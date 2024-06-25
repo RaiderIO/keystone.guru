@@ -770,13 +770,16 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
                     NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
                 ])->orWhereIn('npcs.id', [
-                    // Neltharion's Lair Burning Geodes are in the mapping but give 0 enemy forces.
+                    // Neltharion's Lair:
+                    // Burning Geodes are in the mapping but give 0 enemy forces.
                     // They're in the mapping because they're dangerous af
                     101437,
-                    // Halls of Infusion: Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
+                    // Halls of Infusion:
+                    // Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
                     // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
                     190407,
-                    // Brackenhide Hollow: Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
+                    // Brackenhide Hollow:
+                    // Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
                     194273,
                     // Rotfang Hyena are part of Gutshot boss but, they are part of the mapping. They give 0 enemy forces.
                     194745,
@@ -786,14 +789,20 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     194469,
                     // Gutstabbers give 0 enemy forces but are in the mapping regardless
                     197857,
-                    // Nokhud Offensive: War Ohuna gives 0 enemy forces but is in the mapping regardless
+                    // Nokhud Offensive:
+                    // War Ohuna gives 0 enemy forces but is in the mapping regardless
                     192803,
-                    // Stormsurge Totem
+                    // Stormsurge Totem gives 0 enemy forces but is in the mapping regardless
                     194897,
-                    // Unstable Squall
+                    // Unstable Squall gives 0 enemy forces but is in the mapping regardless
                     194895,
-                    // Primal Gust
+                    // Primal Gust gives 0 enemy forces but is in the mapping regardless
                     195579,
+                    // Dawn of the Infinite:
+                    // Temporal Deviation gives 0 enemy forces but is in the mapping regardless
+                    206063,
+                    // Iridikron's Creation
+                    204918,
                 ]);
             })
             ->get();
