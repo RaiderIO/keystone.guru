@@ -58,10 +58,10 @@ PUT _index_template/combat_log_events-template
         "pos_y": {
           "type": "float"
         },
-        "pos_npc_x": {
+        "pos_enemy_x": {
           "type": "float"
         },
-        "pos_npc_y": {
+        "pos_enemy_y": {
           "type": "float"
         },
         "event_type": {
@@ -239,10 +239,10 @@ PUT /combat_log_events-000001
       "pos_y": {
         "type": "float"
       },
-      "pos_npc_x": {
+      "pos_enemy_x": {
         "type": "float"
       },
-      "pos_npc_y": {
+      "pos_enemy_y": {
         "type": "float"
       },
       "event_type": {

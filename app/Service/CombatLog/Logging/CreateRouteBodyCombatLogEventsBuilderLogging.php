@@ -14,6 +14,12 @@ class CreateRouteBodyCombatLogEventsBuilderLogging extends CreateRouteBodyDungeo
         $this->warning(__METHOD__, get_defined_vars());
     }
 
+    public function getCombatLogEventsEnemyCouldNotBeResolved(int $npcId, string $spawnUid): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+
     public function getCombatLogEventsEnd(): void
     {
         $this->end(__METHOD__);

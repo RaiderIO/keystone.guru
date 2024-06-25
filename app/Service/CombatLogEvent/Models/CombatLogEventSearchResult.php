@@ -7,6 +7,7 @@ use App\Models\Floor\Floor;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
 class CombatLogEventSearchResult
 {
@@ -46,8 +47,14 @@ class CombatLogEventSearchResult
         return [
             'data'                => $this->combatLogEvents->map(function (CombatLogEvent $combatLogEvent)
             use ($dungeon, $floors, $useFacade) {
+                $ingameXY = match ($this->combatLogEventFilter->getDataType()) {
+                    CombatLogEvent::DATA_TYPE_PLAYER_POSITION => $combatLogEvent->getIngameXY(),
+                    CombatLogEvent::DATA_TYPE_ENEMY_POSITION => $combatLogEvent->getIngameXYNpc(),
+                    default => throw new InvalidArgumentException('Invalid data type'),
+                };
+
                 $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
-                    $combatLogEvent->getIngameXY()->setFloor($floors->get($combatLogEvent->ui_map_id))
+                    $ingameXY->setFloor($floors->get($combatLogEvent->ui_map_id))
                 );
 
                 $latLngArray = ($useFacade ?

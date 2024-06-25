@@ -9,6 +9,8 @@ class HeatmapDataResponse implements Arrayable
 {
     private Collection $data;
 
+    private string $dataType;
+
     private int $runCount;
 
     private function __construct()
@@ -19,6 +21,11 @@ class HeatmapDataResponse implements Arrayable
     public function getData(): Collection
     {
         return $this->data;
+    }
+
+    public function getDataType(): string
+    {
+        return $this->dataType;
     }
 
     public function getRunCount(): int
@@ -32,6 +39,7 @@ class HeatmapDataResponse implements Arrayable
             'data' => $this->data->map(
                 fn(HeatmapDataFloorData $floorData) => $floorData->toArray()
             )->values()->toArray(),
+            'data_type' => $this->dataType,
             'run_count' => $this->runCount,
         ];
     }
@@ -46,6 +54,8 @@ class HeatmapDataResponse implements Arrayable
                 HeatmapDataFloorData::fromArray($floorData)
             );
         }
+
+        $result->dataType = $response['data_type'];
         $result->runCount = $response['run_count'];
 
         return $result;

@@ -177,6 +177,7 @@ class CombatLogEventFilter implements Arrayable
         return [
             'challenge_mode_id' => $this->dungeon->challenge_mode_id,
             'event_type'        => $this->eventType,
+            'data_type'         => $this->dataType,
             'level_min'         => $this->levelMin,
             'level_max'         => $this->levelMax,
             'affix_groups'      => $this->affixGroups->map(function (AffixGroup $affixGroup) {
@@ -202,7 +203,7 @@ class CombatLogEventFilter implements Arrayable
 //        /** @var Floor $firstFloor */
 //        $firstFloor = $dungeon->floors->first();
 //
-////        dd($firstFloor);
+//        dd($firstFloor);
 //
 //        $must[]     = BoolQuery::make([
 //            Should::make([

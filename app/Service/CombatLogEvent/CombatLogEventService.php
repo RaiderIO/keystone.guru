@@ -23,6 +23,7 @@ use Codeart\OpensearchLaravel\Aggregations\Types\Terms;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
 class CombatLogEventService implements CombatLogEventServiceInterface
 {
@@ -139,6 +140,20 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
             $gridResult = [];
 
+            $size = match ($filters->getDataType()) {
+                CombatLogEvent::DATA_TYPE_PLAYER_POSITION => [
+                    ':sizeX'  => config('keystoneguru.heatmap.service.data.player.sizeX'),
+                    ':sizeY'  => config('keystoneguru.heatmap.service.data.player.sizeY'),
+                    ':player' => 'true',
+                ],
+                CombatLogEvent::DATA_TYPE_ENEMY_POSITION => [
+                    ':sizeX'  => config('keystoneguru.heatmap.service.data.enemy.sizeX'),
+                    ':sizeY'  => config('keystoneguru.heatmap.service.data.enemy.sizeY'),
+                    ':player' => 'false',
+                ],
+                default => throw new InvalidArgumentException('Invalid data type'),
+            };
+
             // Repeat this query for each floor
             foreach ($filters->getDungeon()->floors()->where('facade', false)->get() as $floor) {
                 /** @var Floor $floor */
@@ -173,14 +188,17 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                                    float stepX = width / sizeX;
                                    float stepY = height / sizeY;
 
+                                   float docPosX = :player ? doc[\'pos_x\'].value : doc[\'pos_enemy_x\'].value;
+                                   float docPosY = :player ? doc[\'pos_y\'].value : doc[\'pos_enemy_y\'].value;
+
                                    // @TODO #2422
-                                   // if( (doc[\'pos_x\'].value < minX) || (doc[\'pos_x\'].value > maxX) ||
-                                   //     (doc[\'pos_y\'].value < minY) || (doc[\'pos_y\'].value > maxY)) {
+                                   // if( (docPosX < minX) || (docPosX > maxX) ||
+                                   //     (docPosY < minY) || (docPosY > maxY)) {
                                    //   return;
                                    // }
 
-                                   int gx = ((doc[\'pos_x\'].value - minX) / width * sizeX).intValue();
-                                   int gy = ((doc[\'pos_y\'].value - minY) / height * sizeY).intValue();
+                                   int gx = ((docPosX - minX) / width * sizeX).intValue();
+                                   int gy = ((docPosY - minY) / height * sizeY).intValue();
 
                                    // @TODO #2422
                                    if( gx < 0 || gx >= sizeX || gy < 0 || gy >= sizeY ) {
@@ -192,15 +210,13 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                                    } else {
                                      state.map[key] = 1;
                                    }
-                                 ', [
-                                     // @TODO #2419
-                                    ':sizeX' => config('keystoneguru.heatmap.service.data.raw.sizeX'),
-                                    ':sizeY' => config('keystoneguru.heatmap.service.data.raw.sizeY'),
+                                 ', array_merge([
                                     ':minX'  => $floor->ingame_min_x,
                                     ':minY'  => $floor->ingame_min_y,
                                     ':maxX'  => $floor->ingame_max_x,
                                     ':maxY'  => $floor->ingame_max_y,
-                                ]),
+                                    ], $size)
+                                ),
                                 combineScript: 'return state.map',
                                 reduceScript: '
                                    Map result = [:];

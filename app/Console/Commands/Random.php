@@ -88,8 +88,8 @@ class Random extends Command
 //            )
 //        )->toArray());
 
-//        $challengeModeRunDataService->convert();
-        $challengeModeRunDataService->insertAllToOpensearch();
+        $challengeModeRunDataService->convert();
+//        $challengeModeRunDataService->insertAllToOpensearch();
 
 //        $combatLogEvents = $combatLogEventService->getCombatLogEvents(
 //            new CombatLogEventFilter(

@@ -8,5 +8,7 @@ interface CreateRouteBodyCombatLogEventsBuilderLoggingInterface extends CreateRo
 
     public function getCombatLogEventsEnemyNotFound(int $npcId, int $mdtId): void;
 
+    public function getCombatLogEventsEnemyCouldNotBeResolved(int $npcId, string $spawnUid): void;
+
     public function getCombatLogEventsEnd(): void;
 }
