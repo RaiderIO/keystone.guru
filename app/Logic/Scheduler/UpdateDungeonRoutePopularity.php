@@ -39,6 +39,10 @@ class UpdateDungeonRoutePopularity
             */
                 * GREATEST(0, (1 - DATEDIFF(NOW(), dungeon_routes.updated_at) / :popularityFalloffDays))
             /*
+                If your route is cloned, it cannot show up in any popularity pages
+             */
+                * IF(dungeon_routes.clone_of IS NOT NULL, 1, 0)
+            /*
                 Adds a penalty if your route does not use the latest mapping version for your dungeon
              */
                 * IF(FIND_IN_SET(dungeon_routes.mapping_version_id, latest_mapping_version_ids.ids) > 1, 1, :outOfDateMappingVersionPenalty)
