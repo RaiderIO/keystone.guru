@@ -16,11 +16,14 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class Save extends Command
 {
     use ExecutesShellCommands;
     use SavesArrayToJsonFile;
+
+    private const PROGRESS_BAR_FORMAT = ' %current%/%max% [%bar%] %percent:3s%% %message%';
 
     /**
      * The name and signature of the console command.
@@ -62,7 +65,7 @@ class Save extends Command
             $tmpZippedFilePath = '/tmp';
             $zippedFileName    = 'mapping.gz';
             $this->info(sprintf('Creating archive of mapping to %s/%s', $tmpZippedFilePath, $zippedFileName));
-            $this->shell(sprintf('tar -zcf %s/%s %s', $tmpZippedFilePath, $zippedFileName, $dungeonDataDir));
+            $this->shell(sprintf('tar -zcf %s/%s -C %s .', $tmpZippedFilePath, $zippedFileName, $dungeonDataDir));
 
             $this->info(sprintf('Saving backup of mapping to %s/%s', $targetDir, $zippedFileName));
             $this->shell([
@@ -174,9 +177,17 @@ class Save extends Command
      */
     private function saveDungeonData(string $dungeonDataDir): void
     {
-        foreach (Dungeon::with(['dungeonRoutesForExport'])->get() as $dungeon) {
-            /** @var $dungeon Dungeon */
-            $this->info(sprintf('- Saving dungeon %s', __($dungeon->name)));
+        // Save all spells
+        $this->info('Saving Dungeon data');
+        $dungeons = Dungeon::with(['dungeonRoutesForExport'])->get();
+        /** @var Dungeon $lastDungeon */
+        $lastDungeon = $dungeons->last();
+
+        $this->withProgressBar($dungeons, function (Dungeon $dungeon, ProgressBar $progressBar) use ($dungeonDataDir, $lastDungeon) {
+            $progressBar->setFormat(self::PROGRESS_BAR_FORMAT);
+            $progressBar->maxSecondsBetweenRedraws(0.1);
+            $progressBar->setMessage(__($dungeon->name));
+
 
             $rootDirPath = sprintf('%s%s/%s', $dungeonDataDir, $dungeon->expansion->shortname, $dungeon->key);
 
@@ -197,7 +208,12 @@ class Save extends Command
             foreach ($floors as $floor) {
                 $this->saveFloor($floor, $rootDirPath);
             }
-        }
+
+            if ($dungeon->id === $lastDungeon->id) {
+                $progressBar->setMessage('Completed!');
+            }
+        });
+        $this->output->writeln('');
     }
 
     private function saveDungeonDungeonRoutes(Dungeon $dungeon, string $rootDirPath): void
@@ -290,9 +306,9 @@ class Save extends Command
             }
         }
 
-        if ($dungeon->dungeonRoutesForExport->isNotEmpty()) {
-            $this->info(sprintf('-- Saving %s dungeonroutes', $dungeon->dungeonRoutesForExport->count()));
-        }
+//        if ($dungeon->dungeonRoutesForExport->isNotEmpty()) {
+//            $this->info(sprintf('-- Saving %s dungeonroutes', $dungeon->dungeonRoutesForExport->count()));
+//        }
 
         $this->saveDataToJsonFile($dungeon->dungeonRoutesForExport->toArray(), $rootDirPath, 'dungeonroutes.json');
     }
@@ -311,16 +327,16 @@ class Save extends Command
         }
 
         // Save NPC data in the root of the dungeon folder
-        if ($npcs->count() > 0) {
-            $this->info(sprintf('-- Saving %s npcs', $npcs->count()));
-        }
+//        if ($npcs->count() > 0) {
+//            $this->info(sprintf('-- Saving %s npcs', $npcs->count()));
+//        }
 
         $this->saveDataToJsonFile($npcs, $rootDirPath, 'npcs.json');
     }
 
     private function saveFloor(Floor $floor, string $rootDirPath): void
     {
-        $this->info(sprintf('-- Saving floor %s', __($floor->name)));
+//        $this->info(sprintf('-- Saving floor %s', __($floor->name)));
         // Only export NPC->id, no need to store the full npc in the enemy
         $enemies      = $floor->enemiesForExport()->without(['npc', 'type'])->get()->values();
         $enemyPacks   = $floor->enemyPacksForExport->values();
@@ -358,9 +374,9 @@ class Save extends Command
 
         foreach ($result as $category => $categoryData) {
             // Save enemies, packs, patrols, markers on a per-floor basis
-            if ($categoryData->count() > 0) {
-                $this->info(sprintf('--- Saving %s %s', $categoryData->count(), $category));
-            }
+//            if ($categoryData->count() > 0) {
+//                $this->info(sprintf('--- Saving %s %s', $categoryData->count(), $category));
+//            }
 
             $this->saveDataToJsonFile($categoryData, sprintf('%s/%s', $rootDirPath, $floor->index), sprintf('%s.json', $category));
         }

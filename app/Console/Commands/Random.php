@@ -8,6 +8,7 @@ use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class Random extends Command
 {
@@ -43,6 +44,21 @@ class Random extends Command
         SeasonServiceInterface               $seasonService,
         DungeonRouteRepositoryInterface      $dungeonRouteRepository
     ): int {
+        $count       = 0;
+
+        $this->info('Test');
+
+        $progressBar = $this->output->createProgressBar(100);
+        $progressBar->setFormat(ProgressBar::FORMAT_DEBUG); // ""
+        $progressBar->start();
+
+        for ($i = 0; $i < 100; $i++) {
+            $progressBar->setMessage(sprintf('Processing %d', $count));
+            $progressBar->advance();
+            usleep(500000);
+            $count++;
+        }
+        $progressBar->finish();
 
 //        $dungeonRoute = $dungeonRouteRepository->find(1715);
 //
@@ -88,7 +104,6 @@ class Random extends Command
 //            )
 //        )->toArray());
 
-        $challengeModeRunDataService->convert();
 //        $challengeModeRunDataService->insertAllToOpensearch();
 
 //        $combatLogEvents = $combatLogEventService->getCombatLogEvents(
