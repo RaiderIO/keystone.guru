@@ -10,5 +10,5 @@ interface ChallengeModeRunDataServiceInterface
 
     public function convertChallengeModeRunData(ChallengeModeRunData $challengeModeRunData): bool;
 
-    public function insertAllToOpensearch(): bool;
+    public function insertAllToOpensearch(int $count = 1000, ?callable $onProcess = null): bool;
 }

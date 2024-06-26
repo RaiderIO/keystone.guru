@@ -95,11 +95,24 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
         return $result;
     }
 
-    public function insertAllToOpensearch(): bool
+    public function insertAllToOpensearch(int $count = 1000, ?callable $onProcess = null): bool
     {
-        return CombatLogEvent::opensearch()
-            ->documents()
-            ->createAll(null, 1000);
+        $result = true;
+
+        CombatLogEvent::chunk($count, function(Collection $combatLogEvents) use(&$result, $onProcess, $count) {
+            /** @var Collection<CombatLogEvent> $combatLogEvents */
+            $ids = $combatLogEvents->pluck('id')->toArray();
+
+            if( $onProcess !== null ) {
+                $onProcess($ids);
+            }
+
+            $result = $result && CombatLogEvent::opensearch()
+                ->documents()
+                ->create($ids, null, $count);
+        });
+
+        return $result;
     }
 
     public function getDungeonFromMapId(int $mapId): ?Dungeon

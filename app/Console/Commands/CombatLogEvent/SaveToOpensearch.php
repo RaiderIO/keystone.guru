@@ -1,29 +1,28 @@
 <?php
 
-namespace App\Console\Commands\ChallengeModeRunData;
+namespace App\Console\Commands\CombatLogEvent;
 
 use App\Logging\StructuredLogging;
-use App\Models\CombatLog\ChallengeModeRunData;
+use App\Models\CombatLog\CombatLogEvent;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Builder;
 use Symfony\Component\Console\Helper\ProgressBar;
 
-class ConvertToEvents extends Command
+class SaveToOpensearch extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'challengemoderundata:convert {--force}';
+    protected $signature = 'combatlogevent:opensearch';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = "Takes the contents of the existing challenge_mode_run_data table and converts the contents to combat log events, and saves those to the database.";
+    protected $description = "Saves all CombatLogEvent data to Opensearch.";
 
     /**
      * Execute the console command.
@@ -33,17 +32,12 @@ class ConvertToEvents extends Command
         // We don't care for logging atm, we got a progress bar baby
         StructuredLogging::disable();
 
-        $force = (bool)$this->option('force');
-
-        $count = ChallengeModeRunData::when(!$force, function (Builder $builder) {
-            $builder->where('processed', false);
-        })->count();
-
+        $count       = CombatLogEvent::count();
         $progressBar = $this->output->createProgressBar($count);
         $progressBar->setFormat(ProgressBar::FORMAT_DEBUG);
 
-        $result = $challengeModeRunDataService->convert($force, function () use (&$progressBar) {
-            $progressBar->advance();
+        $result = $challengeModeRunDataService->insertAllToOpensearch(1000, function (array $ids) use (&$progressBar) {
+            $progressBar->advance(count($ids));
         });
 
         $progressBar->finish();
