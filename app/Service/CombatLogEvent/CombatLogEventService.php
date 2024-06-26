@@ -188,8 +188,8 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                                    float stepX = width / sizeX;
                                    float stepY = height / sizeY;
 
-                                   float docPosX = :player ? doc[\'pos_x\'].value : doc[\'pos_enemy_x\'].value;
-                                   float docPosY = :player ? doc[\'pos_y\'].value : doc[\'pos_enemy_y\'].value;
+                                   double docPosX = :player ? doc[\'pos_x\'].value : doc[\'pos_enemy_x\'].value;
+                                   double docPosY = :player ? doc[\'pos_y\'].value : doc[\'pos_enemy_y\'].value;
 
                                    // @TODO #2422
                                    // if( (docPosX < minX) || (docPosX > maxX) ||
@@ -211,10 +211,10 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                                      state.map[key] = 1;
                                    }
                                  ', array_merge([
-                                    ':minX'  => $floor->ingame_min_x,
-                                    ':minY'  => $floor->ingame_min_y,
-                                    ':maxX'  => $floor->ingame_max_x,
-                                    ':maxY'  => $floor->ingame_max_y,
+                                        ':minX' => $floor->ingame_min_x,
+                                        ':minY' => $floor->ingame_min_y,
+                                        ':maxX' => $floor->ingame_max_x,
+                                        ':maxY' => $floor->ingame_max_y,
                                     ], $size)
                                 ),
                                 combineScript: 'return state.map',
@@ -266,9 +266,9 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 //        {
 //            "size": 0,
 //            "aggs": {
-//            "run_count": {
-//                "cardinality": {
-//                    "field": "run_id"
+//                "run_count": {
+//                    "cardinality": {
+//                        "field": "run_id"
 //                    }
 //                }
 //            }
@@ -308,22 +308,22 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             // <editor-fold desc="OS Query" defaultState="collapsed">
 //            POST /combat_log_events/_search
 //            {
-//                "size": 0,
-//                "aggs": {
+//              "size": 0,
+//              "aggs": {
 //                "dungeon": {
-//                    "terms": {
-//                        "field": "challenge_mode_id",
-//                            "size": 10000
-//                        },
-//                        "aggs": {
-//                        "run_count": {
-//                            "cardinality": {
-//                                "field": "run_id"
-//                                }
-//                            }
-//                        }
+//                  "terms": {
+//                    "field": "challenge_mode_id",
+//                    "size": 10000
+//                  },
+//                  "aggs": {
+//                    "run_count": {
+//                      "cardinality": {
+//                        "field": "run_id"
+//                      }
 //                    }
+//                  }
 //                }
+//              }
 //            }
             // </editor-fold>
 
@@ -474,6 +474,8 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 'ui_map_id'         => $enemyIngameXY->getFloor()->ui_map_id,
                 'pos_x'             => $enemyIngameXY->getX(2),
                 'pos_y'             => $enemyIngameXY->getY(2),
+                'pos_enemy_x'       => $enemyIngameXY->getX(2),
+                'pos_enemy_y'       => $enemyIngameXY->getY(2),
                 'event_type'        => $type,
                 'start'             => $runStart->toDateTimeString(),
                 'end'               => $runStart->addMilliseconds($runDurationMs)->toDateTimeString(),
