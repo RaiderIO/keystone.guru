@@ -837,52 +837,62 @@ return [
         ],
     ],
     'tww'          => [
-        'ara_karacityofechoes'   => [
+        'ara_kara_city_of_echoes'    => [
             'name'   => 'Ara-Kara: City of Echoes',
             'floors' => [
-                'ara_karacityofechoes' => 'Ara-Kara: City of Echoes',
+                'echoing_overlook'        => 'Echoing Overlook',
+                'the_undercache'          => 'The Undercache',
+                'ara_kara_city_of_echoes' => 'Ara-Kara: City of Echoes',
             ],
         ],
-        'cityofthreads'          => [
-            'name'   => 'City of Threads',
-            'floors' => [
-                'cityofthreads' => 'City of Threads',
-            ],
-        ],
-        'cinderbrewmeadery'      => [
+        'cinderbrew_meadery'         => [
             'name'   => 'Cinderbrew Meadery',
             'floors' => [
-                'cinderbrewmeadery' => 'Cinderbrew Meadery',
+                'cinderbrew_meadery' => 'Cinderbrew Meadery',
             ],
         ],
-        'darkflamecleft'         => [
+        'city_of_threads'            => [
+            'name'   => 'City of Threads',
+            'floors' => [
+                'city_of_threads'    => 'City of Threads',
+                'the_transformatory' => 'The Transformatory',
+            ],
+        ],
+        'darkflame_cleft'            => [
             'name'   => 'Darkflame Cleft',
             'floors' => [
-                'darkflamecleft' => 'Darkflame Cleft',
+                'darkflame_cleft' => 'Darkflame Cleft',
             ],
         ],
-        'prioryofthesacredflame' => [
+        'priory_of_the_sacred_flame' => [
             'name'   => 'Priory of the Sacred Flame',
             'floors' => [
-                'prioryofthesacredflame' => 'Priory of the Sacred Flame',
+                'sanctified_grounds'         => 'Sanctified Grounds',
+                'priory_of_the_sacred_flame' => 'Priory of the Sacred Flame',
             ],
         ],
-        'thedawnbreaker'         => [
+        'the_dawnbreaker'            => [
             'name'   => 'The Dawnbreaker',
             'floors' => [
-                'thedawnbreaker' => 'The Dawnbreaker',
+                'the_dawnbreaker' => 'The Dawnbreaker',
             ],
         ],
-        'therookery'             => [
+        'the_rookery'                => [
             'name'   => 'The Rookery',
             'floors' => [
-                'therookery' => 'The Rookery',
+                'the_rookery_landing' => 'The Rookery Landing',
+                'storms_roost'        => 'Storm\'s Roost',
+                'storm_rookery'       => 'Storm Rookery',
+                'stormrider_barracks' => 'Stormrider Barracks',
+                'crashing_storm_hall' => 'Crashing Storm Hall',
+                'abandoned_mines'     => 'Abandoned Mines',
+                'the_rookery'         => 'The Rookery',
             ],
         ],
-        'thestonevault'          => [
+        'the_stonevault'             => [
             'name'   => 'The Stonevault',
             'floors' => [
-                'thestonevault' => 'The Stonevault',
+                'the_stonevault' => 'The Stonevault',
             ],
         ],
     ],
