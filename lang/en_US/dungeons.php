@@ -380,6 +380,12 @@ return [
         ],
     ],
     'cata'         => [
+        'grim_batol' => [
+            'name'   => 'Grim Batol',
+            'floors' => [
+                'grim_batol' => 'Grim Batol',
+            ],
+        ],
         'the_vortex_pinnacle' => [
             'name'   => 'The Vortex Pinnacle',
             'floors' => [
