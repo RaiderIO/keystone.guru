@@ -221,6 +221,10 @@ class DungeonRoute extends Model
         'affixes',
     ];
 
+    protected $casts = [
+        'enemy_forces' => 'integer',
+    ];
+
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
