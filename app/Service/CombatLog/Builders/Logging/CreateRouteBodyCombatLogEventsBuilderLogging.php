@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\CombatLog\Logging;
+namespace App\Service\CombatLog\Builders\Logging;
 
 class CreateRouteBodyCombatLogEventsBuilderLogging extends CreateRouteBodyDungeonRouteBuilderLogging implements CreateRouteBodyCombatLogEventsBuilderLoggingInterface
 {

@@ -10,7 +10,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
-use App\Service\CombatLog\Logging\CreateRouteBodyCorrectionBuilderLoggingInterface;
+use App\Service\CombatLog\Builders\Logging\CreateRouteBodyCorrectionBuilderLoggingInterface;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteChallengeMode;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteCoord;

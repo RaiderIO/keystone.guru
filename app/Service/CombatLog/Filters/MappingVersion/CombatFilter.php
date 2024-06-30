@@ -5,7 +5,7 @@ namespace App\Service\CombatLog\Filters\MappingVersion;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Service\CombatLog\Filters\BaseCombatFilter;
-use App\Service\CombatLog\Logging\MappingVersionCombatFilterLoggingInterface;
+use App\Service\CombatLog\Filters\Logging\MappingVersionCombatFilterLoggingInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 

@@ -2,7 +2,6 @@
 
 namespace App\Service\CombatLog\Builders;
 
-use App;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -17,7 +16,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
-use App\Service\CombatLog\Logging\DungeonRouteBuilderLoggingInterface;
+use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullCollection;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;

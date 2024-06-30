@@ -10,27 +10,30 @@ use Illuminate\Support\Collection;
 interface CombatLogServiceInterface
 {
     /**
-     * @return Collection|BaseEvent[]
+     * @return Collection<BaseEvent>
      */
     public function parseCombatLogToEvents(string $filePath): Collection;
 
     public function parseCombatLogStreaming(string $filePath, callable $callable): void;
 
     /**
-     * @return Collection|ChallengeMode[]
+     * @return Collection<ChallengeMode>
      */
     public function getChallengeModes(string $filePath): Collection;
 
     /**
-     * @return Collection|ChallengeMode[]
+     * @return Collection<ChallengeMode>
      */
     public function getUiMapIds(string $filePath): Collection;
 
     /**
-     * @return Collection|BaseResultEvent[]
+     * @return Collection<BaseResultEvent>
      */
     public function getResultEventsForChallengeMode(string $combatLogFilePath): Collection;
 
+    /**
+     * @return Collection<BaseResultEvent>
+     */
     public function getResultEventsForDungeonOrRaid(string $combatLogFilePath): Collection;
 
     public function extractCombatLog(string $filePath): ?string;

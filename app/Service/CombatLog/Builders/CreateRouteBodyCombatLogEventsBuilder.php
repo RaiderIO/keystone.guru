@@ -11,7 +11,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
-use App\Service\CombatLog\Logging\CreateRouteBodyCombatLogEventsBuilderLoggingInterface;
+use App\Service\CombatLog\Builders\Logging\CreateRouteBodyCombatLogEventsBuilderLoggingInterface;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;

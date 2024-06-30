@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\CombatLog\Logging;
+namespace App\Service\CombatLog\Filters\Logging;
 
 use App\Logging\RollbarStructuredLogging;
 

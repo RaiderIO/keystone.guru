@@ -6,68 +6,19 @@ use App\Logging\RollbarStructuredLogging;
 
 class CombatLogSplitServiceLogging extends RollbarStructuredLogging implements CombatLogSplitServiceLoggingInterface
 {
-    public function splitCombatLogOnChallengeModesStart(string $filePath): void
+    public function splitCombatLogUsingSplitterStart(string $filePath, string $splitter): void
     {
         $this->start(__METHOD__, get_defined_vars());
     }
 
-    public function splitCombatLogOnChallengeModesNoChallengeModesFound(): void
+    public function splitCombatLogUsingSplitterNoChallengeModesFound(): void
     {
-        $this->info(__METHOD__);
+        $this->warning(__METHOD__);
     }
 
-    public function splitCombatLogOnChallengeModesTimestampNotSet(): void
-    {
-        $this->info(__METHOD__);
-    }
-
-    public function splitCombatLogOnChallengeModesTooBigTimestampGap(float $seconds, string $previousTimestamp, string $timestamp): void
-    {
-        $this->info(__METHOD__, get_defined_vars());
-    }
-
-    public function splitCombatLogOnChallengeModesChallengeModeStartEvent(): void
-    {
-        $this->debug(__METHOD__);
-    }
-
-    public function splitCombatLogOnChallengeModesCombatLogVersionEvent(): void
-    {
-        $this->debug(__METHOD__);
-    }
-
-    public function splitCombatLogOnChallengeModesZoneChangeEvent(): void
-    {
-        $this->debug(__METHOD__);
-    }
-
-    public function splitCombatLogOnChallengeModesMapChangeEvent(): void
-    {
-        $this->debug(__METHOD__);
-    }
-
-    public function splitCombatLogOnChallengeModesLastRunNotCompleted(): void
-    {
-        $this->debug(__METHOD__);
-    }
-
-    public function splitCombatLogOnChallengeModesEnd(): void
+    public function splitCombatLogUsingSplitterEnd(): void
     {
         $this->end(__METHOD__);
     }
 
-    public function resetCurrentChallengeMode(): void
-    {
-        $this->debug(__METHOD__);
-    }
-
-    public function reset(): void
-    {
-        $this->debug(__METHOD__);
-    }
-
-    public function generateTargetCombatLogFileNameAttempt(string $saveFilePath): void
-    {
-        $this->debug(__METHOD__, get_defined_vars());
-    }
 }
