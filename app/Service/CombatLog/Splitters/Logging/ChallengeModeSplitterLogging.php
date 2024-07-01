@@ -2,11 +2,8 @@
 
 namespace App\Service\CombatLog\Splitters\Logging;
 
-use App\Logging\RollbarStructuredLogging;
-
-class ChallengeModeSplitterLogging extends RollbarStructuredLogging implements ChallengeModeSplitterLoggingInterface
+class ChallengeModeSplitterLogging extends CombatLogSplitterLogging implements ChallengeModeSplitterLoggingInterface
 {
-
     public function splitCombatLogOnChallengeModesStart(string $filePath): void
     {
         $this->start(__METHOD__, get_defined_vars());
@@ -17,37 +14,43 @@ class ChallengeModeSplitterLogging extends RollbarStructuredLogging implements C
         $this->info(__METHOD__);
     }
 
-    public function splitCombatLogOnChallengeModesTimestampNotSet(): void
+    public function parseCombatLogEventTimestampNotSet(): void
     {
         $this->info(__METHOD__);
     }
 
-    public function splitCombatLogOnChallengeModesTooBigTimestampGap(float $seconds, string $previousTimestamp, string $timestamp): void
+    public function parseCombatLogEventTooBigTimestampGap(float $seconds, string $previousTimestamp, string $timestamp): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    public function splitCombatLogOnChallengeModesChallengeModeStartEvent(): void
+    public function parseCombatLogEventChallengeModeStartEvent(): void
     {
         $this->debug(__METHOD__);
     }
 
-    public function splitCombatLogOnChallengeModesCombatLogVersionEvent(): void
+    public function parseCombatLogEventCombatLogVersionEvent(): void
     {
         $this->debug(__METHOD__);
     }
 
-    public function splitCombatLogOnChallengeModesZoneChangeEvent(): void
+    public function parseCombatLogEventZoneChangeEvent(): void
     {
         $this->debug(__METHOD__);
     }
 
-    public function splitCombatLogOnChallengeModesMapChangeEvent(): void
+    public function parseCombatLogEventMapChangeEvent(): void
     {
         $this->debug(__METHOD__);
     }
 
-    public function splitCombatLogOnChallengeModesLastRunNotCompleted(): void
+    public function splitCombatLogNoChallengeModesFound(): void
+    {
+        $this->info(__METHOD__);
+    }
+
+
+    public function splitCombatLogLastRunNotCompleted(): void
     {
         $this->debug(__METHOD__);
     }
@@ -65,10 +68,5 @@ class ChallengeModeSplitterLogging extends RollbarStructuredLogging implements C
     public function reset(): void
     {
         $this->debug(__METHOD__);
-    }
-
-    public function generateTargetCombatLogFileNameAttempt(string $saveFilePath): void
-    {
-        $this->debug(__METHOD__, get_defined_vars());
     }
 }

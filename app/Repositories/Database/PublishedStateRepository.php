@@ -3,7 +3,6 @@
 namespace App\Repositories\Database;
 
 use App\Models\PublishedState;
-use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\PublishedStateRepositoryInterface;
 
 class PublishedStateRepository extends DatabaseRepository implements PublishedStateRepositoryInterface

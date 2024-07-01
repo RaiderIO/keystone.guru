@@ -13,6 +13,7 @@ use App\Console\Commands\CombatLog\ExtractUiMapIds;
 use App\Console\Commands\CombatLog\OutputCreateRouteJson;
 use App\Console\Commands\CombatLog\OutputResultEvents;
 use App\Console\Commands\CombatLog\SplitChallengeMode;
+use App\Console\Commands\CombatLog\SplitZoneChange;
 use App\Console\Commands\CombatLogEvent\SaveToOpensearch;
 use App\Console\Commands\Database\Backup;
 use App\Console\Commands\Discover\Cache as DiscoverCache;
@@ -93,6 +94,7 @@ class Kernel extends ConsoleKernel
         OutputResultEvents::class,
         OutputCreateRouteJson::class,
         SplitChallengeMode::class,
+        SplitZoneChange::class,
 
         // CombatLogEvent
         SaveToOpensearch::class,

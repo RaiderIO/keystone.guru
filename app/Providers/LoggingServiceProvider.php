@@ -40,6 +40,8 @@ use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLogging;
 use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Splitters\Logging\ChallengeModeSplitterLogging;
 use App\Service\CombatLog\Splitters\Logging\ChallengeModeSplitterLoggingInterface;
+use App\Service\CombatLog\Splitters\Logging\ZoneChangeSplitterLogging;
+use App\Service\CombatLog\Splitters\Logging\ZoneChangeSplitterLoggingInterface;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLogging;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTImportStringServiceLogging;
@@ -94,6 +96,7 @@ class LoggingServiceProvider extends ServiceProvider
 
         /// Splitters
         $this->app->bind(ChallengeModeSplitterLoggingInterface::class, ChallengeModeSplitterLogging::class);
+        $this->app->bind(ZoneChangeSplitterLoggingInterface::class, ZoneChangeSplitterLogging::class);
 
         /// Services
         $this->app->bind(CombatLogServiceLoggingInterface::class, CombatLogServiceLogging::class);

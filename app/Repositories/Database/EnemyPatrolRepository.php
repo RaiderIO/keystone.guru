@@ -3,7 +3,6 @@
 namespace App\Repositories\Database;
 
 use App\Models\EnemyPatrol;
-use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\EnemyPatrolRepositoryInterface;
 
 class EnemyPatrolRepository extends DatabaseRepository implements EnemyPatrolRepositoryInterface

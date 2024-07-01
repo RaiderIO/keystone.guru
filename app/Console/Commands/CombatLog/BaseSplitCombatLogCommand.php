@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\CombatLog;
 
-use App\Service\CombatLog\CombatLogSplitServiceInterface;
 use Illuminate\Support\Collection;
 
 abstract class BaseSplitCombatLogCommand extends BaseCombatLogCommand
@@ -11,8 +10,8 @@ abstract class BaseSplitCombatLogCommand extends BaseCombatLogCommand
      * Execute the console command.
      */
     public function parseCombatLogSplitRecursively(
-        string                         $filePath,
-        callable                       $splitCombatLogCallable,
+        string   $filePath,
+        callable $splitCombatLogCallable,
     ): int {
         ini_set('memory_limit', '2G');
 

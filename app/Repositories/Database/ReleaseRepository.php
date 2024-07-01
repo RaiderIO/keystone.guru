@@ -3,7 +3,6 @@
 namespace App\Repositories\Database;
 
 use App\Models\Release;
-use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\ReleaseRepositoryInterface;
 
 class ReleaseRepository extends DatabaseRepository implements ReleaseRepositoryInterface

@@ -3,7 +3,6 @@
 namespace App\Repositories\Database;
 
 use App\Models\MDTImport;
-use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\MDTImportRepositoryInterface;
 
 class MDTImportRepository extends DatabaseRepository implements MDTImportRepositoryInterface

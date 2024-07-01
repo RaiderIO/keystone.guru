@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Database;
 
-use App\Models\DungeonRoute\DungeonRoute;
 use App\Repositories\BaseRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;

@@ -3,7 +3,6 @@
 namespace App\Repositories\Database;
 
 use App\Models\Polyline;
-use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\PolylineRepositoryInterface;
 
 class PolylineRepository extends DatabaseRepository implements PolylineRepositoryInterface

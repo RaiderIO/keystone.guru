@@ -3,7 +3,6 @@
 namespace App\Repositories\Database;
 
 use App\Models\TeamUser;
-use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\TeamUserRepositoryInterface;
 
 class TeamUserRepository extends DatabaseRepository implements TeamUserRepositoryInterface
