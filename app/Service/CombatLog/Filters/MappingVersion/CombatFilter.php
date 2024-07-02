@@ -26,7 +26,7 @@ class CombatFilter extends BaseCombatFilter
 
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
-        // First, we wait for the challenge mode to start
+        // First, we wait for the dungeon to start
         if ($combatLogEvent instanceof ZoneChange) {
             $this->log->parseZoneChangeFound($lineNr);
             $this->zoneFound = true;
