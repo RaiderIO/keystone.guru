@@ -13,14 +13,17 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Npc;
+use App\Service\CombatLog\Dtos\ExtractedDataResult;
 use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLoggingInterface;
-use App\Service\CombatLog\Models\ExtractedDataResult;
 use App\Service\Season\SeasonServiceInterface;
 
 class CombatLogDataExtractionService implements CombatLogDataExtractionServiceInterface
 {
-    public function __construct(private readonly CombatLogServiceInterface $combatLogService, private readonly SeasonServiceInterface $seasonService, private readonly CombatLogDataExtractionServiceLoggingInterface $log)
-    {
+    public function __construct(
+        private readonly CombatLogServiceInterface                      $combatLogService,
+        private readonly SeasonServiceInterface                         $seasonService,
+        private readonly CombatLogDataExtractionServiceLoggingInterface $log
+    ) {
     }
 
     /**

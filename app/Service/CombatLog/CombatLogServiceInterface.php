@@ -3,7 +3,7 @@
 namespace App\Service\CombatLog;
 
 use App\Logic\CombatLog\BaseEvent;
-use App\Service\CombatLog\Models\ChallengeMode;
+use App\Service\CombatLog\Dtos\ChallengeMode;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use Illuminate\Support\Collection;
 

@@ -13,7 +13,7 @@ class OutputResultEvents extends BaseCombatLogCommand
      *
      * @var string
      */
-    protected $signature = 'combatlog:outputresultevents {filePath} {--force=} {--dungeonOrRaid=}';
+    protected $signature = 'combatlog:outputresultevents {filePath} {--force} {--dungeonOrRaid}';
 
     /**
      * The console command description.
@@ -33,8 +33,8 @@ class OutputResultEvents extends BaseCombatLogCommand
         ini_set('memory_limit', '2G');
 
         $filePath      = $this->argument('filePath');
-        $force         = (bool)$this->option('force');
-        $dungeonOrRaid = (bool)$this->option('dungeonOrRaid');
+        $force         = $this->hasOption('force');
+        $dungeonOrRaid = $this->hasOption('dungeonOrRaid');
 
         return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogService, $force, $dungeonOrRaid) {
             if (!str_contains($filePath, '.zip')) {

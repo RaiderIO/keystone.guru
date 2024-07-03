@@ -105,9 +105,13 @@ class ZoneChangeSplitter extends CombatLogSplitter
             // Save ALL events that come through after the challenge mode start event has been given
             $this->rawEvents->push($rawEvent);
             $this->lastTimestamp = $combatLogEntry->getParsedTimestamp();
+        }
 
-            // And it's ended (we don't care for the valid dungeon zone IDs whitelist, if we switched, we switched)
-            if ($parsedEvent instanceof ZoneChangeEvent) {
+
+        // And it's ended (we don't care for the valid dungeon zone IDs whitelist, if we switched, we switched)
+        if ($parsedEvent instanceof ZoneChangeEvent) {
+            // Wrap up an existing zone if we had one
+            if ($this->lastZoneChangeEvent instanceof ZoneChangeEvent) {
                 $saveFilePath = $this->generateTargetCombatLogFileName($this->filePath);
 
                 try {
@@ -124,15 +128,16 @@ class ZoneChangeSplitter extends CombatLogSplitter
                     unlink($saveFilePath);
                 }
             }
-        } // If we're going to start a new zone
-        else if ($parsedEvent instanceof ZoneChangeEvent &&
-            $this->validDungeonMapIds->has($parsedEvent->getZoneId())) {
-            $this->log->parseCombatLogEventZoneChangeEvent();
 
-            $this->lastZoneChangeEvent = $parsedEvent;
+            // If we're going to start a new zone
+            if ($this->validDungeonMapIds->has($parsedEvent->getZoneId())) {
+                $this->log->parseCombatLogEventZoneChangeEvent();
 
-            $this->rawEvents->push($this->lastCombatLogVersion);
-            $this->rawEvents->push($rawEvent);
+                $this->lastZoneChangeEvent = $parsedEvent;
+
+                $this->rawEvents->push($this->lastCombatLogVersion);
+                $this->rawEvents->push($rawEvent);
+            }
         }
 
         // Always keep track of these events

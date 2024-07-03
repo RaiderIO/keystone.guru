@@ -21,7 +21,10 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
 
     public function splitCombatLogOnChallengeModes(string $filePath): Collection
     {
-        return $this->splitCombatLogUsingSplitter($filePath, new ChallengeModeSplitter($this->combatLogService));
+        return $this->splitCombatLogUsingSplitter(
+            $filePath,
+            new ChallengeModeSplitter($this->combatLogService)
+        );
     }
 
     public function splitCombatLogOnDungeonZoneChanges(string $filePath): Collection

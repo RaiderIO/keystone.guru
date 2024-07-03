@@ -2,6 +2,7 @@
 
 namespace App\Service\CombatLog\Splitters;
 
+use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd as ChallengeModeEndEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartEvent;
@@ -11,6 +12,7 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange as ZoneChangeEvent;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\Splitters\Logging\ChallengeModeSplitterLoggingInterface;
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -64,7 +66,8 @@ class ChallengeModeSplitter extends CombatLogSplitter
         // We don't need to do anything if there are no runs
         // If there's one run, we may still want to trim the fat of the log and keep just
         // the one challenge mode that's in there
-        if ($this->combatLogService->getChallengeModes($filePath)->count() <= 0) {
+        $foundChallengeModes = $this->combatLogService->getChallengeModes($filePath)->count();
+        if ($foundChallengeModes <= 0) {
             $this->log->splitCombatLogNoChallengeModesFound();
 
             return $this->result;
@@ -83,10 +86,14 @@ class ChallengeModeSplitter extends CombatLogSplitter
             $this->log->splitCombatLogLastRunNotCompleted();
         }
 
+        if ($foundChallengeModes !== $this->result->count()) {
+            throw new Exception('The number of challenge modes found does not match the number of challenge modes split from combat log');
+        }
+
         return $this->result;
     }
 
-    private function parseCombatLogEvent(int $combatLogVersion, string $rawEvent, int $lineNr)
+    private function parseCombatLogEvent(int $combatLogVersion, string $rawEvent, int $lineNr): BaseEvent
     {
         $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 

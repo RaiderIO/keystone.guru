@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\CombatLog\Models;
+namespace App\Service\CombatLog\Dtos;
 
 class ExtractedDataResult
 {
