@@ -20,6 +20,10 @@ use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLogging;
 use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Builders\Logging\ResultEventDungeonRouteBuilderLogging;
 use App\Service\CombatLog\Builders\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
+use App\Service\CombatLog\DataExtractors\Logging\FloorDataExtractorLogging;
+use App\Service\CombatLog\DataExtractors\Logging\FloorDataExtractorLoggingInterface;
+use App\Service\CombatLog\DataExtractors\Logging\NpcUpdateDataExtractorLogging;
+use App\Service\CombatLog\DataExtractors\Logging\NpcUpdateDataExtractorLoggingInterface;
 use App\Service\CombatLog\Filters\Logging\BaseCombatFilterLogging;
 use App\Service\CombatLog\Filters\Logging\BaseCombatFilterLoggingInterface;
 use App\Service\CombatLog\Filters\Logging\DungeonRouteCombatFilterLogging;
@@ -89,15 +93,16 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(CreateRouteBodyCombatLogEventsBuilderLoggingInterface::class, CreateRouteBodyCombatLogEventsBuilderLogging::class);
         $this->app->bind(CreateRouteBodyCorrectionBuilderLoggingInterface::class, CreateRouteBodyCorrectionBuilderLogging::class);
         $this->app->bind(ResultEventDungeonRouteBuilderLoggingInterface::class, ResultEventDungeonRouteBuilderLogging::class);
+        /// DataExtractors
+        $this->app->bind(FloorDataExtractorLoggingInterface::class, FloorDataExtractorLogging::class);
+        $this->app->bind(NpcUpdateDataExtractorLoggingInterface::class, NpcUpdateDataExtractorLogging::class);
         /// Filters
         $this->app->bind(BaseCombatFilterLoggingInterface::class, BaseCombatFilterLogging::class);
         $this->app->bind(DungeonRouteCombatFilterLoggingInterface::class, DungeonRouteCombatFilterLogging::class);
         $this->app->bind(MappingVersionCombatFilterLoggingInterface::class, MappingVersionCombatFilterLogging::class);
-
         /// Splitters
         $this->app->bind(ChallengeModeSplitterLoggingInterface::class, ChallengeModeSplitterLogging::class);
         $this->app->bind(ZoneChangeSplitterLoggingInterface::class, ZoneChangeSplitterLogging::class);
-
         /// Services
         $this->app->bind(CombatLogServiceLoggingInterface::class, CombatLogServiceLogging::class);
         $this->app->bind(CombatLogDungeonRouteServiceLoggingInterface::class, CombatLogDungeonRouteServiceLogging::class);
