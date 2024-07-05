@@ -45,7 +45,6 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
                 if ($this->checkedNpcIds->search($npcId) === false) {
                     $this->checkedNpcIds->push($npcId);
 
-
                     $this->log->extractDataNpcWasSummoned(
                         $npcId,
                         $parsedEvent->getGenericData()->getDestName()
@@ -121,6 +120,8 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
             ]);
 
             if ($createdNpc instanceof Npc) {
+                $result->createdNpc();
+
                 $this->log->extractDataCreatedNpc(
                     $guid->getId(),
                     $name,

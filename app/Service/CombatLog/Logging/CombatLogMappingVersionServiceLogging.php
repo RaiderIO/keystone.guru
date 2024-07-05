@@ -6,33 +6,21 @@ use App\Logging\RollbarStructuredLogging;
 
 class CombatLogMappingVersionServiceLogging extends RollbarStructuredLogging implements CombatLogMappingVersionServiceLoggingInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function createMappingVersionFromChallengeModeStart(string $filePath): void
     {
         $this->start(__METHOD__, get_defined_vars());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function createMappingVersionFromChallengeModeNoChallengeModesFound(): void
     {
         $this->debug(__METHOD__);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function createMappingVersionFromChallengeModeMultipleChallengeModesFound(): void
     {
         $this->debug(__METHOD__);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function createMappingVersionFromChallengeModeEnd(): void
     {
         $this->end(__METHOD__);
@@ -40,7 +28,7 @@ class CombatLogMappingVersionServiceLogging extends RollbarStructuredLogging imp
 
     public function createMappingVersionFromDungeonOrRaidStart(string $filePath): void
     {
-        $this->start(__METHOD__, get_defined_vars());
+        $this->start(__METHOD__, get_defined_vars(), false);
     }
 
     public function createMappingVersionFromDungeonOrRaidEnd(): void
@@ -48,9 +36,6 @@ class CombatLogMappingVersionServiceLogging extends RollbarStructuredLogging imp
         $this->end(__METHOD__);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function createMappingVersionFromCombatLogTimestampNotSet(): void
     {
         $this->debug(__METHOD__);
@@ -60,6 +45,17 @@ class CombatLogMappingVersionServiceLogging extends RollbarStructuredLogging imp
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
+
+    public function createMappingVersionFromCombatLogCurrentFloorFromMapChange(int $uiMapId, int $id): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function createMappingVersionFromCombatLogCurrentFloorDefaultFloor(int $dungeonId, int $defaultFloorId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
 
     public function createMappingVersionFromCombatLogSkipEntryNoDungeon(): void
     {

@@ -4,11 +4,15 @@ namespace App\Service\CombatLog\Dtos\DataExtraction;
 
 class ExtractedDataResult
 {
+    private int $createdNpcs = 0;
     private int $updatedNpcs = 0;
-
     private int $updatedFloors = 0;
-
     private int $updatedFloorConnections = 0;
+
+    public function getCreatedNpcs(): int
+    {
+        return $this->createdNpcs;
+    }
 
     public function getUpdatedNpcs(): int
     {
@@ -23,6 +27,11 @@ class ExtractedDataResult
     public function getUpdatedFloors(): int
     {
         return $this->updatedFloors;
+    }
+
+    public function createdNpc(): void
+    {
+        $this->createdNpcs++;
     }
 
     public function updatedFloor(): void
@@ -42,6 +51,6 @@ class ExtractedDataResult
 
     public function hasUpdatedData(): bool
     {
-        return $this->updatedFloors || $this->updatedFloorConnections || $this->updatedNpcs;
+        return $this->createdNpcs || $this->updatedFloors || $this->updatedFloorConnections || $this->updatedNpcs;
     }
 }

@@ -14,6 +14,8 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 {
     private static bool $ENABLED = true;
 
+    private static int $GROUPED_CONTEXT_COUNT = 0;
+
     /** @var array Every begin call that was made, a new key => [] is added to this array. */
     private array $groupedContexts = [];
 
@@ -41,6 +43,9 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
     public function addContext(string $key, array ...$context): void
     {
+        if (!isset($this->groupedContexts[$key])) {
+            self::$GROUPED_CONTEXT_COUNT++;
+        }
         // Add all variables from $context, but remove key (our first parameter) since we don't need it
         $this->groupedContexts[$key] = empty($context) ? [] : array_merge(...$context);
         $this->cacheGroupedContexts();
@@ -48,8 +53,12 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
     public function removeContext(string $key): void
     {
-        unset($this->groupedContexts[$key]);
-        $this->cacheGroupedContexts();
+        if (isset($this->groupedContexts[$key])) {
+            self::$GROUPED_CONTEXT_COUNT--;
+
+            unset($this->groupedContexts[$key]);
+            $this->cacheGroupedContexts();
+        }
     }
 
     protected function getChannel(): ?string
@@ -64,7 +73,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         return $this;
     }
 
-    protected function start(string $functionName, array $context = []): void
+    protected function start(string $functionName, array $context = [], bool $addContext = true): void
     {
         $targetKey = Str::replaceEnd('start', '', strtolower($functionName));
 
@@ -76,7 +85,8 @@ abstract class StructuredLogging implements StructuredLoggingInterface
             );
         }
 
-        $this->addContext($targetKey, $context);
+        // Sometimes you just want to log something without adding the context to all subsequent log lines
+        $this->addContext($targetKey, $addContext ? $context : []);
         Stopwatch::start($targetKey);
 
         $this->log(Level::Info, $functionName, $context);
@@ -164,7 +174,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         $startPadding    = str_repeat(' ', max(0, $fixedLength - $levelNameLength));
 
         $messageWithContextCounts = trim(
-            sprintf('%s %s', str_repeat('-', count($this->groupedContexts)), array_reverse(explode('\\', $functionName))[0])
+            sprintf('%s %s', str_repeat('-', self::$GROUPED_CONTEXT_COUNT), array_reverse(explode('\\', $functionName))[0])
         );
         // Convert App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
 

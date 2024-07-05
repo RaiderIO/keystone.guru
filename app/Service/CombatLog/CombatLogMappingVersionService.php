@@ -160,6 +160,11 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                     }
 
                     $npcs = Npc::whereIn('dungeon_id', [-1, $dungeon->id])->get()->keyBy('id');
+
+                    // Assign the default floor in case there's no MapChange event coming (Ara-Kara is one such?)
+                    /** @var Floor $currentFloor */
+                    $currentFloor = $dungeon->floors()->firstWhere('default', true);
+                    $this->log->createMappingVersionFromCombatLogCurrentFloorDefaultFloor($dungeon->id, $currentFloor->id);
                 }
 
                 return $parsedEvent;
@@ -168,6 +173,8 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             // Ensure we know the floor
             if ($parsedEvent instanceof MapChange) {
                 $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID(), $dungeon->id);
+                $this->log->createMappingVersionFromCombatLogCurrentFloorFromMapChange($parsedEvent->getUiMapID(), $currentFloor->id);
+
             } else if ($currentFloor === null) {
                 $this->log->createMappingVersionFromCombatLogSkipEntryNoFloor();
 
