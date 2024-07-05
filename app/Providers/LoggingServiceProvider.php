@@ -20,6 +20,8 @@ use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLogging;
 use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Builders\Logging\ResultEventDungeonRouteBuilderLogging;
 use App\Service\CombatLog\Builders\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
+use App\Service\CombatLog\DataExtractors\Logging\CreateMissingNpcDataExtractorLogging;
+use App\Service\CombatLog\DataExtractors\Logging\CreateMissingNpcDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\Logging\FloorDataExtractorLogging;
 use App\Service\CombatLog\DataExtractors\Logging\FloorDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\Logging\NpcUpdateDataExtractorLogging;
@@ -94,6 +96,7 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(CreateRouteBodyCorrectionBuilderLoggingInterface::class, CreateRouteBodyCorrectionBuilderLogging::class);
         $this->app->bind(ResultEventDungeonRouteBuilderLoggingInterface::class, ResultEventDungeonRouteBuilderLogging::class);
         /// DataExtractors
+        $this->app->bind(CreateMissingNpcDataExtractorLoggingInterface::class, CreateMissingNpcDataExtractorLogging::class);
         $this->app->bind(FloorDataExtractorLoggingInterface::class, FloorDataExtractorLogging::class);
         $this->app->bind(NpcUpdateDataExtractorLoggingInterface::class, NpcUpdateDataExtractorLogging::class);
         /// Filters

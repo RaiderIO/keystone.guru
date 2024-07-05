@@ -15,8 +15,9 @@ class NpcClassesSeeder extends Seeder implements TableSeederInterface
         $this->command->info('Adding known Npc classes');
 
         $npcClassAttributes = [];
-        foreach (NpcClass::ALL as $key) {
+        foreach (NpcClass::ALL as $key => $id) {
             $npcClassAttributes[] = [
+                'id'  => $id,
                 'key'  => $key,
                 'name' => sprintf('npcclasses.%s', $key),
             ];

@@ -32,10 +32,12 @@ use InvalidArgumentException;
  * @property bool                                $sanguine
  * @property bool                                $runs_away_in_fear
  * @property bool                                $hyper_respawn
+ *
  * @property Dungeon                             $dungeon
  * @property NpcClassification                   $classification
  * @property NpcType                             $type
  * @property NpcClass                            $class
+ *
  * @property NpcEnemyForces|null                 $enemyForces
  * @property NpcEnemyForces[]|Collection         $npcEnemyForces
  * @property Enemy[]|Collection                  $enemies

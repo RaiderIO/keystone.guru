@@ -8,6 +8,7 @@ use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
 use App\Service\CombatLog\DataExtractors\DataExtractorInterface;
 use App\Service\CombatLog\DataExtractors\FloorDataExtractor;
 use App\Service\CombatLog\DataExtractors\NpcUpdateDataExtractor;
@@ -29,6 +30,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
     ) {
         $this->dataExtractors = collect([
             new FloorDataExtractor(),
+            new CreateMissingNpcDataExtractor(),
             new NpcUpdateDataExtractor(),
         ]);
     }
@@ -43,7 +45,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
         $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
         use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds) {
-            $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
+            $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => trim($rawEvent), 'lineNr' => $lineNr]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
             $parsedEvent    = $combatLogEntry->parseEvent([], $combatLogVersion);
@@ -100,14 +102,18 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
             $this->log->extractDataSetChallengeMode(__($dungeon->name, [], 'en_US'), $currentKeyLevel, $currentKeyAffixGroup->getTextAttribute());
         } else if ($parsedEvent instanceof ZoneChange) {
-            if ($currentDungeon?->keyLevel !== 1) {
+            if ($currentDungeon?->keyLevel !== null) {
                 $this->log->extractDataSetZoneFailedChallengeModeActive();
             } else {
-                $dungeon = Dungeon::where('map_id', $parsedEvent->getZoneId())->firstOrFail();
+                $dungeon = Dungeon::firstWhere('map_id', $parsedEvent->getZoneId());
 
-                $result = new DataExtractionCurrentDungeon($dungeon);
+                if ($dungeon === null) {
+                    $this->log->extractDataZoneChangeDungeonNotFound($parsedEvent->getZoneId(), $parsedEvent->getZoneName());
+                } else {
+                    $result = new DataExtractionCurrentDungeon($dungeon);
 
-                $this->log->extractDataSetZone(__($dungeon->name, [], 'en_US'));
+                    $this->log->extractDataZoneChangeSetZone(__($dungeon->name, [], 'en_US'));
+                }
             }
         }
 

@@ -12,5 +12,7 @@ interface CombatLogDataExtractionServiceLoggingInterface
 
     public function extractDataSetZoneFailedChallengeModeActive(): void;
 
-    public function extractDataSetZone(string $dungeonName): void;
+    public function extractDataZoneChangeDungeonNotFound(int $zoneId, string $zoneName): void;
+
+    public function extractDataZoneChangeSetZone(string $dungeonName): void;
 }
