@@ -20,7 +20,8 @@ class WowheadService implements WowheadServiceInterface
 {
     use Curl;
 
-    private const HEALTH_IDENTIFYING_TOKEN = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
+    private const IDENTIFYING_TOKEN_HEALTH     = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
+    private const IDENTIFYING_TOKEN_DISPLAY_ID = 'linksButton.dataset.displayId =';
 
     public function __construct(
         private readonly WowheadServiceLoggingInterface $log
@@ -29,21 +30,15 @@ class WowheadService implements WowheadServiceInterface
 
     public function getNpcHealth(GameVersion $gameVersion, Npc $npc): ?int
     {
-        $response = $this->curlGet(
-            sprintf('https://wowhead.com/%snpc=%s/%s',
-                $gameVersion->key === GameVersion::GAME_VERSION_RETAIL ? '' : $gameVersion->key . '/',
-                $npc->id,
-                Str::slug($npc->name)
-            )
-        );
+        $response = $this->getNpcPageHtml($gameVersion, $npc);
 
         // Hacky shit to scrape it
-        $health = 0;
+        $health = null;
         $lines  = explode(PHP_EOL, $response);
         foreach ($lines as $line) {
             $line = trim($line);
 
-            if (!str_contains($line, self::HEALTH_IDENTIFYING_TOKEN)) {
+            if (!str_contains($line, self::IDENTIFYING_TOKEN_HEALTH)) {
                 continue;
             }
 
@@ -71,7 +66,8 @@ class WowheadService implements WowheadServiceInterface
                         }
                     }
                 }
-            } catch (ChildNotFoundException|StrictException|LogicalException|ContentLengthException|CircularException|NotLoadedException) {
+            } catch (ChildNotFoundException|StrictException|LogicalException|ContentLengthException|CircularException|NotLoadedException $ex) {
+                $this->log->getNpcHealthHtmlParsingException($ex);
             }
         }
 
@@ -124,9 +120,42 @@ class WowheadService implements WowheadServiceInterface
         return $result;
     }
 
+    public function getNpcDisplayId(GameVersion $gameVersion, Npc $npc): ?int
+    {
+        $response = $this->getNpcPageHtml($gameVersion, $npc);
+
+        // Hacky shit to scrape it
+        $displayId = null;
+        $lines  = explode(PHP_EOL, $response);
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            if (!str_contains($line, self::IDENTIFYING_TOKEN_DISPLAY_ID)) {
+                continue;
+            }
+
+            $displayId = (int)str_replace([self::IDENTIFYING_TOKEN_DISPLAY_ID], '', $line);
+            break;
+        }
+
+        return $displayId;
+    }
+
+
     public function sleep(int $seconds = 1): void
     {
         sleep($seconds);
+    }
+
+    public function getNpcPageHtml(GameVersion $gameVersion, Npc $npc): string
+    {
+        return $this->curlGet(
+            sprintf('https://wowhead.com/%snpc=%s/%s',
+                $gameVersion->key === GameVersion::GAME_VERSION_RETAIL ? '' : $gameVersion->key . '/',
+                $npc->id,
+                Str::slug($npc->name)
+            )
+        );
     }
 
     private function getStringBetween(string $string, string $start, string $end): string

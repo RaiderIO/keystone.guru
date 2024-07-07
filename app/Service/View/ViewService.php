@@ -127,7 +127,7 @@ class ViewService implements ViewServiceInterface
                 'selectableSpellsByCategory'      => $selectableSpellsByCategory,
 
                 // Misc
-                'allGameVersions'                 => GameVersion::all(),
+                'allGameVersions'                 => GameVersion::active()->get(),
                 'activeExpansions'                => $activeExpansions, // Show most recent expansions first
                 'allExpansions'                   => $allExpansions,
                 'dungeonsByExpansionIdDesc'       => $allDungeonsByExpansionId,

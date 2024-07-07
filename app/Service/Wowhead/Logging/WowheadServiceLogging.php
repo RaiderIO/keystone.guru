@@ -6,6 +6,11 @@ use App\Logging\StructuredLogging;
 
 class WowheadServiceLogging extends StructuredLogging implements WowheadServiceLoggingInterface
 {
+    public function getNpcHealthHtmlParsingException(\Throwable $ex): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function downloadMissingSpellIconsStart(): void
     {
         $this->start(__METHOD__);
@@ -25,5 +30,4 @@ class WowheadServiceLogging extends StructuredLogging implements WowheadServiceL
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
-
 }

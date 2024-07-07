@@ -19,15 +19,19 @@ use Illuminate\Support\Collection;
 /**
  * @property int                   $id
  * @property int                   $icon_file_id
- * @property int                   $active
+ * @property bool                  $active
  * @property string                $name
  * @property string                $shortname
  * @property string                $color
+ *
  * @property Carbon                $released_at
  * @property Carbon                $created_at
  * @property Carbon                $updated_at
- * @property Collection|Dungeon[]  $dungeons
+ *
+ * @property Collection<Dungeon>   $dungeons
  * @property TimewalkingEvent|null $timewalkingevent
+ *
+ * @method static Builder active()
  *
  * @mixin Eloquent
  */

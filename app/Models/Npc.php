@@ -20,7 +20,7 @@ use InvalidArgumentException;
  * @property int                                 $classification_id
  * @property int                                 $npc_type_id
  * @property int                                 $npc_class_id
- * @property int                                 $display_id
+ * @property int|null                            $display_id
  * @property string                              $name
  * @property int                                 $base_health
  * @property int|null                            $health_percentage Null = 100% health

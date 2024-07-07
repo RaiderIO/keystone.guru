@@ -194,7 +194,6 @@ class Save extends Command
             $this->saveDungeonDungeonRoutes($dungeon, $rootDirPath);
             $this->saveDungeonNpcs($dungeon, $rootDirPath);
 
-            /** @var Dungeon $dungeon */
             $floors = $dungeon->floors()->with([
                 'enemyPacksForExport',
                 'enemyPatrolsForExport',

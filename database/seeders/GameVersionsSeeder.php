@@ -23,6 +23,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
                 'name'        => sprintf('gameversions.%s.name', $key),
                 'description' => sprintf('gameversions.%s.description', $key),
                 'has_seasons' => $key === GameVersion::GAME_VERSION_RETAIL,
+                'active'      => $key !== GameVersion::GAME_VERSION_BETA,
             ];
         }
 

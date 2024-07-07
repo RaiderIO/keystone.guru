@@ -10,4 +10,6 @@ interface WowheadServiceInterface
     public function getNpcHealth(GameVersion $gameVersion, Npc $npc): ?int;
 
     public function downloadMissingSpellIcons(): bool;
+
+    public function getNpcDisplayId(GameVersion $gameVersion, Npc $npc): ?int;
 }

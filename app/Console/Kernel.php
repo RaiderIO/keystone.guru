@@ -58,8 +58,10 @@ use App\Console\Commands\Supervisor\StartSupervisor;
 use App\Console\Commands\Supervisor\StopSupervisor;
 use App\Console\Commands\Thumbnail\DeleteExpiredJobs;
 use App\Console\Commands\View\Cache;
+use App\Console\Commands\Wowhead\FetchDisplayIds;
 use App\Console\Commands\Wowhead\FetchHealth;
 use App\Console\Commands\Wowhead\FetchMissingSpellIcons;
+use App\Console\Commands\Wowhead\RefreshDisplayIds as RefreshDisplayIdsWowhead;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
 use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
 use App\Logic\Scheduler\UpdateDungeonRouteRating;
@@ -183,8 +185,10 @@ class Kernel extends ConsoleKernel
         Cache::class,
 
         // Wowhead
+        FetchDisplayIds::class,
         FetchHealth::class,
         FetchMissingSpellIcons::class,
+        RefreshDisplayIdsWowhead::class,
 
         // WowTools
         RefreshDisplayIds::class,
@@ -205,11 +209,11 @@ class Kernel extends ConsoleKernel
         $schedule->command('scheduler:refreshoutdatedthumbnails')->everyFifteenMinutes();
         $schedule->command('scheduler:deleteexpired')->hourly();
 
-        if ($appType === 'mapping') {
+        if (in_array($appType, ['mapping', 'local'])) {
             $schedule->command('mapping:sync')->everyFiveMinutes();
 
             // Ensure display IDs are set
-            $schedule->command('wowtools:refreshdisplayids')->hourly();
+            $schedule->command('wowhead:refreshdisplayids')->hourly();
         }
 
         $schedule->command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours
