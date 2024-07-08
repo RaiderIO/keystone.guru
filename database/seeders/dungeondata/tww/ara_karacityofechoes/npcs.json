@@ -194,7 +194,7 @@
         "classification_id": 2,
         "npc_type_id": 1,
         "npc_class_id": 1,
-        "display_id": null,
+        "display_id": 120860,
         "name": "Reinforced Drone",
         "base_health": 12345,
         "health_percentage": 100,
