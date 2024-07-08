@@ -1113,6 +1113,27 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 45992,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": null,
+        "name": "Valiona",
+        "base_health": 12345,
+        "health_percentage": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npcspells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 114626,
         "dungeon_id": -1,
         "classification_id": 2,
