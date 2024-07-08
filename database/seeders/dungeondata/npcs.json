@@ -1118,7 +1118,7 @@
         "classification_id": 3,
         "npc_type_id": 5,
         "npc_class_id": 1,
-        "display_id": null,
+        "display_id": 34812,
         "name": "Valiona",
         "base_health": 12345,
         "health_percentage": null,
