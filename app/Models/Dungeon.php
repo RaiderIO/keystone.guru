@@ -273,7 +273,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public const DUNGEON_CITY_OF_THREADS            = 'cityofthreads'; // cityofthreadsdungeon
     public const DUNGEON_DARKFLAME_CLEFT            = 'darkflamecleft';
     public const DUNGEON_PRIORY_OF_THE_SACRED_FLAME = 'prioryofthesacredflame'; // sacredflame
-    public const DUNGEON_THE_DAWNBREAKER            = 'thedawnbreaker';         // dawnbreaker
+    public const DUNGEON_THE_DAWNBREAKER            = 'thedawnbreaker';         // dawnbreaker (aka harrowfall)
     public const DUNGEON_THE_ROOKERY                = 'therookery';             // rookerydungeon
     public const DUNGEON_THE_STONEVAULT             = 'thestonevault';          // stonevault_foundry
 

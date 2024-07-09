@@ -4558,5 +4558,35 @@
         "created_at": "2024-07-05T21:22:32.000000Z",
         "updated_at": "2024-07-05T21:22:32.000000Z",
         "merged": false
+    },
+    {
+        "id": 349,
+        "dungeon_id": 108,
+        "version": 4,
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": null,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": null,
+        "facade_enabled": 0,
+        "created_at": "2024-07-09T08:14:47.000000Z",
+        "updated_at": "2024-07-09T08:14:47.000000Z",
+        "merged": false
+    },
+    {
+        "id": 351,
+        "dungeon_id": 110,
+        "version": 3,
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": null,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": null,
+        "facade_enabled": 0,
+        "created_at": "2024-07-09T08:51:02.000000Z",
+        "updated_at": "2024-07-09T08:51:02.000000Z",
+        "merged": false
     }
 ]

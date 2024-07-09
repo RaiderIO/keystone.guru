@@ -57,6 +57,11 @@ class MapChange extends SpecialEvent
         $this->yMax      = $parameters[2];
         $this->yMin      = $parameters[3];
 
+//        $this->xMax      = $parameters[3];
+//        $this->xMin      = $parameters[4];
+//        $this->yMax      = $parameters[5];
+//        $this->yMin      = $parameters[6];
+
         return $this;
     }
 
