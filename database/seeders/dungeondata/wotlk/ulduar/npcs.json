@@ -1564,7 +1564,7 @@
         "base_health": 196000,
         "health_percentage": null,
         "aggressiveness": "friendly",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,

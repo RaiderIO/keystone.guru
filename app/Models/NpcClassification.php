@@ -24,15 +24,11 @@ class NpcClassification extends CacheModel
 
     protected $fillable = ['id', 'name', 'key', 'color'];
 
-    public const NPC_CLASSIFICATION_NORMAL = 'normal';
-
-    public const NPC_CLASSIFICATION_ELITE = 'elite';
-
-    public const NPC_CLASSIFICATION_BOSS = 'boss';
-
+    public const NPC_CLASSIFICATION_NORMAL     = 'normal';
+    public const NPC_CLASSIFICATION_ELITE      = 'elite';
+    public const NPC_CLASSIFICATION_BOSS       = 'boss';
     public const NPC_CLASSIFICATION_FINAL_BOSS = 'finalboss';
-
-    public const NPC_CLASSIFICATION_RARE = 'rare';
+    public const NPC_CLASSIFICATION_RARE       = 'rare';
 
     public const ALL = [
         self::NPC_CLASSIFICATION_NORMAL     => 1,
