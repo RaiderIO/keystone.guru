@@ -178,7 +178,13 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
             }
         }
 
-        return (new PhpArray2LuaTable())->toLuaTableString('MDT.mapPOIs[dungeonIndex]', $mapPOIs);
+        if(empty($mapPOIs) ){
+            return '
+MDT.mapPOIs[dungeonIndex] = {}
+';
+        } else {
+            return (new PhpArray2LuaTable())->toLuaTableString('MDT.mapPOIs[dungeonIndex]', $mapPOIs);
+        }
     }
 
     /**
