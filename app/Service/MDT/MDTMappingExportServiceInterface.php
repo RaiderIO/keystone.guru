@@ -6,5 +6,5 @@ use App\Models\Mapping\MappingVersion;
 
 interface MDTMappingExportServiceInterface
 {
-    public function getMDTMappingAsLuaString(MappingVersion $mappingVersion): string;
+    public function getMDTMappingAsLuaString(MappingVersion $mappingVersion, bool $excludeTranslations = false): string;
 }

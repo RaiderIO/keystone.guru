@@ -24,7 +24,7 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function getMDTMappingAsLuaString(MappingVersion $mappingVersion): string
+    public function getMDTMappingAsLuaString(MappingVersion $mappingVersion, bool $excludeTranslations = false): string
     {
         $translations = collect();
 
@@ -33,24 +33,28 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
         $dungeonMaps             = $this->getDungeonMaps($mappingVersion);
         $dungeonSubLevels        = $this->getDungeonSubLevels($mappingVersion, $translations);
         $dungeonTotalCountString = $this->getDungeonTotalCount($mappingVersion);
-        $mapPOIS                 = $this->getMapPOIs($mappingVersion);
+        $mapPOIs                 = $this->getMapPOIs($mappingVersion);
         $dungeonEnemies          = $this->getDungeonEnemies($mappingVersion, $translations);
-        $header                  = $this->getHeader($mappingVersion, $translations);
+        $header                  = $this->getHeader($mappingVersion, $translations, $excludeTranslations);
 
-        return $header . $dungeonMaps . $dungeonSubLevels . $dungeonTotalCountString . $mapPOIS . $dungeonEnemies;
+        return $header . $dungeonMaps . $dungeonSubLevels . $dungeonTotalCountString . $mapPOIs . $dungeonEnemies;
     }
 
-    private function getHeader(MappingVersion $mappingVersion, Collection $translations): string
+    private function getHeader(MappingVersion $mappingVersion, Collection $translations, bool $excludeTranslations = false): string
     {
         $translations->push(__($mappingVersion->dungeon->name));
 
-        $translationsLua = $this->getTranslations($translations);
+        $translationsLua = $excludeTranslations ? '' : $this->getTranslations($translations);
 
-        return sprintf('
-local MDT = MDT
+        $zoneIds = $mappingVersion->dungeon->floors()
+            ->where('facade', 0)
+            ->get('ui_map_id')
+            ->pluck('ui_map_id')
+            ->toArray();
+
+        return sprintf('local MDT = MDT
 local L = MDT.L
-%s
-local dungeonIndex = %d
+%slocal dungeonIndex = %d
 MDT.dungeonList[dungeonIndex] = L["%s"]
 MDT.mapInfo[dungeonIndex] = {
 --  viewportPositionOverrides =
@@ -62,7 +66,17 @@ MDT.mapInfo[dungeonIndex] = {
 --    };
 --  }
 };
-        ', $translationsLua, $mappingVersion->dungeon->mdt_id, addslashes(__($mappingVersion->dungeon->name)));
+local zones = { %s }
+-- add zones to MDT.zoneIdToDungeonIdx
+for _, zone in ipairs(zones) do
+  MDT.zoneIdToDungeonIdx[zone] = dungeonIndex
+end
+        ',
+            $translationsLua,
+            $mappingVersion->dungeon->mdt_id,
+            addslashes(__($mappingVersion->dungeon->name)),
+            implode(', ', $zoneIds)
+        );
     }
 
     private function getDungeonMaps(MappingVersion $mappingVersion): string
@@ -298,7 +312,8 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
 
     private function getTranslations(Collection $translations): string
     {
-        $lua = [];
+        // EOL at the start
+        $lua = [''];
         foreach ($translations->unique() as $translation) {
             $lua[] = sprintf('L["%s"] = "%s"', addslashes((string)$translation), addslashes((string)$translation));
         }
