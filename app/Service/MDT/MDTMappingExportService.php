@@ -13,6 +13,7 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Models\NpcClassification;
 use App\Service\MDT\Logging\MDTMappingExportServiceLoggingInterface;
 use Illuminate\Support\Collection;
+use Str;
 
 class MDTMappingExportService implements MDTMappingExportServiceInterface
 {
@@ -82,10 +83,17 @@ end
     private function getDungeonMaps(MappingVersion $mappingVersion): string
     {
         $dungeonMaps   = [];
-        $index         = 0;
-        $dungeonMaps[] = sprintf('[%d] = "%s",', $index, $mappingVersion->dungeon->key);
-        foreach ($mappingVersion->dungeon->floors as $floor) {
-            $dungeonMaps[] = sprintf('[%d] = "%s%d_",', ++$index, $mappingVersion->dungeon->key, $index);
+        if ($mappingVersion->facade_enabled) {
+            /** @var Floor $facadeFloor */
+            $facadeFloor = $mappingVersion->dungeon->floors()->firstWhere('facade', true);
+            $dungeonMaps[] = '  [0] = "",';
+            $dungeonMaps[] = sprintf('  [1] = { customTextures = "%s" }', $facadeFloor->map_name);
+        } else {
+            $index         = 0;
+            $dungeonMaps[] = sprintf('  [%d] = "%s",', $index, $mappingVersion->dungeon->key);
+            foreach ($mappingVersion->dungeon->floors as $floor) {
+                $dungeonMaps[] = sprintf('  [%d] = "%s",', ++$index, $floor->name);
+            }
         }
 
         return sprintf('
@@ -100,7 +108,7 @@ MDT.dungeonMaps[dungeonIndex] = {
         $subLevels = [];
         $index     = 0;
         foreach ($mappingVersion->dungeon->floors as $floor) {
-            $subLevels[] = sprintf('    [%d] = L["%s"],', ++$index, addslashes(__($floor->name)));
+            $subLevels[] = sprintf('  [%d] = L["%s"],', ++$index, addslashes(__($floor->name)));
             $translations->push(__($floor->name));
         }
 

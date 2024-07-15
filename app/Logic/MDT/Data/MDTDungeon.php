@@ -13,6 +13,7 @@ use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Entity\MDTMapPOI;
 use App\Logic\MDT\Entity\MDTNpc;
 use App\Logic\MDT\Exception\InvalidMDTDungeonException;
+use App\Logic\MDT\Exception\InvalidMDTExpansionException;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Expansion;
@@ -40,6 +41,10 @@ class MDTDungeon
     ) {
         if (!Conversion::hasMDTDungeonName($this->dungeon->key)) {
             throw new InvalidMDTDungeonException(sprintf('Unsupported MDT dungeon for dungeon key %s!', $this->dungeon->key));
+        }
+
+        if (!Conversion::getMDTExpansionName($this->dungeon->key)) {
+            throw new InvalidMDTExpansionException(sprintf('Unsupported MDT expansion for dungeon key %s!', $this->dungeon->key));
         }
     }
 
@@ -268,7 +273,9 @@ class MDTDungeon
         $mdtExpansionName = Conversion::getMDTExpansionName($this->dungeon->key);
 
         $mdtDungeonName = Conversion::getMDTDungeonName($this->dungeon->key);
-        if (!empty($mdtExpansionName) && !empty($mdtDungeonName) && Expansion::active()->where('shortname', $expansionName)->exists()) {
+        if (!empty($mdtExpansionName) &&
+            !empty($mdtDungeonName) &&
+            Expansion::active()->where('shortname', $expansionName)->exists()) {
             $dungeonHome = sprintf('%s/%s', $mdtHome, $mdtExpansionName);
 
             $mdtDungeonNameFile = sprintf('%s/%s.lua', $dungeonHome, $mdtDungeonName);

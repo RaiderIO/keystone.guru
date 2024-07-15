@@ -29,6 +29,7 @@ class Conversion
         Expansion::EXPANSION_BFA          => 'BattleForAzeroth',
         Expansion::EXPANSION_SHADOWLANDS  => 'Shadowlands',
         Expansion::EXPANSION_DRAGONFLIGHT => 'Dragonflight', // DF S1 has MoP/WoD dungeons under here
+        Expansion::EXPANSION_TWW          => 'TheWarWithin',
     ];
 
     public const DUNGEON_NAME_MAPPING = [
@@ -59,7 +60,7 @@ class Conversion
 //            Dungeon::DUNGEON_WAILING_CAVERNS             => 'WailingCaverns',
 //            Dungeon::DUNGEON_ZUL_FARRAK                  => 'ZulFarrak',
 //        ],
-        Expansion::EXPANSION_WOTLK   => [
+        Expansion::EXPANSION_WOTLK => [
             Dungeon::DUNGEON_AHN_KAHET_THE_OLD_KINGDOM => 'AhnKahetTheOldKingdom',
             Dungeon::DUNGEON_AZJOL_NERUB               => 'AzjolNerub',
             Dungeon::DUNGEON_DRAK_THARON_KEEP          => 'DrakTharonKeep',
@@ -163,6 +164,17 @@ class Conversion
             Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL => 'DawnOfTheInfiniteLower',
             Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE  => 'DawnOfTheInfiniteUpper',
         ],
+
+        Expansion::EXPANSION_TWW => [
+            // Cata
+            Dungeon::DUNGEON_GRIM_BATOL              => 'GrimBatol',
+
+            // TWW
+            Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES => 'AraKara',
+            Dungeon::DUNGEON_CITY_OF_THREADS         => 'CityOfThreads',
+            Dungeon::DUNGEON_THE_DAWNBREAKER         => 'TheDawnbreaker',
+            Dungeon::DUNGEON_THE_STONEVAULT          => 'TheStonevault',
+        ],
     ];
 
     /**
@@ -186,13 +198,22 @@ class Conversion
         return $result;
     }
 
+    /**
+     * @param string $dungeonKey
+     * @return bool True if MDT an expansion name for this dungeon, false if it has not.
+     */
+    public static function hasMDTExpansionName(string $dungeonKey): bool
+    {
+        return is_string(self::getMDTExpansionName($dungeonKey));
+    }
+
     public static function getMDTExpansionName(string $dungeonKey): ?string
     {
         return self::EXPANSION_NAME_MAPPING[self::getExpansionName($dungeonKey)] ?? null;
     }
 
     /**
-     * @param  $dungeonKey  string
+     * @param string $dungeonKey
      * @return bool True if MDT has a dungeon name, false if it has not.
      */
     public static function hasMDTDungeonName(string $dungeonKey): bool
@@ -201,7 +222,7 @@ class Conversion
     }
 
     /**
-     * @param  $dungeonKey  string
+     * @param string $dungeonKey
      * @return string|null Gets the MDT version of a dungeon name.
      */
     public static function getMDTDungeonName(string $dungeonKey): ?string
@@ -219,7 +240,7 @@ class Conversion
     /**
      * Converts a MDT Dungeon ID to a Keystone.guru ID.
      *
-     * @param  $mdtDungeonId  int
+     * @param int $mdtDungeonId
      *
      * @throws Exception An exception if the found dungeon ID was incorrect/not supported.
      */

@@ -33,6 +33,7 @@ use Illuminate\Support\Collection;
  * @property int                                    $index
  * @property int|null                               $mdt_sub_level
  * @property int|null                               $ui_map_id
+ * @property string|null                            $map_name The map name that Blizzard gives to this floor
  * @property string                                 $name
  * @property bool                                   $default
  * @property bool                                   $facade
@@ -108,6 +109,7 @@ class Floor extends CacheModel implements MappingModelInterface
         'index',
         'mdt_sub_level',
         'ui_map_id',
+        'map_name',
         'name',
         'default',
         'facade',
