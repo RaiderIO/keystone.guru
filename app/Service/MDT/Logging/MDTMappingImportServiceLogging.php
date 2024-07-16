@@ -57,6 +57,12 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->start(__METHOD__, get_defined_vars());
     }
 
+    public function importNpcsUnableToFindCharacteristicForNpc(int $id, string $characteristicName): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+
     public function importNpcsSaveNewNpc(int $npcId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
@@ -71,6 +77,12 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
     {
         $this->error(__METHOD__, get_defined_vars());
     }
+
+    public function importNpcsCharacteristicsAndSpellsUpdate(int $npcCharacteristicsDeleted, bool $npcCharacteristicsInserted, int $npcSpellsDeleted, bool $npcSpellsInserted): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
 
     public function importNpcsEnd(): void
     {

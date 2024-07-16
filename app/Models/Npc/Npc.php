@@ -3,6 +3,7 @@
 namespace App\Models\Npc;
 
 use App\Models\CacheModel;
+use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Mapping\MappingModelInterface;
@@ -18,33 +19,35 @@ use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 /**
- * @property int                                 $id
- * @property int                                 $dungeon_id
- * @property int                                 $classification_id
- * @property int                                 $npc_type_id
- * @property int                                 $npc_class_id
- * @property int|null                            $display_id
- * @property string                              $name
- * @property int                                 $base_health
- * @property int|null                            $health_percentage Null = 100% health
- * @property string                              $aggressiveness
- * @property bool                                $dangerous
- * @property bool                                $truesight
- * @property bool                                $bursting
- * @property bool                                $bolstering
- * @property bool                                $sanguine
- * @property bool                                $runs_away_in_fear
- * @property bool                                $hyper_respawn
+ * @property int                                $id
+ * @property int                                $dungeon_id
+ * @property int                                $classification_id
+ * @property int                                $npc_type_id
+ * @property int                                $npc_class_id
+ * @property int|null                           $display_id
+ * @property string                             $name
+ * @property int                                $base_health
+ * @property int|null                           $health_percentage Null = 100% health
+ * @property string                             $aggressiveness
+ * @property bool                               $dangerous
+ * @property bool                               $truesight
+ * @property bool                               $bursting
+ * @property bool                               $bolstering
+ * @property bool                               $sanguine
+ * @property bool                               $runs_away_in_fear
+ * @property bool                               $hyper_respawn
  *
- * @property Dungeon                             $dungeon
- * @property NpcClassification                   $classification
- * @property NpcType                             $type
- * @property NpcClass                            $class
+ * @property Dungeon                            $dungeon
+ * @property NpcClassification                  $classification
+ * @property NpcType                            $type
+ * @property NpcClass                           $class
  *
- * @property NpcEnemyForces|null                 $enemyForces
- * @property NpcEnemyForces[]|Collection         $npcEnemyForces
- * @property Enemy[]|Collection                  $enemies
- * @property NpcBolsteringWhitelist[]|Collection $npcbolsteringwhitelists
+ * @property NpcEnemyForces|null                $enemyForces
+ * @property Collection<NpcEnemyForces>         $npcEnemyForces
+ * @property Collection<Enemy>                  $enemies
+ * @property Collection<Characteristic>         $characteristics
+ * @property Collection<Spell>                  $spells
+ * @property Collection<NpcBolsteringWhitelist> $npcbolsteringwhitelists
  *
  * @mixin Eloquent
  */
@@ -128,6 +131,16 @@ class Npc extends CacheModel implements MappingModelInterface
     {
         // Not sure why the foreign key declaration is required here, but it is
         return $this->belongsTo(NpcClass::class, 'npc_class_id');
+    }
+
+    public function characteristics(): BelongsToMany
+    {
+        return $this->belongsToMany(Characteristic::class, 'npc_characteristics');
+    }
+
+    public function npcCharacteristics(): HasMany
+    {
+        return $this->hasMany(NpcCharacteristic::class);
     }
 
     public function spells(): BelongsToMany

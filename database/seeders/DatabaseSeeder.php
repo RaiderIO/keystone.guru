@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
         MapIconTypesSeeder::class,
         TagCategorySeeder::class,
         PublishedStatesSeeder::class,
+        CharacteristicsSeeder::class,
 
         // Depends on ExpansionsSeeder, SeasonsSeeder
         AffixSeeder::class,

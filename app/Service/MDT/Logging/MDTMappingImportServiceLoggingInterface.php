@@ -26,11 +26,15 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importNpcsStart(): void;
 
+    public function importNpcsUnableToFindCharacteristicForNpc(int $id, string $characteristicName): void;
+
     public function importNpcsSaveNewNpc(int $npcId): void;
 
     public function importNpcsUpdateExistingNpc(int $npcId): void;
 
     public function importNpcsSaveNpcException(Exception $exception): void;
+
+    public function importNpcsCharacteristicsAndSpellsUpdate(int $npcCharacteristicsDeleted, bool $npcCharacteristicsInserted, int $npcSpellsDeleted, bool $npcSpellsInserted): void;
 
     public function importNpcsEnd(): void;
 

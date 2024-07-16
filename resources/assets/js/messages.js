@@ -2,6 +2,7 @@ export default {
     // The key format should be: 'locale.filename'.
     'en_US.messages': require('../../../lang/en_US/js.php'),
     'en_US.affixes': require('../../../lang/en_US/affixes.php'),
+    'en_US.characteristics': require('../../../lang/en_US/characteristics.php'),
     'en_US.classes': require('../../../lang/en_US/classes.php'),
     'en_US.combatlogdatatypes': require('../../../lang/en_US/combatlogdatatypes.php'),
     'en_US.combatlogeventtypes': require('../../../lang/en_US/combatlogeventtypes.php'),
@@ -23,6 +24,7 @@ export default {
 
     'de_DE.messages': require('../../../lang/de_DE/js.php'),
     'de_DE.affixes': require('../../../lang/de_DE/affixes.php'),
+    'de_DE.characteristics': require('../../../lang/de_DE/characteristics.php'),
     'de_DE.classes': require('../../../lang/de_DE/classes.php'),
     'de_DE.combatlogdatatypes': require('../../../lang/de_DE/combatlogdatatypes.php'),
     'de_DE.combatlogeventtypes': require('../../../lang/de_DE/combatlogeventtypes.php'),
@@ -44,6 +46,7 @@ export default {
 
     'ru_RU.messages': require('../../../lang/ru_RU/js.php'),
     'ru_RU.affixes': require('../../../lang/ru_RU/affixes.php'),
+    'ru_RU.characteristics': require('../../../lang/ru_RU/characteristics.php'),
     'ru_RU.classes': require('../../../lang/ru_RU/classes.php'),
     'ru_RU.combatlogdatatypes': require('../../../lang/ru_RU/combatlogdatatypes.php'),
     'ru_RU.combatlogeventtypes': require('../../../lang/ru_RU/combatlogeventtypes.php'),
@@ -65,6 +68,7 @@ export default {
 
     'ho_HO.messages': require('../../../lang/ho_HO/js.php'),
     'ho_HO.affixes': require('../../../lang/ho_HO/affixes.php'),
+    'ho_HO.characteristics': require('../../../lang/ho_HO/characteristics.php'),
     'ho_HO.classes': require('../../../lang/ho_HO/classes.php'),
     'ho_HO.combatlogdatatypes': require('../../../lang/ho_HO/combatlogdatatypes.php'),
     'ho_HO.combatlogeventtypes': require('../../../lang/ho_HO/combatlogeventtypes.php'),

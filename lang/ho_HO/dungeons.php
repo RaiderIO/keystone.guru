@@ -380,6 +380,12 @@ return [
         ],
     ],
     'cata'         => [
+        'grim_batol' => [
+            'name'   => 'Hodor',
+            'floors' => [
+                'grim_batol' => 'Hodor',
+            ],
+        ],
         'the_vortex_pinnacle' => [
             'name'   => 'Hodor',
             'floors' => [
@@ -837,52 +843,62 @@ return [
         ],
     ],
     'tww'          => [
-        'ara_karacityofechoes'   => [
+        'ara_kara_city_of_echoes'    => [
             'name'   => 'Hodor',
             'floors' => [
-                'ara_karacityofechoes' => 'Hodor',
+                'echoing_overlook'        => 'Hodor',
+                'the_undercache'          => 'Hodor',
+                'ara_kara_city_of_echoes' => 'Hodor',
             ],
         ],
-        'cityofthreads'          => [
+        'cinderbrew_meadery'         => [
             'name'   => 'Hodor',
             'floors' => [
-                'cityofthreads' => 'Hodor',
+                'cinderbrew_meadery' => 'Hodor',
             ],
         ],
-        'cinderbrewmeadery'      => [
+        'city_of_threads'            => [
             'name'   => 'Hodor',
             'floors' => [
-                'cinderbrewmeadery' => 'Hodor',
+                'city_of_threads'    => 'Hodor',
+                'the_transformatory' => 'Hodor',
             ],
         ],
-        'darkflamecleft'         => [
+        'darkflame_cleft'            => [
             'name'   => 'Hodor',
             'floors' => [
-                'darkflamecleft' => 'Hodor',
+                'darkflame_cleft' => 'Hodor',
             ],
         ],
-        'prioryofthesacredflame' => [
+        'priory_of_the_sacred_flame' => [
             'name'   => 'Hodor',
             'floors' => [
-                'prioryofthesacredflame' => 'Hodor',
+                'sanctified_grounds'         => 'Hodor',
+                'priory_of_the_sacred_flame' => 'Hodor',
             ],
         ],
-        'thedawnbreaker'         => [
+        'the_dawnbreaker'            => [
             'name'   => 'Hodor',
             'floors' => [
-                'thedawnbreaker' => 'Hodor',
+                'the_dawnbreaker' => 'Hodor',
             ],
         ],
-        'therookery'             => [
+        'the_rookery'                => [
             'name'   => 'Hodor',
             'floors' => [
-                'therookery' => 'Hodor',
+                'the_rookery_landing' => 'Hodor',
+                'storms_roost'        => 'Hodor',
+                'storm_rookery'       => 'Hodor',
+                'stormrider_barracks' => 'Hodor',
+                'crashing_storm_hall' => 'Hodor',
+                'abandoned_mines'     => 'Hodor',
+                'the_rookery'         => 'Hodor',
             ],
         ],
-        'thestonevault'          => [
+        'the_stonevault'             => [
             'name'   => 'Hodor',
             'floors' => [
-                'thestonevault' => 'Hodor',
+                'the_stonevault' => 'Hodor',
             ],
         ],
     ],

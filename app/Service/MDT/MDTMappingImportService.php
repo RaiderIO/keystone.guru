@@ -5,6 +5,7 @@ namespace App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Entity\MDTMapPOI;
+use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
@@ -14,8 +15,10 @@ use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\Npc\NpcSpell;
 use App\Models\Npc\NpcType;
 use App\Models\Polyline;
 use App\Service\Cache\CacheServiceInterface;
@@ -133,7 +136,16 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             // Get a list of NPCs and update/save them
             $npcs = $dungeon->npcs->keyBy('id');
 
+            $characteristicsByName = Characteristic::all()->mapWithKeys(function (Characteristic $characteristic) {
+                return [__($characteristic->name, [], 'en_US') => $characteristic];
+            });
+
+            $npcCharacteristicsAttributes = [];
+            $npcSpellsAttributes          = [];
+            $affectedNpcIds               = [];
             foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
+                $affectedNpcIds[] = $mdtNpc->getId();
+
                 $npc = $npcs->get($mdtNpc->getId());
 
                 if ($newlyCreated = ($npc === null)) {
@@ -151,6 +163,33 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npc->health_percentage = $npc->health_percentage ?? $mdtNpc->getHealthPercentage();
                 $npc->npc_type_id       = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::HUMANOID;
                 $npc->truesight         = $mdtNpc->getStealthDetect();
+
+                // Save characteristics
+                foreach ($mdtNpc->getCharacteristics() as $characteristicName => $enabled) {
+                    if (!$enabled) {
+                        continue;
+                    }
+
+                    /** @var Characteristic|null $characteristic */
+                    $characteristic = $characteristicsByName->get($characteristicName);
+                    if ($characteristic === null) {
+                        $this->log->importNpcsUnableToFindCharacteristicForNpc($npc->id, $characteristicName);
+                        continue;
+                    }
+
+                    $npcCharacteristicsAttributes[] = [
+                        'npc_id'            => $npc->id,
+                        'characteristic_id' => $characteristic->id,
+                    ];
+                }
+
+                // Save spells
+                foreach ($mdtNpc->getSpells() as $spellId => $obj) {
+                    $npcSpellsAttributes[] = [
+                        'npc_id'   => $npc->id,
+                        'spell_id' => $spellId,
+                    ];
+                }
 
                 try {
                     if ($newlyCreated ? $npc->save() : $npc->update()) {
@@ -190,6 +229,21 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     $this->log->importNpcsSaveNpcException($exception);
                 }
             }
+
+            // It's easier to delete/insert new ones than try to maintain the IDs which don't really mean anything anyway
+            // Clear characteristics/spells for all affected NPCs
+            $npcCharacteristicsDeleted = NpcCharacteristic::whereIn('npc_id', $affectedNpcIds)->delete();
+            $npcSpellsDeleted = NpcSpell::whereIn('npc_id', $affectedNpcIds)->delete();
+
+            // Insert new ones
+            $npcCharacteristicsInserted = NpcCharacteristic::insert($npcCharacteristicsAttributes);
+            $npcSpellsInserted = NpcSpell::insert($npcSpellsAttributes);
+            $this->log->importNpcsCharacteristicsAndSpellsUpdate(
+                $npcCharacteristicsDeleted,
+                $npcCharacteristicsInserted,
+                $npcSpellsDeleted,
+                $npcSpellsInserted
+            );
         } finally {
             $this->log->importNpcsEnd();
         }
