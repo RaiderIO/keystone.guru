@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('npc_spells', function (Blueprint $table) {
-            $table->id();
-            $table->integer('npc_id');
-            $table->integer('spell_id');
-
-            $table->index(['npc_id']);
-            $table->index(['spell_id']);
+        Schema::table('npc_classifications', function (Blueprint $table) {
+            $table->dropColumn('created_at');
+            $table->dropColumn('updated_at');
         });
     }
 
@@ -26,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('npc_spells');
+        Schema::table('npc_classifications', function (Blueprint $table) {
+            $table->timestamps();
+        });
     }
 };

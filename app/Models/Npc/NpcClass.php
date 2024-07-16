@@ -11,6 +11,8 @@ use Illuminate\Support\Collection;
 /**
  * @property int              $id
  * @property string           $name
+ * @property string           $key
+ *
  * @property Collection|Npc[] $npcs
  *
  * @mixin Eloquent

@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
  * @property string           $name
  * @property string           $key
  * @property string           $color
+ *
  * @property Collection|Npc[] $npcs
  *
  * @mixin Eloquent
@@ -20,8 +21,6 @@ use Illuminate\Support\Collection;
 class NpcClassification extends CacheModel
 {
     use SeederModel;
-
-    public $hidden = ['created_at', 'updated_at'];
 
     protected $fillable = ['id', 'name', 'key', 'color'];
 
