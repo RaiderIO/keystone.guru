@@ -14,7 +14,9 @@ class PhpArray2LuaTable
 
     private const TOKEN_ASSIGNMENT_OPERATOR = '=';
 
-    private const TOKEN_ITEM_SEPARATOR = ';' . PHP_EOL;
+    private const TOKEN_ITEM_SEPARATOR = ',' . PHP_EOL;
+
+    private const TOKEN_OBJECT_CLOSE_END_SEPARATOR = ';' . PHP_EOL;
 
     private const TOKEN_STRING_QUOTE = '"';
 
@@ -25,8 +27,7 @@ class PhpArray2LuaTable
     public function toLuaTableString(string $tableName, array $contents): string
     {
         return sprintf('
-%s %s %s
-        ', $tableName,
+%s %s %s', $tableName,
             self::TOKEN_ASSIGNMENT_OPERATOR,
             implode('', $this->arrayToLuaTokens($contents))
         );
@@ -58,7 +59,8 @@ class PhpArray2LuaTable
 
         $tokens[] = $this->getIndent($indent - 1);
         $tokens[] = self::TOKEN_OBJECT_CLOSE;
-        $tokens[] = self::TOKEN_ITEM_SEPARATOR;
+        // End with a semicolon when we close off the object, otherwise just a normal separator
+        $tokens[] = $indent === 1 ? self::TOKEN_OBJECT_CLOSE_END_SEPARATOR : self::TOKEN_ITEM_SEPARATOR;
 
         return $tokens;
     }
