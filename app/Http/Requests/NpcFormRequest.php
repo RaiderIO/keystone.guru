@@ -4,10 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Dungeon;
 use App\Models\Laratrust\Role;
-use App\Models\Npc;
-use App\Models\NpcClass;
-use App\Models\NpcClassification;
-use App\Models\NpcType;
+use App\Models\Npc\Npc;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

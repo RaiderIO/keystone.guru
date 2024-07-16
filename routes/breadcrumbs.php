@@ -7,7 +7,7 @@
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Release;
 use App\Models\Season;

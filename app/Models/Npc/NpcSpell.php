@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Npc;
 
+use App\Models\CacheModel;
+use App\Models\Spell;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,13 +11,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $id
  * @property int $npc_id
- * @property int $whitelist_npc_id
- * @property Npc $npc
- * @property Npc $whitelistnpc
+ * @property int $spell_id
  *
  * @mixin Eloquent
  */
-class NpcBolsteringWhitelist extends CacheModel
+class NpcSpell extends CacheModel
 {
     use SeederModel;
 
@@ -23,16 +23,13 @@ class NpcBolsteringWhitelist extends CacheModel
 
     protected $fillable = ['id', 'npc_id', 'whitelist_npc_id'];
 
-    public $with = ['whitelistnpc'];
-
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);
     }
 
-    public function whitelistnpc(): BelongsTo
+    public function spell(): BelongsTo
     {
-        // Without to prevent infinite recursion
-        return $this->belongsTo(Npc::class, 'whitelist_npc_id')->without('npcbolsteringwhitelists');
+        return $this->belongsTo(Spell::class);
     }
 }

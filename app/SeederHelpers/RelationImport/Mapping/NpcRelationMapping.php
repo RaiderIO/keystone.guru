@@ -2,7 +2,7 @@
 
 namespace App\SeederHelpers\RelationImport\Mapping;
 
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use App\SeederHelpers\RelationImport\Parsers\Relation\NpcNpcBolsteringWhitelistRelationParser;
 use App\SeederHelpers\RelationImport\Parsers\Relation\NpcNpcEnemyForcesRelationParser;
 use App\SeederHelpers\RelationImport\Parsers\Relation\NpcNpcSpellsRelationParser;

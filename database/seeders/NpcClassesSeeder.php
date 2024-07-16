@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\NpcClass;
+use App\Models\Npc\NpcClass;
 use Illuminate\Database\Seeder;
 
 class NpcClassesSeeder extends Seeder implements TableSeederInterface

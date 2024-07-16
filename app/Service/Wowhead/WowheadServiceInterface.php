@@ -3,7 +3,7 @@
 namespace App\Service\Wowhead;
 
 use App\Models\GameVersion\GameVersion;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 
 interface WowheadServiceInterface
 {

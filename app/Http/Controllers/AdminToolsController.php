@@ -13,10 +13,10 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
-use App\Models\NpcClassification;
-use App\Models\NpcType;
+use App\Models\Npc\NpcType;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -748,7 +748,7 @@ class AdminToolsController extends Controller
                 }
 
                 // Find our own NPC
-                /** @var Npc $npc */
+                /** @var \App\Models\Npc\Npc $npc */
                 $npc = $npcs->where('id', $mdtNpc->getId())->first();
 
                 // Not found..
@@ -854,7 +854,7 @@ class AdminToolsController extends Controller
         $npcId    = $request->get('npc_id');
         $value    = $request->get('value');
 
-        /** @var Npc $npc */
+        /** @var \App\Models\Npc\Npc $npc */
         $npc = Npc::with(['enemyForces'])->find($npcId);
 
         switch ($category) {

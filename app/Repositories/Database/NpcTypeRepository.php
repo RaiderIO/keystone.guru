@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Database;
 
-use App\Models\NpcType;
+use App\Models\Npc\NpcType;
 use App\Repositories\Interfaces\NpcTypeRepositoryInterface;
 
 class NpcTypeRepository extends DatabaseRepository implements NpcTypeRepositoryInterface

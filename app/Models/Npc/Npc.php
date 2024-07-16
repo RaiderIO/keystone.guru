@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Npc;
 
+use App\Models\CacheModel;
+use App\Models\Dungeon;
+use App\Models\Enemy;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc\NpcEnemyForces;
+use App\Models\Spell;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

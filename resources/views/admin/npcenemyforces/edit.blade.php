@@ -1,6 +1,6 @@
 <?php
 /**
- * @var $npc \App\Models\Npc
+ * @var $npc \App\Models\Npc\Npc
  * @var $npcEnemyForces \App\Models\Npc\NpcEnemyForces
  */
 ?>

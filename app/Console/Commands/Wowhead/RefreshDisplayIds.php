@@ -3,9 +3,8 @@
 namespace App\Console\Commands\Wowhead;
 
 use App\Models\GameVersion\GameVersion;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use App\Service\Wowhead\WowheadServiceInterface;
-use App\Service\WowTools\WowToolsServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 

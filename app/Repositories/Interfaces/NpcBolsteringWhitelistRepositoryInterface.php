@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\Models\NpcBolsteringWhitelist;
+use App\Models\Npc\NpcBolsteringWhitelist;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
 

@@ -2,7 +2,7 @@
 
 namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use Database\Seeders\DatabaseSeeder;
 

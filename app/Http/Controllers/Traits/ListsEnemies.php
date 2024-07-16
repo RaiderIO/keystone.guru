@@ -11,12 +11,11 @@ namespace App\Http\Controllers\Traits;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Exception\InvalidMDTDungeonException;
-use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc;
-use App\Models\NpcClass;
-use App\Models\NpcType;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcClass;
+use App\Models\Npc\NpcType;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Error;
@@ -45,7 +44,7 @@ trait ListsEnemies
             ->get();
 
         // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
-        /** @var Npc[]|Collection $npcs */
+        /** @var \App\Models\Npc\Npc[]|Collection $npcs */
         $npcs = Npc::whereIn('id', $enemies->pluck('npc_id')->unique()->toArray())->get();
 
         /** @var Collection $npcTypes */

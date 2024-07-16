@@ -2,8 +2,8 @@
 
 namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
-use App\Models\Npc;
-use App\Models\NpcBolsteringWhitelist;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcBolsteringWhitelist;
 use Database\Seeders\DatabaseSeeder;
 
 class NpcNpcBolsteringWhitelistRelationParser implements RelationParserInterface

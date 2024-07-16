@@ -14,8 +14,8 @@ use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc;
-use App\Models\NpcType;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcType;
 use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLoggingInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
@@ -110,7 +110,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         $dungeon = null;
         /** @var Floor|null $currentFloor */
         $currentFloor = null;
-        /** @var Collection|Npc[] $npcs */
+        /** @var Collection|\App\Models\Npc\Npc[] $npcs */
         $npcs = collect();
 
         $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr) use ($extractDungeonCallable, $hasExistingMappingVersion, &$mappingVersion, &$dungeon, &$currentFloor, &$npcs) {

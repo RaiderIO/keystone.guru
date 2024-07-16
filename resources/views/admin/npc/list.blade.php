@@ -10,7 +10,7 @@
 @endsection
 
 <?php
-/** @var $models \Illuminate\Support\Collection|\App\Models\Npc[] */
+/** @var $models \Illuminate\Support\Collection|\App\Models\Npc\Npc[] */
 // eager load the classification
 ?>
 
@@ -46,7 +46,7 @@
                         'title': lang.get('messages.dungeon_label'),
                         'data': 'dungeon.name',
                         'name': 'dungeon_id',
-                        'render': function (data, type, row, meta) {
+                        'render': function (data, type, row) {
                             return row.dungeon_id === -1 ? '{{ __('view_admin.npc.list.all_dungeons') }}' : lang.get(row.dungeon.name);
                         },
                     },
@@ -55,7 +55,7 @@
                         'data': 'enemy_forces',
                         'name': 'enemy_forces',
                         'searchable': false,
-                        'render': function (data, type, row, meta) {
+                        'render': function (data, type, row) {
                             return lang.get(typeof row.enemy_forces !== 'undefined' && row.enemy_forces !== null
                                 ? row.enemy_forces.enemy_forces
                                 : 0);
@@ -72,8 +72,8 @@
                         'data': 'classification.name',
                         'name': 'classification.name',
                         'searchable': false,
-                        'render': function (data, type, row, meta) {
-                            if( row.classification === null ){
+                        'render': function (data, type, row) {
+                            if (row.classification === null) {
                                 console.log(row);
                                 return 'Unknown';
                             }
@@ -86,7 +86,7 @@
                         'name': 'id',
                         'orderable': false,
                         'searchable': false,
-                        'render': function (data, type, row, meta) {
+                        'render': function (data, type, row) {
                             return `<a class="btn btn-primary" href="/admin/npc/${row.id}">` +
                                 `    <i class="fas fa-edit"></i> ${lang.get('messages.edit_label')}` +
                                 `</a>`;

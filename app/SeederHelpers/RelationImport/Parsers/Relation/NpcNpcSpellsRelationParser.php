@@ -2,8 +2,8 @@
 
 namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
-use App\Models\Npc;
-use App\Models\NpcSpell;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcSpell;
 use Database\Seeders\DatabaseSeeder;
 
 class NpcNpcSpellsRelationParser implements RelationParserInterface

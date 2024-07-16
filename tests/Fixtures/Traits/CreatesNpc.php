@@ -2,7 +2,7 @@
 
 namespace Tests\Fixtures\Traits;
 
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use Tests\TestCase;
 
 /**

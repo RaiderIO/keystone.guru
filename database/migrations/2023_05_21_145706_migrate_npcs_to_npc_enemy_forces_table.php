@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use Illuminate\Database\Migrations\Migration;
 
@@ -20,7 +20,7 @@ return new class extends Migration {
         foreach (MappingVersion::all() as $mappingVersion) {
             /** @var MappingVersion $mappingVersion */
             foreach ($allNpcs->whereIn('dungeon_id', [-1, $mappingVersion->dungeon_id]) as $npc) {
-                /** @var Npc $npc */
+                /** @var \App\Models\Npc\Npc $npc */
                 NpcEnemyForces::create([
                     'npc_id'               => $npc->id,
                     'mapping_version_id'   => $mappingVersion->id,
