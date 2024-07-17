@@ -39,6 +39,7 @@ use App\Console\Commands\MDT\Decode;
 use App\Console\Commands\MDT\Encode;
 use App\Console\Commands\MDT\ExportMapping;
 use App\Console\Commands\MDT\ImportMapping;
+use App\Console\Commands\MDT\ImportNpcs;
 use App\Console\Commands\Metric\Aggregate;
 use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
@@ -144,6 +145,7 @@ class Kernel extends ConsoleKernel
         Decode::class,
         ExportMapping::class,
         ImportMapping::class,
+        ImportNpcs::class,
 
         // Metric
         Aggregate::class,

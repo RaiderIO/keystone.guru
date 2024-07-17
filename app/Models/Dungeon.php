@@ -40,9 +40,11 @@ use Mockery\Exception;
  * @property bool                                   $speedrun_difficulty_25_man_enabled True if this dungeon's speedrun is for 25-man.
  * @property bool                                   $active True if this dungeon is active, false if it is not.
  * @property bool                                   $mdt_supported True if MDT is supported for this dungeon, false if it is not.
+ *
  * @property Expansion                              $expansion
  * @property GameVersion                            $gameVersion
  * @property MappingVersion                         $currentMappingVersion
+ *
  * @property Collection<MappingVersion>             $mappingVersions
  * @property Collection<Floor>                      $floors
  * @property Collection<Floor>                      $activeFloors
@@ -754,7 +756,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @return Collection|Npc[]
+     * @return Collection<Npc>
      */
     public function getInUseNpcs(): Collection
     {

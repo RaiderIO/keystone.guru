@@ -78,7 +78,7 @@ class MDTDungeon
     /**
      * Get a list of NPCs
      *
-     * @return Collection|MDTNpc[]
+     * @return Collection<MDTNpc>
      *
      * @throws Exception
      */
@@ -99,7 +99,7 @@ class MDTDungeon
     }
 
     /**
-     * @return Collection|MDTMapPOI[]
+     * @return Collection<MDTMapPOI>
      *
      * @throws Exception
      */

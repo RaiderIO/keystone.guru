@@ -32,7 +32,7 @@
         "name": "Patrol Captain Gerdo",
         "base_health": 5019049,
         "health_percentage": null,
-        "level": null,
+        "level": 72,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -41,8 +41,38 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 308,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 85,
+                "spell_id": 219488
+            },
+            {
+                "id": 86,
+                "spell_id": 219498
+            },
+            {
+                "id": 87,
+                "spell_id": 207806
+            },
+            {
+                "id": 88,
+                "spell_id": 207261
+            },
+            {
+                "id": 89,
+                "spell_id": 207278
+            },
+            {
+                "id": 90,
+                "spell_id": 207815
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -55,7 +85,7 @@
         "name": "Talixae Flamewreath",
         "base_health": 3585035,
         "health_percentage": null,
-        "level": null,
+        "level": 72,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -64,8 +94,42 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 335,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 114,
+                "spell_id": 207881
+            },
+            {
+                "id": 115,
+                "spell_id": 207906
+            },
+            {
+                "id": 116,
+                "spell_id": 207907
+            },
+            {
+                "id": 117,
+                "spell_id": 211457
+            },
+            {
+                "id": 118,
+                "spell_id": 208165
+            },
+            {
+                "id": 119,
+                "spell_id": 209722
+            },
+            {
+                "id": 120,
+                "spell_id": 207887
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -78,7 +142,7 @@
         "name": "Advisor Melandrus",
         "base_health": 5019049,
         "health_percentage": null,
-        "level": null,
+        "level": 72,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -87,8 +151,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 337,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 124,
+                "spell_id": 209602
+            },
+            {
+                "id": 125,
+                "spell_id": 209667
+            },
+            {
+                "id": 126,
+                "spell_id": 209628
+            },
+            {
+                "id": 127,
+                "spell_id": 209678
+            },
+            {
+                "id": 128,
+                "spell_id": 209676
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -124,7 +214,7 @@
         "name": "Duskwatch Guard",
         "base_health": 717294,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -133,8 +223,54 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 278,
+                "characteristic_id": 1
+            },
+            {
+                "id": 279,
+                "characteristic_id": 14
+            },
+            {
+                "id": 280,
+                "characteristic_id": 12
+            },
+            {
+                "id": 281,
+                "characteristic_id": 11
+            },
+            {
+                "id": 282,
+                "characteristic_id": 19
+            },
+            {
+                "id": 283,
+                "characteristic_id": 2
+            },
+            {
+                "id": 284,
+                "characteristic_id": 18
+            },
+            {
+                "id": 285,
+                "characteristic_id": 16
+            },
+            {
+                "id": 286,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 78,
+                "spell_id": 209033
+            },
+            {
+                "id": 79,
+                "spell_id": 209027
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5717,
@@ -183,7 +319,7 @@
         "name": "Duskwatch Arcanist",
         "base_health": 573835,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -192,8 +328,54 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 293,
+                "characteristic_id": 1
+            },
+            {
+                "id": 294,
+                "characteristic_id": 14
+            },
+            {
+                "id": 295,
+                "characteristic_id": 12
+            },
+            {
+                "id": 296,
+                "characteristic_id": 11
+            },
+            {
+                "id": 297,
+                "characteristic_id": 19
+            },
+            {
+                "id": 298,
+                "characteristic_id": 2
+            },
+            {
+                "id": 299,
+                "characteristic_id": 18
+            },
+            {
+                "id": 300,
+                "characteristic_id": 16
+            },
+            {
+                "id": 301,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 81,
+                "spell_id": 209404
+            },
+            {
+                "id": 82,
+                "spell_id": 209410
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5718,
@@ -242,7 +424,7 @@
         "name": "Duskwatch Sentry",
         "base_health": 179323,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -251,8 +433,54 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 261,
+                "characteristic_id": 1
+            },
+            {
+                "id": 262,
+                "characteristic_id": 14
+            },
+            {
+                "id": 263,
+                "characteristic_id": 12
+            },
+            {
+                "id": 264,
+                "characteristic_id": 11
+            },
+            {
+                "id": 265,
+                "characteristic_id": 10
+            },
+            {
+                "id": 266,
+                "characteristic_id": 19
+            },
+            {
+                "id": 267,
+                "characteristic_id": 18
+            },
+            {
+                "id": 268,
+                "characteristic_id": 16
+            },
+            {
+                "id": 269,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 69,
+                "spell_id": 209036
+            },
+            {
+                "id": 70,
+                "spell_id": 210261
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5719,
@@ -301,17 +529,47 @@
         "name": "Guardian Construct",
         "base_health": 1147671,
         "health_percentage": null,
-        "level": null,
+        "level": 71,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 1,
+        "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 277,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 72,
+                "spell_id": 209512
+            },
+            {
+                "id": 73,
+                "spell_id": 225101
+            },
+            {
+                "id": 74,
+                "spell_id": 225100
+            },
+            {
+                "id": 75,
+                "spell_id": 209413
+            },
+            {
+                "id": 76,
+                "spell_id": 397918
+            },
+            {
+                "id": 77,
+                "spell_id": 209495
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5720,
@@ -360,7 +618,7 @@
         "name": "Jazshariu",
         "base_health": 4303767,
         "health_percentage": null,
-        "level": null,
+        "level": 71,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -369,8 +627,30 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 334,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 110,
+                "spell_id": 397903
+            },
+            {
+                "id": 111,
+                "spell_id": 397897
+            },
+            {
+                "id": 112,
+                "spell_id": 207850
+            },
+            {
+                "id": 113,
+                "spell_id": 207979
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -383,7 +663,7 @@
         "name": "Baalgar the Watchful",
         "base_health": 1864966,
         "health_percentage": null,
-        "level": null,
+        "level": 71,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -392,8 +672,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 333,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 105,
+                "spell_id": 397907
+            },
+            {
+                "id": 106,
+                "spell_id": 207980
+            },
+            {
+                "id": 107,
+                "spell_id": 207981
+            },
+            {
+                "id": 108,
+                "spell_id": 397908
+            },
+            {
+                "id": 109,
+                "spell_id": 209719
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -406,7 +712,7 @@
         "name": "Imacu'tya",
         "base_health": 2008424,
         "health_percentage": null,
-        "level": null,
+        "level": 71,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -415,8 +721,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 332,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 102,
+                "spell_id": 397892
+            },
+            {
+                "id": 103,
+                "spell_id": 209713
+            },
+            {
+                "id": 104,
+                "spell_id": 209378
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -429,7 +753,7 @@
         "name": "Legion Hound",
         "base_health": 286918,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -438,8 +762,42 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 326,
+                "characteristic_id": 12
+            },
+            {
+                "id": 327,
+                "characteristic_id": 18
+            },
+            {
+                "id": 328,
+                "characteristic_id": 1
+            },
+            {
+                "id": 329,
+                "characteristic_id": 14
+            },
+            {
+                "id": 330,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 98,
+                "spell_id": 211384
+            },
+            {
+                "id": 99,
+                "spell_id": 211477
+            },
+            {
+                "id": 100,
+                "spell_id": 211391
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5724,
@@ -488,7 +846,7 @@
         "name": "Felbound Enforcer",
         "base_health": 1291130,
         "health_percentage": null,
-        "level": null,
+        "level": 71,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -497,8 +855,18 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 331,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 101,
+                "spell_id": 211464
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5725,
@@ -547,7 +915,7 @@
         "name": "Blazing Imp",
         "base_health": 143459,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -556,8 +924,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 313,
+                "characteristic_id": 12
+            },
+            {
+                "id": 314,
+                "characteristic_id": 19
+            },
+            {
+                "id": 315,
+                "characteristic_id": 18
+            },
+            {
+                "id": 316,
+                "characteristic_id": 1
+            },
+            {
+                "id": 317,
+                "characteristic_id": 14
+            },
+            {
+                "id": 318,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 93,
+                "spell_id": 211412
+            },
+            {
+                "id": 94,
+                "spell_id": 211401
+            },
+            {
+                "id": 95,
+                "spell_id": 211406
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5726,
@@ -606,7 +1012,7 @@
         "name": "Shadow Mistress",
         "base_health": 645566,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -615,8 +1021,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 319,
+                "characteristic_id": 12
+            },
+            {
+                "id": 320,
+                "characteristic_id": 19
+            },
+            {
+                "id": 321,
+                "characteristic_id": 18
+            },
+            {
+                "id": 322,
+                "characteristic_id": 16
+            },
+            {
+                "id": 323,
+                "characteristic_id": 1
+            },
+            {
+                "id": 324,
+                "characteristic_id": 14
+            },
+            {
+                "id": 325,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 96,
+                "spell_id": 211470
+            },
+            {
+                "id": 97,
+                "spell_id": 211473
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5727,
@@ -803,7 +1247,7 @@
         "name": "Mana Saber",
         "base_health": 215189,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -812,8 +1256,38 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 287,
+                "characteristic_id": 12
+            },
+            {
+                "id": 288,
+                "characteristic_id": 11
+            },
+            {
+                "id": 289,
+                "characteristic_id": 2
+            },
+            {
+                "id": 290,
+                "characteristic_id": 1
+            },
+            {
+                "id": 291,
+                "characteristic_id": 19
+            },
+            {
+                "id": 292,
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 80,
+                "spell_id": 209516
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5734,
@@ -862,7 +1336,7 @@
         "name": "Mana Wyrm",
         "base_health": 143459,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -871,8 +1345,42 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 270,
+                "characteristic_id": 12
+            },
+            {
+                "id": 271,
+                "characteristic_id": 11
+            },
+            {
+                "id": 272,
+                "characteristic_id": 19
+            },
+            {
+                "id": 273,
+                "characteristic_id": 18
+            },
+            {
+                "id": 274,
+                "characteristic_id": 1
+            },
+            {
+                "id": 275,
+                "characteristic_id": 14
+            },
+            {
+                "id": 276,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 71,
+                "spell_id": 209477
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5735,
@@ -921,7 +1429,7 @@
         "name": "Arcane Manifestation",
         "base_health": 1147671,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -930,8 +1438,18 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 307,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 84,
+                "spell_id": 209485
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5736,
@@ -980,7 +1498,7 @@
         "name": "Bound Energy",
         "base_health": 430377,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -989,8 +1507,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 302,
+                "characteristic_id": 12
+            },
+            {
+                "id": 303,
+                "characteristic_id": 19
+            },
+            {
+                "id": 304,
+                "characteristic_id": 1
+            },
+            {
+                "id": 305,
+                "characteristic_id": 18
+            },
+            {
+                "id": 306,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 83,
+                "spell_id": 212031
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5737,
@@ -1039,7 +1583,7 @@
         "name": "Watchful Inquisitor",
         "base_health": 717294,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1048,8 +1592,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 309,
+                "characteristic_id": 19
+            },
+            {
+                "id": 310,
+                "characteristic_id": 1
+            },
+            {
+                "id": 311,
+                "characteristic_id": 18
+            },
+            {
+                "id": 312,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 91,
+                "spell_id": 212784
+            },
+            {
+                "id": 92,
+                "spell_id": 211299
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5738,
@@ -1410,7 +1980,7 @@
         "name": "Gerenth the Vile",
         "base_health": 946828,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1419,8 +1989,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 336,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 121,
+                "spell_id": 214692
+            },
+            {
+                "id": 122,
+                "spell_id": 373552
+            },
+            {
+                "id": 123,
+                "spell_id": 373364
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5751,
@@ -1791,7 +2379,7 @@
         "name": "Duskwatch Guard",
         "base_health": 717294,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1800,8 +2388,42 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 255,
+                "characteristic_id": 16
+            },
+            {
+                "id": 256,
+                "characteristic_id": 10
+            },
+            {
+                "id": 257,
+                "characteristic_id": 19
+            },
+            {
+                "id": 258,
+                "characteristic_id": 1
+            },
+            {
+                "id": 259,
+                "characteristic_id": 18
+            },
+            {
+                "id": 260,
+                "characteristic_id": 17
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 67,
+                "spell_id": 209033
+            },
+            {
+                "id": 68,
+                "spell_id": 209027
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 5766,

@@ -9,7 +9,7 @@
         "name": "Iridikron",
         "base_health": 118579424,
         "health_percentage": null,
-        "level": null,
+        "level": 72,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -18,8 +18,90 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7081,
+                "characteristic_id": 24
+            },
+            {
+                "id": 7082,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4583,
+                "spell_id": 414177
+            },
+            {
+                "id": 4584,
+                "spell_id": 409635
+            },
+            {
+                "id": 4585,
+                "spell_id": 409287
+            },
+            {
+                "id": 4586,
+                "spell_id": 414184
+            },
+            {
+                "id": 4587,
+                "spell_id": 414604
+            },
+            {
+                "id": 4588,
+                "spell_id": 409261
+            },
+            {
+                "id": 4589,
+                "spell_id": 409456
+            },
+            {
+                "id": 4590,
+                "spell_id": 409266
+            },
+            {
+                "id": 4591,
+                "spell_id": 414483
+            },
+            {
+                "id": 4592,
+                "spell_id": 409268
+            },
+            {
+                "id": 4593,
+                "spell_id": 409558
+            },
+            {
+                "id": 4594,
+                "spell_id": 409879
+            },
+            {
+                "id": 4595,
+                "spell_id": 414583
+            },
+            {
+                "id": 4596,
+                "spell_id": 414535
+            },
+            {
+                "id": 4597,
+                "spell_id": 409884
+            },
+            {
+                "id": 4598,
+                "spell_id": 414376
+            },
+            {
+                "id": 4599,
+                "spell_id": 414300
+            },
+            {
+                "id": 4600,
+                "spell_id": 409584
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -32,7 +114,7 @@
         "name": "Chronikar",
         "base_health": 8893457,
         "health_percentage": null,
-        "level": null,
+        "level": 72,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -41,8 +123,62 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 6993,
+                "characteristic_id": 24
+            },
+            {
+                "id": 6994,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4486,
+                "spell_id": 413041
+            },
+            {
+                "id": 4487,
+                "spell_id": 401794
+            },
+            {
+                "id": 4488,
+                "spell_id": 413107
+            },
+            {
+                "id": 4489,
+                "spell_id": 418420
+            },
+            {
+                "id": 4490,
+                "spell_id": 413013
+            },
+            {
+                "id": 4491,
+                "spell_id": 413142
+            },
+            {
+                "id": 4492,
+                "spell_id": 416716
+            },
+            {
+                "id": 4493,
+                "spell_id": 401420
+            },
+            {
+                "id": 4494,
+                "spell_id": 401421
+            },
+            {
+                "id": 4495,
+                "spell_id": 413105
+            },
+            {
+                "id": 4496,
+                "spell_id": 405970
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -55,7 +191,7 @@
         "name": "Manifested Timeways",
         "base_health": 10375700,
         "health_percentage": null,
-        "level": null,
+        "level": 72,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -64,8 +200,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7048,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4521,
+                "spell_id": 405696
+            },
+            {
+                "id": 4522,
+                "spell_id": 413329
+            },
+            {
+                "id": 4523,
+                "spell_id": 413332
+            },
+            {
+                "id": 4524,
+                "spell_id": 405448
+            },
+            {
+                "id": 4525,
+                "spell_id": 403910
+            },
+            {
+                "id": 4526,
+                "spell_id": 405431
+            },
+            {
+                "id": 4527,
+                "spell_id": 403912
+            },
+            {
+                "id": 4528,
+                "spell_id": 414032
+            },
+            {
+                "id": 4529,
+                "spell_id": 404650
+            },
+            {
+                "id": 4530,
+                "spell_id": 405672
+            },
+            {
+                "id": 4531,
+                "spell_id": 405671
+            },
+            {
+                "id": 4532,
+                "spell_id": 404141
+            },
+            {
+                "id": 4533,
+                "spell_id": 405478
+            },
+            {
+                "id": 4534,
+                "spell_id": 415359
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -78,7 +276,7 @@
         "name": "Blight of Galakrond",
         "base_health": 14822428,
         "health_percentage": null,
-        "level": null,
+        "level": 72,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -87,8 +285,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7064,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4546,
+                "spell_id": 415097
+            },
+            {
+                "id": 4547,
+                "spell_id": 407057
+            },
+            {
+                "id": 4548,
+                "spell_id": 407714
+            },
+            {
+                "id": 4549,
+                "spell_id": 407147
+            },
+            {
+                "id": 4550,
+                "spell_id": 407406
+            },
+            {
+                "id": 4551,
+                "spell_id": 407413
+            },
+            {
+                "id": 4552,
+                "spell_id": 406886
+            },
+            {
+                "id": 4553,
+                "spell_id": 407159
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -101,7 +337,7 @@
         "name": "Dazhak",
         "base_health": 14822428,
         "health_percentage": null,
-        "level": null,
+        "level": 72,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -110,8 +346,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7066,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4566,
+                "spell_id": 408141
+            },
+            {
+                "id": 4567,
+                "spell_id": 413590
+            },
+            {
+                "id": 4568,
+                "spell_id": 408177
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -124,7 +378,7 @@
         "name": "Loszkeleth",
         "base_health": 14822428,
         "health_percentage": null,
-        "level": null,
+        "level": 72,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -133,8 +387,58 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7067,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4569,
+                "spell_id": 5760
+            },
+            {
+                "id": 4570,
+                "spell_id": 407057
+            },
+            {
+                "id": 4571,
+                "spell_id": 407714
+            },
+            {
+                "id": 4572,
+                "spell_id": 45524
+            },
+            {
+                "id": 4573,
+                "spell_id": 407413
+            },
+            {
+                "id": 4574,
+                "spell_id": 406886
+            },
+            {
+                "id": 4575,
+                "spell_id": 407159
+            },
+            {
+                "id": 4576,
+                "spell_id": 407147
+            },
+            {
+                "id": 4577,
+                "spell_id": 418348
+            },
+            {
+                "id": 4578,
+                "spell_id": 408029
+            },
+            {
+                "id": 4579,
+                "spell_id": 407406
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -147,7 +451,7 @@
         "name": "Ahnzon",
         "base_health": 14822428,
         "health_percentage": null,
-        "level": null,
+        "level": 72,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -156,8 +460,62 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7065,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4554,
+                "spell_id": 407057
+            },
+            {
+                "id": 4555,
+                "spell_id": 407714
+            },
+            {
+                "id": 4556,
+                "spell_id": 407413
+            },
+            {
+                "id": 4557,
+                "spell_id": 406886
+            },
+            {
+                "id": 4558,
+                "spell_id": 407159
+            },
+            {
+                "id": 4559,
+                "spell_id": 408008
+            },
+            {
+                "id": 4560,
+                "spell_id": 407978
+            },
+            {
+                "id": 4561,
+                "spell_id": 407147
+            },
+            {
+                "id": 4562,
+                "spell_id": 418348
+            },
+            {
+                "id": 4563,
+                "spell_id": 415254
+            },
+            {
+                "id": 4564,
+                "spell_id": 407406
+            },
+            {
+                "id": 4565,
+                "spell_id": 415114
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -170,7 +528,7 @@
         "name": "Chromie",
         "base_health": 19254625,
         "health_percentage": null,
-        "level": null,
+        "level": 72,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -179,8 +537,42 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7083,
+                "characteristic_id": 24
+            },
+            {
+                "id": 7084,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4601,
+                "spell_id": 414496
+            },
+            {
+                "id": 4602,
+                "spell_id": 414353
+            },
+            {
+                "id": 4603,
+                "spell_id": 414178
+            },
+            {
+                "id": 4604,
+                "spell_id": 414293
+            },
+            {
+                "id": 4605,
+                "spell_id": 414333
+            },
+            {
+                "id": 4606,
+                "spell_id": 414330
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -193,7 +585,7 @@
         "name": "Blight Chunk",
         "base_health": 444338,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -202,8 +594,66 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7051,
+                "characteristic_id": 6
+            },
+            {
+                "id": 7052,
+                "characteristic_id": 12
+            },
+            {
+                "id": 7053,
+                "characteristic_id": 18
+            },
+            {
+                "id": 7054,
+                "characteristic_id": 2
+            },
+            {
+                "id": 7055,
+                "characteristic_id": 7
+            },
+            {
+                "id": 7056,
+                "characteristic_id": 11
+            },
+            {
+                "id": 7057,
+                "characteristic_id": 20
+            },
+            {
+                "id": 7058,
+                "characteristic_id": 13
+            },
+            {
+                "id": 7059,
+                "characteristic_id": 14
+            },
+            {
+                "id": 7060,
+                "characteristic_id": 1
+            },
+            {
+                "id": 7061,
+                "characteristic_id": 19
+            },
+            {
+                "id": 7062,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4539,
+                "spell_id": 412699
+            },
+            {
+                "id": 4540,
+                "spell_id": 412695
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15834,
@@ -266,7 +716,7 @@
         "name": "Iridikron's Creation",
         "base_health": 123427,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -275,8 +725,74 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7085,
+                "characteristic_id": 6
+            },
+            {
+                "id": 7086,
+                "characteristic_id": 12
+            },
+            {
+                "id": 7087,
+                "characteristic_id": 18
+            },
+            {
+                "id": 7088,
+                "characteristic_id": 2
+            },
+            {
+                "id": 7089,
+                "characteristic_id": 7
+            },
+            {
+                "id": 7090,
+                "characteristic_id": 11
+            },
+            {
+                "id": 7091,
+                "characteristic_id": 20
+            },
+            {
+                "id": 7092,
+                "characteristic_id": 9
+            },
+            {
+                "id": 7093,
+                "characteristic_id": 13
+            },
+            {
+                "id": 7094,
+                "characteristic_id": 14
+            },
+            {
+                "id": 7095,
+                "characteristic_id": 1
+            },
+            {
+                "id": 7096,
+                "characteristic_id": 19
+            },
+            {
+                "id": 7097,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4607,
+                "spell_id": 416256
+            },
+            {
+                "id": 4608,
+                "spell_id": 416257
+            },
+            {
+                "id": 4609,
+                "spell_id": 416258
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -289,7 +805,7 @@
         "name": "Infinite Chronoweaver",
         "base_health": 1481125,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -298,8 +814,78 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 6975,
+                "characteristic_id": 6
+            },
+            {
+                "id": 6976,
+                "characteristic_id": 12
+            },
+            {
+                "id": 6977,
+                "characteristic_id": 18
+            },
+            {
+                "id": 6978,
+                "characteristic_id": 2
+            },
+            {
+                "id": 6979,
+                "characteristic_id": 7
+            },
+            {
+                "id": 6980,
+                "characteristic_id": 24
+            },
+            {
+                "id": 6981,
+                "characteristic_id": 22
+            },
+            {
+                "id": 6982,
+                "characteristic_id": 11
+            },
+            {
+                "id": 6983,
+                "characteristic_id": 20
+            },
+            {
+                "id": 6984,
+                "characteristic_id": 9
+            },
+            {
+                "id": 6985,
+                "characteristic_id": 19
+            },
+            {
+                "id": 6986,
+                "characteristic_id": 17
+            },
+            {
+                "id": 6987,
+                "characteristic_id": 14
+            },
+            {
+                "id": 6988,
+                "characteristic_id": 1
+            },
+            {
+                "id": 6989,
+                "characteristic_id": 15
+            },
+            {
+                "id": 6990,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4483,
+                "spell_id": 411994
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15826,
@@ -362,7 +948,7 @@
         "name": "Infinite Timeslicer",
         "base_health": 1481125,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -371,8 +957,82 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 6959,
+                "characteristic_id": 6
+            },
+            {
+                "id": 6960,
+                "characteristic_id": 12
+            },
+            {
+                "id": 6961,
+                "characteristic_id": 18
+            },
+            {
+                "id": 6962,
+                "characteristic_id": 2
+            },
+            {
+                "id": 6963,
+                "characteristic_id": 7
+            },
+            {
+                "id": 6964,
+                "characteristic_id": 24
+            },
+            {
+                "id": 6965,
+                "characteristic_id": 22
+            },
+            {
+                "id": 6966,
+                "characteristic_id": 11
+            },
+            {
+                "id": 6967,
+                "characteristic_id": 20
+            },
+            {
+                "id": 6968,
+                "characteristic_id": 9
+            },
+            {
+                "id": 6969,
+                "characteristic_id": 19
+            },
+            {
+                "id": 6970,
+                "characteristic_id": 17
+            },
+            {
+                "id": 6971,
+                "characteristic_id": 14
+            },
+            {
+                "id": 6972,
+                "characteristic_id": 1
+            },
+            {
+                "id": 6973,
+                "characteristic_id": 15
+            },
+            {
+                "id": 6974,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4481,
+                "spell_id": 412012
+            },
+            {
+                "id": 4482,
+                "spell_id": 412044
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15825,
@@ -435,7 +1095,7 @@
         "name": "Epoch Ripper",
         "base_health": 2073575,
         "health_percentage": null,
-        "level": null,
+        "level": 71,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -444,8 +1104,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 6991,
+                "characteristic_id": 24
+            },
+            {
+                "id": 6992,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4484,
+                "spell_id": 412065
+            },
+            {
+                "id": 4485,
+                "spell_id": 412063
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15827,
@@ -508,7 +1186,7 @@
         "name": "Iridikron's Creation",
         "base_health": 1481125,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -517,8 +1195,74 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7068,
+                "characteristic_id": 6
+            },
+            {
+                "id": 7069,
+                "characteristic_id": 12
+            },
+            {
+                "id": 7070,
+                "characteristic_id": 18
+            },
+            {
+                "id": 7071,
+                "characteristic_id": 2
+            },
+            {
+                "id": 7072,
+                "characteristic_id": 7
+            },
+            {
+                "id": 7073,
+                "characteristic_id": 11
+            },
+            {
+                "id": 7074,
+                "characteristic_id": 20
+            },
+            {
+                "id": 7075,
+                "characteristic_id": 9
+            },
+            {
+                "id": 7076,
+                "characteristic_id": 13
+            },
+            {
+                "id": 7077,
+                "characteristic_id": 14
+            },
+            {
+                "id": 7078,
+                "characteristic_id": 1
+            },
+            {
+                "id": 7079,
+                "characteristic_id": 19
+            },
+            {
+                "id": 7080,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4580,
+                "spell_id": 412285
+            },
+            {
+                "id": 4581,
+                "spell_id": 411958
+            },
+            {
+                "id": 4582,
+                "spell_id": 416254
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15836,
@@ -581,7 +1325,7 @@
         "name": "Risen Dragon",
         "base_health": 2962250,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -590,8 +1334,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7063,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4541,
+                "spell_id": 412810
+            },
+            {
+                "id": 4542,
+                "spell_id": 416267
+            },
+            {
+                "id": 4543,
+                "spell_id": 417404
+            },
+            {
+                "id": 4544,
+                "spell_id": 412806
+            },
+            {
+                "id": 4545,
+                "spell_id": 412695
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15835,
@@ -654,7 +1424,7 @@
         "name": "Coalesced Moment",
         "base_health": 1007165,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -663,8 +1433,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7021,
+                "characteristic_id": 6
+            },
+            {
+                "id": 7022,
+                "characteristic_id": 12
+            },
+            {
+                "id": 7023,
+                "characteristic_id": 18
+            },
+            {
+                "id": 7024,
+                "characteristic_id": 2
+            },
+            {
+                "id": 7025,
+                "characteristic_id": 7
+            },
+            {
+                "id": 7026,
+                "characteristic_id": 11
+            },
+            {
+                "id": 7027,
+                "characteristic_id": 20
+            },
+            {
+                "id": 7028,
+                "characteristic_id": 9
+            },
+            {
+                "id": 7029,
+                "characteristic_id": 13
+            },
+            {
+                "id": 7030,
+                "characteristic_id": 14
+            },
+            {
+                "id": 7031,
+                "characteristic_id": 1
+            },
+            {
+                "id": 7032,
+                "characteristic_id": 19
+            },
+            {
+                "id": 7033,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4512,
+                "spell_id": 415436
+            },
+            {
+                "id": 4513,
+                "spell_id": 415435
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15830,
@@ -727,7 +1559,7 @@
         "name": "Timestream Leech",
         "base_health": 1184900,
         "health_percentage": null,
-        "level": null,
+        "level": 70,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -736,8 +1568,74 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7034,
+                "characteristic_id": 6
+            },
+            {
+                "id": 7035,
+                "characteristic_id": 12
+            },
+            {
+                "id": 7036,
+                "characteristic_id": 18
+            },
+            {
+                "id": 7037,
+                "characteristic_id": 2
+            },
+            {
+                "id": 7038,
+                "characteristic_id": 7
+            },
+            {
+                "id": 7039,
+                "characteristic_id": 11
+            },
+            {
+                "id": 7040,
+                "characteristic_id": 20
+            },
+            {
+                "id": 7041,
+                "characteristic_id": 9
+            },
+            {
+                "id": 7042,
+                "characteristic_id": 13
+            },
+            {
+                "id": 7043,
+                "characteristic_id": 14
+            },
+            {
+                "id": 7044,
+                "characteristic_id": 1
+            },
+            {
+                "id": 7045,
+                "characteristic_id": 19
+            },
+            {
+                "id": 7046,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4514,
+                "spell_id": 415437
+            },
+            {
+                "id": 4515,
+                "spell_id": 415438
+            },
+            {
+                "id": 4516,
+                "spell_id": 415439
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15831,
@@ -800,7 +1698,7 @@
         "name": "Coalesced Time",
         "base_health": 2221688,
         "health_percentage": null,
-        "level": null,
+        "level": 71,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -809,8 +1707,30 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7047,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4517,
+                "spell_id": 415770
+            },
+            {
+                "id": 4518,
+                "spell_id": 415769
+            },
+            {
+                "id": 4519,
+                "spell_id": 415554
+            },
+            {
+                "id": 4520,
+                "spell_id": 413219
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15832,
@@ -873,7 +1793,7 @@
         "name": "Infinite Infiltrator",
         "base_health": 3776869,
         "health_percentage": null,
-        "level": null,
+        "level": 71,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -882,8 +1802,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 7049,
+                "characteristic_id": 24
+            },
+            {
+                "id": 7050,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 4535,
+                "spell_id": 413622
+            },
+            {
+                "id": 4536,
+                "spell_id": 413621
+            },
+            {
+                "id": 4537,
+                "spell_id": 413618
+            },
+            {
+                "id": 4538,
+                "spell_id": 413623
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15833,

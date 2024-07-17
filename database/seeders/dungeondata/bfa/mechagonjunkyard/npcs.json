@@ -9,7 +9,7 @@
         "name": "Scrapbone Trashtosser",
         "base_health": 212714,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -18,8 +18,54 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2636,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2637,
+                "characteristic_id": 18
+            },
+            {
+                "id": 2638,
+                "characteristic_id": 10
+            },
+            {
+                "id": 2639,
+                "characteristic_id": 14
+            },
+            {
+                "id": 2640,
+                "characteristic_id": 5
+            },
+            {
+                "id": 2641,
+                "characteristic_id": 11
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1854,
+                "spell_id": 300560
+            },
+            {
+                "id": 1855,
+                "spell_id": 300561
+            },
+            {
+                "id": 1856,
+                "spell_id": 316690
+            },
+            {
+                "id": 1857,
+                "spell_id": 300547
+            },
+            {
+                "id": 1858,
+                "spell_id": 300525
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1381,
@@ -40,7 +86,7 @@
         "name": "Scrapbone Grinder",
         "base_health": 212714,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -49,8 +95,50 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2656,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2657,
+                "characteristic_id": 12
+            },
+            {
+                "id": 2658,
+                "characteristic_id": 14
+            },
+            {
+                "id": 2659,
+                "characteristic_id": 18
+            },
+            {
+                "id": 2660,
+                "characteristic_id": 10
+            },
+            {
+                "id": 2661,
+                "characteristic_id": 2
+            },
+            {
+                "id": 2662,
+                "characteristic_id": 5
+            },
+            {
+                "id": 2663,
+                "characteristic_id": 11
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1867,
+                "spell_id": 300296
+            },
+            {
+                "id": 1868,
+                "spell_id": 300414
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1382,
@@ -71,7 +159,7 @@
         "name": "Scrapbone Shaman",
         "base_health": 170172,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -80,8 +168,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2672,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2673,
+                "characteristic_id": 14
+            },
+            {
+                "id": 2674,
+                "characteristic_id": 18
+            },
+            {
+                "id": 2675,
+                "characteristic_id": 12
+            },
+            {
+                "id": 2676,
+                "characteristic_id": 2
+            },
+            {
+                "id": 2677,
+                "characteristic_id": 5
+            },
+            {
+                "id": 2678,
+                "characteristic_id": 11
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1869,
+                "spell_id": 300436
+            },
+            {
+                "id": 1870,
+                "spell_id": 300514
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1383,
@@ -102,7 +228,7 @@
         "name": "Saurolisk Bonenipper",
         "base_health": 212714,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -111,8 +237,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2689,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2690,
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1884,
+                "spell_id": 299474
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1384,
@@ -133,7 +273,7 @@
         "name": "King Gobbamak",
         "base_health": 1491350,
         "health_percentage": null,
-        "level": null,
+        "level": 122,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -142,8 +282,34 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2695,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1905,
+                "spell_id": 297256
+            },
+            {
+                "id": 1906,
+                "spell_id": 297257
+            },
+            {
+                "id": 1907,
+                "spell_id": 297261
+            },
+            {
+                "id": 1908,
+                "spell_id": 297254
+            },
+            {
+                "id": 1909,
+                "spell_id": 297262
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -156,7 +322,7 @@
         "name": "Scrapbone Bully",
         "base_health": 340343,
         "health_percentage": null,
-        "level": null,
+        "level": 121,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -165,8 +331,30 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2691,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1885,
+                "spell_id": 300424
+            },
+            {
+                "id": 1886,
+                "spell_id": 300434
+            },
+            {
+                "id": 1887,
+                "spell_id": 300414
+            },
+            {
+                "id": 1888,
+                "spell_id": 300427
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1386,
@@ -187,7 +375,7 @@
         "name": "Slime Elemental",
         "base_health": 212714,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -196,8 +384,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2722,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2723,
+                "characteristic_id": 18
+            },
+            {
+                "id": 2724,
+                "characteristic_id": 14
+            },
+            {
+                "id": 2725,
+                "characteristic_id": 2
+            },
+            {
+                "id": 2726,
+                "characteristic_id": 5
+            },
+            {
+                "id": 2727,
+                "characteristic_id": 12
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1916,
+                "spell_id": 300764
+            },
+            {
+                "id": 1917,
+                "spell_id": 300777
+            },
+            {
+                "id": 1918,
+                "spell_id": 300816
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1387,
@@ -218,7 +444,7 @@
         "name": "Toxic Monstrosity",
         "base_health": 382886,
         "health_percentage": null,
-        "level": null,
+        "level": 121,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -227,8 +453,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2734,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1927,
+                "spell_id": 300687
+            },
+            {
+                "id": 1928,
+                "spell_id": 300706
+            },
+            {
+                "id": 1929,
+                "spell_id": 300659
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1388,
@@ -249,7 +493,7 @@
         "name": "Toxic Lurker",
         "base_health": 221223,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -258,8 +502,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2702,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2703,
+                "characteristic_id": 18
+            },
+            {
+                "id": 2704,
+                "characteristic_id": 2
+            },
+            {
+                "id": 2705,
+                "characteristic_id": 14
+            },
+            {
+                "id": 2706,
+                "characteristic_id": 12
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1911,
+                "spell_id": 300650
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1389,
@@ -280,7 +550,7 @@
         "name": "HK-8 Aerial Oppression Unit",
         "base_health": 1661790,
         "health_percentage": null,
-        "level": null,
+        "level": 122,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -290,7 +560,48 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 1939,
+                "spell_id": 295536
+            },
+            {
+                "id": 1940,
+                "spell_id": 295939
+            },
+            {
+                "id": 1941,
+                "spell_id": 302166
+            },
+            {
+                "id": 1942,
+                "spell_id": 301351
+            },
+            {
+                "id": 1943,
+                "spell_id": 296025
+            },
+            {
+                "id": 1944,
+                "spell_id": 302272
+            },
+            {
+                "id": 1945,
+                "spell_id": 301177
+            },
+            {
+                "id": 1946,
+                "spell_id": 296080
+            },
+            {
+                "id": 1947,
+                "spell_id": 294894
+            },
+            {
+                "id": 1948,
+                "spell_id": 295552
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -303,7 +614,7 @@
         "name": "Gnome-Eating Slime",
         "base_health": 106357,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -312,8 +623,38 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2696,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2697,
+                "characteristic_id": 18
+            },
+            {
+                "id": 2698,
+                "characteristic_id": 14
+            },
+            {
+                "id": 2699,
+                "characteristic_id": 2
+            },
+            {
+                "id": 2700,
+                "characteristic_id": 5
+            },
+            {
+                "id": 2701,
+                "characteristic_id": 12
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1910,
+                "spell_id": 300818
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1391,
@@ -334,7 +675,7 @@
         "name": "Gunker",
         "base_health": 1491350,
         "health_percentage": null,
-        "level": null,
+        "level": 122,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -343,8 +684,38 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2735,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1930,
+                "spell_id": 297985
+            },
+            {
+                "id": 1931,
+                "spell_id": 297834
+            },
+            {
+                "id": 1932,
+                "spell_id": 297835
+            },
+            {
+                "id": 1933,
+                "spell_id": 298124
+            },
+            {
+                "id": 1934,
+                "spell_id": 298229
+            },
+            {
+                "id": 1935,
+                "spell_id": 298259
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -357,7 +728,7 @@
         "name": "Pistonhead Scrapper",
         "base_health": 212714,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -366,8 +737,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2650,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2651,
+                "characteristic_id": 18
+            },
+            {
+                "id": 2652,
+                "characteristic_id": 14
+            },
+            {
+                "id": 2653,
+                "characteristic_id": 2
+            },
+            {
+                "id": 2654,
+                "characteristic_id": 11
+            },
+            {
+                "id": 2655,
+                "characteristic_id": 12
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1864,
+                "spell_id": 299449
+            },
+            {
+                "id": 1865,
+                "spell_id": 299438
+            },
+            {
+                "id": 1866,
+                "spell_id": 299450
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1393,
@@ -388,7 +797,7 @@
         "name": "Pistonhead Blaster",
         "base_health": 212714,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -397,8 +806,62 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2642,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2643,
+                "characteristic_id": 14
+            },
+            {
+                "id": 2644,
+                "characteristic_id": 17
+            },
+            {
+                "id": 2645,
+                "characteristic_id": 18
+            },
+            {
+                "id": 2646,
+                "characteristic_id": 12
+            },
+            {
+                "id": 2647,
+                "characteristic_id": 2
+            },
+            {
+                "id": 2648,
+                "characteristic_id": 5
+            },
+            {
+                "id": 2649,
+                "characteristic_id": 11
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1859,
+                "spell_id": 299496
+            },
+            {
+                "id": 1860,
+                "spell_id": 299497
+            },
+            {
+                "id": 1861,
+                "spell_id": 299460
+            },
+            {
+                "id": 1862,
+                "spell_id": 299525
+            },
+            {
+                "id": 1863,
+                "spell_id": 299535
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1394,
@@ -419,7 +882,7 @@
         "name": "Pistonhead Mechanic",
         "base_health": 255257,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -428,8 +891,42 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2684,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2685,
+                "characteristic_id": 18
+            },
+            {
+                "id": 2686,
+                "characteristic_id": 2
+            },
+            {
+                "id": 2687,
+                "characteristic_id": 14
+            },
+            {
+                "id": 2688,
+                "characteristic_id": 12
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1881,
+                "spell_id": 299588
+            },
+            {
+                "id": 1882,
+                "spell_id": 273185
+            },
+            {
+                "id": 1883,
+                "spell_id": 300087
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1395,
@@ -450,7 +947,7 @@
         "name": "Weaponized Crawler",
         "base_health": 425429,
         "health_percentage": null,
-        "level": null,
+        "level": 121,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -459,8 +956,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2680,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1876,
+                "spell_id": 300188
+            },
+            {
+                "id": 1877,
+                "spell_id": 300211
+            },
+            {
+                "id": 1878,
+                "spell_id": 300207
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1396,
@@ -481,7 +996,7 @@
         "name": "Scraphound",
         "base_health": 212714,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
@@ -490,8 +1005,30 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2681,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2682,
+                "characteristic_id": 5
+            },
+            {
+                "id": 2683,
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1879,
+                "spell_id": 299475
+            },
+            {
+                "id": 1880,
+                "spell_id": 294107
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1397,
@@ -512,7 +1049,7 @@
         "name": "Heavy Scrapbot",
         "base_health": 340343,
         "health_percentage": null,
-        "level": null,
+        "level": 121,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -521,8 +1058,30 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2692,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1889,
+                "spell_id": 300160
+            },
+            {
+                "id": 1890,
+                "spell_id": 300177
+            },
+            {
+                "id": 1891,
+                "spell_id": 300171
+            },
+            {
+                "id": 1892,
+                "spell_id": 300159
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1398,
@@ -543,7 +1102,7 @@
         "name": "Mechagon Cavalry",
         "base_health": 340343,
         "health_percentage": null,
-        "level": null,
+        "level": 121,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -552,8 +1111,30 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2731,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1922,
+                "spell_id": 301680
+            },
+            {
+                "id": 1923,
+                "spell_id": 301681
+            },
+            {
+                "id": 1924,
+                "spell_id": 301622
+            },
+            {
+                "id": 1925,
+                "spell_id": 301667
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1399,
@@ -574,7 +1155,7 @@
         "name": "Mechagon Prowler",
         "base_health": 213311,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -583,8 +1164,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2732,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2733,
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1926,
+                "spell_id": 301712
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1400,
@@ -605,17 +1200,35 @@
         "name": "Tank Buster MK1",
         "base_health": 681760,
         "health_percentage": null,
-        "level": null,
+        "level": 122,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 1,
+        "truesight": 0,
         "bursting": 0,
         "bolstering": 0,
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2736,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1936,
+                "spell_id": 295445
+            },
+            {
+                "id": 1937,
+                "spell_id": 302274
+            },
+            {
+                "id": 1938,
+                "spell_id": 302279
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -628,7 +1241,7 @@
         "name": "Mechagon Renormalizer",
         "base_health": 170172,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -637,8 +1250,50 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2707,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2708,
+                "characteristic_id": 11
+            },
+            {
+                "id": 2709,
+                "characteristic_id": 14
+            },
+            {
+                "id": 2710,
+                "characteristic_id": 18
+            },
+            {
+                "id": 2711,
+                "characteristic_id": 9
+            },
+            {
+                "id": 2712,
+                "characteristic_id": 12
+            },
+            {
+                "id": 2713,
+                "characteristic_id": 5
+            },
+            {
+                "id": 2714,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1912,
+                "spell_id": 301629
+            },
+            {
+                "id": 1913,
+                "spell_id": 284219
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1402,
@@ -659,7 +1314,7 @@
         "name": "Scrapbone Grunter",
         "base_health": 106357,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -668,7 +1323,40 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "id": 2664,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2665,
+                "characteristic_id": 14
+            },
+            {
+                "id": 2666,
+                "characteristic_id": 17
+            },
+            {
+                "id": 2667,
+                "characteristic_id": 18
+            },
+            {
+                "id": 2668,
+                "characteristic_id": 10
+            },
+            {
+                "id": 2669,
+                "characteristic_id": 12
+            },
+            {
+                "id": 2670,
+                "characteristic_id": 5
+            },
+            {
+                "id": 2671,
+                "characteristic_id": 11
+            }
+        ],
         "npc_spells": [],
         "npc_enemy_forces": [
             {
@@ -690,7 +1378,7 @@
         "name": "Trixie Tazer",
         "base_health": 766980,
         "health_percentage": null,
-        "level": null,
+        "level": 122,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -699,8 +1387,38 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2694,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1899,
+                "spell_id": 298849
+            },
+            {
+                "id": 1900,
+                "spell_id": 302682
+            },
+            {
+                "id": 1901,
+                "spell_id": 302681
+            },
+            {
+                "id": 1902,
+                "spell_id": 298669
+            },
+            {
+                "id": 1903,
+                "spell_id": 299153
+            },
+            {
+                "id": 1904,
+                "spell_id": 298897
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -713,7 +1431,7 @@
         "name": "Malfunctioning Scrapbot",
         "base_health": 340343,
         "health_percentage": null,
-        "level": null,
+        "level": 121,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -722,8 +1440,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2679,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1871,
+                "spell_id": 300129
+            },
+            {
+                "id": 1872,
+                "spell_id": 294890
+            },
+            {
+                "id": 1873,
+                "spell_id": 294884
+            },
+            {
+                "id": 1874,
+                "spell_id": 294894
+            },
+            {
+                "id": 1875,
+                "spell_id": 300102
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1405,
@@ -744,7 +1488,7 @@
         "name": "Naeno Megacrash",
         "base_health": 575235,
         "health_percentage": null,
-        "level": null,
+        "level": 122,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -753,8 +1497,38 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2693,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1893,
+                "spell_id": 299241
+            },
+            {
+                "id": 1894,
+                "spell_id": 298898
+            },
+            {
+                "id": 1895,
+                "spell_id": 298947
+            },
+            {
+                "id": 1896,
+                "spell_id": 298940
+            },
+            {
+                "id": 1897,
+                "spell_id": 303525
+            },
+            {
+                "id": 1898,
+                "spell_id": 298946
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -813,7 +1587,7 @@
         "name": "Anodized Coilbearer",
         "base_health": 212714,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -822,8 +1596,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2728,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2729,
+                "characteristic_id": 5
+            },
+            {
+                "id": 2730,
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1919,
+                "spell_id": 301692
+            },
+            {
+                "id": 1920,
+                "spell_id": 301689
+            },
+            {
+                "id": 1921,
+                "spell_id": 303941
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1409,
@@ -844,7 +1644,7 @@
         "name": "Mechagon Trooper",
         "base_health": 212714,
         "health_percentage": null,
-        "level": null,
+        "level": 120,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -853,8 +1653,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 2715,
+                "characteristic_id": 1
+            },
+            {
+                "id": 2716,
+                "characteristic_id": 14
+            },
+            {
+                "id": 2717,
+                "characteristic_id": 18
+            },
+            {
+                "id": 2718,
+                "characteristic_id": 12
+            },
+            {
+                "id": 2719,
+                "characteristic_id": 2
+            },
+            {
+                "id": 2720,
+                "characteristic_id": 5
+            },
+            {
+                "id": 2721,
+                "characteristic_id": 11
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 1914,
+                "spell_id": 299498
+            },
+            {
+                "id": 1915,
+                "spell_id": 299502
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1410,

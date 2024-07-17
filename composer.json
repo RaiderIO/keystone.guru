@@ -64,6 +64,7 @@
         "akaunting/laravel-language": "^1.0",
         "barryvdh/laravel-ide-helper": "^3.0",
         "beyondcode/laravel-server-timing": "^1.4",
+        "bramus/monolog-colored-line-formatter": "~3.1",
         "codeartmk/opensearch-laravel": "dev-master",
         "darkaonline/l5-swagger": "^8.5",
         "diglactic/laravel-breadcrumbs": "^8.1",

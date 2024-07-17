@@ -9,7 +9,7 @@
         "name": "Timecap'n Hooktail",
         "base_health": 1342215,
         "health_percentage": null,
-        "level": null,
+        "level": 62,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -18,8 +18,30 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4517,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 3007,
+                "spell_id": 350517
+            },
+            {
+                "id": 3008,
+                "spell_id": 347149
+            },
+            {
+                "id": 3009,
+                "spell_id": 354334
+            },
+            {
+                "id": 3010,
+                "spell_id": 347151
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -32,7 +54,7 @@
         "name": "Hylbrande",
         "base_health": 1278300,
         "health_percentage": null,
-        "level": null,
+        "level": 62,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -41,8 +63,42 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4491,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2995,
+                "spell_id": 346960
+            },
+            {
+                "id": 2996,
+                "spell_id": 346961
+            },
+            {
+                "id": 2997,
+                "spell_id": 353312
+            },
+            {
+                "id": 2998,
+                "spell_id": 346116
+            },
+            {
+                "id": 2999,
+                "spell_id": 347097
+            },
+            {
+                "id": 3000,
+                "spell_id": 346766
+            },
+            {
+                "id": 3001,
+                "spell_id": 347094
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -76,9 +132,9 @@
         "npc_class_id": 1,
         "display_id": 100737,
         "name": "So'leah",
-        "base_health": 2028237,
+        "base_health": 1267648,
         "health_percentage": null,
-        "level": null,
+        "level": 62,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -87,8 +143,50 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4537,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 3017,
+                "spell_id": 351057
+            },
+            {
+                "id": 3018,
+                "spell_id": 353635
+            },
+            {
+                "id": 3019,
+                "spell_id": 350804
+            },
+            {
+                "id": 3020,
+                "spell_id": 351096
+            },
+            {
+                "id": 3021,
+                "spell_id": 350875
+            },
+            {
+                "id": 3022,
+                "spell_id": 350796
+            },
+            {
+                "id": 3023,
+                "spell_id": 351646
+            },
+            {
+                "id": 3024,
+                "spell_id": 351086
+            },
+            {
+                "id": 3025,
+                "spell_id": 351124
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -124,7 +222,7 @@
         "name": "Murkbrine Wavejumper",
         "base_health": 170172,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -133,8 +231,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4473,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4474,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4475,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4476,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4477,
+                "characteristic_id": 12
+            },
+            {
+                "id": 4478,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4479,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4480,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2990,
+                "spell_id": 355118
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2202,
@@ -155,7 +291,7 @@
         "name": "Murkbrine Shellcrusher",
         "base_health": 191443,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -164,8 +300,50 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4456,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4457,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4458,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4459,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4460,
+                "characteristic_id": 12
+            },
+            {
+                "id": 4461,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4462,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4463,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2984,
+                "spell_id": 355048
+            },
+            {
+                "id": 2985,
+                "spell_id": 355057
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2203,
@@ -186,7 +364,7 @@
         "name": "Murkbrine Scalebinder",
         "base_health": 148900,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -195,8 +373,54 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4481,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4482,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4483,
+                "characteristic_id": 12
+            },
+            {
+                "id": 4484,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4485,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4486,
+                "characteristic_id": 16
+            },
+            {
+                "id": 4487,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4488,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4489,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2991,
+                "spell_id": 355132
+            },
+            {
+                "id": 2992,
+                "spell_id": 355147
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2204,
@@ -217,7 +441,7 @@
         "name": "Murkbrine Fishmancer",
         "base_health": 148900,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -226,8 +450,50 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4464,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4465,
+                "characteristic_id": 16
+            },
+            {
+                "id": 4466,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4467,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4468,
+                "characteristic_id": 12
+            },
+            {
+                "id": 4469,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4470,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4471,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2986,
+                "spell_id": 355234
+            },
+            {
+                "id": 2987,
+                "spell_id": 355225
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2205,
@@ -248,7 +514,7 @@
         "name": "Murkbrine Shorerunner",
         "base_health": 34034,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -257,7 +523,32 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "id": 4450,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4451,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4452,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4453,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4454,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4455,
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [],
         "npc_enemy_forces": [
             {
@@ -279,7 +570,7 @@
         "name": "Coastwalker Goliath",
         "base_health": 425429,
         "health_percentage": null,
-        "level": null,
+        "level": 61,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -288,8 +579,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4472,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2988,
+                "spell_id": 355464
+            },
+            {
+                "id": 2989,
+                "spell_id": 355429
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2207,
@@ -310,7 +615,7 @@
         "name": "Stormforged Guardian",
         "base_health": 306309,
         "health_percentage": null,
-        "level": null,
+        "level": 61,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -319,8 +624,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4490,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2993,
+                "spell_id": 355584
+            },
+            {
+                "id": 2994,
+                "spell_id": 355577
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2208,
@@ -387,7 +706,7 @@
         "name": "Corsair Officer",
         "base_health": 212714,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -396,8 +715,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4509,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4510,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4511,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4512,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4513,
+                "characteristic_id": 12
+            },
+            {
+                "id": 4514,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4515,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4516,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 3006,
+                "spell_id": 368661
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2211,
@@ -418,7 +775,7 @@
         "name": "Hourglass Tidesage",
         "base_health": 191443,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -427,8 +784,54 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4499,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4500,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4501,
+                "characteristic_id": 12
+            },
+            {
+                "id": 4502,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4503,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4504,
+                "characteristic_id": 16
+            },
+            {
+                "id": 4505,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4506,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4507,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 3004,
+                "spell_id": 356260
+            },
+            {
+                "id": 3005,
+                "spell_id": 356843
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2212,
@@ -449,7 +852,7 @@
         "name": "Drunk Pirate",
         "base_health": 42543,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -458,7 +861,12 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "id": 4508,
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [],
         "npc_enemy_forces": []
     },
@@ -472,7 +880,7 @@
         "name": "Burly Deckhand",
         "base_health": 255257,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -481,8 +889,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4492,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4493,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4494,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4495,
+                "characteristic_id": 12
+            },
+            {
+                "id": 4496,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4497,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4498,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 3002,
+                "spell_id": 368662
+            },
+            {
+                "id": 3003,
+                "spell_id": 356133
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2218,
@@ -503,7 +949,7 @@
         "name": "Adorned Starseer",
         "base_health": 319072,
         "health_percentage": null,
-        "level": null,
+        "level": 61,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -512,8 +958,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4518,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 3011,
+                "spell_id": 357226
+            },
+            {
+                "id": 3012,
+                "spell_id": 357238
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2220,
@@ -534,7 +994,7 @@
         "name": "Focused Ritualist",
         "base_health": 212714,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -543,8 +1003,54 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4528,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4529,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4530,
+                "characteristic_id": 12
+            },
+            {
+                "id": 4531,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4532,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4533,
+                "characteristic_id": 16
+            },
+            {
+                "id": 4534,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4535,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4536,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 3015,
+                "spell_id": 357260
+            },
+            {
+                "id": 3016,
+                "spell_id": 354297
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2221,
@@ -565,7 +1071,7 @@
         "name": "Devoted Accomplice",
         "base_health": 233986,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -574,8 +1080,54 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4519,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4520,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4521,
+                "characteristic_id": 12
+            },
+            {
+                "id": 4522,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4523,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4524,
+                "characteristic_id": 16
+            },
+            {
+                "id": 4525,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4526,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4527,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 3013,
+                "spell_id": 357284
+            },
+            {
+                "id": 3014,
+                "spell_id": 357281
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2222,

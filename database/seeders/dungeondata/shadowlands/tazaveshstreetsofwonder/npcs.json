@@ -32,7 +32,7 @@
         "name": "Zo'phex",
         "base_health": 1278300,
         "health_percentage": null,
-        "level": null,
+        "level": 62,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -41,8 +41,46 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4360,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2888,
+                "spell_id": 347992
+            },
+            {
+                "id": 2889,
+                "spell_id": 348350
+            },
+            {
+                "id": 2890,
+                "spell_id": 345770
+            },
+            {
+                "id": 2891,
+                "spell_id": 353411
+            },
+            {
+                "id": 2892,
+                "spell_id": 346204
+            },
+            {
+                "id": 2893,
+                "spell_id": 347949
+            },
+            {
+                "id": 2894,
+                "spell_id": 345990
+            },
+            {
+                "id": 2895,
+                "spell_id": 348128
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -55,7 +93,7 @@
         "name": "P.O.S.T. Master",
         "base_health": 1342215,
         "health_percentage": null,
-        "level": null,
+        "level": 62,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -64,8 +102,30 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4445,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2952,
+                "spell_id": 346962
+            },
+            {
+                "id": 2953,
+                "spell_id": 346742
+            },
+            {
+                "id": 2954,
+                "spell_id": 346286
+            },
+            {
+                "id": 2955,
+                "spell_id": 346947
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -147,7 +207,7 @@
         "name": "So'azmi",
         "base_health": 1342215,
         "health_percentage": null,
-        "level": null,
+        "level": 62,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -156,8 +216,42 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4446,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2956,
+                "spell_id": 347632
+            },
+            {
+                "id": 2957,
+                "spell_id": 347249
+            },
+            {
+                "id": 2958,
+                "spell_id": 347610
+            },
+            {
+                "id": 2959,
+                "spell_id": 347636
+            },
+            {
+                "id": 2960,
+                "spell_id": 357188
+            },
+            {
+                "id": 2961,
+                "spell_id": 354264
+            },
+            {
+                "id": 2962,
+                "spell_id": 347623
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -193,7 +287,7 @@
         "name": "P.O.S.T. Worker",
         "base_health": 213311,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -202,8 +296,50 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4429,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4430,
+                "characteristic_id": 1
+            },
+            {
+                "id": 4431,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4432,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4433,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4434,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4435,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4436,
+                "characteristic_id": 12
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2948,
+                "spell_id": 347716
+            },
+            {
+                "id": 2949,
+                "spell_id": 348008
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2002,
@@ -224,7 +360,7 @@
         "name": "Overloaded Mailemental",
         "base_health": 159984,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -233,8 +369,50 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4437,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4438,
+                "characteristic_id": 1
+            },
+            {
+                "id": 4439,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4440,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4441,
+                "characteristic_id": 13
+            },
+            {
+                "id": 4442,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4443,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4444,
+                "characteristic_id": 12
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2950,
+                "spell_id": 347903
+            },
+            {
+                "id": 2951,
+                "spell_id": 347775
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2003,
@@ -255,7 +433,7 @@
         "name": "Defective Sorter",
         "base_health": 85325,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -264,8 +442,50 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4421,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4422,
+                "characteristic_id": 1
+            },
+            {
+                "id": 4423,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4424,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4425,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4426,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4427,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4428,
+                "characteristic_id": 12
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2946,
+                "spell_id": 347814
+            },
+            {
+                "id": 2947,
+                "spell_id": 347721
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2004,
@@ -378,7 +598,7 @@
         "name": "Achillite",
         "base_health": 639150,
         "health_percentage": null,
-        "level": null,
+        "level": 62,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -387,8 +607,38 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4419,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2938,
+                "spell_id": 349954
+            },
+            {
+                "id": 2939,
+                "spell_id": 349987
+            },
+            {
+                "id": 2940,
+                "spell_id": 350037
+            },
+            {
+                "id": 2941,
+                "spell_id": 349933
+            },
+            {
+                "id": 2942,
+                "spell_id": 349934
+            },
+            {
+                "id": 2943,
+                "spell_id": 349999
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -401,7 +651,7 @@
         "name": "Alcruux",
         "base_health": 511320,
         "health_percentage": null,
-        "level": null,
+        "level": 62,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -410,8 +660,30 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4418,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2934,
+                "spell_id": 355938
+            },
+            {
+                "id": 2935,
+                "spell_id": 349797
+            },
+            {
+                "id": 2936,
+                "spell_id": 349498
+            },
+            {
+                "id": 2937,
+                "spell_id": 349663
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -447,7 +719,7 @@
         "name": "Brawling Patron",
         "base_health": 170649,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -456,8 +728,42 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4410,
+                "characteristic_id": 1
+            },
+            {
+                "id": 4411,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4412,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4413,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4414,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4415,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4416,
+                "characteristic_id": 14
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2929,
+                "spell_id": 348566
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -470,7 +776,7 @@
         "name": "Zo'gron",
         "base_health": 958725,
         "health_percentage": null,
-        "level": null,
+        "level": 62,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -479,8 +785,30 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4417,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2930,
+                "spell_id": 359028
+            },
+            {
+                "id": 2931,
+                "spell_id": 355438
+            },
+            {
+                "id": 2932,
+                "spell_id": 350922
+            },
+            {
+                "id": 2933,
+                "spell_id": 350919
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -516,7 +844,7 @@
         "name": "Disruptive Patron",
         "base_health": 255974,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -525,8 +853,54 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4396,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4397,
+                "characteristic_id": 1
+            },
+            {
+                "id": 4398,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4399,
+                "characteristic_id": 16
+            },
+            {
+                "id": 4400,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4401,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4402,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4403,
+                "characteristic_id": 12
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2925,
+                "spell_id": 353836
+            },
+            {
+                "id": 2926,
+                "spell_id": 353706
+            },
+            {
+                "id": 2927,
+                "spell_id": 353783
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -585,7 +959,7 @@
         "name": "Venza Goldfuse",
         "base_health": 766980,
         "health_percentage": null,
-        "level": null,
+        "level": 62,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -594,8 +968,22 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4420,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2944,
+                "spell_id": 350086
+            },
+            {
+                "id": 2945,
+                "spell_id": 350101
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1045,7 +1433,7 @@
         "name": "Customs Security",
         "base_health": 234643,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1054,8 +1442,50 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4334,
+                "characteristic_id": 1
+            },
+            {
+                "id": 4335,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4336,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4337,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4338,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4339,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4340,
+                "characteristic_id": 12
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2871,
+                "spell_id": 355888
+            },
+            {
+                "id": 2872,
+                "spell_id": 355900
+            },
+            {
+                "id": 2873,
+                "spell_id": 355891
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2038,
@@ -1076,7 +1506,7 @@
         "name": "Armored Overseer",
         "base_health": 277305,
         "health_percentage": null,
-        "level": null,
+        "level": 61,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1085,8 +1515,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4358,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2882,
+                "spell_id": 352796
+            },
+            {
+                "id": 2883,
+                "spell_id": 356001
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2039,
@@ -1107,7 +1551,7 @@
         "name": "Interrogation Specialist",
         "base_health": 191980,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1116,8 +1560,54 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4350,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4351,
+                "characteristic_id": 1
+            },
+            {
+                "id": 4352,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4353,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4354,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4355,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4356,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4357,
+                "characteristic_id": 12
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2879,
+                "spell_id": 356031
+            },
+            {
+                "id": 2880,
+                "spell_id": 355930
+            },
+            {
+                "id": 2881,
+                "spell_id": 355915
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2040,
@@ -1138,7 +1628,7 @@
         "name": "Support Officer",
         "base_health": 191980,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1147,8 +1637,54 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4342,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4343,
+                "characteristic_id": 1
+            },
+            {
+                "id": 4344,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4345,
+                "characteristic_id": 14
+            },
+            {
+                "id": 4346,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4347,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4348,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4349,
+                "characteristic_id": 12
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2876,
+                "spell_id": 355980
+            },
+            {
+                "id": 2877,
+                "spell_id": 354297
+            },
+            {
+                "id": 2878,
+                "spell_id": 355934
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2041,
@@ -1353,7 +1889,7 @@
         "name": "Gatewarden Zo'mazz",
         "base_health": 341298,
         "health_percentage": null,
-        "level": null,
+        "level": 61,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1362,8 +1898,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4341,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2874,
+                "spell_id": 352796
+            },
+            {
+                "id": 2875,
+                "spell_id": 356548
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2050,
@@ -1476,7 +2026,7 @@
         "name": "Oasis Security",
         "base_health": 341298,
         "health_percentage": null,
-        "level": null,
+        "level": 61,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1485,8 +2035,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4395,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2922,
+                "spell_id": 350916
+            },
+            {
+                "id": 2923,
+                "spell_id": 350922
+            },
+            {
+                "id": 2924,
+                "spell_id": 353706
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1499,7 +2067,7 @@
         "name": "Portalmancer Zo'honn",
         "base_health": 426623,
         "health_percentage": null,
-        "level": null,
+        "level": 61,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1508,8 +2076,30 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4359,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2884,
+                "spell_id": 356548
+            },
+            {
+                "id": 2885,
+                "spell_id": 354297
+            },
+            {
+                "id": 2886,
+                "spell_id": 352390
+            },
+            {
+                "id": 2887,
+                "spell_id": 356537
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2056,
@@ -1691,7 +2281,7 @@
         "name": "Commander Zo'far",
         "base_health": 511947,
         "health_percentage": null,
-        "level": null,
+        "level": 61,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1700,8 +2290,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4384,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2912,
+                "spell_id": 355473
+            },
+            {
+                "id": 2913,
+                "spell_id": 355477
+            },
+            {
+                "id": 2914,
+                "spell_id": 355479
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2065,
@@ -1722,17 +2330,35 @@
         "name": "Tracker Zo'korss",
         "base_health": 426623,
         "health_percentage": null,
-        "level": null,
+        "level": 61,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0,
+        "truesight": 1,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4361,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2896,
+                "spell_id": 356001
+            },
+            {
+                "id": 2897,
+                "spell_id": 356942
+            },
+            {
+                "id": 2898,
+                "spell_id": 356929
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2066,
@@ -1753,7 +2379,7 @@
         "name": "Market Peacekeeper",
         "base_health": 255974,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1762,8 +2388,54 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4369,
+                "characteristic_id": 12
+            },
+            {
+                "id": 4370,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4371,
+                "characteristic_id": 17
+            },
+            {
+                "id": 4372,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4373,
+                "characteristic_id": 1
+            },
+            {
+                "id": 4374,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4375,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4376,
+                "characteristic_id": 16
+            },
+            {
+                "id": 4377,
+                "characteristic_id": 14
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2905,
+                "spell_id": 355640
+            },
+            {
+                "id": 2906,
+                "spell_id": 355637
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2067,
@@ -1784,7 +2456,7 @@
         "name": "Veteran Sparkcaster",
         "base_health": 191980,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1793,8 +2465,38 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4378,
+                "characteristic_id": 1
+            },
+            {
+                "id": 4379,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4380,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4381,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4382,
+                "characteristic_id": 14
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2907,
+                "spell_id": 355642
+            },
+            {
+                "id": 2908,
+                "spell_id": 355641
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2068,
@@ -1815,7 +2517,7 @@
         "name": "Commerce Enforcer",
         "base_health": 324233,
         "health_percentage": null,
-        "level": null,
+        "level": 61,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1824,8 +2526,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4383,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2909,
+                "spell_id": 355477
+            },
+            {
+                "id": 2910,
+                "spell_id": 355782
+            },
+            {
+                "id": 2911,
+                "spell_id": 355783
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2069,
@@ -1869,7 +2589,7 @@
         "name": "Cartel Skulker",
         "base_health": 213050,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1878,8 +2598,30 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4392,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4393,
+                "characteristic_id": 1
+            },
+            {
+                "id": 4394,
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2920,
+                "spell_id": 355830
+            },
+            {
+                "id": 2921,
+                "spell_id": 30831
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2074,
@@ -2038,7 +2780,7 @@
         "name": "Ancient Core Hound",
         "base_health": 307168,
         "health_percentage": null,
-        "level": null,
+        "level": 61,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2047,8 +2789,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4362,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2899,
+                "spell_id": 356404
+            },
+            {
+                "id": 2900,
+                "spell_id": 356408
+            },
+            {
+                "id": 2901,
+                "spell_id": 356407
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2081,
@@ -2460,7 +3220,7 @@
         "name": "Brawling Patron",
         "base_health": 170649,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2469,8 +3229,38 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4404,
+                "characteristic_id": 1
+            },
+            {
+                "id": 4405,
+                "characteristic_id": 2
+            },
+            {
+                "id": 4406,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4407,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4408,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4409,
+                "characteristic_id": 14
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2928,
+                "spell_id": 348566
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -3173,7 +3963,7 @@
         "name": "Cartel Smuggler",
         "base_health": 191745,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -3182,8 +3972,30 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4385,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4386,
+                "characteristic_id": 12
+            },
+            {
+                "id": 4387,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4388,
+                "characteristic_id": 16
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2917,
+                "spell_id": 357029
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2131,
@@ -3204,7 +4016,7 @@
         "name": "Cartel Wiseguy",
         "base_health": 170440,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -3213,8 +4025,30 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4389,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4390,
+                "characteristic_id": 5
+            },
+            {
+                "id": 4391,
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2918,
+                "spell_id": 357196
+            },
+            {
+                "id": 2919,
+                "spell_id": 357197
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2132,
@@ -3235,7 +4069,7 @@
         "name": "Cartel Muscle",
         "base_health": 319575,
         "health_percentage": null,
-        "level": null,
+        "level": 61,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -3245,7 +4079,16 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 2915,
+                "spell_id": 357229
+            },
+            {
+                "id": 2916,
+                "spell_id": 356967
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2133,
@@ -3473,7 +4316,7 @@
         "name": "Enraged Direhorn",
         "base_health": 341298,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -3482,8 +4325,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4363,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2902,
+                "spell_id": 357508
+            },
+            {
+                "id": 2903,
+                "spell_id": 357512
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2143,
@@ -3642,7 +4499,7 @@
         "name": "Frenzied Nightclaw",
         "base_health": 170649,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -3651,8 +4508,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 4364,
+                "characteristic_id": 1
+            },
+            {
+                "id": 4365,
+                "characteristic_id": 19
+            },
+            {
+                "id": 4366,
+                "characteristic_id": 18
+            },
+            {
+                "id": 4367,
+                "characteristic_id": 11
+            },
+            {
+                "id": 4368,
+                "characteristic_id": 14
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2904,
+                "spell_id": 357827
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2150,

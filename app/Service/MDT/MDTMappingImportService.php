@@ -26,6 +26,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
 use App\Service\MDT\Logging\MDTMappingImportServiceLoggingInterface;
 use Exception;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -99,6 +100,112 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         );
     }
 
+    public function importNpcsDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon): void
+    {
+        try {
+            $this->log->importNpcsDataFromMDTStart($dungeon->key);
+
+            // Get a list of NPCs and update/save them
+            $npcs = $dungeon->npcs->keyBy('id');
+
+            $characteristicsByName = Characteristic::all()->mapWithKeys(function (Characteristic $characteristic) {
+                return [__($characteristic->name, [], 'en_US') => $characteristic];
+            });
+
+            $npcCharacteristicsAttributes = [];
+            $npcSpellsAttributes          = [];
+            $affectedNpcIds               = [];
+
+            foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
+                $affectedNpcIds[] = $mdtNpc->getId();
+
+                /** @var Npc|null $npc */
+                $npc = $npcs->get($mdtNpc->getId());
+
+                if ($newlyCreated = ($npc === null)) {
+                    $npc = new Npc();
+                }
+
+                $npc->id = $mdtNpc->getId();
+                // Allow manual override to -1
+                $npc->dungeon_id        = $npc->dungeon_id === -1 ? -1 : $dungeon->id;
+                $npc->display_id        = $mdtNpc->getDisplayId();
+                $npc->classification_id ??= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE];
+                $npc->name              = $mdtNpc->getName();
+                $npc->base_health       = $mdtNpc->getHealth();
+                // MDT doesn't always get this right - don't trust it (Watcher Irideus for example)
+                $npc->health_percentage = $npc->health_percentage ?? $mdtNpc->getHealthPercentage();
+                $npc->level             = $mdtNpc->getLevel();
+                $npc->npc_type_id       = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::UNCATEGORIZED;
+                $npc->truesight         = $mdtNpc->getStealthDetect();
+
+                // Save characteristics
+                foreach ($mdtNpc->getCharacteristics() as $characteristicName => $enabled) {
+                    if (!$enabled) {
+                        continue;
+                    }
+
+                    /** @var Characteristic|null $characteristic */
+                    $characteristic = $characteristicsByName->get($characteristicName);
+                    if ($characteristic === null) {
+                        $this->log->importNpcsDataFromMDTUnableToFindCharacteristicForNpc($npc->id, $characteristicName);
+                        continue;
+                    }
+
+                    $npcCharacteristicsAttributes[] = [
+                        'npc_id'            => $npc->id,
+                        'characteristic_id' => $characteristic->id,
+                    ];
+                }
+
+                // Save spells
+                foreach ($mdtNpc->getSpells() as $spellId => $obj) {
+                    $npcSpellsAttributes[] = [
+                        'npc_id'   => $npc->id,
+                        'spell_id' => $spellId,
+                    ];
+                }
+
+                try {
+                    $saveResult = $newlyCreated ? $npc->save() : $npc->update();
+                    if (!$saveResult) {
+                        throw new Exception(sprintf('Unable to save npc %d!', $npc->id));
+                    } else if ($newlyCreated) {
+                        $this->log->importNpcsDataFromMDTSaveNewNpc($npc->id);
+                    }
+
+                    if ($mdtNpc->getCount() > 0 && $newlyCreated) {
+                        // For new NPCs go back and create enemy forces for all historical mapping versions
+                        $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
+                    }
+                } catch (UniqueConstraintViolationException $exception) {
+                    $this->log->importNpcsDataFromMDTNpcNotMarkedForAllDungeons($npc->id);
+                } catch (Exception $exception) {
+                    $this->log->importNpcsDataFromMDTSaveNpcException($exception);
+                }
+            }
+
+            // It's easier to delete/insert new ones than try to maintain the IDs which don't really mean anything anyway
+            // Clear characteristics/spells for all affected NPCs
+            $npcCharacteristicsDeleted = NpcCharacteristic::whereIn('npc_id', $affectedNpcIds)->delete();
+            $npcSpellsDeleted          = NpcSpell::whereIn('npc_id', $affectedNpcIds)->delete();
+
+            // Insert new ones
+            NpcCharacteristic::insert($npcCharacteristicsAttributes);
+            NpcSpell::insert($npcSpellsAttributes);
+
+            $this->log->importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
+                $npcCharacteristicsDeleted,
+                count($npcCharacteristicsAttributes),
+                $npcSpellsDeleted,
+                count($npcSpellsAttributes)
+            );
+        } finally {
+            $this->log->importNpcsDataFromMDTEnd();
+        }
+    }
+
+
     /**
      * @throws Exception
      */
@@ -133,125 +240,55 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         try {
             $this->log->importNpcsStart();
 
+            $this->importNpcsDataFromMDT($mdtDungeon, $dungeon);
+
             // Get a list of NPCs and update/save them
             $npcs = $dungeon->npcs->keyBy('id');
 
-            $characteristicsByName = Characteristic::all()->mapWithKeys(function (Characteristic $characteristic) {
-                return [__($characteristic->name, [], 'en_US') => $characteristic];
-            });
-
-            $npcCharacteristicsAttributes = [];
-            $npcSpellsAttributes          = [];
-            $affectedNpcIds               = [];
             foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
-                $affectedNpcIds[] = $mdtNpc->getId();
-
+                /** @var Npc|null $npc */
                 $npc = $npcs->get($mdtNpc->getId());
 
-                if ($newlyCreated = ($npc === null)) {
-                    $npc = new Npc();
-                }
+                if ($npc === null) {
+                    $this->log->importNpcsUnableToFindNpc($npc->id);
 
-                $npc->id = $mdtNpc->getId();
-                // Allow manual override to -1
-                $npc->dungeon_id        = $npc->dungeon_id === -1 ? -1 : $dungeon->id;
-                $npc->display_id        = $mdtNpc->getDisplayId();
-                $npc->classification_id ??= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE];
-                $npc->name              = $mdtNpc->getName();
-                $npc->base_health       = $mdtNpc->getHealth();
-                // MDT doesn't always get this right - don't trust it (Watcher Irideus for example)
-                $npc->health_percentage = $npc->health_percentage ?? $mdtNpc->getHealthPercentage();
-                $npc->level             = $mdtNpc->getLevel();
-                $npc->npc_type_id       = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::UNCATEGORIZED;
-                $npc->truesight         = $mdtNpc->getStealthDetect();
-
-                // Save characteristics
-                foreach ($mdtNpc->getCharacteristics() as $characteristicName => $enabled) {
-                    if (!$enabled) {
-                        continue;
-                    }
-
-                    /** @var Characteristic|null $characteristic */
-                    $characteristic = $characteristicsByName->get($characteristicName);
-                    if ($characteristic === null) {
-                        $this->log->importNpcsUnableToFindCharacteristicForNpc($npc->id, $characteristicName);
-                        continue;
-                    }
-
-                    $npcCharacteristicsAttributes[] = [
-                        'npc_id'            => $npc->id,
-                        'characteristic_id' => $characteristic->id,
-                    ];
-                }
-
-                // Save spells
-                foreach ($mdtNpc->getSpells() as $spellId => $obj) {
-                    $npcSpellsAttributes[] = [
-                        'npc_id'   => $npc->id,
-                        'spell_id' => $spellId,
-                    ];
+                    continue;
                 }
 
                 try {
-                    if ($newlyCreated ? $npc->save() : $npc->update()) {
-                        if ($mdtNpc->getCount() > 0) {
-                            if ($newlyCreated) {
-                                // For new NPCs go back and create enemy forces for all historical mapping versions
-                                $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
+                    if ($mdtNpc->getCount() > 0) {
+                        // Create new enemy forces for this NPC for this new mapping version
+                        NpcEnemyForces::create([
+                            'mapping_version_id'   => $newMappingVersion->id,
+                            'npc_id'               => $npc->id,
+                            'enemy_forces'         => $mdtNpc->getCount(),
+                            'enemy_forces_teeming' => null,
+                        ]);
 
-                                $this->log->importNpcsSaveNewNpc($npc->id);
-                            } else {
-                                // Create new enemy forces for this NPC for this new mapping version
-                                NpcEnemyForces::create([
-                                    'mapping_version_id'   => $newMappingVersion->id,
-                                    'npc_id'               => $npc->id,
-                                    'enemy_forces'         => $mdtNpc->getCount(),
-                                    'enemy_forces_teeming' => null,
-                                ]);
+                        $this->log->importNpcsUpdateExistingNpc($npc->id);
+                    }
 
-                                $this->log->importNpcsUpdateExistingNpc($npc->id);
-                            }
-                        }
-
-                        // If shrouded (zul'gamux) update the mapping version to account for that
-                        if ($npc->isShrouded()) {
-                            $newMappingVersion->update([
-                                'enemy_forces_shrouded' => $mdtNpc->getCount(),
-                            ]);
-                        } else if ($npc->isShroudedZulGamux()) {
-                            $newMappingVersion->update([
-                                'enemy_forces_shrouded_zul_gamux' => $mdtNpc->getCount(),
-                            ]);
-                        }
-                    } else {
-                        throw new Exception(sprintf('Unable to save npc %d!', $npc->id));
+                    // If shrouded (zul'gamux) update the mapping version to account for that
+                    if ($npc->isShrouded()) {
+                        $newMappingVersion->update([
+                            'enemy_forces_shrouded' => $mdtNpc->getCount(),
+                        ]);
+                    } else if ($npc->isShroudedZulGamux()) {
+                        $newMappingVersion->update([
+                            'enemy_forces_shrouded_zul_gamux' => $mdtNpc->getCount(),
+                        ]);
                     }
                 } catch (Exception $exception) {
-                    $this->log->importNpcsSaveNpcException($exception);
+                    $this->log->importNpcsDataFromMDTSaveNpcException($exception);
                 }
             }
-
-            // It's easier to delete/insert new ones than try to maintain the IDs which don't really mean anything anyway
-            // Clear characteristics/spells for all affected NPCs
-            $npcCharacteristicsDeleted = NpcCharacteristic::whereIn('npc_id', $affectedNpcIds)->delete();
-            $npcSpellsDeleted = NpcSpell::whereIn('npc_id', $affectedNpcIds)->delete();
-
-            // Insert new ones
-            $npcCharacteristicsInserted = NpcCharacteristic::insert($npcCharacteristicsAttributes);
-            $npcSpellsInserted = NpcSpell::insert($npcSpellsAttributes);
-            $this->log->importNpcsCharacteristicsAndSpellsUpdate(
-                $npcCharacteristicsDeleted,
-                $npcCharacteristicsInserted,
-                $npcSpellsDeleted,
-                $npcSpellsInserted
-            );
         } finally {
             $this->log->importNpcsEnd();
         }
     }
 
     /**
-     * @return Collection|Enemy
+     * @return Collection<Enemy>
      */
     private function importEnemies(
         Mappingversion $currentMappingVersion,

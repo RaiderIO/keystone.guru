@@ -6,10 +6,10 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 31463,
-        "name": "Battered Red Drake",
-        "base_health": 12345,
+        "name": "Battered",
+        "base_health": 10000,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -19,7 +19,24 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5175,
+                "spell_id": 74040
+            },
+            {
+                "id": 5176,
+                "spell_id": 457657
+            },
+            {
+                "id": 5177,
+                "spell_id": 457658
+            },
+            {
+                "id": 5178,
+                "spell_id": 74039
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -74,11 +91,11 @@
         "classification_id": 2,
         "npc_type_id": 1,
         "npc_class_id": 1,
-        "display_id": 31903,
+        "display_id": 119899,
         "name": "Faceless Corruptor",
-        "base_health": 12345,
+        "base_health": 22426278,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -88,7 +105,28 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5132,
+                "spell_id": 391568
+            },
+            {
+                "id": 5133,
+                "spell_id": 451394
+            },
+            {
+                "id": 5134,
+                "spell_id": 451395
+            },
+            {
+                "id": 5135,
+                "spell_id": 451396
+            },
+            {
+                "id": 5136,
+                "spell_id": 451391
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -189,11 +227,11 @@
         "classification_id": 3,
         "npc_type_id": 5,
         "npc_class_id": 1,
-        "display_id": 31498,
+        "display_id": 118920,
         "name": "General Umbriss",
-        "base_health": 12345,
+        "base_health": 83984397,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "neutral",
         "dangerous": 1,
         "truesight": 0,
@@ -203,7 +241,32 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5137,
+                "spell_id": 448953
+            },
+            {
+                "id": 5138,
+                "spell_id": 448882
+            },
+            {
+                "id": 5139,
+                "spell_id": 447268
+            },
+            {
+                "id": 5140,
+                "spell_id": 447261
+            },
+            {
+                "id": 5141,
+                "spell_id": 448877
+            },
+            {
+                "id": 5142,
+                "spell_id": 448847
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -534,11 +597,11 @@
         "classification_id": 2,
         "npc_type_id": 7,
         "npc_class_id": 1,
-        "display_id": 17764,
+        "display_id": 38667,
         "name": "Molten Giant",
-        "base_health": 12345,
+        "base_health": 26631206,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -548,7 +611,16 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5114,
+                "spell_id": 451971
+            },
+            {
+                "id": 5115,
+                "spell_id": 451965
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -559,9 +631,9 @@
         "npc_class_id": 1,
         "display_id": 31584,
         "name": "Twilight Beguiler",
-        "base_health": 12345,
+        "base_health": 11213139,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -571,7 +643,24 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5110,
+                "spell_id": 451761
+            },
+            {
+                "id": 5111,
+                "spell_id": 76369
+            },
+            {
+                "id": 5112,
+                "spell_id": 76711
+            },
+            {
+                "id": 5113,
+                "spell_id": 76151
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -582,9 +671,9 @@
         "npc_class_id": 1,
         "display_id": 33429,
         "name": "Forgemaster Throngus",
-        "base_health": 12345,
+        "base_health": 97981796,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "neutral",
         "dangerous": 1,
         "truesight": 0,
@@ -594,7 +683,52 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5143,
+                "spell_id": 449536
+            },
+            {
+                "id": 5144,
+                "spell_id": 449474
+            },
+            {
+                "id": 5145,
+                "spell_id": 447395
+            },
+            {
+                "id": 5146,
+                "spell_id": 449444
+            },
+            {
+                "id": 5147,
+                "spell_id": 456902
+            },
+            {
+                "id": 5148,
+                "spell_id": 449687
+            },
+            {
+                "id": 5149,
+                "spell_id": 449448
+            },
+            {
+                "id": 5150,
+                "spell_id": 449449
+            },
+            {
+                "id": 5151,
+                "spell_id": 451996
+            },
+            {
+                "id": 5152,
+                "spell_id": 456900
+            },
+            {
+                "id": 5153,
+                "spell_id": 452008
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -789,9 +923,9 @@
         "npc_class_id": 1,
         "display_id": 31792,
         "name": "Drahga Shadowburner",
-        "base_health": 12345,
+        "base_health": 29394539,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -801,7 +935,24 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5154,
+                "spell_id": 450095
+            },
+            {
+                "id": 5155,
+                "spell_id": 448013
+            },
+            {
+                "id": 5156,
+                "spell_id": 447966
+            },
+            {
+                "id": 5157,
+                "spell_id": 76303
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -812,9 +963,9 @@
         "npc_class_id": 1,
         "display_id": 31795,
         "name": "Valiona",
-        "base_health": 12345,
+        "base_health": 139973995,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -824,7 +975,24 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5158,
+                "spell_id": 75328
+            },
+            {
+                "id": 5159,
+                "spell_id": 448105
+            },
+            {
+                "id": 5160,
+                "spell_id": 456773
+            },
+            {
+                "id": 5161,
+                "spell_id": 456751
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -833,11 +1001,11 @@
         "classification_id": 2,
         "npc_type_id": 6,
         "npc_class_id": 1,
-        "display_id": 34942,
+        "display_id": 116017,
         "name": "Invoked Shadowflame Spirit",
-        "base_health": 12345,
+        "base_health": 20000,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -847,7 +1015,12 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5174,
+                "spell_id": 75238
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -879,11 +1052,11 @@
         "classification_id": 3,
         "npc_type_id": 1,
         "npc_class_id": 1,
-        "display_id": 33428,
+        "display_id": 119801,
         "name": "Erudax",
-        "base_health": 12345,
+        "base_health": 111979196,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -893,7 +1066,56 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5162,
+                "spell_id": 448064
+            },
+            {
+                "id": 5163,
+                "spell_id": 449985
+            },
+            {
+                "id": 5164,
+                "spell_id": 449939
+            },
+            {
+                "id": 5165,
+                "spell_id": 450100
+            },
+            {
+                "id": 5166,
+                "spell_id": 450101
+            },
+            {
+                "id": 5167,
+                "spell_id": 450102
+            },
+            {
+                "id": 5168,
+                "spell_id": 450103
+            },
+            {
+                "id": 5169,
+                "spell_id": 450088
+            },
+            {
+                "id": 5170,
+                "spell_id": 448057
+            },
+            {
+                "id": 5171,
+                "spell_id": 450077
+            },
+            {
+                "id": 5172,
+                "spell_id": 461513
+            },
+            {
+                "id": 5173,
+                "spell_id": 450079
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1295,9 +1517,9 @@
         "npc_class_id": 1,
         "display_id": 119878,
         "name": "Twilight Brute",
-        "base_health": 12345,
+        "base_health": 14016424,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1307,7 +1529,20 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5100,
+                "spell_id": 451364
+            },
+            {
+                "id": 5101,
+                "spell_id": 456701
+            },
+            {
+                "id": 5102,
+                "spell_id": 456696
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1318,9 +1553,9 @@
         "npc_class_id": 1,
         "display_id": 119892,
         "name": "Twilight Earthcaller",
-        "base_health": 12345,
+        "base_health": 11213139,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1330,7 +1565,16 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5103,
+                "spell_id": 451871
+            },
+            {
+                "id": 5104,
+                "spell_id": 451261
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1341,9 +1585,9 @@
         "npc_class_id": 1,
         "display_id": 119893,
         "name": "Twilight Overseer",
-        "base_health": 12345,
+        "base_health": 23827921,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1353,7 +1597,16 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5108,
+                "spell_id": 451378
+            },
+            {
+                "id": 5109,
+                "spell_id": 451379
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1363,10 +1616,10 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 34353,
-        "name": "Twilight Flamerender",
-        "base_health": 12345,
+        "name": "Twilight Decapitator",
+        "base_health": 12614782,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1376,7 +1629,24 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5120,
+                "spell_id": 462216
+            },
+            {
+                "id": 5121,
+                "spell_id": 451241
+            },
+            {
+                "id": 5122,
+                "spell_id": 462220
+            },
+            {
+                "id": 5123,
+                "spell_id": 462219
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1387,9 +1657,9 @@
         "npc_class_id": 1,
         "display_id": 91122,
         "name": "Twilight Lavabender",
-        "base_health": 12345,
+        "base_health": 21585292,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1399,7 +1669,32 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5124,
+                "spell_id": 456713
+            },
+            {
+                "id": 5125,
+                "spell_id": 451898
+            },
+            {
+                "id": 5126,
+                "spell_id": 451387
+            },
+            {
+                "id": 5127,
+                "spell_id": 451389
+            },
+            {
+                "id": 5128,
+                "spell_id": 456715
+            },
+            {
+                "id": 5129,
+                "spell_id": 456711
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1410,9 +1705,9 @@
         "npc_class_id": 1,
         "display_id": 119897,
         "name": "Twilight Warlock",
-        "base_health": 12345,
+        "base_health": 14016424,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1422,7 +1717,16 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5118,
+                "spell_id": 451224
+            },
+            {
+                "id": 5119,
+                "spell_id": 76369
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1433,9 +1737,9 @@
         "npc_class_id": 1,
         "display_id": 119898,
         "name": "Twilight Enforcer",
-        "base_health": 12345,
+        "base_health": 15418066,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1445,7 +1749,16 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5116,
+                "spell_id": 451040
+            },
+            {
+                "id": 5117,
+                "spell_id": 451033
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1456,9 +1769,9 @@
         "npc_class_id": 1,
         "display_id": 119995,
         "name": "Twilight Destroyer",
-        "base_health": 12345,
+        "base_health": 28032847,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1468,7 +1781,20 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5105,
+                "spell_id": 451612
+            },
+            {
+                "id": 5106,
+                "spell_id": 451613
+            },
+            {
+                "id": 5107,
+                "spell_id": 451939
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1479,9 +1805,9 @@
         "npc_class_id": 1,
         "display_id": 119810,
         "name": "Mutated Hatchling",
-        "base_health": 12345,
+        "base_health": 2803285,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1491,7 +1817,16 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 5130,
+                "spell_id": 456718
+            },
+            {
+                "id": 5131,
+                "spell_id": 456719
+            }
+        ],
         "npc_enemy_forces": []
     }
 ]

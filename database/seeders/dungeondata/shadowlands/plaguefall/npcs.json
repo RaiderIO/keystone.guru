@@ -9,7 +9,7 @@
         "name": "Plaguebound Devoted",
         "base_health": 39647,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -18,8 +18,62 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3554,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3555,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3556,
+                "characteristic_id": 4
+            },
+            {
+                "id": 3557,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3558,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3559,
+                "characteristic_id": 15
+            },
+            {
+                "id": 3560,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3561,
+                "characteristic_id": 8
+            },
+            {
+                "id": 3562,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3563,
+                "characteristic_id": 10
+            },
+            {
+                "id": 3564,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3565,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2402,
+                "spell_id": 340702
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1673,
@@ -40,7 +94,7 @@
         "name": "Defender of Many Eyes",
         "base_health": 181715,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -49,8 +103,66 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3506,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3507,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3508,
+                "characteristic_id": 4
+            },
+            {
+                "id": 3509,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3510,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3511,
+                "characteristic_id": 15
+            },
+            {
+                "id": 3512,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3513,
+                "characteristic_id": 8
+            },
+            {
+                "id": 3514,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3515,
+                "characteristic_id": 10
+            },
+            {
+                "id": 3516,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3517,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2385,
+                "spell_id": 336451
+            },
+            {
+                "id": 2386,
+                "spell_id": 328533
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1674,
@@ -71,7 +183,7 @@
         "name": "Decaying Flesh Giant",
         "base_health": 297351,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -80,8 +192,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3349,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2335,
+                "spell_id": 320040
+            },
+            {
+                "id": 2336,
+                "spell_id": 320072
+            },
+            {
+                "id": 2337,
+                "spell_id": 329239
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1675,
@@ -102,7 +232,7 @@
         "name": "Rotmarrow Slime",
         "base_health": 132156,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -111,8 +241,66 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3471,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3472,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3473,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3474,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3475,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3476,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3477,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3478,
+                "characteristic_id": 13
+            },
+            {
+                "id": 3479,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3480,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3481,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2369,
+                "spell_id": 346989
+            },
+            {
+                "id": 2370,
+                "spell_id": 319070
+            },
+            {
+                "id": 2371,
+                "spell_id": 328662
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1676,
@@ -133,7 +321,7 @@
         "name": "Rotting Slimeclaw",
         "base_health": 132156,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -142,8 +330,62 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3422,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3423,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3424,
+                "characteristic_id": 4
+            },
+            {
+                "id": 3425,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3426,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3427,
+                "characteristic_id": 15
+            },
+            {
+                "id": 3428,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3429,
+                "characteristic_id": 8
+            },
+            {
+                "id": 3430,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3431,
+                "characteristic_id": 10
+            },
+            {
+                "id": 3432,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3433,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2357,
+                "spell_id": 320512
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1677,
@@ -164,7 +406,7 @@
         "name": "Blighted Spinebreaker",
         "base_health": 264312,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -173,8 +415,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3446,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2360,
+                "spell_id": 318949
+            },
+            {
+                "id": 2361,
+                "spell_id": 332581
+            },
+            {
+                "id": 2362,
+                "spell_id": 320517
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1678,
@@ -189,13 +449,13 @@
         "id": 163915,
         "dungeon_id": 31,
         "classification_id": 2,
-        "npc_type_id": 11,
+        "npc_type_id": 100,
         "npc_class_id": 1,
         "display_id": 99163,
         "name": "Hatchling Nest",
         "base_health": 165195,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -204,7 +464,12 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "id": 3399,
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [],
         "npc_enemy_forces": [
             {
@@ -226,7 +491,7 @@
         "name": "Globgrog",
         "base_health": 935598,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -235,8 +500,38 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3420,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2350,
+                "spell_id": 324490
+            },
+            {
+                "id": 2351,
+                "spell_id": 324459
+            },
+            {
+                "id": 2352,
+                "spell_id": 319780
+            },
+            {
+                "id": 2353,
+                "spell_id": 324667
+            },
+            {
+                "id": 2354,
+                "spell_id": 324652
+            },
+            {
+                "id": 2355,
+                "spell_id": 324527
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -249,7 +544,7 @@
         "name": "Domina Venomblade",
         "base_health": 1155058,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -258,8 +553,42 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3553,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2395,
+                "spell_id": 325552
+            },
+            {
+                "id": 2396,
+                "spell_id": 332313
+            },
+            {
+                "id": 2397,
+                "spell_id": 336258
+            },
+            {
+                "id": 2398,
+                "spell_id": 328539
+            },
+            {
+                "id": 2399,
+                "spell_id": 325245
+            },
+            {
+                "id": 2400,
+                "spell_id": 325550
+            },
+            {
+                "id": 2401,
+                "spell_id": 336306
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -272,7 +601,7 @@
         "name": "Margrave Stradama",
         "base_health": 1056053,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -281,8 +610,26 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3567,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2406,
+                "spell_id": 322232
+            },
+            {
+                "id": 2407,
+                "spell_id": 322304
+            },
+            {
+                "id": 2408,
+                "spell_id": 322491
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -364,7 +711,7 @@
         "name": "Pestilence Slime",
         "base_health": 132156,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -373,8 +720,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3460,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3461,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3462,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3463,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3464,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3465,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3466,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3467,
+                "characteristic_id": 13
+            },
+            {
+                "id": 3468,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3469,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3470,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2365,
+                "spell_id": 340356
+            },
+            {
+                "id": 2366,
+                "spell_id": 346989
+            },
+            {
+                "id": 2367,
+                "spell_id": 331967
+            },
+            {
+                "id": 2368,
+                "spell_id": 321999
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1686,
@@ -395,7 +804,7 @@
         "name": "Congealed Slime",
         "base_health": 132156,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -404,8 +813,66 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3482,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3483,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3484,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3485,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3486,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3487,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3488,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3489,
+                "characteristic_id": 13
+            },
+            {
+                "id": 3490,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3491,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3492,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2372,
+                "spell_id": 346989
+            },
+            {
+                "id": 2373,
+                "spell_id": 328175
+            },
+            {
+                "id": 2374,
+                "spell_id": 321935
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1687,
@@ -426,7 +893,7 @@
         "name": "Brood Ambusher",
         "base_health": 165195,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -435,8 +902,78 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3540,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3541,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3542,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3543,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3544,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3545,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3546,
+                "characteristic_id": 17
+            },
+            {
+                "id": 3547,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3548,
+                "characteristic_id": 16
+            },
+            {
+                "id": 3549,
+                "characteristic_id": 15
+            },
+            {
+                "id": 3550,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3551,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3552,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2391,
+                "spell_id": 328400
+            },
+            {
+                "id": 2392,
+                "spell_id": 338079
+            },
+            {
+                "id": 2393,
+                "spell_id": 328539
+            },
+            {
+                "id": 2394,
+                "spell_id": 328475
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1688,
@@ -457,7 +994,7 @@
         "name": "Doctor Ickus",
         "base_health": 924047,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -466,8 +1003,34 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3505,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2380,
+                "spell_id": 333808
+            },
+            {
+                "id": 2381,
+                "spell_id": 332617
+            },
+            {
+                "id": 2382,
+                "spell_id": 330026
+            },
+            {
+                "id": 2383,
+                "spell_id": 322358
+            },
+            {
+                "id": 2384,
+                "spell_id": 329110
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -572,7 +1135,7 @@
         "name": "Venomous Sniper",
         "base_health": 148676,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -581,8 +1144,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3518,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3519,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3520,
+                "characteristic_id": 4
+            },
+            {
+                "id": 3521,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3522,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3523,
+                "characteristic_id": 15
+            },
+            {
+                "id": 3524,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3525,
+                "characteristic_id": 8
+            },
+            {
+                "id": 3526,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3527,
+                "characteristic_id": 10
+            },
+            {
+                "id": 3528,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3529,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2387,
+                "spell_id": 328365
+            },
+            {
+                "id": 2388,
+                "spell_id": 328338
+            },
+            {
+                "id": 2389,
+                "spell_id": 328395
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1694,
@@ -599,11 +1224,11 @@
         "classification_id": 2,
         "npc_type_id": 1,
         "npc_class_id": 1,
-        "display_id": 97302,
+        "display_id": 95688,
         "name": "Slime Tentacle",
         "base_health": 181715,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -612,8 +1237,62 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3493,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3494,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3495,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3496,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3497,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3498,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3499,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3500,
+                "characteristic_id": 13
+            },
+            {
+                "id": 3501,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3502,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3503,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2375,
+                "spell_id": 319898
+            },
+            {
+                "id": 2376,
+                "spell_id": 329224
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1695,
@@ -634,7 +1313,7 @@
         "name": "Plagueroc",
         "base_health": 231273,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -643,8 +1322,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3348,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2333,
+                "spell_id": 327882
+            },
+            {
+                "id": 2334,
+                "spell_id": 330403
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1696,
@@ -654,6 +1347,34 @@
                 "enemy_forces_teeming": null
             }
         ]
+    },
+    {
+        "id": 168155,
+        "dungeon_id": 31,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 96251,
+        "name": "Plaguebound",
+        "base_health": 165414,
+        "health_percentage": null,
+        "level": 60,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "id": 3347,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [],
+        "npc_enemy_forces": []
     },
     {
         "id": 168310,
@@ -696,7 +1417,7 @@
         "name": "Fen Hornet",
         "base_health": 132156,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -705,8 +1426,58 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3388,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3389,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3390,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3391,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3392,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3393,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3394,
+                "characteristic_id": 16
+            },
+            {
+                "id": 3395,
+                "characteristic_id": 17
+            },
+            {
+                "id": 3396,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3397,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3398,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2343,
+                "spell_id": 327515
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1698,
@@ -727,7 +1498,7 @@
         "name": "Fungret Shroomtender",
         "base_health": 24779,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -736,7 +1507,56 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "id": 3312,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3313,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3314,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3315,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3316,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3317,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3318,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3319,
+                "characteristic_id": 16
+            },
+            {
+                "id": 3320,
+                "characteristic_id": 17
+            },
+            {
+                "id": 3321,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3322,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3323,
+                "characteristic_id": 10
+            }
+        ],
         "npc_spells": [],
         "npc_enemy_forces": []
     },
@@ -800,11 +1620,11 @@
         "classification_id": 2,
         "npc_type_id": 1,
         "npc_class_id": 1,
-        "display_id": 97333,
+        "display_id": 96244,
         "name": "Plaguebelcher",
         "base_health": 264312,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -813,8 +1633,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3419,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2347,
+                "spell_id": 327233
+            },
+            {
+                "id": 2348,
+                "spell_id": 327594
+            },
+            {
+                "id": 2349,
+                "spell_id": 327581
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1702,
@@ -858,7 +1696,7 @@
         "name": "Fungi Stormer",
         "base_health": 132156,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -867,8 +1705,66 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3350,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3351,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3352,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3353,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3354,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3355,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3356,
+                "characteristic_id": 17
+            },
+            {
+                "id": 3357,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3358,
+                "characteristic_id": 16
+            },
+            {
+                "id": 3359,
+                "characteristic_id": 15
+            },
+            {
+                "id": 3360,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3361,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3362,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2338,
+                "spell_id": 330423
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1704,
@@ -889,7 +1785,7 @@
         "name": "Pestilent Harvester",
         "base_health": 198234,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -898,8 +1794,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3400,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3401,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3402,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3403,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3404,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3405,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3406,
+                "characteristic_id": 17
+            },
+            {
+                "id": 3407,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3408,
+                "characteristic_id": 16
+            },
+            {
+                "id": 3409,
+                "characteristic_id": 15
+            },
+            {
+                "id": 3410,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3411,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3412,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2344,
+                "spell_id": 328002
+            },
+            {
+                "id": 2345,
+                "spell_id": 327995
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1705,
@@ -920,7 +1878,7 @@
         "name": "Fungalmancer",
         "base_health": 198234,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -929,8 +1887,74 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3363,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3364,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3365,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3366,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3367,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3368,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3369,
+                "characteristic_id": 17
+            },
+            {
+                "id": 3370,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3371,
+                "characteristic_id": 16
+            },
+            {
+                "id": 3372,
+                "characteristic_id": 15
+            },
+            {
+                "id": 3373,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3374,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3375,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2339,
+                "spell_id": 328016
+            },
+            {
+                "id": 2340,
+                "spell_id": 329917
+            },
+            {
+                "id": 2341,
+                "spell_id": 328015
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1706,
@@ -974,7 +1998,7 @@
         "name": "Plagueborer",
         "base_health": 132156,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -983,8 +2007,62 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3376,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3377,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3378,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3379,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3380,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3381,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3382,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3383,
+                "characteristic_id": 16
+            },
+            {
+                "id": 3384,
+                "characteristic_id": 17
+            },
+            {
+                "id": 3385,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3386,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3387,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2342,
+                "spell_id": 344003
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1708,
@@ -1005,7 +2083,7 @@
         "name": "Plaguebinder",
         "base_health": 132155,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1014,8 +2092,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3447,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3448,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3449,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3450,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3451,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3452,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3453,
+                "characteristic_id": 17
+            },
+            {
+                "id": 3454,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3455,
+                "characteristic_id": 16
+            },
+            {
+                "id": 3456,
+                "characteristic_id": 15
+            },
+            {
+                "id": 3457,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3458,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3459,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2363,
+                "spell_id": 328094
+            },
+            {
+                "id": 2364,
+                "spell_id": 328180
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1709,
@@ -1036,7 +2176,7 @@
         "name": "Venomfang",
         "base_health": 283079,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1045,8 +2185,54 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3530,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3531,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3532,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3533,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3534,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3535,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3536,
+                "characteristic_id": 17
+            },
+            {
+                "id": 3537,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3538,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3539,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2390,
+                "spell_id": 328342
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1082,7 +2268,7 @@
         "name": "Rigged Plagueborer",
         "base_health": 132156,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1091,8 +2277,66 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3434,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3435,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3436,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3437,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3438,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3439,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3440,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3441,
+                "characteristic_id": 16
+            },
+            {
+                "id": 3442,
+                "characteristic_id": 17
+            },
+            {
+                "id": 3443,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3444,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3445,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2358,
+                "spell_id": 334926
+            },
+            {
+                "id": 2359,
+                "spell_id": 328501
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1712,
@@ -1113,7 +2357,7 @@
         "name": "Virulax Blightweaver",
         "base_health": 317172,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1122,8 +2366,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3504,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2377,
+                "spell_id": 320576
+            },
+            {
+                "id": 2378,
+                "spell_id": 320529
+            },
+            {
+                "id": 2379,
+                "spell_id": 328094
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1713,
@@ -1167,7 +2429,7 @@
         "name": "Slime Tentacle",
         "base_health": 181715,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1176,8 +2438,62 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3568,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3569,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3570,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3571,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3572,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3573,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3574,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3575,
+                "characteristic_id": 13
+            },
+            {
+                "id": 3576,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3577,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3578,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2409,
+                "spell_id": 319898
+            },
+            {
+                "id": 2410,
+                "spell_id": 329224
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1715,
@@ -1229,7 +2545,7 @@
         "name": "Plaguebound Fallen",
         "base_health": 33039,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -1238,8 +2554,58 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3301,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3302,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3303,
+                "characteristic_id": 4
+            },
+            {
+                "id": 3304,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3305,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3306,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3307,
+                "characteristic_id": 8
+            },
+            {
+                "id": 3308,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3309,
+                "characteristic_id": 10
+            },
+            {
+                "id": 3310,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3311,
+                "characteristic_id": 5
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2328,
+                "spell_id": 331871
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1252,7 +2618,7 @@
         "name": "Gushing Slime",
         "base_health": 49559,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1261,8 +2627,66 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3336,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3337,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3338,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3339,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3340,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3341,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3342,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3343,
+                "characteristic_id": 13
+            },
+            {
+                "id": 3344,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3345,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3346,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2330,
+                "spell_id": 328660
+            },
+            {
+                "id": 2331,
+                "spell_id": 346989
+            },
+            {
+                "id": 2332,
+                "spell_id": 328662
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1718,
@@ -1277,13 +2701,13 @@
         "id": 169159,
         "dungeon_id": 31,
         "classification_id": 1,
-        "npc_type_id": 11,
+        "npc_type_id": 100,
         "npc_class_id": 1,
         "display_id": 99464,
         "name": "Unstable Canister",
         "base_health": 8260,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -1292,8 +2716,18 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3421,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2356,
+                "spell_id": 328986
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1329,7 +2763,7 @@
         "name": "Mire Soldier",
         "base_health": 132156,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1338,8 +2772,62 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3324,
+                "characteristic_id": 2
+            },
+            {
+                "id": 3325,
+                "characteristic_id": 14
+            },
+            {
+                "id": 3326,
+                "characteristic_id": 5
+            },
+            {
+                "id": 3327,
+                "characteristic_id": 1
+            },
+            {
+                "id": 3328,
+                "characteristic_id": 9
+            },
+            {
+                "id": 3329,
+                "characteristic_id": 19
+            },
+            {
+                "id": 3330,
+                "characteristic_id": 18
+            },
+            {
+                "id": 3331,
+                "characteristic_id": 16
+            },
+            {
+                "id": 3332,
+                "characteristic_id": 17
+            },
+            {
+                "id": 3333,
+                "characteristic_id": 11
+            },
+            {
+                "id": 3334,
+                "characteristic_id": 12
+            },
+            {
+                "id": 3335,
+                "characteristic_id": 10
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2329,
+                "spell_id": 330417
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1722,
@@ -1360,7 +2848,7 @@
         "name": "Ickor Bileflesh",
         "base_health": 317172,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1369,8 +2857,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3566,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2403,
+                "spell_id": 330816
+            },
+            {
+                "id": 2404,
+                "spell_id": 328094
+            },
+            {
+                "id": 2405,
+                "spell_id": 330786
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1723,
@@ -1637,7 +3143,7 @@
         "name": "Plaguebelcher",
         "base_health": 128160,
         "health_percentage": null,
-        "level": null,
+        "level": 60,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1646,8 +3152,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 3579,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 2411,
+                "spell_id": 327233
+            },
+            {
+                "id": 2412,
+                "spell_id": 327594
+            },
+            {
+                "id": 2413,
+                "spell_id": 327581
+            }
+        ],
         "npc_enemy_forces": []
     },
     {

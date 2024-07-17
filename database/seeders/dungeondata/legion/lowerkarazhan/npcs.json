@@ -9,7 +9,7 @@
         "name": "Maiden of Virtue",
         "base_health": 1491350,
         "health_percentage": null,
-        "level": null,
+        "level": 112,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -18,8 +18,42 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 725,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 393,
+                "spell_id": 227800
+            },
+            {
+                "id": 394,
+                "spell_id": 227809
+            },
+            {
+                "id": 395,
+                "spell_id": 227848
+            },
+            {
+                "id": 396,
+                "spell_id": 227508
+            },
+            {
+                "id": 397,
+                "spell_id": 227789
+            },
+            {
+                "id": 398,
+                "spell_id": 227817
+            },
+            {
+                "id": 399,
+                "spell_id": 227823
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -144,10 +178,10 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73811,
-        "name": "Midnight",
+        "name": "Attumen the Huntsman",
         "base_health": 426100,
         "health_percentage": null,
-        "level": null,
+        "level": 112,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -156,8 +190,38 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 726,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 400,
+                "spell_id": 227363
+            },
+            {
+                "id": 401,
+                "spell_id": 227339
+            },
+            {
+                "id": 402,
+                "spell_id": 227404
+            },
+            {
+                "id": 403,
+                "spell_id": 227365
+            },
+            {
+                "id": 404,
+                "spell_id": 227645
+            },
+            {
+                "id": 405,
+                "spell_id": 228895
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -213,10 +277,10 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 17550,
-        "name": "Elfyra",
+        "name": "Opera Hall: Wikket",
         "base_health": 132731495,
         "health_percentage": null,
-        "level": null,
+        "level": 112,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -239,7 +303,7 @@
         "name": "Moroes",
         "base_health": 1193080,
         "health_percentage": null,
-        "level": null,
+        "level": 112,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -248,8 +312,38 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 727,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 406,
+                "spell_id": 227736
+            },
+            {
+                "id": 407,
+                "spell_id": 227737
+            },
+            {
+                "id": 408,
+                "spell_id": 227851
+            },
+            {
+                "id": 409,
+                "spell_id": 227872
+            },
+            {
+                "id": 410,
+                "spell_id": 227742
+            },
+            {
+                "id": 411,
+                "spell_id": 227832
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -584,7 +678,7 @@
         "name": "Ghostly Understudy",
         "base_health": 213050,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -593,8 +687,38 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 676,
+                "characteristic_id": 1
+            },
+            {
+                "id": 677,
+                "characteristic_id": 14
+            },
+            {
+                "id": 678,
+                "characteristic_id": 18
+            },
+            {
+                "id": 679,
+                "characteristic_id": 11
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 345,
+                "spell_id": 227917
+            },
+            {
+                "id": 346,
+                "spell_id": 227925
+            },
+            {
+                "id": 347,
+                "spell_id": 227927
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6296,
@@ -622,7 +746,7 @@
         "name": "Spectral Patron",
         "base_health": 85220,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -631,8 +755,38 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 667,
+                "characteristic_id": 1
+            },
+            {
+                "id": 668,
+                "characteristic_id": 14
+            },
+            {
+                "id": 669,
+                "characteristic_id": 18
+            },
+            {
+                "id": 670,
+                "characteristic_id": 11
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 333,
+                "spell_id": 227981
+            },
+            {
+                "id": 334,
+                "spell_id": 228014
+            },
+            {
+                "id": 335,
+                "spell_id": 227983
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6297,
@@ -660,7 +814,7 @@
         "name": "Ghostly Philanthropist",
         "base_health": 213050,
         "health_percentage": null,
-        "level": null,
+        "level": 111,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -669,8 +823,50 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 671,
+                "characteristic_id": 1
+            },
+            {
+                "id": 672,
+                "characteristic_id": 2
+            },
+            {
+                "id": 673,
+                "characteristic_id": 18
+            },
+            {
+                "id": 674,
+                "characteristic_id": 14
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 336,
+                "spell_id": 228001
+            },
+            {
+                "id": 337,
+                "spell_id": 228010
+            },
+            {
+                "id": 338,
+                "spell_id": 238566
+            },
+            {
+                "id": 339,
+                "spell_id": 228017
+            },
+            {
+                "id": 340,
+                "spell_id": 228014
+            },
+            {
+                "id": 341,
+                "spell_id": 227999
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6298,
@@ -698,7 +894,7 @@
         "name": "Skeletal Usher",
         "base_health": 340880,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -707,8 +903,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 684,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 350,
+                "spell_id": 227965
+            },
+            {
+                "id": 351,
+                "spell_id": 227966
+            },
+            {
+                "id": 352,
+                "spell_id": 227977
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6299,
@@ -874,7 +1088,7 @@
         "name": "Phantom Crew",
         "base_health": 340880,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -883,8 +1097,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 675,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 342,
+                "spell_id": 228164
+            },
+            {
+                "id": 343,
+                "spell_id": 228161
+            },
+            {
+                "id": 344,
+                "spell_id": 228086
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6306,
@@ -935,7 +1167,7 @@
         "name": "Arcane Warden",
         "base_health": 340880,
         "health_percentage": null,
-        "level": null,
+        "level": 111,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -944,8 +1176,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 708,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 382,
+                "spell_id": 228320
+            },
+            {
+                "id": 383,
+                "spell_id": 238606
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6308,
@@ -973,7 +1219,7 @@
         "name": "Phantom Guest",
         "base_health": 85220,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -982,8 +1228,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 689,
+                "characteristic_id": 1
+            },
+            {
+                "id": 690,
+                "characteristic_id": 2
+            },
+            {
+                "id": 691,
+                "characteristic_id": 11
+            },
+            {
+                "id": 692,
+                "characteristic_id": 14
+            },
+            {
+                "id": 693,
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 355,
+                "spell_id": 29492
+            },
+            {
+                "id": 356,
+                "spell_id": 21910
+            },
+            {
+                "id": 357,
+                "spell_id": 29928
+            },
+            {
+                "id": 358,
+                "spell_id": 29513
+            },
+            {
+                "id": 359,
+                "spell_id": 29514
+            },
+            {
+                "id": 360,
+                "spell_id": 29579
+            },
+            {
+                "id": 361,
+                "spell_id": 29580
+            },
+            {
+                "id": 362,
+                "spell_id": 29581
+            },
+            {
+                "id": 363,
+                "spell_id": 29930
+            },
+            {
+                "id": 364,
+                "spell_id": 29583
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6309,
@@ -1011,7 +1319,7 @@
         "name": "Skeletal Waiter",
         "base_health": 340880,
         "health_percentage": null,
-        "level": null,
+        "level": 111,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1020,8 +1328,18 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 709,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 384,
+                "spell_id": 230297
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6311,
@@ -1049,7 +1367,7 @@
         "name": "Spectral Retainer",
         "base_health": 340880,
         "health_percentage": null,
-        "level": null,
+        "level": 111,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1059,7 +1377,12 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "id": 365,
+                "spell_id": 241784
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6312,
@@ -1087,7 +1410,7 @@
         "name": "Spectral Attendant",
         "base_health": 213050,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1096,8 +1419,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 694,
+                "characteristic_id": 2
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 366,
+                "spell_id": 241788
+            },
+            {
+                "id": 367,
+                "spell_id": 228279
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6313,
@@ -1125,7 +1462,7 @@
         "name": "Spectral Valet",
         "base_health": 340880,
         "health_percentage": null,
-        "level": null,
+        "level": 111,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1134,8 +1471,18 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 688,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 354,
+                "spell_id": 228278
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6314,
@@ -1163,7 +1510,7 @@
         "name": "Undying Servant",
         "base_health": 213050,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1172,8 +1519,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 685,
+                "characteristic_id": 1
+            },
+            {
+                "id": 686,
+                "characteristic_id": 14
+            },
+            {
+                "id": 687,
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 353,
+                "spell_id": 228277
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6315,
@@ -1201,7 +1566,7 @@
         "name": "Phantom Guardsman",
         "base_health": 255660,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1210,8 +1575,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 695,
+                "characteristic_id": 1
+            },
+            {
+                "id": 696,
+                "characteristic_id": 2
+            },
+            {
+                "id": 697,
+                "characteristic_id": 18
+            },
+            {
+                "id": 698,
+                "characteristic_id": 14
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 368,
+                "spell_id": 228276
+            },
+            {
+                "id": 369,
+                "spell_id": 241774
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6316,
@@ -1239,7 +1630,7 @@
         "name": "Spectral Sentry",
         "base_health": 170440,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1248,8 +1639,30 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 705,
+                "characteristic_id": 1
+            },
+            {
+                "id": 706,
+                "characteristic_id": 14
+            },
+            {
+                "id": 707,
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 380,
+                "spell_id": 6660
+            },
+            {
+                "id": 381,
+                "spell_id": 228273
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6317,
@@ -1415,7 +1828,7 @@
         "name": "Ghostly Steward",
         "base_health": 14205481,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1453,7 +1866,7 @@
         "name": "Ghostly Chef",
         "base_health": 159788,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1491,7 +1904,7 @@
         "name": "Ghostly Baker",
         "base_health": 170440,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1529,7 +1942,7 @@
         "name": "Reformed Maiden",
         "base_health": 170440,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1538,8 +1951,38 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 699,
+                "characteristic_id": 1
+            },
+            {
+                "id": 700,
+                "characteristic_id": 14
+            },
+            {
+                "id": 701,
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 370,
+                "spell_id": 228528
+            },
+            {
+                "id": 371,
+                "spell_id": 241801
+            },
+            {
+                "id": 372,
+                "spell_id": 228526
+            },
+            {
+                "id": 373,
+                "spell_id": 241798
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6327,
@@ -1567,7 +2010,7 @@
         "name": "Virtuous Lady",
         "base_health": 213050,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1576,8 +2019,30 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 703,
+                "characteristic_id": 18
+            },
+            {
+                "id": 704,
+                "characteristic_id": 14
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 377,
+                "spell_id": 241808
+            },
+            {
+                "id": 378,
+                "spell_id": 241809
+            },
+            {
+                "id": 379,
+                "spell_id": 228559
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6328,
@@ -1605,7 +2070,7 @@
         "name": "Skeletal Hound",
         "base_health": 213050,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1643,7 +2108,7 @@
         "name": "Wholesome Hostess",
         "base_health": 191745,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1652,8 +2117,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 702,
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 374,
+                "spell_id": 228576
+            },
+            {
+                "id": 375,
+                "spell_id": 228625
+            },
+            {
+                "id": 376,
+                "spell_id": 228575
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6330,
@@ -1704,7 +2187,7 @@
         "name": "Spectral Apprentice",
         "base_health": 202398,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1713,7 +2196,24 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "id": 714,
+                "characteristic_id": 11
+            },
+            {
+                "id": 715,
+                "characteristic_id": 2
+            },
+            {
+                "id": 716,
+                "characteristic_id": 18
+            },
+            {
+                "id": 717,
+                "characteristic_id": 14
+            }
+        ],
         "npc_spells": [],
         "npc_enemy_forces": [
             {
@@ -1742,7 +2242,7 @@
         "name": "Spectral Journeyman",
         "base_health": 245008,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1751,8 +2251,30 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 710,
+                "characteristic_id": 1
+            },
+            {
+                "id": 711,
+                "characteristic_id": 14
+            },
+            {
+                "id": 712,
+                "characteristic_id": 18
+            },
+            {
+                "id": 713,
+                "characteristic_id": 11
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 385,
+                "spell_id": 228637
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6333,
@@ -1780,7 +2302,7 @@
         "name": "Spectral Stable Hand",
         "base_health": 191745,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1789,8 +2311,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 723,
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 388,
+                "spell_id": 6016
+            },
+            {
+                "id": 389,
+                "spell_id": 228606
+            },
+            {
+                "id": 390,
+                "spell_id": 233210
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6334,
@@ -1818,7 +2358,7 @@
         "name": "Spectral Charger",
         "base_health": 255660,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1827,8 +2367,38 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 718,
+                "characteristic_id": 1
+            },
+            {
+                "id": 719,
+                "characteristic_id": 2
+            },
+            {
+                "id": 720,
+                "characteristic_id": 11
+            },
+            {
+                "id": 721,
+                "characteristic_id": 14
+            },
+            {
+                "id": 722,
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 386,
+                "spell_id": 241828
+            },
+            {
+                "id": 387,
+                "spell_id": 228603
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6335,
@@ -1971,7 +2541,7 @@
         "name": "Coldmist Widow",
         "base_health": 11364385,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2009,10 +2579,10 @@
         "name": "Arcanid",
         "base_health": 14030105,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 1,
+        "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
@@ -2089,11 +2659,11 @@
         "classification_id": 2,
         "npc_type_id": 2,
         "npc_class_id": 1,
-        "display_id": 9756,
+        "display_id": 27683,
         "name": "Coldmist Stalker",
         "base_health": 11364385,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2729,7 +3299,7 @@
         "name": "Backup Singer",
         "base_health": 127830,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2738,8 +3308,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 680,
+                "characteristic_id": 1
+            },
+            {
+                "id": 681,
+                "characteristic_id": 2
+            },
+            {
+                "id": 682,
+                "characteristic_id": 18
+            },
+            {
+                "id": 683,
+                "characteristic_id": 14
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 348,
+                "spell_id": 232084
+            },
+            {
+                "id": 349,
+                "spell_id": 232115
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6372,
@@ -2767,7 +3363,7 @@
         "name": "Spectral Patron",
         "base_health": 85220,
         "health_percentage": null,
-        "level": null,
+        "level": 110,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2776,8 +3372,38 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "id": 730,
+                "characteristic_id": 1
+            },
+            {
+                "id": 731,
+                "characteristic_id": 14
+            },
+            {
+                "id": 732,
+                "characteristic_id": 18
+            },
+            {
+                "id": 733,
+                "characteristic_id": 11
+            }
+        ],
+        "npc_spells": [
+            {
+                "id": 426,
+                "spell_id": 227981
+            },
+            {
+                "id": 427,
+                "spell_id": 228014
+            },
+            {
+                "id": 428,
+                "spell_id": 227983
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 6373,
