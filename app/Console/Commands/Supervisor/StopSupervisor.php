@@ -24,14 +24,6 @@ class StopSupervisor extends Command
     protected $description = 'Stops supervisor related tasks for this instance';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): int

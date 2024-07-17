@@ -29,14 +29,6 @@ class Aggregate extends Command
     protected $description = 'Aggregates all metrics and writes them to the metric aggregations table';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(MetricServiceInterface $metricService): int

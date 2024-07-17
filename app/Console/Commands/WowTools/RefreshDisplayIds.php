@@ -24,14 +24,6 @@ class RefreshDisplayIds extends Command
     protected $description = 'Updates the display ID of all NPCs that do not have them yet.';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(WowToolsServiceInterface $wowToolsService): void

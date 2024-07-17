@@ -27,14 +27,6 @@ class Cache extends Command
     protected $description = 'Caches all search results for routes for the route discovery page';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService): int

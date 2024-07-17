@@ -24,14 +24,6 @@ class FetchDisplayIds extends Command
     protected $description = 'Fetches the display IDs of all NPCs attached to said dungeon and updates it.';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      *

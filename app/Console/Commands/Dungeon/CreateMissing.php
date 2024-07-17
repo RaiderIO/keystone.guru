@@ -24,14 +24,6 @@ class CreateMissing extends Command
      */
     protected $description = "Looks into the internal code database for dungeons that haven't been added to the database yet and adds them.";
 
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function handle(): int
     {
         /** @var Collection|Expansion[] $expansions */

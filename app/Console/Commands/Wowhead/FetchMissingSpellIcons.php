@@ -23,14 +23,6 @@ class FetchMissingSpellIcons extends Command
     protected $description = 'Fetches any missing spell icons from Wowhead.';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      *

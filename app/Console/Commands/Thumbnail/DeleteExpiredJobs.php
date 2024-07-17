@@ -23,14 +23,6 @@ class DeleteExpiredJobs extends Command
      */
     protected $description = 'Deletes any expired thumbnail jobs from the database.';
 
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function handle(): int
     {
         $count = 0;

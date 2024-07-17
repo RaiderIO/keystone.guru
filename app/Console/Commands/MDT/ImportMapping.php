@@ -26,14 +26,6 @@ class ImportMapping extends Command
     protected $description = 'Imports the current mapping of all dungeons to MDT';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      *

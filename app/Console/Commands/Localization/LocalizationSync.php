@@ -31,14 +31,6 @@ class LocalizationSync extends Command
     protected $description = 'Synchronize all lang files in target language with base language';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): int

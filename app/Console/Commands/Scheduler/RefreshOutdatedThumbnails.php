@@ -27,14 +27,6 @@ class RefreshOutdatedThumbnails extends Command
     protected $description = 'Refreshes outdated thumbnails for dungeonroutes';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      *
