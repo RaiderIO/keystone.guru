@@ -9,6 +9,7 @@
         "name": "Prince Taldaram",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -17,7 +18,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -30,6 +32,7 @@
         "name": "Elder Nadox",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -38,7 +41,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -51,6 +55,7 @@
         "name": "Jedoga Shadowseeker",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -59,7 +64,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -72,6 +78,7 @@
         "name": "Herald Volazj",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -80,7 +87,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -93,6 +101,7 @@
         "name": "Twilight Worshipper",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -101,7 +110,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -114,6 +124,7 @@
         "name": "Twilight Initiate",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -122,7 +133,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -135,6 +147,7 @@
         "name": "Ahn'kahar Guardian",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -143,7 +156,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -156,6 +170,7 @@
         "name": "Ahn'kahar Swarmer ",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -164,7 +179,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -177,6 +193,7 @@
         "name": "Twilight Apostle",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -185,7 +202,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -198,6 +216,7 @@
         "name": "Amanitar",
         "base_health": 12345,
         "health_percentage": 100,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -206,7 +225,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -219,6 +239,7 @@
         "name": "Ahn'kahar Web Winder",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -227,7 +248,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -240,6 +262,7 @@
         "name": "Ahn'kahar Slasher",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -248,7 +271,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -261,6 +285,7 @@
         "name": "Ahn'kahar Spell Flinger",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -269,7 +294,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -282,6 +308,7 @@
         "name": "Deep Crawler",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -290,7 +317,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -303,6 +331,7 @@
         "name": "Plague Walker",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -311,7 +340,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -324,6 +354,7 @@
         "name": "Bonegrinder",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -332,7 +363,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -345,6 +377,7 @@
         "name": "Eye of Taldaram",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -353,7 +386,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -366,6 +400,7 @@
         "name": "Frostbringer",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -374,7 +409,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -387,6 +423,7 @@
         "name": "Plundering Geist",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -395,7 +432,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -408,6 +446,7 @@
         "name": "Twilight Darkcaster",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -416,7 +455,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -429,6 +469,7 @@
         "name": "Savage Cave Beast",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -437,7 +478,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -450,6 +492,7 @@
         "name": "Ahn'kahar Swarmer",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -458,7 +501,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -471,6 +515,7 @@
         "name": "Twilight Volunteer",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -479,7 +524,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -492,6 +538,7 @@
         "name": "Healthy Mushroom",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -500,7 +547,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -513,6 +561,7 @@
         "name": "Forgotten One",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -521,7 +570,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -534,6 +584,7 @@
         "name": "Bound Fire Elemental",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -542,7 +593,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -555,6 +607,7 @@
         "name": "Bound Air Elemental",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -563,7 +616,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -576,6 +630,7 @@
         "name": "Bound Water Elemental",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -584,7 +639,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -597,6 +653,7 @@
         "name": "Poisonous Mushroom",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -605,7 +662,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -618,6 +676,7 @@
         "name": "Twisted Visage",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -626,7 +685,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -639,6 +699,7 @@
         "name": "Twisted Visage",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -647,7 +708,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -660,6 +722,7 @@
         "name": "Twisted Visage",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -668,7 +731,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -681,6 +745,7 @@
         "name": "Twisted Visage",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -689,7 +754,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -702,6 +768,7 @@
         "name": "Twisted Visage",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -710,7 +777,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -723,6 +791,7 @@
         "name": "Ahn'kahar Watcher",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -731,7 +800,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -744,6 +814,7 @@
         "name": "Azjol-anak Warrior",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -752,7 +823,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -765,6 +837,7 @@
         "name": "Nerubian Flyer",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -773,7 +846,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     }
 ]

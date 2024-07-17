@@ -9,6 +9,7 @@
         "name": "Tirathon Saltheril",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -17,7 +18,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -30,6 +32,7 @@
         "name": "Ash'Golm",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -38,7 +41,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -51,6 +55,7 @@
         "name": "Glazer",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -59,7 +64,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -72,6 +78,7 @@
         "name": "Cordana Felsong",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -80,7 +87,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -93,6 +101,7 @@
         "name": "Inquisitor Tormentorum",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -101,7 +110,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -114,6 +124,7 @@
         "name": "Viletongue Belcher",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -122,7 +133,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 818,
@@ -143,6 +155,7 @@
         "name": "Frenzied Animus",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -151,7 +164,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -164,6 +178,7 @@
         "name": "Immoliant Fury",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -172,7 +187,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 820,
@@ -193,6 +209,7 @@
         "name": "Felsworn Infester",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -201,7 +218,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 821,
@@ -222,6 +240,7 @@
         "name": "Blade Dancer Illianna",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -230,7 +249,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 822,
@@ -251,6 +271,7 @@
         "name": "Barbed Spiderling",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -259,7 +280,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 823,
@@ -280,6 +302,7 @@
         "name": "Aranasi Broodmother",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -288,7 +311,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 824,
@@ -309,6 +333,7 @@
         "name": "Demon Spider",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -317,7 +342,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -330,6 +356,7 @@
         "name": "Lens",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -338,7 +365,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -351,6 +379,7 @@
         "name": "Glayvianna Soulrender",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -359,7 +388,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 827,
@@ -380,6 +410,7 @@
         "name": "Foul Mother",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -388,7 +419,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 828,
@@ -409,6 +441,7 @@
         "name": "Shadow Hunter",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -417,7 +450,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 829,
@@ -438,6 +472,7 @@
         "name": "Felsworn Myrmidon",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -446,7 +481,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 830,
@@ -467,6 +503,7 @@
         "name": "Blazing Imp",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -475,7 +512,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 831,
@@ -496,6 +534,7 @@
         "name": "Drelanim Whisperwind",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -504,7 +543,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -517,6 +557,7 @@
         "name": "Ember",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -525,7 +566,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -538,6 +580,7 @@
         "name": "Felguard Annihilator",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -546,7 +589,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -559,6 +603,7 @@
         "name": "Shadowmoon Technician",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -567,7 +612,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -580,6 +626,7 @@
         "name": "Dreadlord Mendacius",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -588,7 +635,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 836,
@@ -609,6 +657,7 @@
         "name": "Faceless Voidcaster",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -617,7 +666,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -630,6 +680,7 @@
         "name": "Void-Touched Juggernaut",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -638,7 +689,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -651,6 +703,7 @@
         "name": "Deranged Mindflayer",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -659,7 +712,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -672,6 +726,7 @@
         "name": "Enormous Stone Quilen",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -680,7 +735,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -693,6 +749,7 @@
         "name": "Mogu'shan Secret-Keeper",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -701,7 +758,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -714,6 +772,7 @@
         "name": "Lingering Corruption",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -722,7 +781,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -735,6 +795,7 @@
         "name": "Shadowmoon Warlock",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -743,7 +804,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -756,6 +818,7 @@
         "name": "Grimguard",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -764,7 +827,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -777,6 +841,7 @@
         "name": "Glazer",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -785,7 +850,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -798,6 +864,7 @@
         "name": "Fel-Infused Fury",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -806,7 +873,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 846,
@@ -827,6 +895,7 @@
         "name": "Avatar of Vengeance",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -835,7 +904,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -848,6 +918,7 @@
         "name": "Spirit of Vengeance",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -856,7 +927,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 848,
@@ -877,6 +949,7 @@
         "name": "Grimhorn the Enslaver",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -885,7 +958,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 849,
@@ -906,6 +980,7 @@
         "name": "Fel Scorcher",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -914,7 +989,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 850,
@@ -935,6 +1011,7 @@
         "name": "Malignant Defiler",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -943,7 +1020,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 851,
@@ -964,6 +1042,7 @@
         "name": "Drelanim Whisperwind",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -972,7 +1051,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -985,6 +1065,7 @@
         "name": "Avatar of Shadow",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -993,7 +1074,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1006,6 +1088,7 @@
         "name": "Grimoira",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1014,7 +1097,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1027,6 +1111,7 @@
         "name": "Fel Fury",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1035,7 +1120,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1048,6 +1134,7 @@
         "name": "Tormenting Orb",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1056,7 +1143,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1069,6 +1157,7 @@
         "name": "Tirathon Saltheril",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1077,7 +1166,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1090,6 +1180,7 @@
         "name": "Cordana Felsong",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1098,7 +1189,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1111,6 +1203,7 @@
         "name": "Avatar of Shadow",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1119,7 +1212,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1132,6 +1226,7 @@
         "name": "Inquisitor Tormentorum",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1140,7 +1235,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1153,6 +1249,7 @@
         "name": "Tormenting Orb",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1161,7 +1258,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1174,6 +1272,7 @@
         "name": "Overloaded Lens",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1182,7 +1281,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     }
 ]

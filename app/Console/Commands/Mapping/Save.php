@@ -147,7 +147,13 @@ class Save extends Command
         $this->info('Saving global NPCs');
 
         // Save all NPCs which aren't directly tied to a dungeon
-        $npcs = Npc::without(['spells', 'enemyForces'])->with(['npcspells', 'npcEnemyForces'])->where('dungeon_id', -1)->get()->values();
+        /** @var Collection<Npc> $npcs */
+        $npcs = Npc::without(['characteristics', 'spells', 'enemyForces'])
+            ->with(['npcCharacteristics', 'npcSpells', 'npcEnemyForces'])
+            ->where('dungeon_id', -1)
+            ->get()
+            ->values();
+
         $npcs->makeHidden(['type', 'class']);
         foreach ($npcs as $item) {
             $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
@@ -314,8 +320,8 @@ class Save extends Command
 
     private function saveDungeonNpcs(Dungeon $dungeon, string $rootDirPath): void
     {
-        $npcs = Npc::without(['spells', 'enemyForces'])
-            ->with(['npcspells', 'npcEnemyForces'])
+        $npcs = Npc::without(['characteristics', 'spells', 'enemyForces'])
+            ->with(['npcCharacteristics', 'npcSpells', 'npcEnemyForces'])
             ->where('dungeon_id', $dungeon->id)
             ->get()
             ->makeHidden(['type', 'class'])

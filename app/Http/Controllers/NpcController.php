@@ -64,7 +64,8 @@ class NpcController extends Controller
             'name'              => $validated['name'],
             // Remove commas or dots in the name; we want the integer value
             'base_health'       => str_replace([',', '.'], '', (string)$validated['base_health']),
-            'health_percentage' => $validated['health_percentage'],
+            'health_percentage' => $validated['health_percentage'] === 100 ? null : $validated['health_percentage'],
+            'level'             => $validated['level'],
             'aggressiveness'    => $validated['aggressiveness'],
             'dangerous'         => $validated['dangerous'] ?? 0,
             'truesight'         => $validated['truesight'] ?? 0,
@@ -87,26 +88,29 @@ class NpcController extends Controller
             $bolsteringWhitelistNpcs = $validated['bolstering_whitelist_npcs'] ?? [];
             // Clear current whitelists
             $npc->npcbolsteringwhitelists()->delete();
+            $bolsteringWhitelistNpcAttributes = [];
             foreach ($bolsteringWhitelistNpcs as $whitelistNpcId) {
-                NpcBolsteringWhitelist::insert([
+                $bolsteringWhitelistNpcAttributes[] = [
                     'npc_id'           => $npc->id,
                     'whitelist_npc_id' => $whitelistNpcId,
-                ]);
+                ];
             }
+            NpcBolsteringWhitelist::insert($bolsteringWhitelistNpcAttributes);
 
             // Spells, if set
             $spells = $validated['spells'] ?? [];
             // Clear current spells
-            $npc->npcspells()->delete();
+            $npc->npcSpells()->delete();
+            $npcSpellAttributes = [];
             foreach ($spells as $spellId) {
-                NpcSpell::insert([
+                $npcSpellAttributes[] = [
                     'npc_id'   => $npc->id,
                     'spell_id' => $spellId,
-                ]);
+                ];
             }
+            NpcSpell::insert($npcSpellAttributes);
 
             $existingEnemyForces = 0;
-
             // Now create new enemy forces. Default to 0, but can be set if we just changed the dungeon
             if ($oldId === null) {
                 $npc->createNpcEnemyForcesForExistingMappingVersions($existingEnemyForces);

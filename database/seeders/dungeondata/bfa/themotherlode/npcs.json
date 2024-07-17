@@ -9,6 +9,7 @@
         "name": "Coin-Operated Crowd Pummeler",
         "base_health": 8914542,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -17,7 +18,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -30,6 +32,7 @@
         "name": "Azerokk",
         "base_health": 4733929,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -38,7 +41,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -51,6 +55,7 @@
         "name": "Rixxa Fluxflame",
         "base_health": 5379465,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -59,7 +64,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -72,6 +78,7 @@
         "name": "Mogul Razdunk",
         "base_health": 5994261,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -80,7 +87,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -93,6 +101,7 @@
         "name": "Earthrager",
         "base_health": 768495,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -101,7 +110,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -114,6 +124,7 @@
         "name": "Addled Thug",
         "base_health": 999044,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -122,7 +133,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1190,
@@ -143,6 +155,7 @@
         "name": "Off-Duty Laborer",
         "base_health": 307398,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -151,7 +164,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1191,
@@ -172,6 +186,7 @@
         "name": "Mine Rat",
         "base_health": 461097,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -180,7 +195,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1192,
@@ -201,6 +217,7 @@
         "name": "Mechanized Peacekeeper",
         "base_health": 1229592,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "neutral",
         "dangerous": 1,
         "truesight": 0,
@@ -209,7 +226,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1193,
@@ -230,6 +248,7 @@
         "name": "Mech Jockey",
         "base_health": 768495,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -238,7 +257,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1194,
@@ -259,6 +279,7 @@
         "name": "Stonefury",
         "base_health": 768495,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -267,7 +288,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1195,
@@ -288,6 +310,7 @@
         "name": "Wanton Sapper",
         "base_health": 768495,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -296,7 +319,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1196,
@@ -317,6 +341,7 @@
         "name": "Venture Co. Earthshaper",
         "base_health": 768495,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -325,7 +350,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1197,
@@ -346,6 +372,7 @@
         "name": "Feckless Assistant",
         "base_health": 768495,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -354,7 +381,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1198,
@@ -375,6 +403,7 @@
         "name": "Venture Co. Mastermind",
         "base_health": 1229592,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -383,7 +412,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1199,
@@ -404,6 +434,7 @@
         "name": "Venture Co. Alchemist",
         "base_health": 768495,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -412,7 +443,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1200,
@@ -433,6 +465,7 @@
         "name": "Venture Co. Skyscorcher",
         "base_health": 768495,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -441,7 +474,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1201,
@@ -462,6 +496,7 @@
         "name": "Venture Co. War Machine",
         "base_health": 1229592,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -470,7 +505,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1202,
@@ -491,6 +527,7 @@
         "name": "Crawler Mine",
         "base_health": 19707,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -499,7 +536,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1203,
@@ -520,6 +558,7 @@
         "name": "Expert Technician",
         "base_health": 768495,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -528,7 +567,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1204,
@@ -549,6 +589,7 @@
         "name": "Test Subject",
         "base_health": 153699,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -557,7 +598,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1205,
@@ -578,6 +620,7 @@
         "name": "Shalebiter",
         "base_health": 153699,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -586,7 +629,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1206,
@@ -607,6 +651,7 @@
         "name": "Taskmaster Askari",
         "base_health": 1229592,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -615,7 +660,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1207,
@@ -636,6 +682,7 @@
         "name": "Hired Assassin",
         "base_health": 768495,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -644,7 +691,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1208,
@@ -665,6 +713,7 @@
         "name": "Off-Duty Laborer",
         "base_health": 307398,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -673,7 +722,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -686,6 +736,7 @@
         "name": "Rowdy Reveler",
         "base_health": 153699,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -694,7 +745,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -707,6 +759,7 @@
         "name": "Mechanized Peacekeeper",
         "base_health": 1229592,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "neutral",
         "dangerous": 1,
         "truesight": 0,
@@ -715,7 +768,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1211,
@@ -736,6 +790,7 @@
         "name": "Refreshment Vendor",
         "base_health": 768495,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -744,7 +799,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1212,
@@ -765,6 +821,7 @@
         "name": "Azerite Extractor",
         "base_health": 1229592,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -773,7 +830,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1213,
@@ -794,6 +852,7 @@
         "name": "Fanatical Driller",
         "base_health": 176601,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -802,7 +861,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -815,6 +875,7 @@
         "name": "Weapons Tester",
         "base_health": 768495,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -823,7 +884,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1215,
@@ -844,6 +906,7 @@
         "name": "Ordnance Specialist",
         "base_health": 768495,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -852,7 +915,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1216,
@@ -873,6 +937,7 @@
         "name": "Big Money Crab",
         "base_health": 153699,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -881,7 +946,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1217,
@@ -902,6 +968,7 @@
         "name": "Bottom Feeder",
         "base_health": 153699,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -910,7 +977,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -923,6 +991,7 @@
         "name": "Safety Shark",
         "base_health": 3073980,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -931,7 +1000,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1219,
@@ -952,6 +1022,7 @@
         "name": "Venture Co. Longshoreman",
         "base_health": 307398,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -960,7 +1031,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -973,6 +1045,7 @@
         "name": "Posh Vacationer",
         "base_health": 153699,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -981,7 +1054,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -994,6 +1068,7 @@
         "name": "Footbomb Hooligan",
         "base_health": 153699,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1002,7 +1077,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1015,6 +1091,7 @@
         "name": "Dr. Wrenchly von Boom",
         "base_health": 183935,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1023,7 +1100,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1036,6 +1114,7 @@
         "name": "Drix Bassbolter",
         "base_health": 36787,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1044,7 +1123,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1057,6 +1137,7 @@
         "name": "Asset Manager",
         "base_health": 153699,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1065,7 +1146,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     }
 ]

@@ -9,6 +9,7 @@
         "name": "Regal Mistdancer",
         "base_health": 264636,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -17,7 +18,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1758,
@@ -38,6 +40,7 @@
         "name": "Wicked Oppressor",
         "base_health": 138934,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -46,7 +49,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1759,
@@ -67,6 +71,7 @@
         "name": "Grand Overseer",
         "base_health": 231557,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -75,7 +80,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1760,
@@ -96,6 +102,7 @@
         "name": "Grubby Dirtcruncher",
         "base_health": 223514,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -104,7 +111,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1761,
@@ -125,6 +133,7 @@
         "name": "Famished Tick",
         "base_health": 99239,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -133,7 +142,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1762,
@@ -154,6 +164,7 @@
         "name": "Insatiable Brute",
         "base_health": 248097,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -162,7 +173,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1763,
@@ -183,6 +195,7 @@
         "name": "Vestige of Doubt",
         "base_health": 148858,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -191,7 +204,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1764,
@@ -212,6 +226,7 @@
         "name": "Frenzied Ghoul",
         "base_health": 165398,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -220,7 +235,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1765,
@@ -241,6 +257,7 @@
         "name": "Rockbound Sprite",
         "base_health": 49620,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -249,7 +266,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1766,
@@ -270,6 +288,7 @@
         "name": "Chamber Sentinel",
         "base_health": 281177,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -278,7 +297,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1767,
@@ -299,6 +319,7 @@
         "name": "General Kaal",
         "base_health": 6607800,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -307,7 +328,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -320,6 +342,7 @@
         "name": "Kryxis the Voracious",
         "base_health": 1156365,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -328,7 +351,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -341,6 +365,7 @@
         "name": "Grand Proctor Beryllia",
         "base_health": 1156365,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -349,7 +374,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -362,6 +388,7 @@
         "name": "Executor Tarvold",
         "base_health": 925092,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -370,7 +397,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -383,6 +411,7 @@
         "name": "General Kaal",
         "base_health": 3283280,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -391,7 +420,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -404,6 +434,7 @@
         "name": "Starving Prisoner",
         "base_health": 75768,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -412,7 +443,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1773,
@@ -433,6 +465,7 @@
         "name": "Forlorn Captive",
         "base_health": 25256,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -441,7 +474,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -454,6 +488,7 @@
         "name": "Gluttonous Tick",
         "base_health": 148858,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -462,7 +497,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1775,
@@ -483,6 +519,7 @@
         "name": "Fleeting Manifestation",
         "base_health": 63140,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -491,7 +528,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -504,6 +542,7 @@
         "name": "Noble Skirmisher",
         "base_health": 165398,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -512,7 +551,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1777,
@@ -533,6 +573,7 @@
         "name": "Animated Weapon",
         "base_health": 126280,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -541,7 +582,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -554,6 +596,7 @@
         "name": "General Draven",
         "base_health": 252560,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -562,7 +605,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -575,6 +619,7 @@
         "name": "Sanguine Cadet",
         "base_health": 66159,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -583,7 +628,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1780,
@@ -604,6 +650,7 @@
         "name": "Dark Acolyte",
         "base_health": 57889,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -612,7 +659,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1781,
@@ -633,6 +681,7 @@
         "name": "Infused Quill-feather",
         "base_health": 33079,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -641,7 +690,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1782,
@@ -662,6 +712,7 @@
         "name": "Stonewall Gargon",
         "base_health": 25256,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -670,7 +721,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -683,6 +735,7 @@
         "name": "Ravenous Dreadbat",
         "base_health": 165398,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -691,7 +744,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1784,
@@ -712,6 +766,7 @@
         "name": "Chamber Sentinel",
         "base_health": 264636,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -720,7 +775,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1785,
@@ -741,6 +797,7 @@
         "name": "Fleeting Manifestation",
         "base_health": 75768,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -749,7 +806,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -762,6 +820,7 @@
         "name": "Famished Tick",
         "base_health": 75768,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -770,7 +829,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -783,6 +843,7 @@
         "name": "Sinfall Flyer",
         "base_health": 25256,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -791,7 +852,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -804,6 +866,7 @@
         "name": "Head Custodian Javlin",
         "base_health": 396955,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -812,7 +875,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1790,
@@ -833,6 +897,7 @@
         "name": "Research Scribe",
         "base_health": 165398,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -841,7 +906,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1791,
@@ -862,6 +928,7 @@
         "name": "Dreadful Huntmaster",
         "base_health": 148858,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -870,7 +937,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1792,
@@ -891,6 +959,7 @@
         "name": "Stonewall Gargon",
         "base_health": 33079,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -899,7 +968,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1793,
@@ -920,6 +990,7 @@
         "name": "Depths Warden",
         "base_health": 264636,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -928,7 +999,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1795,
@@ -949,6 +1021,7 @@
         "name": "Research Scribe",
         "base_health": 126280,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -957,7 +1030,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1796,
@@ -978,6 +1052,7 @@
         "name": "Remnant of Fury",
         "base_health": 148858,
         "health_percentage": null,
+        "level": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -986,7 +1061,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1797,

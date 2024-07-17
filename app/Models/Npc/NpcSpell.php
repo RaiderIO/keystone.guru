@@ -23,6 +23,8 @@ class NpcSpell extends CacheModel
 
     protected $fillable = ['id', 'npc_id', 'whitelist_npc_id'];
 
+    protected $hidden = ['npc_id'];
+
     public function npc(): BelongsTo
     {
         return $this->belongsTo(Npc::class);

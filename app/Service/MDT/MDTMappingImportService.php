@@ -161,7 +161,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npc->base_health       = $mdtNpc->getHealth();
                 // MDT doesn't always get this right - don't trust it (Watcher Irideus for example)
                 $npc->health_percentage = $npc->health_percentage ?? $mdtNpc->getHealthPercentage();
-                $npc->npc_type_id       = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::HUMANOID;
+                $npc->level             = $mdtNpc->getLevel();
+                $npc->npc_type_id       = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::UNCATEGORIZED;
                 $npc->truesight         = $mdtNpc->getStealthDetect();
 
                 // Save characteristics

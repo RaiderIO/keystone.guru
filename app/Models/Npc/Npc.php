@@ -28,6 +28,7 @@ use InvalidArgumentException;
  * @property string                             $name
  * @property int                                $base_health
  * @property int|null                           $health_percentage Null = 100% health
+ * @property int|null                           $level
  * @property string                             $aggressiveness
  * @property bool                               $dangerous
  * @property bool                               $truesight
@@ -46,7 +47,9 @@ use InvalidArgumentException;
  * @property Collection<NpcEnemyForces>         $npcEnemyForces
  * @property Collection<Enemy>                  $enemies
  * @property Collection<Characteristic>         $characteristics
+ * @property Collection<NpcCharacteristic>      $npcCharacteristics
  * @property Collection<Spell>                  $spells
+ * @property Collection<NpcSpell>               $npcSpells
  * @property Collection<NpcBolsteringWhitelist> $npcbolsteringwhitelists
  *
  * @mixin Eloquent
@@ -59,7 +62,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public $timestamps = false;
 
-    protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'spells'];
+    protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'characteristics', 'spells'];
 
     protected $fillable = [
         'id',
@@ -71,6 +74,7 @@ class Npc extends CacheModel implements MappingModelInterface
         'name',
         'base_health',
         'health_percentage',
+        'level',
         'aggressiveness',
         'dangerous',
         'truesight',
@@ -135,7 +139,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function characteristics(): BelongsToMany
     {
-        return $this->belongsToMany(Characteristic::class, 'npc_characteristics');
+        return $this->belongsToMany(Characteristic::class, 'npc_characteristics')->orderBy('characteristics.id');
     }
 
     public function npcCharacteristics(): HasMany
@@ -148,7 +152,7 @@ class Npc extends CacheModel implements MappingModelInterface
         return $this->belongsToMany(Spell::class, 'npc_spells');
     }
 
-    public function npcspells(): HasMany
+    public function npcSpells(): HasMany
     {
         return $this->hasMany(NpcSpell::class);
     }
@@ -300,7 +304,8 @@ class Npc extends CacheModel implements MappingModelInterface
         // Delete Npc properly if it gets deleted
         static::deleting(static function (Npc $npc) {
             $npc->npcbolsteringwhitelists()->delete();
-            $npc->npcspells()->delete();
+            $npc->npcCharacteristics()->delete();
+            $npc->npcSpells()->delete();
             $npc->npcEnemyForces()->delete();
         });
     }

@@ -3,10 +3,11 @@
 namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcSpell;
 use Database\Seeders\DatabaseSeeder;
 
-class NpcNpcSpellsRelationParser implements RelationParserInterface
+class NpcNpcCharacteristicsRelationParser implements RelationParserInterface
 {
     public function canParseRootModel(string $modelClassName): bool
     {
@@ -20,15 +21,15 @@ class NpcNpcSpellsRelationParser implements RelationParserInterface
 
     public function canParseRelation(string $name, array $value): bool
     {
-        return $name === 'npc_spells';
+        return $name === 'npc_characteristics';
     }
 
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
-        foreach ($value as $npcSpell) {
-            $npcSpell['npc_id'] = $modelData['id'];
+        foreach ($value as $npcCharacteristic) {
+            $npcCharacteristic['npc_id'] = $modelData['id'];
 
-            NpcSpell::from(DatabaseSeeder::getTempTableName(NpcSpell::class))->insert($npcSpell);
+            NpcCharacteristic::from(DatabaseSeeder::getTempTableName(NpcCharacteristic::class))->insert($npcCharacteristic);
         }
 
         // Didn't really change anything so just return the value.

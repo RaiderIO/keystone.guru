@@ -3,6 +3,7 @@
 namespace App\Service\MDT;
 
 use App\Logic\MDT\Conversion;
+use App\Models\Characteristic;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
@@ -11,6 +12,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\Spell;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Logging\MDTMappingExportServiceLoggingInterface;
 use Illuminate\Support\Collection;
@@ -195,7 +197,9 @@ MDT.mapPOIs[dungeonIndex] = {};
     {
         $dungeonEnemies = [];
 
-        $npcs = Npc::whereIn('dungeon_id', [-1, $mappingVersion->dungeon_id])->get()->keyBy('id');
+        $npcs = Npc::whereIn('dungeon_id', [-1, $mappingVersion->dungeon_id])
+            ->get()
+            ->keyBy('id');
 
         // A variable for storing my enemy packs and assigning them a group numbers
         $enemyPackGroups   = collect();
@@ -265,14 +269,18 @@ MDT.mapPOIs[dungeonIndex] = {};
                 'stealthDetect'    => $npc->truesight ? true : null,
                 'displayId'        => $npc->display_id,
                 'creatureType'     => $npc->type->type,
-                'level'            => 70,
+                'level'            => $npc->level,
                 'isBoss'           => $npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS] ?
                     true : null,
-                'characteristics'  => [], // @TODO
-                'spells'           => [], // @TODO
+                'characteristics' => $npc->characteristics->mapWithKeys(function (Characteristic $characteristic) {
+                    return [__($characteristic->name, [], 'en_US') => true];
+                })->toArray(),
+                'spells'          => $npc->spells->mapWithKeys(function (Spell $spell) {
+                    return [$spell->id => []];
+                })->toArray(),
                 'clones'           => [],
                 'healthPercentage' => $npc->health_percentage ?? null,
-            ]);
+            ], fn($value) => $value !== null);
 
             $translations->push($npc->name);
 

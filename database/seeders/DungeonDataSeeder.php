@@ -18,6 +18,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\MountableArea;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcBolsteringWhitelist;
+use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcSpell;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
@@ -51,10 +52,10 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 {
     private const DUNGEON_DATA_DIR = 'seeders/dungeondata/';
 
-    /** @var Collection|array */
+    /** @var Collection<array> */
     private Collection $importedModels;
 
-    /** @var Collection|RelationMapping[] */
+    /** @var Collection<RelationMapping> */
     private Collection $relationMapping;
 
     public function __construct()
@@ -453,6 +454,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             Npc::class,
             NpcBolsteringWhitelist::class,
             NpcEnemyForces::class,
+            NpcCharacteristic::class,
             NpcSpell::class,
             Enemy::class,
             EnemyPack::class,

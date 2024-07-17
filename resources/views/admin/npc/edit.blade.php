@@ -136,8 +136,14 @@
 
     <div class="form-group{{ $errors->has('health_percentage') ? ' has-error' : '' }}">
         {!! Form::label('health_percentage', __('view_admin.npc.edit.health_percentage')) !!}
-        {!! Form::text('health_percentage', (isset($npc) ? $npc->health_percentage: null) ?? 100, ['class' => 'form-control']) !!}
+        {!! Form::number('health_percentage', (isset($npc) ? $npc->health_percentage: null) ?? 100, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'health_percentage'])
+    </div>
+
+    <div class="form-group{{ $errors->has('level') ? ' has-error' : '' }}">
+        {!! Form::label('level', __('view_admin.npc.edit.level')) !!}
+        {!! Form::number('level', $npc->level ?? null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'level'])
     </div>
 
     <div class="form-group">
