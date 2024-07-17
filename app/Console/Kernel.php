@@ -40,6 +40,7 @@ use App\Console\Commands\MDT\Encode;
 use App\Console\Commands\MDT\ExportMapping;
 use App\Console\Commands\MDT\ImportMapping;
 use App\Console\Commands\MDT\ImportNpcs;
+use App\Console\Commands\MDT\ImportSpells;
 use App\Console\Commands\Metric\Aggregate;
 use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
@@ -62,6 +63,7 @@ use App\Console\Commands\View\Cache;
 use App\Console\Commands\Wowhead\FetchDisplayIds;
 use App\Console\Commands\Wowhead\FetchHealth;
 use App\Console\Commands\Wowhead\FetchMissingSpellIcons;
+use App\Console\Commands\Wowhead\FetchSpellData;
 use App\Console\Commands\Wowhead\RefreshDisplayIds as RefreshDisplayIdsWowhead;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
 use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
@@ -146,6 +148,7 @@ class Kernel extends ConsoleKernel
         ExportMapping::class,
         ImportMapping::class,
         ImportNpcs::class,
+        ImportSpells::class,
 
         // Metric
         Aggregate::class,
@@ -190,6 +193,7 @@ class Kernel extends ConsoleKernel
         FetchDisplayIds::class,
         FetchHealth::class,
         FetchMissingSpellIcons::class,
+        FetchSpellData::class,
         RefreshDisplayIdsWowhead::class,
 
         // WowTools

@@ -30,4 +30,11 @@ class WowheadServiceLogging extends StructuredLogging implements WowheadServiceL
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
+
+    public function getSpellDataIconNameNotFound(string $line, string $jsonString): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+
 }

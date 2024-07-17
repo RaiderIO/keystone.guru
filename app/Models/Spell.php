@@ -67,12 +67,14 @@ class Spell extends CacheModel implements MappingModelInterface
     public const DISPEL_TYPE_DISEASE = 'Disease';
     public const DISPEL_TYPE_POISON  = 'Poison';
     public const DISPEL_TYPE_CURSE   = 'Curse';
+    public const DISPEL_TYPE_UNKNOWN = 'Unknown';
 
     public const ALL_DISPEL_TYPES = [
         self::DISPEL_TYPE_MAGIC,
         self::DISPEL_TYPE_DISEASE,
         self::DISPEL_TYPE_POISON,
         self::DISPEL_TYPE_CURSE,
+        self::DISPEL_TYPE_UNKNOWN,
     ];
 
     public const CATEGORY_GENERAL      = 'general';
@@ -89,6 +91,7 @@ class Spell extends CacheModel implements MappingModelInterface
     public const CATEGORY_DRUID        = 'druid';
     public const CATEGORY_DEMON_HUNTER = 'demon_hunter';
     public const CATEGORY_EVOKER       = 'evoker';
+    public const CATEGORY_UNKNOWN      = 'unknown';
 
     public const ALL_CATEGORIES = [
         self::CATEGORY_GENERAL,
@@ -105,6 +108,7 @@ class Spell extends CacheModel implements MappingModelInterface
         self::CATEGORY_DRUID,
         self::CATEGORY_DEMON_HUNTER,
         self::CATEGORY_EVOKER,
+        self::CATEGORY_UNKNOWN,
     ];
 
     public const COOLDOWN_GROUP_ALL            = 'all';
@@ -121,6 +125,7 @@ class Spell extends CacheModel implements MappingModelInterface
     public const COOLDOWN_GROUP_PERSONAL       = 'personal';
     public const COOLDOWN_GROUP_PERSONAL_CD    = 'personal_cd';
     public const COOLDOWN_GROUP_UTILITY        = 'utility';
+    public const COOLDOWN_GROUP_UNKNOWN        = 'unknown';
 
     public const ALL_COOLDOWN_GROUPS = [
         self::COOLDOWN_GROUP_ALL,
@@ -137,22 +142,17 @@ class Spell extends CacheModel implements MappingModelInterface
         self::COOLDOWN_GROUP_PERSONAL,
         self::COOLDOWN_GROUP_PERSONAL_CD,
         self::COOLDOWN_GROUP_UTILITY,
+        self::COOLDOWN_GROUP_UNKNOWN,
     ];
 
     // Some hard coded spells that we have exceptions for in the code
-    public const SPELL_BLOODLUST = 2825;
-
-    public const SPELL_HEROISM = 32182;
-
-    public const SPELL_TIME_WARP = 80353;
-
+    public const SPELL_BLOODLUST           = 2825;
+    public const SPELL_HEROISM             = 32182;
+    public const SPELL_TIME_WARP           = 80353;
     public const SPELL_FURY_OF_THE_ASPECTS = 390386;
-
-    public const SPELL_ANCIENT_HYSTERIA = 90355;
-
-    public const SPELL_PRIMAL_RAGE = 264667;
-
-    public const SPELL_FERAL_HIDE_DRUMS = 381301;
+    public const SPELL_ANCIENT_HYSTERIA    = 90355;
+    public const SPELL_PRIMAL_RAGE         = 264667;
+    public const SPELL_FERAL_HIDE_DRUMS    = 381301;
 
     public function getSchoolsAsArray(): array
     {

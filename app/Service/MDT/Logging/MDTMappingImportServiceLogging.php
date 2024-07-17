@@ -81,6 +81,25 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->end(__METHOD__);
     }
 
+    public function importSpellDataFromMDTStart(string $key): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
+
+    public function importSpellDataFromMDTResult(int $count): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function importSpellDataFromMDTFailed(): void
+    {
+        $this->error(__METHOD__);
+    }
+
+    public function importSpellDataFromMDTEnd(): void
+    {
+        $this->end(__METHOD__, get_defined_vars());
+    }
 
     public function importNpcsStart(): void
     {

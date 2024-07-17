@@ -14,4 +14,6 @@ interface MDTMappingImportServiceInterface
     public function getMDTMappingHash(Dungeon $dungeon): string;
 
     public function importNpcsDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon): void;
+
+    public function importSpellDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon): void;
 }

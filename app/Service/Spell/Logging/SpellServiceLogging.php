@@ -21,11 +21,15 @@ class SpellServiceLogging extends StructuredLogging implements SpellServiceLoggi
         $this->warning(__METHOD__, get_defined_vars());
     }
 
-    public function importFromCsvInsertResult(bool $insertResult): void
+    public function importFromCsvInsertNewSpell(int $spellId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function importFromCsvInsertResult(int $updated, int $inserted): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
 
     public function getCategoryNameFromClassNameUnableToFindCharacterClass(string $indexClassName): void
     {

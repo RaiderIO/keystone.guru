@@ -133,6 +133,9 @@ class MDTNpc implements Arrayable
         return $this->id;
     }
 
+    /**
+     * @return array<int, array>
+     */
     public function getSpells(): array
     {
         return $this->spells;

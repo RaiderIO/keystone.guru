@@ -35,7 +35,7 @@ class SpellService implements SpellServiceInterface
         $indexImagelink      = array_search('Imagelink', $headers);
         $indexActive         = array_search('Active (True/False)', $headers);
 
-        $spellAttributes = [];
+        $spellsAttributes = [];
 
         foreach ($csv as $index => $row) {
 
@@ -47,7 +47,7 @@ class SpellService implements SpellServiceInterface
                 continue;
             }
 
-            if (isset($spellAttributes[$spellId])) {
+            if (isset($spellsAttributes[$spellId])) {
                 $this->log->importFromCsvSpellAlreadySet($spellId);
 
                 continue;
@@ -57,7 +57,7 @@ class SpellService implements SpellServiceInterface
 
             $cooldownGroupName = $this->getCooldownGroupNameFromRowCooldownGroup($row[$indexCooldownGroup]);
 
-            $spellAttributes[$spellId] = [
+            $spellsAttributes[$spellId] = [
                 'id'             => $spellId,
                 'category'       => $categoryName,
                 'cooldown_group' => $cooldownGroupName,
@@ -70,13 +70,27 @@ class SpellService implements SpellServiceInterface
             ];
         }
 
-        Spell::truncate();
+        // Update all found spells or insert them if they didn't exist
+        $spellsById = Spell::all()->keyBy('id');
 
-        $insertResult = Spell::insert($spellAttributes);
+        $updated = $inserted = 0;
+        foreach($spellsAttributes as $spellId => $spellAttributes) {
+            if ($spellsById->has($spellId)) {
+                $spell = $spellsById->get($spellId);
 
-        $this->log->importFromCsvInsertResult($insertResult);
+                $spell->update($spellAttributes);
+                $updated++;
+            } else {
+                if( Spell::create($spellAttributes) ) {
+                    $this->log->importFromCsvInsertNewSpell($spellId);
+                    $inserted++;
+                }
+            }
+        }
 
-        return $insertResult;
+        $this->log->importFromCsvInsertResult($updated, $inserted);
+
+        return true;
     }
 
     public function getCategoryNameFromRowClassName(string $rowClassName): ?string

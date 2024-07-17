@@ -21,6 +21,7 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcSpell;
 use App\Models\Npc\NpcType;
 use App\Models\Polyline;
+use App\Models\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
@@ -106,7 +107,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $this->log->importNpcsDataFromMDTStart($dungeon->key);
 
             // Get a list of NPCs and update/save them
-            $npcs = $dungeon->npcs->keyBy('id');
+            $existingNpcs = $dungeon->npcs->keyBy('id');
 
             $characteristicsByName = Characteristic::all()->mapWithKeys(function (Characteristic $characteristic) {
                 return [__($characteristic->name, [], 'en_US') => $characteristic];
@@ -120,7 +121,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $affectedNpcIds[] = $mdtNpc->getId();
 
                 /** @var Npc|null $npc */
-                $npc = $npcs->get($mdtNpc->getId());
+                $npc = $existingNpcs->get($mdtNpc->getId());
 
                 if ($newlyCreated = ($npc === null)) {
                     $npc = new Npc();
@@ -205,6 +206,46 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         }
     }
 
+    public function importSpellDataFromMDT(MDTDungeon $mdtDungeon, Dungeon $dungeon): void
+    {
+        try {
+            $this->log->importSpellDataFromMDTStart($dungeon->key);
+
+            $existingSpells = Spell::all()->keyBy('id');
+
+            $spellsAttributes = [];
+            foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
+                $mdtSpells = $mdtNpc->getSpells();
+
+                foreach ($mdtSpells as $spellId => $spell) {
+                    // Ignore spells that we know of - we really only have IDs from MDT, so keep any data that was already there
+                    if ($existingSpells->get($spellId) !== null) {
+                        continue;
+                    }
+
+                    $spellsAttributes[$spellId] = [
+                        'id'             => $spellId,
+                        'category'       => sprintf('spells.category.%s', Spell::CATEGORY_UNKNOWN),
+                        'cooldown_group' => sprintf('spells.cooldown_group.%s', Spell::COOLDOWN_GROUP_UNKNOWN),
+                        'dispel_type'    => Spell::DISPEL_TYPE_UNKNOWN,
+                        'icon_name'      => '',
+                        'name'           => '',
+                        'schools_mask'   => 0,
+                        'aura'           => 0,
+                        'selectable'     => 0,
+                    ];
+                }
+            }
+
+            if (Spell::insert($spellsAttributes)) {
+                $this->log->importSpellDataFromMDTResult(count($spellsAttributes));
+            } else {
+                $this->log->importSpellDataFromMDTFailed();
+            }
+        } finally {
+            $this->log->importSpellDataFromMDTEnd();
+        }
+    }
 
     /**
      * @throws Exception

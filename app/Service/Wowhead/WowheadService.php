@@ -6,6 +6,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Spell;
 use App\Service\Traits\Curl;
+use App\Service\Wowhead\Dtos\SpellDataResult;
 use App\Service\Wowhead\Logging\WowheadServiceLoggingInterface;
 use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
@@ -22,6 +23,10 @@ class WowheadService implements WowheadServiceInterface
 
     private const IDENTIFYING_TOKEN_HEALTH     = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
     private const IDENTIFYING_TOKEN_DISPLAY_ID = 'linksButton.dataset.displayId =';
+
+
+    private const IDENTIFYING_TOKEN_SPELL_NAME      = '<meta property="og:title" content=';
+    private const IDENTIFYING_TOKEN_SPELL_ICON_NAME = 'WH.Gatherer.addData(29,';
 
     public function __construct(
         private readonly WowheadServiceLoggingInterface $log
@@ -126,7 +131,7 @@ class WowheadService implements WowheadServiceInterface
 
         // Hacky shit to scrape it
         $displayId = null;
-        $lines  = explode(PHP_EOL, $response);
+        $lines     = explode(PHP_EOL, $response);
         foreach ($lines as $line) {
             $line = trim($line);
 
@@ -139,6 +144,49 @@ class WowheadService implements WowheadServiceInterface
         }
 
         return $displayId;
+    }
+
+    public function getSpellData(int $spellId): ?SpellDataResult
+    {
+        $response = $this->getSpellPageHtml($spellId);
+
+        // More hacky shit to scrape data we need
+        $spellId       = 0;
+        $cooldownGroup = 0;
+        $iconName      = '';
+        $name          = '';
+        $schoolsMask   = 0;
+        $aura          = false;
+
+        $lines = explode(PHP_EOL, $response);
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+//            echo substr($line, 0, 50) . PHP_EOL;
+
+            if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_ICON_NAME)) {
+                // WH.Gatherer.addData(29, 3, {"135988":{"name":"spell_ice_lament","icon":"spell_ice_lament"}});
+                if (preg_match('/{.*}/', $line, $matches)) {
+                    $jsonString = $matches[0];
+                    $json       = json_decode($jsonString, true);
+
+                    if (!is_array($json)) {
+                        $this->log->getSpellDataIconNameNotFound($line, $json);
+                        continue;
+                    }
+
+                    // I don't know the number of the first array key - convert it to 0 always
+                    $json     = array_values($json);
+                    $iconName = $json[0]['icon'];
+                }
+            } else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_NAME)) {
+                $name = str_replace([self::IDENTIFYING_TOKEN_SPELL_NAME, '"', '>'], '', $line);
+            }
+        }
+
+        return new SpellDataResult(
+            $spellId, $cooldownGroup, $iconName, $name, $schoolsMask, $aura
+        );
     }
 
 
@@ -154,6 +202,15 @@ class WowheadService implements WowheadServiceInterface
                 $gameVersion->key === GameVersion::GAME_VERSION_RETAIL ? '' : $gameVersion->key . '/',
                 $npc->id,
                 Str::slug($npc->name)
+            )
+        );
+    }
+
+    public function getSpellPageHtml(int $spellId): string
+    {
+        return $this->curlGet(
+            sprintf('https://wowhead.com/spell=%s',
+                $spellId
             )
         );
     }
