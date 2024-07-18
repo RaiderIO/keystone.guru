@@ -36,5 +36,14 @@ class WowheadServiceLogging extends StructuredLogging implements WowheadServiceL
         $this->info(__METHOD__, get_defined_vars());
     }
 
+    public function getSpellDataSpellSchoolNotFound(string $schoolsStr, string $school): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function getSpellDataSpellDispelTypeNotFound(string $dispelType): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
 
 }

@@ -63,17 +63,21 @@ class Spell extends CacheModel implements MappingModelInterface
         'Arcane'   => self::SCHOOL_ARCANE,
     ];
 
-    public const DISPEL_TYPE_MAGIC   = 'Magic';
-    public const DISPEL_TYPE_DISEASE = 'Disease';
-    public const DISPEL_TYPE_POISON  = 'Poison';
-    public const DISPEL_TYPE_CURSE   = 'Curse';
-    public const DISPEL_TYPE_UNKNOWN = 'Unknown';
+    public const DISPEL_TYPE_MAGIC         = 'Magic';
+    public const DISPEL_TYPE_DISEASE       = 'Disease';
+    public const DISPEL_TYPE_POISON        = 'Poison';
+    public const DISPEL_TYPE_CURSE         = 'Curse';
+    public const DISPEL_TYPE_ENRAGE        = 'Enrage';
+    public const DISPEL_TYPE_NOT_AVAILABLE = 'N/A';
+    public const DISPEL_TYPE_UNKNOWN       = 'Unknown';
 
     public const ALL_DISPEL_TYPES = [
         self::DISPEL_TYPE_MAGIC,
         self::DISPEL_TYPE_DISEASE,
         self::DISPEL_TYPE_POISON,
         self::DISPEL_TYPE_CURSE,
+        self::DISPEL_TYPE_ENRAGE,
+        self::DISPEL_TYPE_NOT_AVAILABLE,
         self::DISPEL_TYPE_UNKNOWN,
     ];
 
@@ -177,5 +181,18 @@ class Spell extends CacheModel implements MappingModelInterface
     {
         // Spells aren't tied to a specific dungeon, but they're part of the mapping
         return 0;
+    }
+
+    public static function maskToReadableString(int $spellSchoolMask): string
+    {
+        $result = [];
+
+        foreach (self::ALL_SCHOOLS as $schoolName => $schoolMask) {
+            if ($spellSchoolMask & $schoolMask) {
+                $result[] = $schoolName;
+            }
+        }
+
+        return implode(', ', $result);
     }
 }

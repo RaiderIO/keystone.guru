@@ -16,4 +16,8 @@ interface WowheadServiceLoggingInterface
     public function downloadSpellIconDownloadResult(string $targetFilePath, bool $result): void;
 
     public function getSpellDataIconNameNotFound(string $line, string $jsonString): void;
+
+    public function getSpellDataSpellSchoolNotFound(string $schoolsStr, string $school): void;
+
+    public function getSpellDataSpellDispelTypeNotFound(string $dispelType): void;
 }

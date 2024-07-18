@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Wowhead;
 
-use App\Models\Dungeon;
 use App\Models\Spell;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Exception;
@@ -32,8 +31,8 @@ class FetchSpellData extends Command
      */
     public function handle(WowheadServiceInterface $wowheadService): void
     {
-//        foreach (Spell::where('name', '')->get() as $spell) {
-        foreach (Spell::where('id', 589)->get() as $spell) {
+        foreach (Spell::where('name', '')->get() as $spell) {
+//        foreach (Spell::where('id', 589)->get() as $spell) {
             $this->info(sprintf('Fetching spell data for spell %d', $spell->id));
 
             $spellDataResult = $wowheadService->getSpellData($spell->id);
@@ -42,12 +41,16 @@ class FetchSpellData extends Command
                 $this->warn('- Unable to find spell data for spell!');
             } else {
                 $spell->update([
-                    'icon_name' => $spellDataResult->getIconName(),
-                    'name'      => $spellDataResult->getName(),
+                    'icon_name'    => $spellDataResult->getIconName(),
+                    'name'         => $spellDataResult->getName(),
+                    'dispel_type'  => $spellDataResult->getDispelType(),
+                    'schools_mask' => $spellDataResult->getSchoolsMask(),
                 ]);
 
                 $this->info(sprintf('- %s', $spellDataResult->getName()));
                 $this->comment(sprintf('-- Icon name: %s', $spellDataResult->getIconName()));
+                $this->comment(sprintf('-- Dispel type: %s', $spellDataResult->getDispelType()));
+                $this->comment(sprintf('-- Schools: %s', Spell::maskToReadableString($spellDataResult->getSchoolsMask())));
             }
 
             // Don't DDOS

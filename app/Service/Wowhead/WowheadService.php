@@ -25,8 +25,10 @@ class WowheadService implements WowheadServiceInterface
     private const IDENTIFYING_TOKEN_DISPLAY_ID = 'linksButton.dataset.displayId =';
 
 
-    private const IDENTIFYING_TOKEN_SPELL_NAME      = '<meta property="og:title" content=';
-    private const IDENTIFYING_TOKEN_SPELL_ICON_NAME = 'WH.Gatherer.addData(29,';
+    private const IDENTIFYING_TOKEN_SPELL_NAME        = '<meta property="og:title" content=';
+    private const IDENTIFYING_TOKEN_SPELL_ICON_NAME   = 'WH.Gatherer.addData(29,';
+    private const IDENTIFYING_TOKEN_SPELL_SCHOOL      = '<th>School</th>';
+    private const IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE = '<th>Dispel type</th>';
 
     public function __construct(
         private readonly WowheadServiceLoggingInterface $log
@@ -152,18 +154,21 @@ class WowheadService implements WowheadServiceInterface
 
         // More hacky shit to scrape data we need
         $spellId       = 0;
-        $cooldownGroup = 0;
+        $cooldownGroup = Spell::COOLDOWN_GROUP_UNKNOWN; // I can't find info on this on Wowhead?
+        $dispelType = '';
         $iconName      = '';
         $name          = '';
         $schoolsMask   = 0;
         $aura          = false;
 
+        // When set to true, the next line will contain the school.
+        $schoolFound = $dispelTypeFound = false;
+
         $lines = explode(PHP_EOL, $response);
         foreach ($lines as $line) {
             $line = trim($line);
 
-//            echo substr($line, 0, 50) . PHP_EOL;
-
+            // Spell icon name
             if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_ICON_NAME)) {
                 // WH.Gatherer.addData(29, 3, {"135988":{"name":"spell_ice_lament","icon":"spell_ice_lament"}});
                 if (preg_match('/{.*}/', $line, $matches)) {
@@ -179,13 +184,45 @@ class WowheadService implements WowheadServiceInterface
                     $json     = array_values($json);
                     $iconName = $json[0]['icon'];
                 }
-            } else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_NAME)) {
+            } // Spell name
+            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_NAME)) {
                 $name = str_replace([self::IDENTIFYING_TOKEN_SPELL_NAME, '"', '>'], '', $line);
+            } // Spell school
+            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_SCHOOL)) {
+                $schoolFound = true;
+            } // Triggered on the next line
+            else if ($schoolFound) {
+                $schoolsStr = str_replace(['<td>', '</td>'], '', $line);
+                $schools    = explode(', ', $schoolsStr);
+
+                foreach ($schools as $school) {
+                    if (isset(Spell::ALL_SCHOOLS[$school])) {
+                        $schoolsMask |= Spell::ALL_SCHOOLS[$school];
+                    } else {
+                        $this->log->getSpellDataSpellSchoolNotFound($schoolsStr, $school);
+                    }
+                }
+                $schoolFound = false;
+            } // Spell dispel type
+            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE)) {
+                $dispelTypeFound = true;
+            } // Triggered on the next line
+            else if ($dispelTypeFound) {
+                $dispelType = str_replace(['<td>', '</td>'], '', $line);
+                if (str_contains($dispelType, 'n/a')) {
+                    $dispelType = Spell::DISPEL_TYPE_NOT_AVAILABLE;
+                } else if (!in_array($dispelType, Spell::ALL_DISPEL_TYPES)) {
+                    $this->log->getSpellDataSpellDispelTypeNotFound($dispelType);
+
+                    $dispelType = Spell::DISPEL_TYPE_UNKNOWN;
+                }
+                $dispelTypeFound = false;
             }
+
         }
 
         return new SpellDataResult(
-            $spellId, $cooldownGroup, $iconName, $name, $schoolsMask, $aura
+            $spellId, $cooldownGroup, $dispelType, $iconName, $name, $schoolsMask, $aura
         );
     }
 

@@ -7,6 +7,7 @@ class SpellDataResult
     public function __construct(
         private readonly int    $spellId,
         private readonly string $cooldownGroup,
+        private readonly string $dispelType,
         private readonly string $iconName,
         private readonly string $name,
         private readonly int    $schoolsMask,
@@ -23,6 +24,11 @@ class SpellDataResult
     public function getCooldownGroup(): string
     {
         return $this->cooldownGroup;
+    }
+
+    public function getDispelType(): string
+    {
+        return $this->dispelType;
     }
 
     public function getIconName(): string

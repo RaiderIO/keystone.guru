@@ -111,7 +111,6 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->error(__METHOD__, get_defined_vars());
     }
 
-
     public function importNpcsDataFromMDTSaveNewNpc(int $npcId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
