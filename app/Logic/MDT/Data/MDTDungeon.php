@@ -210,6 +210,9 @@ class MDTDungeon
                             'npc_id'                        => $npcId,
                             // All MDT_IDs are 1-indexed, because LUA
                             'mdt_id'                        => $mdtCloneIndex,
+                            'mdt_scale'                     => $clone['scale'] ?? null,
+                            'mdt_x'                         => $clone['x'],
+                            'mdt_y'                         => $clone['y'],
                             'lat'                           => $clone['lat'],
                             'lng'                           => $clone['lng'],
                             'teeming'                       => isset($clone['teeming']) && $clone['teeming'] ? Enemy::TEEMING_VISIBLE : null,

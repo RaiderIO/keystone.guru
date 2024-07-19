@@ -54,6 +54,7 @@ class MDTNpc implements Arrayable
         } else {
             $this->spells = [];
         }
+        ksort($this->spells);
 
         $this->scale         = (float)$this->rawMdtNpc['scale'];
         $this->stealthDetect = isset($this->rawMdtNpc['stealthDetect']) && $this->rawMdtNpc['stealthDetect'];

@@ -272,10 +272,10 @@ MDT.mapPOIs[dungeonIndex] = {};
                 'level'            => $npc->level,
                 'isBoss'           => $npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS] ?
                     true : null,
-                'characteristics' => $npc->characteristics->mapWithKeys(function (Characteristic $characteristic) {
+                'characteristics'  => $npc->characteristics->mapWithKeys(function (Characteristic $characteristic) {
                     return [__($characteristic->name, [], 'en_US') => true];
                 })->toArray(),
-                'spells'          => $npc->spells->mapWithKeys(function (Spell $spell) {
+                'spells'           => $npc->spells->mapWithKeys(function (Spell $spell) {
                     return [$spell->id => []];
                 })->toArray(),
                 'clones'           => [],
@@ -301,10 +301,11 @@ MDT.mapPOIs[dungeonIndex] = {};
                 $convertedEnemyLatLng                  = $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $enemy->getLatLng());
                 $mdtCoordinate                         = Conversion::convertLatLngToMDTCoordinate($convertedEnemyLatLng);
                 $dungeonEnemy['clones'][++$cloneIndex] = array_filter([
-                    'x'        => $mdtCoordinate['x'],
-                    'y'        => $mdtCoordinate['y'],
+                    'x'        => (float)($enemy->mdt_x ?? $mdtCoordinate['x']),
+                    'y'        => (float)($enemy->mdt_y ?? $mdtCoordinate['y']),
                     'g'        => $group ?? null,
                     'sublevel' => $enemy->floor->mdt_sub_level ?? $enemy->floor->index,
+                    'scale'    => $enemy->mdt_scale,
                 ]);
 
                 // Add patrol if any
@@ -314,8 +315,13 @@ MDT.mapPOIs[dungeonIndex] = {};
                     $polylineLatLngs = $enemy->enemyPatrol->polyline->getDecodedLatLngs($enemy->floor);
                     $vertexIndex     = 0;
                     foreach ($polylineLatLngs as $vertexLatLng) {
-                        $convertedVertexLatLng          = $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $vertexLatLng);
-                        $patrolVertices[++$vertexIndex] = Conversion::convertLatLngToMDTCoordinate($convertedVertexLatLng);
+                        $convertedVertexLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $vertexLatLng);
+                        $vertexMDTXY           = Conversion::convertLatLngToMDTCoordinate($convertedVertexLatLng);
+                        // Reverse order
+                        $patrolVertices[++$vertexIndex] = [
+                            'x' => $vertexMDTXY['x'],
+                            'y' => $vertexMDTXY['y'],
+                        ];
                     }
 
                     $dungeonEnemy['clones'][$cloneIndex]['patrol'] = $patrolVertices;
