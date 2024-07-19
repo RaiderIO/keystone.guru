@@ -117,10 +117,10 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $npcSpellsAttributes          = [];
             $affectedNpcIds               = [];
 
+            /** @var Npc|null $npc */
             foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
                 $affectedNpcIds[] = $mdtNpc->getId();
 
-                /** @var Npc|null $npc */
                 $npc = $existingNpcs->get($mdtNpc->getId());
 
                 if ($newlyCreated = ($npc === null)) {
@@ -131,6 +131,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 // Allow manual override to -1
                 $npc->dungeon_id        = $npc->dungeon_id === -1 ? -1 : $dungeon->id;
                 $npc->display_id        = $mdtNpc->getDisplayId();
+                $npc->encounter_id      = $mdtNpc->getEncounterId();
                 $npc->classification_id ??= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE];
                 $npc->name              = $mdtNpc->getName();
                 $npc->base_health       = $mdtNpc->getHealth();
@@ -181,7 +182,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         $npc->createNpcEnemyForcesForExistingMappingVersions($mdtNpc->getCount());
                     }
                 } catch (UniqueConstraintViolationException $exception) {
-                    $this->log->importNpcsDataFromMDTNpcNotMarkedForAllDungeons($npc->id);
+                    $this->log->importNpcsDataFromMDTNpcNotMarkedForAllDungeons($npc?->id ?? 0);
                 } catch (Exception $exception) {
                     $this->log->importNpcsDataFromMDTSaveNpcException($exception);
                 }

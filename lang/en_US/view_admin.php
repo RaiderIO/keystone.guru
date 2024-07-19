@@ -16,6 +16,7 @@ return [
             'game_version_id'                    => 'Game version ID',
             'zone_id'                            => 'Zone ID',
             'map_id'                             => 'Map ID',
+            'instance_id'                        => 'Instance ID',
             'challenge_mode_id'                  => 'Challenge mode ID',
             'mdt_id'                             => 'MDT ID',
             'dungeon_name'                       => 'Dungeon name',

@@ -6,10 +6,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 67773,
+        "encounter_id": 1485,
         "name": "Hymdall",
         "base_health": 5492531,
         "health_percentage": null,
         "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -20,21 +22,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 587,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 207,
                 "spell_id": 191284
             },
             {
-                "id": 208,
                 "spell_id": 193092
             },
             {
-                "id": 209,
                 "spell_id": 193235
             }
         ],
@@ -47,10 +45,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 64466,
+        "encounter_id": 1487,
         "name": "Fenryr",
         "base_health": 4938339,
         "health_percentage": null,
         "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -61,37 +61,29 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 650,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 261,
                 "spell_id": 196496
             },
             {
-                "id": 262,
                 "spell_id": 196497
             },
             {
-                "id": 263,
                 "spell_id": 196512
             },
             {
-                "id": 264,
                 "spell_id": 196543
             },
             {
-                "id": 265,
                 "spell_id": 196567
             },
             {
-                "id": 266,
                 "spell_id": 197556
             },
             {
-                "id": 267,
                 "spell_id": 197558
             }
         ],
@@ -104,10 +96,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 65873,
+        "encounter_id": 1488,
         "name": "God-King Skovald",
         "base_health": 4993210,
         "health_percentage": null,
         "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -118,45 +112,35 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 664,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 311,
                 "spell_id": 193659
             },
             {
-                "id": 312,
                 "spell_id": 193660
             },
             {
-                "id": 313,
                 "spell_id": 193668
             },
             {
-                "id": 314,
                 "spell_id": 193686
             },
             {
-                "id": 315,
                 "spell_id": 193826
             },
             {
-                "id": 316,
                 "spell_id": 193827
             },
             {
-                "id": 317,
                 "spell_id": 193983
             },
             {
-                "id": 318,
                 "spell_id": 194112
             },
             {
-                "id": 319,
                 "spell_id": 202494
             }
         ],
@@ -169,10 +153,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 67230,
+        "encounter_id": 1489,
         "name": "Odyn",
         "base_health": 19204651,
         "health_percentage": null,
         "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -183,49 +169,38 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 665,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 320,
                 "spell_id": 197961
             },
             {
-                "id": 321,
                 "spell_id": 197963
             },
             {
-                "id": 322,
                 "spell_id": 197964
             },
             {
-                "id": 323,
                 "spell_id": 197965
             },
             {
-                "id": 324,
                 "spell_id": 197966
             },
             {
-                "id": 325,
                 "spell_id": 197967
             },
             {
-                "id": 326,
                 "spell_id": 198058
             },
             {
-                "id": 327,
                 "spell_id": 198077
             },
             {
-                "id": 328,
                 "spell_id": 198263
             },
             {
-                "id": 329,
                 "spell_id": 198412
             }
         ],
@@ -238,10 +213,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 25801,
+        "encounter_id": null,
         "name": "Valarjar Shieldmaiden",
         "base_health": 931837,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -252,41 +229,32 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 614,
-                "characteristic_id": 14
-            },
-            {
-                "id": 615,
-                "characteristic_id": 11
-            },
-            {
-                "id": 616,
-                "characteristic_id": 12
-            },
-            {
-                "id": 617,
-                "characteristic_id": 18
-            },
-            {
-                "id": 618,
                 "characteristic_id": 19
             },
             {
-                "id": 619,
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 1
             },
             {
-                "id": 620,
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 5
             }
         ],
         "npc_spells": [
             {
-                "id": 221,
                 "spell_id": 198944
             },
             {
-                "id": 222,
                 "spell_id": 199050
             }
         ],
@@ -328,10 +296,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 72718,
+        "encounter_id": 1486,
         "name": "Hyrja",
         "base_health": 4993210,
         "health_percentage": null,
         "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -342,53 +312,41 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 631,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 237,
                 "spell_id": 191976
             },
             {
-                "id": 238,
                 "spell_id": 192018
             },
             {
-                "id": 239,
                 "spell_id": 192044
             },
             {
-                "id": 240,
                 "spell_id": 192067
             },
             {
-                "id": 241,
                 "spell_id": 192132
             },
             {
-                "id": 242,
                 "spell_id": 192133
             },
             {
-                "id": 243,
                 "spell_id": 192206
             },
             {
-                "id": 244,
                 "spell_id": 192307
             },
             {
-                "id": 245,
                 "spell_id": 200682
             },
             {
-                "id": 246,
                 "spell_id": 200901
             },
             {
-                "id": 247,
                 "spell_id": 215457
             }
         ],
@@ -401,10 +359,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 64208,
+        "encounter_id": null,
         "name": "Valarjar Mystic",
         "base_health": 645118,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -415,45 +375,35 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 589,
                 "characteristic_id": 18
             },
             {
-                "id": 590,
-                "characteristic_id": 14
-            },
-            {
-                "id": 591,
                 "characteristic_id": 16
             },
             {
-                "id": 592,
-                "characteristic_id": 12
-            },
-            {
-                "id": 593,
                 "characteristic_id": 11
             },
             {
-                "id": 594,
-                "characteristic_id": 2
-            },
-            {
-                "id": 595,
                 "characteristic_id": 1
             },
             {
-                "id": 596,
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 5
             }
         ],
         "npc_spells": [
             {
-                "id": 213,
                 "spell_id": 198934
             },
             {
-                "id": 214,
                 "spell_id": 215433
             }
         ],
@@ -495,10 +445,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 67277,
+        "encounter_id": null,
         "name": "Valarjar Thundercaller",
         "base_health": 716798,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -509,53 +461,41 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 577,
-                "characteristic_id": 14
-            },
-            {
-                "id": 578,
-                "characteristic_id": 16
-            },
-            {
-                "id": 579,
-                "characteristic_id": 12
-            },
-            {
-                "id": 580,
-                "characteristic_id": 1
-            },
-            {
-                "id": 581,
-                "characteristic_id": 11
-            },
-            {
-                "id": 582,
-                "characteristic_id": 17
-            },
-            {
-                "id": 583,
-                "characteristic_id": 18
-            },
-            {
-                "id": 584,
                 "characteristic_id": 2
             },
             {
-                "id": 585,
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 5
             }
         ],
         "npc_spells": [
             {
-                "id": 202,
                 "spell_id": 198595
             },
             {
-                "id": 203,
                 "spell_id": 215429
             },
             {
-                "id": 204,
                 "spell_id": 215430
             }
         ],
@@ -597,10 +537,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 28086,
+        "encounter_id": null,
         "name": "King Haldor",
         "base_health": 1791994,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -611,41 +553,32 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 661,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 287,
                 "spell_id": 199590
             },
             {
-                "id": 288,
                 "spell_id": 199591
             },
             {
-                "id": 289,
                 "spell_id": 199592
             },
             {
-                "id": 290,
                 "spell_id": 199593
             },
             {
-                "id": 291,
                 "spell_id": 199652
             },
             {
-                "id": 292,
                 "spell_id": 199674
             },
             {
-                "id": 293,
                 "spell_id": 199726
             },
             {
-                "id": 294,
                 "spell_id": 200969
             }
         ],
@@ -687,10 +620,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 67429,
+        "encounter_id": null,
         "name": "Stormforged Sentinel",
         "base_health": 1290235,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -701,21 +636,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 588,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 210,
                 "spell_id": 198745
             },
             {
-                "id": 211,
                 "spell_id": 199805
             },
             {
-                "id": 212,
                 "spell_id": 210875
             }
         ],
@@ -757,10 +688,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 70154,
+        "encounter_id": null,
         "name": "Ebonclaw Worg",
         "base_health": 645118,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -771,49 +704,38 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 651,
-                "characteristic_id": 17
-            },
-            {
-                "id": 652,
-                "characteristic_id": 14
-            },
-            {
-                "id": 653,
-                "characteristic_id": 16
-            },
-            {
-                "id": 654,
-                "characteristic_id": 12
-            },
-            {
-                "id": 655,
-                "characteristic_id": 18
-            },
-            {
-                "id": 656,
                 "characteristic_id": 19
             },
             {
-                "id": 657,
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
                 "characteristic_id": 1
             },
             {
-                "id": 658,
                 "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 16
             }
         ],
         "npc_spells": [
             {
-                "id": 268,
                 "spell_id": 199177
             },
             {
-                "id": 269,
                 "spell_id": 199179
             },
             {
-                "id": 270,
                 "spell_id": 199182
             }
         ],
@@ -855,10 +777,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 45090,
+        "encounter_id": null,
         "name": "Gildedfur Stag",
         "base_health": 430079,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -869,21 +793,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 632,
-                "characteristic_id": 1
+                "characteristic_id": 19
             },
             {
-                "id": 633,
-                "characteristic_id": 19
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 248,
                 "spell_id": 199108
             },
             {
-                "id": 249,
                 "spell_id": 199146
             }
         ],
@@ -925,10 +845,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 65853,
+        "encounter_id": null,
         "name": "Angerhoof Bull",
         "base_health": 788478,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -939,41 +861,32 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 636,
-                "characteristic_id": 14
-            },
-            {
-                "id": 637,
-                "characteristic_id": 16
-            },
-            {
-                "id": 638,
                 "characteristic_id": 18
             },
             {
-                "id": 639,
-                "characteristic_id": 2
-            },
-            {
-                "id": 640,
                 "characteristic_id": 1
             },
             {
-                "id": 641,
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
                 "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 253,
                 "spell_id": 190225
             },
             {
-                "id": 254,
                 "spell_id": 199090
             },
             {
-                "id": 255,
                 "spell_id": 199151
             }
         ],
@@ -1015,10 +928,12 @@
         "npc_type_id": 8,
         "npc_class_id": 2,
         "display_id": 25811,
+        "encounter_id": null,
         "name": "Valarjar Marksman",
         "base_health": 716798,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1029,53 +944,41 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 606,
                 "characteristic_id": 18
             },
             {
-                "id": 607,
-                "characteristic_id": 14
-            },
-            {
-                "id": 608,
                 "characteristic_id": 16
             },
             {
-                "id": 609,
-                "characteristic_id": 12
-            },
-            {
-                "id": 610,
                 "characteristic_id": 11
             },
             {
-                "id": 611,
-                "characteristic_id": 2
-            },
-            {
-                "id": 612,
                 "characteristic_id": 1
             },
             {
-                "id": 613,
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 5
             }
         ],
         "npc_spells": [
             {
-                "id": 217,
                 "spell_id": 191401
             },
             {
-                "id": 218,
                 "spell_id": 199210
             },
             {
-                "id": 219,
                 "spell_id": 199247
             },
             {
-                "id": 220,
                 "spell_id": 199248
             }
         ],
@@ -1117,10 +1020,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 64200,
+        "encounter_id": null,
         "name": "Valarjar Runecarver",
         "base_health": 752637,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1131,49 +1036,38 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 597,
-                "characteristic_id": 14
-            },
-            {
-                "id": 598,
-                "characteristic_id": 16
-            },
-            {
-                "id": 599,
-                "characteristic_id": 12
-            },
-            {
-                "id": 600,
-                "characteristic_id": 1
-            },
-            {
-                "id": 601,
-                "characteristic_id": 11
-            },
-            {
-                "id": 602,
-                "characteristic_id": 17
-            },
-            {
-                "id": 603,
-                "characteristic_id": 18
-            },
-            {
-                "id": 604,
                 "characteristic_id": 2
             },
             {
-                "id": 605,
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 5
             }
         ],
         "npc_spells": [
             {
-                "id": 215,
                 "spell_id": 198959
             },
             {
-                "id": 216,
                 "spell_id": 198962
             }
         ],
@@ -1215,10 +1109,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 41014,
+        "encounter_id": null,
         "name": "Steeljaw Grizzly",
         "base_health": 858654,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1229,41 +1125,32 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 642,
-                "characteristic_id": 16
-            },
-            {
-                "id": 643,
-                "characteristic_id": 12
-            },
-            {
-                "id": 644,
-                "characteristic_id": 18
-            },
-            {
-                "id": 645,
                 "characteristic_id": 19
             },
             {
-                "id": 646,
                 "characteristic_id": 1
             },
             {
-                "id": 647,
                 "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
             }
         ],
         "npc_spells": [
             {
-                "id": 256,
                 "spell_id": 185425
             },
             {
-                "id": 257,
                 "spell_id": 196194
             },
             {
-                "id": 258,
                 "spell_id": 320679
             }
         ],
@@ -1305,10 +1192,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 67281,
+        "encounter_id": null,
         "name": "Valarjar Trapper",
         "base_health": 881661,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1319,21 +1208,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 648,
-                "characteristic_id": 1
+                "characteristic_id": 18
             },
             {
-                "id": 649,
-                "characteristic_id": 18
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 259,
                 "spell_id": 199341
             },
             {
-                "id": 260,
                 "spell_id": 199361
             }
         ],
@@ -1375,10 +1260,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 67203,
+        "encounter_id": null,
         "name": "Storm Drake",
         "base_health": 1433595,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1389,17 +1276,14 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 586,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 205,
                 "spell_id": 198888
             },
             {
-                "id": 206,
                 "spell_id": 198892
             }
         ],
@@ -1441,10 +1325,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 28085,
+        "encounter_id": null,
         "name": "King Bjorn",
         "base_health": 1863674,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1455,41 +1341,32 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 662,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 295,
                 "spell_id": 199590
             },
             {
-                "id": 296,
                 "spell_id": 199591
             },
             {
-                "id": 297,
                 "spell_id": 199592
             },
             {
-                "id": 298,
                 "spell_id": 199593
             },
             {
-                "id": 299,
                 "spell_id": 199652
             },
             {
-                "id": 300,
                 "spell_id": 199674
             },
             {
-                "id": 301,
                 "spell_id": 199726
             },
             {
-                "id": 302,
                 "spell_id": 200969
             }
         ],
@@ -1531,10 +1408,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 28087,
+        "encounter_id": null,
         "name": "King Ranulf",
         "base_health": 1863674,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1545,41 +1424,32 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 660,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 279,
                 "spell_id": 199590
             },
             {
-                "id": 280,
                 "spell_id": 199591
             },
             {
-                "id": 281,
                 "spell_id": 199592
             },
             {
-                "id": 282,
                 "spell_id": 199593
             },
             {
-                "id": 283,
                 "spell_id": 199652
             },
             {
-                "id": 284,
                 "spell_id": 199674
             },
             {
-                "id": 285,
                 "spell_id": 199726
             },
             {
-                "id": 286,
                 "spell_id": 200969
             }
         ],
@@ -1621,10 +1491,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 28088,
+        "encounter_id": null,
         "name": "King Tor",
         "base_health": 2150393,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1635,41 +1507,32 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 663,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 303,
                 "spell_id": 199590
             },
             {
-                "id": 304,
                 "spell_id": 199591
             },
             {
-                "id": 305,
                 "spell_id": 199592
             },
             {
-                "id": 306,
                 "spell_id": 199593
             },
             {
-                "id": 307,
                 "spell_id": 199652
             },
             {
-                "id": 308,
                 "spell_id": 199674
             },
             {
-                "id": 309,
                 "spell_id": 199726
             },
             {
-                "id": 310,
                 "spell_id": 200969
             }
         ],
@@ -1711,10 +1574,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 67274,
+        "encounter_id": null,
         "name": "Valarjar Champion",
         "base_health": 788478,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1725,41 +1590,32 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 570,
-                "characteristic_id": 14
-            },
-            {
-                "id": 571,
-                "characteristic_id": 11
-            },
-            {
-                "id": 572,
-                "characteristic_id": 12
-            },
-            {
-                "id": 573,
-                "characteristic_id": 18
-            },
-            {
-                "id": 574,
                 "characteristic_id": 19
             },
             {
-                "id": 575,
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 1
             },
             {
-                "id": 576,
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 5
             }
         ],
         "npc_spells": [
             {
-                "id": 200,
                 "spell_id": 199772
             },
             {
-                "id": 201,
                 "spell_id": 397410
             }
         ],
@@ -1801,10 +1657,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 64200,
+        "encounter_id": null,
         "name": "Valarjar Purifier",
         "base_health": 1146876,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1815,17 +1673,14 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 621,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 223,
                 "spell_id": 192563
             },
             {
-                "id": 224,
                 "spell_id": 192565
             }
         ],
@@ -1867,10 +1722,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 64464,
+        "encounter_id": null,
         "name": "Olmyr the Enlightened",
         "base_health": 1863674,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1881,25 +1738,20 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 630,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 233,
                 "spell_id": 192158
             },
             {
-                "id": 234,
                 "spell_id": 192206
             },
             {
-                "id": 235,
                 "spell_id": 192288
             },
             {
-                "id": 236,
                 "spell_id": 215457
             }
         ],
@@ -1941,10 +1793,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 64575,
+        "encounter_id": null,
         "name": "Solsten",
         "base_health": 1863674,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1955,21 +1809,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 629,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 230,
                 "spell_id": 191976
             },
             {
-                "id": 231,
                 "spell_id": 200682
             },
             {
-                "id": 232,
                 "spell_id": 200901
             }
         ],
@@ -2011,10 +1861,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 25811,
+        "encounter_id": null,
         "name": "Valarjar Falconer",
         "base_health": 31288,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2063,10 +1915,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 42414,
+        "encounter_id": null,
         "name": "Trained Hawk",
         "base_health": 15001,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2086,10 +1940,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 64466,
+        "encounter_id": 1487,
         "name": "Fenryr",
         "base_health": 4938339,
         "health_percentage": null,
         "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -2100,41 +1956,32 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 659,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 271,
                 "spell_id": 196496
             },
             {
-                "id": 272,
                 "spell_id": 196497
             },
             {
-                "id": 273,
                 "spell_id": 196512
             },
             {
-                "id": 274,
                 "spell_id": 196543
             },
             {
-                "id": 275,
                 "spell_id": 196838
             },
             {
-                "id": 276,
                 "spell_id": 197556
             },
             {
-                "id": 277,
                 "spell_id": 197558
             },
             {
-                "id": 278,
                 "spell_id": 200561
             }
         ],
@@ -2147,10 +1994,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 67203,
+        "encounter_id": null,
         "name": "Storm Drake",
         "base_health": 1218556,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2161,25 +2010,20 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 634,
-                "characteristic_id": 1
+                "characteristic_id": 11
             },
             {
-                "id": 635,
-                "characteristic_id": 11
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 250,
                 "spell_id": 198888
             },
             {
-                "id": 251,
                 "spell_id": 198892
             },
             {
-                "id": 252,
                 "spell_id": 207753
             }
         ],
@@ -2221,10 +2065,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 70645,
+        "encounter_id": null,
         "name": "Valarjar Aspirant",
         "base_health": 1433595,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2235,21 +2081,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 622,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 225,
                 "spell_id": 191508
             },
             {
-                "id": 226,
                 "spell_id": 199033
             },
             {
-                "id": 227,
                 "spell_id": 199034
             }
         ],
@@ -2291,10 +2133,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 25801,
+        "encounter_id": null,
         "name": "Valarjar Shieldmaiden",
         "base_health": 931837,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2305,37 +2149,29 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 623,
-                "characteristic_id": 17
-            },
-            {
-                "id": 624,
-                "characteristic_id": 16
-            },
-            {
-                "id": 625,
-                "characteristic_id": 18
-            },
-            {
-                "id": 626,
                 "characteristic_id": 19
             },
             {
-                "id": 627,
                 "characteristic_id": 1
             },
             {
-                "id": 628,
                 "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
             }
         ],
         "npc_spells": [
             {
-                "id": 228,
                 "spell_id": 198944
             },
             {
-                "id": 229,
                 "spell_id": 199050
             }
         ],

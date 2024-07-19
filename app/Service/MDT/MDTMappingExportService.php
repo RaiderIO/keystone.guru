@@ -268,6 +268,9 @@ MDT.mapPOIs[dungeonIndex] = {};
                 'level'            => $npc->level,
                 'isBoss'           => $npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS] ?
                     true : null,
+                'encounterID'      => $npc->encounter_id,
+                // $npc->dungeon may be null if dungeon_id = -1
+                'instanceID'       => $mappingVersion->dungeon->instance_id,
                 'characteristics'  => $npc->characteristics->mapWithKeys(function (Characteristic $characteristic) {
                     return [__($characteristic->name, [], 'en_US') => true];
                 })->toArray(),

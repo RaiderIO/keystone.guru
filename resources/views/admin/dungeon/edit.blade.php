@@ -91,11 +91,17 @@ $gameVersionsSelect = \App\Models\GameVersion\GameVersion::all()
             @include('common.forms.form-error', ['key' => 'map_id'])
         </div>
 
-            <div class="form-group{{ $errors->has('challenge_mode_id') ? ' has-error' : '' }}">
-                {!! Form::label('challenge_mode_id', __('view_admin.dungeon.edit.challenge_mode_id')) !!}
-                {!! Form::number('challenge_mode_id', null, ['class' => 'form-control']) !!}
-                @include('common.forms.form-error', ['key' => 'challenge_mode_id'])
-            </div>
+        <div class="form-group{{ $errors->has('instance_id') ? ' has-error' : '' }}">
+            {!! Form::label('instance_id', __('view_admin.dungeon.edit.instance_id')) !!}
+            {!! Form::number('instance_id', null, ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'instance_id'])
+        </div>
+
+        <div class="form-group{{ $errors->has('challenge_mode_id') ? ' has-error' : '' }}">
+            {!! Form::label('challenge_mode_id', __('view_admin.dungeon.edit.challenge_mode_id')) !!}
+            {!! Form::number('challenge_mode_id', null, ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'challenge_mode_id'])
+        </div>
 
         <div class="form-group{{ $errors->has('mdt_id') ? ' has-error' : '' }}">
             {!! Form::label('mdt_id', __('view_admin.dungeon.edit.mdt_id')) !!}

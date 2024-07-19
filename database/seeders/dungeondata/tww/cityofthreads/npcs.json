@@ -6,10 +6,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 117254,
+        "encounter_id": 2593,
         "name": "The Coaglamation",
         "base_health": 97981796,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.5,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -21,43 +23,33 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4918,
                 "spell_id": 437533
             },
             {
-                "id": 4919,
                 "spell_id": 441289
             },
             {
-                "id": 4920,
                 "spell_id": 441395
             },
             {
-                "id": 4921,
                 "spell_id": 442285
             },
             {
-                "id": 4922,
                 "spell_id": 443150
             },
             {
-                "id": 4923,
                 "spell_id": 447146
             },
             {
-                "id": 4924,
                 "spell_id": 461825
             },
             {
-                "id": 4925,
                 "spell_id": 461842
             },
             {
-                "id": 4926,
                 "spell_id": 461880
             },
             {
-                "id": 4927,
                 "spell_id": 461989
             }
         ],
@@ -70,10 +62,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 115771,
+        "encounter_id": null,
         "name": "Ascended Neophyte",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -93,10 +87,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 116499,
+        "encounter_id": null,
         "name": "Unstable Test Subject",
         "base_health": 22426278,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -108,23 +104,18 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4859,
                 "spell_id": 436205
             },
             {
-                "id": 4860,
                 "spell_id": 436246
             },
             {
-                "id": 4861,
                 "spell_id": 445812
             },
             {
-                "id": 4862,
                 "spell_id": 445813
             },
             {
-                "id": 4863,
                 "spell_id": 445838
             }
         ],
@@ -137,10 +128,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 114555,
+        "encounter_id": null,
         "name": "Congealed Droplet",
         "base_health": 2803285,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -160,10 +153,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 120894,
+        "encounter_id": null,
         "name": "Sureki Unnaturaler",
         "base_health": 11213139,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -175,11 +170,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4864,
                 "spell_id": 446086
             },
             {
-                "id": 4865,
                 "spell_id": 453840
             }
         ],
@@ -192,10 +185,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 120891,
+        "encounter_id": null,
         "name": "Assistant Unnaturaler",
         "base_health": 8409854,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -207,11 +202,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4857,
                 "spell_id": 453583
             },
             {
-                "id": 4858,
                 "spell_id": 453584
             }
         ],
@@ -224,10 +217,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 116692,
+        "encounter_id": 2593,
         "name": "Orator Krixvizk",
         "base_health": 97981796,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -239,51 +234,39 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4875,
                 "spell_id": 434691
             },
             {
-                "id": 4876,
                 "spell_id": 434710
             },
             {
-                "id": 4877,
                 "spell_id": 434722
             },
             {
-                "id": 4878,
                 "spell_id": 434723
             },
             {
-                "id": 4879,
                 "spell_id": 434779
             },
             {
-                "id": 4880,
                 "spell_id": 434829
             },
             {
-                "id": 4881,
                 "spell_id": 434832
             },
             {
-                "id": 4882,
                 "spell_id": 434926
             },
             {
-                "id": 4883,
                 "spell_id": 440310
             },
             {
-                "id": 4884,
                 "spell_id": 448560
             },
             {
-                "id": 4885,
                 "spell_id": 448561
             },
             {
-                "id": 4886,
                 "spell_id": 448562
             }
         ],
@@ -296,10 +279,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 116699,
+        "encounter_id": 2593,
         "name": "Nx",
         "base_health": 83984397,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -311,51 +296,39 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4887,
                 "spell_id": 439518
             },
             {
-                "id": 4888,
                 "spell_id": 439522
             },
             {
-                "id": 4889,
                 "spell_id": 439621
             },
             {
-                "id": 4890,
                 "spell_id": 439692
             },
             {
-                "id": 4891,
                 "spell_id": 439697
             },
             {
-                "id": 4892,
                 "spell_id": 440049
             },
             {
-                "id": 4893,
                 "spell_id": 440419
             },
             {
-                "id": 4894,
                 "spell_id": 440434
             },
             {
-                "id": 4895,
                 "spell_id": 440437
             },
             {
-                "id": 4896,
                 "spell_id": 441286
             },
             {
-                "id": 4897,
                 "spell_id": 441381
             },
             {
-                "id": 4898,
                 "spell_id": 441391
             }
         ],
@@ -368,10 +341,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 116700,
+        "encounter_id": 2593,
         "name": "Vx",
         "base_health": 83984397,
         "health_percentage": 100,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -383,43 +358,33 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4899,
                 "spell_id": 439518
             },
             {
-                "id": 4900,
                 "spell_id": 440049
             },
             {
-                "id": 4901,
                 "spell_id": 440107
             },
             {
-                "id": 4902,
                 "spell_id": 440218
             },
             {
-                "id": 4903,
                 "spell_id": 440238
             },
             {
-                "id": 4904,
                 "spell_id": 440468
             },
             {
-                "id": 4905,
                 "spell_id": 441295
             },
             {
-                "id": 4906,
                 "spell_id": 441298
             },
             {
-                "id": 4907,
                 "spell_id": 441305
             },
             {
-                "id": 4908,
                 "spell_id": 441384
             }
         ],
@@ -432,10 +397,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 116701,
+        "encounter_id": 2593,
         "name": "Izo The Grand Splicer",
         "base_health": 111979196,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -447,39 +414,30 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4909,
                 "spell_id": 437700
             },
             {
-                "id": 4910,
                 "spell_id": 438860
             },
             {
-                "id": 4911,
                 "spell_id": 439324
             },
             {
-                "id": 4912,
                 "spell_id": 439341
             },
             {
-                "id": 4913,
                 "spell_id": 439401
             },
             {
-                "id": 4914,
                 "spell_id": 439481
             },
             {
-                "id": 4915,
                 "spell_id": 439646
             },
             {
-                "id": 4916,
                 "spell_id": 439763
             },
             {
-                "id": 4917,
                 "spell_id": 439764
             }
         ],
@@ -492,10 +450,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 116480,
+        "encounter_id": 2485,
         "name": "Ravenous Scarab",
         "base_health": 39245986,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -507,15 +467,12 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4928,
                 "spell_id": 450042
             },
             {
-                "id": 4929,
                 "spell_id": 450047
             },
             {
-                "id": 4930,
                 "spell_id": 450055
             }
         ],
@@ -528,10 +485,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 114423,
+        "encounter_id": null,
         "name": "Hollows Resident",
         "base_health": 2218308,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -551,10 +510,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 119732,
+        "encounter_id": null,
         "name": "Xephitik",
         "base_health": 21024636,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -566,19 +527,15 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4839,
                 "spell_id": 443427
             },
             {
-                "id": 4840,
                 "spell_id": 450784
             },
             {
-                "id": 4841,
                 "spell_id": 451423
             },
             {
-                "id": 4842,
                 "spell_id": 451428
             }
         ],
@@ -591,10 +548,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 119371,
+        "encounter_id": null,
         "name": "Eye Of The Queen",
         "base_health": 25229563,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -606,19 +565,15 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4843,
                 "spell_id": 451218
             },
             {
-                "id": 4844,
                 "spell_id": 451222
             },
             {
-                "id": 4845,
                 "spell_id": 451295
             },
             {
-                "id": 4846,
                 "spell_id": 451543
             }
         ],
@@ -631,10 +586,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 119377,
+        "encounter_id": null,
         "name": "Ascended Aristocrat",
         "base_health": 4991193,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -654,10 +611,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 115734,
+        "encounter_id": null,
         "name": "Hollows Merchant",
         "base_health": 1109154,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -677,10 +636,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 118106,
+        "encounter_id": null,
         "name": "Reposing Knight",
         "base_health": 5545770,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -700,10 +661,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 118005,
+        "encounter_id": null,
         "name": "Umbral Weave",
         "base_health": 277289,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -723,10 +686,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 120868,
+        "encounter_id": null,
         "name": "Sureki Venomblade",
         "base_health": 12895110,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -738,11 +703,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4828,
                 "spell_id": 443397
             },
             {
-                "id": 4829,
                 "spell_id": 443401
             }
         ],
@@ -755,10 +718,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 120872,
+        "encounter_id": null,
         "name": "Sureki Silkbinder",
         "base_health": 12054125,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -770,11 +735,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4826,
                 "spell_id": 443427
             },
             {
-                "id": 4827,
                 "spell_id": 443430
             }
         ],
@@ -787,10 +750,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 120905,
+        "encounter_id": null,
         "name": "Herald Of Ansurek",
         "base_health": 22426278,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -802,27 +767,21 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4833,
                 "spell_id": 443433
             },
             {
-                "id": 4834,
                 "spell_id": 443434
             },
             {
-                "id": 4835,
                 "spell_id": 443435
             },
             {
-                "id": 4836,
                 "spell_id": 443436
             },
             {
-                "id": 4837,
                 "spell_id": 443437
             },
             {
-                "id": 4838,
                 "spell_id": 443438
             }
         ],
@@ -835,10 +794,12 @@
         "npc_type_id": 4,
         "npc_class_id": 1,
         "display_id": 120882,
+        "encounter_id": null,
         "name": "Royal Swarmguard",
         "base_health": 25229563,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -850,15 +811,12 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4830,
                 "spell_id": 443500
             },
             {
-                "id": 4831,
                 "spell_id": 443507
             },
             {
-                "id": 4832,
                 "spell_id": 443509
             }
         ],
@@ -871,10 +829,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 120589,
+        "encounter_id": null,
         "name": "Battle Scarab",
         "base_health": 2803285,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -894,10 +854,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 117374,
+        "encounter_id": null,
         "name": "Umbral Citizen",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -917,10 +879,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 116446,
+        "encounter_id": null,
         "name": "Umbral Citizen",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -940,10 +904,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 121817,
+        "encounter_id": null,
         "name": "Pale Priest",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -963,10 +929,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 114418,
+        "encounter_id": null,
         "name": "Royal Acolyte",
         "base_health": 3882039,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -986,10 +954,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 120885,
+        "encounter_id": null,
         "name": "Retired Lord Vul'azak",
         "base_health": 12345,
         "health_percentage": 100,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1009,10 +979,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 120890,
+        "encounter_id": null,
         "name": "Royal Venomshell",
         "base_health": 28032847,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1024,19 +996,15 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4853,
                 "spell_id": 434133
             },
             {
-                "id": 4854,
                 "spell_id": 434137
             },
             {
-                "id": 4855,
                 "spell_id": 443500
             },
             {
-                "id": 4856,
                 "spell_id": 461630
             }
         ],
@@ -1049,10 +1017,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 114268,
+        "encounter_id": null,
         "name": "Executor Nizrek",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1072,10 +1042,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 117374,
+        "encounter_id": null,
         "name": "Favored Citizen",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1095,10 +1067,12 @@
         "npc_type_id": 4,
         "npc_class_id": 1,
         "display_id": 118827,
+        "encounter_id": null,
         "name": "Elder Shadeweaver",
         "base_health": 28032847,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1110,23 +1084,18 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4866,
                 "spell_id": 443427
             },
             {
-                "id": 4867,
                 "spell_id": 444428
             },
             {
-                "id": 4868,
                 "spell_id": 446717
             },
             {
-                "id": 4869,
                 "spell_id": 446718
             },
             {
-                "id": 4870,
                 "spell_id": 446726
             }
         ],
@@ -1139,10 +1108,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 118826,
+        "encounter_id": null,
         "name": "Hulking Warshell",
         "base_health": 39245986,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1154,19 +1125,15 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4871,
                 "spell_id": 443507
             },
             {
-                "id": 4872,
                 "spell_id": 443509
             },
             {
-                "id": 4873,
                 "spell_id": 444428
             },
             {
-                "id": 4874,
                 "spell_id": 447271
             }
         ],
@@ -1179,10 +1146,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 116681,
+        "encounter_id": null,
         "name": "Trained Flyer",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1202,10 +1171,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 116681,
+        "encounter_id": null,
         "name": "Trained Flyer",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1225,10 +1196,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 118005,
+        "encounter_id": null,
         "name": "Umbral Weave",
         "base_health": 277289,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1248,10 +1221,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 116480,
+        "encounter_id": null,
         "name": "Hungry Scarab",
         "base_health": 1109154,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1271,10 +1246,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 119370,
+        "encounter_id": null,
         "name": "Agile Pursuer",
         "base_health": 14016424,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1286,7 +1263,6 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4848,
                 "spell_id": 448030
             }
         ],
@@ -1299,10 +1275,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 119369,
+        "encounter_id": null,
         "name": "Web Marauder",
         "base_health": 18221351,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1314,7 +1292,6 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4847,
                 "spell_id": 452151
             }
         ],
@@ -1327,10 +1304,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 118964,
+        "encounter_id": null,
         "name": "Queen Ansurek",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1350,10 +1329,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 120886,
+        "encounter_id": null,
         "name": "Sureki Conscript",
         "base_health": 8409854,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1365,11 +1346,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4851,
                 "spell_id": 451238
             },
             {
-                "id": 4852,
                 "spell_id": 451239
             }
         ],
@@ -1382,10 +1361,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 114026,
+        "encounter_id": null,
         "name": "Pale Priest",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1405,10 +1386,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 118106,
+        "encounter_id": null,
         "name": "Covert Webmancer",
         "base_health": 14016424,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 0.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1420,11 +1403,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 4849,
                 "spell_id": 442536
             },
             {
-                "id": 4850,
                 "spell_id": 452162
             }
         ],
@@ -1437,10 +1418,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 115750,
+        "encounter_id": null,
         "name": "Silkswooner Waree",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1460,10 +1443,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 117326,
+        "encounter_id": null,
         "name": "Phylleus",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1483,10 +1468,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 119369,
+        "encounter_id": null,
         "name": "Web Marauder",
         "base_health": 7209501,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1506,10 +1493,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 118106,
+        "encounter_id": null,
         "name": "Covert Webmancer",
         "base_health": 5545770,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1529,10 +1518,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 118410,
+        "encounter_id": null,
         "name": "Van'atka",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1552,10 +1543,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 119910,
+        "encounter_id": null,
         "name": "Kobyss Puppet",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1575,10 +1568,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 114421,
+        "encounter_id": null,
         "name": "Fliq'ri",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,

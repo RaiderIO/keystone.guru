@@ -6,33 +6,22 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class MDTNpc implements Arrayable
 {
-    private array $clones;
-
-    private int $id = 0;
-
-    private array $spells = [];
-
-    private float $scale = 0.0;
-
-    private bool $stealthDetect = false;
-
-    private int $countTeeming = 0;
-
-    private int $count = 0;
-
-    private string $name;
-
-    private int $displayId = 0;
-
-    private string $creatureType;
-
-    private int $level = 0;
-
-    private int $health = 0;
-
+    private array         $clones;
+    private int           $id              = 0;
+    private array         $spells          = [];
+    private float         $scale           = 0.0;
+    private bool          $stealthDetect   = false;
+    private int           $countTeeming    = 0;
+    private int           $count           = 0;
+    private string        $name;
+    private int           $displayId       = 0;
+    private ?int          $encounterId     = null;
+    private ?int          $instanceId      = null;
+    private string        $creatureType;
+    private int           $level           = 0;
+    private int           $health          = 0;
     private readonly ?int $healthPercentage;
-
-    private array $characteristics = [];
+    private array         $characteristics = [];
 
     public function __construct(private readonly int $index, private array $rawMdtNpc)
     {
@@ -65,7 +54,9 @@ class MDTNpc implements Arrayable
             $this->name = $this->rawMdtNpc['name'];
         }
 
-        $this->displayId = (int)$this->rawMdtNpc['displayId'];
+        $this->displayId   = (int)$this->rawMdtNpc['displayId'];
+        $this->encounterId = $this->rawMdtNpc['encounterID'] ?? null;
+        $this->instanceId  = $this->rawMdtNpc['instanceID'] ?? null;
         // May not always be set?
         if (isset($this->rawMdtNpc['creatureType'])) {
             $this->creatureType = $this->rawMdtNpc['creatureType'];
@@ -170,6 +161,16 @@ class MDTNpc implements Arrayable
     public function getDisplayId(): int
     {
         return $this->displayId;
+    }
+
+    public function getEncounterId(): ?int
+    {
+        return $this->encounterId;
+    }
+
+    public function getInstanceId(): ?int
+    {
+        return $this->instanceId;
     }
 
     public function getCreatureType(): ?string

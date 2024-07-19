@@ -6,10 +6,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 42978,
+        "encounter_id": null,
         "name": "Silt Crab",
         "base_health": 768495,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -20,57 +22,44 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2141,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2142,
                 "characteristic_id": 5
             },
             {
-                "id": 2143,
-                "characteristic_id": 18
+                "characteristic_id": 10
             },
             {
-                "id": 2144,
                 "characteristic_id": 2
             },
             {
-                "id": 2145,
-                "characteristic_id": 19
-            },
-            {
-                "id": 2146,
                 "characteristic_id": 12
             },
             {
-                "id": 2147,
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 2148,
                 "characteristic_id": 1
             },
             {
-                "id": 2149,
-                "characteristic_id": 10
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1596,
                 "spell_id": 209859
             },
             {
-                "id": 1597,
                 "spell_id": 258058
             },
             {
-                "id": 1598,
                 "spell_id": 277242
             },
             {
-                "id": 1599,
                 "spell_id": 277564
             }
         ],
@@ -91,10 +80,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 46043,
+        "encounter_id": null,
         "name": "Saltwater Snapper",
         "base_health": 922194,
         "health_percentage": null,
         "level": 121,
+        "mdt_scale": 1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -105,29 +96,23 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2118,
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 12
             },
             {
-                "id": 2119,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2120,
                 "characteristic_id": 1
             },
             {
-                "id": 2121,
-                "characteristic_id": 18
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1586,
                 "spell_id": 209859
             },
             {
-                "id": 1587,
                 "spell_id": 258054
             }
         ],
@@ -148,10 +133,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 82983,
+        "encounter_id": 2097,
         "name": "The Sand Queen",
         "base_health": 5379465,
         "health_percentage": null,
         "level": 122,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -162,41 +149,32 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2150,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 1600,
                 "spell_id": 205276
             },
             {
-                "id": 1601,
                 "spell_id": 257092
             },
             {
-                "id": 1602,
                 "spell_id": 257495
             },
             {
-                "id": 1603,
                 "spell_id": 257580
             },
             {
-                "id": 1604,
                 "spell_id": 257608
             },
             {
-                "id": 1605,
                 "spell_id": 257617
             },
             {
-                "id": 1606,
                 "spell_id": 259975
             },
             {
-                "id": 1607,
                 "spell_id": 277564
             }
         ],
@@ -209,10 +187,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 5990,
+        "encounter_id": null,
         "name": "Stinging Parasite",
         "base_health": 230549,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 0.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -223,53 +203,41 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2122,
                 "characteristic_id": 19
             },
             {
-                "id": 2123,
-                "characteristic_id": 2
-            },
-            {
-                "id": 2124,
                 "characteristic_id": 18
             },
             {
-                "id": 2125,
-                "characteristic_id": 10
-            },
-            {
-                "id": 2126,
                 "characteristic_id": 12
             },
             {
-                "id": 2127,
                 "characteristic_id": 14
             },
             {
-                "id": 2128,
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
                 "characteristic_id": 1
             },
             {
-                "id": 2129,
-                "characteristic_id": 11
+                "characteristic_id": 2
             }
         ],
         "npc_spells": [
             {
-                "id": 1588,
                 "spell_id": 209859
             },
             {
-                "id": 1589,
                 "spell_id": 258075
             },
             {
-                "id": 1590,
                 "spell_id": 277242
             },
             {
-                "id": 1591,
                 "spell_id": 277564
             }
         ],
@@ -290,10 +258,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 84333,
+        "encounter_id": null,
         "name": "Sewer Vicejaw",
         "base_health": 845345,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -304,65 +274,50 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2130,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2131,
-                "characteristic_id": 10
-            },
-            {
-                "id": 2132,
-                "characteristic_id": 18
-            },
-            {
-                "id": 2133,
                 "characteristic_id": 9
             },
             {
-                "id": 2134,
-                "characteristic_id": 2
-            },
-            {
-                "id": 2135,
                 "characteristic_id": 19
             },
             {
-                "id": 2136,
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
                 "characteristic_id": 17
             },
             {
-                "id": 2137,
                 "characteristic_id": 12
             },
             {
-                "id": 2138,
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 16
             },
             {
-                "id": 2139,
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 1
             },
             {
-                "id": 2140,
-                "characteristic_id": 14
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1592,
                 "spell_id": 209859
             },
             {
-                "id": 1593,
                 "spell_id": 258079
             },
             {
-                "id": 1594,
                 "spell_id": 277242
             },
             {
-                "id": 1595,
                 "spell_id": 277564
             }
         ],
@@ -383,10 +338,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81739,
+        "encounter_id": 2098,
         "name": "Jes Howlis",
         "base_health": 4610970,
         "health_percentage": null,
         "level": 122,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -397,45 +354,35 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2224,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 1640,
                 "spell_id": 205276
             },
             {
-                "id": 1641,
                 "spell_id": 257777
             },
             {
-                "id": 1642,
                 "spell_id": 257785
             },
             {
-                "id": 1643,
                 "spell_id": 257791
             },
             {
-                "id": 1644,
                 "spell_id": 257793
             },
             {
-                "id": 1645,
                 "spell_id": 257814
             },
             {
-                "id": 1646,
                 "spell_id": 257827
             },
             {
-                "id": 1647,
                 "spell_id": 257956
             },
             {
-                "id": 1648,
                 "spell_id": 258544
             }
         ],
@@ -448,10 +395,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 79322,
+        "encounter_id": null,
         "name": "Bilge Rat Looter",
         "base_health": 461097,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -462,61 +411,47 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2180,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2181,
                 "characteristic_id": 5
             },
             {
-                "id": 2182,
-                "characteristic_id": 18
+                "characteristic_id": 10
             },
             {
-                "id": 2183,
                 "characteristic_id": 2
             },
             {
-                "id": 2184,
-                "characteristic_id": 19
-            },
-            {
-                "id": 2185,
                 "characteristic_id": 12
             },
             {
-                "id": 2186,
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 2187,
                 "characteristic_id": 1
             },
             {
-                "id": 2188,
-                "characteristic_id": 10
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1622,
                 "spell_id": 209859
             },
             {
-                "id": 1623,
                 "spell_id": 258133
             },
             {
-                "id": 1624,
                 "spell_id": 258134
             },
             {
-                "id": 1625,
                 "spell_id": 277242
             },
             {
-                "id": 1626,
                 "spell_id": 277564
             }
         ],
@@ -537,10 +472,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 84380,
+        "encounter_id": null,
         "name": "Ashvane Officer",
         "base_health": 1229592,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
@@ -551,73 +488,56 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2234,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2235,
                 "characteristic_id": 5
             },
             {
-                "id": 2236,
-                "characteristic_id": 18
+                "characteristic_id": 10
             },
             {
-                "id": 2237,
-                "characteristic_id": 16
-            },
-            {
-                "id": 2238,
                 "characteristic_id": 2
             },
             {
-                "id": 2239,
-                "characteristic_id": 19
-            },
-            {
-                "id": 2240,
                 "characteristic_id": 17
             },
             {
-                "id": 2241,
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 12
             },
             {
-                "id": 2242,
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 2243,
                 "characteristic_id": 1
             },
             {
-                "id": 2244,
-                "characteristic_id": 10
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1652,
                 "spell_id": 132951
             },
             {
-                "id": 1653,
                 "spell_id": 209859
             },
             {
-                "id": 1654,
                 "spell_id": 258313
             },
             {
-                "id": 1655,
                 "spell_id": 258317
             },
             {
-                "id": 1656,
                 "spell_id": 277242
             },
             {
-                "id": 1657,
                 "spell_id": 277564
             }
         ],
@@ -638,10 +558,12 @@
         "npc_type_id": 8,
         "npc_class_id": 2,
         "display_id": 81520,
+        "encounter_id": null,
         "name": "Ashvane Flamecaster",
         "base_health": 1075893,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -652,61 +574,47 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2256,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2257,
                 "characteristic_id": 5
             },
             {
-                "id": 2258,
-                "characteristic_id": 18
+                "characteristic_id": 10
             },
             {
-                "id": 2259,
                 "characteristic_id": 2
             },
             {
-                "id": 2260,
-                "characteristic_id": 19
-            },
-            {
-                "id": 2261,
                 "characteristic_id": 12
             },
             {
-                "id": 2262,
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 2263,
                 "characteristic_id": 1
             },
             {
-                "id": 2264,
-                "characteristic_id": 10
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1664,
                 "spell_id": 209859
             },
             {
-                "id": 1665,
                 "spell_id": 258634
             },
             {
-                "id": 1666,
                 "spell_id": 258869
             },
             {
-                "id": 1667,
                 "spell_id": 277242
             },
             {
-                "id": 1668,
                 "spell_id": 277564
             }
         ],
@@ -727,10 +635,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81498,
+        "encounter_id": 2099,
         "name": "Knight Captain Valyri",
         "base_health": 5379465,
         "health_percentage": null,
         "level": 122,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -741,25 +651,20 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2276,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 1672,
                 "spell_id": 256955
             },
             {
-                "id": 1673,
                 "spell_id": 256970
             },
             {
-                "id": 1674,
                 "spell_id": 256976
             },
             {
-                "id": 1675,
                 "spell_id": 257028
             }
         ],
@@ -772,10 +677,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81496,
+        "encounter_id": null,
         "name": "Ashvane Warden",
         "base_health": 1383291,
         "health_percentage": null,
         "level": 121,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
@@ -786,57 +693,44 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2277,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2278,
                 "characteristic_id": 5
             },
             {
-                "id": 2279,
-                "characteristic_id": 18
+                "characteristic_id": 10
             },
             {
-                "id": 2280,
-                "characteristic_id": 19
-            },
-            {
-                "id": 2281,
                 "characteristic_id": 2
             },
             {
-                "id": 2282,
                 "characteristic_id": 17
             },
             {
-                "id": 2283,
-                "characteristic_id": 15
+                "characteristic_id": 19
             },
             {
-                "id": 2284,
                 "characteristic_id": 12
             },
             {
-                "id": 2285,
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 2286,
                 "characteristic_id": 1
             },
             {
-                "id": 2287,
-                "characteristic_id": 10
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1676,
                 "spell_id": 259188
             },
             {
-                "id": 1677,
                 "spell_id": 259711
             }
         ],
@@ -857,10 +751,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81505,
+        "encounter_id": 2096,
         "name": "Overseer Korgus",
         "base_health": 6609057,
         "health_percentage": null,
         "level": 122,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -871,53 +767,41 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2297,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 1684,
                 "spell_id": 256038
             },
             {
-                "id": 1685,
                 "spell_id": 256039
             },
             {
-                "id": 1686,
                 "spell_id": 256044
             },
             {
-                "id": 1687,
                 "spell_id": 256083
             },
             {
-                "id": 1688,
                 "spell_id": 256101
             },
             {
-                "id": 1689,
                 "spell_id": 256105
             },
             {
-                "id": 1690,
                 "spell_id": 256128
             },
             {
-                "id": 1691,
                 "spell_id": 256198
             },
             {
-                "id": 1692,
                 "spell_id": 256199
             },
             {
-                "id": 1693,
                 "spell_id": 256200
             },
             {
-                "id": 1694,
                 "spell_id": 256201
             }
         ],
@@ -930,10 +814,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81499,
+        "encounter_id": null,
         "name": "Irontide Thug",
         "base_health": 1152743,
         "health_percentage": null,
         "level": 121,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
@@ -944,21 +830,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2151,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 1608,
                 "spell_id": 209859
             },
             {
-                "id": 1609,
                 "spell_id": 258128
             },
             {
-                "id": 1610,
                 "spell_id": 277564
             }
         ],
@@ -979,10 +861,12 @@
         "npc_type_id": 8,
         "npc_class_id": 3,
         "display_id": 42840,
+        "encounter_id": null,
         "name": "Bilge Rat Seaspeaker",
         "base_health": 691646,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -993,73 +877,56 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2200,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2201,
-                "characteristic_id": 5
-            },
-            {
-                "id": 2202,
-                "characteristic_id": 18
-            },
-            {
-                "id": 2203,
                 "characteristic_id": 9
             },
             {
-                "id": 2204,
-                "characteristic_id": 19
+                "characteristic_id": 5
             },
             {
-                "id": 2205,
+                "characteristic_id": 10
+            },
+            {
                 "characteristic_id": 2
             },
             {
-                "id": 2206,
                 "characteristic_id": 17
             },
             {
-                "id": 2207,
-                "characteristic_id": 16
+                "characteristic_id": 19
             },
             {
-                "id": 2208,
                 "characteristic_id": 12
             },
             {
-                "id": 2209,
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 2210,
                 "characteristic_id": 1
             },
             {
-                "id": 2211,
-                "characteristic_id": 10
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1631,
                 "spell_id": 209859
             },
             {
-                "id": 1632,
                 "spell_id": 258150
             },
             {
-                "id": 1633,
                 "spell_id": 258153
             },
             {
-                "id": 1634,
                 "spell_id": 277242
             },
             {
-                "id": 1635,
                 "spell_id": 277564
             }
         ],
@@ -1080,10 +947,12 @@
         "npc_type_id": 8,
         "npc_class_id": 2,
         "display_id": 81513,
+        "encounter_id": null,
         "name": "Ashvane Marine",
         "base_health": 1229592,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1094,73 +963,56 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2245,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2246,
                 "characteristic_id": 5
             },
             {
-                "id": 2247,
-                "characteristic_id": 18
+                "characteristic_id": 10
             },
             {
-                "id": 2248,
-                "characteristic_id": 16
-            },
-            {
-                "id": 2249,
                 "characteristic_id": 2
             },
             {
-                "id": 2250,
-                "characteristic_id": 19
-            },
-            {
-                "id": 2251,
                 "characteristic_id": 17
             },
             {
-                "id": 2252,
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 12
             },
             {
-                "id": 2253,
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 2254,
                 "characteristic_id": 1
             },
             {
-                "id": 2255,
-                "characteristic_id": 10
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1658,
                 "spell_id": 132951
             },
             {
-                "id": 1659,
                 "spell_id": 185857
             },
             {
-                "id": 1660,
                 "spell_id": 209859
             },
             {
-                "id": 1661,
                 "spell_id": 258864
             },
             {
-                "id": 1662,
                 "spell_id": 277242
             },
             {
-                "id": 1663,
                 "spell_id": 277564
             }
         ],
@@ -1181,10 +1033,12 @@
         "npc_type_id": 8,
         "npc_class_id": 3,
         "display_id": 81550,
+        "encounter_id": null,
         "name": "Ashvane Priest",
         "base_health": 1229592,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1195,65 +1049,50 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2288,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2289,
                 "characteristic_id": 5
             },
             {
-                "id": 2290,
-                "characteristic_id": 18
+                "characteristic_id": 10
             },
             {
-                "id": 2291,
                 "characteristic_id": 2
             },
             {
-                "id": 2292,
                 "characteristic_id": 17
             },
             {
-                "id": 2293,
                 "characteristic_id": 12
             },
             {
-                "id": 2294,
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 2295,
                 "characteristic_id": 1
             },
             {
-                "id": 2296,
-                "characteristic_id": 10
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1678,
                 "spell_id": 209859
             },
             {
-                "id": 1679,
                 "spell_id": 258917
             },
             {
-                "id": 1680,
                 "spell_id": 258935
             },
             {
-                "id": 1681,
                 "spell_id": 258938
             },
             {
-                "id": 1682,
                 "spell_id": 277242
             },
             {
-                "id": 1683,
                 "spell_id": 277564
             }
         ],
@@ -1274,10 +1113,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 82828,
+        "encounter_id": null,
         "name": "Despondent Scallywag",
         "base_health": 230549,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -1288,45 +1129,35 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2173,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2174,
                 "characteristic_id": 19
             },
             {
-                "id": 2175,
                 "characteristic_id": 5
             },
             {
-                "id": 2176,
-                "characteristic_id": 12
-            },
-            {
-                "id": 2177,
                 "characteristic_id": 18
             },
             {
-                "id": 2178,
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 1
             },
             {
-                "id": 2179,
-                "characteristic_id": 14
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1619,
                 "spell_id": 209859
             },
             {
-                "id": 1620,
                 "spell_id": 277242
             },
             {
-                "id": 1621,
                 "spell_id": 277564
             }
         ],
@@ -1339,10 +1170,12 @@
         "npc_type_id": 8,
         "npc_class_id": 2,
         "display_id": 78990,
+        "encounter_id": null,
         "name": "Cutwater Striker",
         "base_health": 768495,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1353,125 +1186,95 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2152,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2153,
                 "characteristic_id": 5
             },
             {
-                "id": 2154,
-                "characteristic_id": 18
-            },
-            {
-                "id": 2155,
-                "characteristic_id": 16
-            },
-            {
-                "id": 2156,
-                "characteristic_id": 2
-            },
-            {
-                "id": 2157,
-                "characteristic_id": 19
-            },
-            {
-                "id": 2158,
-                "characteristic_id": 17
-            },
-            {
-                "id": 2159,
-                "characteristic_id": 12
-            },
-            {
-                "id": 2160,
-                "characteristic_id": 14
-            },
-            {
-                "id": 2161,
-                "characteristic_id": 1
-            },
-            {
-                "id": 2162,
                 "characteristic_id": 10
             },
             {
-                "id": 2189,
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 1
+            },
+            {
                 "characteristic_id": 11
             },
             {
-                "id": 2190,
                 "characteristic_id": 5
             },
             {
-                "id": 2191,
-                "characteristic_id": 18
+                "characteristic_id": 10
             },
             {
-                "id": 2192,
-                "characteristic_id": 16
-            },
-            {
-                "id": 2193,
                 "characteristic_id": 2
             },
             {
-                "id": 2194,
-                "characteristic_id": 19
-            },
-            {
-                "id": 2195,
                 "characteristic_id": 17
             },
             {
-                "id": 2196,
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 12
             },
             {
-                "id": 2197,
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 2198,
                 "characteristic_id": 1
             },
             {
-                "id": 2199,
-                "characteristic_id": 10
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1611,
                 "spell_id": 209859
             },
             {
-                "id": 1612,
                 "spell_id": 272620
             },
             {
-                "id": 1613,
                 "spell_id": 277242
             },
             {
-                "id": 1614,
                 "spell_id": 277564
             },
             {
-                "id": 1627,
                 "spell_id": 209859
             },
             {
-                "id": 1628,
                 "spell_id": 272620
             },
             {
-                "id": 1629,
                 "spell_id": 277242
             },
             {
-                "id": 1630,
                 "spell_id": 277564
             }
         ],
@@ -1492,10 +1295,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81496,
+        "encounter_id": null,
         "name": "Block Warden",
         "base_health": 1383289,
         "health_percentage": null,
         "level": 121,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1506,45 +1311,35 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2217,
-                "characteristic_id": 2
-            },
-            {
-                "id": 2218,
                 "characteristic_id": 19
             },
             {
-                "id": 2219,
                 "characteristic_id": 5
             },
             {
-                "id": 2220,
-                "characteristic_id": 12
-            },
-            {
-                "id": 2221,
                 "characteristic_id": 18
             },
             {
-                "id": 2222,
                 "characteristic_id": 14
             },
             {
-                "id": 2223,
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 2
             }
         ],
         "npc_spells": [
             {
-                "id": 1637,
                 "spell_id": 259188
             },
             {
-                "id": 1638,
                 "spell_id": 259711
             },
             {
-                "id": 1639,
                 "spell_id": 277564
             }
         ],
@@ -1565,10 +1360,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 79064,
+        "encounter_id": null,
         "name": "Irontide Raider",
         "base_health": 461096,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1579,29 +1376,23 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2212,
-                "characteristic_id": 2
-            },
-            {
-                "id": 2213,
                 "characteristic_id": 18
             },
             {
-                "id": 2214,
                 "characteristic_id": 19
             },
             {
-                "id": 2215,
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 1
             },
             {
-                "id": 2216,
-                "characteristic_id": 11
+                "characteristic_id": 2
             }
         ],
         "npc_spells": [
             {
-                "id": 1636,
                 "spell_id": 209859
             }
         ],
@@ -1622,10 +1413,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 84394,
+        "encounter_id": null,
         "name": "Blacktooth Arsonist",
         "base_health": 845345,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1636,61 +1429,47 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2163,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2164,
                 "characteristic_id": 5
             },
             {
-                "id": 2165,
-                "characteristic_id": 18
-            },
-            {
-                "id": 2166,
-                "characteristic_id": 16
-            },
-            {
-                "id": 2167,
                 "characteristic_id": 2
             },
             {
-                "id": 2168,
-                "characteristic_id": 19
-            },
-            {
-                "id": 2169,
-                "characteristic_id": 12
-            },
-            {
-                "id": 2170,
                 "characteristic_id": 17
             },
             {
-                "id": 2171,
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 1
             },
             {
-                "id": 2172,
-                "characteristic_id": 14
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1615,
                 "spell_id": 209859
             },
             {
-                "id": 1616,
                 "spell_id": 265889
             },
             {
-                "id": 1617,
                 "spell_id": 277242
             },
             {
-                "id": 1618,
                 "spell_id": 277564
             }
         ],
@@ -1711,10 +1490,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81513,
+        "encounter_id": null,
         "name": "Ashvane Jailer",
         "base_health": 1229590,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
@@ -1725,53 +1506,41 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2225,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2226,
                 "characteristic_id": 5
             },
             {
-                "id": 2227,
-                "characteristic_id": 18
-            },
-            {
-                "id": 2228,
                 "characteristic_id": 2
             },
             {
-                "id": 2229,
-                "characteristic_id": 19
-            },
-            {
-                "id": 2230,
-                "characteristic_id": 12
-            },
-            {
-                "id": 2231,
                 "characteristic_id": 17
             },
             {
-                "id": 2232,
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 1
             },
             {
-                "id": 2233,
-                "characteristic_id": 14
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1649,
                 "spell_id": 209859
             },
             {
-                "id": 1650,
                 "spell_id": 258313
             },
             {
-                "id": 1651,
                 "spell_id": 258317
             }
         ],
@@ -1792,10 +1561,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 79322,
+        "encounter_id": null,
         "name": "Bilge Rat Looter",
         "base_health": 461096,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1806,13 +1577,11 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2298,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 1695,
                 "spell_id": 209859
             }
         ],
@@ -1833,10 +1602,12 @@
         "npc_type_id": 8,
         "npc_class_id": 2,
         "display_id": 81513,
+        "encounter_id": null,
         "name": "Ashvane Spotter",
         "base_health": 1229592,
         "health_percentage": null,
         "level": 120,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1847,61 +1618,47 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 2265,
-                "characteristic_id": 11
-            },
-            {
-                "id": 2266,
                 "characteristic_id": 5
             },
             {
-                "id": 2267,
-                "characteristic_id": 18
+                "characteristic_id": 10
             },
             {
-                "id": 2268,
-                "characteristic_id": 16
-            },
-            {
-                "id": 2269,
                 "characteristic_id": 2
             },
             {
-                "id": 2270,
-                "characteristic_id": 19
-            },
-            {
-                "id": 2271,
                 "characteristic_id": 17
             },
             {
-                "id": 2272,
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 12
             },
             {
-                "id": 2273,
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 2274,
                 "characteristic_id": 1
             },
             {
-                "id": 2275,
-                "characteristic_id": 10
+                "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 1669,
                 "spell_id": 185857
             },
             {
-                "id": 1670,
                 "spell_id": 209859
             },
             {
-                "id": 1671,
                 "spell_id": 258864
             }
         ],

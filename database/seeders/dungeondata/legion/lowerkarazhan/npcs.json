@@ -6,10 +6,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 16198,
+        "encounter_id": 1555,
         "name": "Maiden of Virtue",
         "base_health": 1491350,
         "health_percentage": null,
         "level": 112,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -20,37 +22,29 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 725,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 393,
                 "spell_id": 227508
             },
             {
-                "id": 394,
                 "spell_id": 227789
             },
             {
-                "id": 395,
                 "spell_id": 227800
             },
             {
-                "id": 396,
                 "spell_id": 227809
             },
             {
-                "id": 397,
                 "spell_id": 227817
             },
             {
-                "id": 398,
                 "spell_id": 227823
             },
             {
-                "id": 399,
                 "spell_id": 227848
             }
         ],
@@ -63,10 +57,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 73201,
+        "encounter_id": null,
         "name": "Volatile Energy",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -86,10 +82,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73156,
+        "encounter_id": null,
         "name": "Galindre",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -109,10 +107,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73161,
+        "encounter_id": null,
         "name": "Mrrgria",
         "base_health": 52744,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -132,10 +132,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73159,
+        "encounter_id": null,
         "name": "Toe Knee",
         "base_health": 52744,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -155,10 +157,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73162,
+        "encounter_id": null,
         "name": "Attumen the Huntsman",
         "base_health": 41023,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -178,10 +182,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73811,
+        "encounter_id": 1835,
         "name": "Attumen the Huntsman",
         "base_health": 426100,
         "health_percentage": null,
         "level": 112,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -192,33 +198,26 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 726,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 400,
                 "spell_id": 227339
             },
             {
-                "id": 401,
                 "spell_id": 227363
             },
             {
-                "id": 402,
                 "spell_id": 227365
             },
             {
-                "id": 403,
                 "spell_id": 227404
             },
             {
-                "id": 404,
                 "spell_id": 227645
             },
             {
-                "id": 405,
                 "spell_id": 228895
             }
         ],
@@ -231,10 +230,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 2315,
+        "encounter_id": null,
         "name": "Gang Ruffian",
         "base_health": 11328,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -254,10 +255,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73461,
+        "encounter_id": null,
         "name": "Shoreline Tidespeaker",
         "base_health": 11328,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -277,10 +280,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 17550,
+        "encounter_id": 1820,
         "name": "Opera Hall: Wikket",
         "base_health": 132731495,
         "health_percentage": null,
         "level": 112,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -300,10 +305,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16540,
+        "encounter_id": 1837,
         "name": "Moroes",
         "base_health": 1193080,
         "health_percentage": null,
         "level": 112,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -314,33 +321,26 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 727,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 406,
                 "spell_id": 227736
             },
             {
-                "id": 407,
                 "spell_id": 227737
             },
             {
-                "id": 408,
                 "spell_id": 227742
             },
             {
-                "id": 409,
                 "spell_id": 227832
             },
             {
-                "id": 410,
                 "spell_id": 227851
             },
             {
-                "id": 411,
                 "spell_id": 227872
             }
         ],
@@ -353,10 +353,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73194,
+        "encounter_id": null,
         "name": "Baroness Dorothea Millstipe",
         "base_health": 18125,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -376,10 +378,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73195,
+        "encounter_id": null,
         "name": "Lady Catriona Von'Indi",
         "base_health": 18125,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -399,10 +403,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73196,
+        "encounter_id": null,
         "name": "Baron Rafe Dreuger",
         "base_health": 18125,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -422,10 +428,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73197,
+        "encounter_id": null,
         "name": "Lady Keira Berrybuck",
         "base_health": 18125,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -445,10 +453,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73198,
+        "encounter_id": null,
         "name": "Lord Robin Daris",
         "base_health": 18125,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -468,10 +478,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73199,
+        "encounter_id": null,
         "name": "Lord Crispin Ference",
         "base_health": 18125,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -491,10 +503,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73262,
+        "encounter_id": null,
         "name": "Winged Assistant",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -514,10 +528,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 73202,
+        "encounter_id": null,
         "name": "Coggleston",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -537,10 +553,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 65104,
+        "encounter_id": null,
         "name": "Luminore",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -560,10 +578,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 73203,
+        "encounter_id": null,
         "name": "Babblet",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -583,10 +603,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 18039,
+        "encounter_id": null,
         "name": "Barnes",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -606,10 +628,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 18718,
+        "encounter_id": null,
         "name": "Medivh",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -629,10 +653,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 45436,
+        "encounter_id": null,
         "name": "Figero",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -652,10 +678,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 73301,
+        "encounter_id": null,
         "name": "Mrs. Cauldrons",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -675,10 +703,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73302,
+        "encounter_id": null,
         "name": "Ghostly Understudy",
         "base_health": 213050,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -689,33 +719,26 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 676,
-                "characteristic_id": 18
+                "characteristic_id": 11
             },
             {
-                "id": 677,
                 "characteristic_id": 14
             },
             {
-                "id": 678,
-                "characteristic_id": 1
+                "characteristic_id": 18
             },
             {
-                "id": 679,
-                "characteristic_id": 11
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 345,
                 "spell_id": 227917
             },
             {
-                "id": 346,
                 "spell_id": 227925
             },
             {
-                "id": 347,
                 "spell_id": 227927
             }
         ],
@@ -743,10 +766,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16555,
+        "encounter_id": null,
         "name": "Spectral Patron",
         "base_health": 85220,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -757,33 +782,26 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 667,
-                "characteristic_id": 18
+                "characteristic_id": 11
             },
             {
-                "id": 668,
                 "characteristic_id": 14
             },
             {
-                "id": 669,
-                "characteristic_id": 1
+                "characteristic_id": 18
             },
             {
-                "id": 670,
-                "characteristic_id": 11
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 333,
                 "spell_id": 227981
             },
             {
-                "id": 334,
                 "spell_id": 227983
             },
             {
-                "id": 335,
                 "spell_id": 228014
             }
         ],
@@ -811,10 +829,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73336,
+        "encounter_id": null,
         "name": "Ghostly Philanthropist",
         "base_health": 213050,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -825,45 +845,35 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 671,
                 "characteristic_id": 2
             },
             {
-                "id": 672,
                 "characteristic_id": 14
             },
             {
-                "id": 673,
-                "characteristic_id": 1
+                "characteristic_id": 18
             },
             {
-                "id": 674,
-                "characteristic_id": 18
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 336,
                 "spell_id": 227999
             },
             {
-                "id": 337,
                 "spell_id": 228001
             },
             {
-                "id": 338,
                 "spell_id": 228010
             },
             {
-                "id": 339,
                 "spell_id": 228014
             },
             {
-                "id": 340,
                 "spell_id": 228017
             },
             {
-                "id": 341,
                 "spell_id": 238566
             }
         ],
@@ -891,10 +901,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73313,
+        "encounter_id": null,
         "name": "Skeletal Usher",
         "base_health": 340880,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -905,21 +917,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 684,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 350,
                 "spell_id": 227965
             },
             {
-                "id": 351,
                 "spell_id": 227966
             },
             {
-                "id": 352,
                 "spell_id": 227977
             }
         ],
@@ -947,10 +955,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73309,
+        "encounter_id": null,
         "name": "Bella",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -970,10 +980,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73323,
+        "encounter_id": null,
         "name": "Brute",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -993,10 +1005,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73324,
+        "encounter_id": null,
         "name": "Egona Spangly",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1016,10 +1030,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73325,
+        "encounter_id": null,
         "name": "Peta Venkner",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1039,10 +1055,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73359,
+        "encounter_id": null,
         "name": "Gillian Voltzman",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1062,10 +1080,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73354,
+        "encounter_id": null,
         "name": "Mae Stance",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1085,10 +1105,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73338,
+        "encounter_id": null,
         "name": "Phantom Crew",
         "base_health": 340880,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1099,21 +1121,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 675,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 342,
                 "spell_id": 228086
             },
             {
-                "id": 343,
                 "spell_id": 228161
             },
             {
-                "id": 344,
                 "spell_id": 228164
             }
         ],
@@ -1141,10 +1159,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73348,
+        "encounter_id": null,
         "name": "Sebastian",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1164,10 +1184,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 61125,
+        "encounter_id": null,
         "name": "Arcane Warden",
         "base_health": 340880,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1178,17 +1200,14 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 708,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 382,
                 "spell_id": 228320
             },
             {
-                "id": 383,
                 "spell_id": 238606
             }
         ],
@@ -1216,10 +1235,12 @@
         "npc_type_id": 10,
         "npc_class_id": 5,
         "display_id": 16464,
+        "encounter_id": null,
         "name": "Phantom Guest",
         "base_health": 85220,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1230,65 +1251,50 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 689,
-                "characteristic_id": 14
-            },
-            {
-                "id": 690,
-                "characteristic_id": 18
-            },
-            {
-                "id": 691,
-                "characteristic_id": 2
-            },
-            {
-                "id": 692,
                 "characteristic_id": 1
             },
             {
-                "id": 693,
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 355,
                 "spell_id": 21910
             },
             {
-                "id": 356,
                 "spell_id": 29492
             },
             {
-                "id": 357,
                 "spell_id": 29513
             },
             {
-                "id": 358,
                 "spell_id": 29514
             },
             {
-                "id": 359,
                 "spell_id": 29579
             },
             {
-                "id": 360,
                 "spell_id": 29580
             },
             {
-                "id": 361,
                 "spell_id": 29581
             },
             {
-                "id": 362,
                 "spell_id": 29583
             },
             {
-                "id": 363,
                 "spell_id": 29928
             },
             {
-                "id": 364,
                 "spell_id": 29930
             }
         ],
@@ -1316,10 +1322,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73472,
+        "encounter_id": null,
         "name": "Skeletal Waiter",
         "base_health": 340880,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1330,13 +1338,11 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 709,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 384,
                 "spell_id": 230297
             }
         ],
@@ -1364,10 +1370,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73465,
+        "encounter_id": null,
         "name": "Spectral Retainer",
         "base_health": 340880,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1379,7 +1387,6 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 365,
                 "spell_id": 241784
             }
         ],
@@ -1407,10 +1414,12 @@
         "npc_type_id": 10,
         "npc_class_id": 3,
         "display_id": 16514,
+        "encounter_id": null,
         "name": "Spectral Attendant",
         "base_health": 213050,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1421,17 +1430,14 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 694,
                 "characteristic_id": 2
             }
         ],
         "npc_spells": [
             {
-                "id": 366,
                 "spell_id": 228279
             },
             {
-                "id": 367,
                 "spell_id": 241788
             }
         ],
@@ -1459,10 +1465,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16494,
+        "encounter_id": null,
         "name": "Spectral Valet",
         "base_health": 340880,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1473,13 +1481,11 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 688,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 354,
                 "spell_id": 228278
             }
         ],
@@ -1507,10 +1513,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73417,
+        "encounter_id": null,
         "name": "Undying Servant",
         "base_health": 213050,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1521,21 +1529,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 685,
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 686,
                 "characteristic_id": 1
-            },
-            {
-                "id": 687,
-                "characteristic_id": 18
             }
         ],
         "npc_spells": [
             {
-                "id": 353,
                 "spell_id": 228277
             }
         ],
@@ -1563,10 +1567,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16454,
+        "encounter_id": null,
         "name": "Phantom Guardsman",
         "base_health": 255660,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1577,29 +1583,23 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 695,
                 "characteristic_id": 2
             },
             {
-                "id": 696,
                 "characteristic_id": 14
             },
             {
-                "id": 697,
-                "characteristic_id": 1
+                "characteristic_id": 18
             },
             {
-                "id": 698,
-                "characteristic_id": 18
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 368,
                 "spell_id": 228276
             },
             {
-                "id": 369,
                 "spell_id": 241774
             }
         ],
@@ -1627,10 +1627,12 @@
         "npc_type_id": 10,
         "npc_class_id": 2,
         "display_id": 16458,
+        "encounter_id": null,
         "name": "Spectral Sentry",
         "base_health": 170440,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1641,25 +1643,20 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 705,
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 706,
                 "characteristic_id": 1
-            },
-            {
-                "id": 707,
-                "characteristic_id": 18
             }
         ],
         "npc_spells": [
             {
-                "id": 380,
                 "spell_id": 6660
             },
             {
-                "id": 381,
                 "spell_id": 228273
             }
         ],
@@ -1687,10 +1684,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73355,
+        "encounter_id": null,
         "name": "Babby Yikes",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1710,10 +1709,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73356,
+        "encounter_id": null,
         "name": "Willy Zulemore",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1733,10 +1734,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73357,
+        "encounter_id": null,
         "name": "Aron Gillwort",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1756,10 +1759,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73358,
+        "encounter_id": null,
         "name": "Potter Golem",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1779,10 +1784,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16784,
+        "encounter_id": null,
         "name": "Phantom Hound",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1802,10 +1809,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 73598,
+        "encounter_id": null,
         "name": "Guardian's Image",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1825,10 +1834,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16535,
+        "encounter_id": null,
         "name": "Ghostly Steward",
         "base_health": 14205481,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1863,10 +1874,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16524,
+        "encounter_id": null,
         "name": "Ghostly Chef",
         "base_health": 159788,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1901,10 +1914,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16529,
+        "encounter_id": null,
         "name": "Ghostly Baker",
         "base_health": 170440,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1939,10 +1954,12 @@
         "npc_type_id": 4,
         "npc_class_id": 1,
         "display_id": 16551,
+        "encounter_id": null,
         "name": "Reformed Maiden",
         "base_health": 170440,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1953,33 +1970,26 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 699,
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 700,
                 "characteristic_id": 1
-            },
-            {
-                "id": 701,
-                "characteristic_id": 18
             }
         ],
         "npc_spells": [
             {
-                "id": 370,
                 "spell_id": 228526
             },
             {
-                "id": 371,
                 "spell_id": 228528
             },
             {
-                "id": 372,
                 "spell_id": 241798
             },
             {
-                "id": 373,
                 "spell_id": 241801
             }
         ],
@@ -2007,10 +2017,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16547,
+        "encounter_id": null,
         "name": "Virtuous Lady",
         "base_health": 213050,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2021,25 +2033,20 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 703,
                 "characteristic_id": 18
             },
             {
-                "id": 704,
                 "characteristic_id": 14
             }
         ],
         "npc_spells": [
             {
-                "id": 377,
                 "spell_id": 228559
             },
             {
-                "id": 378,
                 "spell_id": 241808
             },
             {
-                "id": 379,
                 "spell_id": 241809
             }
         ],
@@ -2067,10 +2074,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73458,
+        "encounter_id": null,
         "name": "Skeletal Hound",
         "base_health": 213050,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2105,10 +2114,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16543,
+        "encounter_id": null,
         "name": "Wholesome Hostess",
         "base_health": 191745,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2119,21 +2130,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 702,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 374,
                 "spell_id": 228575
             },
             {
-                "id": 375,
                 "spell_id": 228576
             },
             {
-                "id": 376,
                 "spell_id": 228625
             }
         ],
@@ -2161,10 +2168,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16048,
+        "encounter_id": null,
         "name": "Calliard",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -2184,10 +2193,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16417,
+        "encounter_id": null,
         "name": "Spectral Apprentice",
         "base_health": 202398,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2198,19 +2209,15 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 714,
-                "characteristic_id": 18
-            },
-            {
-                "id": 715,
-                "characteristic_id": 14
-            },
-            {
-                "id": 716,
                 "characteristic_id": 2
             },
             {
-                "id": 717,
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 11
             }
         ],
@@ -2239,10 +2246,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73470,
+        "encounter_id": null,
         "name": "Spectral Journeyman",
         "base_health": 245008,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2253,25 +2262,20 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 710,
-                "characteristic_id": 18
+                "characteristic_id": 11
             },
             {
-                "id": 711,
                 "characteristic_id": 14
             },
             {
-                "id": 712,
-                "characteristic_id": 1
+                "characteristic_id": 18
             },
             {
-                "id": 713,
-                "characteristic_id": 11
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 385,
                 "spell_id": 228637
             }
         ],
@@ -2299,10 +2303,12 @@
         "npc_type_id": 10,
         "npc_class_id": 4,
         "display_id": 16397,
+        "encounter_id": null,
         "name": "Spectral Stable Hand",
         "base_health": 191745,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2313,21 +2319,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 723,
                 "characteristic_id": 18
             }
         ],
         "npc_spells": [
             {
-                "id": 388,
                 "spell_id": 6016
             },
             {
-                "id": 389,
                 "spell_id": 228606
             },
             {
-                "id": 390,
                 "spell_id": 233210
             }
         ],
@@ -2355,10 +2357,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16407,
+        "encounter_id": null,
         "name": "Spectral Charger",
         "base_health": 255660,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2369,33 +2373,26 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 718,
-                "characteristic_id": 14
-            },
-            {
-                "id": 719,
-                "characteristic_id": 18
-            },
-            {
-                "id": 720,
-                "characteristic_id": 2
-            },
-            {
-                "id": 721,
                 "characteristic_id": 1
             },
             {
-                "id": 722,
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 11
             }
         ],
         "npc_spells": [
             {
-                "id": 386,
                 "spell_id": 228603
             },
             {
-                "id": 387,
                 "spell_id": 241828
             }
         ],
@@ -2423,10 +2420,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16165,
+        "encounter_id": null,
         "name": "Koren",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -2446,10 +2445,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 73528,
+        "encounter_id": null,
         "name": "Nightbane",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -2469,10 +2470,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 37397,
+        "encounter_id": null,
         "name": "Bonecurse",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2492,10 +2495,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 11078,
+        "encounter_id": null,
         "name": "Restless Bones",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2515,10 +2520,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73262,
+        "encounter_id": null,
         "name": "Caged Assistant",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -2538,10 +2545,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 16050,
+        "encounter_id": null,
         "name": "Coldmist Widow",
         "base_health": 11364385,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2576,10 +2585,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 72245,
+        "encounter_id": null,
         "name": "Arcanid",
         "base_health": 14030105,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2614,10 +2625,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73613,
+        "encounter_id": null,
         "name": "The Monkey King",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -2637,10 +2650,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 18720,
+        "encounter_id": null,
         "name": "Image of Medivh",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -2660,10 +2675,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 27683,
+        "encounter_id": null,
         "name": "Coldmist Stalker",
         "base_health": 11364385,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2698,10 +2715,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 37786,
+        "encounter_id": null,
         "name": "Image of Arcanagos",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -2721,10 +2740,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 18718,
+        "encounter_id": null,
         "name": "Medivh",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -2744,10 +2765,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 18718,
+        "encounter_id": null,
         "name": "Medivh",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -2767,10 +2790,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73839,
+        "encounter_id": null,
         "name": "Anduin Lothar",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -2790,10 +2815,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73840,
+        "encounter_id": null,
         "name": "Prince Llane Wrynn",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -2813,10 +2840,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 18718,
+        "encounter_id": null,
         "name": "Medivh",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -2836,10 +2865,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 65834,
+        "encounter_id": null,
         "name": "Archmage Khadgar",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -2859,10 +2890,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 65834,
+        "encounter_id": null,
         "name": "Archmage Khadgar",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -2882,10 +2915,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 56765,
+        "encounter_id": null,
         "name": "Archmage Khadgar",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -2905,10 +2940,12 @@
         "npc_type_id": 4,
         "npc_class_id": 1,
         "display_id": 71911,
+        "encounter_id": null,
         "name": "Gleeful Immolator",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2928,10 +2965,12 @@
         "npc_type_id": 4,
         "npc_class_id": 1,
         "display_id": 9016,
+        "encounter_id": null,
         "name": "Felguard Sentry",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2951,10 +2990,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 17067,
+        "encounter_id": null,
         "name": "Romulo",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -2974,10 +3015,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 17068,
+        "encounter_id": null,
         "name": "Julianne",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -2997,10 +3040,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 17069,
+        "encounter_id": null,
         "name": "Dorothee",
         "base_health": 31147,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 1,
         "truesight": 0,
@@ -3020,10 +3065,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 17076,
+        "encounter_id": null,
         "name": "Strawman",
         "base_health": 18688,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 1,
         "truesight": 0,
@@ -3043,10 +3090,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 18261,
+        "encounter_id": null,
         "name": "Roar",
         "base_health": 18688,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 1,
         "truesight": 0,
@@ -3066,10 +3115,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 17187,
+        "encounter_id": null,
         "name": "Tinhead",
         "base_health": 18688,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 1,
         "truesight": 0,
@@ -3089,10 +3140,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 17079,
+        "encounter_id": null,
         "name": "Tito",
         "base_health": 5614,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 1,
         "truesight": 0,
@@ -3112,10 +3165,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 17121,
+        "encounter_id": null,
         "name": "Grandmother",
         "base_health": 1246,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 1,
         "truesight": 0,
@@ -3135,10 +3190,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 17550,
+        "encounter_id": null,
         "name": "The Crone",
         "base_health": 31147,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 1,
         "truesight": 0,
@@ -3158,10 +3215,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 17053,
+        "encounter_id": null,
         "name": "The Big Bad Wolf",
         "base_health": 171010,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -3181,10 +3240,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73803,
+        "encounter_id": null,
         "name": "Medivh",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -3204,10 +3265,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 65834,
+        "encounter_id": null,
         "name": "Archmage Khadgar",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -3227,10 +3290,12 @@
         "npc_type_id": 3,
         "npc_class_id": 1,
         "display_id": 74223,
+        "encounter_id": null,
         "name": "Spider",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -3250,10 +3315,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 73157,
+        "encounter_id": null,
         "name": "Mana Devourer",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -3273,10 +3340,12 @@
         "npc_type_id": 3,
         "npc_class_id": 1,
         "display_id": 36357,
+        "encounter_id": null,
         "name": "Rat",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -3296,10 +3365,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 74235,
+        "encounter_id": null,
         "name": "Backup Singer",
         "base_health": 127830,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -3310,29 +3381,23 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 680,
                 "characteristic_id": 2
             },
             {
-                "id": 681,
                 "characteristic_id": 14
             },
             {
-                "id": 682,
-                "characteristic_id": 1
+                "characteristic_id": 18
             },
             {
-                "id": 683,
-                "characteristic_id": 18
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 348,
                 "spell_id": 232084
             },
             {
-                "id": 349,
                 "spell_id": 232115
             }
         ],
@@ -3360,10 +3425,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16555,
+        "encounter_id": null,
         "name": "Spectral Patron",
         "base_health": 85220,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -3374,33 +3441,26 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 730,
-                "characteristic_id": 18
+                "characteristic_id": 11
             },
             {
-                "id": 731,
                 "characteristic_id": 14
             },
             {
-                "id": 732,
-                "characteristic_id": 1
+                "characteristic_id": 18
             },
             {
-                "id": 733,
-                "characteristic_id": 11
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 426,
                 "spell_id": 227981
             },
             {
-                "id": 427,
                 "spell_id": 227983
             },
             {
-                "id": 428,
                 "spell_id": 228014
             }
         ],
@@ -3428,10 +3488,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 37986,
+        "encounter_id": null,
         "name": "Unbound Pyrelord",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -3451,10 +3513,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 31808,
+        "encounter_id": null,
         "name": "Flamewaker Centurion",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -3474,10 +3538,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 74241,
+        "encounter_id": null,
         "name": "Ancient Core Hound",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -3497,10 +3563,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 16166,
+        "encounter_id": null,
         "name": "R.L Cooper",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -3520,10 +3588,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 74244,
+        "encounter_id": null,
         "name": "Silver Forks",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -3543,10 +3613,12 @@
         "npc_type_id": 3,
         "npc_class_id": 1,
         "display_id": 100576,
+        "encounter_id": null,
         "name": "Merlin",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -3566,10 +3638,12 @@
         "npc_type_id": 4,
         "npc_class_id": 1,
         "display_id": 104653,
+        "encounter_id": null,
         "name": "Reformed Bachelor",
         "base_health": 6134,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -3604,10 +3678,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 104614,
+        "encounter_id": null,
         "name": "Virtuous Gentleman",
         "base_health": 6134,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -3642,10 +3718,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 104649,
+        "encounter_id": null,
         "name": "Wholesome Host",
         "base_health": 14238,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -3680,10 +3758,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 94426,
+        "encounter_id": null,
         "name": "Soul Fragment",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,

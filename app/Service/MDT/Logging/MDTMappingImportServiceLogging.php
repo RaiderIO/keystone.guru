@@ -68,10 +68,10 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
     }
 
     public function importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
-        int  $npcCharacteristicsDeleted,
-        bool $npcCharacteristicsInserted,
-        int  $npcSpellsDeleted,
-        bool $npcSpellsInserted
+        int $npcCharacteristicsDeleted,
+        int $npcCharacteristicsInserted,
+        int $npcSpellsDeleted,
+        int $npcSpellsInserted
     ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }

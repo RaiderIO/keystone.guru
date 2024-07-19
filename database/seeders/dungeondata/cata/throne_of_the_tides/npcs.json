@@ -6,10 +6,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 37370,
+        "encounter_id": null,
         "name": "Naz'jar Invader",
         "base_health": 1184900,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -20,81 +22,62 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6725,
-                "characteristic_id": 9
-            },
-            {
-                "id": 6726,
-                "characteristic_id": 6
-            },
-            {
-                "id": 6727,
-                "characteristic_id": 11
-            },
-            {
-                "id": 6728,
-                "characteristic_id": 14
-            },
-            {
-                "id": 6729,
-                "characteristic_id": 24
-            },
-            {
-                "id": 6730,
-                "characteristic_id": 18
-            },
-            {
-                "id": 6731,
-                "characteristic_id": 2
-            },
-            {
-                "id": 6732,
-                "characteristic_id": 19
-            },
-            {
-                "id": 6733,
-                "characteristic_id": 12
-            },
-            {
-                "id": 6734,
-                "characteristic_id": 10
-            },
-            {
-                "id": 6735,
-                "characteristic_id": 17
-            },
-            {
-                "id": 6736,
-                "characteristic_id": 20
-            },
-            {
-                "id": 6737,
-                "characteristic_id": 7
-            },
-            {
-                "id": 6738,
                 "characteristic_id": 1
             },
             {
-                "id": 6739,
-                "characteristic_id": 15
+                "characteristic_id": 7
             },
             {
-                "id": 6740,
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 16
             },
             {
-                "id": 6741,
-                "characteristic_id": 5
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 24
+            },
+            {
+                "characteristic_id": 15
             }
         ],
         "npc_spells": [
             {
-                "id": 4399,
                 "spell_id": 76807
             },
             {
-                "id": 4400,
                 "spell_id": 426618
             }
         ],
@@ -143,10 +126,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 34342,
+        "encounter_id": null,
         "name": "Lady Naz'jar",
         "base_health": 180560,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -166,10 +151,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 32311,
+        "encounter_id": null,
         "name": "Deep Murloc Drudge",
         "base_health": 444338,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -180,81 +167,62 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6780,
-                "characteristic_id": 9
-            },
-            {
-                "id": 6781,
-                "characteristic_id": 6
-            },
-            {
-                "id": 6782,
-                "characteristic_id": 11
-            },
-            {
-                "id": 6783,
-                "characteristic_id": 14
-            },
-            {
-                "id": 6784,
-                "characteristic_id": 24
-            },
-            {
-                "id": 6785,
-                "characteristic_id": 18
-            },
-            {
-                "id": 6786,
-                "characteristic_id": 2
-            },
-            {
-                "id": 6787,
-                "characteristic_id": 19
-            },
-            {
-                "id": 6788,
-                "characteristic_id": 12
-            },
-            {
-                "id": 6789,
-                "characteristic_id": 10
-            },
-            {
-                "id": 6790,
-                "characteristic_id": 17
-            },
-            {
-                "id": 6791,
-                "characteristic_id": 20
-            },
-            {
-                "id": 6792,
-                "characteristic_id": 7
-            },
-            {
-                "id": 6793,
                 "characteristic_id": 1
             },
             {
-                "id": 6794,
-                "characteristic_id": 15
+                "characteristic_id": 7
             },
             {
-                "id": 6795,
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 16
             },
             {
-                "id": 6796,
-                "characteristic_id": 5
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 24
+            },
+            {
+                "characteristic_id": 15
             }
         ],
         "npc_spells": [
             {
-                "id": 4415,
                 "spell_id": 427292
             },
             {
-                "id": 4416,
                 "spell_id": 427293
             }
         ],
@@ -303,10 +271,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 32568,
+        "encounter_id": null,
         "name": "Naz'jar Sentinel",
         "base_health": 2369800,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -317,21 +287,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6776,
                 "characteristic_id": 1
             },
             {
-                "id": 6777,
                 "characteristic_id": 24
             }
         ],
         "npc_spells": [
             {
-                "id": 4408,
                 "spell_id": 426741
             },
             {
-                "id": 4409,
                 "spell_id": 428542
             }
         ],
@@ -380,10 +346,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 32311,
+        "encounter_id": null,
         "name": "Deep Murloc Hunter",
         "base_health": 1060,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -403,10 +371,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 37370,
+        "encounter_id": null,
         "name": "Naz'jar Invader",
         "base_health": 12940,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -426,10 +396,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 34342,
+        "encounter_id": 101,
         "name": "Lady Naz'jar",
         "base_health": 8152336,
         "health_percentage": null,
         "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -440,45 +412,35 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6814,
                 "characteristic_id": 1
             },
             {
-                "id": 6815,
                 "characteristic_id": 24
             }
         ],
         "npc_spells": [
             {
-                "id": 4419,
                 "spell_id": 75683
             },
             {
-                "id": 4420,
                 "spell_id": 427769
             },
             {
-                "id": 4421,
                 "spell_id": 427771
             },
             {
-                "id": 4422,
                 "spell_id": 428054
             },
             {
-                "id": 4423,
                 "spell_id": 428263
             },
             {
-                "id": 4424,
                 "spell_id": 428374
             },
             {
-                "id": 4425,
                 "spell_id": 428376
             },
             {
-                "id": 4426,
                 "spell_id": 429263
             }
         ],
@@ -491,10 +453,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 32348,
+        "encounter_id": null,
         "name": "Naz'jar Honor Guard",
         "base_health": 888675,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -505,25 +469,20 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6850,
                 "characteristic_id": 1
             },
             {
-                "id": 6851,
                 "characteristic_id": 24
             }
         ],
         "npc_spells": [
             {
-                "id": 4431,
                 "spell_id": 428291
             },
             {
-                "id": 4432,
                 "spell_id": 428293
             },
             {
-                "id": 4433,
                 "spell_id": 428294
             }
         ],
@@ -536,10 +495,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 91648,
+        "encounter_id": null,
         "name": "Naz'jar Tempest Witch",
         "base_health": 1333013,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -550,81 +511,62 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6797,
-                "characteristic_id": 9
-            },
-            {
-                "id": 6798,
-                "characteristic_id": 6
-            },
-            {
-                "id": 6799,
-                "characteristic_id": 11
-            },
-            {
-                "id": 6800,
-                "characteristic_id": 14
-            },
-            {
-                "id": 6801,
-                "characteristic_id": 24
-            },
-            {
-                "id": 6802,
-                "characteristic_id": 18
-            },
-            {
-                "id": 6803,
-                "characteristic_id": 2
-            },
-            {
-                "id": 6804,
-                "characteristic_id": 19
-            },
-            {
-                "id": 6805,
-                "characteristic_id": 12
-            },
-            {
-                "id": 6806,
-                "characteristic_id": 10
-            },
-            {
-                "id": 6807,
-                "characteristic_id": 17
-            },
-            {
-                "id": 6808,
-                "characteristic_id": 20
-            },
-            {
-                "id": 6809,
-                "characteristic_id": 7
-            },
-            {
-                "id": 6810,
                 "characteristic_id": 1
             },
             {
-                "id": 6811,
-                "characteristic_id": 15
+                "characteristic_id": 7
             },
             {
-                "id": 6812,
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 16
             },
             {
-                "id": 6813,
-                "characteristic_id": 5
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 24
+            },
+            {
+                "characteristic_id": 15
             }
         ],
         "npc_spells": [
             {
-                "id": 4417,
                 "spell_id": 75992
             },
             {
-                "id": 4418,
                 "spell_id": 426768
             }
         ],
@@ -673,10 +615,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 33792,
+        "encounter_id": 102,
         "name": "Commander Ulthok",
         "base_health": 10375700,
         "health_percentage": null,
         "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -687,33 +631,26 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6852,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 4434,
                 "spell_id": 427456
             },
             {
-                "id": 4435,
                 "spell_id": 427554
             },
             {
-                "id": 4436,
                 "spell_id": 427565
             },
             {
-                "id": 4437,
                 "spell_id": 427668
             },
             {
-                "id": 4438,
                 "spell_id": 427670
             },
             {
-                "id": 4439,
                 "spell_id": 427672
             }
         ],
@@ -726,10 +663,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 32259,
+        "encounter_id": 103,
         "name": "Mindbender Ghur'sha",
         "base_health": 9338130,
         "health_percentage": null,
         "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -740,17 +679,14 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6881,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 4455,
                 "spell_id": 429172
             },
             {
-                "id": 4456,
                 "spell_id": 429173
             }
         ],
@@ -763,10 +699,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 32081,
+        "encounter_id": null,
         "name": "Neptulon",
         "base_health": 21866,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -786,10 +724,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 30408,
+        "encounter_id": 103,
         "name": "Erunak Stonespeaker",
         "base_health": 9338130,
         "health_percentage": null,
         "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -800,41 +740,32 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6879,
                 "characteristic_id": 1
             },
             {
-                "id": 6880,
                 "characteristic_id": 24
             }
         ],
         "npc_spells": [
             {
-                "id": 4448,
                 "spell_id": 181089
             },
             {
-                "id": 4449,
                 "spell_id": 419956
             },
             {
-                "id": 4450,
                 "spell_id": 429037
             },
             {
-                "id": 4451,
                 "spell_id": 429038
             },
             {
-                "id": 4452,
                 "spell_id": 429048
             },
             {
-                "id": 4453,
                 "spell_id": 429051
             },
             {
-                "id": 4454,
                 "spell_id": 429057
             }
         ],
@@ -847,10 +778,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 33845,
+        "encounter_id": null,
         "name": "Unstable Corruption",
         "base_health": 296225,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -861,61 +794,47 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6917,
-                "characteristic_id": 13
-            },
-            {
-                "id": 6918,
-                "characteristic_id": 9
-            },
-            {
-                "id": 6919,
-                "characteristic_id": 2
-            },
-            {
-                "id": 6920,
-                "characteristic_id": 19
-            },
-            {
-                "id": 6921,
-                "characteristic_id": 6
-            },
-            {
-                "id": 6922,
-                "characteristic_id": 11
-            },
-            {
-                "id": 6923,
-                "characteristic_id": 18
-            },
-            {
-                "id": 6924,
-                "characteristic_id": 20
-            },
-            {
-                "id": 6925,
-                "characteristic_id": 7
-            },
-            {
-                "id": 6926,
                 "characteristic_id": 1
             },
             {
-                "id": 6927,
-                "characteristic_id": 14
+                "characteristic_id": 13
             },
             {
-                "id": 6928,
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
                 "characteristic_id": 12
             },
             {
-                "id": 6929,
-                "characteristic_id": 5
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 14
             }
         ],
         "npc_spells": [
             {
-                "id": 4461,
                 "spell_id": 76363
             }
         ],
@@ -928,10 +847,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 33846,
+        "encounter_id": null,
         "name": "Tainted Sentry",
         "base_health": 2369800,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -942,17 +863,14 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6930,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 4462,
                 "spell_id": 76634
             },
             {
-                "id": 4463,
                 "spell_id": 76636
             }
         ],
@@ -1001,10 +919,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 31982,
+        "encounter_id": null,
         "name": "Gilgoblin Hunter",
         "base_health": 1036788,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1015,85 +935,65 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6900,
-                "characteristic_id": 9
-            },
-            {
-                "id": 6901,
-                "characteristic_id": 6
-            },
-            {
-                "id": 6902,
-                "characteristic_id": 11
-            },
-            {
-                "id": 6903,
-                "characteristic_id": 14
-            },
-            {
-                "id": 6904,
-                "characteristic_id": 24
-            },
-            {
-                "id": 6905,
-                "characteristic_id": 18
-            },
-            {
-                "id": 6906,
-                "characteristic_id": 2
-            },
-            {
-                "id": 6907,
-                "characteristic_id": 19
-            },
-            {
-                "id": 6908,
-                "characteristic_id": 12
-            },
-            {
-                "id": 6909,
-                "characteristic_id": 10
-            },
-            {
-                "id": 6910,
-                "characteristic_id": 17
-            },
-            {
-                "id": 6911,
-                "characteristic_id": 20
-            },
-            {
-                "id": 6912,
-                "characteristic_id": 7
-            },
-            {
-                "id": 6913,
                 "characteristic_id": 1
             },
             {
-                "id": 6914,
-                "characteristic_id": 15
+                "characteristic_id": 7
             },
             {
-                "id": 6915,
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 16
             },
             {
-                "id": 6916,
-                "characteristic_id": 5
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 24
+            },
+            {
+                "characteristic_id": 15
             }
         ],
         "npc_spells": [
             {
-                "id": 4458,
                 "spell_id": 76516
             },
             {
-                "id": 4459,
                 "spell_id": 427376
             },
             {
-                "id": 4460,
                 "spell_id": 427384
             }
         ],
@@ -1142,10 +1042,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 31674,
+        "encounter_id": null,
         "name": "Faceless Watcher",
         "base_health": 2369800,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
@@ -1156,21 +1058,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6854,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 4442,
                 "spell_id": 76590
             },
             {
-                "id": 4443,
                 "spell_id": 428926
             },
             {
-                "id": 4444,
                 "spell_id": 429021
             }
         ],
@@ -1219,10 +1117,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 32121,
+        "encounter_id": null,
         "name": "Gilgoblin Aquamage",
         "base_health": 592450,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1233,77 +1133,59 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6883,
-                "characteristic_id": 9
-            },
-            {
-                "id": 6884,
-                "characteristic_id": 6
-            },
-            {
-                "id": 6885,
-                "characteristic_id": 11
-            },
-            {
-                "id": 6886,
-                "characteristic_id": 14
-            },
-            {
-                "id": 6887,
-                "characteristic_id": 24
-            },
-            {
-                "id": 6888,
-                "characteristic_id": 18
-            },
-            {
-                "id": 6889,
-                "characteristic_id": 2
-            },
-            {
-                "id": 6890,
-                "characteristic_id": 19
-            },
-            {
-                "id": 6891,
-                "characteristic_id": 12
-            },
-            {
-                "id": 6892,
-                "characteristic_id": 10
-            },
-            {
-                "id": 6893,
-                "characteristic_id": 17
-            },
-            {
-                "id": 6894,
-                "characteristic_id": 20
-            },
-            {
-                "id": 6895,
-                "characteristic_id": 7
-            },
-            {
-                "id": 6896,
                 "characteristic_id": 1
             },
             {
-                "id": 6897,
-                "characteristic_id": 15
+                "characteristic_id": 7
             },
             {
-                "id": 6898,
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 16
             },
             {
-                "id": 6899,
-                "characteristic_id": 5
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 24
+            },
+            {
+                "characteristic_id": 15
             }
         ],
         "npc_spells": [
             {
-                "id": 4457,
                 "spell_id": 429176
             }
         ],
@@ -1352,10 +1234,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 37387,
+        "encounter_id": null,
         "name": "Naz'jar Oracle",
         "base_health": 1333013,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1366,85 +1250,65 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6759,
-                "characteristic_id": 9
-            },
-            {
-                "id": 6760,
-                "characteristic_id": 6
-            },
-            {
-                "id": 6761,
-                "characteristic_id": 11
-            },
-            {
-                "id": 6762,
-                "characteristic_id": 14
-            },
-            {
-                "id": 6763,
-                "characteristic_id": 24
-            },
-            {
-                "id": 6764,
-                "characteristic_id": 18
-            },
-            {
-                "id": 6765,
-                "characteristic_id": 2
-            },
-            {
-                "id": 6766,
-                "characteristic_id": 19
-            },
-            {
-                "id": 6767,
-                "characteristic_id": 12
-            },
-            {
-                "id": 6768,
-                "characteristic_id": 10
-            },
-            {
-                "id": 6769,
-                "characteristic_id": 17
-            },
-            {
-                "id": 6770,
-                "characteristic_id": 20
-            },
-            {
-                "id": 6771,
-                "characteristic_id": 7
-            },
-            {
-                "id": 6772,
                 "characteristic_id": 1
             },
             {
-                "id": 6773,
-                "characteristic_id": 15
+                "characteristic_id": 7
             },
             {
-                "id": 6774,
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 16
             },
             {
-                "id": 6775,
-                "characteristic_id": 5
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 24
+            },
+            {
+                "characteristic_id": 15
             }
         ],
         "npc_spells": [
             {
-                "id": 4405,
                 "spell_id": 76813
             },
             {
-                "id": 4406,
                 "spell_id": 76820
             },
             {
-                "id": 4407,
                 "spell_id": 426731
             }
         ],
@@ -1493,10 +1357,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 37387,
+        "encounter_id": null,
         "name": "Naz'jar Spiritmender",
         "base_health": 12940,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1516,10 +1382,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 37388,
+        "encounter_id": null,
         "name": "Naz'jar Frost Witch",
         "base_health": 740563,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1530,81 +1398,62 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6833,
-                "characteristic_id": 9
-            },
-            {
-                "id": 6834,
-                "characteristic_id": 6
-            },
-            {
-                "id": 6835,
-                "characteristic_id": 11
-            },
-            {
-                "id": 6836,
-                "characteristic_id": 14
-            },
-            {
-                "id": 6837,
-                "characteristic_id": 24
-            },
-            {
-                "id": 6838,
-                "characteristic_id": 18
-            },
-            {
-                "id": 6839,
-                "characteristic_id": 2
-            },
-            {
-                "id": 6840,
-                "characteristic_id": 19
-            },
-            {
-                "id": 6841,
-                "characteristic_id": 12
-            },
-            {
-                "id": 6842,
-                "characteristic_id": 10
-            },
-            {
-                "id": 6843,
-                "characteristic_id": 17
-            },
-            {
-                "id": 6844,
-                "characteristic_id": 20
-            },
-            {
-                "id": 6845,
-                "characteristic_id": 7
-            },
-            {
-                "id": 6846,
                 "characteristic_id": 1
             },
             {
-                "id": 6847,
-                "characteristic_id": 15
+                "characteristic_id": 7
             },
             {
-                "id": 6848,
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 16
             },
             {
-                "id": 6849,
-                "characteristic_id": 5
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 24
+            },
+            {
+                "characteristic_id": 15
             }
         ],
         "npc_spells": [
             {
-                "id": 4429,
                 "spell_id": 428103
             },
             {
-                "id": 4430,
                 "spell_id": 428329
             }
         ],
@@ -1617,10 +1466,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 34135,
+        "encounter_id": 104,
         "name": "Ozumat",
         "base_health": 59289712,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1631,29 +1482,23 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6958,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 4476,
                 "spell_id": 428594
             },
             {
-                "id": 4477,
                 "spell_id": 428616
             },
             {
-                "id": 4478,
                 "spell_id": 429046
             },
             {
-                "id": 4479,
                 "spell_id": 429049
             },
             {
-                "id": 4480,
                 "spell_id": 429089
             }
         ],
@@ -1666,10 +1511,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 32018,
+        "encounter_id": null,
         "name": "Unyielding Behemoth",
         "base_health": 30613,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -1689,10 +1536,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 34352,
+        "encounter_id": null,
         "name": "Deep Murloc Invader",
         "base_health": 794,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -1712,10 +1561,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 32708,
+        "encounter_id": null,
         "name": "Vicious Mindlasher",
         "base_health": 17493,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -1735,10 +1586,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 32708,
+        "encounter_id": null,
         "name": "Faceless Sapper",
         "base_health": 26239,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -1758,10 +1611,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 19874,
+        "encounter_id": null,
         "name": "Blight Beast",
         "base_health": 13120,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -1781,10 +1636,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 36746,
+        "encounter_id": null,
         "name": "Captain Taylor",
         "base_health": 5349,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1804,10 +1661,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 36747,
+        "encounter_id": null,
         "name": "Legionnaire Nazgrim",
         "base_health": 2058,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1827,10 +1686,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 37387,
+        "encounter_id": null,
         "name": "Naz'jar Spiritmender",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1850,10 +1711,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 37370,
+        "encounter_id": null,
         "name": "Naz'jar Invader",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1873,10 +1736,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 37356,
+        "encounter_id": null,
         "name": "Throne of Tides Teleporter",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1896,10 +1761,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 37356,
+        "encounter_id": null,
         "name": "Throne of Tides Teleporter",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1919,10 +1786,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 91794,
+        "encounter_id": null,
         "name": "Naz'jar Ravager",
         "base_health": 4147150,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1933,33 +1802,26 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6778,
                 "characteristic_id": 1
             },
             {
-                "id": 6779,
                 "characteristic_id": 24
             }
         ],
         "npc_spells": [
             {
-                "id": 4410,
                 "spell_id": 426645
             },
             {
-                "id": 4411,
                 "spell_id": 426684
             },
             {
-                "id": 4412,
                 "spell_id": 426685
             },
             {
-                "id": 4413,
                 "spell_id": 426688
             },
             {
-                "id": 4414,
                 "spell_id": 426727
             }
         ],
@@ -2015,10 +1877,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 103357,
+        "encounter_id": null,
         "name": "Vicious Snap Dragon",
         "base_health": 740563,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2029,89 +1893,68 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6742,
-                "characteristic_id": 9
-            },
-            {
-                "id": 6743,
-                "characteristic_id": 6
-            },
-            {
-                "id": 6744,
-                "characteristic_id": 11
-            },
-            {
-                "id": 6745,
-                "characteristic_id": 14
-            },
-            {
-                "id": 6746,
-                "characteristic_id": 22
-            },
-            {
-                "id": 6747,
-                "characteristic_id": 18
-            },
-            {
-                "id": 6748,
-                "characteristic_id": 2
-            },
-            {
-                "id": 6749,
-                "characteristic_id": 19
-            },
-            {
-                "id": 6750,
-                "characteristic_id": 21
-            },
-            {
-                "id": 6751,
-                "characteristic_id": 10
-            },
-            {
-                "id": 6752,
-                "characteristic_id": 17
-            },
-            {
-                "id": 6753,
-                "characteristic_id": 20
-            },
-            {
-                "id": 6754,
-                "characteristic_id": 7
-            },
-            {
-                "id": 6755,
                 "characteristic_id": 1
             },
             {
-                "id": 6756,
-                "characteristic_id": 12
+                "characteristic_id": 7
             },
             {
-                "id": 6757,
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 16
             },
             {
-                "id": 6758,
-                "characteristic_id": 5
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 21
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 22
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 17
             }
         ],
         "npc_spells": [
             {
-                "id": 4401,
                 "spell_id": 426659
             },
             {
-                "id": 4402,
                 "spell_id": 426660
             },
             {
-                "id": 4403,
                 "spell_id": 426662
             },
             {
-                "id": 4404,
                 "spell_id": 426663
             }
         ],
@@ -2167,10 +2010,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 90742,
+        "encounter_id": null,
         "name": "Faceless Seer",
         "base_health": 1481125,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2181,61 +2026,47 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6867,
-                "characteristic_id": 13
-            },
-            {
-                "id": 6868,
-                "characteristic_id": 18
-            },
-            {
-                "id": 6869,
-                "characteristic_id": 2
-            },
-            {
-                "id": 6870,
-                "characteristic_id": 19
-            },
-            {
-                "id": 6871,
-                "characteristic_id": 6
-            },
-            {
-                "id": 6872,
-                "characteristic_id": 11
-            },
-            {
-                "id": 6873,
-                "characteristic_id": 20
-            },
-            {
-                "id": 6874,
-                "characteristic_id": 7
-            },
-            {
-                "id": 6875,
                 "characteristic_id": 1
             },
             {
-                "id": 6876,
+                "characteristic_id": 13
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 6877,
                 "characteristic_id": 12
             },
             {
-                "id": 6878,
-                "characteristic_id": 5
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 18
             }
         ],
         "npc_spells": [
             {
-                "id": 4446,
                 "spell_id": 426783
             },
             {
-                "id": 4447,
                 "spell_id": 426796
             }
         ],
@@ -2291,10 +2122,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 31994,
+        "encounter_id": null,
         "name": "Minion of Ghur'sha",
         "base_health": 888675,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2305,57 +2138,44 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6855,
-                "characteristic_id": 13
-            },
-            {
-                "id": 6856,
-                "characteristic_id": 18
-            },
-            {
-                "id": 6857,
-                "characteristic_id": 2
-            },
-            {
-                "id": 6858,
-                "characteristic_id": 19
-            },
-            {
-                "id": 6859,
-                "characteristic_id": 6
-            },
-            {
-                "id": 6860,
-                "characteristic_id": 11
-            },
-            {
-                "id": 6861,
-                "characteristic_id": 20
-            },
-            {
-                "id": 6862,
-                "characteristic_id": 7
-            },
-            {
-                "id": 6863,
                 "characteristic_id": 1
             },
             {
-                "id": 6864,
+                "characteristic_id": 13
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
                 "characteristic_id": 14
             },
             {
-                "id": 6865,
                 "characteristic_id": 12
             },
             {
-                "id": 6866,
-                "characteristic_id": 5
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 18
             }
         ],
         "npc_spells": [
             {
-                "id": 4445,
                 "spell_id": 426905
             }
         ],
@@ -2411,10 +2231,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 33012,
+        "encounter_id": null,
         "name": "Bubbling Ooze",
         "base_health": 14811250,
         "health_percentage": null,
         "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2425,17 +2247,14 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6853,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 4440,
                 "spell_id": 427451
             },
             {
-                "id": 4441,
                 "spell_id": 427559
             }
         ],
@@ -2448,10 +2267,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 31539,
+        "encounter_id": null,
         "name": "Deep Sea Murloc",
         "base_health": 177735,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2462,81 +2283,62 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6816,
-                "characteristic_id": 9
-            },
-            {
-                "id": 6817,
-                "characteristic_id": 6
-            },
-            {
-                "id": 6818,
-                "characteristic_id": 11
-            },
-            {
-                "id": 6819,
-                "characteristic_id": 14
-            },
-            {
-                "id": 6820,
-                "characteristic_id": 24
-            },
-            {
-                "id": 6821,
-                "characteristic_id": 18
-            },
-            {
-                "id": 6822,
-                "characteristic_id": 2
-            },
-            {
-                "id": 6823,
-                "characteristic_id": 19
-            },
-            {
-                "id": 6824,
-                "characteristic_id": 12
-            },
-            {
-                "id": 6825,
-                "characteristic_id": 10
-            },
-            {
-                "id": 6826,
-                "characteristic_id": 17
-            },
-            {
-                "id": 6827,
-                "characteristic_id": 20
-            },
-            {
-                "id": 6828,
-                "characteristic_id": 7
-            },
-            {
-                "id": 6829,
                 "characteristic_id": 1
             },
             {
-                "id": 6830,
-                "characteristic_id": 15
+                "characteristic_id": 7
             },
             {
-                "id": 6831,
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 16
             },
             {
-                "id": 6832,
-                "characteristic_id": 5
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 24
+            },
+            {
+                "characteristic_id": 15
             }
         ],
         "npc_spells": [
             {
-                "id": 4427,
                 "spell_id": 428096
             },
             {
-                "id": 4428,
                 "spell_id": 428097
             }
         ],
@@ -2549,10 +2351,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 91695,
+        "encounter_id": 104,
         "name": "Ink of Ozumat",
         "base_health": 10375700,
         "health_percentage": null,
         "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2563,37 +2367,29 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6931,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 4464,
                 "spell_id": 428399
             },
             {
-                "id": 4465,
                 "spell_id": 428401
             },
             {
-                "id": 4466,
                 "spell_id": 428405
             },
             {
-                "id": 4467,
                 "spell_id": 428407
             },
             {
-                "id": 4468,
                 "spell_id": 428530
             },
             {
-                "id": 4469,
                 "spell_id": 428868
             },
             {
-                "id": 4470,
                 "spell_id": 428889
             }
         ],
@@ -2606,10 +2402,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 102373,
+        "encounter_id": null,
         "name": "Splotch",
         "base_health": 207357,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2620,61 +2418,47 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6945,
-                "characteristic_id": 13
-            },
-            {
-                "id": 6946,
-                "characteristic_id": 9
-            },
-            {
-                "id": 6947,
-                "characteristic_id": 2
-            },
-            {
-                "id": 6948,
-                "characteristic_id": 19
-            },
-            {
-                "id": 6949,
-                "characteristic_id": 6
-            },
-            {
-                "id": 6950,
-                "characteristic_id": 11
-            },
-            {
-                "id": 6951,
-                "characteristic_id": 18
-            },
-            {
-                "id": 6952,
-                "characteristic_id": 20
-            },
-            {
-                "id": 6953,
-                "characteristic_id": 7
-            },
-            {
-                "id": 6954,
                 "characteristic_id": 1
             },
             {
-                "id": 6955,
-                "characteristic_id": 14
+                "characteristic_id": 13
             },
             {
-                "id": 6956,
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
                 "characteristic_id": 12
             },
             {
-                "id": 6957,
-                "characteristic_id": 5
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 14
             }
         ],
         "npc_spells": [
             {
-                "id": 4475,
                 "spell_id": 428526
             }
         ],
@@ -2687,10 +2471,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 91837,
+        "encounter_id": null,
         "name": "Sludge",
         "base_health": 296225,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2701,73 +2487,56 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6932,
-                "characteristic_id": 13
-            },
-            {
-                "id": 6933,
-                "characteristic_id": 9
-            },
-            {
-                "id": 6934,
-                "characteristic_id": 2
-            },
-            {
-                "id": 6935,
-                "characteristic_id": 19
-            },
-            {
-                "id": 6936,
-                "characteristic_id": 6
-            },
-            {
-                "id": 6937,
-                "characteristic_id": 11
-            },
-            {
-                "id": 6938,
-                "characteristic_id": 18
-            },
-            {
-                "id": 6939,
-                "characteristic_id": 20
-            },
-            {
-                "id": 6940,
-                "characteristic_id": 7
-            },
-            {
-                "id": 6941,
                 "characteristic_id": 1
             },
             {
-                "id": 6942,
-                "characteristic_id": 14
+                "characteristic_id": 13
             },
             {
-                "id": 6943,
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
                 "characteristic_id": 12
             },
             {
-                "id": 6944,
-                "characteristic_id": 5
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 14
             }
         ],
         "npc_spells": [
             {
-                "id": 4471,
                 "spell_id": 428403
             },
             {
-                "id": 4472,
                 "spell_id": 428531
             },
             {
-                "id": 4473,
                 "spell_id": 428621
             },
             {
-                "id": 4474,
                 "spell_id": 428809
             }
         ],
@@ -2780,10 +2549,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 19071,
+        "encounter_id": null,
         "name": "Stormflurry Totem",
         "base_health": 217813,
         "health_percentage": null,
         "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2794,7 +2565,6 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 6882,
                 "characteristic_id": 1
             }
         ],

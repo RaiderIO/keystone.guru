@@ -23,7 +23,7 @@ class NpcSpell extends CacheModel
 
     protected $fillable = ['id', 'npc_id', 'whitelist_npc_id'];
 
-    protected $hidden = ['npc_id'];
+    protected $hidden = ['id', 'npc_id'];
 
     public function npc(): BelongsTo
     {

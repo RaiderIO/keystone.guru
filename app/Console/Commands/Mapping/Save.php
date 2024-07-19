@@ -125,6 +125,7 @@ class Save extends Command
                 'id',
                 'expansion_id',
                 'zone_id',
+                'instance_id',
                 'mdt_id',
                 'key',
                 'name',

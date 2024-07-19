@@ -6,10 +6,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 16958,
+        "encounter_id": 1557,
         "name": "The Curator",
         "base_health": 2091168,
         "health_percentage": null,
         "level": 112,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -20,29 +22,23 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 801,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 537,
                 "spell_id": 227254
             },
             {
-                "id": 538,
                 "spell_id": 227257
             },
             {
-                "id": 539,
                 "spell_id": 227267
             },
             {
-                "id": 540,
                 "spell_id": 227285
             },
             {
-                "id": 541,
                 "spell_id": 227465
             }
         ],
@@ -55,10 +51,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 73157,
+        "encounter_id": 1818,
         "name": "Mana Devourer",
         "base_health": 1917450,
         "health_percentage": null,
         "level": 112,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -69,29 +67,23 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 804,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 561,
                 "spell_id": 227297
             },
             {
-                "id": 562,
                 "spell_id": 227457
             },
             {
-                "id": 563,
                 "spell_id": 227523
             },
             {
-                "id": 564,
                 "spell_id": 227618
             },
             {
-                "id": 565,
                 "spell_id": 227620
             }
         ],
@@ -104,10 +96,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 61850,
+        "encounter_id": null,
         "name": "Damaged Golem",
         "base_health": 306309,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -118,17 +112,14 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 784,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 504,
                 "spell_id": 227529
             },
             {
-                "id": 505,
                 "spell_id": 242894
             }
         ],
@@ -149,10 +140,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 55144,
+        "encounter_id": null,
         "name": "Mana Confluence",
         "base_health": 306309,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -163,13 +156,11 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 786,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 511,
                 "spell_id": 228700
             }
         ],
@@ -190,10 +181,12 @@
         "npc_type_id": 8,
         "npc_class_id": 3,
         "display_id": 73834,
+        "encounter_id": 1817,
         "name": "Shade of Medivh",
         "base_health": 1491350,
         "health_percentage": null,
         "level": 112,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -204,57 +197,44 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 803,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 549,
                 "spell_id": 227592
             },
             {
-                "id": 550,
                 "spell_id": 227615
             },
             {
-                "id": 551,
                 "spell_id": 227628
             },
             {
-                "id": 552,
                 "spell_id": 227641
             },
             {
-                "id": 553,
                 "spell_id": 227644
             },
             {
-                "id": 554,
                 "spell_id": 227779
             },
             {
-                "id": 555,
                 "spell_id": 228249
             },
             {
-                "id": 556,
                 "spell_id": 228261
             },
             {
-                "id": 557,
                 "spell_id": 228262
             },
             {
-                "id": 558,
                 "spell_id": 228269
             },
             {
-                "id": 559,
                 "spell_id": 228334
             },
             {
-                "id": 560,
                 "spell_id": 228958
             }
         ],
@@ -267,10 +247,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 62387,
+        "encounter_id": null,
         "name": "Mana-Gorged Wyrm",
         "base_health": 102103,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -281,17 +263,14 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 787,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 512,
                 "spell_id": 228362
             },
             {
-                "id": 513,
                 "spell_id": 232271
             }
         ],
@@ -312,10 +291,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 16841,
+        "encounter_id": null,
         "name": "The Curator",
         "base_health": 184000,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -335,10 +316,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73709,
+        "encounter_id": 1838,
         "name": "Viz'aduum the Watcher",
         "base_health": 1704400,
         "health_percentage": null,
         "level": 112,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -349,37 +332,29 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 802,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 542,
                 "spell_id": 229083
             },
             {
-                "id": 543,
                 "spell_id": 229151
             },
             {
-                "id": 544,
                 "spell_id": 229159
             },
             {
-                "id": 545,
                 "spell_id": 229161
             },
             {
-                "id": 546,
                 "spell_id": 229598
             },
             {
-                "id": 547,
                 "spell_id": 229610
             },
             {
-                "id": 548,
                 "spell_id": 230084
             }
         ],
@@ -392,10 +367,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 16293,
+        "encounter_id": null,
         "name": "King",
         "base_health": 638144,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -406,25 +383,20 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 800,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 533,
                 "spell_id": 229427
             },
             {
-                "id": 534,
                 "spell_id": 229429
             },
             {
-                "id": 535,
                 "spell_id": 229468
             },
             {
-                "id": 536,
                 "spell_id": 229489
             }
         ],
@@ -445,10 +417,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73790,
+        "encounter_id": null,
         "name": "Queen",
         "base_health": 18455,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -468,10 +442,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73795,
+        "encounter_id": null,
         "name": "Bishop",
         "base_health": 12303,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -491,10 +467,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73796,
+        "encounter_id": null,
         "name": "Bishop",
         "base_health": 12303,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -514,10 +492,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73797,
+        "encounter_id": null,
         "name": "Knight",
         "base_health": 12303,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -537,10 +517,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 72773,
+        "encounter_id": null,
         "name": "Rook",
         "base_health": 14764,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -560,10 +542,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 73857,
+        "encounter_id": null,
         "name": "Rat",
         "base_health": 382886,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -574,25 +558,20 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 792,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 523,
                 "spell_id": 229692
             },
             {
-                "id": 524,
                 "spell_id": 229693
             },
             {
-                "id": 525,
                 "spell_id": 229696
             },
             {
-                "id": 526,
                 "spell_id": 229698
             }
         ],
@@ -613,10 +592,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 73858,
+        "encounter_id": null,
         "name": "Spider",
         "base_health": 319072,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -627,21 +608,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 793,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 527,
                 "spell_id": 229704
             },
             {
-                "id": 528,
                 "spell_id": 229705
             },
             {
-                "id": 529,
                 "spell_id": 229706
             }
         ],
@@ -662,10 +639,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 73859,
+        "encounter_id": null,
         "name": "Ancient Tome",
         "base_health": 298270,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -693,10 +672,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 73804,
+        "encounter_id": null,
         "name": "Nielas Aran",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -716,10 +697,12 @@
         "npc_type_id": 4,
         "npc_class_id": 1,
         "display_id": 73837,
+        "encounter_id": null,
         "name": "Fel Bat",
         "base_health": 212714,
         "health_percentage": null,
         "level": 110,
+        "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -730,25 +713,20 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 789,
                 "characteristic_id": 1
             },
             {
-                "id": 790,
                 "characteristic_id": 17
             }
         ],
         "npc_spells": [
             {
-                "id": 517,
                 "spell_id": 229597
             },
             {
-                "id": 518,
                 "spell_id": 229622
             },
             {
-                "id": 519,
                 "spell_id": 229623
             }
         ],
@@ -769,10 +747,12 @@
         "npc_type_id": 4,
         "npc_class_id": 1,
         "display_id": 73838,
+        "encounter_id": null,
         "name": "Erudite Slayer",
         "base_health": 340343,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -783,17 +763,14 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 799,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 531,
                 "spell_id": 229608
             },
             {
-                "id": 532,
                 "spell_id": 229611
             }
         ],
@@ -814,10 +791,12 @@
         "npc_type_id": 4,
         "npc_class_id": 1,
         "display_id": 63419,
+        "encounter_id": null,
         "name": "Infused Pyromancer",
         "base_health": 467972,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -828,21 +807,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 788,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 514,
                 "spell_id": 229677
             },
             {
-                "id": 515,
                 "spell_id": 229678
             },
             {
-                "id": 516,
                 "spell_id": 374743
             }
         ],
@@ -863,10 +838,12 @@
         "npc_type_id": 4,
         "npc_class_id": 1,
         "display_id": 73944,
+        "encounter_id": null,
         "name": "Wrathguard Flamebringer",
         "base_health": 638144,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -877,21 +854,17 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 791,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 520,
                 "spell_id": 191540
             },
             {
-                "id": 521,
                 "spell_id": 230043
             },
             {
-                "id": 522,
                 "spell_id": 230044
             }
         ],
@@ -912,10 +885,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 74335,
+        "encounter_id": null,
         "name": "Abstract Nullifier",
         "base_health": 340343,
         "health_percentage": null,
         "level": 111,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -926,29 +901,23 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 785,
                 "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
-                "id": 506,
                 "spell_id": 230050
             },
             {
-                "id": 507,
                 "spell_id": 230083
             },
             {
-                "id": 508,
                 "spell_id": 230094
             },
             {
-                "id": 509,
                 "spell_id": 230161
             },
             {
-                "id": 510,
                 "spell_id": 230162
             }
         ],
@@ -969,10 +938,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 62384,
+        "encounter_id": null,
         "name": "Mana Devourer",
         "base_health": 212714,
         "health_percentage": null,
         "level": 112,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -983,29 +954,23 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "id": 794,
                 "characteristic_id": 11
             },
             {
-                "id": 795,
                 "characteristic_id": 1
             },
             {
-                "id": 796,
-                "characteristic_id": 14
+                "characteristic_id": 18
             },
             {
-                "id": 797,
                 "characteristic_id": 19
             },
             {
-                "id": 798,
-                "characteristic_id": 18
+                "characteristic_id": 14
             }
         ],
         "npc_spells": [
             {
-                "id": 530,
                 "spell_id": 230218
             }
         ],
@@ -1026,10 +991,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 48519,
+        "encounter_id": null,
         "name": "Flying Tome",
         "base_health": 12345,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,

@@ -6,10 +6,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 120054,
+        "encounter_id": 2572,
         "name": "E.D.N.A",
         "base_health": 112052199,
         "health_percentage": 100,
         "level": 80,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -21,27 +23,21 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5060,
                 "spell_id": 424805
             },
             {
-                "id": 5061,
                 "spell_id": 424879
             },
             {
-                "id": 5062,
                 "spell_id": 424888
             },
             {
-                "id": 5063,
                 "spell_id": 424889
             },
             {
-                "id": 5064,
                 "spell_id": 424903
             },
             {
-                "id": 5065,
                 "spell_id": 451728
             }
         ],
@@ -54,10 +50,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 117402,
+        "encounter_id": null,
         "name": "Earth Infused Golem",
         "base_health": 22452722,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -69,15 +67,12 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5018,
                 "spell_id": 425027
             },
             {
-                "id": 5019,
                 "spell_id": 425974
             },
             {
-                "id": 5020,
                 "spell_id": 462597
             }
         ],
@@ -90,10 +85,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 118714,
+        "encounter_id": 2572,
         "name": "Skarmorak",
         "base_health": 98045674,
         "health_percentage": 100,
         "level": 80,
+        "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -105,55 +102,42 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5066,
                 "spell_id": 422233
             },
             {
-                "id": 5067,
                 "spell_id": 422261
             },
             {
-                "id": 5068,
                 "spell_id": 423200
             },
             {
-                "id": 5069,
                 "spell_id": 423228
             },
             {
-                "id": 5070,
                 "spell_id": 423246
             },
             {
-                "id": 5071,
                 "spell_id": 423324
             },
             {
-                "id": 5072,
                 "spell_id": 423327
             },
             {
-                "id": 5073,
                 "spell_id": 423538
             },
             {
-                "id": 5074,
                 "spell_id": 423572
             },
             {
-                "id": 5075,
                 "spell_id": 435813
             },
             {
-                "id": 5076,
                 "spell_id": 439749
             },
             {
-                "id": 5077,
                 "spell_id": 443405
             },
             {
-                "id": 5078,
                 "spell_id": 445409
             }
         ],
@@ -166,10 +150,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 118702,
+        "encounter_id": null,
         "name": "Cursedheart Invader",
         "base_health": 14032951,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -181,19 +167,15 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5014,
                 "spell_id": 426283
             },
             {
-                "id": 5015,
                 "spell_id": 426308
             },
             {
-                "id": 5016,
                 "spell_id": 427300
             },
             {
-                "id": 5017,
                 "spell_id": 462597
             }
         ],
@@ -206,10 +188,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 109870,
+        "encounter_id": null,
         "name": "Void Touched Elemental",
         "base_health": 15436247,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -221,11 +205,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5036,
                 "spell_id": 426345
             },
             {
-                "id": 5037,
                 "spell_id": 449070
             }
         ],
@@ -238,10 +220,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 118702,
+        "encounter_id": null,
         "name": "Cursedheart Invader",
         "base_health": 4900758,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -261,10 +245,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 114686,
+        "encounter_id": null,
         "name": "Aspiring Forgehand",
         "base_health": 8419771,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -276,15 +262,12 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5038,
                 "spell_id": 423766
             },
             {
-                "id": 5039,
                 "spell_id": 427361
             },
             {
-                "id": 5040,
                 "spell_id": 462597
             }
         ],
@@ -297,10 +280,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 118731,
+        "encounter_id": null,
         "name": "Ghastly Voidsoul",
         "base_health": 12629657,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -312,11 +297,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5021,
                 "spell_id": 449455
             },
             {
-                "id": 5022,
                 "spell_id": 462597
             }
         ],
@@ -329,10 +312,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 117641,
+        "encounter_id": null,
         "name": "Engine Speaker",
         "base_health": 15436247,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -344,15 +329,12 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5030,
                 "spell_id": 427382
             },
             {
-                "id": 5031,
                 "spell_id": 452811
             },
             {
-                "id": 5032,
                 "spell_id": 462597
             }
         ],
@@ -365,10 +347,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 117973,
+        "encounter_id": null,
         "name": "Void Bound Despoiler",
         "base_health": 22452722,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -380,19 +364,15 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5026,
                 "spell_id": 426771
             },
             {
-                "id": 5027,
                 "spell_id": 426786
             },
             {
-                "id": 5028,
                 "spell_id": 459210
             },
             {
-                "id": 5029,
                 "spell_id": 462597
             }
         ],
@@ -405,10 +385,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 119856,
+        "encounter_id": 2572,
         "name": "High Speaker Eirich",
         "base_health": 112052199,
         "health_percentage": 100,
         "level": 80,
+        "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -420,31 +402,24 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5093,
                 "spell_id": 427329
             },
             {
-                "id": 5094,
                 "spell_id": 427852
             },
             {
-                "id": 5095,
                 "spell_id": 427854
             },
             {
-                "id": 5096,
                 "spell_id": 427865
             },
             {
-                "id": 5097,
                 "spell_id": 427869
             },
             {
-                "id": 5098,
                 "spell_id": 428532
             },
             {
-                "id": 5099,
                 "spell_id": 457465
             }
         ],
@@ -457,10 +432,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 116916,
+        "encounter_id": 2572,
         "name": "Speaker Dorlita",
         "base_health": 84039149,
         "health_percentage": 100,
         "level": 80,
+        "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -472,31 +449,24 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5086,
                 "spell_id": 428120
             },
             {
-                "id": 5087,
                 "spell_id": 428508
             },
             {
-                "id": 5088,
                 "spell_id": 428519
             },
             {
-                "id": 5089,
                 "spell_id": 428711
             },
             {
-                "id": 5090,
                 "spell_id": 439577
             },
             {
-                "id": 5091,
                 "spell_id": 449167
             },
             {
-                "id": 5092,
                 "spell_id": 449169
             }
         ],
@@ -509,10 +479,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 115818,
+        "encounter_id": 2572,
         "name": "Speaker Brokk",
         "base_health": 70032624,
         "health_percentage": 100,
         "level": 80,
+        "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -524,31 +496,24 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5079,
                 "spell_id": 428161
             },
             {
-                "id": 5080,
                 "spell_id": 428202
             },
             {
-                "id": 5081,
                 "spell_id": 428204
             },
             {
-                "id": 5082,
                 "spell_id": 428212
             },
             {
-                "id": 5083,
                 "spell_id": 430097
             },
             {
-                "id": 5084,
                 "spell_id": 439577
             },
             {
-                "id": 5085,
                 "spell_id": 445541
             }
         ],
@@ -561,10 +526,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 115974,
+        "encounter_id": null,
         "name": "Forgebound Mender",
         "base_health": 12629657,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -576,11 +543,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5041,
                 "spell_id": 429109
             },
             {
-                "id": 5042,
                 "spell_id": 429110
             }
         ],
@@ -593,10 +558,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 116911,
+        "encounter_id": null,
         "name": "Forge Loader",
         "base_health": 25259312,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -608,23 +575,18 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5043,
                 "spell_id": 429114
             },
             {
-                "id": 5044,
                 "spell_id": 449129
             },
             {
-                "id": 5045,
                 "spell_id": 449130
             },
             {
-                "id": 5046,
                 "spell_id": 449153
             },
             {
-                "id": 5047,
                 "spell_id": 449154
             }
         ],
@@ -637,10 +599,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 117855,
+        "encounter_id": null,
         "name": "Rock Smasher",
         "base_health": 28065903,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -652,23 +616,18 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5053,
                 "spell_id": 428703
             },
             {
-                "id": 5054,
                 "spell_id": 428706
             },
             {
-                "id": 5055,
                 "spell_id": 428709
             },
             {
-                "id": 5056,
                 "spell_id": 428879
             },
             {
-                "id": 5057,
                 "spell_id": 428887
             }
         ],
@@ -681,10 +640,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 115945,
+        "encounter_id": null,
         "name": "Cursedforge Stoneshaper",
         "base_health": 13331304,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -696,11 +657,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5051,
                 "spell_id": 429422
             },
             {
-                "id": 5052,
                 "spell_id": 429427
             }
         ],
@@ -713,10 +672,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 115944,
+        "encounter_id": null,
         "name": "Cursedforge Honor Guard",
         "base_health": 22452722,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -728,15 +689,12 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5048,
                 "spell_id": 428894
             },
             {
-                "id": 5049,
                 "spell_id": 448640
             },
             {
-                "id": 5050,
                 "spell_id": 448975
             }
         ],
@@ -749,10 +707,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 118692,
+        "encounter_id": null,
         "name": "Turned Speaker",
         "base_health": 14734599,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -764,11 +724,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5034,
                 "spell_id": 427300
             },
             {
-                "id": 5035,
                 "spell_id": 429545
             }
         ],
@@ -781,10 +739,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 118365,
+        "encounter_id": null,
         "name": "Void Bound Howler",
         "base_health": 13331304,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -796,7 +756,6 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5033,
                 "spell_id": 445207
             }
         ],
@@ -809,10 +768,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 118454,
+        "encounter_id": null,
         "name": "Injured Earthen",
         "base_health": 1960303,
         "health_percentage": null,
         "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -832,10 +793,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 118231,
+        "encounter_id": null,
         "name": "Repurposed Loaderbot",
         "base_health": 14734599,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -847,15 +810,12 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5023,
                 "spell_id": 447141
             },
             {
-                "id": 5024,
                 "spell_id": 447145
             },
             {
-                "id": 5025,
                 "spell_id": 462597
             }
         ],
@@ -868,10 +828,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 120170,
+        "encounter_id": null,
         "name": "Cursedforge Mender",
         "base_health": 12629657,
         "health_percentage": null,
         "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -883,11 +845,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "id": 5058,
                 "spell_id": 429109
             },
             {
-                "id": 5059,
                 "spell_id": 429110
             }
         ],
