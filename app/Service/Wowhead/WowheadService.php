@@ -88,7 +88,7 @@ class WowheadService implements WowheadServiceInterface
         $this->log->downloadMissingSpellIconsStart();
         try {
             $targetFolder = resource_path('assets/images/spells');
-            Spell::each(function (Spell $spell) use (&$result, $targetFolder) {
+            Spell::whereNot('icon_name', '')->each(function (Spell $spell) use (&$result, $targetFolder) {
                 $targetFile = sprintf('%s/%s.jpg', $targetFolder, $spell->icon_name);
 
                 // Not missing = we continue
