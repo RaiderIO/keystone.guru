@@ -50,11 +50,11 @@
         "npc_spells": [
             {
                 "id": 85,
-                "spell_id": 219488
+                "spell_id": 207261
             },
             {
                 "id": 86,
-                "spell_id": 219498
+                "spell_id": 207278
             },
             {
                 "id": 87,
@@ -62,15 +62,15 @@
             },
             {
                 "id": 88,
-                "spell_id": 207261
+                "spell_id": 207815
             },
             {
                 "id": 89,
-                "spell_id": 207278
+                "spell_id": 219488
             },
             {
                 "id": 90,
-                "spell_id": 207815
+                "spell_id": 219498
             }
         ],
         "npc_enemy_forces": []
@@ -107,15 +107,15 @@
             },
             {
                 "id": 115,
-                "spell_id": 207906
+                "spell_id": 207887
             },
             {
                 "id": 116,
-                "spell_id": 207907
+                "spell_id": 207906
             },
             {
                 "id": 117,
-                "spell_id": 211457
+                "spell_id": 207907
             },
             {
                 "id": 118,
@@ -127,7 +127,7 @@
             },
             {
                 "id": 120,
-                "spell_id": 207887
+                "spell_id": 211457
             }
         ],
         "npc_enemy_forces": []
@@ -164,19 +164,19 @@
             },
             {
                 "id": 125,
-                "spell_id": 209667
-            },
-            {
-                "id": 126,
                 "spell_id": 209628
             },
             {
+                "id": 126,
+                "spell_id": 209667
+            },
+            {
                 "id": 127,
-                "spell_id": 209678
+                "spell_id": 209676
             },
             {
                 "id": 128,
-                "spell_id": 209676
+                "spell_id": 209678
             }
         ],
         "npc_enemy_forces": []
@@ -226,7 +226,7 @@
         "npc_characteristics": [
             {
                 "id": 278,
-                "characteristic_id": 1
+                "characteristic_id": 5
             },
             {
                 "id": 279,
@@ -234,23 +234,23 @@
             },
             {
                 "id": 280,
-                "characteristic_id": 12
-            },
-            {
-                "id": 281,
-                "characteristic_id": 11
-            },
-            {
-                "id": 282,
-                "characteristic_id": 19
-            },
-            {
-                "id": 283,
                 "characteristic_id": 2
             },
             {
-                "id": 284,
+                "id": 281,
                 "characteristic_id": 18
+            },
+            {
+                "id": 282,
+                "characteristic_id": 11
+            },
+            {
+                "id": 283,
+                "characteristic_id": 19
+            },
+            {
+                "id": 284,
+                "characteristic_id": 12
             },
             {
                 "id": 285,
@@ -258,17 +258,17 @@
             },
             {
                 "id": 286,
-                "characteristic_id": 5
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
                 "id": 78,
-                "spell_id": 209033
+                "spell_id": 209027
             },
             {
                 "id": 79,
-                "spell_id": 209027
+                "spell_id": 209033
             }
         ],
         "npc_enemy_forces": [
@@ -331,7 +331,7 @@
         "npc_characteristics": [
             {
                 "id": 293,
-                "characteristic_id": 1
+                "characteristic_id": 5
             },
             {
                 "id": 294,
@@ -339,23 +339,23 @@
             },
             {
                 "id": 295,
-                "characteristic_id": 12
-            },
-            {
-                "id": 296,
-                "characteristic_id": 11
-            },
-            {
-                "id": 297,
-                "characteristic_id": 19
-            },
-            {
-                "id": 298,
                 "characteristic_id": 2
             },
             {
-                "id": 299,
+                "id": 296,
                 "characteristic_id": 18
+            },
+            {
+                "id": 297,
+                "characteristic_id": 11
+            },
+            {
+                "id": 298,
+                "characteristic_id": 19
+            },
+            {
+                "id": 299,
+                "characteristic_id": 12
             },
             {
                 "id": 300,
@@ -363,7 +363,7 @@
             },
             {
                 "id": 301,
-                "characteristic_id": 5
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
@@ -436,7 +436,7 @@
         "npc_characteristics": [
             {
                 "id": 261,
-                "characteristic_id": 1
+                "characteristic_id": 5
             },
             {
                 "id": 262,
@@ -444,7 +444,7 @@
             },
             {
                 "id": 263,
-                "characteristic_id": 12
+                "characteristic_id": 18
             },
             {
                 "id": 264,
@@ -452,7 +452,7 @@
             },
             {
                 "id": 265,
-                "characteristic_id": 10
+                "characteristic_id": 12
             },
             {
                 "id": 266,
@@ -460,7 +460,7 @@
             },
             {
                 "id": 267,
-                "characteristic_id": 18
+                "characteristic_id": 10
             },
             {
                 "id": 268,
@@ -468,7 +468,7 @@
             },
             {
                 "id": 269,
-                "characteristic_id": 5
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
@@ -547,27 +547,27 @@
         "npc_spells": [
             {
                 "id": 72,
-                "spell_id": 209512
-            },
-            {
-                "id": 73,
-                "spell_id": 225101
-            },
-            {
-                "id": 74,
-                "spell_id": 225100
-            },
-            {
-                "id": 75,
                 "spell_id": 209413
             },
             {
+                "id": 73,
+                "spell_id": 209495
+            },
+            {
+                "id": 74,
+                "spell_id": 209512
+            },
+            {
+                "id": 75,
+                "spell_id": 225100
+            },
+            {
                 "id": 76,
-                "spell_id": 397918
+                "spell_id": 225101
             },
             {
                 "id": 77,
-                "spell_id": 209495
+                "spell_id": 397918
             }
         ],
         "npc_enemy_forces": [
@@ -636,19 +636,19 @@
         "npc_spells": [
             {
                 "id": 110,
-                "spell_id": 397903
-            },
-            {
-                "id": 111,
-                "spell_id": 397897
-            },
-            {
-                "id": 112,
                 "spell_id": 207850
             },
             {
-                "id": 113,
+                "id": 111,
                 "spell_id": 207979
+            },
+            {
+                "id": 112,
+                "spell_id": 397897
+            },
+            {
+                "id": 113,
+                "spell_id": 397903
             }
         ],
         "npc_enemy_forces": []
@@ -681,23 +681,23 @@
         "npc_spells": [
             {
                 "id": 105,
-                "spell_id": 397907
-            },
-            {
-                "id": 106,
                 "spell_id": 207980
             },
             {
-                "id": 107,
+                "id": 106,
                 "spell_id": 207981
             },
             {
+                "id": 107,
+                "spell_id": 209719
+            },
+            {
                 "id": 108,
-                "spell_id": 397908
+                "spell_id": 397907
             },
             {
                 "id": 109,
-                "spell_id": 209719
+                "spell_id": 397908
             }
         ],
         "npc_enemy_forces": []
@@ -730,7 +730,7 @@
         "npc_spells": [
             {
                 "id": 102,
-                "spell_id": 397892
+                "spell_id": 209378
             },
             {
                 "id": 103,
@@ -738,7 +738,7 @@
             },
             {
                 "id": 104,
-                "spell_id": 209378
+                "spell_id": 397892
             }
         ],
         "npc_enemy_forces": []
@@ -765,23 +765,23 @@
         "npc_characteristics": [
             {
                 "id": 326,
-                "characteristic_id": 12
+                "characteristic_id": 5
             },
             {
                 "id": 327,
-                "characteristic_id": 18
-            },
-            {
-                "id": 328,
-                "characteristic_id": 1
-            },
-            {
-                "id": 329,
                 "characteristic_id": 14
             },
             {
+                "id": 328,
+                "characteristic_id": 18
+            },
+            {
+                "id": 329,
+                "characteristic_id": 12
+            },
+            {
                 "id": 330,
-                "characteristic_id": 5
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
@@ -791,11 +791,11 @@
             },
             {
                 "id": 99,
-                "spell_id": 211477
+                "spell_id": 211391
             },
             {
                 "id": 100,
-                "spell_id": 211391
+                "spell_id": 211477
             }
         ],
         "npc_enemy_forces": [
@@ -927,41 +927,41 @@
         "npc_characteristics": [
             {
                 "id": 313,
-                "characteristic_id": 12
+                "characteristic_id": 5
             },
             {
                 "id": 314,
-                "characteristic_id": 19
-            },
-            {
-                "id": 315,
-                "characteristic_id": 18
-            },
-            {
-                "id": 316,
-                "characteristic_id": 1
-            },
-            {
-                "id": 317,
                 "characteristic_id": 14
             },
             {
+                "id": 315,
+                "characteristic_id": 19
+            },
+            {
+                "id": 316,
+                "characteristic_id": 18
+            },
+            {
+                "id": 317,
+                "characteristic_id": 12
+            },
+            {
                 "id": 318,
-                "characteristic_id": 5
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
                 "id": 93,
-                "spell_id": 211412
-            },
-            {
-                "id": 94,
                 "spell_id": 211401
             },
             {
-                "id": 95,
+                "id": 94,
                 "spell_id": 211406
+            },
+            {
+                "id": 95,
+                "spell_id": 211412
             }
         ],
         "npc_enemy_forces": [
@@ -1024,11 +1024,11 @@
         "npc_characteristics": [
             {
                 "id": 319,
-                "characteristic_id": 12
+                "characteristic_id": 5
             },
             {
                 "id": 320,
-                "characteristic_id": 19
+                "characteristic_id": 14
             },
             {
                 "id": 321,
@@ -1036,19 +1036,19 @@
             },
             {
                 "id": 322,
-                "characteristic_id": 16
+                "characteristic_id": 19
             },
             {
                 "id": 323,
-                "characteristic_id": 1
+                "characteristic_id": 12
             },
             {
                 "id": 324,
-                "characteristic_id": 14
+                "characteristic_id": 16
             },
             {
                 "id": 325,
-                "characteristic_id": 5
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
@@ -1267,19 +1267,19 @@
             },
             {
                 "id": 289,
-                "characteristic_id": 2
-            },
-            {
-                "id": 290,
-                "characteristic_id": 1
-            },
-            {
-                "id": 291,
                 "characteristic_id": 19
             },
             {
-                "id": 292,
+                "id": 290,
+                "characteristic_id": 2
+            },
+            {
+                "id": 291,
                 "characteristic_id": 18
+            },
+            {
+                "id": 292,
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
@@ -1348,7 +1348,7 @@
         "npc_characteristics": [
             {
                 "id": 270,
-                "characteristic_id": 12
+                "characteristic_id": 5
             },
             {
                 "id": 271,
@@ -1356,23 +1356,23 @@
             },
             {
                 "id": 272,
-                "characteristic_id": 19
-            },
-            {
-                "id": 273,
-                "characteristic_id": 18
-            },
-            {
-                "id": 274,
-                "characteristic_id": 1
-            },
-            {
-                "id": 275,
                 "characteristic_id": 14
             },
             {
+                "id": 273,
+                "characteristic_id": 19
+            },
+            {
+                "id": 274,
+                "characteristic_id": 18
+            },
+            {
+                "id": 275,
+                "characteristic_id": 12
+            },
+            {
                 "id": 276,
-                "characteristic_id": 5
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
@@ -1510,7 +1510,7 @@
         "npc_characteristics": [
             {
                 "id": 302,
-                "characteristic_id": 12
+                "characteristic_id": 5
             },
             {
                 "id": 303,
@@ -1518,15 +1518,15 @@
             },
             {
                 "id": 304,
-                "characteristic_id": 1
-            },
-            {
-                "id": 305,
                 "characteristic_id": 18
             },
             {
+                "id": 305,
+                "characteristic_id": 12
+            },
+            {
                 "id": 306,
-                "characteristic_id": 5
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
@@ -1595,11 +1595,11 @@
         "npc_characteristics": [
             {
                 "id": 309,
-                "characteristic_id": 19
+                "characteristic_id": 5
             },
             {
                 "id": 310,
-                "characteristic_id": 1
+                "characteristic_id": 19
             },
             {
                 "id": 311,
@@ -1607,17 +1607,17 @@
             },
             {
                 "id": 312,
-                "characteristic_id": 5
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
                 "id": 91,
-                "spell_id": 212784
+                "spell_id": 211299
             },
             {
                 "id": 92,
-                "spell_id": 211299
+                "spell_id": 212784
             }
         ],
         "npc_enemy_forces": [
@@ -2002,11 +2002,11 @@
             },
             {
                 "id": 122,
-                "spell_id": 373552
+                "spell_id": 373364
             },
             {
                 "id": 123,
-                "spell_id": 373364
+                "spell_id": 373552
             }
         ],
         "npc_enemy_forces": [
@@ -2391,37 +2391,37 @@
         "npc_characteristics": [
             {
                 "id": 255,
-                "characteristic_id": 16
-            },
-            {
-                "id": 256,
-                "characteristic_id": 10
-            },
-            {
-                "id": 257,
-                "characteristic_id": 19
-            },
-            {
-                "id": 258,
-                "characteristic_id": 1
-            },
-            {
-                "id": 259,
                 "characteristic_id": 18
             },
             {
-                "id": 260,
+                "id": 256,
+                "characteristic_id": 19
+            },
+            {
+                "id": 257,
                 "characteristic_id": 17
+            },
+            {
+                "id": 258,
+                "characteristic_id": 10
+            },
+            {
+                "id": 259,
+                "characteristic_id": 16
+            },
+            {
+                "id": 260,
+                "characteristic_id": 1
             }
         ],
         "npc_spells": [
             {
                 "id": 67,
-                "spell_id": 209033
+                "spell_id": 209027
             },
             {
                 "id": 68,
-                "spell_id": 209027
+                "spell_id": 209033
             }
         ],
         "npc_enemy_forces": [
