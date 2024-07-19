@@ -156,7 +156,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function npcCharacteristics(): HasMany
     {
-        return $this->hasMany(NpcCharacteristic::class);
+        return $this->hasMany(NpcCharacteristic::class)->orderBy('characteristic_id');
     }
 
     public function spells(): BelongsToMany

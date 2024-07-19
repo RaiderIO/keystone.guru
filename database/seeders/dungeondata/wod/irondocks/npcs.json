@@ -240,10 +240,10 @@
                 "characteristic_id": 1
             },
             {
-                "characteristic_id": 19
+                "characteristic_id": 2
             },
             {
-                "characteristic_id": 2
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -296,22 +296,22 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
                 "characteristic_id": 11
             },
             {
                 "characteristic_id": 12
             },
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 19
+                "characteristic_id": 14
             },
             {
                 "characteristic_id": 18
             },
             {
-                "characteristic_id": 14
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -433,13 +433,13 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
             },
             {
                 "characteristic_id": 19
-            },
-            {
-                "characteristic_id": 12
             }
         ],
         "npc_spells": [
@@ -641,10 +641,10 @@
                 "characteristic_id": 1
             },
             {
-                "characteristic_id": 19
+                "characteristic_id": 11
             },
             {
-                "characteristic_id": 11
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -737,13 +737,13 @@
                 "characteristic_id": 1
             },
             {
-                "characteristic_id": 19
-            },
-            {
                 "characteristic_id": 17
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1015,10 +1015,10 @@
                 "characteristic_id": 1
             },
             {
-                "characteristic_id": 19
+                "characteristic_id": 14
             },
             {
-                "characteristic_id": 14
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1112,10 +1112,10 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 19
+                "characteristic_id": 18
             },
             {
-                "characteristic_id": 18
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1159,19 +1159,19 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
                 "characteristic_id": 11
             },
             {
                 "characteristic_id": 12
             },
             {
-                "characteristic_id": 1
+                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
-            },
-            {
-                "characteristic_id": 18
             }
         ],
         "npc_spells": [
@@ -1224,10 +1224,10 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 19
+                "characteristic_id": 18
             },
             {
-                "characteristic_id": 18
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1489,13 +1489,13 @@
                 "characteristic_id": 1
             },
             {
-                "characteristic_id": 19
-            },
-            {
                 "characteristic_id": 11
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [

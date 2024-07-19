@@ -344,7 +344,7 @@ class Save extends Command
     {
 //        $this->info(sprintf('-- Saving floor %s', __($floor->name)));
         // Only export NPC->id, no need to store the full npc in the enemy
-        $enemies      = $floor->enemiesForExport()->without(['npc', 'type'])->get()->values();
+        $enemies      = $floor->enemiesForExport()->without(['npc', 'type'])->get()->makeVisible(['mdt_scale'])->values();
         $enemyPacks   = $floor->enemyPacksForExport->values();
         $enemyPatrols = $floor->enemyPatrolsForExport->values();
         /** @var \Illuminate\Database\Eloquent\Collection $dungeonFloorSwitchMarkers */

@@ -256,6 +256,9 @@ MDT.mapPOIs[dungeonIndex] = {};
                 }
             }
 
+            $isBoss = $npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS] ?
+                true : null;
+
             $dungeonEnemy = array_filter([
                 'name'             => addslashes($npc->name),
                 'id'               => $npc->id,
@@ -266,11 +269,10 @@ MDT.mapPOIs[dungeonIndex] = {};
                 'displayId'        => $npc->display_id,
                 'creatureType'     => $npc->type->type,
                 'level'            => $npc->level,
-                'isBoss'           => $npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS] ?
-                    true : null,
+                'isBoss'           => $isBoss,
                 'encounterID'      => $npc->encounter_id,
                 // $npc->dungeon may be null if dungeon_id = -1
-                'instanceID'       => $mappingVersion->dungeon->instance_id,
+                'instanceID'       => $isBoss ? $mappingVersion->dungeon->instance_id : null,
                 'characteristics'  => $npc->characteristics->mapWithKeys(function (Characteristic $characteristic) {
                     return [__($characteristic->name, [], 'en_US') => true];
                 })->toArray(),
@@ -327,6 +329,9 @@ MDT.mapPOIs[dungeonIndex] = {};
                             'y' => $vertexMDTXY['y'],
                         ];
                     }
+
+                    // MDT does not save the close off of its patrols, so remove the last vertex for export
+                    array_pop($patrolVertices);
 
                     $dungeonEnemy['clones'][$cloneIndex]['patrol'] = $patrolVertices;
 

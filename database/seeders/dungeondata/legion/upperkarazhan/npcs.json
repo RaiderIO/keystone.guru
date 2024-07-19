@@ -954,19 +954,19 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
                 "characteristic_id": 11
             },
             {
-                "characteristic_id": 1
+                "characteristic_id": 14
             },
             {
                 "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
-            },
-            {
-                "characteristic_id": 14
             }
         ],
         "npc_spells": [

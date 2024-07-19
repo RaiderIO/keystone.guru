@@ -25,9 +25,9 @@ use Illuminate\Support\Collection;
  * @property int                          $floor_id
  * @property int|null                     $mdt_id The ID in MDT (clone index) that this enemy is coupled to
  * @property int|null                     $mdt_npc_id The ID of the NPC in MDT that this enemy is coupled to. Usually this will be the same - but MDT sometimes makes mistakes which will require a different NPC to be coupled.
- * @property int|null    $mdt_scale The scale that MDT assigned to this particular enemy.
- * @property string|null $mdt_x The X position that MDT assigned to this enemy on import.
- * @property string|null $mdt_y The Y position that MDT assigned to this enemy on import.
+ * @property int|null                     $mdt_scale The scale that MDT assigned to this particular enemy.
+ * @property string|null                  $mdt_x The X position that MDT assigned to this enemy on import.
+ * @property string|null                  $mdt_y The Y position that MDT assigned to this enemy on import.
  * @property string                       $seasonal_type The type of seasonal effect this enemy has. Awakened to signify an Awakened enemy, Inspiring to signify an Inspiring enemy
  * @property int                          $seasonal_index Shows/hides this enemy based on the seasonal index as defined in Affix Group. If they match, the enemy is shown, otherwise hidden. If not set enemy is always shown.
  * @property int                          $mdt_npc_index The index of the NPC in MDT (not saved in DB)
