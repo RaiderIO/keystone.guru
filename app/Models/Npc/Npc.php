@@ -29,6 +29,7 @@ use InvalidArgumentException;
  * @property int                                $base_health
  * @property int|null                           $health_percentage Null = 100% health
  * @property int|null                           $level
+ * @property float|null                         $mdt_scale
  * @property string                             $aggressiveness
  * @property bool                               $dangerous
  * @property bool                               $truesight
@@ -58,6 +59,20 @@ class Npc extends CacheModel implements MappingModelInterface
 {
     use SeederModel;
 
+    public const AGGRESSIVENESS_AGGRESSIVE = 'aggressive';
+    public const AGGRESSIVENESS_UNFRIENDLY = 'unfriendly';
+    public const AGGRESSIVENESS_NEUTRAL    = 'neutral';
+    public const AGGRESSIVENESS_FRIENDLY   = 'friendly';
+    public const AGGRESSIVENESS_AWAKENED   = 'awakened';
+
+    public const ALL_AGGRESSIVENESS = [
+        self::AGGRESSIVENESS_AGGRESSIVE,
+        self::AGGRESSIVENESS_UNFRIENDLY,
+        self::AGGRESSIVENESS_NEUTRAL,
+        self::AGGRESSIVENESS_FRIENDLY,
+        self::AGGRESSIVENESS_AWAKENED,
+    ];
+
     public $incrementing = false;
 
     public $timestamps = false;
@@ -75,6 +90,7 @@ class Npc extends CacheModel implements MappingModelInterface
         'base_health',
         'health_percentage',
         'level',
+        'mdt_scale',
         'aggressiveness',
         'dangerous',
         'truesight',
@@ -84,22 +100,17 @@ class Npc extends CacheModel implements MappingModelInterface
         'runs_away_in_fear',
     ];
 
-    public const AGGRESSIVENESS_AGGRESSIVE = 'aggressive';
-
-    public const AGGRESSIVENESS_UNFRIENDLY = 'unfriendly';
-
-    public const AGGRESSIVENESS_NEUTRAL = 'neutral';
-
-    public const AGGRESSIVENESS_FRIENDLY = 'friendly';
-
-    public const AGGRESSIVENESS_AWAKENED = 'awakened';
-
-    public const ALL_AGGRESSIVENESS = [
-        self::AGGRESSIVENESS_AGGRESSIVE,
-        self::AGGRESSIVENESS_UNFRIENDLY,
-        self::AGGRESSIVENESS_NEUTRAL,
-        self::AGGRESSIVENESS_FRIENDLY,
-        self::AGGRESSIVENESS_AWAKENED,
+    protected $casts = [
+        'id'                => 'integer',
+        'dungeon_id'        => 'integer',
+        'classification_id' => 'integer',
+        'npc_type_id'       => 'integer',
+        'npc_class_id'      => 'integer',
+        'display_id'        => 'integer',
+        'base_health'       => 'integer',
+        'health_percentage' => 'integer',
+        'level'             => 'integer',
+        'mdt_scale'         => 'float',
     ];
 
     /**

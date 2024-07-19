@@ -137,6 +137,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 // MDT doesn't always get this right - don't trust it (Watcher Irideus for example)
                 $npc->health_percentage = $npc->health_percentage ?? $mdtNpc->getHealthPercentage();
                 $npc->level             = $mdtNpc->getLevel();
+                $npc->mdt_scale         = $mdtNpc->getScale();
                 $npc->npc_type_id       = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::UNCATEGORIZED;
                 $npc->truesight         = $mdtNpc->getStealthDetect();
 
@@ -556,6 +557,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         'mapping_version_id' => $newMappingVersion->id,
                         'floor_id'           => $savedEnemy->floor_id,
                         'polyline_id'        => $polyLine->id,
+                        'mdt_npc_id'         => $mdtNPC->getId(),
+                        'mdt_id'             => $mdtCloneIndex,
                         'teeming'            => null,
                         'faction'            => Faction::FACTION_ANY,
                     ]);
@@ -659,7 +662,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     /**
      * Get a bounding box which encompasses all passed enemies
      *
-     * @param Collection|Enemy[] $enemies
+     * @param Collection<Enemy> $enemies
      */
     private function getVerticesBoundingBoxFromEnemies(Collection $enemies): array
     {

@@ -54,7 +54,7 @@ class ExportMapping extends Command
             if (!Conversion::hasMDTDungeonName($dungeon->key)) {
                 $this->warn(sprintf('Unable to find MDT dungeon for key %s!', $dungeon->key));
             } else {
-                $fileName = realpath(sprintf('%s/%s.lua', $targetFolder, Conversion::getMDTDungeonName($dungeon->key)));
+                $fileName = sprintf('%s/%s.lua', realpath($targetFolder), Conversion::getMDTDungeonName($dungeon->key));
 
                 $this->info(sprintf('Saving %s', $fileName));
                 file_put_contents($fileName, $luaString);

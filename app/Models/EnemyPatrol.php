@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int            $mapping_version_id
  * @property int            $floor_id
  * @property int            $polyline_id
+ * @property int|null       $mdt_npc_id Keeps track of which enemy this patrol was assigned to in MDT
+ * @property int|null       $mdt_id
  * @property string         $teeming
  * @property string         $faction
  * @property MappingVersion $mappingVersion
@@ -35,6 +37,8 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         'mapping_version_id',
         'floor_id',
         'polyline_id',
+        'mdt_npc_id',
+        'mdt_id',
         'teeming',
         'faction',
     ];
@@ -47,6 +51,8 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         'mapping_version_id' => 'integer',
         'floor_id'           => 'integer',
         'polyline_id'        => 'integer',
+        'mdt_npc_id'         => 'integer',
+        'mdt_id'             => 'integer',
     ];
 
     public function mappingVersion(): BelongsTo
@@ -59,12 +65,10 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         return $this->belongsTo(Floor::class);
     }
 
-    /**
-     * Get the dungeon route that this brushline is attached to.
-     */
     public function polyline(): HasOne
     {
-        return $this->hasOne(Polyline::class, 'model_id')->where('model_class', static::class);
+        return $this->hasOne(Polyline::class, 'model_id')
+            ->where('model_class', static::class);
     }
 
     public function getDungeonId(): ?int

@@ -242,10 +242,6 @@ MDT.mapPOIs[dungeonIndex] = {};
                 NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE]       => 1.6,
             ];
 
-            if ($npc === null) {
-                dd($enemies);
-            }
-
             /** @var NpcEnemyForces|null $npcEnemyForces */
             $npcEnemyForces = $npc->enemyForcesByMappingVersion($mappingVersion->id)->first();
 
@@ -265,7 +261,7 @@ MDT.mapPOIs[dungeonIndex] = {};
                 'id'               => $npc->id,
                 'count'            => $enemyForces,
                 'health'           => $npc->base_health,
-                'scale'            => $scaleMapping[$npc->classification_id],
+                'scale'            => $npc->mdt_scale ?? $scaleMapping[$npc->classification_id],
                 'stealthDetect'    => $npc->truesight ? true : null,
                 'displayId'        => $npc->display_id,
                 'creatureType'     => $npc->type->type,
@@ -304,12 +300,17 @@ MDT.mapPOIs[dungeonIndex] = {};
                     'x'        => (float)($enemy->mdt_x ?? $mdtCoordinate['x']),
                     'y'        => (float)($enemy->mdt_y ?? $mdtCoordinate['y']),
                     'g'        => $group ?? null,
-                    'sublevel' => $enemy->floor->mdt_sub_level ?? $enemy->floor->index,
+                    // Facade means that the sublevel is ALWAYS 1 since there's only one MDT level
+                    'sublevel' => $enemy->floor->mdt_sub_level ?? $mappingVersion->facade_enabled ? 1 : $enemy->floor->index,
                     'scale'    => $enemy->mdt_scale,
                 ]);
 
                 // Add patrol if any
-                if ($enemy->enemy_patrol_id !== null && !$savedEnemyPatrols->has($enemy->enemy_patrol_id)) {
+                if ($enemy->enemy_patrol_id !== null &&
+                    // @TODO creating a new patrol will cause it not to be able to be exported to MDT since mdt_npc_id and mdt_id are only set when importing MDT patrols
+                    // !$savedEnemyPatrols->has($enemy->enemy_patrol_id))
+                    $enemy->enemyPatrol->mdt_npc_id === $enemy->npc_id &&
+                    $enemy->enemyPatrol->mdt_id === $enemy->mdt_id) {
                     $patrolVertices = [];
 
                     $polylineLatLngs = $enemy->enemyPatrol->polyline->getDecodedLatLngs($enemy->floor);
