@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "247e9d03f09511e0f5432bbc70c4dbc1",
+    "content-hash": "486e9f8e4e74fe15216e6e9a8c07c948",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -5037,7 +5037,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Wotuu/MythicDungeonTools.git",
-                "reference": "2423e442156ea4f770362e19c20acacd3cc51464"
+                "reference": "7c99c1e0fb6cd8e7fb7869fdd5fe09d688c41959"
             },
             "type": "library"
         },
@@ -14355,5 +14355,5 @@
         "ext-zip": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
