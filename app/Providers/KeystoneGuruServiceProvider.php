@@ -45,6 +45,8 @@ use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Discord\DiscordApiService;
 use App\Service\Discord\DiscordApiServiceInterface;
+use App\Service\Dungeon\DungeonService;
+use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\DungeonRoute\CoverageService;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DevDiscoverService;
@@ -81,7 +83,6 @@ use App\Service\Patreon\PatreonApiService;
 use App\Service\Patreon\PatreonApiServiceInterface;
 use App\Service\Patreon\PatreonService;
 use App\Service\Patreon\PatreonServiceInterface;
-use App\Service\RaiderIO\RaiderIOApiService;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\RaiderIO\RaiderIOKeystoneGuruApiService;
 use App\Service\ReadOnlyMode\ReadOnlyModeService;
@@ -140,6 +141,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(SpellServiceInterface::class, SpellService::class);
         $this->app->bind(ChallengeModeRunDataServiceInterface::class, ChallengeModeRunDataService::class);
         $this->app->bind(CombatLogEventServiceInterface::class, CombatLogEventService::class);
+        $this->app->bind(DungeonServiceInterface::class, DungeonService::class);
 
         // Depends on CoordinatesService
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);

@@ -28,7 +28,7 @@ class RefreshDisplayIds extends Command
      */
     public function handle(WowToolsServiceInterface $wowToolsService): void
     {
-        /** @var Collection|\App\Models\Npc\Npc[] $npcsToRefresh */
+        /** @var Collection<Npc> $npcsToRefresh */
         $npcsToRefresh = Npc::whereNull('display_id')->get();
 
         $this->info(sprintf('Refreshing display_ids for %d npcs..', $npcsToRefresh->count()));

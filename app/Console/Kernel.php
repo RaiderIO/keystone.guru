@@ -19,6 +19,7 @@ use App\Console\Commands\Database\Backup;
 use App\Console\Commands\Discover\Cache as DiscoverCache;
 use App\Console\Commands\Dungeon\CreateMissing;
 use App\Console\Commands\Dungeon\CreateMissingFloors;
+use App\Console\Commands\Dungeon\ImportInstanceIds;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
 use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
 use App\Console\Commands\Generate\Repository as GenerateRepository;
@@ -113,6 +114,7 @@ class Kernel extends ConsoleKernel
         // Dungeon
         CreateMissing::class,
         CreateMissingFloors::class,
+        ImportInstanceIds::class,
 
         // Environment
         EnvironmentUpdatePrepare::class,

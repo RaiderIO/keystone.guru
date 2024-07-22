@@ -50,6 +50,8 @@ use App\Service\CombatLog\Splitters\Logging\ZoneChangeSplitterLogging;
 use App\Service\CombatLog\Splitters\Logging\ZoneChangeSplitterLoggingInterface;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLogging;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
+use App\Service\Dungeon\Logging\DungeonServiceLogging;
+use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTImportStringServiceLogging;
 use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTMappingExportServiceLogging;
@@ -116,6 +118,9 @@ class LoggingServiceProvider extends ServiceProvider
 
         // Combat log event
         $this->app->bind(CombatLogEventServiceLoggingInterface::class, CombatLogEventServiceLogging::class);
+
+        // Dungeon
+        $this->app->bind(DungeonServiceLoggingInterface::class, DungeonServiceLogging::class);
 
         // MDT
         $this->app->bind(MDTImportStringServiceLoggingInterface::class, MDTImportStringServiceLogging::class);
