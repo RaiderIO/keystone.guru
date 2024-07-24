@@ -293,7 +293,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npc = $npcs->get($mdtNpc->getId());
 
                 if ($npc === null) {
-                    $this->log->importNpcsUnableToFindNpc($npc->id);
+                    $this->log->importNpcsUnableToFindNpc($mdtNpc->getId());
 
                     continue;
                 }
