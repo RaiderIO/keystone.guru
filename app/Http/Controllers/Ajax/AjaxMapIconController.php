@@ -177,7 +177,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
      *
      * @throws Exception
      */
-    public function adminDelete(Request $request, MapIcon $mapIcon)
+    public function adminDelete(Request $request, MappingVersion $mappingVersion, MapIcon $mapIcon)
     {
         return $this->delete($request, null, $mapIcon);
     }
