@@ -12314,7 +12314,7 @@
         "map_id": 2660,
         "instance_id": 1271,
         "challenge_mode_id": 503,
-        "mdt_id": 0,
+        "mdt_id": 113,
         "key": "ara_karacityofechoes",
         "name": "dungeons.tww.ara_kara_city_of_echoes.name",
         "slug": "ara-kara-city-of-echoes",
@@ -12328,7 +12328,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": 2357,
-                "map_name": null,
+                "map_name": "CityOfEchos_A",
                 "name": "dungeons.tww.ara_kara_city_of_echoes.floors.echoing_overlook",
                 "default": 1,
                 "facade": 0,
@@ -12343,7 +12343,14 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 972,
+                        "floor1_id": 282,
+                        "floor2_id": 283,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -12352,7 +12359,7 @@
                 "index": 2,
                 "mdt_sub_level": null,
                 "ui_map_id": 2358,
-                "map_name": null,
+                "map_name": "CityOfEchos_B",
                 "name": "dungeons.tww.ara_kara_city_of_echoes.floors.the_undercache",
                 "default": 0,
                 "facade": 0,
@@ -12367,7 +12374,14 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 973,
+                        "floor1_id": 283,
+                        "floor2_id": 282,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -12376,7 +12390,7 @@
                 "index": 3,
                 "mdt_sub_level": 1,
                 "ui_map_id": 0,
-                "map_name": null,
+                "map_name": "AraKara",
                 "name": "dungeons.tww.ara_kara_city_of_echoes.floors.ara_kara_city_of_echoes",
                 "default": 0,
                 "facade": 1,

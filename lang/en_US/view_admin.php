@@ -133,6 +133,7 @@ return [
             'connected_floors'                   => 'Connected floors',
             'connected_floors_title'             => 'A connected floor is any other floor that we may reach from this floor',
             'connected'                          => 'Connected',
+            'floor_name'                         => 'Name',
             'direction'                          => 'Direction',
             'floor_direction'                    => [
                 'none'  => 'None',

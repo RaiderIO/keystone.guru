@@ -8,7 +8,7 @@
         "display_id": 119793,
         "encounter_id": 2579,
         "name": "Avanoxx",
-        "base_health": 84039149,
+        "base_health": 109250902,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -67,10 +67,10 @@
         "display_id": 117840,
         "encounter_id": null,
         "name": "Engorged Crawler",
-        "base_health": 13471634,
+        "base_health": 17480145,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1.3,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -79,7 +79,14 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 438618
@@ -94,7 +101,15 @@
                 "spell_id": 438675
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16315,
+                "mapping_version_id": 357,
+                "npc_id": 214840,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 215405,
@@ -105,10 +120,10 @@
         "display_id": 115723,
         "encounter_id": 2579,
         "name": "Anubzekt",
-        "base_health": 98045674,
+        "base_health": 127459387,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 2,
+        "mdt_scale": 1.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -117,7 +132,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 433443
@@ -147,9 +166,6 @@
                 "spell_id": 435151
             },
             {
-                "spell_id": 435193
-            },
-            {
                 "spell_id": 439506
             }
         ],
@@ -164,10 +180,10 @@
         "display_id": 117473,
         "encounter_id": 2579,
         "name": "Kikatal The Harvester",
-        "base_health": 112052199,
+        "base_health": 145667870,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 2,
+        "mdt_scale": 1.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -176,7 +192,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 432117
@@ -239,10 +259,10 @@
         "display_id": 116588,
         "encounter_id": null,
         "name": "Trilling Attendant",
-        "base_health": 11226361,
+        "base_health": 14566787,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1.3,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -251,7 +271,17 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 434786
@@ -263,7 +293,15 @@
                 "spell_id": 434796
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16314,
+                "mapping_version_id": 357,
+                "npc_id": 216293,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 216333,
@@ -274,7 +312,7 @@
         "display_id": 119391,
         "encounter_id": null,
         "name": "Bloodstained Assistant",
-        "base_health": 12629657,
+        "base_health": 16387636,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -286,13 +324,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 433002
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16320,
+                "mapping_version_id": 357,
+                "npc_id": 216333,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 216336,
@@ -303,10 +356,10 @@
         "display_id": 120876,
         "encounter_id": null,
         "name": "Starved Crawler",
-        "base_health": 3592435,
+        "base_health": 4661372,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -315,13 +368,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 434083
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16312,
+                "mapping_version_id": 357,
+                "npc_id": 216336,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 216337,
@@ -332,7 +400,7 @@
         "display_id": 120862,
         "encounter_id": null,
         "name": "Bloodworker",
-        "base_health": 2806590,
+        "base_health": 3641697,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 0.8,
@@ -344,7 +412,14 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 453583
@@ -353,7 +428,15 @@
                 "spell_id": 453584
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16319,
+                "mapping_version_id": 357,
+                "npc_id": 216337,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 216338,
@@ -364,7 +447,7 @@
         "display_id": 120855,
         "encounter_id": null,
         "name": "Hulking Bloodguard",
-        "base_health": 22452722,
+        "base_health": 29133574,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -391,7 +474,15 @@
                 "spell_id": 453161
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16322,
+                "mapping_version_id": 357,
+                "npc_id": 216338,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 216340,
@@ -402,10 +493,10 @@
         "display_id": 116485,
         "encounter_id": null,
         "name": "Sentry Stagshell",
-        "base_health": 5613181,
+        "base_health": 7283393,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -414,13 +505,31 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 432967
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16323,
+                "mapping_version_id": 357,
+                "npc_id": 216340,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 216341,
@@ -431,10 +540,10 @@
         "display_id": 120841,
         "encounter_id": null,
         "name": "Jabbing Flyer",
-        "base_health": 3367908,
+        "base_health": 4370036,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -443,13 +552,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 438599
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16313,
+                "mapping_version_id": 357,
+                "npc_id": 216341,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 216363,
@@ -460,10 +584,10 @@
         "display_id": 120860,
         "encounter_id": null,
         "name": "Reinforced Drone",
-        "base_health": 11226361,
+        "base_health": 14566787,
         "health_percentage": 100,
         "level": 80,
-        "mdt_scale": 0.9,
+        "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -472,7 +596,17 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 433656
@@ -481,7 +615,15 @@
                 "spell_id": 433785
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16327,
+                "mapping_version_id": 357,
+                "npc_id": 216363,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 216364,
@@ -492,10 +634,10 @@
         "display_id": 115772,
         "encounter_id": null,
         "name": "Blood Overseer",
-        "base_health": 25259312,
+        "base_health": 32775271,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1.1,
+        "mdt_scale": 1.3,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -522,7 +664,15 @@
                 "spell_id": 455408
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16324,
+                "mapping_version_id": 357,
+                "npc_id": 216364,
+                "enemy_forces": 14,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 216365,
@@ -533,7 +683,7 @@
         "display_id": 116349,
         "encounter_id": null,
         "name": "Winged Carrier",
-        "base_health": 9823067,
+        "base_health": 12745939,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -545,7 +695,14 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 433656
@@ -554,7 +711,15 @@
                 "spell_id": 433821
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16325,
+                "mapping_version_id": 357,
+                "npc_id": 216365,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 216856,
@@ -590,7 +755,7 @@
         "display_id": 120861,
         "encounter_id": null,
         "name": "Nerubian Hauler",
-        "base_health": 44905444,
+        "base_health": 58267148,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -603,8 +768,23 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
-        "npc_enemy_forces": []
+        "npc_spells": [
+            {
+                "spell_id": 434252
+            },
+            {
+                "spell_id": 434254
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16326,
+                "mapping_version_id": 357,
+                "npc_id": 217039,
+                "enemy_forces": 35,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 217531,
@@ -615,7 +795,7 @@
         "display_id": 117119,
         "encounter_id": null,
         "name": "Ixin",
-        "base_health": 22452722,
+        "base_health": 29133574,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2.5,
@@ -642,7 +822,15 @@
                 "spell_id": 441131
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16318,
+                "mapping_version_id": 357,
+                "npc_id": 217531,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 217533,
@@ -653,7 +841,7 @@
         "display_id": 117119,
         "encounter_id": null,
         "name": "Atik",
-        "base_health": 22452722,
+        "base_health": 29133574,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2.5,
@@ -689,7 +877,15 @@
                 "spell_id": 460613
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16316,
+                "mapping_version_id": 357,
+                "npc_id": 217533,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 218324,
@@ -700,7 +896,7 @@
         "display_id": 117119,
         "encounter_id": null,
         "name": "Nakt",
-        "base_health": 22452722,
+        "base_health": 29133574,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2.5,
@@ -733,7 +929,15 @@
                 "spell_id": 460613
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16317,
+                "mapping_version_id": 357,
+                "npc_id": 218324,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 219221,
@@ -761,6 +965,42 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 220599,
+        "dungeon_id": 108,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 117870,
+        "encounter_id": 2579,
+        "name": "Bloodstained Webmage",
+        "base_health": 7283393,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 442210
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 223253,
         "dungeon_id": 108,
         "classification_id": 2,
@@ -769,7 +1009,7 @@
         "display_id": 117870,
         "encounter_id": null,
         "name": "Bloodstained Webmage",
-        "base_health": 12629657,
+        "base_health": 16387636,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -781,7 +1021,17 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 434786
@@ -790,6 +1040,14 @@
                 "spell_id": 448248
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16321,
+                "mapping_version_id": 357,
+                "npc_id": 223253,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]
