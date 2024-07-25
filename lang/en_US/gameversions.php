@@ -13,4 +13,8 @@ return [
         'name'        => 'Classic Era',
         'description' => 'Classic Era',
     ],
+    'beta' => [
+        'name'        => 'Retail Beta',
+        'description' => 'Retail Beta',
+    ],
 ];
