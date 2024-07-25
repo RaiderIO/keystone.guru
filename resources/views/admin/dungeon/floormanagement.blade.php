@@ -67,7 +67,7 @@ $mappingVersionsSelect = $dungeon->mappingVersions
                             {!! Form::select('mapping_version', $mappingVersionsSelect, null, ['class' => 'form-control selectpicker']) !!}
                         </div>
                         <div class="col-auto pl-1">
-                            {!! Form::submit(__('view_admin.dungeon.edit.floor_management.floor_edit_mapping'), ['class' => 'form-control']) !!}
+                            {!! Form::submit(__('view_admin.dungeon.edit.floor_management.floor_edit_edit_mapping'), ['class' => 'form-control']) !!}
                         </div>
                     </div>
                 </form>
