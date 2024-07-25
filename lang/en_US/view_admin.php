@@ -27,6 +27,8 @@ return [
             'floor_management' => [
                 'title'                => 'Floor management',
                 'add_floor'            => 'Add floor',
+                'table_header_active'  => 'Active',
+                'table_header_facade'  => 'Facade',
                 'table_header_id'      => 'Id',
                 'table_header_index'   => 'Index',
                 'table_header_name'    => 'Name',
