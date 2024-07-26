@@ -6,7 +6,7 @@
         "target_floor_id": 293,
         "lat": -175.82,
         "lng": 237.92,
-        "size": 900,
+        "size": 740,
         "rotation": 0
     },
     {
@@ -16,7 +16,27 @@
         "target_floor_id": 293,
         "lat": -31.46,
         "lng": -17.14,
-        "size": 800,
+        "size": 725,
+        "rotation": 0
+    },
+    {
+        "id": 326,
+        "mapping_version_id": 362,
+        "floor_id": 304,
+        "target_floor_id": 293,
+        "lat": -175.82,
+        "lng": 237.92,
+        "size": 740,
+        "rotation": 0
+    },
+    {
+        "id": 327,
+        "mapping_version_id": 362,
+        "floor_id": 304,
+        "target_floor_id": 293,
+        "lat": -31.46,
+        "lng": -17.14,
+        "size": 725,
         "rotation": 0
     }
 ]
