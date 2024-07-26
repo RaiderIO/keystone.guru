@@ -36,8 +36,8 @@ $mappingVersionsSelect = $dungeon->mappingVersions
         <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_facade') }}</th>
         <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_id') }}</th>
         <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_index') }}</th>
-        <th width="30%">{{ __('view_admin.dungeon.edit.floor_management.table_header_name') }}</th>
-        <th width="30%">{{ __('view_admin.dungeon.edit.floor_management.table_header_actions') }}</th>
+        <th width="20%">{{ __('view_admin.dungeon.edit.floor_management.table_header_name') }}</th>
+        <th width="40%">{{ __('view_admin.dungeon.edit.floor_management.table_header_actions') }}</th>
     </tr>
     </thead>
 
