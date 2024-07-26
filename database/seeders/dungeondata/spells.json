@@ -1094,7 +1094,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "spell_nature_cyclone",
-        "name": "Storm&apos;s Edge",
+        "name": "Storm's Edge",
         "schools_mask": 8,
         "aura": 0,
         "selectable": 0
@@ -1105,7 +1105,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "spell_nature_cyclone",
-        "name": "Storm&apos;s Edge",
+        "name": "Storm's Edge",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -1765,7 +1765,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_monk_standingkick",
-        "name": "Aerialist&apos;s Kick",
+        "name": "Aerialist's Kick",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -3547,7 +3547,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "spell_nature_wrathv2",
-        "name": "Nature&apos;s Wrath",
+        "name": "Nature's Wrath",
         "schools_mask": 8,
         "aura": 0,
         "selectable": 0
@@ -3954,7 +3954,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_warrior_commandingshout",
-        "name": "Champion&apos;s Presence",
+        "name": "Champion's Presence",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -5780,7 +5780,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_heroicleap",
-        "name": "Valkyra&apos;s Advance",
+        "name": "Valkyra's Advance",
         "schools_mask": 2,
         "aura": 0,
         "selectable": 0
@@ -5791,7 +5791,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_heroicleap",
-        "name": "Valkyra&apos;s Advance",
+        "name": "Valkyra's Advance",
         "schools_mask": 2,
         "aura": 0,
         "selectable": 0
@@ -5934,7 +5934,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "spell_shadow_zdemonformgreen",
-        "name": "Dreadlord&apos;s Guile",
+        "name": "Dreadlord's Guile",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -6671,7 +6671,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_potion_160",
-        "name": "&quot;Drink&quot; Ancient Potion",
+        "name": "\"Drink\" Ancient Potion",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -7991,7 +7991,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_hunter_murderofcrows",
-        "name": "Raven&apos;s Dive",
+        "name": "Raven's Dive",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -8002,7 +8002,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_hunter_murderofcrows",
-        "name": "Raven&apos;s Dive",
+        "name": "Raven's Dive",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -9135,7 +9135,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_mage_massinvisibility",
-        "name": "Guardian&apos;s Image",
+        "name": "Guardian's Image",
         "schools_mask": 64,
         "aura": 0,
         "selectable": 0
@@ -10103,7 +10103,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "trade_archaeology_skullstaff",
-        "name": "Bwonsamdi&apos;s Mantle",
+        "name": "Bwonsamdi's Mantle",
         "schools_mask": 2,
         "aura": 0,
         "selectable": 0
@@ -10114,7 +10114,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "trade_archaeology_skullstaff",
-        "name": "Bwonsamdi&apos;s Mantle",
+        "name": "Bwonsamdi's Mantle",
         "schools_mask": 2,
         "aura": 0,
         "selectable": 0
@@ -10411,7 +10411,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "Enrage",
         "icon_name": "spell_nature_shamanrage",
-        "name": "Fanatic&apos;s Rage",
+        "name": "Fanatic's Rage",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -11478,7 +11478,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_warrior_bladestorm",
-        "name": "Goin&apos; Bananas",
+        "name": "Goin' Bananas",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -11489,7 +11489,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "spell_nature_earthbind",
-        "name": "Goin&apos; Bananas",
+        "name": "Goin' Bananas",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -12468,7 +12468,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_artifact_corruptedbloodofzakajz",
-        "name": "Taint of G&apos;huun",
+        "name": "Taint of G'huun",
         "schools_mask": 32,
         "aura": 0,
         "selectable": 0
@@ -12754,7 +12754,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_misc_noose_01",
-        "name": "Hangman&apos;s Noose",
+        "name": "Hangman's Noose",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -13920,7 +13920,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "Magic",
         "icon_name": "sha_ability_rogue_bloodyeye_nightmare",
-        "name": "Gift of G&apos;huun",
+        "name": "Gift of G'huun",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -14404,7 +14404,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "spell_holy_purifyingpower",
-        "name": "Lucre&apos;s Call",
+        "name": "Lucre's Call",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -14844,7 +14844,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_priest_cascade_shadow",
-        "name": "Leviathan&apos;s Wake",
+        "name": "Leviathan's Wake",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -15196,7 +15196,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_drink_21",
-        "name": "Kaja&apos;Cola Refresher",
+        "name": "Kaja'Cola Refresher",
         "schools_mask": 16,
         "aura": 0,
         "selectable": 0
@@ -15207,7 +15207,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_drink_21",
-        "name": "Kaja&apos;Cola Refresher",
+        "name": "Kaja'Cola Refresher",
         "schools_mask": 32,
         "aura": 0,
         "selectable": 0
@@ -17572,7 +17572,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "shaman_pvp_ripplingwaters",
-        "name": "Spirit&apos;s Swiftness",
+        "name": "Spirit's Swiftness",
         "schools_mask": 16,
         "aura": 0,
         "selectable": 0
@@ -17638,7 +17638,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "achievement_nazmir_boss_ghuun",
-        "name": "Symbiote of G&apos;huun",
+        "name": "Symbiote of G'huun",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -17660,7 +17660,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_shawaterelemental_swirl",
-        "name": "Viq&apos;Goth&apos;s Wrath",
+        "name": "Viq'Goth's Wrath",
         "schools_mask": 16,
         "aura": 0,
         "selectable": 0
@@ -17825,7 +17825,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_monk_ridethewind",
-        "name": "Trade Wind&apos;s Vigor",
+        "name": "Trade Wind's Vigor",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -18001,7 +18001,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_rhyolith_magmaflow_wave",
-        "name": "&quot;Hidden&quot; Flame Cannon",
+        "name": "\"Hidden\" Flame Cannon",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -18056,7 +18056,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_monk_forcesphere_arcane",
-        "name": "Queen&apos;s Decree: Blowback",
+        "name": "Queen's Decree: Blowback",
         "schools_mask": 64,
         "aura": 0,
         "selectable": 0
@@ -18914,7 +18914,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_hunter_runningshot",
-        "name": "Run &apos;n&apos; Gun",
+        "name": "Run 'n' Gun",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -18925,7 +18925,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_ammo_bullet_04",
-        "name": "Run &apos;n&apos; Gun",
+        "name": "Run 'n' Gun",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -19497,7 +19497,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_shaman_watershield",
-        "name": "Queen&apos;s Decree: Unstoppable",
+        "name": "Queen's Decree: Unstoppable",
         "schools_mask": 16,
         "aura": 0,
         "selectable": 0
@@ -19508,7 +19508,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_shaman_watershield",
-        "name": "Queen&apos;s Decree: Unstoppable",
+        "name": "Queen's Decree: Unstoppable",
         "schools_mask": 16,
         "aura": 0,
         "selectable": 0
@@ -19530,7 +19530,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "spell_priest_void-blast",
-        "name": "Queen&apos;s Decree: Hide",
+        "name": "Queen's Decree: Hide",
         "schools_mask": 32,
         "aura": 0,
         "selectable": 0
@@ -19541,7 +19541,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "spell_priest_void-blast",
-        "name": "Queen&apos;s Decree: Hide",
+        "name": "Queen's Decree: Hide",
         "schools_mask": 32,
         "aura": 0,
         "selectable": 0
@@ -19662,7 +19662,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_shield_1h_nzothraid_d_01",
-        "name": "Armies of N&apos;Zoth",
+        "name": "Armies of N'Zoth",
         "schools_mask": 32,
         "aura": 0,
         "selectable": 0
@@ -21488,7 +21488,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_misc_herb_nightmarevine",
-        "name": "Droman&apos;s Wrath",
+        "name": "Droman's Wrath",
         "schools_mask": 8,
         "aura": 0,
         "selectable": 0
@@ -22137,7 +22137,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_relics_totemofrage",
-        "name": "Protector&apos;s Rage",
+        "name": "Protector's Rage",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -22302,7 +22302,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_enchanting_wod_crystalshard",
-        "name": "Halkias&apos;s Anima",
+        "name": "Halkias's Anima",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -24634,7 +24634,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "Magic",
         "icon_name": "spell_holy_prayerofshadowprotection",
-        "name": "Death&apos;s Embrace",
+        "name": "Death's Embrace",
         "schools_mask": 32,
         "aura": 0,
         "selectable": 0
@@ -26559,7 +26559,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "spell_druid_bloodythrash",
-        "name": "Hook&apos;d!",
+        "name": "Hook'd!",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -30376,7 +30376,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_misc_volatileair",
-        "name": "Zephyr&apos;s Call",
+        "name": "Zephyr's Call",
         "schools_mask": 8,
         "aura": 0,
         "selectable": 0
@@ -31410,7 +31410,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_mage_firestarter",
-        "name": "The Dragon&apos;s Kiln",
+        "name": "The Dragon's Kiln",
         "schools_mask": 4,
         "aura": 0,
         "selectable": 0
@@ -31872,7 +31872,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_mage_shattershield",
-        "name": "Mage Hunter&apos;s Fervor",
+        "name": "Mage Hunter's Fervor",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -33324,7 +33324,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_hunter_snipershot",
-        "name": "Hunter&apos;s Mark",
+        "name": "Hunter's Mark",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -33489,7 +33489,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_hunter_invigeration",
-        "name": "Master&apos;s Call",
+        "name": "Master's Call",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -33500,7 +33500,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_hunter_invigeration",
-        "name": "Master&apos;s Call",
+        "name": "Master's Call",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -35084,7 +35084,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_druid_challangingroar",
-        "name": "Huntleader&apos;s Tactics",
+        "name": "Huntleader's Tactics",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -35095,7 +35095,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_druid_berserk",
-        "name": "Huntleader&apos;s Tactics",
+        "name": "Huntleader's Tactics",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
@@ -35271,7 +35271,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "spell_druid_astralstorm",
-        "name": "Tempest&apos;s Fury",
+        "name": "Tempest's Fury",
         "schools_mask": 16,
         "aura": 0,
         "selectable": 0
@@ -42498,7 +42498,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_ability_web_groundstate",
-        "name": "Spinneret&apos;s Strands",
+        "name": "Spinneret's Strands",
         "schools_mask": 32,
         "aura": 0,
         "selectable": 0
@@ -42509,7 +42509,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_ability_web_groundstate",
-        "name": "Spinneret&apos;s Strands",
+        "name": "Spinneret's Strands",
         "schools_mask": 32,
         "aura": 0,
         "selectable": 0
@@ -42520,7 +42520,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_ability_web_groundstate",
-        "name": "Spinneret&apos;s Strands",
+        "name": "Spinneret's Strands",
         "schools_mask": 32,
         "aura": 0,
         "selectable": 0
@@ -42542,7 +42542,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_ability_web_nova",
-        "name": "Spinneret&apos;s Websnap",
+        "name": "Spinneret's Websnap",
         "schools_mask": 32,
         "aura": 0,
         "selectable": 0
@@ -44720,7 +44720,7 @@
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "Enrage",
         "icon_name": "inv_ability_web_debuff",
-        "name": "Tactician&apos;s Rage",
+        "name": "Tactician's Rage",
         "schools_mask": 1,
         "aura": 0,
         "selectable": 0
