@@ -12781,7 +12781,7 @@
             {
                 "id": 304,
                 "index": 2,
-                "mdt_sub_level": null,
+                "mdt_sub_level": 1,
                 "ui_map_id": 0,
                 "map_name": "TheDawnbreaker",
                 "name": "dungeons.tww.the_dawnbreaker.floors.the_dawnbreaker",
