@@ -6,12 +6,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 96477,
-        "encounter_id": 2392,
+        "encounter_id": 2593,
         "name": "Surgeon Stitchflesh",
-        "base_health": 713642,
+        "base_health": 78609408,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 2,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -36,16 +36,34 @@
                 "spell_id": 320359
             },
             {
+                "spell_id": 320365
+            },
+            {
+                "spell_id": 320366
+            },
+            {
                 "spell_id": 326574
             },
             {
+                "spell_id": 326629
+            },
+            {
                 "spell_id": 327664
+            },
+            {
+                "spell_id": 334321
+            },
+            {
+                "spell_id": 334476
             },
             {
                 "spell_id": 334488
             },
             {
                 "spell_id": 343556
+            },
+            {
+                "spell_id": 343558
             }
         ],
         "npc_enemy_forces": []
@@ -57,12 +75,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 95467,
-        "encounter_id": 2395,
+        "encounter_id": 2593,
         "name": "Blightbone",
-        "base_health": 1156365,
+        "base_health": 127376353,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -121,12 +139,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 96085,
-        "encounter_id": 2396,
+        "encounter_id": 2593,
         "name": "Nalthor the Rimebinder",
-        "base_health": 1057248,
+        "base_health": 116458380,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -135,11 +153,7 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            }
-        ],
+        "npc_characteristics": [],
         "npc_spells": [
             {
                 "spell_id": 320771
@@ -148,16 +162,22 @@
                 "spell_id": 320772
             },
             {
+                "spell_id": 320784
+            },
+            {
                 "spell_id": 320788
             },
             {
-                "spell_id": 321370
+                "spell_id": 321754
             },
             {
                 "spell_id": 321755
             },
             {
                 "spell_id": 321894
+            },
+            {
+                "spell_id": 323730
             }
         ],
         "npc_enemy_forces": []
@@ -171,10 +191,10 @@
         "display_id": 95222,
         "encounter_id": null,
         "name": "Patchwerk Soldier",
-        "base_health": 165398,
+        "base_health": 14577083,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 0.8,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -185,34 +205,7 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 4
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 8
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
                 "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
@@ -224,6 +217,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16374,
+                "mapping_version_id": 361,
+                "npc_id": 162729,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1865,
                 "mapping_version_id": 34,
@@ -242,10 +242,10 @@
         "display_id": 95227,
         "encounter_id": null,
         "name": "Stitched Vanguard",
-        "base_health": 198477,
+        "base_health": 21865624,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -256,34 +256,7 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 4
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 8
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
                 "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
@@ -295,12 +268,16 @@
             },
             {
                 "spell_id": 320703
-            },
-            {
-                "spell_id": 323190
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16377,
+                "mapping_version_id": 361,
+                "npc_id": 163121,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1866,
                 "mapping_version_id": 34,
@@ -319,10 +296,10 @@
         "display_id": 96107,
         "encounter_id": null,
         "name": "Brittlebone Warrior",
-        "base_health": 165398,
+        "base_health": 10932812,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 0.7,
+        "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -333,34 +310,7 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 4
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 8
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
                 "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
@@ -382,10 +332,10 @@
         "display_id": 96112,
         "encounter_id": null,
         "name": "Brittlebone Mage",
-        "base_health": 74429,
+        "base_health": 8199609,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 0.7,
+        "mdt_scale": 0.9,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -396,34 +346,7 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 4
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 8
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
                 "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
@@ -431,13 +354,13 @@
         ],
         "npc_spells": [
             {
-                "spell_id": 320336
-            },
-            {
                 "spell_id": 321576
             },
             {
-                "spell_id": 328667
+                "spell_id": 328664
+            },
+            {
+                "spell_id": 333602
             }
         ],
         "npc_enemy_forces": []
@@ -451,10 +374,10 @@
         "display_id": 94992,
         "encounter_id": null,
         "name": "Zolramus Sorcerer",
-        "base_health": 148858,
+        "base_health": 16399218,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -465,40 +388,7 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 9
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
-                "characteristic_id": 12
-            },
-            {
                 "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 16
-            },
-            {
-                "characteristic_id": 17
-            },
-            {
-                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
@@ -509,10 +399,23 @@
                 "spell_id": 320462
             },
             {
+                "spell_id": 320464
+            },
+            {
                 "spell_id": 320571
+            },
+            {
+                "spell_id": 320573
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16380,
+                "mapping_version_id": 361,
+                "npc_id": 163128,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1869,
                 "mapping_version_id": 34,
@@ -529,12 +432,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 94926,
-        "encounter_id": 2391,
+        "encounter_id": 2593,
         "name": "Amarth",
-        "base_health": 991170,
+        "base_health": 109179731,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -550,16 +453,25 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 319902
+            },
+            {
                 "spell_id": 320012
             },
             {
                 "spell_id": 320171
             },
             {
+                "spell_id": 320580
+            },
+            {
                 "spell_id": 321226
             },
             {
                 "spell_id": 321247
+            },
+            {
+                "spell_id": 333488
             },
             {
                 "spell_id": 333489
@@ -582,10 +494,10 @@
         "display_id": 95233,
         "encounter_id": null,
         "name": "Zolramus Necromancer",
-        "base_health": 231557,
+        "base_health": 25509895,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -596,40 +508,7 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 9
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
-                "characteristic_id": 12
-            },
-            {
                 "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 16
-            },
-            {
-                "characteristic_id": 17
-            },
-            {
-                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
@@ -646,10 +525,32 @@
                 "spell_id": 321780
             },
             {
+                "spell_id": 323957
+            },
+            {
+                "spell_id": 324026
+            },
+            {
+                "spell_id": 324027
+            },
+            {
                 "spell_id": 327393
+            },
+            {
+                "spell_id": 327396
+            },
+            {
+                "spell_id": 327397
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16382,
+                "mapping_version_id": 361,
+                "npc_id": 163618,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1871,
                 "mapping_version_id": 34,
@@ -668,10 +569,10 @@
         "display_id": 93933,
         "encounter_id": null,
         "name": "Zolramus Bonecarver",
-        "base_health": 165398,
+        "base_health": 18221353,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -682,42 +583,6 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 9
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
-                "characteristic_id": 12
-            },
-            {
-                "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 16
-            },
-            {
-                "characteristic_id": 17
-            },
-            {
-                "characteristic_id": 18
-            },
-            {
                 "characteristic_id": 19
             }
         ],
@@ -727,6 +592,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16381,
+                "mapping_version_id": 361,
+                "npc_id": 163619,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1872,
                 "mapping_version_id": 34,
@@ -745,10 +617,10 @@
         "display_id": 99121,
         "encounter_id": null,
         "name": "Rotspew",
-        "base_health": 396955,
+        "base_health": 43731248,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 2,
+        "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -757,11 +629,7 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            }
-        ],
+        "npc_characteristics": [],
         "npc_spells": [
             {
                 "spell_id": 333479
@@ -770,10 +638,20 @@
                 "spell_id": 333482
             },
             {
+                "spell_id": 333485
+            },
+            {
                 "spell_id": 338456
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16394,
+                "mapping_version_id": 361,
+                "npc_id": 163620,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1873,
                 "mapping_version_id": 34,
@@ -792,10 +670,10 @@
         "display_id": 99122,
         "encounter_id": null,
         "name": "Goregrind",
-        "base_health": 463113,
+        "base_health": 51019789,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 2,
+        "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -804,11 +682,7 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            }
-        ],
+        "npc_characteristics": [],
         "npc_spells": [
             {
                 "spell_id": 333477
@@ -821,6 +695,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16393,
+                "mapping_version_id": 361,
+                "npc_id": 163621,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1874,
                 "mapping_version_id": 34,
@@ -839,7 +720,7 @@
         "display_id": 97800,
         "encounter_id": null,
         "name": "Goregrind Bits",
-        "base_health": 165398,
+        "base_health": 18221353,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1,
@@ -852,36 +733,6 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 4
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 8
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
-                "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 18
-            },
             {
                 "characteristic_id": 19
             }
@@ -902,7 +753,7 @@
         "display_id": 97801,
         "encounter_id": null,
         "name": "Rotspew Leftovers",
-        "base_health": 132318,
+        "base_health": 14577083,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1,
@@ -915,36 +766,6 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 4
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 8
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
-                "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 18
-            },
             {
                 "characteristic_id": 19
             }
@@ -1040,10 +861,10 @@
         "display_id": 96218,
         "encounter_id": null,
         "name": "Stitchflesh's Creation",
-        "base_health": 330795,
+        "base_health": 33593764,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 2,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1065,7 +886,19 @@
                 "spell_id": 320376
             },
             {
+                "spell_id": 322548
+            },
+            {
+                "spell_id": 322681
+            },
+            {
+                "spell_id": 327952
+            },
+            {
                 "spell_id": 334322
+            },
+            {
+                "spell_id": 348170
             }
         ],
         "npc_enemy_forces": []
@@ -1154,10 +987,10 @@
         "display_id": 95231,
         "encounter_id": null,
         "name": "Zolramus Gatekeeper",
-        "base_health": 297716,
+        "base_health": 27332030,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1.3,
+        "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1179,10 +1012,20 @@
                 "spell_id": 322756
             },
             {
+                "spell_id": 322757
+            },
+            {
                 "spell_id": 323347
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16378,
+                "mapping_version_id": 361,
+                "npc_id": 165137,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1884,
                 "mapping_version_id": 34,
@@ -1201,7 +1044,7 @@
         "display_id": 94761,
         "encounter_id": null,
         "name": "Blight Bag",
-        "base_health": 66159,
+        "base_health": 7288541,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 0.7,
@@ -1218,37 +1061,16 @@
                 "characteristic_id": 1
             },
             {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 4
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 8
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
                 "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 321821
+            },
             {
                 "spell_id": 335164
             },
@@ -1257,6 +1079,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16375,
+                "mapping_version_id": 361,
+                "npc_id": 165138,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1885,
                 "mapping_version_id": 34,
@@ -1278,7 +1107,7 @@
         "base_health": 396955,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1.5,
+        "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1287,26 +1116,16 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            }
-        ],
-        "npc_spells": [
-            {
-                "spell_id": 324372
-            },
-            {
-                "spell_id": 324381
-            },
-            {
-                "spell_id": 324387
-            },
-            {
-                "spell_id": 324394
-            }
-        ],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16386,
+                "mapping_version_id": 361,
+                "npc_id": 165197,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1886,
                 "mapping_version_id": 34,
@@ -1325,10 +1144,10 @@
         "display_id": 97668,
         "encounter_id": null,
         "name": "Zolramus Bonemender",
-        "base_health": 165398,
+        "base_health": 18221353,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1339,40 +1158,7 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 9
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
-                "characteristic_id": 12
-            },
-            {
                 "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 16
-            },
-            {
-                "characteristic_id": 17
-            },
-            {
-                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
@@ -1387,6 +1173,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16384,
+                "mapping_version_id": 361,
+                "npc_id": 165222,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1887,
                 "mapping_version_id": 34,
@@ -1480,10 +1273,10 @@
         "display_id": 94780,
         "encounter_id": null,
         "name": "Nar'zudah",
-        "base_health": 396955,
+        "base_health": 43731248,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1.5,
+        "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1492,11 +1285,7 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            }
-        ],
+        "npc_characteristics": [],
         "npc_spells": [
             {
                 "spell_id": 320462
@@ -1505,13 +1294,32 @@
                 "spell_id": 327393
             },
             {
+                "spell_id": 327396
+            },
+            {
+                "spell_id": 327397
+            },
+            {
                 "spell_id": 335141
             },
             {
+                "spell_id": 335142
+            },
+            {
                 "spell_id": 345623
+            },
+            {
+                "spell_id": 345625
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16385,
+                "mapping_version_id": 361,
+                "npc_id": 165824,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1891,
                 "mapping_version_id": 34,
@@ -1530,10 +1338,10 @@
         "display_id": 96480,
         "encounter_id": null,
         "name": "Flesh Crafter",
-        "base_health": 231557,
+        "base_health": 20043489,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1.4,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1544,40 +1352,7 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 9
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
-                "characteristic_id": 12
-            },
-            {
                 "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 16
-            },
-            {
-                "characteristic_id": 17
-            },
-            {
-                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
@@ -1585,13 +1360,29 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 323471
+            },
+            {
+                "spell_id": 323489
+            },
+            {
                 "spell_id": 323496
+            },
+            {
+                "spell_id": 327127
             },
             {
                 "spell_id": 327130
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16379,
+                "mapping_version_id": 361,
+                "npc_id": 165872,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1892,
                 "mapping_version_id": 34,
@@ -1610,10 +1401,10 @@
         "display_id": 95226,
         "encounter_id": null,
         "name": "Loyal Creation",
-        "base_health": 215017,
+        "base_health": 23687760,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1.4,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1624,34 +1415,7 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 4
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 8
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
                 "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
@@ -1670,6 +1434,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16390,
+                "mapping_version_id": 361,
+                "npc_id": 165911,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 1893,
                 "mapping_version_id": 34,
                 "npc_id": 165911,
@@ -1687,10 +1458,10 @@
         "display_id": 96115,
         "encounter_id": null,
         "name": "Skeletal Marauder",
-        "base_health": 330795,
+        "base_health": 36442707,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1.3,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1717,6 +1488,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16383,
+                "mapping_version_id": 361,
+                "npc_id": 165919,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 1894,
                 "mapping_version_id": 34,
                 "npc_id": 165919,
@@ -1734,10 +1512,10 @@
         "display_id": 96114,
         "encounter_id": null,
         "name": "Brittlebone Crossbowman",
-        "base_health": 82699,
+        "base_health": 9110677,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 0.7,
+        "mdt_scale": 0.9,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1748,34 +1526,7 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 4
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 8
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
                 "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
@@ -1800,7 +1551,7 @@
         "display_id": 95577,
         "encounter_id": null,
         "name": "Spare Parts",
-        "base_health": 16540,
+        "base_health": 1822136,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 0.7,
@@ -1814,41 +1565,10 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 4
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 8
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
-                "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 18
-            },
-            {
                 "characteristic_id": 19
             }
         ],
-        "npc_spells": [
-            {
-                "spell_id": 334610
-            }
-        ],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1885,10 +1605,10 @@
         "display_id": 98170,
         "encounter_id": null,
         "name": "Corpse Harvester",
-        "base_health": 165398,
+        "base_health": 18221353,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1899,37 +1619,7 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 9
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
-                "characteristic_id": 12
-            },
-            {
                 "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 16
-            },
-            {
-                "characteristic_id": 17
             },
             {
                 "characteristic_id": 18
@@ -1943,10 +1633,20 @@
                 "spell_id": 334747
             },
             {
+                "spell_id": 334748
+            },
+            {
                 "spell_id": 334749
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16376,
+                "mapping_version_id": 361,
+                "npc_id": 166302,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1898,
                 "mapping_version_id": 34,
@@ -2040,10 +1740,10 @@
         "display_id": 98227,
         "encounter_id": null,
         "name": "Separation Assistant",
-        "base_health": 330795,
+        "base_health": 36442707,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1.6,
+        "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2052,12 +1752,14 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            }
-        ],
+        "npc_characteristics": [],
         "npc_spells": [
+            {
+                "spell_id": 323471
+            },
+            {
+                "spell_id": 323489
+            },
             {
                 "spell_id": 323496
             },
@@ -2065,10 +1767,20 @@
                 "spell_id": 338606
             },
             {
+                "spell_id": 338610
+            },
+            {
                 "spell_id": 338636
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16391,
+                "mapping_version_id": 361,
+                "npc_id": 167731,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1902,
                 "mapping_version_id": 34,
@@ -2295,7 +2007,7 @@
         "display_id": 96132,
         "encounter_id": null,
         "name": "Shuffling Corpse",
-        "base_health": 59543,
+        "base_health": 6559687,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 0.7,
@@ -2309,35 +2021,18 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 4
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 8
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
-                "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 18
-            },
-            {
                 "characteristic_id": 19
             }
         ],
         "npc_spells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16387,
+                "mapping_version_id": 361,
+                "npc_id": 171500,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1913,
                 "mapping_version_id": 34,
@@ -2406,10 +2101,10 @@
         "display_id": 98190,
         "encounter_id": null,
         "name": "Kyrian Stitchwerk",
-        "base_health": 297716,
+        "base_health": 32798436,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 2,
+        "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2418,11 +2113,7 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            }
-        ],
+        "npc_characteristics": [],
         "npc_spells": [
             {
                 "spell_id": 338357
@@ -2432,6 +2123,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16389,
+                "mapping_version_id": 361,
+                "npc_id": 172981,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1916,
                 "mapping_version_id": 34,
@@ -2450,10 +2148,10 @@
         "display_id": 98170,
         "encounter_id": null,
         "name": "Corpse Collector",
-        "base_health": 165398,
+        "base_health": 18221353,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1.4,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2464,40 +2162,10 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
                 "characteristic_id": 2
             },
             {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 9
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
-                "characteristic_id": 12
-            },
-            {
                 "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 15
-            },
-            {
-                "characteristic_id": 16
-            },
-            {
-                "characteristic_id": 17
-            },
-            {
-                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
@@ -2511,10 +2179,20 @@
                 "spell_id": 334748
             },
             {
+                "spell_id": 334749
+            },
+            {
                 "spell_id": 338353
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16388,
+                "mapping_version_id": 361,
+                "npc_id": 173016,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1917,
                 "mapping_version_id": 34,
@@ -2533,10 +2211,10 @@
         "display_id": 98226,
         "encounter_id": null,
         "name": "Stitching Assistant",
-        "base_health": 330795,
+        "base_health": 36442707,
         "health_percentage": null,
         "level": 60,
-        "mdt_scale": 1.6,
+        "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2545,12 +2223,14 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            }
-        ],
+        "npc_characteristics": [],
         "npc_spells": [
+            {
+                "spell_id": 323471
+            },
+            {
+                "spell_id": 323489
+            },
             {
                 "spell_id": 323496
             },
@@ -2558,10 +2238,20 @@
                 "spell_id": 334748
             },
             {
+                "spell_id": 334749
+            },
+            {
                 "spell_id": 338653
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16392,
+                "mapping_version_id": 361,
+                "npc_id": 173044,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1918,
                 "mapping_version_id": 34,
