@@ -204,19 +204,6 @@ const BLOODLUST_SPELLS = [
     SPELL_FERAL_HIDE_DRUMS
 ];
 
-const BLACKLISTED_SPELLS = [
-    // Algeth'ar Academy
-    /// Arcane Ravager
-    388942, // Vicious Ambush
-    388982, // Vicious Ambush
-    388984, // Vicious Ambush
-    388958, // Riftbreath
-    388957, // Riftbreath
-
-    /// Algeth'ar Echoknight
-    181089, // Encounter Event
-]
-
 // Metrics
 const METRIC_CATEGORY_DUNGEON_ROUTE_MDT_COPY = 1;
 

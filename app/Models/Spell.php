@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * @property int    $id
@@ -16,7 +17,11 @@ use Eloquent;
  * @property int    $schools_mask
  * @property bool   $aura
  * @property bool   $selectable
+ * @property bool   $hidden
+ *
  * @property string $icon_url
+ *
+ * @method static Builder visible()
  *
  * @mixin Eloquent
  */
@@ -42,6 +47,7 @@ class Spell extends CacheModel implements MappingModelInterface
         'schools_mask',
         'aura',
         'selectable',
+        'hidden',
         'icon_url',
     ];
 
@@ -167,6 +173,11 @@ class Spell extends CacheModel implements MappingModelInterface
         }
 
         return $result;
+    }
+
+    public function scopeVisible(): Builder
+    {
+        return $this->where('hidden', false);
     }
 
     /**

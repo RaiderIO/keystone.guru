@@ -161,7 +161,9 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function spells(): BelongsToMany
     {
-        return $this->belongsToMany(Spell::class, 'npc_spells');
+        return $this->belongsToMany(Spell::class, 'npc_spells')
+            ->where('hidden', false)
+            ->orderBy('spells.id');
     }
 
     public function npcSpells(): HasMany
