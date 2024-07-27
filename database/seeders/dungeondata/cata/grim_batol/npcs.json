@@ -63,6 +63,48 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 39388,
+        "dungeon_id": 116,
+        "classification_id": 2,
+        "npc_type_id": 5,
+        "npc_class_id": 1,
+        "display_id": 119810,
+        "encounter_id": 2579,
+        "name": "Mutated Hatchling",
+        "base_health": 3036892,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 456718
+            },
+            {
+                "spell_id": 456719
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 39390,
         "dungeon_id": 116,
         "classification_id": 2,
@@ -96,7 +138,7 @@
         "display_id": 119899,
         "encounter_id": null,
         "name": "Faceless Corruptor",
-        "base_health": 22426278,
+        "base_health": 29154165,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -111,9 +153,6 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "spell_id": 391568
-            },
-            {
                 "spell_id": 451391
             },
             {
@@ -126,7 +165,15 @@
                 "spell_id": 451396
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16420,
+                "mapping_version_id": 363,
+                "npc_id": 39392,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 39405,
@@ -237,7 +284,7 @@
         "display_id": 118920,
         "encounter_id": 2579,
         "name": "General Umbriss",
-        "base_health": 83984397,
+        "base_health": 109179731,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -249,7 +296,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 447261
@@ -631,7 +682,7 @@
         "display_id": 38667,
         "encounter_id": null,
         "name": "Molten Giant",
-        "base_health": 26631206,
+        "base_health": 34620572,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.6,
@@ -643,7 +694,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 451965
@@ -652,7 +707,15 @@
                 "spell_id": 451971
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16414,
+                "mapping_version_id": 363,
+                "npc_id": 40166,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 40167,
@@ -663,7 +726,7 @@
         "display_id": 31584,
         "encounter_id": null,
         "name": "Twilight Beguiler",
-        "base_health": 11213139,
+        "base_health": 14577083,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -675,7 +738,17 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 76151
@@ -690,7 +763,15 @@
                 "spell_id": 451761
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16413,
+                "mapping_version_id": 363,
+                "npc_id": 40167,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 40177,
@@ -701,7 +782,7 @@
         "display_id": 33429,
         "encounter_id": 2579,
         "name": "Forgemaster Throngus",
-        "base_health": 97981796,
+        "base_health": 127376353,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -713,7 +794,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 447395
@@ -960,7 +1045,7 @@
         "display_id": 31792,
         "encounter_id": 2579,
         "name": "Drahga Shadowburner",
-        "base_health": 29394539,
+        "base_health": 38212907,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -972,7 +1057,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 76303
@@ -998,7 +1087,7 @@
         "display_id": 31795,
         "encounter_id": 2579,
         "name": "Valiona",
-        "base_health": 139973995,
+        "base_health": 181966219,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -1010,7 +1099,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 75328
@@ -1034,9 +1127,9 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 116017,
-        "encounter_id": 2483,
+        "encounter_id": null,
         "name": "Invoked Shadowflame Spirit",
-        "base_health": 20000,
+        "base_health": 2099610,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1048,10 +1141,20 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 75238
+            },
+            {
+                "spell_id": 82850
             }
         ],
         "npc_enemy_forces": []
@@ -1090,7 +1193,7 @@
         "display_id": 119801,
         "encounter_id": 2579,
         "name": "Erudax",
-        "base_health": 111979196,
+        "base_health": 145572975,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -1102,7 +1205,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 448057
@@ -1577,7 +1684,7 @@
         "display_id": 119878,
         "encounter_id": null,
         "name": "Twilight Brute",
-        "base_health": 14016424,
+        "base_health": 18221353,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -1589,7 +1696,17 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 451364
@@ -1601,7 +1718,15 @@
                 "spell_id": 456701
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16409,
+                "mapping_version_id": 363,
+                "npc_id": 224152,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 224219,
@@ -1612,7 +1737,7 @@
         "display_id": 119892,
         "encounter_id": null,
         "name": "Twilight Earthcaller",
-        "base_health": 11213139,
+        "base_health": 14577083,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -1624,7 +1749,20 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 451261
@@ -1633,7 +1771,15 @@
                 "spell_id": 451871
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16410,
+                "mapping_version_id": 363,
+                "npc_id": 224219,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 224221,
@@ -1644,10 +1790,10 @@
         "display_id": 119893,
         "encounter_id": null,
         "name": "Twilight Overseer",
-        "base_health": 23827921,
+        "base_health": 30976301,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1.6,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1656,7 +1802,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 451378
@@ -1665,7 +1815,15 @@
                 "spell_id": 451379
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16412,
+                "mapping_version_id": 363,
+                "npc_id": 224221,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 224240,
@@ -1675,8 +1833,8 @@
         "npc_class_id": 1,
         "display_id": 34353,
         "encounter_id": null,
-        "name": "Twilight Decapitator",
-        "base_health": 12614782,
+        "name": "Twilight Flamerender",
+        "base_health": 16399218,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -1688,7 +1846,20 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 451241
@@ -1703,7 +1874,15 @@
                 "spell_id": 462220
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16417,
+                "mapping_version_id": 363,
+                "npc_id": 224240,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 224249,
@@ -1714,7 +1893,7 @@
         "display_id": 91122,
         "encounter_id": null,
         "name": "Twilight Lavabender",
-        "base_health": 21585292,
+        "base_health": 28060883,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.6,
@@ -1726,7 +1905,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 451387
@@ -1747,7 +1930,15 @@
                 "spell_id": 456715
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16418,
+                "mapping_version_id": 363,
+                "npc_id": 224249,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 224271,
@@ -1758,7 +1949,7 @@
         "display_id": 119897,
         "encounter_id": null,
         "name": "Twilight Warlock",
-        "base_health": 14016424,
+        "base_health": 18221353,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -1770,7 +1961,17 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 76369
@@ -1779,7 +1980,15 @@
                 "spell_id": 451224
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16416,
+                "mapping_version_id": 363,
+                "npc_id": 224271,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 224276,
@@ -1790,7 +1999,7 @@
         "display_id": 119898,
         "encounter_id": null,
         "name": "Twilight Enforcer",
-        "base_health": 15418066,
+        "base_health": 20043489,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -1802,7 +2011,20 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 451033
@@ -1811,7 +2033,15 @@
                 "spell_id": 451040
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16415,
+                "mapping_version_id": 363,
+                "npc_id": 224276,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 224609,
@@ -1822,7 +2052,7 @@
         "display_id": 119995,
         "encounter_id": null,
         "name": "Twilight Destroyer",
-        "base_health": 28032847,
+        "base_health": 36442707,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.7,
@@ -1846,7 +2076,15 @@
                 "spell_id": 451939
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16411,
+                "mapping_version_id": 363,
+                "npc_id": 224609,
+                "enemy_forces": 22,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 224853,
@@ -1857,7 +2095,7 @@
         "display_id": 119810,
         "encounter_id": null,
         "name": "Mutated Hatchling",
-        "base_health": 2803285,
+        "base_health": 3644271,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 0.8,
@@ -1869,7 +2107,14 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 456718
@@ -1878,6 +2123,14 @@
                 "spell_id": 456719
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16419,
+                "mapping_version_id": 363,
+                "npc_id": 224853,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]
