@@ -13125,7 +13125,7 @@
         "map_id": 2652,
         "instance_id": 1269,
         "challenge_mode_id": 501,
-        "mdt_id": 0,
+        "mdt_id": 110,
         "key": "thestonevault",
         "name": "dungeons.tww.the_stonevault.name",
         "slug": "the-stonevault",
