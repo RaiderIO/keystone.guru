@@ -23,6 +23,8 @@ class Characteristic extends CacheModel
 
     protected $fillable = ['id', 'name', 'key'];
 
+    protected $visible = ['name', 'key'];
+
     public const CHARACTERISTIC_TAUNT           = 'taunt';
     public const CHARACTERISTIC_INCAPACITATE    = 'incapacitate';
     public const CHARACTERISTIC_SUBJUGATE_DEMON = 'subjugate_demon';

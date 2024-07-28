@@ -27,6 +27,8 @@ class NpcClass extends CacheModel
         'name',
     ];
 
+    protected $visible = ['name', 'key'];
+
     public $timestamps = false;
 
     public const NPC_CLASS_MELEE = 'melee';
