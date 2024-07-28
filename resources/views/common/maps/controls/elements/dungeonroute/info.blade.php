@@ -1,5 +1,9 @@
 <?php
-/** @var \App\Models\DungeonRoute\Dungeonroute $dungeonroute */
+
+use App\Models\DungeonRoute\Dungeonroute;
+
+/** @var Dungeonroute $dungeonroute */
+
 ob_start();
 ?>
 <div id="map_dungeon_route_info_popover_container">
@@ -11,8 +15,8 @@ ob_start();
     </div>
     <div class="row no-gutters">
         <div class="col pl-2" data-toggle="tooltip" title="{{ sprintf(__('view_common.maps.controls.elements.dungeonrouteinfo.timer_title'),
-                        gmdate('i:s', $dungeonroute->dungeon->getTimerUpgradePlusTwoSeconds()),
-                        gmdate('i:s', $dungeonroute->dungeon->getTimerUpgradePlusThreeSeconds()))
+                        gmdate('i:s', $dungeonroute->mappingVersion->getTimerUpgradePlusTwoSeconds()),
+                        gmdate('i:s', $dungeonroute->mappingVersion->getTimerUpgradePlusThreeSeconds()))
                         }}">
             {{ gmdate('i:s', $dungeonroute->mappingVersion->timer_max_seconds) }}
         </div>
@@ -42,7 +46,7 @@ ob_start();
     @endforeach
 </div>
 <?php $content = ob_get_clean(); ?>
-<!-- Dungeonroute info -->
+    <!-- Dungeonroute info -->
 <div class="row no-gutters">
     <div class="col" data-toggle="tooltip" data-placement="right">
         <button id="map_dungeon_route_info_popover" class="btn btn-info w-100"

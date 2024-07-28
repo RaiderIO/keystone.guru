@@ -200,8 +200,18 @@ class MappingVersion extends Model
         );
     }
 
+    public function getTimerUpgradePlusTwoSeconds(): int
+    {
+        return $this->timer_max_seconds * config('keystoneguru.keystone.timer.plustwofactor');
+    }
+
+    public function getTimerUpgradePlusThreeSeconds(): int
+    {
+        return $this->timer_max_seconds * config('keystoneguru.keystone.timer.plusthreefactor');
+    }
+
     /**
-     * @return Collection|FloorUnion[]
+     * @return Collection<FloorUnion>
      */
     public function getFloorUnionsOnFloor(int $floorId): Collection
     {

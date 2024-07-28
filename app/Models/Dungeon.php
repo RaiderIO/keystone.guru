@@ -834,33 +834,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
         return in_array($this->key, [self::DUNGEON_SIEGE_OF_BORALUS, self::DUNGEON_THE_NEXUS]);
     }
 
-    /**
-     * Checks if this dungeon is Siege of Boralus. It's a bit of a special dungeon because of horde/alliance differences,
-     * hence this function, so we can use it to differentiate between the two.
-     */
-    public function isSiegeOfBoralus(): bool
-    {
-        return $this->key === self::DUNGEON_SIEGE_OF_BORALUS;
-    }
-
-    /**
-     * Checks if this dungeon is Tol Dagor. It's a bit of a special dungeon because of a shitty MDT bug.
-     */
-    public function isTolDagor(): bool
-    {
-        return $this->key === self::DUNGEON_TOL_DAGOR;
-    }
-
-    public function getTimerUpgradePlusTwoSeconds(): int
-    {
-        return $this->timer_max_seconds * config('keystoneguru.keystone.timer.plustwofactor');
-    }
-
-    public function getTimerUpgradePlusThreeSeconds(): int
-    {
-        return $this->timer_max_seconds * config('keystoneguru.keystone.timer.plusthreefactor');
-    }
-
     public function getImageUrl(): string
     {
         return url(sprintf('images/dungeons/%s/%s.jpg', $this->expansion->shortname, $this->key));
