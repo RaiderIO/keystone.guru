@@ -750,7 +750,7 @@ class MapObject extends Signalable {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         let state = getState();
-        let debug = false;
+        let debug = state.isDebug();
 
         // Floor states; most common reason for not being visible
         if (state.getCurrentFloor().id !== this.floor_id) {

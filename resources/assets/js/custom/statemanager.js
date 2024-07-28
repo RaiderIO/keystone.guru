@@ -2,6 +2,8 @@ class StateManager extends Signalable {
     constructor() {
         super();
 
+        this._debug = false;
+
         // Any dungeon route we may be editing at this time
         this._mapContext = null;
 
@@ -61,6 +63,18 @@ class StateManager extends Signalable {
         } else {
             console.error(`Unable to find map context type '${mapContext.type}'`);
         }
+    }
+
+    setDebug(debug) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        this._debug = debug;
+    }
+
+    isDebug() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this._debug;
     }
 
     /**
