@@ -1081,7 +1081,7 @@
     {
         "id": 40320,
         "dungeon_id": 116,
-        "classification_id": 2,
+        "classification_id": 3,
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 31795,
@@ -1092,7 +1092,7 @@
         "level": 80,
         "mdt_scale": 2,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,

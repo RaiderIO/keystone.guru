@@ -888,7 +888,7 @@
         "level": null,
         "mdt_scale": null,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
