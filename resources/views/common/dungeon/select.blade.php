@@ -1,12 +1,19 @@
 <?php
+
+use App\Models\Dungeon;
+use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
+use Illuminate\Support\Collection;
+
 /**
- * @var $currentUserGameVersion \App\Models\GameVersion\GameVersion
- * @var $allDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[]
- * @var $allActiveDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[]
- * @var $allExpansions \Illuminate\Support\Collection|\App\Models\Expansion[]
- * @var $siegeOfBoralus \App\Models\Dungeon
- * @var $currentSeason \App\Models\Season
- * @var $nextSeason \App\Models\Season|null
+ * @var GameVersion           $currentUserGameVersion
+ * @var Collection<Dungeon>   $allDungeons
+ * @var Collection<Dungeon>   $allActiveDungeons
+ * @var Collection<Expansion> $allExpansions
+ * @var Dungeon               $siegeOfBoralus
+ * @var Season                $currentSeason
+ * @var Season|null           $nextSeason
  */
 $id                   ??= 'dungeon_id_select';
 $name                 ??= 'dungeon_id';
@@ -50,10 +57,10 @@ if (!isset($dungeons)) {
     }
 
     if ($showExpansions) {
-        $validExpansions = $allExpansions->when(!$ignoreGameVersion, static fn(\Illuminate\Support\Collection $collection) => $collection->filter(static fn(\App\Models\Expansion $expansion) => $expansion->hasDungeonForGameVersion($currentUserGameVersion)));
+        $validExpansions = $allExpansions->when(!$ignoreGameVersion, static fn(Collection $collection) => $collection->filter(static fn(\App\Models\Expansion $expansion) => $expansion->hasDungeonForGameVersion($currentUserGameVersion)));
 
         foreach ($validExpansions as $expansion) {
-            $key                                                         = sprintf('expansion-%d', $expansion->id);
+            $key                                                        = sprintf('expansion-%d', $expansion->id);
             $dungeonsSelect[__('view_common.dungeon.select.all')][$key] =
                 __('view_common.dungeon.select.all_expansion_dungeons', ['expansion' => __($expansion->name)]);
 
@@ -66,7 +73,7 @@ if (!isset($dungeons)) {
     if ($showSeasons) {
         foreach ($seasons as $season) {
             $dungeonsSelect[__($season->name)] = $season->dungeons
-                ->mapWithKeys(static fn(\App\Models\Dungeon $dungeon) => [$dungeon->id => __($dungeon->name)])
+                ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => __($dungeon->name)])
                 ->toArray();
         }
     }
@@ -80,18 +87,18 @@ $dungeonsByExpansion = $dungeons->groupBy('expansion_id');
 // Group the dungeons by expansion
 // @TODO Fix the odd sorting of the expansions here, but it's late atm and can't think of a good way
 foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
-    /** @var \Illuminate\Support\Collection $dungeonsOfExpansion */
-    /** @var \App\Models\Expansion $expansion */
+    /** @var Collection $dungeonsOfExpansion */
+    /** @var Expansion $expansion */
     $expansion = $allExpansions->where('id', $expansionId)->first();
 
     if ($expansion->active || !$activeOnly) {
         $dungeonsOfExpansionFiltered = $dungeonsOfExpansion
-            ->when(!$ignoreGameVersion, static fn(\Illuminate\Support\Collection $collection) => $collection->filter(static fn(\App\Models\Dungeon $dungeon) => $dungeon->game_version_id === $currentUserGameVersion->id));
+            ->when(!$ignoreGameVersion, static fn(Collection $collection) => $collection->filter(static fn(Dungeon $dungeon) => $dungeon->game_version_id === $currentUserGameVersion->id));
 
         // Only if there's something to display for this expansion
         if ($dungeonsOfExpansionFiltered->isNotEmpty()) {
             $dungeonsSelect[__($expansion->name)] = $dungeonsOfExpansionFiltered
-                ->mapWithKeys(static fn(\App\Models\Dungeon $dungeon) => [$dungeon->id => __($dungeon->name)]);
+                ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => __($dungeon->name)]);
         }
     }
 }

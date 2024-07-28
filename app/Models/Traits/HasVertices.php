@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 trait HasVertices
 {
     /**
-     * @return Collection|LatLng[]
+     * @return Collection<LatLng>
      */
     public function getDecodedLatLngs(?Floor $floor = null): Collection
     {

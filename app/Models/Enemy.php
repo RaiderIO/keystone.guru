@@ -90,7 +90,7 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
     //    public    $appends    = ['active_auras'];
     public $with = [
         'npc',
-        //        'enemyactiveauras'
+        //        'enemyActiveAuras'
     ];
 
     public $hidden = [

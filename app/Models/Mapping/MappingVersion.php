@@ -279,14 +279,17 @@ class MappingVersion extends Model
         return $result;
     }
 
+    /**
+     * @return Collection<Enemy>
+     */
     public function mapContextEnemies(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection|Enemy[] $enemies */
+        /** @var Collection<Enemy> $enemies */
         $enemies = $this->enemies()
             ->with(['floor'])
             ->without(['npc'])
             ->get()
-            ->makeHidden(['enemyactiveauras']);
+            ->makeHidden(['enemy_active_auras']);
 
         if ($this->facade_enabled && $useFacade) {
             foreach ($enemies as $enemy) {
@@ -326,9 +329,12 @@ class MappingVersion extends Model
         return $newFloor;
     }
 
+    /**
+     * @return Collection<EnemyPack>
+     */
     public function mapContextEnemyPacks(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection|EnemyPack[] $enemyPacks */
+        /** @var Collection<EnemyPack> $enemyPacks */
         $enemyPacks = $this->enemyPacks()->with(['floor', 'enemies:enemies.id,enemies.enemy_pack_id'])->get();
 
         if ($this->facade_enabled && $useFacade) {
@@ -344,9 +350,12 @@ class MappingVersion extends Model
         return $enemyPacks;
     }
 
+    /**
+     * @return Collection<EnemyPatrol>
+     */
     public function mapContextEnemyPatrols(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection|EnemyPatrol[] $enemyPatrols */
+        /** @var Collection<EnemyPatrol> $enemyPatrols */
         $enemyPatrols = $this->enemyPatrols()->with('floor')->get();
 
         if ($this->facade_enabled && $useFacade) {
@@ -362,9 +371,12 @@ class MappingVersion extends Model
         return $enemyPatrols;
     }
 
+    /**
+     * @return Collection<MapIcon>
+     */
     public function mapContextMapIcons(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection|MapIcon[] $mapIcons */
+        /** @var Collection<MapIcon> $mapIcons */
         $mapIcons = $this->mapIcons()
             ->with(['floor'])
             ->get();
@@ -383,9 +395,12 @@ class MappingVersion extends Model
         return $mapIcons;
     }
 
+    /**
+     * @return Collection<DungeonFloorSwitchMarker>
+     */
     public function mapContextDungeonFloorSwitchMarkers(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers */
+        /** @var Collection<DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $this->dungeonFloorSwitchMarkers()
             ->whereNull('source_floor_id')
             ->with('floor')
@@ -409,9 +424,12 @@ class MappingVersion extends Model
         return $dungeonFloorSwitchMarkers;
     }
 
+    /**
+     * @return Collection<MountableArea>
+     */
     public function mapContextMountableAreas(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection|MountableArea[] $mountableAreas */
+        /** @var Collection<MountableArea> $mountableAreas */
         $mountableAreas = $this->mountableAreas()->with('floor')->get();
 
         if ($this->facade_enabled && $useFacade) {
