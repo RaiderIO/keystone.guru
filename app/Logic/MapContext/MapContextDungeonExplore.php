@@ -3,6 +3,11 @@
 namespace App\Logic\MapContext;
 
 use App\Models\Dungeon;
+use App\Models\Floor\Floor;
+use App\Models\Mapping\MappingVersion;
+use App\Service\Cache\CacheServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
 
 /**
@@ -16,6 +21,18 @@ use Illuminate\Support\Collection;
  */
 class MapContextDungeonExplore extends MapContextMappingVersion
 {
+    public function __construct(
+        CacheServiceInterface            $cacheService,
+        CoordinatesServiceInterface      $coordinatesService,
+        protected SeasonServiceInterface $seasonService,
+        Dungeon                          $dungeon,
+        Floor                            $floor,
+        MappingVersion                   $mappingVersion)
+    {
+        parent::__construct($cacheService, $coordinatesService, $dungeon, $floor, $mappingVersion);
+    }
+
+
     public function getFloors(): Collection
     {
         $useFacade = $this->getMapFacadeStyle() === 'facade';
@@ -32,4 +49,13 @@ class MapContextDungeonExplore extends MapContextMappingVersion
     {
         return sprintf('%s-dungeon-explore.%s', config('app.type'), $this->context->getRouteKey());
     }
+
+    public function getProperties(): array
+    {
+        return array_merge([
+            'featuredAffixes' => $this->context->getActiveSeason($this->seasonService)?->getFeaturedAffixes() ?? [],
+        ], parent::getProperties());
+    }
+
+
 }

@@ -1,18 +1,25 @@
 <?php
+
+use App\Models\Release;
+use App\Service\Cookies\CookieServiceInterface;
+use Illuminate\Support\Facades\Auth;
+
 /**
- * @var $isLocal bool
- * @var $isMapping bool
- * @var $isProduction bool
- * @var $revision string
- * @var $theme string
- * @var $hasNewChangelog bool
- * @var $latestRelease \App\Models\Release
- * @var $latestReleaseSpotlight \App\Models\Release
+ * @var bool    $isLocal
+ * @var bool    $isMapping
+ * @var bool    $isProduction
+ * @var string  $revision
+ * @var string  $theme
+ * @var bool    $hasNewChangelog
+ * @var Release $latestRelease
+ * @var Release $latestReleaseSpotlight
  */
+
+$cookieService = resolve(CookieServiceInterface::class);
 
 // Show ads or not
 $showAds ??= true;
-$user    = \Illuminate\Support\Facades\Auth::user();
+$user    = Auth::user();
 // Show the legal modal or not if people didn't agree to it yet
 $showLegalModal ??= true;
 $showSpotlight  ??= true;
@@ -38,13 +45,13 @@ $rootClass ??= '';
 
 // Bit of a hack to do this here - but for now this works
 $showSpotlightRelease = false;
-if ($showSpotlight && $latestReleaseSpotlight instanceof \App\Models\Release) {
+if ($showSpotlight && $latestReleaseSpotlight instanceof Release) {
     // Only if the user hasn't seen the latest spotlight release yet
     $showSpotlightRelease = ($_COOKIE['changelog_release'] ?? 0) < $latestReleaseSpotlight->id;
 
     // It's now at least the release of the latest spotlight release since that's what's pushed in your face atm
     if ($showSpotlightRelease) {
-        setcookie('changelog_release', $latestReleaseSpotlight->id);
+        $cookieService->setCookie('changelog_release', $latestReleaseSpotlight->id);
     }
 }
 

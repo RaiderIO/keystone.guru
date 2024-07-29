@@ -32,6 +32,13 @@ class MapContext extends Signalable {
     }
 
     /**
+     * @returns {String}
+     */
+    getEnvironment() {
+        return this._options.environment;
+    }
+
+    /**
      * Always return false in a context where affixes are not known
      * @param affix {String}
      * @returns {boolean}

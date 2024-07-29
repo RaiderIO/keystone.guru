@@ -1,7 +1,15 @@
 <?php
-/** @var \Illuminate\Support\Collection<\App\Models\Team> $models */
 
-setcookie('viewed_teams', true);
+use App\Models\Team;
+use App\Service\Cookies\CookieServiceInterface;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection<Team> $models
+ */
+
+$cookieService = resolve(CookieServiceInterface::class);
+$cookieService->setCookie('viewed_teams', true)
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_team.list.title')])
 

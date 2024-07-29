@@ -1,53 +1,64 @@
 // noinspection JSUnusedGlobalSymbols
-
-let cookieDefaultAttributes = {path: '/', sameSite: 'None', secure: true};
-Cookies.withAttributes(cookieDefaultAttributes);
-
 // @TODO: temporary solution for ensuring default values for certain cookies are set
-let cookieDefaults = {
-    polyline_default_weight: 3,
-    polyline_default_color: null,
-    hidden_map_object_groups: '["mountablearea"]',
-    hidden_map_object_groups_added_mountablearea: 0,
-    map_facade_style: 'split_floors',
-    map_number_style: 'enemy_forces',
-    kill_zones_number_style: 'percentage',
-    pulls_sidebar_floor_switch_visibility: 1,
-    dungeon_speedrun_required_npcs_show_all: 0,
-    map_unkilled_enemy_opacity: '50',
-    map_unkilled_important_enemy_opacity: '80',
-    map_enemy_aggressiveness_border: 0,
-    map_enemy_dangerous_border: 0,
-    enemy_display_type: 'enemy_portrait',
-    echo_cursors_enabled: 1,
-    map_controls_show_hide_labels: 1
-};
+let cookieDefaultAttributes = undefined;
+$(function () {
+    let state = getState();
 
-for (let name in cookieDefaults) {
-    if (cookieDefaults.hasOwnProperty(name)) {
-        let value = Cookies.get(name);
-        // If not set at all, or set to empty, re-fill it to fix a bug
-        if (typeof value === 'undefined' || (name === 'hidden_map_object_groups' && value === '')) {
-            Cookies.set(name, cookieDefaults[name], cookieDefaultAttributes);
-        } else {
-            // Re-set the cookie with the default attributes so that they're always up-to-date
-            Cookies.set(name, value, cookieDefaultAttributes);
+    // If we're not in a map context, don't do anything
+    if(!state) {
+        return;
+    }
+
+    let isLocal = state.getMapContext().getEnvironment() === ENVIRONMENT_LOCAL;
+    cookieDefaultAttributes = {path: '/', sameSite: isLocal ? '' : 'None', secure: !isLocal};
+    Cookies.withAttributes(cookieDefaultAttributes);
+
+    let cookieDefaults = {
+        polyline_default_weight: 3,
+        polyline_default_color: null,
+        hidden_map_object_groups: '["mountablearea"]',
+        hidden_map_object_groups_added_mountablearea: 0,
+        map_facade_style: 'split_floors',
+        map_number_style: 'enemy_forces',
+        kill_zones_number_style: 'percentage',
+        pulls_sidebar_floor_switch_visibility: 1,
+        dungeon_speedrun_required_npcs_show_all: 0,
+        map_unkilled_enemy_opacity: '50',
+        map_unkilled_important_enemy_opacity: '80',
+        map_enemy_aggressiveness_border: 0,
+        map_enemy_dangerous_border: 0,
+        enemy_display_type: 'enemy_portrait',
+        echo_cursors_enabled: 1,
+        map_controls_show_hide_labels: 1
+    };
+
+    for (let name in cookieDefaults) {
+        if (cookieDefaults.hasOwnProperty(name)) {
+            let value = Cookies.get(name);
+            // If not set at all, or set to empty, re-fill it to fix a bug
+            if (typeof value === 'undefined' || (name === 'hidden_map_object_groups' && value === '')) {
+                Cookies.set(name, cookieDefaults[name], cookieDefaultAttributes);
+            } else {
+                // Re-set the cookie with the default attributes so that they're always up-to-date
+                Cookies.set(name, value, cookieDefaultAttributes);
+            }
         }
     }
-}
 
 // If we need to initially hide the mountable areas, we don't want it to be visible by default
-if (Cookies.get('hidden_map_object_groups_added_mountablearea') === '0') {
-    try {
-        let hiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
-        hiddenMapObjectGroups.push('mountablearea');
-        Cookies.set('hidden_map_object_groups', JSON.stringify(hiddenMapObjectGroups), cookieDefaultAttributes);
-        Cookies.set('hidden_map_object_groups_added_mountablearea', 1, cookieDefaultAttributes);
-    } catch (e) {
-        console.error(e);
+    if (Cookies.get('hidden_map_object_groups_added_mountablearea') === '0') {
+        try {
+            let hiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
+            hiddenMapObjectGroups.push('mountablearea');
+            Cookies.set('hidden_map_object_groups', JSON.stringify(hiddenMapObjectGroups), cookieDefaultAttributes);
+            Cookies.set('hidden_map_object_groups_added_mountablearea', 1, cookieDefaultAttributes);
+        } catch (e) {
+            console.error(e);
+        }
     }
-}
-
+});
+// Environments
+const ENVIRONMENT_LOCAL = 'local';
 
 // Map object groups
 const MAP_OBJECT_GROUP_USER_MOUSE_POSITION = 'mouseposition';

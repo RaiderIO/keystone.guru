@@ -84,13 +84,15 @@ class DungeonExploreController extends Controller
 
             $mostRecentSeason = $seasonService->getMostRecentSeasonForDungeon($dungeon);
 
+            $heatmapActive = Feature::active(Heatmap::class) && $dungeon->gameVersion->has_seasons;
+
             return view('dungeon.explore.view', [
                 'dungeon'            => $dungeon,
                 'floor'              => $floor,
                 'title'              => __($dungeon->name),
                 'mapContext'         => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
-                'showHeatmapSearch'  => Feature::active(Heatmap::class) && $combatLogEventService->getRunCount($combatLogEventFilter),
-                'availableDateRange' => Feature::active(Heatmap::class) ? $combatLogEventService->getAvailableDateRange($combatLogEventFilter) : null,
+                'showHeatmapSearch'  => $heatmapActive && $combatLogEventService->getRunCount($combatLogEventFilter),
+                'availableDateRange' => $heatmapActive ? $combatLogEventService->getAvailableDateRange($combatLogEventFilter) : null,
                 'keyLevelMin'        => $mostRecentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
                 'keyLevelMax'        => $mostRecentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
             ]);

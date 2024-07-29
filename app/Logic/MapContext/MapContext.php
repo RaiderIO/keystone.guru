@@ -120,6 +120,7 @@ abstract class MapContext
         }
 
         return [
+            'environment'         => config('app.env'),
             'type'                => $this->getType(),
             'mappingVersion'      => $this->mappingVersion,
             'floorId'             => $this->floor->id,
