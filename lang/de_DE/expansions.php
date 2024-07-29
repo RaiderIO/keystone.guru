@@ -38,7 +38,7 @@ return [
     'midnight'           => [
         'name' => '',
     ],
-    'tlt'     => [
+    'tlt'                => [
         'name' => '',
     ],
 ];

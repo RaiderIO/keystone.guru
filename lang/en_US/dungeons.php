@@ -380,7 +380,7 @@ return [
         ],
     ],
     'cata'         => [
-        'grim_batol' => [
+        'grim_batol'          => [
             'name'   => 'Grim Batol',
             'floors' => [
                 'grim_batol' => 'Grim Batol',

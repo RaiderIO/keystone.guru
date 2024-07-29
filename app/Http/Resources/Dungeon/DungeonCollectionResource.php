@@ -3,10 +3,8 @@
 namespace App\Http\Resources\Dungeon;
 
 use App\Models\Dungeon;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use JsonSerializable;
 
 /**
  * Class DungeonCollectionResource
@@ -25,7 +23,7 @@ class DungeonCollectionResource extends ResourceCollection
         return [
             'data' => $this->collection->map(
                 static fn(Dungeon $dungeon) => new DungeonResource($dungeon)
-            )->toArray()
+            )->toArray(),
         ];
     }
 }

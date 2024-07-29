@@ -10,7 +10,7 @@
 @endsection
 
 <?php
-/** @var $models \Illuminate\Support\Collection|\App\Models\Npc\Npc[] */
+/** @var $models \Illuminate\Support\Collection<\App\Models\Npc\Npc> */
 // eager load the classification
 ?>
 

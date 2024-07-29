@@ -1,6 +1,6 @@
 @if(!empty($added))
-**{{ __('view_app.commit.added.added') }}**:
+    **{{ __('view_app.commit.added.added') }}**:
     @foreach($added as $file)
-+ {{ $file }}
+        + {{ $file }}
     @endforeach
 @endif

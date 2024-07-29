@@ -33,10 +33,10 @@ class HeatmapDataResponse implements Arrayable
         return $this->runCount;
     }
 
-    public function toArray() : array
+    public function toArray(): array
     {
         return [
-            'data' => $this->data->map(
+            'data'      => $this->data->map(
                 fn(HeatmapDataFloorData $floorData) => $floorData->toArray()
             )->values()->toArray(),
             'data_type' => $this->dataType,

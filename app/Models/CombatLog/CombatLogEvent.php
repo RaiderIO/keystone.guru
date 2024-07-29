@@ -24,8 +24,8 @@ use Illuminate\Support\Carbon;
  * @property int    $ui_map_id
  * @property float  $pos_x
  * @property float  $pos_y
- * @property float $pos_enemy_x
- * @property float $pos_enemy_y
+ * @property float  $pos_enemy_x
+ * @property float  $pos_enemy_y
  * @property string $event_type
  * @property string $characters
  * @property string $context

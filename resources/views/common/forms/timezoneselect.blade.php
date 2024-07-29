@@ -2,7 +2,7 @@
 $selected ??= '';
 
 // https://gist.github.com/Xeoncross/1204255
-$regions = [
+$regions   = [
     __('view_common.forms.timezoneselect.africa')     => DateTimeZone::AFRICA,
     __('view_common.forms.timezoneselect.america')    => DateTimeZone::AMERICA,
     __('view_common.forms.timezoneselect.antarctica') => DateTimeZone::ANTARCTICA,

@@ -99,17 +99,17 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
     {
         $result = true;
 
-        CombatLogEvent::chunk($count, function(Collection $combatLogEvents) use(&$result, $onProcess, $count) {
+        CombatLogEvent::chunk($count, function (Collection $combatLogEvents) use (&$result, $onProcess, $count) {
             /** @var Collection<CombatLogEvent> $combatLogEvents */
             $ids = $combatLogEvents->pluck('id')->toArray();
 
-            if( $onProcess !== null ) {
+            if ($onProcess !== null) {
                 $onProcess($ids);
             }
 
             $result = $result && CombatLogEvent::opensearch()
-                ->documents()
-                ->create($ids, null, $count);
+                    ->documents()
+                    ->create($ids, null, $count);
         });
 
         return $result;

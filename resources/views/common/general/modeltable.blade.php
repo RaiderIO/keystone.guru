@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \Illuminate\Database\Eloquent\Model $model
- * @var $exclude array
+ * @var                                     $exclude array
  */
 $exclude ??= [];
 ?>

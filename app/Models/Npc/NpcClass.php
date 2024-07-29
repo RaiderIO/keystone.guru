@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int              $id
- * @property string           $name
- * @property string           $key
+ * @property int             $id
+ * @property string          $name
+ * @property string          $key
  *
- * @property Collection|Npc[] $npcs
+ * @property Collection<Npc> $npcs
  *
  * @mixin Eloquent
  */
@@ -31,16 +31,16 @@ class NpcClass extends CacheModel
 
     public $timestamps = false;
 
-    public const NPC_CLASS_MELEE = 'melee';
-    public const NPC_CLASS_RANGED = 'ranged';
-    public const NPC_CLASS_CASTER = 'caster';
-    public const NPC_CLASS_HEALER = 'healer';
-    public const NPC_CLASS_CASTER_MELEE = 'caster_melee';
+    public const NPC_CLASS_MELEE         = 'melee';
+    public const NPC_CLASS_RANGED        = 'ranged';
+    public const NPC_CLASS_CASTER        = 'caster';
+    public const NPC_CLASS_HEALER        = 'healer';
+    public const NPC_CLASS_CASTER_MELEE  = 'caster_melee';
     public const NPC_CLASS_HEALER_CASTER = 'healer_caster';
-    public const NPC_CLASS_HEALER_MELEE = 'healer_melee';
+    public const NPC_CLASS_HEALER_MELEE  = 'healer_melee';
     public const NPC_CLASS_RANGED_CASTER = 'ranged_caster';
     public const NPC_CLASS_RANGED_HEALER = 'ranged_healer';
-    public const NPC_CLASS_RANGED_MELEE = 'ranged_melee';
+    public const NPC_CLASS_RANGED_MELEE  = 'ranged_melee';
 
     public const ALL = [
         self::NPC_CLASS_MELEE         => 1,

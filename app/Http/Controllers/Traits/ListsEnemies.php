@@ -36,7 +36,7 @@ trait ListsEnemies
         MappingVersion              $mappingVersion,
         bool                        $showMdtEnemies = false
     ): ?array {
-        /** @var Collection|Enemy[] $enemies */
+        /** @var Collection<Enemy> $enemies */
         $enemies = Enemy::selectRaw('enemies.*')
             ->join('floors', 'enemies.floor_id', '=', 'floors.id')
             ->where('floors.dungeon_id', $mappingVersion->dungeon_id)
@@ -44,7 +44,7 @@ trait ListsEnemies
             ->get();
 
         // After this $result will contain $npc_id but not the $npc object. Put that in manually here.
-        /** @var \App\Models\Npc\Npc[]|Collection $npcs */
+        /** @var Collection<Npc> $npcs */
         $npcs = Npc::whereIn('id', $enemies->pluck('npc_id')->unique()->toArray())->get();
 
         /** @var Collection $npcTypes */

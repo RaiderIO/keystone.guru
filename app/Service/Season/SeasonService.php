@@ -25,7 +25,7 @@ class SeasonService implements SeasonServiceInterface
 {
     use UserCurrentTime;
 
-    /** @var Collection|Season[] */
+    /** @var Collection<Season> */
     private Collection $seasonCache;
 
     private ?Season $firstSeasonCache = null;

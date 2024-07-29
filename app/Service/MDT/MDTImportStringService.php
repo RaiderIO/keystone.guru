@@ -215,7 +215,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         }
 
         $floors = $importStringPulls->getDungeon()->floors;
-        /** @var Collection|Enemy[] $enemies */
+        /** @var Collection<Enemy> $enemies */
         $enemies = $importStringPulls->getMappingVersion()->enemies->each(static function (Enemy $enemy) {
             $enemy->npc_id = $enemy->mdt_npc_id ?? $enemy->npc_id;
         });

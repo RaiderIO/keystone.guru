@@ -149,9 +149,9 @@ if ($isAdmin) {
         <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
             <div id="map_faction_display_controls" class="leaflet-draw-section">
                 <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-                    @foreach(\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction)
-                        <a class="map_faction_display_control map_controls_custom" href="#"
-                           data-faction="{{ strtolower($faction->key) }}"
+            @foreach(\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction)
+                <a class="map_faction_display_control map_controls_custom" href="#"
+                   data-faction="{{ strtolower($faction->key) }}"
                            title="{{ __($faction->name) }}">
                             <i class="{{ $loop->index === 0 ? 'fas' : 'far' }} fa-circle radiobutton"
                                style="width: 15px"></i>
@@ -160,10 +160,10 @@ if ($isAdmin) {
                                  alt="Faction"/>
                         </a>
 
-                    @endforeach
-                </div>
-                <ul class="leaflet-draw-actions"></ul>
+            @endforeach
             </div>
+            <ul class="leaflet-draw-actions"></ul>
+        </div>
 
 
         </script>

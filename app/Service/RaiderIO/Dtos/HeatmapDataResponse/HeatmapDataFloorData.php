@@ -37,7 +37,7 @@ class HeatmapDataFloorData implements Arrayable
     {
         return [
             'floor_id' => $this->floorId,
-            'lat_lngs' => $this->latLngs->map(fn(HeatmapDataLatLng $latLng) => $latLng->toArray())->toArray()
+            'lat_lngs' => $this->latLngs->map(fn(HeatmapDataLatLng $latLng) => $latLng->toArray())->toArray(),
         ];
     }
 
@@ -47,7 +47,7 @@ class HeatmapDataFloorData implements Arrayable
 
         $model->floorId = $data['floor_id'];
         $model->latLngs = collect();
-        foreach($data['lat_lngs'] as $latLng) {
+        foreach ($data['lat_lngs'] as $latLng) {
             $model->latLngs->push(
                 HeatmapDataLatLng::fromArray($latLng)
             );

@@ -235,7 +235,7 @@ class Floor extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @return Collection|Floor[] A list of all connected floors, regardless of direction
+     * @return Collection<Floor> A list of all connected floors, regardless of direction
      */
     public function connectedFloors(): Collection
     {
@@ -310,7 +310,7 @@ class Floor extends CacheModel implements MappingModelInterface
     {
         $result = null;
 
-        /** @var Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers */
+        /** @var Collection<DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $this->dungeonFloorSwitchMarkers()
             ->where('target_floor_id', $targetFloorId)->get();
 

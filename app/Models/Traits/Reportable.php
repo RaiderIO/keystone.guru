@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property Collection|UserReport[] $userreports
+ * @property Collection<UserReport> $userreports
  */
 trait Reportable
 {

@@ -35,9 +35,9 @@ return [
         ],
 
         'database' => [
-            'driver' => 'database',
+            'driver'     => 'database',
             'connection' => null,
-            'table' => 'features',
+            'table'      => 'features',
         ],
 
     ],

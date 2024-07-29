@@ -69,12 +69,12 @@ abstract class DungeonRouteBuilder
     protected Collection $killZones;
 
     public function __construct(
-        protected CoordinatesServiceInterface         $coordinatesService,
-        protected DungeonRouteRepositoryInterface     $dungeonRouteRepository,
-        protected KillZoneRepositoryInterface         $killZoneRepository,
-        protected KillZoneEnemyRepositoryInterface    $killZoneEnemyRepository,
-        protected KillZoneSpellRepositoryInterface    $killZoneSpellRepository,
-        protected DungeonRoute                        $dungeonRoute,
+        protected CoordinatesServiceInterface                $coordinatesService,
+        protected DungeonRouteRepositoryInterface            $dungeonRouteRepository,
+        protected KillZoneRepositoryInterface                $killZoneRepository,
+        protected KillZoneEnemyRepositoryInterface           $killZoneEnemyRepository,
+        protected KillZoneSpellRepositoryInterface           $killZoneSpellRepository,
+        protected DungeonRoute                               $dungeonRoute,
         private readonly DungeonRouteBuilderLoggingInterface $log
     ) {
         $this->currentFloor     = null;
@@ -92,7 +92,7 @@ abstract class DungeonRouteBuilder
             ->keyBy('id');
 
         // #1818 Filter out any NPC ids that are invalid
-        $this->validNpcIds          = $this->dungeonRoute->dungeon->getInUseNpcIds();
+        $this->validNpcIds = $this->dungeonRoute->dungeon->getInUseNpcIds();
 
         $this->validSpellIds        = Spell::all('id')->pluck(['id']);
         $this->activePullCollection = new ActivePullCollection();
@@ -126,7 +126,7 @@ abstract class DungeonRouteBuilder
         try {
             $this->log->createPullStart($this->killZoneIndex);
 
-            /** @var Collection|ActivePullEnemy[] $killedEnemies */
+            /** @var Collection<ActivePullEnemy> $killedEnemies */
             $killedEnemies = $activePull->getEnemiesKilled();
 
             $killZone = $this->killZoneRepository->create([
@@ -243,7 +243,7 @@ abstract class DungeonRouteBuilder
             // Find the closest Enemy with the same NPC ID that is not killed yet
             $closestEnemy = new ClosestEnemy();
 
-            /** @var Collection|Enemy[] $filteredEnemies */
+            /** @var Collection<Enemy> $filteredEnemies */
             $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($npcId) {
                 if ($availableEnemy->npc_id !== $npcId) {
                     return false;
@@ -336,7 +336,7 @@ abstract class DungeonRouteBuilder
     ): void {
         // Build a list of potential enemies which will always take precedence since they're in a group that we have aggroed.
         // Therefore, these enemies should be in combat with us regardless
-        /** @var Collection|Enemy[] $preferredEnemiesInEngagedGroups */
+        /** @var Collection<Enemy> $preferredEnemiesInEngagedGroups */
         $preferredEnemiesInEngagedGroups = $filteredEnemies->filter(static function (Enemy $availableEnemy) use ($preferredGroups) {
             return $availableEnemy->enemy_pack_id !== null && $preferredGroups->has($availableEnemy->enemyPack->group);
         });
@@ -361,7 +361,7 @@ abstract class DungeonRouteBuilder
         ?LatLng         $previousPullLatLng,
         ClosestEnemy    $closestEnemy
     ): void {
-        /** @var Collection|Enemy[] $preferredEnemiesOnCurrentFloor */
+        /** @var Collection<Enemy> $preferredEnemiesOnCurrentFloor */
         $preferredEnemiesOnCurrentFloor = $filteredEnemies->filter(fn(Enemy $availableEnemy) => $availableEnemy->floor_id == $this->currentFloor->id);
 
         if ($preferredEnemiesOnCurrentFloor->isNotEmpty()) {
@@ -441,7 +441,7 @@ abstract class DungeonRouteBuilder
         $enemiesByKillPriority = $enemies->groupBy(static fn(Enemy $enemy) => $enemy->kill_priority ?? 0)->sortKeysDesc();
 
         foreach ($enemiesByKillPriority as $killPriority => $availableEnemies) {
-            /** @var Collection|Enemy[] $availableEnemies */
+            /** @var Collection<Enemy> $availableEnemies */
             $this->log->findClosestEnemyAndDistanceFromListPriority($killPriority, $availableEnemies->count());
 
             // For each group of enemies

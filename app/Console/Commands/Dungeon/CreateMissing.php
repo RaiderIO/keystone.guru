@@ -26,9 +26,9 @@ class CreateMissing extends Command
 
     public function handle(): int
     {
-        /** @var Collection|Expansion[] $expansions */
+        /** @var Collection<Expansion> $expansions */
         $expansions = Expansion::all()->keyBy('shortname');
-        /** @var Collection|Dungeon[] $dungeons */
+        /** @var Collection<Dungeon> $dungeons */
         $dungeons = Dungeon::all()->keyBy('key');
 
         foreach (Dungeon::ALL as $expansionKey => $dungeonKeys) {

@@ -597,7 +597,7 @@ class AdminToolsController extends Controller
         $uiMapAssignmentTableHeaderIndexMaxX       = array_search('Region[3]', $uiMapAssignmentTableHeaders, true);
         $uiMapAssignmentTableHeaderIndexMaxY       = array_search('Region[4]', $uiMapAssignmentTableHeaders, true);
 
-        /** @var Collection|Dungeon[] $allDungeons */
+        /** @var Collection<Dungeon> $allDungeons */
         //        $allDungeons = Dungeon::where('key', Dungeon::DUNGEON_AZJOL_NERUB)->get()->keyBy('id');
         $allDungeons = Dungeon::where('map_id', '>', 0)->get()->keyBy('id');
 

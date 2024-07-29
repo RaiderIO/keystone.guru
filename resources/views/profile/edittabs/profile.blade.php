@@ -16,8 +16,8 @@
     @if(isset($user->iconfile))
         <div class="form-group">
             {{__('view_profile.edit.avatar')}}: <img src="{{ $user->iconfile->getURL() }}"
-                                                      alt="{{ __('view_profile.edit.avatar_title') }}"
-                                                      style="max-width: 48px"/>
+                                                     alt="{{ __('view_profile.edit.avatar_title') }}"
+                                                     style="max-width: 48px"/>
         </div>
     @endif
 
@@ -69,16 +69,16 @@
         <?php
         foreach ($allClasses->chunk(13) as $chunk) { ?>
         <div class="row no-gutters pt-1">
-            <?php foreach ($chunk as $class) { ?>
+                <?php foreach ($chunk as $class) { ?>
             <div class="col-md profile_class_color border-dark"
                  data-color="{{ $class->color }}"
                  style="background-color: {{ $class->color }};">
             </div>
             <?php }
- ?>
+                ?>
         </div>
-<?php }
- ?>
+        <?php }
+        ?>
     </div>
 
     {!! Form::submit(__('view_profile.edit.save'), ['class' => 'btn btn-info']) !!}

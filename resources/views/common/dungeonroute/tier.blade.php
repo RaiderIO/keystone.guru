@@ -1,5 +1,5 @@
 <?php
-/** @var $affixGroupEaseTiersByAffixGroup \Illuminate\Support\Collection|\App\Models\AffixGroup\AffixGroupEaseTier[] */
+/** @var $affixGroupEaseTiersByAffixGroup \Illuminate\Support\Collection<\App\Models\AffixGroup\AffixGroupEaseTier> */
 /** @var $tier string */
 /** @var $dungeon \App\Models\Dungeon */
 /** @var $affixgroup \App\Models\AffixGroup\AffixGroup */

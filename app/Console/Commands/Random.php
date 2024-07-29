@@ -36,7 +36,7 @@ class Random extends Command
         SeasonServiceInterface               $seasonService,
         DungeonRouteRepositoryInterface      $dungeonRouteRepository
     ): int {
-        $count       = 0;
+        $count = 0;
 
         $this->info('Test');
 

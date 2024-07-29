@@ -155,7 +155,7 @@ class DiscoverService extends BaseDiscoverService
             $this->getCacheKey('grouped_by_dungeon:popular'), function () {
                 $result = collect();
 
-                /** @var Collection|Dungeon[] $activeDungeons */
+                /** @var Collection<Dungeon> $activeDungeons */
                 $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeons())->active()->get();
                 foreach ($activeDungeons as $dungeon) {
                     // Limit the amount of results of our queries
@@ -196,7 +196,7 @@ class DiscoverService extends BaseDiscoverService
             function () use ($affixGroup) {
                 $result = collect();
 
-                /** @var Collection|Dungeon[] $activeDungeons */
+                /** @var Collection<Dungeon> $activeDungeons */
                 $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeons())->active()->get();
                 foreach ($activeDungeons as $dungeon) {
                     // Limit the amount of results of our queries

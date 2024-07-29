@@ -11,7 +11,6 @@ use App\Models\Polyline;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

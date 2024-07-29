@@ -110,7 +110,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         $dungeon = null;
         /** @var Floor|null $currentFloor */
         $currentFloor = null;
-        /** @var Collection|\App\Models\Npc\Npc[] $npcs */
+        /** @var Collection<Npc> $npcs */
         $npcs = collect();
 
         $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr) use ($extractDungeonCallable, $hasExistingMappingVersion, &$mappingVersion, &$dungeon, &$currentFloor, &$npcs) {

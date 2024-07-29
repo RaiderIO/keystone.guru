@@ -39,7 +39,7 @@ class RefreshDisplayIds extends Command
 
         foreach ($npcsToRefresh as $npc) {
             $gameVersion = $npc->dungeon?->gameVersion ?? $retail;
-            $displayId = $wowheadService->getNpcDisplayId($gameVersion, $npc);
+            $displayId   = $wowheadService->getNpcDisplayId($gameVersion, $npc);
 
             if ($displayId !== null && $npc->update(['display_id' => $displayId])) {
                 $this->info(sprintf('- %s (%d): %d', $npc->name, $npc->id, $displayId));

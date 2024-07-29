@@ -18,7 +18,7 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
 {
     public function getResult(): array
     {
-        /** @var array{ draw: int, recordsTotal: int, data: Builder[]|Collection, recordsFiltered: int, input: array, queries: array } $result */
+        /** @var array{ draw: int, recordsTotal: int, data: Collection<Builder>, recordsFiltered: int, input: array, queries: array } $result */
         $result = parent::getResult();
 
         $result['data'] = $result['data']->each(function (DungeonRoute $dungeonRoute) {

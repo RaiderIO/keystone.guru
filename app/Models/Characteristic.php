@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int              $id
- * @property string           $name
- * @property string           $key
+ * @property int             $id
+ * @property string          $name
+ * @property string          $key
  *
- * @property Collection|Npc[] $npcs
+ * @property Collection<Npc> $npcs
  *
  * @mixin Eloquent
  */

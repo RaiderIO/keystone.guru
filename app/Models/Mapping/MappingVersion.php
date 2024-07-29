@@ -464,7 +464,7 @@ class MappingVersion extends Model
             if ($newMappingVersion->dungeon === null) {
                 return;
             }
-            /** @var Collection|MappingVersion[] $existingMappingVersions */
+            /** @var Collection<MappingVersion> $existingMappingVersions */
             $existingMappingVersions = $newMappingVersion->dungeon->mappingVersions()->get();
             // Nothing to do if we don't have an older mapping version
             if ($existingMappingVersions->count() < 2) {
@@ -491,7 +491,7 @@ class MappingVersion extends Model
                 'floorUnionAreas',
                 'npcEnemyForces',
             ]);
-            /** @var Collection|MappingModelInterface[] $previousMapping */
+            /** @var Collection<MappingModelInterface> $previousMapping */
             $previousMapping = collect()
                 ->merge($previousMappingVersion->dungeonFloorSwitchMarkers)
                 ->merge($previousMappingVersion->enemies)

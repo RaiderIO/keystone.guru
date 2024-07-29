@@ -33,7 +33,7 @@ class ChallengeModeRunData extends Model
         'run_id',
         'correlation_id',
         'post_body',
-        'processed'
+        'processed',
     ];
 
     public function challengeModeRun(): BelongsTo

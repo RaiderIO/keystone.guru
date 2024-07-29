@@ -33,7 +33,7 @@ return [
             'laravel'    => Lukasss93\Larex\Exporters\LaravelExporter::class,
             'json:lang'  => Lukasss93\Larex\Exporters\JsonLanguagesExporter::class,
             'json:group' => Lukasss93\Larex\Exporters\JsonGroupsExporter::class,
-            'crowdin' => Lukasss93\LarexCrowdin\Exporters\CrowdinExporter::class,
+            'crowdin'    => Lukasss93\LarexCrowdin\Exporters\CrowdinExporter::class,
         ],
     ],
 

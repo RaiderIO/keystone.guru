@@ -59,7 +59,7 @@
 
         <tbody>
         @foreach ($models as $report)
-            <?php /** @var $user \App\Models\UserReport */?>
+                <?php /** @var $user \App\Models\UserReport */ ?>
             <tr>
                 <td>{{ $report->id }}</td>
                 <td>{{ $report->user->name }}</td>

@@ -32,8 +32,8 @@ class DungeonController extends Controller
 
         $beforeDungeon = null;
         if ($dungeon === null) {
-            $dungeon       = Dungeon::create($validated);
-            $saveResult    = true;
+            $dungeon    = Dungeon::create($validated);
+            $saveResult = true;
         } else {
             $beforeDungeon = clone $dungeon;
             $saveResult    = $dungeon->update($validated);

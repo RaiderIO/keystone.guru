@@ -18,7 +18,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     use CreatesCombatLogEvent;
 
     const EVENT_TYPE = CombatLogEvent::EVENT_TYPE_ENEMY_KILLED;
-    const DATA_TYPE = CombatLogEvent::DATA_TYPE_PLAYER_POSITION;
+    const DATA_TYPE  = CombatLogEvent::DATA_TYPE_PLAYER_POSITION;
 
     #[Test]
     #[Group('Controller')]
@@ -34,7 +34,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         // Act
         $response = $this->post(route('ajax.heatmap.data'), [
             'event_type' => self::EVENT_TYPE,
-            'data_type' => self::DATA_TYPE,
+            'data_type'  => self::DATA_TYPE,
             'dungeon_id' => $dungeon->id,
         ]);
 
@@ -64,7 +64,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         // Act
         $response = $this->post(route('ajax.heatmap.data'), [
             'event_type' => self::EVENT_TYPE,
-            'data_type' => self::DATA_TYPE,
+            'data_type'  => self::DATA_TYPE,
             'dungeon_id' => $dungeon->id,
         ]);
 

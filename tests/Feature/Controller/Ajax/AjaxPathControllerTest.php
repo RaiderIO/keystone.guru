@@ -59,12 +59,12 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
     public function store_givenPathWithValidButNotMatchingFloorId_shouldReturnError(): void
     {
         // Arrange
-        $validIds = $this->dungeonRoute->dungeon->floors->pluck('id');
+        $validIds  = $this->dungeonRoute->dungeon->floors->pluck('id');
         $allFloors = Floor::all()->keyBy('id');
 
-        $randomInvalidId = $allFloors->pluck('id')->diff($validIds)->random();
+        $randomInvalidId    = $allFloors->pluck('id')->diff($validIds)->random();
         $randomInvalidFloor = $allFloors->get($randomInvalidId);
-        $polyline = PolylineFixtures::createPolyline($randomInvalidFloor);
+        $polyline           = PolylineFixtures::createPolyline($randomInvalidFloor);
 
         // Act
         $response = $this->post(route('ajax.dungeonroute.path.create', ['dungeonRoute' => $this->dungeonRoute]), [

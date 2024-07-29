@@ -1,8 +1,8 @@
 <?php
 /**
  * @var \App\Models\User $user
- * @var boolean   $link
- * @var boolean   $showAnonIcon
+ * @var boolean          $link
+ * @var boolean          $showAnonIcon
  */
 $link         ??= false;
 $showAnonIcon ??= true;

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Traits\HasGenericModelRelation;
-use App\Models\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

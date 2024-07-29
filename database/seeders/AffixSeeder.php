@@ -76,7 +76,7 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             $affix->setTable(DatabaseSeeder::getTempTableName(Affix::class))->save();
         }
 
-        /** @var Collection|Expansion[] $expansions */
+        /** @var Collection<Expansion> $expansions */
         $expansions = Expansion::all()->mapWithKeys(function (Expansion $expansion) {
             return [$expansion->shortname => $expansion->id];
         });
@@ -87,15 +87,15 @@ class AffixSeeder extends Seeder implements TableSeederInterface
         $dragonflight = $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT);
         $tww          = $expansions->get(Expansion::EXPANSION_TWW);
 
-        $season1 = ['season_id' => 1, 'expansion_id' => $bfa];
-        $season2 = ['season_id' => 2, 'expansion_id' => $bfa];
-        $season3 = ['season_id' => 3, 'expansion_id' => $bfa];
-        $season4 = ['season_id' => 4, 'expansion_id' => $bfa];
-        $season5 = ['season_id' => 5, 'expansion_id' => $shadowlands];
-        $season6 = ['season_id' => 6, 'expansion_id' => $shadowlands];
-        $season7 = ['season_id' => 7, 'expansion_id' => $legion];
-        $season8 = ['season_id' => 8, 'expansion_id' => $shadowlands];
-        $season9 = ['season_id' => 9, 'expansion_id' => $shadowlands];
+        $season1  = ['season_id' => 1, 'expansion_id' => $bfa];
+        $season2  = ['season_id' => 2, 'expansion_id' => $bfa];
+        $season3  = ['season_id' => 3, 'expansion_id' => $bfa];
+        $season4  = ['season_id' => 4, 'expansion_id' => $bfa];
+        $season5  = ['season_id' => 5, 'expansion_id' => $shadowlands];
+        $season6  = ['season_id' => 6, 'expansion_id' => $shadowlands];
+        $season7  = ['season_id' => 7, 'expansion_id' => $legion];
+        $season8  = ['season_id' => 8, 'expansion_id' => $shadowlands];
+        $season9  = ['season_id' => 9, 'expansion_id' => $shadowlands];
         $season10 = ['season_id' => 10, 'expansion_id' => $dragonflight];
         $season11 = ['season_id' => 11, 'expansion_id' => $dragonflight];
         $season12 = ['season_id' => 12, 'expansion_id' => $dragonflight];

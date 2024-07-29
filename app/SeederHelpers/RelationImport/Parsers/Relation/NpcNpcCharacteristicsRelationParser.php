@@ -4,7 +4,6 @@ namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
-use App\Models\Npc\NpcSpell;
 use Database\Seeders\DatabaseSeeder;
 
 class NpcNpcCharacteristicsRelationParser implements RelationParserInterface

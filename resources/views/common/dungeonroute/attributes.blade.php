@@ -1,6 +1,6 @@
 <?php
 /** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
-/** @var $allRouteAttributes \Illuminate\Support\Collection|\App\Models\RouteAttribute[] */
+/** @var $allRouteAttributes \Illuminate\Support\Collection<\App\Models\RouteAttribute> */
 
 $showNoAttributes ??= false;
 ?>

@@ -23,7 +23,7 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
     public function __construct()
     {
         $this->checkedNpcIds = collect();
-        $log = App::make(NpcUpdateDataExtractorLoggingInterface::class);
+        $log                 = App::make(NpcUpdateDataExtractorLoggingInterface::class);
         /** @var NpcUpdateDataExtractorLoggingInterface $log */
 
         $this->log = $log;

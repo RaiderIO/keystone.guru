@@ -14,7 +14,7 @@
         dataLayer.push(arguments);
     };
     gtag('js', new Date());
-    gtag('config', 'G-69YEVZW7MB', { 'send_page_view': false });
+    gtag('config', 'G-69YEVZW7MB', {'send_page_view': false});
     gtag(
         'event',
         'ramp_js',

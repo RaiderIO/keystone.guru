@@ -420,12 +420,12 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         return $updatedModels;
     }
 
-    protected function rollback()
+    protected function rollback(): void
     {
         $this->command->warn('Truncating all relevant data...');
 
         // Can DEFINITELY NOT truncate DungeonRoute table here. That'd wipe the entire instance, not good.
-        /** @var DungeonRoute[]|Collection $demoRoutes */
+        /** @var Collection<DungeonRoute> $demoRoutes */
         $demoRoutes = DungeonRoute::with(['brushlines', 'paths', 'killZones', 'livesessions'])
             ->where('demo', true)
             ->get();

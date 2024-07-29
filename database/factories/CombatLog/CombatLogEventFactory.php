@@ -8,9 +8,8 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
 use App\Models\Season;
-use Illuminate\Support\Carbon;
-use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Carbon;
 
 class CombatLogEventFactory extends Factory
 {

@@ -115,8 +115,8 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_UNIT_DIED       => UnitDied::class,
         self::SPECIAL_EVENT_UNIT_DISSIPATES => UnitDissipates::class,
 
-        self::SPECIAL_EVENT_DAMAGE_SPLIT         => DamageSplit::class,
-        self::SPECIAL_EVENT_SPELL_RESURRECT      => SpellResurrect::class,
+        self::SPECIAL_EVENT_DAMAGE_SPLIT    => DamageSplit::class,
+        self::SPECIAL_EVENT_SPELL_RESURRECT => SpellResurrect::class,
 
         self::SPECIAL_EVENT_EMOTE           => Emote::class,
         self::SPECIAL_EVENT_ENCHANT_APPLIED => EnchantApplied::class,

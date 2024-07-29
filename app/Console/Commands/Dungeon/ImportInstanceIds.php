@@ -2,11 +2,8 @@
 
 namespace App\Console\Commands\Dungeon;
 
-use App\Models\Dungeon;
-use App\Models\Floor\Floor;
 use App\Service\Dungeon\DungeonServiceInterface;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 
 class ImportInstanceIds extends Command
 {

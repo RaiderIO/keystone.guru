@@ -4,9 +4,9 @@ namespace App\Service\CombatLog\Dtos\DataExtraction;
 
 class ExtractedDataResult
 {
-    private int $createdNpcs = 0;
-    private int $updatedNpcs = 0;
-    private int $updatedFloors = 0;
+    private int $createdNpcs             = 0;
+    private int $updatedNpcs             = 0;
+    private int $updatedFloors           = 0;
     private int $updatedFloorConnections = 0;
 
     public function getCreatedNpcs(): int

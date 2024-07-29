@@ -21,7 +21,9 @@ for ($i = 0;
      ++$i) { ?>
 <div class="row no-gutters">
         <?php
-    for ($j = 0; $j < $colCount; ++$j) {
+    for ($j = 0;
+         $j < $colCount;
+         ++$j) {
         $index = $i * $colCount + $j;
     if ($dungeons->has($index)){
         /** @var \App\Models\Dungeon $dungeon */
@@ -164,8 +166,8 @@ for ($i = 0;
         <?php
     }
     }
-      ?>
+        ?>
 </div>
 <?php }
- ?>
+?>
 

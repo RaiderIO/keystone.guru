@@ -137,7 +137,7 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
     {
         $mapPOIs = [];
 
-        /** @var Collection|Floor[] $floors */
+        /** @var Collection<Floor> $floors */
         $floors = $mappingVersion->dungeon->floors();
         //        $floors->each(function (Floor $floor) use ($mappingVersion) {
         //            $floor->setRelation('dungeon', $mappingVersion->dungeon);
@@ -222,7 +222,7 @@ MDT.mapPOIs[dungeonIndex] = {};
             ->groupBy('npc_id');
 
         foreach ($enemiesByNpcId as $npcId => $enemies) {
-            /** @var Collection|Enemy[] $enemies */
+            /** @var Collection<Enemy> $enemies */
             if (empty($npcId)) {
                 $this->log->getDungeonEnemiesEnemiesWithoutNpcIdFound($enemies->pluck('id')->toArray());
 

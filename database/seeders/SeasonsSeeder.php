@@ -18,7 +18,7 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
     {
         $this->command->info('Adding known Seasons');
 
-        /** @var Collection|Expansion[] $expansions */
+        /** @var Collection<Expansion> $expansions */
         $expansions = Expansion::all()->mapWithKeys(function (Expansion $expansion) {
             return [$expansion->shortname => $expansion->id];
         });
@@ -229,7 +229,7 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                         Dungeon::DUNGEON_NELTHARUS,
                     ])->orderBy('expansions.released_at')
                     ->get(),
-            ],[
+            ], [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_TWW),
                 'seasonal_affix_id'       => null,
                 'index'                   => 4,

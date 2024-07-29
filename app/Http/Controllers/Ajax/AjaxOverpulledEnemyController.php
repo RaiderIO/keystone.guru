@@ -38,7 +38,7 @@ class AjaxOverpulledEnemyController extends Controller
 
         $validated = $request->validated();
 
-        /** @var Collection|Enemy[] $enemies */
+        /** @var Collection<Enemy> $enemies */
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
         foreach ($enemies as $enemy) {
@@ -85,7 +85,7 @@ class AjaxOverpulledEnemyController extends Controller
 
         $validated = $request->validated();
 
-        /** @var Collection|Enemy[] $enemies */
+        /** @var Collection<Enemy> $enemies */
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
         try {

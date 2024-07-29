@@ -72,9 +72,9 @@ $changelog = isset($release) ? $release->changelog : new \App\Models\ReleaseChan
 
     @isset($release)
         <div class="form-group">
-            <?php
+                <?php
                 $releaseArr = $release->toArray();
-            ?>
+                ?>
             {!! Form::label('release_json', __('view_admin.release.edit.release_json')) !!}
             {!! Form::textarea('release_json', json_encode($releaseArr, JSON_PRETTY_PRINT), ['class' => 'form-control w-100']) !!}
         </div>

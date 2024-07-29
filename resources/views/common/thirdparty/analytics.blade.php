@@ -5,7 +5,7 @@
     @auth
     <?php // https://developers.google.com/analytics/devguides/collection/gtagjs/display-features ?>
     @if( Auth::user()->analytics_cookie_opt_out )
-        gtag('set', 'allow_ad_personalization_signals', false);
+    gtag('set', 'allow_ad_personalization_signals', false);
     @endif
     @endauth
     function gtag() {

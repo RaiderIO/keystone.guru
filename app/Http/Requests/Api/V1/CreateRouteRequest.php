@@ -5,7 +5,6 @@ namespace App\Http\Requests\Api\V1;
 use App\Models\Affix;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
-use App\Models\Spell;
 use App\Rules\CreateRouteNpcChronologicalRule;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use Illuminate\Validation\Rule;

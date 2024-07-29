@@ -32,7 +32,7 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @return Collection|BaseEvent[]
+     * @return Collection<BaseEvent>
      *
      * @throws Exception
      */
@@ -74,7 +74,7 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @return Collection|ChallengeMode
+     * @return Collection<ChallengeMode>
      *
      * @throws Exception
      */
@@ -109,7 +109,7 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @return Collection|ChallengeMode
+     * @return Collection<ChallengeMode>
      *
      * @throws Exception
      */

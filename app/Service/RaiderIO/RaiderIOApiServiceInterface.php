@@ -2,8 +2,8 @@
 
 namespace App\Service\RaiderIO;
 
-use App\Service\RaiderIO\Dtos\HeatmapDataResponse\HeatmapDataResponse;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
+use App\Service\RaiderIO\Dtos\HeatmapDataResponse\HeatmapDataResponse;
 
 interface RaiderIOApiServiceInterface
 {

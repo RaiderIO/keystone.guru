@@ -372,7 +372,7 @@ return [
                 // for raw since the buckets would be too small, but since the coordinates
                 // are equal to enemy positions this only just increases the accuracy of the
                 // points, while still having a low bucket count.
-                'enemy' => [
+                'enemy'  => [
                     'sizeX' => 800,
                     'sizeY' => 600,
                 ],

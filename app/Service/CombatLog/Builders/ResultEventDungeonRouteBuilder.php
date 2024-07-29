@@ -37,7 +37,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         KillZoneEnemyRepositoryInterface $killZoneEnemyRepository,
         KillZoneSpellRepositoryInterface $killZoneSpellRepository,
         DungeonRoute                     $dungeonRoute,
-        /** @var Collection|BaseResultEvent[] */
+        /** @var Collection<BaseResultEvent> */
         private readonly Collection      $resultEvents
     ) {
         $this->log = App::make(ResultEventDungeonRouteBuilderLoggingInterface::class);

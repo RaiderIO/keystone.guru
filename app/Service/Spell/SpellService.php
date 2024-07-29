@@ -74,14 +74,14 @@ class SpellService implements SpellServiceInterface
         $spellsById = Spell::all()->keyBy('id');
 
         $updated = $inserted = 0;
-        foreach($spellsAttributes as $spellId => $spellAttributes) {
+        foreach ($spellsAttributes as $spellId => $spellAttributes) {
             if ($spellsById->has($spellId)) {
                 $spell = $spellsById->get($spellId);
 
                 $spell->update($spellAttributes);
                 $updated++;
             } else {
-                if( Spell::create($spellAttributes) ) {
+                if (Spell::create($spellAttributes)) {
                     $this->log->importFromCsvInsertNewSpell($spellId);
                     $inserted++;
                 }

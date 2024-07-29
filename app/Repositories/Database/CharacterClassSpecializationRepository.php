@@ -3,7 +3,6 @@
 namespace App\Repositories\Database;
 
 use App\Models\CharacterClassSpecialization;
-use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\CharacterClassSpecializationRepositoryInterface;
 
 class CharacterClassSpecializationRepository extends DatabaseRepository implements CharacterClassSpecializationRepositoryInterface

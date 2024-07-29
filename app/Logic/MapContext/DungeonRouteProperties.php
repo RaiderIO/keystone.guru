@@ -5,7 +5,6 @@ namespace App\Logic\MapContext;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
-use App\Models\Mapping\MappingVersion;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 
@@ -23,11 +22,14 @@ trait DungeonRouteProperties
         return $this->floor->dungeon->floorsForMapFacade($this->mappingVersion, $useFacade)->active()->get();
     }
 
+    /**
+     * @return Collection<DungeonRoute>
+     */
     private function getDungeonRoutesProperties(CoordinatesServiceInterface $coordinatesService, array $publicKeys): Collection
     {
         $result = collect();
 
-        /** @var Collection|DungeonRoute $dungeonRoutes */
+        /** @var Collection<DungeonRoute> $dungeonRoutes */
         $dungeonRoutes = DungeonRoute::with([
             'killZones',
             'mapicons',

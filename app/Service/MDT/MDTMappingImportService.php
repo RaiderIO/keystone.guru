@@ -435,7 +435,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
             // Save enemy packs
             foreach ($mdtEnemyPacks as $groupIndex => $mdtEnemiesWithGroupsByEnemyPack) {
-                /** @var $mdtEnemiesWithGroupsByEnemyPack Collection|Enemy[] */
+                /** @var $mdtEnemiesWithGroupsByEnemyPack Collection<Enemy> */
                 $mdtEnemiesWithGroupsByEnemyPack = $mdtEnemiesWithGroupsByEnemyPack
                     ->filter(static fn(Enemy $enemy) => $enemy->teeming === null && !in_array($enemy->npc_id, self::IGNORE_ENEMY_NPC_IDS))
                     ->keyBy('id');

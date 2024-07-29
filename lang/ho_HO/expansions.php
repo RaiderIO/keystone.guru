@@ -38,7 +38,7 @@ return [
     'midnight'           => [
         'name' => 'Hodor',
     ],
-    'tlt'     => [
+    'tlt'                => [
         'name' => 'Hodor',
     ],
 ];

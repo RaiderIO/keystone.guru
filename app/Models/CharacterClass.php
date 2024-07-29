@@ -12,13 +12,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                                       $id
- * @property string                                    $key
- * @property string                                    $name
- * @property string                                    $color
- * @property Collection|CharacterClassSpecialization[] $specializations
- * @property Collection|DungeonRoutePlayerClass[]      $dungeonrouteplayerclasses
- * @property Collection|DungeonRoutePlayerRace[]       $dungeonrouteplayerraces
+ * @property int                                      $id
+ * @property string                                   $key
+ * @property string                                   $name
+ * @property string                                   $color
+ * @property Collection<CharacterClassSpecialization> $specializations
+ * @property Collection<DungeonRoutePlayerClass>      $dungeonrouteplayerclasses
+ * @property Collection<DungeonRoutePlayerRace>       $dungeonrouteplayerraces
  *
  * @mixin Eloquent
  */

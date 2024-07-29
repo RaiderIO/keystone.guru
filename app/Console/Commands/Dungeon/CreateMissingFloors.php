@@ -25,7 +25,7 @@ class CreateMissingFloors extends Command
 
     public function handle(): int
     {
-        /** @var Collection|Dungeon[] $dungeons */
+        /** @var Collection<Dungeon> $dungeons */
         $dungeons = Dungeon::all()->keyBy('key');
 
         foreach ($dungeons as $dungeon) {

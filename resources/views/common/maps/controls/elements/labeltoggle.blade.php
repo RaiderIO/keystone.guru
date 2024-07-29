@@ -1,7 +1,7 @@
 <?php
 
 ?>
-<!-- Label toggle -->
+    <!-- Label toggle -->
 <div class="row no-gutters">
     <div id="map_controls_element_label_toggle_btn" class="col btn btn-info">
         <i class="fa fa-chevron-right"></i>

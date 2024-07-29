@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                                 $id
- * @property int                                 $release_id
- * @property string                              $description
- * @property Release                             $release
- * @property ReleaseChangelogChange[]|Collection $changes
+ * @property int                                $id
+ * @property int                                $release_id
+ * @property string                             $description
+ * @property Release                            $release
+ * @property Collection<ReleaseChangelogChange> $changes
  *
  * @mixin Eloquent
  */

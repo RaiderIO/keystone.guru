@@ -436,7 +436,7 @@ return [
     'filter_input_season_header'                                           => 'Hodor',
     'filter_input_user_header'                                             => 'Hodor',
     'filter_input_event_type_header'                                       => 'Hodor',
-    'filter_input_data_type_header'                                       => 'Hodor',
+    'filter_input_data_type_header'                                        => 'Hodor',
     'filter_input_date_header'                                             => 'Hodor',
     'filter_input_date_from_header'                                        => 'Hodor',
     'filter_input_date_to_header'                                          => 'Hodor',

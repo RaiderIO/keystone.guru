@@ -436,7 +436,7 @@ return [
     'filter_input_season_header'                                           => '',
     'filter_input_user_header'                                             => '',
     'filter_input_event_type_header'                                       => '',
-    'filter_input_data_type_header'                                       => '',
+    'filter_input_data_type_header'                                        => '',
     'filter_input_date_header'                                             => '',
     'filter_input_date_from_header'                                        => '',
     'filter_input_date_to_header'                                          => '',

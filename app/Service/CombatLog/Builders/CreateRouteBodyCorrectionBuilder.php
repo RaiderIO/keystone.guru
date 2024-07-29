@@ -73,7 +73,7 @@ class CreateRouteBodyCorrectionBuilder extends CreateRouteBodyDungeonRouteBuilde
         try {
             $this->log->getCreateRouteBodyStart();
 
-            $floors  = $this->dungeonRoute->dungeon->floors->keyBy('id');
+            $floors = $this->dungeonRoute->dungeon->floors->keyBy('id');
 
             foreach ($this->createRouteBody->npcs as $npc) {
                 $resolvedEnemy = $npc->getResolvedEnemy();

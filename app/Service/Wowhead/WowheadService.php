@@ -155,7 +155,7 @@ class WowheadService implements WowheadServiceInterface
         // More hacky shit to scrape data we need
         $spellId       = 0;
         $cooldownGroup = Spell::COOLDOWN_GROUP_UNKNOWN; // I can't find info on this on Wowhead?
-        $dispelType = '';
+        $dispelType    = '';
         $iconName      = '';
         $name          = '';
         $schoolsMask   = 0;

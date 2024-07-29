@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int|null                                    $linked_awakened_obelisk_id
- * @property Collection|MapObjectToAwakenedObeliskLink[] $linkedawakenedobelisks
+ * @property int|null                                   $linked_awakened_obelisk_id
+ * @property Collection<MapObjectToAwakenedObeliskLink> $linkedawakenedobelisks
  *
  * @mixin Eloquent
  */

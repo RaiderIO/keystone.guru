@@ -1,13 +1,13 @@
 <?php
 /**
- * @var \App\Models\GameVersion\GameVersion                    $currentUserGameVersion
- * @var \App\Models\Season|null                                $nextSeason
- * @var \App\Models\Season                                     $currentSeason
- * @var \Illuminate\Support\Collection|\App\Models\Expansion[] $activeExpansions
- * @var string                                                 $id
- * @var string                                                 $tabsId
- * @var bool                                                   $selectable
- * @var callable|null                                          $subtextFn
+ * @var \App\Models\GameVersion\GameVersion                   $currentUserGameVersion
+ * @var \App\Models\Season|null                               $nextSeason
+ * @var \App\Models\Season                                    $currentSeason
+ * @var \Illuminate\Support\Collection<\App\Models\Expansion> $activeExpansions
+ * @var string                                                $id
+ * @var string                                                $tabsId
+ * @var bool                                                  $selectable
+ * @var callable|null                                         $subtextFn
  */
 $selectedSeasonId = $currentUserGameVersion->has_seasons ? ($nextSeason ?? $currentSeason)->id : null;
 $selectable       ??= true;

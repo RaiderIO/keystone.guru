@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Spell;
 
-use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Service\Spell\SpellServiceInterface;
 use App\Service\Traits\Curl;
 use Illuminate\Console\Command;
