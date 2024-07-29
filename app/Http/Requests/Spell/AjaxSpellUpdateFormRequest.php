@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Spell;
 
 use App\Models\Laratrust\Role;
 use App\Models\Spell;
@@ -8,7 +8,7 @@ use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class SpellFormRequest extends FormRequest
+class AjaxSpellUpdateFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,8 @@ class SpellFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id'             => 'required',
-            'name'           => 'required|string',
-            'icon_name'      => 'required|string',
+            'name'           => 'string',
+            'icon_name'      => 'string',
             'category'       => Rule::in(Spell::ALL_CATEGORIES),
             'dispel_type'    => Rule::in(Spell::ALL_DISPEL_TYPES),
             'cooldown_group' => Rule::in(Spell::ALL_COOLDOWN_GROUPS),

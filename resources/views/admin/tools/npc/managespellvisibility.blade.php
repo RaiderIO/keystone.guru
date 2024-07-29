@@ -21,12 +21,18 @@ use Illuminate\Support\Collection;
 
             // All input fields that are checkboxes with spell class
             $('.spell').bind('change', function () {
+                let hiddenOnMap = !$(this).is(':checked');
                 $.ajax({
                     type: 'PUT',
-                    url: `/ajax/admin/spell/${$(this).data('id')}/toggleVisibility`,
+                    url: `/ajax/admin/spell/${$(this).data('id')}`,
+                    data: {
+                        hidden_on_map: hiddenOnMap ? 1 : 0
+                    },
                     dataType: 'json',
                     success: function () {
                         showSuccessNotification(lang.get('messages.toggle_spell_visibility_success'));
+
+                        $(`.spell-${$(this).data('id')}`).prop('checked', !hiddenOnMap);
                     },
                     error: function () {
                         showErrorNotification(lang.get('messages.toggle_spell_visibility_error'));
@@ -41,9 +47,9 @@ use Illuminate\Support\Collection;
     {{ $npcs->links() }}
 
     @foreach($npcs as $npc)
-        <div class="form-element">
-            <h4 class="form-label">
-                <label for="npc-{{ $npc->id }}">{{ __($npc->name) }} ({{ __($npc->id) }})</label>
+        <div class="form-group">
+            <h4>
+                {{ __($npc->name) }} ({{ __($npc->id) }})
             </h4>
             @foreach($npc->npcSpells as $npcSpell)
                     <?php
@@ -59,8 +65,8 @@ use Illuminate\Support\Collection;
                         </div>
                     @else
                         <div class="col-auto">
-                            <input type="checkbox" id="spell-{{ $npcSpell->spell_id }}"
-                                   class="form-control left_checkbox spell"
+                            <input type="checkbox"
+                                   class="form-control left_checkbox spell spell-{{ $npcSpell->spell_id }}"
                                    name="spell-{{ $npcSpell->spell_id }}"
                                    data-id="{{ $npcSpell->spell_id }}"
                                    value="{{ $npcSpell->spell_id }}" {{ $spell->hidden_on_map ? '' : 'checked' }}>

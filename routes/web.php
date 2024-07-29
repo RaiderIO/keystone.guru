@@ -394,7 +394,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/npc', (new AjaxNpcController())->get(...));
                 Route::post('/thumbnail/{dungeonroute}/refresh', (new AjaxDungeonRouteController())->refreshThumbnail(...));
 
-                Route::put('/spell/{spell}/toggleVisibility', (new AjaxSpellController())->toggleVisibility(...));
+                Route::put('/spell/{spell}', (new AjaxSpellController())->update(...));
 
                 Route::prefix('mappingVersion/{mappingVersion}')->group(static function () {
                     Route::patch('/', (new AjaxMappingVersionController())->store(...));
