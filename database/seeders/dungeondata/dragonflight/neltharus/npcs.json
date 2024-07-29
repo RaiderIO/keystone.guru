@@ -6,9 +6,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 102604,
+        "encounter_id": 2494,
         "name": "Magmatusk",
         "base_health": 45745004,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -17,7 +20,43 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 374365
+            },
+            {
+                "spell_id": 374410
+            },
+            {
+                "spell_id": 375251
+            },
+            {
+                "spell_id": 375436
+            },
+            {
+                "spell_id": 375439
+            },
+            {
+                "spell_id": 375449
+            },
+            {
+                "spell_id": 375455
+            },
+            {
+                "spell_id": 375535
+            },
+            {
+                "spell_id": 375890
+            },
+            {
+                "spell_id": 391457
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -27,9 +66,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 108349,
+        "encounter_id": null,
         "name": "Qalashi Hunter",
         "base_health": 7894387,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -38,7 +80,64 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 372561
+            },
+            {
+                "spell_id": 372566
+            },
+            {
+                "spell_id": 372570
+            },
+            {
+                "spell_id": 372583
+            },
+            {
+                "spell_id": 372824
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16127,
@@ -105,9 +204,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 108366,
+        "encounter_id": null,
         "name": "Overseer Lahar",
         "base_health": 15788774,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -116,7 +218,31 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 372461
+            },
+            {
+                "spell_id": 372472
+            },
+            {
+                "spell_id": 373406
+            },
+            {
+                "spell_id": 376186
+            },
+            {
+                "spell_id": 383928
+            },
+            {
+                "spell_id": 395427
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16129,
@@ -183,9 +309,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 109230,
+        "encounter_id": null,
         "name": "Tamed Phoenix",
         "base_health": 2631462,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -194,7 +323,48 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 13
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 16128,
@@ -261,9 +431,12 @@
         "npc_type_id": 7,
         "npc_class_id": 4,
         "display_id": 108347,
+        "encounter_id": null,
         "name": "Qalashi Bonetender",
         "base_health": 7894387,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -272,7 +445,55 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 372223
+            },
+            {
+                "spell_id": 372226
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16131,
@@ -339,9 +560,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 108344,
+        "encounter_id": null,
         "name": "Qalashi Trainee",
         "base_health": 6578656,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -350,7 +574,61 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 371875
+            },
+            {
+                "spell_id": 372311
+            },
+            {
+                "spell_id": 372372
+            },
+            {
+                "spell_id": 372824
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16130,
@@ -417,9 +695,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 108248,
+        "encounter_id": 2490,
         "name": "Chargath, Bane of Scales",
         "base_health": 52808083,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -428,7 +709,73 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 373424
+            },
+            {
+                "spell_id": 373733
+            },
+            {
+                "spell_id": 373735
+            },
+            {
+                "spell_id": 373742
+            },
+            {
+                "spell_id": 373756
+            },
+            {
+                "spell_id": 373762
+            },
+            {
+                "spell_id": 374655
+            },
+            {
+                "spell_id": 374704
+            },
+            {
+                "spell_id": 375055
+            },
+            {
+                "spell_id": 375056
+            },
+            {
+                "spell_id": 375057
+            },
+            {
+                "spell_id": 375397
+            },
+            {
+                "spell_id": 384019
+            },
+            {
+                "spell_id": 388523
+            },
+            {
+                "spell_id": 389059
+            },
+            {
+                "spell_id": 396332
+            },
+            {
+                "spell_id": 396424
+            },
+            {
+                "spell_id": 396672
+            },
+            {
+                "spell_id": 414585
+            },
+            {
+                "spell_id": 437458
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -438,9 +785,12 @@
         "npc_type_id": 3,
         "npc_class_id": 1,
         "display_id": 104524,
+        "encounter_id": null,
         "name": "Lava Pincer",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -449,7 +799,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -459,9 +810,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 101960,
+        "encounter_id": null,
         "name": "Qalashi Irontorch",
         "base_health": 9210118,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -470,7 +824,61 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 372201
+            },
+            {
+                "spell_id": 372202
+            },
+            {
+                "spell_id": 372203
+            },
+            {
+                "spell_id": 384161
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16139,
@@ -537,9 +945,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 111190,
+        "encounter_id": null,
         "name": "Irontorch Commander",
         "base_health": 14473043,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -548,7 +959,31 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 372293
+            },
+            {
+                "spell_id": 372296
+            },
+            {
+                "spell_id": 372542
+            },
+            {
+                "spell_id": 372543
+            },
+            {
+                "spell_id": 373084
+            },
+            {
+                "spell_id": 373089
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16140,
@@ -615,9 +1050,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 111189,
+        "encounter_id": null,
         "name": "Qalashi Bonesplitter",
         "base_health": 8552253,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -626,7 +1064,61 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 372224
+            },
+            {
+                "spell_id": 372225
+            },
+            {
+                "spell_id": 372262
+            },
+            {
+                "spell_id": 372266
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16138,
@@ -693,9 +1185,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 102505,
+        "encounter_id": null,
         "name": "Lava Flare",
         "base_health": 4210339,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -704,7 +1199,52 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 13
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 372538
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16137,
@@ -771,9 +1311,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 109595,
+        "encounter_id": null,
         "name": "Qalashi Blacksmith",
         "base_health": 9210118,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -782,7 +1325,19 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 372971
+            },
+            {
+                "spell_id": 384623
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16141,
@@ -849,9 +1404,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 108665,
+        "encounter_id": null,
         "name": "Qalashi Lavabearer",
         "base_health": 10525850,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
@@ -860,7 +1418,31 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 372211
+            },
+            {
+                "spell_id": 372213
+            },
+            {
+                "spell_id": 379404
+            },
+            {
+                "spell_id": 379406
+            },
+            {
+                "spell_id": 379410
+            },
+            {
+                "spell_id": 381329
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16136,
@@ -927,9 +1509,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 107189,
+        "encounter_id": 2489,
         "name": "Forgemaster Gorek",
         "base_health": 41586366,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -938,7 +1523,67 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 374397
+            },
+            {
+                "spell_id": 374517
+            },
+            {
+                "spell_id": 374533
+            },
+            {
+                "spell_id": 374534
+            },
+            {
+                "spell_id": 374535
+            },
+            {
+                "spell_id": 374586
+            },
+            {
+                "spell_id": 374635
+            },
+            {
+                "spell_id": 374641
+            },
+            {
+                "spell_id": 374812
+            },
+            {
+                "spell_id": 374839
+            },
+            {
+                "spell_id": 374842
+            },
+            {
+                "spell_id": 374969
+            },
+            {
+                "spell_id": 375046
+            },
+            {
+                "spell_id": 375061
+            },
+            {
+                "spell_id": 375291
+            },
+            {
+                "spell_id": 375306
+            },
+            {
+                "spell_id": 377995
+            },
+            {
+                "spell_id": 392666
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -948,9 +1593,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 92726,
+        "encounter_id": null,
         "name": "Binding Spear",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -959,7 +1607,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -969,9 +1618,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 107029,
+        "encounter_id": 2501,
         "name": "Warlord Sargha",
         "base_health": 47527275,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -980,7 +1632,43 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 376780
+            },
+            {
+                "spell_id": 376783
+            },
+            {
+                "spell_id": 376784
+            },
+            {
+                "spell_id": 377014
+            },
+            {
+                "spell_id": 377017
+            },
+            {
+                "spell_id": 377018
+            },
+            {
+                "spell_id": 377204
+            },
+            {
+                "spell_id": 377473
+            },
+            {
+                "spell_id": 377477
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -990,9 +1678,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 108664,
+        "encounter_id": null,
         "name": "High Thaumaturge Fural",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1001,7 +1692,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1011,9 +1703,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 106307,
+        "encounter_id": null,
         "name": "Qalashi Mammoth Trainer",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1022,7 +1717,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1032,9 +1728,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 109460,
+        "encounter_id": null,
         "name": "Raging Ember",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1043,7 +1742,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1053,9 +1753,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 109407,
+        "encounter_id": null,
         "name": "Ore Elemental",
         "base_health": 5262925,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1064,7 +1767,61 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 13
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 378149
+            },
+            {
+                "spell_id": 378172
+            },
+            {
+                "spell_id": 378202
+            },
+            {
+                "spell_id": 378221
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16133,
@@ -1131,9 +1888,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 108663,
+        "encounter_id": null,
         "name": "Qalashi Plunderer",
         "base_health": 8552253,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1142,7 +1902,55 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 378827
+            },
+            {
+                "spell_id": 378831
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16134,
@@ -1209,9 +2017,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 108029,
+        "encounter_id": null,
         "name": "Qalashi Spinecrusher",
         "base_health": 9210118,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1220,7 +2031,52 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 378847
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16132,
@@ -1287,9 +2143,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 107985,
+        "encounter_id": null,
         "name": "Qalashi Thaumaturge",
         "base_health": 6315505,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1298,7 +2157,58 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 378281
+            },
+            {
+                "spell_id": 378282
+            },
+            {
+                "spell_id": 378818
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16135,
@@ -1365,9 +2275,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 104578,
+        "encounter_id": null,
         "name": "Apex Blazewing",
         "base_health": 10525850,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1376,7 +2289,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 381662
+            },
+            {
+                "spell_id": 381663
+            },
+            {
+                "spell_id": 381670
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16125,
@@ -1443,9 +2371,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 111187,
+        "encounter_id": null,
         "name": "Qalashi Warden",
         "base_health": 10525850,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
@@ -1454,7 +2385,19 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 382708
+            },
+            {
+                "spell_id": 384597
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16124,
@@ -1521,9 +2464,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 108666,
+        "encounter_id": null,
         "name": "Qalashi Lavamancer",
         "base_health": 9210118,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.3,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1532,7 +2478,31 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 372213
+            },
+            {
+                "spell_id": 382791
+            },
+            {
+                "spell_id": 382795
+            },
+            {
+                "spell_id": 383231
+            },
+            {
+                "spell_id": 383651
+            },
+            {
+                "spell_id": 383660
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16126,
@@ -1599,9 +2569,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 102503,
+        "encounter_id": null,
         "name": "Lava Spawn",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1610,7 +2583,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1620,9 +2594,12 @@
         "npc_type_id": 3,
         "npc_class_id": 1,
         "display_id": 108050,
+        "encounter_id": null,
         "name": "Lava Slime",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -1631,7 +2608,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1641,9 +2619,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 108693,
+        "encounter_id": null,
         "name": "Forgewrought Monstrosity",
         "base_health": 7894387,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1652,7 +2633,19 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 384662
+            },
+            {
+                "spell_id": 384663
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16142,

@@ -9,9 +9,6 @@ class GameVersionService implements GameVersionServiceInterface
 {
     private const GAME_VERSION_COOKIE = 'game_version';
 
-    /**
-     * {@inheritDoc}
-     */
     public function setGameVersion(GameVersion $gameVersion, ?User $user): void
     {
         $user?->update(['game_version_id' => $gameVersion->id]);
@@ -24,9 +21,6 @@ class GameVersionService implements GameVersionServiceInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getGameVersion(?User $user): GameVersion
     {
         $gameVersion = null;

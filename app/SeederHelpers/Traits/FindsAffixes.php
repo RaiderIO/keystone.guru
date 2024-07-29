@@ -14,7 +14,7 @@ trait FindsAffixes
     /**
      * Finds an affix by name in a list of affixes.
      *
-     * @param Collection|Affix[] $affixes
+     * @param Collection<Affix> $affixes
      * @return bool|Affix
      */
     private function findAffix(Collection $affixes, string $affixName)

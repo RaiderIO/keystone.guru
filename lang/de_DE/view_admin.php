@@ -117,12 +117,14 @@ return [
             'index'                              => '',
             'mdt_sub_level'                      => '',
             'ui_map_id'                          => '',
-            'floor_name'                         => '',
+            'map_name'                           => '',
+            'name'                               => '',
             'min_enemy_size'                     => '',
             'max_enemy_size'                     => '',
             'enemy_engagement_max_range'         => '',
             'enemy_engagement_max_range_patrols' => '',
             'percentage_display_zoom'            => '',
+            'zoom_max'                           => '',
             'default'                            => '',
             'default_title'                      => '',
             'facade'                             => '',
@@ -337,6 +339,21 @@ return [
                 'submit'                    => '',
             ],
         ],
+        'features'     => [
+            'list' => [
+                'title'        => '',
+                'header'       => '',
+                'table_header' => [
+                    'enabled' => '',
+                    'feature' => '',
+                    'actions' => '',
+                ],
+                'actions'      => [
+                    'toggle' => '',
+                    'forget' => '',
+                ],
+            ],
+        ],
         'mdt'          => [
             'diff'                              => [
                 'title'                 => '',
@@ -418,6 +435,9 @@ return [
 
             'subheader_mapping'  => '',
             'force_sync_mapping' => '',
+
+            'subheader_features' => '',
+            'manage_features'    => '',
 
             'subheader_actions'   => '',
             'export_dungeon_data' => '',

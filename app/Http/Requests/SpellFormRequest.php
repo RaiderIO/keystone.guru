@@ -34,6 +34,7 @@ class SpellFormRequest extends FormRequest
             'schools.*'      => Rule::in(Spell::ALL_SCHOOLS),
             'aura'           => 'boolean',
             'selectable'     => 'boolean',
+            'hidden_on_map'  => 'boolean',
         ];
     }
 }

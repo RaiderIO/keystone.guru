@@ -5,7 +5,7 @@ return [
         'list' => [
             'title'             => 'Hodor',
             'header'            => 'Hodor',
-            'heatmap_available' => '',
+            'heatmap_available' => 'Hodor',
         ],
     ],
 ];

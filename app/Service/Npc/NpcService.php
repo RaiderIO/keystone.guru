@@ -3,7 +3,7 @@
 namespace App\Service\Npc;
 
 use App\Models\Dungeon;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use Illuminate\Support\Collection;
 
 class NpcService implements NpcServiceInterface

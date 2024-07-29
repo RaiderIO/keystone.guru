@@ -306,6 +306,8 @@ return [
                 'enabled'          => '',
                 'disabled'         => '',
                 'event_type'       => '',
+                'data_type'        => '',
+                'data_type_title'  => '',
                 'filter'           => '',
                 'loading'          => '',
                 'key_level'        => '',
@@ -357,8 +359,9 @@ return [
             'pullsworkbench' => [
                 'modal'            => [
                     'description' => [
-                        'label' => '',
-                        'save'  => '',
+                        'label'               => '',
+                        'supported_html_tags' => '',
+                        'save'                => '',
                     ],
                     'spells'      => [
                         'label' => '',

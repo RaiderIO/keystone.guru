@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\Models\NpcClassification;
+use App\Models\Npc\NpcClassification;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
 

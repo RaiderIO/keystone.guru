@@ -6,8 +6,8 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Mapping\MappingVersion;
 use Artisan;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -93,7 +93,7 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
             ->without(['faction', 'specializations', 'classes', 'races', 'affixes'])
             ->whereNull('mapping_version_id')
             ->chunk(100, function (Collection $dungeonRoutes) use (&$count) {
-                /** @var Collection|DungeonRoute[] $dungeonRoutes */
+                /** @var Collection<DungeonRoute> $dungeonRoutes */
                 foreach ($dungeonRoutes as $dungeonRoute) {
                     $dungeonRoute->update(['mapping_version_id' => $dungeonRoute->dungeon->currentMappingVersion->id]);
                 }

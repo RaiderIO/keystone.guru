@@ -6,7 +6,6 @@ use App\Models\Dungeon;
 use App\Models\Faction;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -37,7 +36,7 @@ class FactionSelectionRequiredRule implements ValidationRule
         $factionId = $this->request->get('faction_id');
 
         $result = !empty($value);
-        /** @var Collection|Dungeon[] $factionSelectionRequired */
+        /** @var Collection<Dungeon> $factionSelectionRequired */
         $factionSelectionRequired = Dungeon::factionSelectionRequired()->get();
 
         if (in_array(intval($dungeonId), $factionSelectionRequired->pluck('id')->toArray())) {

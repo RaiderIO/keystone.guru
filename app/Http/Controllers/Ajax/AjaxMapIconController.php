@@ -10,8 +10,8 @@ use App\Models\MapIcon;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Team;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -177,7 +177,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
      *
      * @throws Exception
      */
-    public function adminDelete(Request $request, MapIcon $mapIcon)
+    public function adminDelete(Request $request, MappingVersion $mappingVersion, MapIcon $mapIcon)
     {
         return $this->delete($request, null, $mapIcon);
     }

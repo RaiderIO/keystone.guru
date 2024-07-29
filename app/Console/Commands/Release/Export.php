@@ -3,12 +3,8 @@
 namespace App\Console\Commands\Release;
 
 use App\Models\Release;
-use App\Models\ReleaseReportLog;
-use App\Service\Discord\DiscordApiService;
-use App\Service\Reddit\RedditApiService;
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 
 class Export extends Command
 {

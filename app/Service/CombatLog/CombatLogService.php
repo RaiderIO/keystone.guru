@@ -11,12 +11,12 @@ use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Service\CombatLog\Dtos\ChallengeMode;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Filters\DungeonRoute\CombatLogDungeonRouteFilter;
 use App\Service\CombatLog\Filters\DungeonRoute\DungeonRouteFilter;
 use App\Service\CombatLog\Filters\MappingVersion\CombatLogDungeonOrRaidFilter;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
-use App\Service\CombatLog\Models\ChallengeMode;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use File;
@@ -32,7 +32,7 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @return Collection|BaseEvent[]
+     * @return Collection<BaseEvent>
      *
      * @throws Exception
      */
@@ -74,7 +74,7 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @return Collection|ChallengeMode
+     * @return Collection<ChallengeMode>
      *
      * @throws Exception
      */
@@ -109,7 +109,7 @@ class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
-     * @return Collection|ChallengeMode
+     * @return Collection<ChallengeMode>
      *
      * @throws Exception
      */
@@ -270,14 +270,14 @@ class CombatLogService implements CombatLogServiceInterface
             $this->log->parseCombatLogParseEventsStart();
             $combatLogVersion = CombatLogVersion::RETAIL;
             while (($rawEvent = fgets($handle)) !== false) {
-                $parsedEvent = $callback($combatLogVersion, $rawEvent, ++$lineNr);
+                $parsedEvent = $callback($combatLogVersion, trim($rawEvent), ++$lineNr);
                 if ($parsedEvent instanceof CombatLogVersionEvent) {
                     $combatLogVersion = $parsedEvent->getVersion();
                     $this->log->parseCombatLogParseEventsChangedCombatLogVersion($combatLogVersion);
                 }
             }
         } catch (Exception $exception) {
-            throw new Exception(sprintf('%d: %s', $lineNr, $rawEvent), $exception->getCode(), $exception);
+            throw new Exception(sprintf('%d: %s', $lineNr, trim($rawEvent)), $exception->getCode(), $exception);
         } finally {
             $this->log->parseCombatLogParseEventsEnd();
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * @var \Illuminate\Support\Collection|\App\Models\GameVersion\GameVersion[] $allGameVersions
- * @var \App\Models\GameVersion\GameVersion $currentUserGameVersion
+ * @var \Illuminate\Support\Collection<\App\Models\GameVersion\GameVersion> $allGameVersions
+ * @var \App\Models\GameVersion\GameVersion                                 $currentUserGameVersion
  */
 ?>
 <li class="nav-item dropdown d-lg-none d-block">

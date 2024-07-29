@@ -30,7 +30,8 @@
             guys are going too fast" :).
         </li>
         <li>
-            <span class="font-weight-bold">Neky</span> for being mostly useless and annoying. But he did help map that one dungeon, or so he said.
+            <span class="font-weight-bold">Neky</span> for being mostly useless and annoying. But he did help map that
+            one dungeon, or so he said.
         </li>
     </ul>
     </p>

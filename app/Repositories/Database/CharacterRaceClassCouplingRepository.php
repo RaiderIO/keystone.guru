@@ -3,7 +3,6 @@
 namespace App\Repositories\Database;
 
 use App\Models\CharacterRaceClassCoupling;
-use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\CharacterRaceClassCouplingRepositoryInterface;
 
 class CharacterRaceClassCouplingRepository extends DatabaseRepository implements CharacterRaceClassCouplingRepositoryInterface

@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Controller;
+namespace Tests\Feature\Controller;
 
 use App\Models\Mapping\MappingVersion;
 use Tests\TestCases\AjaxPublicTestCase;

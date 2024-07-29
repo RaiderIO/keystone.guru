@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Traits\SeederModel;
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * @property int    $id
@@ -16,34 +17,17 @@ use Eloquent;
  * @property int    $schools_mask
  * @property bool   $aura
  * @property bool   $selectable
+ * @property bool   $hidden_on_map
+ *
  * @property string $icon_url
+ *
+ * @method static Builder visible()
  *
  * @mixin Eloquent
  */
 class Spell extends CacheModel implements MappingModelInterface
 {
     use SeederModel;
-
-    public $incrementing = false;
-
-    public $timestamps = false;
-
-    public $hidden = ['pivot'];
-
-    protected $appends = ['icon_url'];
-
-    protected $fillable = [
-        'id',
-        'category',
-        'cooldown_group',
-        'dispel_type',
-        'icon_name',
-        'name',
-        'schools_mask',
-        'aura',
-        'selectable',
-        'icon_url',
-    ];
 
     public const SCHOOL_PHYSICAL = 1;
     public const SCHOOL_HOLY     = 2;
@@ -63,16 +47,22 @@ class Spell extends CacheModel implements MappingModelInterface
         'Arcane'   => self::SCHOOL_ARCANE,
     ];
 
-    public const DISPEL_TYPE_MAGIC   = 'Magic';
-    public const DISPEL_TYPE_DISEASE = 'Disease';
-    public const DISPEL_TYPE_POISON  = 'Poison';
-    public const DISPEL_TYPE_CURSE   = 'Curse';
+    public const DISPEL_TYPE_MAGIC         = 'Magic';
+    public const DISPEL_TYPE_DISEASE       = 'Disease';
+    public const DISPEL_TYPE_POISON        = 'Poison';
+    public const DISPEL_TYPE_CURSE         = 'Curse';
+    public const DISPEL_TYPE_ENRAGE        = 'Enrage';
+    public const DISPEL_TYPE_NOT_AVAILABLE = 'N/A';
+    public const DISPEL_TYPE_UNKNOWN       = 'Unknown';
 
     public const ALL_DISPEL_TYPES = [
         self::DISPEL_TYPE_MAGIC,
         self::DISPEL_TYPE_DISEASE,
         self::DISPEL_TYPE_POISON,
         self::DISPEL_TYPE_CURSE,
+        self::DISPEL_TYPE_ENRAGE,
+        self::DISPEL_TYPE_NOT_AVAILABLE,
+        self::DISPEL_TYPE_UNKNOWN,
     ];
 
     public const CATEGORY_GENERAL      = 'general';
@@ -89,6 +79,7 @@ class Spell extends CacheModel implements MappingModelInterface
     public const CATEGORY_DRUID        = 'druid';
     public const CATEGORY_DEMON_HUNTER = 'demon_hunter';
     public const CATEGORY_EVOKER       = 'evoker';
+    public const CATEGORY_UNKNOWN      = 'unknown';
 
     public const ALL_CATEGORIES = [
         self::CATEGORY_GENERAL,
@@ -105,6 +96,7 @@ class Spell extends CacheModel implements MappingModelInterface
         self::CATEGORY_DRUID,
         self::CATEGORY_DEMON_HUNTER,
         self::CATEGORY_EVOKER,
+        self::CATEGORY_UNKNOWN,
     ];
 
     public const COOLDOWN_GROUP_ALL            = 'all';
@@ -121,6 +113,7 @@ class Spell extends CacheModel implements MappingModelInterface
     public const COOLDOWN_GROUP_PERSONAL       = 'personal';
     public const COOLDOWN_GROUP_PERSONAL_CD    = 'personal_cd';
     public const COOLDOWN_GROUP_UTILITY        = 'utility';
+    public const COOLDOWN_GROUP_UNKNOWN        = 'unknown';
 
     public const ALL_COOLDOWN_GROUPS = [
         self::COOLDOWN_GROUP_ALL,
@@ -137,22 +130,48 @@ class Spell extends CacheModel implements MappingModelInterface
         self::COOLDOWN_GROUP_PERSONAL,
         self::COOLDOWN_GROUP_PERSONAL_CD,
         self::COOLDOWN_GROUP_UTILITY,
+        self::COOLDOWN_GROUP_UNKNOWN,
     ];
 
     // Some hard coded spells that we have exceptions for in the code
-    public const SPELL_BLOODLUST = 2825;
-
-    public const SPELL_HEROISM = 32182;
-
-    public const SPELL_TIME_WARP = 80353;
-
+    public const SPELL_BLOODLUST           = 2825;
+    public const SPELL_HEROISM             = 32182;
+    public const SPELL_TIME_WARP           = 80353;
     public const SPELL_FURY_OF_THE_ASPECTS = 390386;
+    public const SPELL_ANCIENT_HYSTERIA    = 90355;
+    public const SPELL_PRIMAL_RAGE         = 264667;
+    public const SPELL_FERAL_HIDE_DRUMS    = 381301;
 
-    public const SPELL_ANCIENT_HYSTERIA = 90355;
+    public $incrementing = false;
 
-    public const SPELL_PRIMAL_RAGE = 264667;
+    public $timestamps = false;
 
-    public const SPELL_FERAL_HIDE_DRUMS = 381301;
+    public $hidden = ['pivot'];
+
+    protected $appends = ['icon_url'];
+
+    protected $fillable = [
+        'id',
+        'category',
+        'cooldown_group',
+        'dispel_type',
+        'icon_name',
+        'name',
+        'schools_mask',
+        'aura',
+        'selectable',
+        'hidden_on_map',
+        'icon_url',
+    ];
+
+    protected $casts = [
+        'id'            => 'integer',
+        'schools_mask'  => 'integer',
+        'aura'          => 'boolean',
+        'selectable'    => 'boolean',
+        'hidden_on_map' => 'boolean',
+    ];
+
 
     public function getSchoolsAsArray(): array
     {
@@ -163,6 +182,11 @@ class Spell extends CacheModel implements MappingModelInterface
         }
 
         return $result;
+    }
+
+    public function scopeVisible(): Builder
+    {
+        return $this->where('hidden_on_map', false);
     }
 
     /**
@@ -177,5 +201,18 @@ class Spell extends CacheModel implements MappingModelInterface
     {
         // Spells aren't tied to a specific dungeon, but they're part of the mapping
         return 0;
+    }
+
+    public static function maskToReadableString(int $spellSchoolMask): string
+    {
+        $result = [];
+
+        foreach (self::ALL_SCHOOLS as $schoolName => $schoolMask) {
+            if ($spellSchoolMask & $schoolMask) {
+                $result[] = $schoolName;
+            }
+        }
+
+        return implode(', ', $result);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Service\CombatLogEvent\Models;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use Codeart\OpensearchLaravel\Search\Query;
 use Codeart\OpensearchLaravel\Search\SearchQueries\BoolQuery;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Filter;
@@ -39,7 +40,8 @@ class CombatLogEventFilter implements Arrayable
 
     public function __construct(
         private readonly Dungeon $dungeon,
-        private readonly string $eventType
+        private readonly string  $eventType,
+        private readonly string  $dataType
     ) {
         $this->affixGroups = collect();
         $this->affixes     = collect();
@@ -50,18 +52,21 @@ class CombatLogEventFilter implements Arrayable
         return $this->dungeon;
     }
 
-    /**
-     * @return int|null
-     */
+    public function getEventType(): string
+    {
+        return $this->eventType;
+    }
+
+    public function getDataType(): string
+    {
+        return $this->dataType;
+    }
+
     public function getLevelMin(): ?int
     {
         return $this->levelMin;
     }
 
-    /**
-     * @param int|null $levelMin
-     * @return CombatLogEventFilter
-     */
     public function setLevelMin(?int $levelMin): CombatLogEventFilter
     {
         $this->levelMin = $levelMin;
@@ -69,18 +74,11 @@ class CombatLogEventFilter implements Arrayable
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getLevelMax(): ?int
     {
         return $this->levelMax;
     }
 
-    /**
-     * @param int|null $levelMax
-     * @return CombatLogEventFilter
-     */
     public function setLevelMax(?int $levelMax): CombatLogEventFilter
     {
         $this->levelMax = $levelMax;
@@ -89,7 +87,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @return Collection
+     * @return Collection<AffixGroup>
      */
     public function getAffixGroups(): Collection
     {
@@ -97,7 +95,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @param Collection $affixGroups
+     * @param Collection<AffixGroup> $affixGroups
      * @return CombatLogEventFilter
      */
     public function setAffixGroups(Collection $affixGroups): CombatLogEventFilter
@@ -108,7 +106,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @return Collection
+     * @return Collection<Affix>
      */
     public function getAffixes(): Collection
     {
@@ -116,7 +114,7 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
-     * @param Collection $affixes
+     * @param Collection<Affix> $affixes
      * @return CombatLogEventFilter
      */
     public function setAffixes(Collection $affixes): CombatLogEventFilter
@@ -126,18 +124,11 @@ class CombatLogEventFilter implements Arrayable
         return $this;
     }
 
-    /**
-     * @return Carbon|null
-     */
     public function getDateFrom(): ?Carbon
     {
         return $this->dateFrom;
     }
 
-    /**
-     * @param Carbon|null $dateFrom
-     * @return CombatLogEventFilter
-     */
     public function setDateFrom(?Carbon $dateFrom): CombatLogEventFilter
     {
         $this->dateFrom = $dateFrom;
@@ -145,18 +136,11 @@ class CombatLogEventFilter implements Arrayable
         return $this;
     }
 
-    /**
-     * @return Carbon|null
-     */
     public function getDateTo(): ?Carbon
     {
         return $this->dateTo;
     }
 
-    /**
-     * @param Carbon|null $dateTo
-     * @return CombatLogEventFilter
-     */
     public function setDateTo(?Carbon $dateTo): CombatLogEventFilter
     {
         $this->dateTo = $dateTo;
@@ -164,18 +148,11 @@ class CombatLogEventFilter implements Arrayable
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getDurationMin(): ?int
     {
         return $this->durationMin;
     }
 
-    /**
-     * @param int|null $durationMin
-     * @return CombatLogEventFilter
-     */
     public function setDurationMin(?int $durationMin): CombatLogEventFilter
     {
         $this->durationMin = $durationMin;
@@ -183,18 +160,11 @@ class CombatLogEventFilter implements Arrayable
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getDurationMax(): ?int
     {
         return $this->durationMax;
     }
 
-    /**
-     * @param int|null $durationMax
-     * @return CombatLogEventFilter
-     */
     public function setDurationMax(?int $durationMax): CombatLogEventFilter
     {
         $this->durationMax = $durationMax;
@@ -207,6 +177,7 @@ class CombatLogEventFilter implements Arrayable
         return [
             'challenge_mode_id' => $this->dungeon->challenge_mode_id,
             'event_type'        => $this->eventType,
+            'data_type'         => $this->dataType,
             'level_min'         => $this->levelMin,
             'level_max'         => $this->levelMax,
             'affix_groups'      => $this->affixGroups->map(function (AffixGroup $affixGroup) {
@@ -224,8 +195,29 @@ class CombatLogEventFilter implements Arrayable
 
     public function toOpensearchQuery(array $must = []): array
     {
-        $must[] = MatchOne::make('challenge_mode_id', $this->getDungeon()->challenge_mode_id);
+        $dungeon = $this->getDungeon();
+
+        $must[] = MatchOne::make('challenge_mode_id', $dungeon->challenge_mode_id);
         $must[] = MatchOne::make('event_type', $this->eventType);
+
+//        /** @var Floor $firstFloor */
+//        $firstFloor = $dungeon->floors->first();
+//
+//        dd($firstFloor);
+//
+//        $must[]     = BoolQuery::make([
+//            Should::make([
+//                BoolQuery::make([
+//                    Must::make([
+//                        MatchOne::make('ui_map_id', $firstFloor->ui_map_id),
+//                        Range::make('pos_x', [
+//                            'gte' => $firstFloor->ingame_min_x,
+//                            'lte' => $firstFloor->ingame_max_x,
+//                        ]),
+//                    ]),
+//                ]),
+//            ]),
+//        ]);
 
         if ($this->levelMin !== null && $this->levelMax !== null) {
             $must[] = Range::make('level', [
@@ -294,7 +286,8 @@ class CombatLogEventFilter implements Arrayable
     {
         $combatLogEventFilter = new CombatLogEventFilter(
             dungeon: Dungeon::firstWhere('id', $requestArray['dungeon_id']),
-            eventType: $requestArray['event_type']
+            eventType: $requestArray['event_type'],
+            dataType: $requestArray['data_type']
         );
 
         if (isset($requestArray['level'])) {
@@ -304,7 +297,7 @@ class CombatLogEventFilter implements Arrayable
 
         if (isset($requestArray['duration'])) {
             [$durationMin, $durationMax] = explode(';', $requestArray['duration']);
-            $combatLogEventFilter->setdurationMin((int)$durationMin)->setdurationMax((int)$durationMax);
+            $combatLogEventFilter->setDurationMin((int)$durationMin)->setDurationMax((int)$durationMax);
         }
 
         if (isset($requestArray['affixes'])) {
@@ -322,6 +315,26 @@ class CombatLogEventFilter implements Arrayable
         if (isset($requestArray['date_range_to'])) {
             $combatLogEventFilter->setDateTo(Carbon::createFromFormat('Y-m-d', $requestArray['date_range_to']));
         }
+
+        return $combatLogEventFilter;
+    }
+
+    public static function fromHeatmapDataFilter(HeatmapDataFilter $heatmapDataFilter): CombatLogEventFilter
+    {
+        $combatLogEventFilter = new CombatLogEventFilter(
+            $heatmapDataFilter->getDungeon(),
+            $heatmapDataFilter->getEventType(),
+            $heatmapDataFilter->getDataType()
+        );
+
+        $combatLogEventFilter->setLevelMin($heatmapDataFilter->getLevelMin());
+        $combatLogEventFilter->setLevelMax($heatmapDataFilter->getLevelMax());
+        $combatLogEventFilter->setAffixGroups($heatmapDataFilter->getAffixGroups());
+        $combatLogEventFilter->setAffixes($heatmapDataFilter->getAffixes());
+        $combatLogEventFilter->setDateFrom($heatmapDataFilter->getDateFrom());
+        $combatLogEventFilter->setDateTo($heatmapDataFilter->getDateTo());
+        $combatLogEventFilter->setDurationMin($heatmapDataFilter->getDurationMin());
+        $combatLogEventFilter->setDurationMax($heatmapDataFilter->getDurationMax());
 
         return $combatLogEventFilter;
     }

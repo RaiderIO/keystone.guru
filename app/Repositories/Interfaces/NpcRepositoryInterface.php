@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
 

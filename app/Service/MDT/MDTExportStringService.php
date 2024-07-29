@@ -10,7 +10,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\KillZone\KillZone;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;
-use App\Models\NpcClassification;
+use App\Models\Npc\NpcClassification;
 use App\Models\Path;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -167,7 +167,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
         // Lua is 1 based, not 0 based
         $pullIndex = 1;
-        /** @var Collection|KillZone[] $killZones */
+        /** @var Collection<KillZone> $killZones */
         $killZones = $this->dungeonRoute->killZones()->get();
         foreach ($killZones as $killZone) {
             $pull = [];

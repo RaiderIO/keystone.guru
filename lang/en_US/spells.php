@@ -16,6 +16,7 @@ return [
         'shaman'       => 'Shaman',
         'warlock'      => 'Warlock',
         'warrior'      => 'Warrior',
+        'unknown'      => 'Unknown',
     ],
     'cooldown_group' => [
         'all'            => 'All',
@@ -32,5 +33,6 @@ return [
         'personal'       => 'Personal',
         'personal_cd'    => 'Personal CD',
         'utility'        => 'Utility',
+        'unknown'        => 'Unknown',
     ],
 ];

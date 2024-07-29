@@ -494,6 +494,7 @@ class CommonMapsMap extends InlineCode {
         }
 
         let hiddenMapObjectGroups = [];
+        let currentlyUnavailableMapObjectGroups = [];
         // Build a list of elements to hide from the UI
         for (let index in MAP_OBJECT_GROUP_NAMES) {
             let mapObjectGroupName = MAP_OBJECT_GROUP_NAMES[index];
@@ -512,13 +513,16 @@ class CommonMapsMap extends InlineCode {
                 } else {
                     group.setVisibility(true);
                 }
-
+            } else {
+                currentlyUnavailableMapObjectGroups.push(mapObjectGroupName);
             }
         }
 
         // If cookieHiddenMapObjectGroups contained any map object groups that are currently unavailable, we must still
         // add them to our current list as to not lose our setting for it
-        hiddenMapObjectGroups = hiddenMapObjectGroups.concat(cookieHiddenMapObjectGroups);
+        hiddenMapObjectGroups = hiddenMapObjectGroups.concat(
+            cookieHiddenMapObjectGroups.filter(element => currentlyUnavailableMapObjectGroups.includes(element))
+        );
 
         // Update our cookie so that we know upon page refresh
         Cookies.set('hidden_map_object_groups', JSON.stringify(hiddenMapObjectGroups), cookieDefaultAttributes);

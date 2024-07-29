@@ -6,9 +6,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 106801,
+        "encounter_id": null,
         "name": "Watcher Irideus",
         "base_health": 173990413,
         "health_percentage": 30,
+        "level": 70,
+        "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -17,7 +20,43 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 383840
+            },
+            {
+                "spell_id": 383935
+            },
+            {
+                "spell_id": 384014
+            },
+            {
+                "spell_id": 384015
+            },
+            {
+                "spell_id": 384351
+            },
+            {
+                "spell_id": 384524
+            },
+            {
+                "spell_id": 389056
+            },
+            {
+                "spell_id": 389179
+            },
+            {
+                "spell_id": 389181
+            },
+            {
+                "spell_id": 389490
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -27,9 +66,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 110696,
+        "encounter_id": 2507,
         "name": "Gulping Goliath",
         "base_health": 46843573,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -38,7 +80,52 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 374389
+            },
+            {
+                "spell_id": 375215
+            },
+            {
+                "spell_id": 385181
+            },
+            {
+                "spell_id": 385187
+            },
+            {
+                "spell_id": 385442
+            },
+            {
+                "spell_id": 385451
+            },
+            {
+                "spell_id": 385531
+            },
+            {
+                "spell_id": 385551
+            },
+            {
+                "spell_id": 385555
+            },
+            {
+                "spell_id": 385691
+            },
+            {
+                "spell_id": 385743
+            },
+            {
+                "spell_id": 388245
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -48,9 +135,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 107064,
+        "encounter_id": 2510,
         "name": "Khajin the Unyielding",
         "base_health": 46843573,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -59,7 +149,37 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 385963
+            },
+            {
+                "spell_id": 386559
+            },
+            {
+                "spell_id": 386562
+            },
+            {
+                "spell_id": 386743
+            },
+            {
+                "spell_id": 386757
+            },
+            {
+                "spell_id": 390111
+            },
+            {
+                "spell_id": 390118
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -69,9 +189,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 106934,
+        "encounter_id": 2511,
         "name": "Primal Tsunami",
         "base_health": 39616251,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -80,7 +203,40 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 387474
+            },
+            {
+                "spell_id": 387504
+            },
+            {
+                "spell_id": 387559
+            },
+            {
+                "spell_id": 387571
+            },
+            {
+                "spell_id": 387585
+            },
+            {
+                "spell_id": 387619
+            },
+            {
+                "spell_id": 388424
+            },
+            {
+                "spell_id": 389872
+            },
+            {
+                "spell_id": 389875
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -90,9 +246,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 105949,
+        "encounter_id": null,
         "name": "Refti Defender",
         "base_health": 7384312,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -101,7 +260,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 374339
+            },
+            {
+                "spell_id": 393432
+            },
+            {
+                "spell_id": 393444
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16109,
@@ -189,9 +411,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 109168,
+        "encounter_id": null,
         "name": "Containment Apparatus",
         "base_health": 5370409,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
@@ -200,7 +425,49 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 374020
+            },
+            {
+                "spell_id": 374045
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16112,
@@ -288,9 +555,12 @@
         "npc_type_id": 8,
         "npc_class_id": 4,
         "display_id": 102959,
+        "encounter_id": null,
         "name": "Primalist Geomancer",
         "base_health": 6713011,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -299,7 +569,67 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 374073
+            },
+            {
+                "spell_id": 374075
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16111,
@@ -387,9 +717,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 102946,
+        "encounter_id": null,
         "name": "Primalist Ravager",
         "base_health": 5034758,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -398,7 +731,64 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 374149
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16110,
@@ -486,9 +876,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 107114,
+        "encounter_id": null,
         "name": "Skulking Zealot",
         "base_health": 5370409,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -497,7 +890,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 374612
+            },
+            {
+                "spell_id": 374615
+            },
+            {
+                "spell_id": 374617
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16116,
@@ -585,9 +1041,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 100688,
+        "encounter_id": null,
         "name": "Dazzling Dragonfly",
         "base_health": 5370409,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -596,7 +1055,67 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 21
+            },
+            {
+                "characteristic_id": 22
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 374563
+            },
+            {
+                "spell_id": 374578
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16115,
@@ -684,9 +1203,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 102560,
+        "encounter_id": null,
         "name": "Curious Swoglet",
         "base_health": 2013904,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 0.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -695,7 +1217,61 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 22
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 374389
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16114,
@@ -783,9 +1359,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 107117,
+        "encounter_id": null,
         "name": "Flamecaller Aymi",
         "base_health": 16111226,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -794,7 +1373,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 374699
+            },
+            {
+                "spell_id": 374706
+            },
+            {
+                "spell_id": 374724
+            },
+            {
+                "spell_id": 374735
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16117,
@@ -882,9 +1482,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 107118,
+        "encounter_id": null,
         "name": "Squallbringer Cyraz",
         "base_health": 16111226,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -893,7 +1496,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 374823
+            },
+            {
+                "spell_id": 374863
+            },
+            {
+                "spell_id": 375079
+            },
+            {
+                "spell_id": 375080
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16118,
@@ -981,9 +1605,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 102880,
+        "encounter_id": null,
         "name": "Primalist Earthshaker",
         "base_health": 8055613,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -992,7 +1619,67 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 375384
+            },
+            {
+                "spell_id": 408388
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16120,
@@ -1080,9 +1767,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 102874,
+        "encounter_id": null,
         "name": "Primalist Galesinger",
         "base_health": 6041710,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1091,7 +1781,76 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 385036
+            },
+            {
+                "spell_id": 385141
+            },
+            {
+                "spell_id": 385168
+            },
+            {
+                "spell_id": 437719
+            },
+            {
+                "spell_id": 437730
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16122,
@@ -1179,9 +1938,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 102900,
+        "encounter_id": null,
         "name": "Primalist Icecaller",
         "base_health": 6041710,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1190,7 +1952,67 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 375950
+            },
+            {
+                "spell_id": 376171
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16119,
@@ -1278,9 +2100,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 110961,
+        "encounter_id": null,
         "name": "Gusting Proto-Dragon",
         "base_health": 1158396,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1289,7 +2114,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 7565,
@@ -1342,9 +2168,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 110962,
+        "encounter_id": null,
         "name": "Glacial Proto-Dragon",
         "base_health": 12083419,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -1353,7 +2182,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 375351
+            },
+            {
+                "spell_id": 375353
+            },
+            {
+                "spell_id": 391634
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16121,
@@ -1441,9 +2288,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 110963,
+        "encounter_id": null,
         "name": "Subterranean Proto-Dragon",
         "base_health": 1158396,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1452,7 +2302,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 7567,
@@ -1505,9 +2356,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 107124,
+        "encounter_id": null,
         "name": "Infuser Sariya",
         "base_health": 20139032,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1516,7 +2370,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 377402
+            },
+            {
+                "spell_id": 388882
+            },
+            {
+                "spell_id": 390290
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16123,
@@ -1604,9 +2476,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 109433,
+        "encounter_id": null,
         "name": "Aqualing",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1615,7 +2490,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1625,9 +2501,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 102510,
+        "encounter_id": null,
         "name": "Aqua Rager",
         "base_health": 3356506,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 0.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1636,7 +2515,55 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 13
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 377341
+            },
+            {
+                "spell_id": 377384
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1646,9 +2573,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 109412,
+        "encounter_id": null,
         "name": "Zephyrling",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1657,7 +2587,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1667,9 +2598,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 110301,
+        "encounter_id": null,
         "name": "Titan Defense Orb",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1678,7 +2612,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1688,9 +2623,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 102560,
+        "encounter_id": null,
         "name": "Curious Swoglet",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1699,7 +2637,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 7573,
@@ -1752,9 +2691,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 110914,
+        "encounter_id": null,
         "name": "Primalist Infuser",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1763,7 +2705,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1773,9 +2716,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 109168,
+        "encounter_id": null,
         "name": "Nullification Device",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1784,7 +2730,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1794,9 +2741,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 109044,
+        "encounter_id": null,
         "name": "Toxic Swogmother",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1805,7 +2755,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1815,9 +2766,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 109168,
+        "encounter_id": null,
         "name": "Flow Control Device",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1826,7 +2780,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1836,9 +2791,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 108545,
+        "encounter_id": null,
         "name": "Primalist Infuser",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1847,7 +2805,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1857,9 +2816,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 102898,
+        "encounter_id": null,
         "name": "Primalist Shocktrooper",
         "base_health": 6713011,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1868,7 +2830,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 395690
+            },
+            {
+                "spell_id": 395691
+            },
+            {
+                "spell_id": 395694
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16113,

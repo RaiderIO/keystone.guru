@@ -24,14 +24,6 @@ class DeleteExpiredDungeonRoutes extends Command
     protected $description = 'Deletes all routes that have expired ';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      *

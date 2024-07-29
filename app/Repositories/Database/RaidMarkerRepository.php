@@ -3,7 +3,6 @@
 namespace App\Repositories\Database;
 
 use App\Models\RaidMarker;
-use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\RaidMarkerRepositoryInterface;
 
 class RaidMarkerRepository extends DatabaseRepository implements RaidMarkerRepositoryInterface

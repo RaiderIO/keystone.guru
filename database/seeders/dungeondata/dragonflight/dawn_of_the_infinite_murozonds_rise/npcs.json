@@ -6,9 +6,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 112999,
+        "encounter_id": 2526,
         "name": "Tyr, the Infinite Keeper",
         "base_health": 9607339,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -17,7 +20,55 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 400597
+            },
+            {
+                "spell_id": 400641
+            },
+            {
+                "spell_id": 400642
+            },
+            {
+                "spell_id": 400649
+            },
+            {
+                "spell_id": 400680
+            },
+            {
+                "spell_id": 400681
+            },
+            {
+                "spell_id": 400683
+            },
+            {
+                "spell_id": 401248
+            },
+            {
+                "spell_id": 401482
+            },
+            {
+                "spell_id": 403724
+            },
+            {
+                "spell_id": 410249
+            },
+            {
+                "spell_id": 413595
+            },
+            {
+                "spell_id": 414493
+            },
+            {
+                "spell_id": 417339
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -27,9 +78,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 111457,
+        "encounter_id": 2536,
         "name": "Morchie",
         "base_health": 9311729,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -38,7 +92,31 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 403891
+            },
+            {
+                "spell_id": 404916
+            },
+            {
+                "spell_id": 404917
+            },
+            {
+                "spell_id": 405279
+            },
+            {
+                "spell_id": 406481
+            },
+            {
+                "spell_id": 407504
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -48,9 +126,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 106056,
+        "encounter_id": 2538,
         "name": "Chrono-Lord Deios",
         "base_health": 106419752,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -59,7 +140,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 410904
+            },
+            {
+                "spell_id": 410908
+            },
+            {
+                "spell_id": 416139
+            },
+            {
+                "spell_id": 416152
+            },
+            {
+                "spell_id": 416264
+            },
+            {
+                "spell_id": 416265
+            },
+            {
+                "spell_id": 416266
+            },
+            {
+                "spell_id": 416290
+            },
+            {
+                "spell_id": 417413
+            },
+            {
+                "spell_id": 419596
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -69,9 +189,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 113587,
+        "encounter_id": null,
         "name": "Timeline Marauder",
         "base_health": 1777350,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -80,7 +203,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 417481
+            },
+            {
+                "spell_id": 419327
+            },
+            {
+                "spell_id": 419328
+            },
+            {
+                "spell_id": 419339
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15843,
@@ -140,9 +284,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 111368,
+        "encounter_id": null,
         "name": "Valow, Timesworn Keeper",
         "base_health": 3554700,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -151,7 +298,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 412136
+            },
+            {
+                "spell_id": 412137
+            },
+            {
+                "spell_id": 412138
+            },
+            {
+                "spell_id": 413024
+            },
+            {
+                "spell_id": 413027
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15839,
@@ -211,9 +379,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 110868,
+        "encounter_id": null,
         "name": "Infinite Twilight Magus",
         "base_health": 1333013,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -222,7 +393,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 22
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 400165
+            },
+            {
+                "spell_id": 400180
+            },
+            {
+                "spell_id": 413606
+            },
+            {
+                "spell_id": 413607
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15838,
@@ -282,9 +516,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 112018,
+        "encounter_id": 2534,
         "name": "Anduin Lothar",
         "base_health": 7685871,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -293,7 +530,58 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 410234
+            },
+            {
+                "spell_id": 410235
+            },
+            {
+                "spell_id": 410236
+            },
+            {
+                "spell_id": 410238
+            },
+            {
+                "spell_id": 410497
+            },
+            {
+                "spell_id": 418047
+            },
+            {
+                "spell_id": 418054
+            },
+            {
+                "spell_id": 418056
+            },
+            {
+                "spell_id": 418059
+            },
+            {
+                "spell_id": 418061
+            },
+            {
+                "spell_id": 418062
+            },
+            {
+                "spell_id": 419609
+            },
+            {
+                "spell_id": 419611
+            },
+            {
+                "spell_id": 419616
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -303,9 +591,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 86744,
+        "encounter_id": null,
         "name": "Alliance Footman",
         "base_health": 296225,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -314,7 +605,60 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -324,9 +668,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 113780,
+        "encounter_id": null,
         "name": "Tyr's Vanguard",
         "base_health": 1481125,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -335,7 +682,64 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 412505
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15837,
@@ -395,9 +799,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 108311,
+        "encounter_id": null,
         "name": "Lerai, Timesworn Maiden",
         "base_health": 3554700,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -406,7 +813,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 412128
+            },
+            {
+                "spell_id": 412129
+            },
+            {
+                "spell_id": 412131
+            },
+            {
+                "spell_id": 413023
+            },
+            {
+                "spell_id": 418435
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15840,
@@ -466,9 +894,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 105939,
+        "encounter_id": null,
         "name": "Spurlok, Timesworn Sentinel",
         "base_health": 3554700,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -477,7 +908,31 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 412215
+            },
+            {
+                "spell_id": 412238
+            },
+            {
+                "spell_id": 412242
+            },
+            {
+                "spell_id": 412922
+            },
+            {
+                "spell_id": 414922
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15841,
@@ -537,9 +992,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 112687,
+        "encounter_id": null,
         "name": "Infinite Keeper",
         "base_health": 1333013,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -548,7 +1006,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 411763
+            },
+            {
+                "spell_id": 412027
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -558,9 +1031,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 112511,
+        "encounter_id": null,
         "name": "Time-Displaced Trooper",
         "base_health": 355470,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -569,7 +1045,61 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 22
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 411023
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -579,9 +1109,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 110868,
+        "encounter_id": null,
         "name": "Infinite Timebender",
         "base_health": 2073575,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -590,7 +1123,31 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 411949
+            },
+            {
+                "spell_id": 411952
+            },
+            {
+                "spell_id": 411969
+            },
+            {
+                "spell_id": 412029
+            },
+            {
+                "spell_id": 412378
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15849,
@@ -650,9 +1207,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 983,
+        "encounter_id": null,
         "name": "Time-Lost Waveshaper",
         "base_health": 1184900,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -661,7 +1221,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 411300
+            },
+            {
+                "spell_id": 411407
+            },
+            {
+                "spell_id": 411610
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15851,
@@ -721,9 +1344,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 31,
+        "encounter_id": null,
         "name": "Time-Lost Tidehunter",
         "base_health": 1333013,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -732,7 +1358,67 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 411644
+            },
+            {
+                "spell_id": 411700
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15852,
@@ -792,9 +1478,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 1762,
+        "encounter_id": null,
         "name": "Time-Lost Wakethrasher",
         "base_health": 444338,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -803,7 +1492,60 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 15850,
@@ -863,9 +1605,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 90548,
+        "encounter_id": null,
         "name": "Time-Lost Aerobot",
         "base_health": 1481125,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -874,7 +1619,55 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 412156
+            },
+            {
+                "spell_id": 412181
+            },
+            {
+                "spell_id": 412200
+            },
+            {
+                "spell_id": 412225
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15855,
@@ -934,9 +1727,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 91402,
+        "encounter_id": null,
         "name": "Time-Lost Rocketeer",
         "base_health": 1481125,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -945,7 +1741,49 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 412233
+            },
+            {
+                "spell_id": 412262
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15854,
@@ -1005,9 +1843,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 91293,
+        "encounter_id": null,
         "name": "Time-Lost Smack-o-Tron",
         "base_health": 518394,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1016,7 +1857,42 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 15853,
@@ -1076,9 +1952,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 90738,
+        "encounter_id": null,
         "name": "Chronaxie",
         "base_health": 1895840,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1087,7 +1966,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 419511
+            },
+            {
+                "spell_id": 419512
+            },
+            {
+                "spell_id": 419516
+            },
+            {
+                "spell_id": 419517
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15860,
@@ -1147,9 +2044,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 74319,
+        "encounter_id": null,
         "name": "Pendule",
         "base_health": 947920,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1158,7 +2058,55 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 13
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 413427
+            },
+            {
+                "spell_id": 413428
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15858,
@@ -1218,9 +2166,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 113583,
+        "encounter_id": null,
         "name": "Infinite Diversionist",
         "base_health": 3258475,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1229,7 +2180,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 413618
+            },
+            {
+                "spell_id": 413621
+            },
+            {
+                "spell_id": 413622
+            },
+            {
+                "spell_id": 413623
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15844,
@@ -1289,9 +2261,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 112993,
+        "encounter_id": null,
         "name": "Alliance Conjuror",
         "base_health": 222169,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1300,7 +2275,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 417018
+            },
+            {
+                "spell_id": 417026
+            },
+            {
+                "spell_id": 417030
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1310,9 +2348,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 88837,
+        "encounter_id": null,
         "name": "Alliance Archer",
         "base_health": 266602,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1321,7 +2362,67 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 415215
+            },
+            {
+                "spell_id": 418009
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1331,9 +2432,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 113584,
+        "encounter_id": null,
         "name": "Infinite Watchkeeper",
         "base_health": 3776869,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1342,7 +2446,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 413618
+            },
+            {
+                "spell_id": 413621
+            },
+            {
+                "spell_id": 413622
+            },
+            {
+                "spell_id": 413623
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15842,
@@ -1402,9 +2527,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 113860,
+        "encounter_id": null,
         "name": "Alliance Knight",
         "base_health": 1481125,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1413,7 +2541,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 407124
+            },
+            {
+                "spell_id": 407125
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15861,
@@ -1473,9 +2616,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 113859,
+        "encounter_id": null,
         "name": "Paladin of the Silver Hand",
         "base_health": 2369800,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1484,7 +2630,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 416999
+            },
+            {
+                "spell_id": 417002
+            },
+            {
+                "spell_id": 417011
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15857,
@@ -1544,9 +2708,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 113517,
+        "encounter_id": null,
         "name": "Alliance Destroyer",
         "base_health": 4443375,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1555,7 +2722,31 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 407205
+            },
+            {
+                "spell_id": 407312
+            },
+            {
+                "spell_id": 407313
+            },
+            {
+                "spell_id": 407315
+            },
+            {
+                "spell_id": 407317
+            },
+            {
+                "spell_id": 418684
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15856,
@@ -1615,9 +2806,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 113585,
+        "encounter_id": null,
         "name": "Infinite Saboteur",
         "base_health": 3776869,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1626,7 +2820,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 413618
+            },
+            {
+                "spell_id": 413621
+            },
+            {
+                "spell_id": 419351
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15845,
@@ -1686,9 +2898,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 113771,
+        "encounter_id": null,
         "name": "Infinite Slayer",
         "base_health": 3776869,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1697,7 +2912,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 413622
+            },
+            {
+                "spell_id": 413623
+            },
+            {
+                "spell_id": 419351
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15859,
@@ -1757,9 +2990,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 110868,
+        "encounter_id": null,
         "name": "Infinite Riftmage",
         "base_health": 1925463,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1768,7 +3004,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 418103
+            },
+            {
+                "spell_id": 418200
+            },
+            {
+                "spell_id": 418202
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15847,

@@ -32,6 +32,7 @@ use App\Http\Controllers\Ajax\AjaxPathController;
 use App\Http\Controllers\Ajax\AjaxPridefulEnemyController;
 use App\Http\Controllers\Ajax\AjaxProfileController;
 use App\Http\Controllers\Ajax\AjaxSiteController;
+use App\Http\Controllers\Ajax\AjaxSpellController;
 use App\Http\Controllers\Ajax\AjaxTagController;
 use App\Http\Controllers\Ajax\AjaxTeamController;
 use App\Http\Controllers\Ajax\AjaxUserController;
@@ -288,8 +289,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::prefix('tools')->group(static function () {
                 Route::get('/', (new AdminToolsController())->index(...))->name('admin.tools');
                 Route::get('/combatlog', (new AdminToolsController())->combatlog(...))->name('admin.combatlog');
-                Route::get('/npcimport', (new AdminToolsController())->npcimport(...))->name('admin.tools.npcimport');
-                Route::post('/npcimport', (new AdminToolsController())->npcimportsubmit(...))->name('admin.tools.npcimport.submit');
+                Route::get('/npc/import', (new AdminToolsController())->npcimport(...))->name('admin.tools.npc.import');
+                Route::post('/npc/import', (new AdminToolsController())->npcimportsubmit(...))->name('admin.tools.npc.import.submit');
+                Route::get('/npc/manage-spell-visibility', (new AdminToolsController())->manageSpellVisibility(...))->name('admin.tools.npc.managespellvisibility');
 
                 // Dungeonroute
                 Route::get('/dungeonroute', (new AdminToolsController())->dungeonroute(...))->name('admin.tools.dungeonroute.view');
@@ -391,6 +393,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/user', (new AjaxUserController())->get(...));
                 Route::get('/npc', (new AjaxNpcController())->get(...));
                 Route::post('/thumbnail/{dungeonroute}/refresh', (new AjaxDungeonRouteController())->refreshThumbnail(...));
+
+                Route::put('/spell/{spell}', (new AjaxSpellController())->update(...));
 
                 Route::prefix('mappingVersion/{mappingVersion}')->group(static function () {
                     Route::patch('/', (new AjaxMappingVersionController())->store(...));

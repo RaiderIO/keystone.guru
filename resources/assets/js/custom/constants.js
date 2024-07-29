@@ -96,6 +96,10 @@ const MAP_CONTEXT_TYPE_LIVE_SESSION = 'livesession';
 const MAP_CONTEXT_TYPE_MAPPING_VERSION_EDIT = 'mappingVersionEdit';
 const MAP_CONTEXT_TYPE_DUNGEON_EXPLORE = 'dungeonExplore';
 
+// Dungeons
+const DUNGEON_SIEGE_OF_BORALUS = 'siegeofboralus';
+const DUNGEON_THE_NEXUS = 'thenexus';
+
 // Kill zones
 const NUMBER_STYLE_PERCENTAGE = 'percentage';
 const NUMBER_STYLE_ENEMY_FORCES = 'enemy_forces';

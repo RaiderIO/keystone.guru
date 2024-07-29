@@ -24,6 +24,9 @@ return [
             'exception'                   => [
                 'internal_server_error' => '',
             ],
+            'feature_toggle_activated'    => '',
+            'feature_toggle_deactivated'  => '',
+            'feature_forgotten'           => '',
         ],
     ],
     'apidungeonroute'             => [
@@ -193,6 +196,7 @@ return [
             'user_is_now_an_admin'              => '',
             'user_is_no_longer_an_admin'        => '',
             'user_is_now_a_user'                => '',
+            'user_is_now_a_role'                => '',
             'account_deleted_successfully'      => '',
             'account_deletion_error'            => '',
             'user_is_not_a_patron'              => '',

@@ -245,7 +245,7 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         $rowClassName = 'Tinker Explosivist';
 
         // Just make up a new class here
-        $characterClassTinker = $this->characterClasses->first();
+        $characterClassTinker       = $this->characterClasses->first();
         $characterClassTinker->name = 'classes.tinker';
 
         $log          = LoggingFixtures::createSpellServiceLogging($this);

@@ -6,11 +6,11 @@ use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
- * @var GameVersion              $currentUserGameVersion
- * @var Collection|GameVersion[] $allGameVersions
- * @var Collection|Expansion[]   $activeExpansions
- * @var Season                   $currentSeason
- * @var Season                   $nextSeason
+ * @var GameVersion             $currentUserGameVersion
+ * @var Collection<GameVersion> $allGameVersions
+ * @var Collection<Expansion>   $activeExpansions
+ * @var Season                  $currentSeason
+ * @var Season                  $nextSeason
  */
 
 $navs = [

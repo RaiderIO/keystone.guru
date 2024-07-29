@@ -27,7 +27,7 @@ use Teapot\StatusCode\Http;
 class AjaxTagController extends Controller
 {
     /**
-     * @return Tag[]|Collection
+     * @return Collection<Tag>
      */
     public function all(Request $request)
     {
@@ -35,7 +35,7 @@ class AjaxTagController extends Controller
     }
 
     /**
-     * @return Tag[]|Collection
+     * @return Collection<Tag>
      */
     public function get(Request $request, TagCategory $category)
     {

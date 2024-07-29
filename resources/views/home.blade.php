@@ -1,10 +1,18 @@
 <?php
-/** @var $demoRoutes \Illuminate\Support\Collection|\App\Models\DungeonRoute\DungeonRoute[] */
-/** @var $demoRouteDungeons \Illuminate\Support\Collection|\App\Models\Dungeon[] */
-/** @var $demoRouteMapping array */
-/** @var $userCount int */
-/** @var $theme string */
-/** @var $currentSeason \App\Models\Season */
+
+use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Season;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection<DungeonRoute> $demoRoutes
+ * @var Collection<Dungeon>      $demoRouteDungeons
+ * @var array                    $demoRouteMapping
+ * @var int                      $userCount
+ * @var string                   $theme
+ * @var Season                   $currentSeason
+ */
 
 $dungeonSelectId    = 'demo_dungeon_id';
 $demoRoutesIFrameId = 'demo_routes_iframe';
@@ -14,7 +22,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
 @include('common.general.inline', ['path' => 'home/home', 'options' => [
     'dungeon_select_id' => '#' . $dungeonSelectId,
     'demo_routes_iframe_id' => '#' . $demoRoutesIFrameId,
-    'demo_route_mapping' => $demoRouteMapping
+    'demo_route_mapping' => $demoRouteMapping,
 ]])
 
 @section('content')
@@ -268,7 +276,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                             'dungeons'    => $demoRouteDungeons,
                             'showAll'     => false,
                             'showSeasons' => true,
-                            'required'    => false
+                            'required'    => false,
                         ])
                     </div>
                 </div>

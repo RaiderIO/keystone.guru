@@ -15,18 +15,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                         $id
- * @property int                         $mapping_version_id
- * @property int                         $floor_id
- * @property int                         $target_floor_id
- * @property float                       $lat
- * @property float                       $lng
- * @property float                       $size
- * @property float                       $rotation
- * @property MappingVersion              $mappingVersion
- * @property Floor                       $floor
- * @property Floor                       $targetFloor
- * @property Collection|FloorUnionArea[] $floorUnionAreas
+ * @property int                        $id
+ * @property int                        $mapping_version_id
+ * @property int                        $floor_id
+ * @property int                        $target_floor_id
+ * @property float                      $lat
+ * @property float                      $lng
+ * @property float                      $size
+ * @property float                      $rotation
+ * @property MappingVersion             $mappingVersion
+ * @property Floor                      $floor
+ * @property Floor                      $targetFloor
+ * @property Collection<FloorUnionArea> $floorUnionAreas
  *
  * @mixin Eloquent
  */

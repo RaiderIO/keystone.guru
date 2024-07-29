@@ -2,9 +2,6 @@
 
 namespace Tests;
 
-use App\Models\Season;
-use Illuminate\Support\Facades\Artisan;
-
 trait Bootstrap
 {
     private function bootstrap(): void

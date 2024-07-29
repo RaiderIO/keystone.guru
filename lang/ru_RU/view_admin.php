@@ -117,12 +117,14 @@ return [
             'index'                              => 'Индекс',
             'mdt_sub_level'                      => 'MDT подуровень',
             'ui_map_id'                          => '',
-            'floor_name'                         => 'Название этажа',
+            'map_name'                           => '',
+            'name'                               => '',
             'min_enemy_size'                     => 'Минимальное количество врагов (пусто по умолчанию (%s))',
             'max_enemy_size'                     => 'Максимальное количество врагов (пусто по умолчанию (%s))',
             'enemy_engagement_max_range'         => '',
             'enemy_engagement_max_range_patrols' => '',
             'percentage_display_zoom'            => '',
+            'zoom_max'                           => '',
             'default'                            => 'По умолчанию',
             'default_title'                      => 'Если отмечено по умолчанию, этот этаж открывается первым при редактировании маршрутов для этого подземелья (по умолчанию должен быть отмечен только один).',
             'facade'                             => '',
@@ -337,6 +339,21 @@ return [
                 'submit'                    => 'Подтвердить',
             ],
         ],
+        'features'     => [
+            'list' => [
+                'title'        => '',
+                'header'       => '',
+                'table_header' => [
+                    'enabled' => '',
+                    'feature' => '',
+                    'actions' => '',
+                ],
+                'actions'      => [
+                    'toggle' => '',
+                    'forget' => '',
+                ],
+            ],
+        ],
         'mdt'          => [
             'diff'                              => [
                 'title'                 => 'MDT Различия',
@@ -418,6 +435,9 @@ return [
 
             'subheader_mapping'  => '',
             'force_sync_mapping' => '',
+
+            'subheader_features' => '',
+            'manage_features'    => '',
 
             'subheader_actions'   => 'Действия',
             'export_dungeon_data' => 'Экспорт данных о подземельях',

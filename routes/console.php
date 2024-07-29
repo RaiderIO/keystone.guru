@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Console\Command;
-use Illuminate\Foundation\Inspiring;
-
 /*
 |--------------------------------------------------------------------------
 | Console Routes

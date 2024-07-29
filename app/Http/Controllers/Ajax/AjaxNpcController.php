@@ -9,7 +9,7 @@ use App\Logic\Datatables\ColumnHandler\Npc\DungeonColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Npc\IdColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Npc\NameColumnHandler;
 use App\Logic\Datatables\NpcsDatatablesHandler;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -23,7 +23,7 @@ class AjaxNpcController extends Controller
     public function delete(Request $request)
     {
         try {
-            /** @var Npc $npc */
+            /** @var \App\Models\Npc\Npc $npc */
             $npc = Npc::findOrFail($request->get('id'));
 
             if ($npc->delete()) {

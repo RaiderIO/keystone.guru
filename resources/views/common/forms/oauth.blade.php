@@ -1,10 +1,10 @@
 <?php
-/** @var $allRegions \Illuminate\Support\Collection|\App\Models\GameServerRegion[] */
+/** @var $allRegions \Illuminate\Support\Collection<\App\Models\GameServerRegion> */
 ?>
 <div class="form-group">
     <div class="row">
         <div class="col">
-            <img src="{{ url('/images/oauth/battlenet_logo.png') }}" class="mx-auto d-block"/>
+            <img alt="Battle.net" src="{{ url('/images/oauth/battlenet_logo.png') }}" class="mx-auto d-block"/>
         </div>
     </div>
 </div>
@@ -26,7 +26,7 @@
     <div class="row">
         <div class="col">
             <a href="{{ route('login.discord') }}">
-                <img src="{{ url('/images/oauth/discord_logo.png') }}" class="mx-auto d-block"
+                <img alt="Discord" src="{{ url('/images/oauth/discord_logo.png') }}" class="mx-auto d-block"
                      style="max-height: 64px;"/>
             </a>
         </div>
@@ -39,7 +39,7 @@
     <div class="row">
         <div class="col">
             <a href="{{ route('login.google') }}">
-                <img class="google_login_image mx-auto d-block"/>
+                <img alt="Google" class="google_login_image mx-auto d-block"/>
             </a>
         </div>
     </div>

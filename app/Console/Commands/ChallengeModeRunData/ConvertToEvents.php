@@ -2,8 +2,12 @@
 
 namespace App\Console\Commands\ChallengeModeRunData;
 
+use App\Logging\StructuredLogging;
+use App\Models\CombatLog\ChallengeModeRunData;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class ConvertToEvents extends Command
 {
@@ -12,7 +16,7 @@ class ConvertToEvents extends Command
      *
      * @var string
      */
-    protected $signature = 'challengemoderundata:convert {--translate}';
+    protected $signature = 'challengemoderundata:convert {--force}';
 
     /**
      * The console command description.
@@ -26,8 +30,24 @@ class ConvertToEvents extends Command
      */
     public function handle(ChallengeModeRunDataServiceInterface $challengeModeRunDataService): int
     {
-        $translate = (bool)$this->option('translate');
+        // We don't care for logging atm, we got a progress bar baby
+        StructuredLogging::disable();
 
-        return $challengeModeRunDataService->convert($translate);
+        $force = (bool)$this->option('force');
+
+        $count = ChallengeModeRunData::when(!$force, function (Builder $builder) {
+            $builder->where('processed', false);
+        })->count();
+
+        $progressBar = $this->output->createProgressBar($count);
+        $progressBar->setFormat(ProgressBar::FORMAT_DEBUG);
+
+        $result = $challengeModeRunDataService->convert($force, function () use (&$progressBar) {
+            $progressBar->advance();
+        });
+
+        $progressBar->finish();
+
+        return $result;
     }
 }

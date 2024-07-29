@@ -76,7 +76,11 @@ class DungeonExploreController extends Controller
                 ]);
             }
 
-            $combatLogEventFilter = new CombatLogEventFilter($dungeon, CombatLogEvent::EVENT_TYPE_ENEMY_KILLED);
+            $combatLogEventFilter = new CombatLogEventFilter(
+                $dungeon,
+                CombatLogEvent::EVENT_TYPE_ENEMY_KILLED,
+                CombatLogEvent::DATA_TYPE_PLAYER_POSITION,
+            );
 
             $mostRecentSeason = $seasonService->getMostRecentSeasonForDungeon($dungeon);
 

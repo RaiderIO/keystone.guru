@@ -2,7 +2,7 @@
 
 namespace App\Service\CombatLog;
 
-use App\Service\CombatLog\Models\ExtractedDataResult;
+use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 
 interface CombatLogDataExtractionServiceInterface
 {

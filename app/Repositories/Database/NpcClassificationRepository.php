@@ -2,8 +2,7 @@
 
 namespace App\Repositories\Database;
 
-use App\Models\NpcClassification;
-use App\Repositories\Database\DatabaseRepository;
+use App\Models\Npc\NpcClassification;
 use App\Repositories\Interfaces\NpcClassificationRepositoryInterface;
 
 class NpcClassificationRepository extends DatabaseRepository implements NpcClassificationRepositoryInterface

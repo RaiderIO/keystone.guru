@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Psr\Log\LogLevel;
 use RuntimeException;
-use Symfony\Component\HttpFoundation\Response;
 
 class LoginController extends Controller
 {

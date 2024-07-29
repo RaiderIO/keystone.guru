@@ -32,5 +32,13 @@ return [
     'dragonflight'       => [
         'name' => '',
     ],
-
+    'tww'                => [
+        'name' => '',
+    ],
+    'midnight'           => [
+        'name' => '',
+    ],
+    'tlt'                => [
+        'name' => '',
+    ],
 ];

@@ -19,7 +19,7 @@
 @endsection
 <?php
 /**
- * @var $npc \App\Models\Npc
+ * @var $npc \App\Models\Npc\Npc
  * @var $floor \App\Models\Floor\Floor
  * @var $classifications array
  * @var $spells \App\Models\Spell[]
@@ -62,7 +62,7 @@
         <span class="form-required">*</span>
         <?php
         $aggressivenessSelect = [];
-        foreach (\App\Models\Npc::ALL_AGGRESSIVENESS as $aggressiveness) {
+        foreach (\App\Models\Npc\Npc::ALL_AGGRESSIVENESS as $aggressiveness) {
             $aggressivenessSelect[$aggressiveness] = __(sprintf('npcaggressiveness.%s', $aggressiveness));
         }
         ?>
@@ -73,14 +73,14 @@
     <div class="form-group{{ $errors->has('npc_type_id') ? ' has-error' : '' }}">
         {!! Form::label('npc_class_id', __('view_admin.npc.edit.type'), [], false) !!}
         <span class="form-required">*</span>
-        {!! Form::select('npc_type_id', \App\Models\NpcType::pluck('type', 'id'), null, ['class' => 'form-control selectpicker']) !!}
+        {!! Form::select('npc_type_id', \App\Models\Npc\NpcType::pluck('type', 'id'), null, ['class' => 'form-control selectpicker']) !!}
         @include('common.forms.form-error', ['key' => 'npc_type_id'])
     </div>
 
     <div class="form-group{{ $errors->has('npc_class_id') ? ' has-error' : '' }}">
         {!! Form::label('npc_class_id', __('view_admin.npc.edit.class'), [], false) !!}
         <span class="form-required">*</span>
-        {!! Form::select('npc_class_id', \App\Models\NpcClass::pluck('name', 'id')->mapWithKeys(static fn($name, $id) => [$id => __($name)]), null,
+        {!! Form::select('npc_class_id', \App\Models\Npc\NpcClass::pluck('name', 'id')->mapWithKeys(static fn($name, $id) => [$id => __($name)]), null,
                         ['class' => 'form-control selectpicker']) !!}
         @include('common.forms.form-error', ['key' => 'npc_class_id'])
     </div>
@@ -136,8 +136,14 @@
 
     <div class="form-group{{ $errors->has('health_percentage') ? ' has-error' : '' }}">
         {!! Form::label('health_percentage', __('view_admin.npc.edit.health_percentage')) !!}
-        {!! Form::text('health_percentage', (isset($npc) ? $npc->health_percentage: null) ?? 100, ['class' => 'form-control']) !!}
+        {!! Form::number('health_percentage', (isset($npc) ? $npc->health_percentage: null) ?? 100, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'health_percentage'])
+    </div>
+
+    <div class="form-group{{ $errors->has('level') ? ' has-error' : '' }}">
+        {!! Form::label('level', __('view_admin.npc.edit.level')) !!}
+        {!! Form::number('level', $npc->level ?? null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'level'])
     </div>
 
     <div class="form-group">

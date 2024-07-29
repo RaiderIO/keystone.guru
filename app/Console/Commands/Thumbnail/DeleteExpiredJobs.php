@@ -23,14 +23,6 @@ class DeleteExpiredJobs extends Command
      */
     protected $description = 'Deletes any expired thumbnail jobs from the database.';
 
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function handle(): int
     {
         $count = 0;
@@ -39,7 +31,7 @@ class DeleteExpiredJobs extends Command
             ->where('created_at', '<', Carbon::now()->subSeconds(
                 config('keystoneguru.api.dungeon_route.thumbnail.expiration_time_seconds')
             ))->chunk(100, static function (Collection $rows) use (&$count) {
-                /** @var Collection|DungeonRouteThumbnailJob[] $rows */
+                /** @var Collection<DungeonRouteThumbnailJob> $rows */
                 foreach ($rows as $row) {
                     $row->expire();
                 }

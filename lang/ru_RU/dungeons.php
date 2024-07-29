@@ -380,6 +380,12 @@ return [
         ],
     ],
     'cata'         => [
+        'grim_batol'          => [
+            'name'   => '',
+            'floors' => [
+                'grim_batol' => '',
+            ],
+        ],
         'the_vortex_pinnacle' => [
             'name'   => '',
             'floors' => [
@@ -833,6 +839,66 @@ return [
                 'infinite_conflux'       => '',
                 'twisting_approach'      => '',
                 'immemorial_battlefield' => '',
+            ],
+        ],
+    ],
+    'tww'          => [
+        'ara_kara_city_of_echoes'    => [
+            'name'   => '',
+            'floors' => [
+                'echoing_overlook'        => '',
+                'the_undercache'          => '',
+                'ara_kara_city_of_echoes' => '',
+            ],
+        ],
+        'cinderbrew_meadery'         => [
+            'name'   => '',
+            'floors' => [
+                'cinderbrew_meadery' => '',
+            ],
+        ],
+        'city_of_threads'            => [
+            'name'   => '',
+            'floors' => [
+                'city_of_threads'    => '',
+                'the_transformatory' => '',
+            ],
+        ],
+        'darkflame_cleft'            => [
+            'name'   => '',
+            'floors' => [
+                'darkflame_cleft' => '',
+            ],
+        ],
+        'priory_of_the_sacred_flame' => [
+            'name'   => '',
+            'floors' => [
+                'sanctified_grounds'         => '',
+                'priory_of_the_sacred_flame' => '',
+            ],
+        ],
+        'the_dawnbreaker'            => [
+            'name'   => '',
+            'floors' => [
+                'the_dawnbreaker' => '',
+            ],
+        ],
+        'the_rookery'                => [
+            'name'   => '',
+            'floors' => [
+                'the_rookery_landing' => '',
+                'storms_roost'        => '',
+                'storm_rookery'       => '',
+                'stormrider_barracks' => '',
+                'crashing_storm_hall' => '',
+                'abandoned_mines'     => '',
+                'the_rookery'         => '',
+            ],
+        ],
+        'the_stonevault'             => [
+            'name'   => '',
+            'floors' => [
+                'the_stonevault' => '',
             ],
         ],
     ],

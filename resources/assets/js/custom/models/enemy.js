@@ -528,6 +528,7 @@ class Enemy extends VersionableMapObject {
                 for (let index in this.npc.spells) {
                     if (this.npc.spells.hasOwnProperty(index)) {
                         let spell = this.npc.spells[index];
+
                         spellHtml += spellTemplate(spell);
                         // Stop before the end
                         if (count < this.npc.spells.length - 1) {

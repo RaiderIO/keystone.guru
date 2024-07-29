@@ -5,28 +5,28 @@ namespace App\Models\Speedrun;
 use App\Models\CacheModel;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int      $id
- * @property int      $floor_id
- * @property int      $npc_id
- * @property int      $npc2_id
- * @property int      $npc3_id
- * @property int      $npc4_id
- * @property int      $npc5_id
- * @property int      $difficulty
- * @property int      $count
- * @property Dungeon  $dungeon
- * @property Floor    $floor
- * @property Npc      $npc
- * @property Npc|null $npc2
- * @property Npc|null $npc3
- * @property Npc|null $npc4
- * @property Npc|null $npc5
+ * @property int                      $id
+ * @property int                      $floor_id
+ * @property int                      $npc_id
+ * @property int                      $npc2_id
+ * @property int                      $npc3_id
+ * @property int                      $npc4_id
+ * @property int                      $npc5_id
+ * @property int                      $difficulty
+ * @property int                      $count
+ * @property Dungeon                  $dungeon
+ * @property Floor                    $floor
+ * @property \App\Models\Npc\Npc      $npc
+ * @property Npc|null                 $npc2
+ * @property Npc|null                 $npc3
+ * @property Npc|null                 $npc4
+ * @property \App\Models\Npc\Npc|null $npc5
  *
  * @mixin Eloquent
  */

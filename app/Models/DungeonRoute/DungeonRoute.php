@@ -221,6 +221,10 @@ class DungeonRoute extends Model
         'affixes',
     ];
 
+    protected $casts = [
+        'enemy_forces' => 'integer',
+    ];
+
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
@@ -440,7 +444,7 @@ class DungeonRoute extends Model
 
     public function mapContextKillZones(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection|KillZone[] $killZones */
+        /** @var Collection<KillZone> $killZones */
         $killZones = $this->killZones()
             ->with(['floor'])
             ->get();
@@ -466,7 +470,7 @@ class DungeonRoute extends Model
 
     public function mapContextMapIcons(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection|MapIcon[] $mapIcons */
+        /** @var Collection<MapIcon> $mapIcons */
         $mapIcons = $this->mapicons()
             ->with(['floor'])
             ->get();
@@ -487,7 +491,7 @@ class DungeonRoute extends Model
 
     public function mapContextBrushlines(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection|Brushline[] $brushlines */
+        /** @var Collection<Brushline> $brushlines */
         $brushlines = $this->brushlines()->with(['floor'])->get();
 
         if ($useFacade) {
@@ -507,7 +511,7 @@ class DungeonRoute extends Model
 
     public function mapContextPaths(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
-        /** @var Collection|Brushline[] $paths */
+        /** @var Collection<Brushline> $paths */
         $paths = $this->paths()->with(['floor'])->get();
 
         if ($useFacade) {

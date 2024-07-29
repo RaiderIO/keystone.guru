@@ -26,14 +26,6 @@ class CreateGithubReleaseTicket extends GithubReleaseCommand
     protected $description = 'Creates a new ticket for a release on the Keystone.guru Github';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      *

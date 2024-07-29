@@ -7,20 +7,21 @@ use App\Models\Season;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection|Dungeon[]      $dungeons
- * @var Collection|AffixGroup[]   $affixgroups
- * @var Collection|DungeonRoute[] $dungeonRoutes
- * @var AffixGroup                $currentAffixGroup
- * @var Season                    $currentSeason
- * @var Season|null               $nextSeason
- * @var Season|null               $selectedSeason
+ * @var Collection<Dungeon>      $dungeons
+ * @var Collection<AffixGroup>   $affixgroups
+ * @var Collection<DungeonRoute> $dungeonRoutes
+ * @var AffixGroup               $currentAffixGroup
+ * @var Season                   $currentSeason
+ * @var Season|null              $nextSeason
+ * @var Season|null              $selectedSeason
  */
 
-if(!function_exists('getDungeonRoutesByDungeonIdAndAffixGroupId') ) {
+if (!function_exists('getDungeonRoutesByDungeonIdAndAffixGroupId')) {
     /**
      * @return Collection
      */
-    function getDungeonRoutesByDungeonIdAndAffixGroupId(Collection $dungeonRoutes, Dungeon $dungeon, AffixGroup $affixGroup): Collection {
+    function getDungeonRoutesByDungeonIdAndAffixGroupId(Collection $dungeonRoutes, Dungeon $dungeon, AffixGroup $affixGroup): Collection
+    {
         if ($dungeonRoutes->has($dungeon->id)) {
             /** @var Collection $dungeonRoutesList */
             $dungeonRoutesList = $dungeonRoutes->get($dungeon->id);

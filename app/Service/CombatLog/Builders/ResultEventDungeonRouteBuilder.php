@@ -10,7 +10,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
-use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
+use App\Service\CombatLog\Builders\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
@@ -37,7 +37,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         KillZoneEnemyRepositoryInterface $killZoneEnemyRepository,
         KillZoneSpellRepositoryInterface $killZoneSpellRepository,
         DungeonRoute                     $dungeonRoute,
-        /** @var Collection|BaseResultEvent[] */
+        /** @var Collection<BaseResultEvent> */
         private readonly Collection      $resultEvents
     ) {
         $this->log = App::make(ResultEventDungeonRouteBuilderLoggingInterface::class);

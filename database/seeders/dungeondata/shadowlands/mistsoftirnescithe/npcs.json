@@ -6,9 +6,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 95256,
+        "encounter_id": null,
         "name": "Mistveil Defender",
-        "base_health": 189675,
+        "base_health": 28060883,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -17,8 +20,32 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 463236
+            },
+            {
+                "spell_id": 463247
+            },
+            {
+                "spell_id": 463248
+            },
+            {
+                "spell_id": 463256
+            },
+            {
+                "spell_id": 463257
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16426,
+                "mapping_version_id": 365,
+                "npc_id": 163058,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1618,
                 "mapping_version_id": 30,
@@ -35,9 +62,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 96451,
+        "encounter_id": 2581,
         "name": "Mistcaller",
-        "base_health": 1156365,
+        "base_health": 127376353,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1.3,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -46,7 +76,30 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 321828
+            },
+            {
+                "spell_id": 321834
+            },
+            {
+                "spell_id": 321873
+            },
+            {
+                "spell_id": 336499
+            },
+            {
+                "spell_id": 336752
+            },
+            {
+                "spell_id": 336759
+            },
+            {
+                "spell_id": 341709
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -56,9 +109,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 95809,
+        "encounter_id": 2581,
         "name": "Tred'ova",
-        "base_health": 1321560,
+        "base_health": 145572975,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -67,7 +123,55 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 322450
+            },
+            {
+                "spell_id": 322465
+            },
+            {
+                "spell_id": 322527
+            },
+            {
+                "spell_id": 322550
+            },
+            {
+                "spell_id": 322551
+            },
+            {
+                "spell_id": 322563
+            },
+            {
+                "spell_id": 322614
+            },
+            {
+                "spell_id": 322654
+            },
+            {
+                "spell_id": 322655
+            },
+            {
+                "spell_id": 322709
+            },
+            {
+                "spell_id": 326263
+            },
+            {
+                "spell_id": 326281
+            },
+            {
+                "spell_id": 463602
+            },
+            {
+                "spell_id": 463603
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -77,9 +181,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 95497,
+        "encounter_id": 2581,
         "name": "Ingra Maloch",
-        "base_health": 1784106,
+        "base_health": 196523516,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -88,7 +195,36 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 321005
+            },
+            {
+                "spell_id": 321006
+            },
+            {
+                "spell_id": 321010
+            },
+            {
+                "spell_id": 323057
+            },
+            {
+                "spell_id": 323138
+            },
+            {
+                "spell_id": 323146
+            },
+            {
+                "spell_id": 323149
+            },
+            {
+                "spell_id": 328756
+            },
+            {
+                "spell_id": 331440
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -98,9 +234,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 95564,
+        "encounter_id": 2581,
         "name": "Droman Oulfarran",
-        "base_health": 357359,
+        "base_health": 47311217,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -109,7 +248,24 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 321772
+            },
+            {
+                "spell_id": 323059
+            },
+            {
+                "spell_id": 323137
+            },
+            {
+                "spell_id": 323177
+            },
+            {
+                "spell_id": 323250
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -119,9 +275,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 95612,
+        "encounter_id": null,
         "name": "Drust Soulcleaver",
-        "base_health": 148442,
+        "base_health": 16399218,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -130,8 +289,36 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 322557
+            },
+            {
+                "spell_id": 322569
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16423,
+                "mapping_version_id": 365,
+                "npc_id": 164920,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1623,
                 "mapping_version_id": 30,
@@ -148,9 +335,12 @@
         "npc_type_id": 8,
         "npc_class_id": 4,
         "display_id": 95613,
+        "encounter_id": null,
         "name": "Drust Harvester",
-        "base_health": 148442,
+        "base_health": 16399218,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -159,8 +349,42 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 322767
+            },
+            {
+                "spell_id": 322938
+            },
+            {
+                "spell_id": 322939
+            },
+            {
+                "spell_id": 326319
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16424,
+                "mapping_version_id": 365,
+                "npc_id": 164921,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1624,
                 "mapping_version_id": 30,
@@ -177,9 +401,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 95615,
+        "encounter_id": null,
         "name": "Drust Boughbreaker",
-        "base_health": 362857,
+        "base_health": 40086977,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -188,8 +415,29 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 324909
+            },
+            {
+                "spell_id": 324922
+            },
+            {
+                "spell_id": 324923
+            },
+            {
+                "spell_id": 325027
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16425,
+                "mapping_version_id": 365,
+                "npc_id": 164926,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1625,
                 "mapping_version_id": 30,
@@ -206,9 +454,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 95618,
+        "encounter_id": null,
         "name": "Tirnenn Villager",
-        "base_health": 395844,
+        "base_health": 43731248,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -217,8 +468,36 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 300155
+            },
+            {
+                "spell_id": 321952
+            },
+            {
+                "spell_id": 321968
+            },
+            {
+                "spell_id": 322486
+            },
+            {
+                "spell_id": 322487
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16422,
+                "mapping_version_id": 365,
+                "npc_id": 164929,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1626,
                 "mapping_version_id": 30,
@@ -235,9 +514,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 96451,
+        "encounter_id": null,
         "name": "Illusionary Clone",
         "base_health": 75768,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -246,7 +528,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -256,9 +539,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 86207,
+        "encounter_id": null,
         "name": "Drust Spiteclaw",
-        "base_health": 98961,
+        "base_health": 10932812,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -267,8 +553,45 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 322967
+            },
+            {
+                "spell_id": 322968
+            },
+            {
+                "spell_id": 323020
+            },
+            {
+                "spell_id": 323043
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16421,
+                "mapping_version_id": 365,
+                "npc_id": 165111,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1628,
                 "mapping_version_id": 30,
@@ -285,9 +608,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 93755,
+        "encounter_id": null,
         "name": "Illusionary Vulpin",
         "base_health": 25256,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -296,7 +622,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -306,9 +633,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 93375,
+        "encounter_id": null,
         "name": "Cocoon of Lakali",
         "base_health": 25256,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -317,7 +647,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -327,9 +658,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 94208,
+        "encounter_id": null,
         "name": "Gormling Larva",
         "base_health": 15153,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -338,7 +672,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -348,9 +683,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 95051,
+        "encounter_id": null,
         "name": "Mistveil Shaper",
-        "base_health": 173182,
+        "base_health": 19132421,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -359,8 +697,27 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 324776
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16431,
+                "mapping_version_id": 365,
+                "npc_id": 166275,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1632,
                 "mapping_version_id": 30,
@@ -377,9 +734,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 95261,
+        "encounter_id": null,
         "name": "Mistveil Guardian",
-        "base_health": 181429,
+        "base_health": 32798436,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -388,8 +748,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 463208
+            },
+            {
+                "spell_id": 463210
+            },
+            {
+                "spell_id": 463217
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16429,
+                "mapping_version_id": 365,
+                "npc_id": 166276,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1633,
                 "mapping_version_id": 30,
@@ -406,9 +784,12 @@
         "npc_type_id": 8,
         "npc_class_id": 7,
         "display_id": 95908,
+        "encounter_id": null,
         "name": "Mistveil Tender",
-        "base_health": 156688,
+        "base_health": 17310286,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -417,8 +798,24 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 324914
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16430,
+                "mapping_version_id": 365,
+                "npc_id": 166299,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1634,
                 "mapping_version_id": 30,
@@ -435,9 +832,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 93762,
+        "encounter_id": null,
         "name": "Mistveil Stalker",
-        "base_health": 148442,
+        "base_health": 16399218,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -446,8 +846,33 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 324986
+            },
+            {
+                "spell_id": 324987
+            },
+            {
+                "spell_id": 325021
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16427,
+                "mapping_version_id": 365,
+                "npc_id": 166301,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1635,
                 "mapping_version_id": 30,
@@ -464,9 +889,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 95198,
+        "encounter_id": null,
         "name": "Mistveil Stinger",
-        "base_health": 131948,
+        "base_health": 14577083,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -475,8 +903,49 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 325223
+            },
+            {
+                "spell_id": 325224
+            },
+            {
+                "spell_id": 325226
+            },
+            {
+                "spell_id": 325223
+            },
+            {
+                "spell_id": 325224
+            },
+            {
+                "spell_id": 325226
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16428,
+                "mapping_version_id": 365,
+                "npc_id": 166304,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16439,
+                "mapping_version_id": 365,
+                "npc_id": 166304,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1636,
                 "mapping_version_id": 30,
@@ -493,9 +962,12 @@
         "npc_type_id": 2,
         "npc_class_id": 7,
         "display_id": 94190,
+        "encounter_id": null,
         "name": "Spinemaw Staghorn",
-        "base_health": 263896,
+        "base_health": 29154165,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -504,8 +976,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 326046
+            },
+            {
+                "spell_id": 340544
+            },
+            {
+                "spell_id": 460092
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16433,
+                "mapping_version_id": 365,
+                "npc_id": 167111,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1637,
                 "mapping_version_id": 30,
@@ -522,9 +1012,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 94205,
+        "encounter_id": null,
         "name": "Spinemaw Acidgullet",
-        "base_health": 164935,
+        "base_health": 18221353,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -533,8 +1026,33 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 325413
+            },
+            {
+                "spell_id": 325418
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16434,
+                "mapping_version_id": 365,
+                "npc_id": 167113,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1638,
                 "mapping_version_id": 30,
@@ -551,9 +1069,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 95692,
+        "encounter_id": null,
         "name": "Spinemaw Reaver",
-        "base_health": 131948,
+        "base_health": 14577083,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -562,8 +1083,30 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 326090
+            },
+            {
+                "spell_id": 326092
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16437,
+                "mapping_version_id": 365,
+                "npc_id": 167116,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1639,
                 "mapping_version_id": 30,
@@ -580,9 +1123,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 94208,
+        "encounter_id": null,
         "name": "Spinemaw Larva",
-        "base_health": 32987,
+        "base_health": 3644271,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 0.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -591,8 +1137,27 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 326018
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16436,
+                "mapping_version_id": 365,
+                "npc_id": 167117,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1640,
                 "mapping_version_id": 30,
@@ -609,9 +1174,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 96965,
+        "encounter_id": null,
         "name": "Overgrowth",
         "base_health": 12628,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -620,7 +1188,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -630,9 +1199,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 96451,
+        "encounter_id": null,
         "name": "Mistcaller",
         "base_health": 883960,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -641,7 +1213,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -651,9 +1224,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 95564,
+        "encounter_id": null,
         "name": "Droman Oulfarran",
         "base_health": 404096,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -662,7 +1238,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -672,9 +1249,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 95564,
+        "encounter_id": null,
         "name": "Droman Oulfarran",
         "base_health": 404096,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -683,7 +1263,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -693,9 +1274,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 95256,
+        "encounter_id": null,
         "name": "Mistveil Defender",
         "base_health": 145222,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -704,7 +1288,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 1647,
@@ -722,9 +1307,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 94197,
+        "encounter_id": null,
         "name": "Spinemaw Gorger",
-        "base_health": 164935,
+        "base_health": 18221353,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -733,8 +1321,33 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 326021
+            },
+            {
+                "spell_id": 326022
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16435,
+                "mapping_version_id": 365,
+                "npc_id": 172312,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1648,
                 "mapping_version_id": 30,
@@ -751,9 +1364,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 94212,
+        "encounter_id": null,
         "name": "Parasitic Infestor",
         "base_health": 15153,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -762,7 +1378,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -772,9 +1389,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 98186,
+        "encounter_id": null,
         "name": "Hydra Seed",
         "base_health": 25256,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -783,7 +1403,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -793,9 +1414,12 @@
         "npc_type_id": 5,
         "npc_class_id": 7,
         "display_id": 98569,
+        "encounter_id": null,
         "name": "Mistveil Matriarch",
         "base_health": 494804,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -804,8 +1428,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 340160
+            },
+            {
+                "spell_id": 340189
+            },
+            {
+                "spell_id": 340208
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16440,
+                "mapping_version_id": 365,
+                "npc_id": 173655,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1651,
                 "mapping_version_id": 30,
@@ -822,9 +1464,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 98563,
+        "encounter_id": null,
         "name": "Tasty Toughshroom",
         "base_health": 25256,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -833,7 +1478,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -843,9 +1489,12 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 98564,
+        "encounter_id": null,
         "name": "Savory Statshroom",
         "base_health": 25256,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -854,7 +1503,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -864,9 +1514,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 55772,
+        "encounter_id": null,
         "name": "Mistveil Nightblossom",
-        "base_health": 494804,
+        "base_health": 54664060,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -875,8 +1528,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 340279
+            },
+            {
+                "spell_id": 340288
+            },
+            {
+                "spell_id": 340289
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16432,
+                "mapping_version_id": 365,
+                "npc_id": 173714,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1654,
                 "mapping_version_id": 30,
@@ -893,9 +1564,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 98502,
+        "encounter_id": null,
         "name": "Mistveil Gorgegullet",
-        "base_health": 494804,
+        "base_health": 54664060,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -904,8 +1578,29 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 340300
+            },
+            {
+                "spell_id": 340304
+            },
+            {
+                "spell_id": 340305
+            },
+            {
+                "spell_id": 340311
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16438,
+                "mapping_version_id": 365,
+                "npc_id": 173720,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1655,
                 "mapping_version_id": 30,

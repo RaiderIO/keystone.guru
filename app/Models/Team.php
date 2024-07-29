@@ -7,7 +7,6 @@ use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\Traits\HasIconFile;
-use App\Models\User;
 use Eloquent;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -17,15 +16,15 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property int                       $id
- * @property string                    $public_key
- * @property string                    $name
- * @property string                    $description
- * @property string                    $invite_code
- * @property string                    $default_role
- * @property Collection|TeamUser[]     $teamusers
- * @property Collection|User[]         $members
- * @property Collection|DungeonRoute[] $dungeonroutes
+ * @property int                      $id
+ * @property string                   $public_key
+ * @property string                   $name
+ * @property string                   $description
+ * @property string                   $invite_code
+ * @property string                   $default_role
+ * @property Collection<TeamUser>     $teamusers
+ * @property Collection<User>         $members
+ * @property Collection<DungeonRoute> $dungeonroutes
  *
  * @mixin Eloquent
  */

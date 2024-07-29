@@ -363,8 +363,19 @@ return [
     'heatmap' => [
         'service' => [
             'data' => [
-                'sizeX' => 800,
-                'sizeY' => 600,
+                // Player data can get away with less accurate positioning
+                'player' => [
+                    'sizeX' => 400,
+                    'sizeY' => 300,
+                ],
+                // Enemy requires precise positioning, this resolution is too much
+                // for raw since the buckets would be too small, but since the coordinates
+                // are equal to enemy positions this only just increases the accuracy of the
+                // points, while still having a low bucket count.
+                'enemy'  => [
+                    'sizeX' => 800,
+                    'sizeY' => 600,
+                ],
             ],
         ],
     ],

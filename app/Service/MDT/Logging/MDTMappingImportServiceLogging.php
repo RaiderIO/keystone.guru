@@ -52,24 +52,78 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->end(__METHOD__, get_defined_vars());
     }
 
-    public function importNpcsStart(): void
+    public function importNpcsDataFromMDTStart(string $key): void
     {
         $this->start(__METHOD__, get_defined_vars());
     }
 
-    public function importNpcsSaveNewNpc(int $npcId): void
+    public function importNpcsDataFromMDTNpcNotMarkedForAllDungeons(int $npcId): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function importNpcsDataFromMDTSaveNpcException(Exception $exception): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
+        int $npcCharacteristicsDeleted,
+        int $npcCharacteristicsInserted,
+        int $npcSpellsDeleted,
+        int $npcSpellsInserted
+    ): void {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function importNpcsDataFromMDTEnd(): void
+    {
+        $this->end(__METHOD__);
+    }
+
+    public function importSpellDataFromMDTStart(string $key): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
+
+    public function importSpellDataFromMDTResult(int $count): void
     {
         $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function importSpellDataFromMDTFailed(): void
+    {
+        $this->error(__METHOD__);
+    }
+
+    public function importSpellDataFromMDTEnd(): void
+    {
+        $this->end(__METHOD__, get_defined_vars());
+    }
+
+    public function importNpcsStart(): void
+    {
+        $this->start(__METHOD__);
+    }
+
+    public function importNpcsDataFromMDTUnableToFindCharacteristicForNpc(int $id, string $characteristicName): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function importNpcsDataFromMDTSaveNewNpc(int $npcId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function importNpcsUnableToFindNpc(int $npcId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
     }
 
     public function importNpcsUpdateExistingNpc(int $npcId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
-    }
-
-    public function importNpcsSaveNpcException(Exception $exception): void
-    {
-        $this->error(__METHOD__, get_defined_vars());
     }
 
     public function importNpcsEnd(): void

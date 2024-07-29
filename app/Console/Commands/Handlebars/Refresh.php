@@ -24,14 +24,6 @@ class Refresh extends Command
     protected $description = 'Refreshes the handlebars compiled file';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): int

@@ -27,7 +27,7 @@ class ImportStringPulls
     }
 
     /**
-     * @return Collection|ImportWarning[]
+     * @return Collection<ImportWarning>
      */
     public function getWarnings(): Collection
     {
@@ -35,7 +35,7 @@ class ImportStringPulls
     }
 
     /**
-     * @return Collection|ImportError[]
+     * @return Collection<ImportError>
      */
     public function getErrors(): Collection
     {

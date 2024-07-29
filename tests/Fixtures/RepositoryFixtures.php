@@ -1212,7 +1212,7 @@ class RepositoryFixtures
 
     public static function getReleaseChangelogChangeRepositoryMock(
         PublicTestCase $testCase,
-        array $methodsToMock = []
+        array          $methodsToMock = []
     ): MockObject|ReleaseChangelogChangeRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(ReleaseChangelogChangeRepositoryInterface::class);
 
@@ -1225,7 +1225,7 @@ class RepositoryFixtures
 
     public static function getReleaseChangelogRepositoryMock(
         PublicTestCase $testCase,
-        array $methodsToMock = []
+        array          $methodsToMock = []
     ): MockObject|ReleaseChangelogRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(ReleaseChangelogRepositoryInterface::class);
 
@@ -1238,7 +1238,7 @@ class RepositoryFixtures
 
     public static function getReleaseReportLogRepositoryMock(
         PublicTestCase $testCase,
-        array $methodsToMock = []
+        array          $methodsToMock = []
     ): MockObject|ReleaseReportLogRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(ReleaseReportLogRepositoryInterface::class);
 
@@ -1251,7 +1251,7 @@ class RepositoryFixtures
 
     public static function getReleaseRepositoryMock(
         PublicTestCase $testCase,
-        array $methodsToMock = []
+        array          $methodsToMock = []
     ): MockObject|ReleaseRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(ReleaseRepositoryInterface::class);
 
@@ -1264,7 +1264,7 @@ class RepositoryFixtures
 
     public static function getRouteAttributeRepositoryMock(
         PublicTestCase $testCase,
-        array $methodsToMock = []
+        array          $methodsToMock = []
     ): MockObject|RouteAttributeRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(RouteAttributeRepositoryInterface::class);
 
@@ -1277,7 +1277,7 @@ class RepositoryFixtures
 
     public static function getSeasonDungeonRepositoryMock(
         PublicTestCase $testCase,
-        array $methodsToMock = []
+        array          $methodsToMock = []
     ): MockObject|SeasonDungeonRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(SeasonDungeonRepositoryInterface::class);
 
@@ -1290,7 +1290,7 @@ class RepositoryFixtures
 
     public static function getSeasonRepositoryMock(
         PublicTestCase $testCase,
-        array $methodsToMock = []
+        array          $methodsToMock = []
     ): MockObject|SeasonRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(SeasonRepositoryInterface::class);
 
@@ -1303,7 +1303,7 @@ class RepositoryFixtures
 
     public static function getTeamUserRepositoryMock(
         PublicTestCase $testCase,
-        array $methodsToMock = []
+        array          $methodsToMock = []
     ): MockObject|TeamUserRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(TeamUserRepositoryInterface::class);
 
@@ -1316,7 +1316,7 @@ class RepositoryFixtures
 
     public static function getUserReportRepositoryMock(
         PublicTestCase $testCase,
-        array $methodsToMock = []
+        array          $methodsToMock = []
     ): MockObject|UserReportRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(UserReportRepositoryInterface::class);
 
@@ -1329,7 +1329,7 @@ class RepositoryFixtures
 
     public static function getUserRepositoryMock(
         PublicTestCase $testCase,
-        array $methodsToMock = []
+        array          $methodsToMock = []
     ): MockObject|UserRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilder(UserRepositoryInterface::class);
 

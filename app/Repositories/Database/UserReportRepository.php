@@ -3,7 +3,6 @@
 namespace App\Repositories\Database;
 
 use App\Models\UserReport;
-use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\UserReportRepositoryInterface;
 
 class UserReportRepository extends DatabaseRepository implements UserReportRepositoryInterface

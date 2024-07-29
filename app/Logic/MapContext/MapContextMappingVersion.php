@@ -7,7 +7,7 @@ use App\Models\Dungeon;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 

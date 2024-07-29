@@ -6,9 +6,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 88361,
+        "encounter_id": null,
         "name": "Fetid Maggot",
         "base_health": 988383,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -17,7 +20,49 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 265540
+            },
+            {
+                "spell_id": 265542
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8821,
@@ -84,9 +129,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 82394,
+        "encounter_id": 2157,
         "name": "Elder Leaxa",
         "base_health": 4742430,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -95,7 +143,28 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 260685
+            },
+            {
+                "spell_id": 260879
+            },
+            {
+                "spell_id": 260894
+            },
+            {
+                "spell_id": 264603
+            },
+            {
+                "spell_id": 264757
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -105,9 +174,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 81977,
+        "encounter_id": 2130,
         "name": "Sporecaller Zancha",
         "base_health": 6916035,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -116,7 +188,31 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 259718
+            },
+            {
+                "spell_id": 259720
+            },
+            {
+                "spell_id": 259732
+            },
+            {
+                "spell_id": 259830
+            },
+            {
+                "spell_id": 272457
+            },
+            {
+                "spell_id": 274213
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -126,9 +222,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 81808,
+        "encounter_id": null,
         "name": "Underrot Tick",
         "base_health": 197676,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 0.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -137,7 +236,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 265533
+            },
+            {
+                "spell_id": 278637
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8819,
@@ -204,9 +342,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 85816,
+        "encounter_id": null,
         "name": "Chosen Blood Matron",
         "base_health": 1581412,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -215,7 +356,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 265016
+            },
+            {
+                "spell_id": 265019
+            },
+            {
+                "spell_id": 265081
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8820,
@@ -282,9 +438,12 @@
         "npc_type_id": 8,
         "npc_class_id": 3,
         "display_id": 75861,
+        "encounter_id": null,
         "name": "Devout Blood Priest",
         "base_health": 889545,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -293,7 +452,49 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 265084
+            },
+            {
+                "spell_id": 265089
+            },
+            {
+                "spell_id": 265091
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8823,
@@ -360,9 +561,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 78855,
+        "encounter_id": 2131,
         "name": "Cragmaw the Infested",
         "base_health": 6916035,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -371,7 +575,28 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 260292
+            },
+            {
+                "spell_id": 260312
+            },
+            {
+                "spell_id": 260333
+            },
+            {
+                "spell_id": 260334
+            },
+            {
+                "spell_id": 260793
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -381,9 +606,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 86632,
+        "encounter_id": 2158,
         "name": "Unbound Abomination",
         "base_health": 7904040,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -392,7 +620,22 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 269185
+            },
+            {
+                "spell_id": 269301
+            },
+            {
+                "spell_id": 269843
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -402,9 +645,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 79499,
+        "encounter_id": null,
         "name": "Fanatical Headhunter",
         "base_health": 988383,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -413,7 +659,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 265376
+            },
+            {
+                "spell_id": 265377
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8822,
@@ -480,9 +765,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 80852,
+        "encounter_id": null,
         "name": "Befouled Spirit",
         "base_health": 1284898,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
@@ -491,7 +779,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 265568
+            },
+            {
+                "spell_id": 265625
+            },
+            {
+                "spell_id": 278755
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8824,
@@ -558,9 +861,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 76653,
+        "encounter_id": null,
         "name": "Feral Bloodswarmer",
         "base_health": 889545,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -569,7 +875,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 266106
+            },
+            {
+                "spell_id": 266107
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8825,
@@ -636,9 +981,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 88121,
+        "encounter_id": null,
         "name": "Reanimated Guardian",
         "base_health": 790706,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -647,7 +995,40 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 4
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 8
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 266201
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8828,
@@ -714,9 +1095,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 83311,
+        "encounter_id": null,
         "name": "Living Rot",
         "base_health": 988383,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -725,7 +1109,43 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 13
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 265665
+            },
+            {
+                "spell_id": 265668
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8826,
@@ -792,9 +1212,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 80467,
+        "encounter_id": null,
         "name": "Diseased Lasher",
         "base_health": 840125,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -803,7 +1226,40 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 13
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 278961
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8827,
@@ -870,9 +1326,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 79182,
+        "encounter_id": null,
         "name": "Bloodsworn Defiler",
         "base_health": 1383736,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -881,7 +1340,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 265433
+            },
+            {
+                "spell_id": 265468
+            },
+            {
+                "spell_id": 265487
+            },
+            {
+                "spell_id": 265523
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8830,
@@ -948,9 +1425,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 85815,
+        "encounter_id": null,
         "name": "Fallen Deathspeaker",
         "base_health": 988383,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -959,7 +1439,43 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 4
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 8
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 266209
+            },
+            {
+                "spell_id": 266265
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8829,
@@ -1026,9 +1542,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 76851,
+        "encounter_id": null,
         "name": "Titan Keeper Hezrel",
         "base_health": 470936,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -1037,7 +1556,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1047,9 +1567,12 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 84808,
+        "encounter_id": null,
         "name": "Grotesque Horror",
         "base_health": 1186059,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1058,7 +1581,49 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 13
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 272180
+            },
+            {
+                "spell_id": 413044
+            },
+            {
+                "spell_id": 413047
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8831,
@@ -1125,9 +1690,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 84376,
+        "encounter_id": null,
         "name": "Faceless Corruptor",
         "base_health": 1581412,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1136,7 +1704,19 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 272592
+            },
+            {
+                "spell_id": 272609
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8832,

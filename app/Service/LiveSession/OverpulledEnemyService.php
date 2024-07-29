@@ -35,7 +35,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
                 $enemyForcesLeftToCorrect += $overpulledEnemyForce['enemy_forces'];
 
                 // All the killzones that we can potentially take enemies from
-                /** @var Collection|KillZone[] $availableKillZones */
+                /** @var Collection<KillZone> $availableKillZones */
                 $availableKillZones = KillZone::where('dungeon_route_id', $liveSession->dungeon_route_id)
                     ->where('index', '>', $overpulledEnemyForce['kill_zone']->index)
                     ->get();
@@ -90,7 +90,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
     }
 
     /**
-     * @return Collection|array{array{kill_zone: KillZone, enemy_forces: int}}
+     * @return Collection<array{array{kill_zone: KillZone, enemy_forces: int}}>
      */
     private function getOverpulledEnemyForces(LiveSession $liveSession): Collection
     {

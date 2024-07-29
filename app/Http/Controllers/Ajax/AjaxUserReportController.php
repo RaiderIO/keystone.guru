@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ajax;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\UserReportFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -12,7 +13,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class AjaxUserReportController
+class AjaxUserReportController extends Controller
 {
     /**
      * @return Model|UserReport

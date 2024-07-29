@@ -3,7 +3,7 @@
 namespace App\Models\KillZone;
 
 use App\Models\Enemy;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

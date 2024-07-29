@@ -6,6 +6,7 @@ use App\Models\CacheModel;
 use App\Models\Traits\SeederModel;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,6 +16,9 @@ use Illuminate\Support\Facades\Auth;
  * @property string $name
  * @property string $description
  * @property bool   $has_seasons
+ * @property bool   $active
+ *
+ * @method static Builder active()
  */
 class GameVersion extends CacheModel
 {
@@ -26,22 +30,23 @@ class GameVersion extends CacheModel
         'name',
         'description',
         'has_seasons',
+        'active',
     ];
 
     public $timestamps = false;
 
     public const DEFAULT_GAME_VERSION = self::GAME_VERSION_RETAIL;
 
-    public const GAME_VERSION_RETAIL = 'retail';
-
-    public const GAME_VERSION_WRATH = 'wotlk';
-
+    public const GAME_VERSION_RETAIL      = 'retail';
+    public const GAME_VERSION_WRATH       = 'wotlk';
     public const GAME_VERSION_CLASSIC_ERA = 'classic';
+    public const GAME_VERSION_BETA        = 'beta';
 
     public const ALL = [
         self::GAME_VERSION_RETAIL      => 1,
         self::GAME_VERSION_CLASSIC_ERA => 2,
         self::GAME_VERSION_WRATH       => 3,
+        self::GAME_VERSION_BETA        => 4,
     ];
 
     /**
@@ -50,6 +55,14 @@ class GameVersion extends CacheModel
     public function getRouteKeyName(): string
     {
         return 'key';
+    }
+
+    /**
+     * Scope a query to only include active dungeons.
+     */
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('game_versions.active', 1);
     }
 
     /**

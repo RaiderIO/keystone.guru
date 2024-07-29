@@ -29,6 +29,7 @@ use App\Repositories\Stub\KillZone\KillZoneEnemyRepository as KillZoneEnemyRepos
 use App\Repositories\Stub\KillZone\KillZoneRepository as KillZoneRepositoryStub;
 use App\Repositories\Stub\KillZone\KillZoneSpellRepository as KillZoneSpellRepositoryStub;
 use App\Service\CombatLog\Builders\CreateRouteBodyCombatLogEventsBuilder;
+use App\Service\CombatLog\Builders\CreateRouteBodyCorrectionBuilder;
 use App\Service\CombatLog\Builders\CreateRouteBodyDungeonRouteBuilder;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLoggingInterface;
@@ -121,6 +122,25 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         $builder->build();
 
         return $builder->getCombatLogEvents();
+    }
+
+    public function correctCreateRouteBody(CreateRouteBody $createRouteBody): CreateRouteBody
+    {
+        $builder = new CreateRouteBodyCorrectionBuilder(
+            $this->seasonService,
+            $this->coordinatesService,
+            new DungeonRouteRepositoryStub(),
+            new DungeonRouteAffixGroupRepositoryStub(),
+            new AffixGroupRepositoryStub(),
+            new KillZoneRepositoryStub(),
+            new KillZoneEnemyRepositoryStub(),
+            new KillZoneSpellRepositoryStub(),
+            $createRouteBody
+        );
+
+        $builder->build();
+
+        return $builder->getCreateRouteBody();
     }
 
 

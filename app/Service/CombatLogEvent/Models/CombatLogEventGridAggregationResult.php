@@ -84,6 +84,7 @@ class CombatLogEventGridAggregationResult implements Arrayable
 
         return [
             'data'      => array_values($data),
+            'data_type' => $this->combatLogEventFilter->getDataType(),
             'run_count' => $this->runCount,
         ];
 

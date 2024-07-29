@@ -18,12 +18,12 @@ if ($section) { ?>
                 if ($modal){ ?>
                 $('{{$modal}}').on('shown.bs.modal', function () {
                     <?php }
-                 ?>
+                        ?>
                     _inlineManager.activate('{{ $path }}');
                         <?php if ($modal){ ?>
                 });
                 <?php }
-                 ?>
+                    ?>
             }
         });
     </script>
@@ -41,12 +41,12 @@ if ($section) { ?>
             if ($modal){ ?>
             $('{{$modal}}').on('shown.bs.modal', function () {
                 <?php }
-             ?>
+                    ?>
                 _inlineManager.activate('{{ $path }}');
                     <?php if ($modal){ ?>
             });
             <?php }
-             ?>
+                ?>
         }
     });
 </script>

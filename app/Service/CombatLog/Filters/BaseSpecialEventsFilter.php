@@ -21,6 +21,8 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
         1,
         // Gorgrond
         1116,
+        // The Ringing Depths
+        2601,
     ];
 
     // @TODO should be removed when all floor map UIs have been resolved for all existing dungeons
@@ -59,6 +61,10 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
         2025,
         // Valdrakken
         2112,
+        // Khaz Algar
+        2274,
+        // City of Threads (outside)
+        2343,
     ];
 
     public function __construct(protected Collection $resultEvents)

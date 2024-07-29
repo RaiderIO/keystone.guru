@@ -16,10 +16,11 @@ use App\Models\Floor\FloorUnionArea;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MountableArea;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcBolsteringWhitelist;
+use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcEnemyForces;
-use App\Models\NpcBolsteringWhitelist;
-use App\Models\NpcSpell;
+use App\Models\Npc\NpcSpell;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Spell;
 use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
@@ -51,10 +52,10 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 {
     private const DUNGEON_DATA_DIR = 'seeders/dungeondata/';
 
-    /** @var Collection|array */
+    /** @var Collection<array> */
     private Collection $importedModels;
 
-    /** @var Collection|RelationMapping[] */
+    /** @var Collection<RelationMapping> */
     private Collection $relationMapping;
 
     public function __construct()
@@ -419,12 +420,12 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         return $updatedModels;
     }
 
-    protected function rollback()
+    protected function rollback(): void
     {
         $this->command->warn('Truncating all relevant data...');
 
         // Can DEFINITELY NOT truncate DungeonRoute table here. That'd wipe the entire instance, not good.
-        /** @var DungeonRoute[]|Collection $demoRoutes */
+        /** @var Collection<DungeonRoute> $demoRoutes */
         $demoRoutes = DungeonRoute::with(['brushlines', 'paths', 'killZones', 'livesessions'])
             ->where('demo', true)
             ->get();
@@ -453,6 +454,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             Npc::class,
             NpcBolsteringWhitelist::class,
             NpcEnemyForces::class,
+            NpcCharacteristic::class,
             NpcSpell::class,
             Enemy::class,
             EnemyPack::class,

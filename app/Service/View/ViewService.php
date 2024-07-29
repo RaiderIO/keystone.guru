@@ -70,7 +70,7 @@ class ViewService implements ViewServiceInterface
             $allRegions    = GameServerRegion::all();
             $allExpansions = Expansion::with(['dungeons'])->orderBy('released_at', 'desc')->get();
 
-            /** @var Collection|Expansion[] $activeExpansions */
+            /** @var Collection<Expansion> $activeExpansions */
             $activeExpansions = Expansion::active()->with('dungeons')->orderBy('released_at', 'desc')->get();
 
             // Spells
@@ -127,7 +127,7 @@ class ViewService implements ViewServiceInterface
                 'selectableSpellsByCategory'      => $selectableSpellsByCategory,
 
                 // Misc
-                'allGameVersions'                 => GameVersion::all(),
+                'allGameVersions'                 => GameVersion::active()->get(),
                 'activeExpansions'                => $activeExpansions, // Show most recent expansions first
                 'allExpansions'                   => $allExpansions,
                 'dungeonsByExpansionIdDesc'       => $allDungeonsByExpansionId,
@@ -161,13 +161,13 @@ class ViewService implements ViewServiceInterface
 
                 $allExpansions = Expansion::with(['dungeons'])->orderBy('released_at', 'desc')->get();
 
-                /** @var Collection|ExpansionData[] $expansionsData */
+                /** @var Collection<ExpansionData> $expansionsData */
                 $expansionsData = collect();
                 foreach ($allExpansions as $expansion) {
                     $expansionsData->put($expansion->shortname, $this->expansionService->getData($expansion, $gameServerRegion));
                 }
 
-                /** @var Collection|Expansion[] $activeExpansions */
+                /** @var Collection<Expansion> $activeExpansions */
                 $activeExpansions = Expansion::active()->with('dungeons')->orderBy('released_at', 'desc')->get();
 
                 // Build a list of all valid affix groups we may select across all currently active seasons

@@ -20,9 +20,9 @@ class TestableStructuredLogging extends StructuredLogging
     }
 
 
-    public function start(string $functionName, array $context = []): void
+    public function start(string $functionName, array $context = [], bool $addContext = true): void
     {
-        parent::start($functionName, $context);
+        parent::start($functionName, $context, $addContext);
     }
 
     public function end(string $functionName, array $context = []): void

@@ -50,6 +50,7 @@ class SiteController extends Controller
 
             /** @var User $user */
             $user = Auth::user();
+
             return view('profile.overview', [
                 'dungeonRoutes' => $coverageService->getForUser($user, $season),
             ]);

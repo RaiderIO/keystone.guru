@@ -2,8 +2,8 @@
 
 namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
-use App\Models\Npc;
-use App\Models\NpcSpell;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcSpell;
 use Database\Seeders\DatabaseSeeder;
 
 class NpcNpcSpellsRelationParser implements RelationParserInterface
@@ -20,13 +20,15 @@ class NpcNpcSpellsRelationParser implements RelationParserInterface
 
     public function canParseRelation(string $name, array $value): bool
     {
-        return $name === 'npcspells';
+        return $name === 'npc_spells';
     }
 
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
-        foreach ($value as $spell) {
-            NpcSpell::from(DatabaseSeeder::getTempTableName(NpcSpell::class))->insert($spell);
+        foreach ($value as $npcSpell) {
+            $npcSpell['npc_id'] = $modelData['id'];
+
+            NpcSpell::from(DatabaseSeeder::getTempTableName(NpcSpell::class))->insert($npcSpell);
         }
 
         // Didn't really change anything so just return the value.

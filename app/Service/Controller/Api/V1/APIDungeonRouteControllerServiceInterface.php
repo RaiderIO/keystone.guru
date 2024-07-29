@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 interface APIDungeonRouteControllerServiceInterface
 {
     /**
-     * @return Collection|DungeonRouteThumbnailJob[]
+     * @return Collection<DungeonRouteThumbnailJob>
      */
     public function createThumbnails(
         DungeonRoute $dungeonRoute,

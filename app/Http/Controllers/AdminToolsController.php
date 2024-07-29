@@ -13,10 +13,11 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
-use App\Models\NpcClassification;
-use App\Models\NpcType;
+use App\Models\Npc\NpcType;
+use App\Models\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -112,7 +113,7 @@ class AdminToolsController extends Controller
      */
     public function npcimport(): View
     {
-        return view('admin.tools.npcimport.import');
+        return view('admin.tools.npc.import');
     }
 
     /**
@@ -219,6 +220,17 @@ class AdminToolsController extends Controller
         } finally {
             dump($log);
         }
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function manageSpellVisibility(): View
+    {
+        return view('admin.tools.npc.managespellvisibility', [
+            'npcs'   => Npc::with('npcSpells')->has('npcSpells')->paginate(50),
+            'spells' => Spell::all()->keyBy('id'),
+        ]);
     }
 
     /**
@@ -597,7 +609,7 @@ class AdminToolsController extends Controller
         $uiMapAssignmentTableHeaderIndexMaxX       = array_search('Region[3]', $uiMapAssignmentTableHeaders, true);
         $uiMapAssignmentTableHeaderIndexMaxY       = array_search('Region[4]', $uiMapAssignmentTableHeaders, true);
 
-        /** @var Collection|Dungeon[] $allDungeons */
+        /** @var Collection<Dungeon> $allDungeons */
         //        $allDungeons = Dungeon::where('key', Dungeon::DUNGEON_AZJOL_NERUB)->get()->keyBy('id');
         $allDungeons = Dungeon::where('map_id', '>', 0)->get()->keyBy('id');
 
@@ -748,7 +760,7 @@ class AdminToolsController extends Controller
                 }
 
                 // Find our own NPC
-                /** @var Npc $npc */
+                /** @var \App\Models\Npc\Npc $npc */
                 $npc = $npcs->where('id', $mdtNpc->getId())->first();
 
                 // Not found..
@@ -854,7 +866,7 @@ class AdminToolsController extends Controller
         $npcId    = $request->get('npc_id');
         $value    = $request->get('value');
 
-        /** @var Npc $npc */
+        /** @var \App\Models\Npc\Npc $npc */
         $npc = Npc::with(['enemyForces'])->find($npcId);
 
         switch ($category) {

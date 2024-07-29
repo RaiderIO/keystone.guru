@@ -24,14 +24,6 @@ class FetchHealth extends Command
     protected $description = 'Fetches the health of all NPCs attached to said dungeon and saves it.';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      *
@@ -39,7 +31,8 @@ class FetchHealth extends Command
      */
     public function handle(WowheadServiceInterface $wowheadService): void
     {
-        $dungeon = Dungeon::where('key', $this->argument('dungeon'))->first();
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::firstWhere('key', $this->argument('dungeon'));
 
         if ($dungeon === null) {
             throw new Exception('Unable to find dungeon!');
@@ -58,7 +51,7 @@ class FetchHealth extends Command
 
             $health = $wowheadService->getNpcHealth($dungeon->gameVersion, $npc);
 
-            if ($health === 0) {
+            if (empty($health)) {
                 $this->warn('- Unable to find health for npc!');
             } else {
                 $npc->update(['base_health' => $health]);

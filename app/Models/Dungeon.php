@@ -8,7 +8,10 @@ use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\Npc\NpcType;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Service\Season\SeasonServiceInterface;
 use Eloquent;
@@ -27,7 +30,8 @@ use Mockery\Exception;
  * @property int                                    $game_version_id The linked game version to this dungeon.
  * @property int                                    $zone_id The ID of the location that WoW has given this dungeon.
  * @property int                                    $map_id The ID of the map (used internally in the game, used for simulation craft purposes)
- * @property int                                    $challenge_mode_id The ID of the M+ for this dungeon (used internally in the game, used for ARC)
+ * @property int|null                               $instance_id The ID of the instance (used internally in the game, used for MDT mapping export purposes)
+ * @property int|null                               $challenge_mode_id The ID of the M+ for this dungeon (used internally in the game, used for ARC)
  * @property int                                    $mdt_id The ID that MDT has given this dungeon.
  * @property string                                 $name The name of the dungeon.
  * @property string                                 $slug The url friendly slug of the dungeon.
@@ -37,9 +41,11 @@ use Mockery\Exception;
  * @property bool                                   $speedrun_difficulty_25_man_enabled True if this dungeon's speedrun is for 25-man.
  * @property bool                                   $active True if this dungeon is active, false if it is not.
  * @property bool                                   $mdt_supported True if MDT is supported for this dungeon, false if it is not.
+ *
  * @property Expansion                              $expansion
  * @property GameVersion                            $gameVersion
  * @property MappingVersion                         $currentMappingVersion
+ *
  * @property Collection<MappingVersion>             $mappingVersions
  * @property Collection<Floor>                      $floors
  * @property Collection<Floor>                      $activeFloors
@@ -57,6 +63,7 @@ use Mockery\Exception;
  *
  * @method static Builder active()
  * @method static Builder inactive()
+ * @method static Builder factionSelectionRequired()
  *
  * @mixin Eloquent
  */
@@ -78,6 +85,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'speedrun_difficulty_25_man_enabled',
         'zone_id',
         'map_id',
+        'instance_id',
         'challenge_mode_id',
         'mdt_id',
         'name',
@@ -87,7 +95,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     public $with = ['expansion', 'gameVersion', 'floors'];
 
-    public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'created_at', 'updated_at'];
+    public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'instance_id', 'created_at', 'updated_at'];
 
     public $timestamps = false;
 
@@ -212,60 +220,70 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public const DUNGEON_GRIMRAIL_DEPOT            = 'grimraildepot';
     public const DUNGEON_SHADOWMOON_BURIAL_GROUNDS = 'shadowmoonburialgrounds';
     public const DUNGEON_SKYREACH                  = 'skyreach';
-    public const DUNGEON_THE_EVERBLOOM             = 'theeverbloom'; // overgrownoutput
+    public const DUNGEON_THE_EVERBLOOM             = 'theeverbloom';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      // overgrownoutput
 
     // Legion
-    public const DUNGEON_ARCWAY                      = 'arcway';
-    public const DUNGEON_BLACK_ROOK_HOLD             = 'blackrookhold';
-    public const DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT  = 'cathedralofeternalnight';
-    public const DUNGEON_COURT_OF_STARS              = 'courtofstars';
-    public const DUNGEON_DARKHEART_THICKET           = 'darkheartthicket';
-    public const DUNGEON_EYE_OF_AZSHARA              = 'eyeofazshara';
-    public const DUNGEON_HALLS_OF_VALOR              = 'hallsofvalor';
-    public const DUNGEON_LOWER_KARAZHAN              = 'lowerkarazhan';
-    public const DUNGEON_MAW_OF_SOULS                = 'mawofsouls';
-    public const DUNGEON_NELTHARIONS_LAIR            = 'neltharionslair';
-    public const DUNGEON_UPPER_KARAZHAN              = 'upperkarazhan';
+    public const DUNGEON_ARCWAY               = 'arcway';
+    public const DUNGEON_BLACK_ROOK_HOLD = 'blackrookhold';
+    public const DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT = 'cathedralofeternalnight';
+    public const DUNGEON_COURT_OF_STARS = 'courtofstars';
+    public const DUNGEON_DARKHEART_THICKET = 'darkheartthicket';
+    public const DUNGEON_EYE_OF_AZSHARA = 'eyeofazshara';
+    public const DUNGEON_HALLS_OF_VALOR = 'hallsofvalor';
+    public const DUNGEON_LOWER_KARAZHAN = 'lowerkarazhan';
+    public const DUNGEON_MAW_OF_SOULS = 'mawofsouls';
+    public const DUNGEON_NELTHARIONS_LAIR = 'neltharionslair';
+    public const DUNGEON_UPPER_KARAZHAN = 'upperkarazhan';
     public const DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE = 'theseatofthetriumvirate';
-    public const DUNGEON_VAULT_OF_THE_WARDENS        = 'vaultofthewardens';
+    public const DUNGEON_VAULT_OF_THE_WARDENS = 'vaultofthewardens';
 
     // Battle for Azeroth
-    public const DUNGEON_ATAL_DAZAR           = 'ataldazar';
-    public const DUNGEON_FREEHOLD             = 'freehold';
-    public const DUNGEON_KINGS_REST           = 'kingsrest';
-    public const DUNGEON_SHRINE_OF_THE_STORM  = 'shrineofthestorm';
-    public const DUNGEON_SIEGE_OF_BORALUS     = 'siegeofboralus';
+    public const DUNGEON_ATAL_DAZAR        = 'ataldazar';
+    public const DUNGEON_FREEHOLD = 'freehold';
+    public const DUNGEON_KINGS_REST = 'kingsrest';
+    public const DUNGEON_SHRINE_OF_THE_STORM = 'shrineofthestorm';
+    public const DUNGEON_SIEGE_OF_BORALUS = 'siegeofboralus';
     public const DUNGEON_TEMPLE_OF_SETHRALISS = 'templeofsethraliss';
-    public const DUNGEON_THE_MOTHERLODE       = 'themotherlode';
-    public const DUNGEON_THE_UNDERROT         = 'theunderrot';
-    public const DUNGEON_TOL_DAGOR            = 'toldagor';
-    public const DUNGEON_WAYCREST_MANOR       = 'waycrestmanor';
-    public const DUNGEON_MECHAGON_JUNKYARD    = 'mechagonjunkyard';
-    public const DUNGEON_MECHAGON_WORKSHOP    = 'mechagonworkshop';
+    public const DUNGEON_THE_MOTHERLODE    = 'themotherlode';
+    public const DUNGEON_THE_UNDERROT      = 'theunderrot';
+    public const DUNGEON_TOL_DAGOR         = 'toldagor';
+    public const DUNGEON_WAYCREST_MANOR    = 'waycrestmanor';
+    public const DUNGEON_MECHAGON_JUNKYARD = 'mechagonjunkyard';
+    public const DUNGEON_MECHAGON_WORKSHOP = 'mechagonworkshop';
 
     // Shadowlands
-    public const DUNGEON_DE_OTHER_SIDE              = 'deotherside_ardenweald';
-    public const DUNGEON_HALLS_OF_ATONEMENT         = 'hallsofatonement_a';
-    public const DUNGEON_MISTS_OF_TIRNA_SCITHE      = 'mistsoftirnescithe';
-    public const DUNGEON_PLAGUEFALL                 = 'plaguefall';
-    public const DUNGEON_SANGUINE_DEPTHS            = 'sanguinedepths_a';
-    public const DUNGEON_SPIRES_OF_ASCENSION        = 'spiresofascension_a';
-    public const DUNGEON_THE_NECROTIC_WAKE          = 'necroticwake_a';
-    public const DUNGEON_THEATER_OF_PAIN            = 'theaterofpain';
+    public const DUNGEON_DE_OTHER_SIDE            = 'deotherside_ardenweald';
+    public const DUNGEON_HALLS_OF_ATONEMENT = 'hallsofatonement_a';
+    public const DUNGEON_MISTS_OF_TIRNA_SCITHE = 'mistsoftirnescithe';
+    public const DUNGEON_PLAGUEFALL = 'plaguefall';
+    public const DUNGEON_SANGUINE_DEPTHS = 'sanguinedepths_a';
+    public const DUNGEON_SPIRES_OF_ASCENSION = 'spiresofascension_a';
+    public const DUNGEON_THE_NECROTIC_WAKE = 'necroticwake_a';
+    public const DUNGEON_THEATER_OF_PAIN = 'theaterofpain';
     public const DUNGEON_TAZAVESH_STREETS_OF_WONDER = 'tazaveshstreetsofwonder';
-    public const DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   = 'tazaveshsoleahsgambit';
+    public const DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT = 'tazaveshsoleahsgambit';
 
     // Dragonflight
-    public const DUNGEON_ALGETH_AR_ACADEMY                    = 'dragonacademy';
-    public const DUNGEON_BRACKENHIDE_HOLLOW                   = 'brackenhide';
-    public const DUNGEON_HALLS_OF_INFUSION                    = 'hallsofinfusion';
-    public const DUNGEON_NELTHARUS                            = 'neltharus';
-    public const DUNGEON_RUBY_LIFE_POOLS                      = 'rubylifepools';
-    public const DUNGEON_THE_AZURE_VAULT                      = 'theazurevault';
-    public const DUNGEON_THE_NOKHUD_OFFENSIVE                 = 'nokhudoffensive';
-    public const DUNGEON_ULDAMAN_LEGACY_OF_TYR                = 'uldamanlegacyoftyr';
+    public const DUNGEON_ALGETH_AR_ACADEMY                   = 'dragonacademy';
+    public const DUNGEON_BRACKENHIDE_HOLLOW = 'brackenhide';
+    public const DUNGEON_HALLS_OF_INFUSION = 'hallsofinfusion';
+    public const DUNGEON_NELTHARUS = 'neltharus';
+    public const DUNGEON_RUBY_LIFE_POOLS = 'rubylifepools';
+    public const DUNGEON_THE_AZURE_VAULT = 'theazurevault';
+    public const DUNGEON_THE_NOKHUD_OFFENSIVE = 'nokhudoffensive';
+    public const DUNGEON_ULDAMAN_LEGACY_OF_TYR = 'uldamanlegacyoftyr';
     public const DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL = 'dawn_of_the_infinite_galakronds_fall';
-    public const DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE  = 'dawn_of_the_infinite_murozonds_rise';
+    public const DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE = 'dawn_of_the_infinite_murozonds_rise';
+
+    // The War Within
+    public const DUNGEON_ARA_KARA_CITY_OF_ECHOES    = 'ara_karacityofechoes';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         //cityofechoes
+    public const DUNGEON_CINDERBREW_MEADERY         = 'cinderbrewmeadery';
+    public const DUNGEON_CITY_OF_THREADS            = 'cityofthreads'; // cityofthreadsdungeon
+    public const DUNGEON_DARKFLAME_CLEFT            = 'darkflamecleft';
+    public const DUNGEON_PRIORY_OF_THE_SACRED_FLAME = 'prioryofthesacredflame'; // sacredflame
+    public const DUNGEON_THE_DAWNBREAKER            = 'thedawnbreaker';         // dawnbreaker (aka harrowfall)
+    public const DUNGEON_THE_ROOKERY                = 'therookery';             // rookerydungeon
+    public const DUNGEON_THE_STONEVAULT             = 'thestonevault';          // stonevault_foundry
 
     public const ALL = [
         Expansion::EXPANSION_CLASSIC      => [
@@ -420,6 +438,16 @@ class Dungeon extends CacheModel implements MappingModelInterface
             self::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
             self::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL,
             self::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE,
+        ],
+        Expansion::EXPANSION_TWW          => [
+            self::DUNGEON_ARA_KARA_CITY_OF_ECHOES,
+            self::DUNGEON_CINDERBREW_MEADERY,
+            self::DUNGEON_CITY_OF_THREADS,
+            self::DUNGEON_DARKFLAME_CLEFT,
+            self::DUNGEON_PRIORY_OF_THE_SACRED_FLAME,
+            self::DUNGEON_THE_DAWNBREAKER,
+            self::DUNGEON_THE_ROOKERY,
+            self::DUNGEON_THE_STONEVAULT,
         ],
     ];
 
@@ -731,7 +759,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @return Collection|Npc[]
+     * @return Collection<Npc>
      */
     public function getInUseNpcs(): Collection
     {
@@ -750,13 +778,16 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
                     NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
                 ])->orWhereIn('npcs.id', [
-                    // Neltharion's Lair Burning Geodes are in the mapping but give 0 enemy forces.
+                    // Neltharion's Lair:
+                    // Burning Geodes are in the mapping but give 0 enemy forces.
                     // They're in the mapping because they're dangerous af
                     101437,
-                    // Halls of Infusion: Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
+                    // Halls of Infusion:
+                    // Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
                     // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
                     190407,
-                    // Brackenhide Hollow: Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
+                    // Brackenhide Hollow:
+                    // Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
                     194273,
                     // Rotfang Hyena are part of Gutshot boss but, they are part of the mapping. They give 0 enemy forces.
                     194745,
@@ -766,14 +797,20 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     194469,
                     // Gutstabbers give 0 enemy forces but are in the mapping regardless
                     197857,
-                    // Nokhud Offensive: War Ohuna gives 0 enemy forces but is in the mapping regardless
+                    // Nokhud Offensive:
+                    // War Ohuna gives 0 enemy forces but is in the mapping regardless
                     192803,
-                    // Stormsurge Totem
+                    // Stormsurge Totem gives 0 enemy forces but is in the mapping regardless
                     194897,
-                    // Unstable Squall
+                    // Unstable Squall gives 0 enemy forces but is in the mapping regardless
                     194895,
-                    // Primal Gust
+                    // Primal Gust gives 0 enemy forces but is in the mapping regardless
                     195579,
+                    // Dawn of the Infinite:
+                    // Temporal Deviation gives 0 enemy forces but is in the mapping regardless
+                    206063,
+                    // Iridikron's Creation
+                    204918,
                 ]);
             })
             ->get();
@@ -796,33 +833,6 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function isFactionSelectionRequired(): bool
     {
         return in_array($this->key, [self::DUNGEON_SIEGE_OF_BORALUS, self::DUNGEON_THE_NEXUS]);
-    }
-
-    /**
-     * Checks if this dungeon is Siege of Boralus. It's a bit of a special dungeon because of horde/alliance differences,
-     * hence this function, so we can use it to differentiate between the two.
-     */
-    public function isSiegeOfBoralus(): bool
-    {
-        return $this->key === self::DUNGEON_SIEGE_OF_BORALUS;
-    }
-
-    /**
-     * Checks if this dungeon is Tol Dagor. It's a bit of a special dungeon because of a shitty MDT bug.
-     */
-    public function isTolDagor(): bool
-    {
-        return $this->key === self::DUNGEON_TOL_DAGOR;
-    }
-
-    public function getTimerUpgradePlusTwoSeconds(): int
-    {
-        return $this->timer_max_seconds * config('keystoneguru.keystone.timer.plustwofactor');
-    }
-
-    public function getTimerUpgradePlusThreeSeconds(): int
-    {
-        return $this->timer_max_seconds * config('keystoneguru.keystone.timer.plusthreefactor');
     }
 
     public function getImageUrl(): string

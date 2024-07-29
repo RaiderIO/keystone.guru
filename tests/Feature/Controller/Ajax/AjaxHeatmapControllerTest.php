@@ -18,6 +18,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     use CreatesCombatLogEvent;
 
     const EVENT_TYPE = CombatLogEvent::EVENT_TYPE_ENEMY_KILLED;
+    const DATA_TYPE  = CombatLogEvent::DATA_TYPE_PLAYER_POSITION;
 
     #[Test]
     #[Group('Controller')]
@@ -33,6 +34,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         // Act
         $response = $this->post(route('ajax.heatmap.data'), [
             'event_type' => self::EVENT_TYPE,
+            'data_type'  => self::DATA_TYPE,
             'dungeon_id' => $dungeon->id,
         ]);
 
@@ -45,6 +47,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
             $this->assertCount($rowCountPerFloor, $floorRow['lat_lngs']);
         }
         $this->assertEquals($runCount, $responseArr['run_count']);
+        $this->assertEquals(self::DATA_TYPE, $responseArr['data_type']);
     }
 
     #[Test]
@@ -61,6 +64,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         // Act
         $response = $this->post(route('ajax.heatmap.data'), [
             'event_type' => self::EVENT_TYPE,
+            'data_type'  => self::DATA_TYPE,
             'dungeon_id' => $dungeon->id,
         ]);
 
@@ -76,6 +80,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
             $responseArr['data'][0]['lat_lngs']
         );
         $this->assertEquals($runCount, $responseArr['run_count']);
+        $this->assertEquals(self::DATA_TYPE, $responseArr['data_type']);
     }
 
     private function setUpTestForDungeon(Dungeon $dungeon, int $rowCountPerFloor, int $runCount, bool $useFacade = false): void
@@ -83,6 +88,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $combatLogEventFilter = new CombatLogEventFilter(
             $dungeon,
             self::EVENT_TYPE,
+            self::DATA_TYPE
         );
 
         $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);

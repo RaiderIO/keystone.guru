@@ -5,7 +5,7 @@ namespace App\Http\Requests\Speedrun;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Laratrust\Role;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

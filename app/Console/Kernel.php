@@ -13,10 +13,13 @@ use App\Console\Commands\CombatLog\ExtractUiMapIds;
 use App\Console\Commands\CombatLog\OutputCreateRouteJson;
 use App\Console\Commands\CombatLog\OutputResultEvents;
 use App\Console\Commands\CombatLog\SplitChallengeMode;
+use App\Console\Commands\CombatLog\SplitZoneChange;
+use App\Console\Commands\CombatLogEvent\SaveToOpensearch;
 use App\Console\Commands\Database\Backup;
 use App\Console\Commands\Discover\Cache as DiscoverCache;
 use App\Console\Commands\Dungeon\CreateMissing;
 use App\Console\Commands\Dungeon\CreateMissingFloors;
+use App\Console\Commands\Dungeon\ImportInstanceIds;
 use App\Console\Commands\Environment\Update as EnvironmentUpdate;
 use App\Console\Commands\Environment\UpdatePrepare as EnvironmentUpdatePrepare;
 use App\Console\Commands\Generate\Repository as GenerateRepository;
@@ -37,6 +40,8 @@ use App\Console\Commands\MDT\Decode;
 use App\Console\Commands\MDT\Encode;
 use App\Console\Commands\MDT\ExportMapping;
 use App\Console\Commands\MDT\ImportMapping;
+use App\Console\Commands\MDT\ImportNpcs;
+use App\Console\Commands\MDT\ImportSpells;
 use App\Console\Commands\Metric\Aggregate;
 use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
@@ -56,8 +61,11 @@ use App\Console\Commands\Supervisor\StartSupervisor;
 use App\Console\Commands\Supervisor\StopSupervisor;
 use App\Console\Commands\Thumbnail\DeleteExpiredJobs;
 use App\Console\Commands\View\Cache;
+use App\Console\Commands\Wowhead\FetchDisplayIds;
 use App\Console\Commands\Wowhead\FetchHealth;
 use App\Console\Commands\Wowhead\FetchMissingSpellIcons;
+use App\Console\Commands\Wowhead\FetchSpellData;
+use App\Console\Commands\Wowhead\RefreshDisplayIds as RefreshDisplayIdsWowhead;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
 use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
 use App\Logic\Scheduler\UpdateDungeonRouteRating;
@@ -92,6 +100,10 @@ class Kernel extends ConsoleKernel
         OutputResultEvents::class,
         OutputCreateRouteJson::class,
         SplitChallengeMode::class,
+        SplitZoneChange::class,
+
+        // CombatLogEvent
+        SaveToOpensearch::class,
 
         // Database
         Backup::class,
@@ -102,6 +114,7 @@ class Kernel extends ConsoleKernel
         // Dungeon
         CreateMissing::class,
         CreateMissingFloors::class,
+        ImportInstanceIds::class,
 
         // Environment
         EnvironmentUpdatePrepare::class,
@@ -136,6 +149,8 @@ class Kernel extends ConsoleKernel
         Decode::class,
         ExportMapping::class,
         ImportMapping::class,
+        ImportNpcs::class,
+        ImportSpells::class,
 
         // Metric
         Aggregate::class,
@@ -177,8 +192,11 @@ class Kernel extends ConsoleKernel
         Cache::class,
 
         // Wowhead
+        FetchDisplayIds::class,
         FetchHealth::class,
         FetchMissingSpellIcons::class,
+        FetchSpellData::class,
+        RefreshDisplayIdsWowhead::class,
 
         // WowTools
         RefreshDisplayIds::class,
@@ -199,11 +217,11 @@ class Kernel extends ConsoleKernel
         $schedule->command('scheduler:refreshoutdatedthumbnails')->everyFifteenMinutes();
         $schedule->command('scheduler:deleteexpired')->hourly();
 
-        if ($appType === 'mapping') {
+        if (in_array($appType, ['mapping', 'local'])) {
             $schedule->command('mapping:sync')->everyFiveMinutes();
 
             // Ensure display IDs are set
-            $schedule->command('wowtools:refreshdisplayids')->hourly();
+            $schedule->command('wowhead:refreshdisplayids')->hourly();
         }
 
         $schedule->command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours

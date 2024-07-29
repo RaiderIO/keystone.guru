@@ -9,14 +9,17 @@ use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
+use App\Service\CombatLog\Filters\Logging\BaseCombatFilterLoggingInterface;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
-use App\Service\CombatLog\Logging\BaseCombatFilterLoggingInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyEngaged;
 use App\Service\CombatLog\ResultEvents\EnemyKilled;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 
+/**
+ * @property Collection<BaseResultEvent> $resultEvents
+ */
 abstract class BaseCombatFilter implements CombatLogParserInterface
 {
     /** @var float[] The percentage (between 0 and 1) when certain enemies are considered defeated */
@@ -42,22 +45,21 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         194181,
     ];
 
-    /** @var Collection|int[] A list of valid NPC IDs, any NPCs not in this list will be discarded. */
+    /** @var Collection<int> A list of valid NPC IDs, any NPCs not in this list will be discarded. */
     private Collection $validNpcIds;
 
-    /** @var Collection|CombatLogEvent[] List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
+    /** @var Collection<CombatLogEvent> List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
     private readonly Collection $accurateEnemySightings;
 
-    /** @var Collection|string[] List of GUIDs for all enemies that have been summoned. Summoned enemies are ignored by default. */
+    /** @var Collection<string> List of GUIDs for all enemies that have been summoned. Summoned enemies are ignored by default. */
     private readonly Collection $summonedEnemies;
 
-    /** @var Collection|string[] List of GUIDs for all enemies that we have killed since the start. */
+    /** @var Collection<string> List of GUIDs for all enemies that we have killed since the start. */
     private readonly Collection $killedEnemies;
 
     private readonly BaseCombatFilterLoggingInterface $log;
 
-    public function __construct(/** @var Collection|BaseResultEvent[] */
-        private readonly Collection $resultEvents)
+    public function __construct(private readonly Collection $resultEvents)
     {
         $this->validNpcIds            = collect();
         $this->accurateEnemySightings = collect();

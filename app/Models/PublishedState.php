@@ -5,15 +5,14 @@ namespace App\Models;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Traits\SeederModel;
-use App\Models\User;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                       $id
- * @property string                    $name
- * @property Collection|DungeonRoute[] $dungeonRoutes
+ * @property int                      $id
+ * @property string                   $name
+ * @property Collection<DungeonRoute> $dungeonRoutes
  *
  * @mixin Eloquent
  */
@@ -51,7 +50,7 @@ class PublishedState extends CacheModel
     }
 
     /**
-     * @return Collection|string[]
+     * @return Collection<string>
      */
     public static function getAvailablePublishedStates(DungeonRoute $dungeonRoute, ?User $user = null): Collection
     {

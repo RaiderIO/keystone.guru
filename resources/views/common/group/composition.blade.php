@@ -31,7 +31,7 @@ $factions ??= $allFactions;
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->key) }}                {
+        .{{ strtolower($faction->key) }}                 {
             color: {{ $faction->color }};
             font-weight: bold;
         }

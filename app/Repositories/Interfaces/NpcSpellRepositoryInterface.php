@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\Models\NpcSpell;
+use App\Models\Npc\NpcSpell;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
 

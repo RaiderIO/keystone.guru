@@ -3,7 +3,6 @@
 namespace App\Repositories\Database;
 
 use App\Models\CacheModel;
-use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\CacheModelRepositoryInterface;
 
 class CacheModelRepository extends DatabaseRepository implements CacheModelRepositoryInterface

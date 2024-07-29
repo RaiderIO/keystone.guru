@@ -24,6 +24,9 @@ return [
             'exception'                   => [
                 'internal_server_error' => 'Дополнение добавлено в админ панель',
             ],
+            'feature_toggle_activated'    => '',
+            'feature_toggle_deactivated'  => '',
+            'feature_forgotten'           => '',
         ],
     ],
     'apidungeonroute'             => [
@@ -193,6 +196,7 @@ return [
             'user_is_now_an_admin'              => 'Пользователь %s теперь администратор',
             'user_is_no_longer_an_admin'        => 'Пользователь %s больше не администратор',
             'user_is_now_a_user'                => 'Пользователь %s теперь пользователь',
+            'user_is_now_a_role'                => '',
             'account_deleted_successfully'      => 'Аккаунт успешно удален.',
             'account_deletion_error'            => 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
             'user_is_not_a_patron'              => 'Этот пользователь не подписчик Patron',

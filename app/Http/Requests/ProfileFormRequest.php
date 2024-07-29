@@ -14,7 +14,7 @@ class ProfileFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()?->hasRole(Role::ROLE_ALL);
+        return Auth::user()?->hasRole(Role::ROLE_ALL) ?? false;
     }
 
     /**

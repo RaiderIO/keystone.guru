@@ -26,6 +26,7 @@ return [
                     'pull'              => 'Пулл %s',
                     'object'            => '',
                 ],
+                'object_out_of_bounds'                                 => '',
                 'limit_reached_pulls'                                  => '',
                 'limit_reached_brushlines'                             => '',
                 'limit_reached_paths'                                  => '',

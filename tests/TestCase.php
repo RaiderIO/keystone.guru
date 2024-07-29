@@ -17,7 +17,7 @@ abstract class TestCase extends BaseTestCase
         // Use a hacky global so that we really only execute this once
         global $initialized;
 
-        if (! $initialized) {
+        if (!$initialized) {
             // Do something once here for _all_ test subclasses.
             $initialized = true;
 

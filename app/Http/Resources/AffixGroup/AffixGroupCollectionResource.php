@@ -3,10 +3,8 @@
 namespace App\Http\Resources\AffixGroup;
 
 use App\Models\AffixGroup\AffixGroup;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use JsonSerializable;
 
 /**
  * Class AffixGroupCollectionResource

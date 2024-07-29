@@ -1,5 +1,5 @@
 <?php
-/** @var \Illuminate\Support\Collection|\App\Models\Team[] $models */
+/** @var \Illuminate\Support\Collection<\App\Models\Team> $models */
 
 setcookie('viewed_teams', true);
 ?>
@@ -28,7 +28,7 @@ setcookie('viewed_teams', true);
             <tr data-teamid="{{ $team->public_key }}">
                 <td class="clickable">
                     @isset($team->iconfile)
-                        <img class="mr-1" src="{{ $team->iconfile->getURL() }}"
+                        <img alt="Icon" class="mr-1" src="{{ $team->iconfile->getURL() }}"
                              style="max-width: 48px"/>
                     @endisset
                     {{ $team->name }}

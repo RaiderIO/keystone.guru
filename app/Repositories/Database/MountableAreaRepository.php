@@ -3,7 +3,6 @@
 namespace App\Repositories\Database;
 
 use App\Models\MountableArea;
-use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\MountableAreaRepositoryInterface;
 
 class MountableAreaRepository extends DatabaseRepository implements MountableAreaRepositoryInterface

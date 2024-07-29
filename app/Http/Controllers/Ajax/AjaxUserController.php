@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Ajax;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserFormRequest;
 use App\Logic\Datatables\UsersDatatablesHandler;
 use App\Models\User;
@@ -10,7 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Teapot\StatusCode;
 
-class AjaxUserController
+class AjaxUserController extends Controller
 {
     /**
      * @return array|mixed

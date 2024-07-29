@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollectionInterface
 {
-    /** @var Collection|RaidEventPull[] */
+    /** @var Collection<RaidEventPull> */
     private Collection $raidEventPulls;
 
     public function __construct(private readonly CoordinatesServiceInterface $coordinatesService, private readonly SimulationCraftRaidEventsOptions $options)

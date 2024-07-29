@@ -23,14 +23,6 @@ class RefreshMembershipStatus extends Command
     protected $description = 'Fetches all membership status from the Patreon API and re-applies their pledge status';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(PatreonApiService $patreonApiService, PatreonServiceInterface $patreonService): int

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Patreon\PatreonUserLink;
+use App\Models\User;
 use App\Service\Patreon\PatreonApiServiceInterface;
 use App\Service\Patreon\PatreonServiceInterface;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

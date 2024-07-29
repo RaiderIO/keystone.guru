@@ -1,0 +1,973 @@
+[
+    {
+        "id": 210966,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 117315,
+        "encounter_id": null,
+        "name": "Sureki Webmage",
+        "base_health": 36442707,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.7,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 451104
+            },
+            {
+                "spell_id": 451107
+            },
+            {
+                "spell_id": 451113
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16399,
+                "mapping_version_id": 362,
+                "npc_id": 210966,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16286,
+                "mapping_version_id": 335,
+                "npc_id": 210966,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 211087,
+        "dungeon_id": 113,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 114311,
+        "encounter_id": 2579,
+        "name": "Speaker Shadowcrown",
+        "base_health": 127376353,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 2,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 426734
+            },
+            {
+                "spell_id": 426735
+            },
+            {
+                "spell_id": 426736
+            },
+            {
+                "spell_id": 428086
+            },
+            {
+                "spell_id": 451026
+            },
+            {
+                "spell_id": 451032
+            },
+            {
+                "spell_id": 453140
+            },
+            {
+                "spell_id": 453141
+            },
+            {
+                "spell_id": 453173
+            },
+            {
+                "spell_id": 453212
+            },
+            {
+                "spell_id": 453214
+            },
+            {
+                "spell_id": 453310
+            },
+            {
+                "spell_id": 453859
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 211089,
+        "dungeon_id": 113,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 114315,
+        "encounter_id": 2579,
+        "name": "Anubikkaj",
+        "base_health": 127376353,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 2,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 426787
+            },
+            {
+                "spell_id": 426793
+            },
+            {
+                "spell_id": 426826
+            },
+            {
+                "spell_id": 426860
+            },
+            {
+                "spell_id": 426865
+            },
+            {
+                "spell_id": 427001
+            },
+            {
+                "spell_id": 427002
+            },
+            {
+                "spell_id": 427007
+            },
+            {
+                "spell_id": 427192
+            },
+            {
+                "spell_id": 427378
+            },
+            {
+                "spell_id": 452127
+            },
+            {
+                "spell_id": 452145
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 211261,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115760,
+        "encounter_id": null,
+        "name": "Ascendant Viscoxria",
+        "base_health": 51930859,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 3,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 427192
+            },
+            {
+                "spell_id": 451101
+            },
+            {
+                "spell_id": 451102
+            },
+            {
+                "spell_id": 451119
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16405,
+                "mapping_version_id": 362,
+                "npc_id": 211261,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16292,
+                "mapping_version_id": 335,
+                "npc_id": 211261,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 211262,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 119262,
+        "encounter_id": null,
+        "name": "Ixkreten The Unbreakable",
+        "base_health": 60130467,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 3,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 427192
+            },
+            {
+                "spell_id": 451115
+            },
+            {
+                "spell_id": 451116
+            },
+            {
+                "spell_id": 451117
+            },
+            {
+                "spell_id": 451119
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16407,
+                "mapping_version_id": 362,
+                "npc_id": 211262,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16294,
+                "mapping_version_id": 335,
+                "npc_id": 211262,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 211263,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115759,
+        "encounter_id": null,
+        "name": "Deathscreamer Ikentak",
+        "base_health": 49197655,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 3,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 427192
+            },
+            {
+                "spell_id": 450854
+            },
+            {
+                "spell_id": 450855
+            },
+            {
+                "spell_id": 450860
+            },
+            {
+                "spell_id": 451119
+            },
+            {
+                "spell_id": 460135
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16406,
+                "mapping_version_id": 362,
+                "npc_id": 211263,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16293,
+                "mapping_version_id": 335,
+                "npc_id": 211263,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 211341,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 117518,
+        "encounter_id": null,
+        "name": "Manifested Shadow",
+        "base_health": 23687760,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.3,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 431304
+            },
+            {
+                "spell_id": 431305
+            },
+            {
+                "spell_id": 432565
+            },
+            {
+                "spell_id": 432606
+            },
+            {
+                "spell_id": 453345
+            },
+            {
+                "spell_id": 463455
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16402,
+                "mapping_version_id": 362,
+                "npc_id": 211341,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16289,
+                "mapping_version_id": 335,
+                "npc_id": 211341,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 213885,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 120116,
+        "encounter_id": null,
+        "name": "Nightfall Dark Architect",
+        "base_health": 51019789,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 3,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 431303
+            },
+            {
+                "spell_id": 431349
+            },
+            {
+                "spell_id": 431350
+            },
+            {
+                "spell_id": 431352
+            },
+            {
+                "spell_id": 446615
+            },
+            {
+                "spell_id": 452502
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16408,
+                "mapping_version_id": 362,
+                "npc_id": 213885,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16295,
+                "mapping_version_id": 335,
+                "npc_id": 213885,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 213892,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115523,
+        "encounter_id": null,
+        "name": "Nightfall Shadowmage",
+        "base_health": 16399218,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.5,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 431303
+            },
+            {
+                "spell_id": 431309
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16396,
+                "mapping_version_id": 362,
+                "npc_id": 213892,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16283,
+                "mapping_version_id": 335,
+                "npc_id": 213892,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 213893,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115520,
+        "encounter_id": null,
+        "name": "Nightfall Darkcaster",
+        "base_health": 17310286,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.2,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 431333
+            },
+            {
+                "spell_id": 432520
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16400,
+                "mapping_version_id": 362,
+                "npc_id": 213893,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16287,
+                "mapping_version_id": 335,
+                "npc_id": 213893,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 213894,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115528,
+        "encounter_id": null,
+        "name": "Nightfall Curseblade",
+        "base_health": 19132421,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.5,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 431493
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16395,
+                "mapping_version_id": 362,
+                "npc_id": 213894,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16282,
+                "mapping_version_id": 335,
+                "npc_id": 213894,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 213895,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115530,
+        "encounter_id": null,
+        "name": "Nightfall Shadowalker",
+        "base_health": 18221353,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.2,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 431637
+            },
+            {
+                "spell_id": 431638
+            },
+            {
+                "spell_id": 431660
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16401,
+                "mapping_version_id": 362,
+                "npc_id": 213895,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16288,
+                "mapping_version_id": 335,
+                "npc_id": 213895,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 213932,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 116834,
+        "encounter_id": null,
+        "name": "Sureki Militant",
+        "base_health": 30856855,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.8,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 16403,
+                "mapping_version_id": 362,
+                "npc_id": 213932,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16290,
+                "mapping_version_id": 335,
+                "npc_id": 213932,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 213934,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115534,
+        "encounter_id": null,
+        "name": "Nightfall Tactician",
+        "base_health": 30976301,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.2,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 431494
+            },
+            {
+                "spell_id": 451112
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16404,
+                "mapping_version_id": 362,
+                "npc_id": 213934,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16291,
+                "mapping_version_id": 335,
+                "npc_id": 213934,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 213937,
+        "dungeon_id": 113,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 118404,
+        "encounter_id": 2579,
+        "name": "Rashanan",
+        "base_health": 2147483647,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 2,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 434089
+            },
+            {
+                "spell_id": 434090
+            },
+            {
+                "spell_id": 434093
+            },
+            {
+                "spell_id": 434096
+            },
+            {
+                "spell_id": 434119
+            },
+            {
+                "spell_id": 434407
+            },
+            {
+                "spell_id": 434441
+            },
+            {
+                "spell_id": 434576
+            },
+            {
+                "spell_id": 434579
+            },
+            {
+                "spell_id": 434655
+            },
+            {
+                "spell_id": 435793
+            },
+            {
+                "spell_id": 438957
+            },
+            {
+                "spell_id": 448213
+            },
+            {
+                "spell_id": 448215
+            },
+            {
+                "spell_id": 448887
+            },
+            {
+                "spell_id": 448888
+            },
+            {
+                "spell_id": 449734
+            },
+            {
+                "spell_id": 463428
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 214761,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115526,
+        "encounter_id": null,
+        "name": "Nightfall Ritualist",
+        "base_health": 30976301,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 2,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 431364
+            },
+            {
+                "spell_id": 431365
+            },
+            {
+                "spell_id": 432448
+            },
+            {
+                "spell_id": 432454
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16397,
+                "mapping_version_id": 362,
+                "npc_id": 214761,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16284,
+                "mapping_version_id": 335,
+                "npc_id": 214761,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 214762,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115535,
+        "encounter_id": null,
+        "name": "Nightfall Commander",
+        "base_health": 34620572,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 2,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 431491
+            },
+            {
+                "spell_id": 450756
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16398,
+                "mapping_version_id": 362,
+                "npc_id": 214762,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16285,
+                "mapping_version_id": 335,
+                "npc_id": 214762,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
+    }
+]

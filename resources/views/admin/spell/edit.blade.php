@@ -1,4 +1,5 @@
 <?php
+
 use App\Models\Floor\Floor;
 use App\Models\Spell;
 

@@ -2,8 +2,6 @@
 
 namespace App\Logging;
 
-use Rollbar\Rollbar;
-
 abstract class RollbarStructuredLogging extends StructuredLogging
 {
     public function __construct()

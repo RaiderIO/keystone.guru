@@ -13,13 +13,14 @@ use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Entity\MDTMapPOI;
 use App\Logic\MDT\Entity\MDTNpc;
 use App\Logic\MDT\Exception\InvalidMDTDungeonException;
+use App\Logic\MDT\Exception\InvalidMDTExpansionException;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Expansion;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
@@ -40,6 +41,10 @@ class MDTDungeon
     ) {
         if (!Conversion::hasMDTDungeonName($this->dungeon->key)) {
             throw new InvalidMDTDungeonException(sprintf('Unsupported MDT dungeon for dungeon key %s!', $this->dungeon->key));
+        }
+
+        if (!Conversion::getMDTExpansionName($this->dungeon->key)) {
+            throw new InvalidMDTExpansionException(sprintf('Unsupported MDT expansion for dungeon key %s!', $this->dungeon->key));
         }
     }
 
@@ -73,7 +78,7 @@ class MDTDungeon
     /**
      * Get a list of NPCs
      *
-     * @return Collection|MDTNpc[]
+     * @return Collection<MDTNpc>
      *
      * @throws Exception
      */
@@ -94,7 +99,7 @@ class MDTDungeon
     }
 
     /**
-     * @return Collection|MDTMapPOI[]
+     * @return Collection<MDTMapPOI>
      *
      * @throws Exception
      */
@@ -205,6 +210,9 @@ class MDTDungeon
                             'npc_id'                        => $npcId,
                             // All MDT_IDs are 1-indexed, because LUA
                             'mdt_id'                        => $mdtCloneIndex,
+                            'mdt_scale'                     => $clone['scale'] ?? null,
+                            'mdt_x'                         => $clone['x'],
+                            'mdt_y'                         => $clone['y'],
                             'lat'                           => $clone['lat'],
                             'lng'                           => $clone['lng'],
                             'teeming'                       => isset($clone['teeming']) && $clone['teeming'] ? Enemy::TEEMING_VISIBLE : null,
@@ -268,7 +276,9 @@ class MDTDungeon
         $mdtExpansionName = Conversion::getMDTExpansionName($this->dungeon->key);
 
         $mdtDungeonName = Conversion::getMDTDungeonName($this->dungeon->key);
-        if (!empty($mdtExpansionName) && !empty($mdtDungeonName) && Expansion::active()->where('shortname', $expansionName)->exists()) {
+        if (!empty($mdtExpansionName) &&
+            !empty($mdtDungeonName) &&
+            Expansion::active()->where('shortname', $expansionName)->exists()) {
             $dungeonHome = sprintf('%s/%s', $mdtHome, $mdtExpansionName);
 
             $mdtDungeonNameFile = sprintf('%s/%s.lua', $dungeonHome, $mdtDungeonName);

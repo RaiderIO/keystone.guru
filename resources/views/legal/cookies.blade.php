@@ -265,7 +265,8 @@
                 map_facade_style
             </td>
             <td>
-                Remembers if you want to display the map using combined floors (when available) or split (traditional style).
+                Remembers if you want to display the map using combined floors (when available) or split (traditional
+                style).
             </td>
         </tr>
         <tr>

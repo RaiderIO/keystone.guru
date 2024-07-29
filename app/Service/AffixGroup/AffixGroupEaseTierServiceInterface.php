@@ -17,7 +17,7 @@ interface AffixGroupEaseTierServiceInterface
     public function getTierForAffixAndDungeon(AffixGroup $affixGroup, Dungeon $dungeon): ?string;
 
     /**
-     * @return Collection|AffixGroupEaseTier[]
+     * @return Collection<AffixGroupEaseTier>
      */
     public function getTiersByAffixGroups(Collection $affixGroups): Collection;
 

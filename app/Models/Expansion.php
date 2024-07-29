@@ -19,15 +19,19 @@ use Illuminate\Support\Collection;
 /**
  * @property int                   $id
  * @property int                   $icon_file_id
- * @property int                   $active
+ * @property bool                  $active
  * @property string                $name
  * @property string                $shortname
  * @property string                $color
+ *
  * @property Carbon                $released_at
  * @property Carbon                $created_at
  * @property Carbon                $updated_at
- * @property Collection|Dungeon[]  $dungeons
+ *
+ * @property Collection<Dungeon>   $dungeons
  * @property TimewalkingEvent|null $timewalkingevent
+ *
+ * @method static Builder active()
  *
  * @mixin Eloquent
  */
@@ -75,6 +79,12 @@ class Expansion extends CacheModel
 
     public const EXPANSION_DRAGONFLIGHT = 'dragonflight';
 
+    public const EXPANSION_TWW = 'tww';
+
+    public const EXPANSION_MIDNIGHT = 'midnight';
+
+    public const EXPANSION_TLT = 'tlt';
+
     public const ALL = [
         self::EXPANSION_CLASSIC      => 'Classic',
         self::EXPANSION_TBC          => 'The Burning Crusade',
@@ -86,6 +96,9 @@ class Expansion extends CacheModel
         self::EXPANSION_BFA          => 'Battle for Azeroth',
         self::EXPANSION_SHADOWLANDS  => 'Shadowlands',
         self::EXPANSION_DRAGONFLIGHT => 'Dragonflight',
+        self::EXPANSION_TWW          => 'The War Within',
+        self::EXPANSION_MIDNIGHT     => 'Midnight',
+        self::EXPANSION_TLT          => 'The Last Titan',
     ];
 
     private ?Collection $currentSeasonCache = null;

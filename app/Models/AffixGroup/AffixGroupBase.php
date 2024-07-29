@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * @property int                $id The ID of this Affix.
- * @property int                $season_id
- * @property int                $seasonal_index
- * @property int                $seasonal_index_in_season Only set in rare case - not a database column! See KeystoneGuruServiceProvider.php
- * @property string             $text To string of the affix group
- * @property Collection|Affix[] $affixes
+ * @property int               $id The ID of this Affix.
+ * @property int               $season_id
+ * @property int               $seasonal_index
+ * @property int               $seasonal_index_in_season Only set in rare case - not a database column! See KeystoneGuruServiceProvider.php
+ * @property string            $text To string of the affix group
+ * @property Collection<Affix> $affixes
  *
  * @mixin Eloquent
  */

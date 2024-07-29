@@ -2,8 +2,7 @@
 
 namespace App\Repositories\Database;
 
-use App\Models\NpcBolsteringWhitelist;
-use App\Repositories\Database\DatabaseRepository;
+use App\Models\Npc\NpcBolsteringWhitelist;
 use App\Repositories\Interfaces\NpcBolsteringWhitelistRepositoryInterface;
 
 class NpcBolsteringWhitelistRepository extends DatabaseRepository implements NpcBolsteringWhitelistRepositoryInterface

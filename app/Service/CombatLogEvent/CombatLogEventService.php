@@ -6,6 +6,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
 use App\Models\Enemy;
+use App\Models\Floor\Floor;
 use App\Models\Season;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
@@ -22,6 +23,7 @@ use Codeart\OpensearchLaravel\Aggregations\Types\Terms;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use InvalidArgumentException;
 
 class CombatLogEventService implements CombatLogEventServiceInterface
 {
@@ -138,8 +140,23 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
             $gridResult = [];
 
+            $size = match ($filters->getDataType()) {
+                CombatLogEvent::DATA_TYPE_PLAYER_POSITION => [
+                    ':sizeX'  => config('keystoneguru.heatmap.service.data.player.sizeX'),
+                    ':sizeY'  => config('keystoneguru.heatmap.service.data.player.sizeY'),
+                    ':player' => 'true',
+                ],
+                CombatLogEvent::DATA_TYPE_ENEMY_POSITION => [
+                    ':sizeX'  => config('keystoneguru.heatmap.service.data.enemy.sizeX'),
+                    ':sizeY'  => config('keystoneguru.heatmap.service.data.enemy.sizeY'),
+                    ':player' => 'false',
+                ],
+                default => throw new InvalidArgumentException('Invalid data type'),
+            };
+
             // Repeat this query for each floor
             foreach ($filters->getDungeon()->floors()->where('facade', false)->get() as $floor) {
+                /** @var Floor $floor */
                 $filterQuery = $filters->toOpensearchQuery([
                     MatchOne::make('ui_map_id', $floor->ui_map_id),
                 ]);
@@ -155,7 +172,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                     ->search($filterQuery)
                     ->aggregations([
                         Aggregation::make(
-                            name: "heatmap",
+                            name: 'heatmap',
                             aggregationType: ScriptedMetric::make(
                                 mapScript: strtr('
                                    int sizeX = :sizeX;
@@ -171,22 +188,35 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                                    float stepX = width / sizeX;
                                    float stepY = height / sizeY;
 
-                                   int gx = ((doc[\'pos_x\'].value - minX) / width * sizeX).intValue();
-                                   int gy = ((doc[\'pos_y\'].value - minY) / height * sizeY).intValue();
+                                   double docPosX = :player ? doc[\'pos_x\'].value : doc[\'pos_enemy_x\'].value;
+                                   double docPosY = :player ? doc[\'pos_y\'].value : doc[\'pos_enemy_y\'].value;
+
+                                   // @TODO #2422
+                                   // if( (docPosX < minX) || (docPosX > maxX) ||
+                                   //     (docPosY < minY) || (docPosY > maxY)) {
+                                   //   return;
+                                   // }
+
+                                   int gx = ((docPosX - minX) / width * sizeX).intValue();
+                                   int gy = ((docPosY - minY) / height * sizeY).intValue();
+
+                                   // @TODO #2422
+                                   if( gx < 0 || gx >= sizeX || gy < 0 || gy >= sizeY ) {
+                                     return;
+                                   }
                                    String key = ((gx * stepX) + minX).toString() + \',\' + ((gy * stepY) + minY).toString();
                                    if (state.map.containsKey(key)) {
                                      state.map[key] += 1;
                                    } else {
                                      state.map[key] = 1;
                                    }
-                                 ', [
-                                    ':sizeX' => config('keystoneguru.heatmap.service.data.sizeX'),
-                                    ':sizeY' => config('keystoneguru.heatmap.service.data.sizeY'),
-                                    ':minX'  => $floor->ingame_min_x,
-                                    ':minY'  => $floor->ingame_min_y,
-                                    ':maxX'  => $floor->ingame_max_x,
-                                    ':maxY'  => $floor->ingame_max_y,
-                                ]),
+                                 ', array_merge([
+                                        ':minX' => $floor->ingame_min_x,
+                                        ':minY' => $floor->ingame_min_y,
+                                        ':maxX' => $floor->ingame_max_x,
+                                        ':maxY' => $floor->ingame_max_y,
+                                    ], $size)
+                                ),
                                 combineScript: 'return state.map',
                                 reduceScript: '
                                    Map result = [:];
@@ -236,9 +266,9 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 //        {
 //            "size": 0,
 //            "aggs": {
-//            "run_count": {
-//                "cardinality": {
-//                    "field": "run_id"
+//                "run_count": {
+//                    "cardinality": {
+//                        "field": "run_id"
 //                    }
 //                }
 //            }
@@ -278,22 +308,22 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             // <editor-fold desc="OS Query" defaultState="collapsed">
 //            POST /combat_log_events/_search
 //            {
-//                "size": 0,
-//                "aggs": {
+//              "size": 0,
+//              "aggs": {
 //                "dungeon": {
-//                    "terms": {
-//                        "field": "challenge_mode_id",
-//                            "size": 10000
-//                        },
-//                        "aggs": {
-//                        "run_count": {
-//                            "cardinality": {
-//                                "field": "run_id"
-//                                }
-//                            }
-//                        }
+//                  "terms": {
+//                    "field": "challenge_mode_id",
+//                    "size": 10000
+//                  },
+//                  "aggs": {
+//                    "run_count": {
+//                      "cardinality": {
+//                        "field": "run_id"
+//                      }
 //                    }
+//                  }
 //                }
+//              }
 //            }
             // </editor-fold>
 
@@ -442,8 +472,10 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 'level'             => $level,
                 'affix_ids'         => json_encode($affixGroup->affixes->pluck('affix_id')->toArray()),
                 'ui_map_id'         => $enemyIngameXY->getFloor()->ui_map_id,
-                'pos_x'             => round($enemyIngameXY->getX(), 2),
-                'pos_y'             => round($enemyIngameXY->getY(), 2),
+                'pos_x'             => $enemyIngameXY->getX(2),
+                'pos_y'             => $enemyIngameXY->getY(2),
+                'pos_enemy_x'       => $enemyIngameXY->getX(2),
+                'pos_enemy_y'       => $enemyIngameXY->getY(2),
                 'event_type'        => $type,
                 'start'             => $runStart->toDateTimeString(),
                 'end'               => $runStart->addMilliseconds($runDurationMs)->toDateTimeString(),

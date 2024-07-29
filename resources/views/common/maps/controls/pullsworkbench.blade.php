@@ -1,7 +1,8 @@
 <?php
+
 use Illuminate\Support\Collection;
 
-    // map_killzonessidebar_killzone_description_modal_supported_html_tags
+// map_killzonessidebar_killzone_description_modal_supported_html_tags
 /** @var Collection $spellsSelect */
 ?>
 

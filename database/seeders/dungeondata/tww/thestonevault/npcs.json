@@ -1,0 +1,1270 @@
+[
+    {
+        "id": 210108,
+        "dungeon_id": 115,
+        "classification_id": 3,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 120054,
+        "encounter_id": 2572,
+        "name": "E.D.N.A",
+        "base_health": 145572975,
+        "health_percentage": 100,
+        "level": 80,
+        "mdt_scale": 1.5,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 424795
+            },
+            {
+                "spell_id": 424805
+            },
+            {
+                "spell_id": 424879
+            },
+            {
+                "spell_id": 424888
+            },
+            {
+                "spell_id": 424889
+            },
+            {
+                "spell_id": 424903
+            },
+            {
+                "spell_id": 424913
+            },
+            {
+                "spell_id": 451728
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 210109,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 117402,
+        "encounter_id": null,
+        "name": "Earth Infused Golem",
+        "base_health": 29154165,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 425027
+            },
+            {
+                "spell_id": 425974
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16442,
+                "mapping_version_id": 366,
+                "npc_id": 210109,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 210156,
+        "dungeon_id": 115,
+        "classification_id": 3,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 118714,
+        "encounter_id": 2572,
+        "name": "Skarmorak",
+        "base_health": 127376353,
+        "health_percentage": 100,
+        "level": 80,
+        "mdt_scale": 2,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 422233
+            },
+            {
+                "spell_id": 422261
+            },
+            {
+                "spell_id": 423200
+            },
+            {
+                "spell_id": 423228
+            },
+            {
+                "spell_id": 423246
+            },
+            {
+                "spell_id": 423324
+            },
+            {
+                "spell_id": 423327
+            },
+            {
+                "spell_id": 423538
+            },
+            {
+                "spell_id": 423572
+            },
+            {
+                "spell_id": 435813
+            },
+            {
+                "spell_id": 439749
+            },
+            {
+                "spell_id": 443405
+            },
+            {
+                "spell_id": 445409
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 212389,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 118702,
+        "encounter_id": null,
+        "name": "Cursedheart Invader",
+        "base_health": 18221353,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 426283
+            },
+            {
+                "spell_id": 426308
+            },
+            {
+                "spell_id": 427300
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16441,
+                "mapping_version_id": 366,
+                "npc_id": 212389,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 212400,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 109870,
+        "encounter_id": null,
+        "name": "Void Touched Elemental",
+        "base_health": 20043489,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 426345
+            },
+            {
+                "spell_id": 449070
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16449,
+                "mapping_version_id": 366,
+                "npc_id": 212400,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 212403,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 118702,
+        "encounter_id": null,
+        "name": "Cursedheart Invader",
+        "base_health": 18221353,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 426283
+            },
+            {
+                "spell_id": 426308
+            },
+            {
+                "spell_id": 452811
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16457,
+                "mapping_version_id": 366,
+                "npc_id": 212403,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 212405,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 114686,
+        "encounter_id": null,
+        "name": "Aspiring Forgehand",
+        "base_health": 10932812,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 423766
+            },
+            {
+                "spell_id": 427361
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16450,
+                "mapping_version_id": 366,
+                "npc_id": 212405,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 212453,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 118731,
+        "encounter_id": null,
+        "name": "Ghastly Voidsoul",
+        "base_health": 16399218,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 449455
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16443,
+                "mapping_version_id": 366,
+                "npc_id": 212453,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 212764,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 117641,
+        "encounter_id": null,
+        "name": "Engine Speaker",
+        "base_health": 20043489,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 427382
+            },
+            {
+                "spell_id": 452811
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16446,
+                "mapping_version_id": 366,
+                "npc_id": 212764,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 212765,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 117973,
+        "encounter_id": null,
+        "name": "Void Bound Despoiler",
+        "base_health": 29154165,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.3,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 426771
+            },
+            {
+                "spell_id": 426786
+            },
+            {
+                "spell_id": 459210
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16445,
+                "mapping_version_id": 366,
+                "npc_id": 212765,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 213119,
+        "dungeon_id": 115,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 119856,
+        "encounter_id": 2572,
+        "name": "High Speaker Eirich",
+        "base_health": 145572975,
+        "health_percentage": 100,
+        "level": 80,
+        "mdt_scale": 2,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 427329
+            },
+            {
+                "spell_id": 427852
+            },
+            {
+                "spell_id": 427854
+            },
+            {
+                "spell_id": 427865
+            },
+            {
+                "spell_id": 427869
+            },
+            {
+                "spell_id": 428532
+            },
+            {
+                "spell_id": 457465
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 213216,
+        "dungeon_id": 115,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 116916,
+        "encounter_id": 2572,
+        "name": "Speaker Dorlita",
+        "base_health": 109179731,
+        "health_percentage": 100,
+        "level": 80,
+        "mdt_scale": 2,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 428120
+            },
+            {
+                "spell_id": 428508
+            },
+            {
+                "spell_id": 428519
+            },
+            {
+                "spell_id": 428711
+            },
+            {
+                "spell_id": 439577
+            },
+            {
+                "spell_id": 449167
+            },
+            {
+                "spell_id": 449169
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 213217,
+        "dungeon_id": 115,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115818,
+        "encounter_id": 2572,
+        "name": "Speaker Brokk",
+        "base_health": 90983109,
+        "health_percentage": 100,
+        "level": 80,
+        "mdt_scale": 2,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 428161
+            },
+            {
+                "spell_id": 428202
+            },
+            {
+                "spell_id": 428204
+            },
+            {
+                "spell_id": 428212
+            },
+            {
+                "spell_id": 428819
+            },
+            {
+                "spell_id": 428820
+            },
+            {
+                "spell_id": 429999
+            },
+            {
+                "spell_id": 430097
+            },
+            {
+                "spell_id": 439577
+            },
+            {
+                "spell_id": 443954
+            },
+            {
+                "spell_id": 445541
+            },
+            {
+                "spell_id": 462372
+            },
+            {
+                "spell_id": 462373
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 213338,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115974,
+        "encounter_id": null,
+        "name": "Forgebound Mender",
+        "base_health": 16399218,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 429109
+            },
+            {
+                "spell_id": 429110
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16451,
+                "mapping_version_id": 366,
+                "npc_id": 213338,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 213343,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 116911,
+        "encounter_id": null,
+        "name": "Forge Loader",
+        "base_health": 32798436,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.4,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 429114
+            },
+            {
+                "spell_id": 449129
+            },
+            {
+                "spell_id": 449130
+            },
+            {
+                "spell_id": 449153
+            },
+            {
+                "spell_id": 449154
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16452,
+                "mapping_version_id": 366,
+                "npc_id": 213343,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 213694,
+        "dungeon_id": 115,
+        "classification_id": 3,
+        "npc_type_id": 11,
+        "npc_class_id": 1,
+        "display_id": 91401,
+        "encounter_id": 2572,
+        "name": "Scrap Block",
+        "base_health": 90983109,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 428242
+            },
+            {
+                "spell_id": 428520
+            },
+            {
+                "spell_id": 428535
+            },
+            {
+                "spell_id": 463145
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 213954,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 117855,
+        "encounter_id": null,
+        "name": "Rock Smasher",
+        "base_health": 36442707,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.5,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 428703
+            },
+            {
+                "spell_id": 428706
+            },
+            {
+                "spell_id": 428709
+            },
+            {
+                "spell_id": 428879
+            },
+            {
+                "spell_id": 428887
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16455,
+                "mapping_version_id": 366,
+                "npc_id": 213954,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 214049,
+        "dungeon_id": 115,
+        "classification_id": 3,
+        "npc_type_id": 11,
+        "npc_class_id": 1,
+        "display_id": 100728,
+        "encounter_id": 2572,
+        "name": "Vent Stalker",
+        "base_health": 90983109,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 428819
+            },
+            {
+                "spell_id": 428820
+            },
+            {
+                "spell_id": 429999
+            },
+            {
+                "spell_id": 443954
+            },
+            {
+                "spell_id": 462372
+            },
+            {
+                "spell_id": 462373
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 214066,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115945,
+        "encounter_id": null,
+        "name": "Cursedforge Stoneshaper",
+        "base_health": 17310286,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 429422
+            },
+            {
+                "spell_id": 429427
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16454,
+                "mapping_version_id": 366,
+                "npc_id": 214066,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 214264,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115944,
+        "encounter_id": null,
+        "name": "Cursedforge Honor Guard",
+        "base_health": 29154165,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 428894
+            },
+            {
+                "spell_id": 448640
+            },
+            {
+                "spell_id": 448975
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16453,
+                "mapping_version_id": 366,
+                "npc_id": 214264,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 214350,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 118692,
+        "encounter_id": null,
+        "name": "Turned Speaker",
+        "base_health": 19132421,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 427300
+            },
+            {
+                "spell_id": 429545
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16448,
+                "mapping_version_id": 366,
+                "npc_id": 214350,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 214443,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 11,
+        "npc_class_id": 1,
+        "display_id": 37518,
+        "encounter_id": 2572,
+        "name": "Crystal Shard",
+        "base_health": 1399740,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 439600
+            },
+            {
+                "spell_id": 443494
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 221979,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 118365,
+        "encounter_id": null,
+        "name": "Void Bound Howler",
+        "base_health": 17310286,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 445207
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16447,
+                "mapping_version_id": 366,
+                "npc_id": 221979,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 222149,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 118454,
+        "encounter_id": null,
+        "name": "Injured Earthen",
+        "base_health": 1960303,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 222923,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 118231,
+        "encounter_id": null,
+        "name": "Repurposed Loaderbot",
+        "base_health": 19132421,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 447141
+            },
+            {
+                "spell_id": 447145
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16444,
+                "mapping_version_id": 366,
+                "npc_id": 222923,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 224962,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 120170,
+        "encounter_id": null,
+        "name": "Cursedforge Mender",
+        "base_health": 16399218,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 429109
+            },
+            {
+                "spell_id": 429110
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 16456,
+                "mapping_version_id": 366,
+                "npc_id": 224962,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    }
+]

@@ -24,19 +24,11 @@ class CreateMissing extends Command
      */
     protected $description = "Looks into the internal code database for dungeons that haven't been added to the database yet and adds them.";
 
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function handle(): int
     {
-        /** @var Collection|Expansion[] $expansions */
+        /** @var Collection<Expansion> $expansions */
         $expansions = Expansion::all()->keyBy('shortname');
-        /** @var Collection|Dungeon[] $dungeons */
+        /** @var Collection<Dungeon> $dungeons */
         $dungeons = Dungeon::all()->keyBy('key');
 
         foreach (Dungeon::ALL as $expansionKey => $dungeonKeys) {

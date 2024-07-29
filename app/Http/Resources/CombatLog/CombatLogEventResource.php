@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources\CombatLog;
 
-use App\Http\Resources\AffixGroup\AffixGroupCollectionResource;
-use App\Http\Resources\UserResource;
 use App\Models\CombatLog\CombatLogEvent;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;

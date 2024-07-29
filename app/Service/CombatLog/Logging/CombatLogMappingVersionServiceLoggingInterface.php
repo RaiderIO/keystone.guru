@@ -18,6 +18,10 @@ interface CombatLogMappingVersionServiceLoggingInterface
 
     public function createMappingVersionFromCombatLogDungeonFromExistingMappingVersion(int $dungeonId): void;
 
+    public function createMappingVersionFromCombatLogCurrentFloorFromMapChange(int $uiMapId, int $id): void;
+
+    public function createMappingVersionFromCombatLogCurrentFloorDefaultFloor(int $dungeonId, int $defaultFloorId): void;
+
     public function createMappingVersionFromCombatLogSkipEntryNoDungeon(): void;
 
     public function createMappingVersionFromCombatLogAddedNewFloorConnection(int $previousFloorId, int $currentFloorId): void;
@@ -28,10 +32,7 @@ interface CombatLogMappingVersionServiceLoggingInterface
 
     public function createMappingVersionFromCombatLogSkipEnemyIsCritter(int $floorId, int $npcId): void;
 
-    /**
-     * @return mixed
-     */
-    public function createMappingVersionFromCombatLogNewEnemy(int $floorId, int $npcId);
+    public function createMappingVersionFromCombatLogNewEnemy(int $floorId, int $npcId): void;
 
     public function createMappingVersionFromChallengeModeEnd(): void;
 }

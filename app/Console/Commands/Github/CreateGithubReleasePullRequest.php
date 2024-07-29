@@ -26,14 +26,6 @@ class CreateGithubReleasePullRequest extends GithubReleaseCommand
     protected $description = 'Creates a new pull request for a release on the Keystone.guru Github';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      *

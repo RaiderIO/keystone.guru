@@ -29,14 +29,6 @@ class Enable extends Command
     protected $description = 'Puts the site in read-only mode - no longer allowing the acceptance of requests other than GET requests';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(ReadOnlyModeServiceInterface $readOnlyModeService): int

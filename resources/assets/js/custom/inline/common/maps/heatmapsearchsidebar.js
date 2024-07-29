@@ -15,6 +15,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
         this.filters = {
             'event_type': new SearchFilterRadioEventType(this.options.filterEventTypeContainerSelector, this.options.filterEventTypeSelector, this._search.bind(this)),
+            'data_type': new SearchFilterRadioDataType(this.options.filterDataTypeContainerSelector, this.options.filterDataTypeSelector, this._search.bind(this)),
             'level': new SearchFilterLevel(this.options.filterLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
             'affix_groups': new SearchFilterAffixGroups(this.options.filterAffixGroupsSelector, this._search.bind(this)),
             'affixes': new SearchFilterAffixes(this.options.filterAffixesSelector, this._search.bind(this)),

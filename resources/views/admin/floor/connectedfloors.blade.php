@@ -55,6 +55,6 @@ $connectedFloorCandidates = $dungeon->floors;
             </div>
         </div>
         <?php }
- ?>
+            ?>
     </div>
 @endif

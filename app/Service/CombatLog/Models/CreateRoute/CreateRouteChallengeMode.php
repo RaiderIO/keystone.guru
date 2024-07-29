@@ -9,7 +9,7 @@ class CreateRouteChallengeMode
         public string $end,
         public bool   $success,
         public int    $durationMs,
-        public int   $challengeModeId,
+        public int    $challengeModeId,
         public int    $level,
         public array  $affixes)
     {

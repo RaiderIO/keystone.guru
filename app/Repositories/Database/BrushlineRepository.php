@@ -3,7 +3,6 @@
 namespace App\Repositories\Database;
 
 use App\Models\Brushline;
-use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\BrushlineRepositoryInterface;
 
 class BrushlineRepository extends DatabaseRepository implements BrushlineRepositoryInterface

@@ -14,8 +14,8 @@ use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc;
-use App\Models\NpcType;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcType;
 use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLoggingInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
@@ -110,7 +110,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         $dungeon = null;
         /** @var Floor|null $currentFloor */
         $currentFloor = null;
-        /** @var Collection|Npc[] $npcs */
+        /** @var Collection<Npc> $npcs */
         $npcs = collect();
 
         $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr) use ($extractDungeonCallable, $hasExistingMappingVersion, &$mappingVersion, &$dungeon, &$currentFloor, &$npcs) {
@@ -160,6 +160,11 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                     }
 
                     $npcs = Npc::whereIn('dungeon_id', [-1, $dungeon->id])->get()->keyBy('id');
+
+                    // Assign the default floor in case there's no MapChange event coming (Ara-Kara is one such?)
+                    /** @var Floor $currentFloor */
+                    $currentFloor = $dungeon->floors()->firstWhere('default', true);
+                    $this->log->createMappingVersionFromCombatLogCurrentFloorDefaultFloor($dungeon->id, $currentFloor->id);
                 }
 
                 return $parsedEvent;
@@ -168,6 +173,8 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             // Ensure we know the floor
             if ($parsedEvent instanceof MapChange) {
                 $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID(), $dungeon->id);
+                $this->log->createMappingVersionFromCombatLogCurrentFloorFromMapChange($parsedEvent->getUiMapID(), $currentFloor->id);
+
             } else if ($currentFloor === null) {
                 $this->log->createMappingVersionFromCombatLogSkipEntryNoFloor();
 

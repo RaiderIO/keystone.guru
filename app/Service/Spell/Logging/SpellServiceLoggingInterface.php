@@ -10,7 +10,9 @@ interface SpellServiceLoggingInterface
 
     public function importFromCsvSpellAlreadySet(int $spellId): void;
 
-    public function importFromCsvInsertResult(bool $insertResult);
+    public function importFromCsvInsertNewSpell(int $spellId): void;
+
+    public function importFromCsvInsertResult(int $updated, int $inserted): void;
 
     public function getCategoryNameFromClassNameUnableToFindCharacterClass(string $indexClassName): void;
 

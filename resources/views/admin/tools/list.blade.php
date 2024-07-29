@@ -4,9 +4,12 @@
 
 @section('content')
     <h3>{{ __('view_admin.tools.list.header_tools') }}</h3>
-    <h4>{{ __('view_admin.tools.list.subheader_import') }}</h4>
+    <h4>{{ __('view_admin.tools.list.subheader_npcs') }}</h4>
     <div class="form-group">
-        <a href="{{ route('admin.tools.npcimport') }}">{{ __('view_admin.tools.list.mass_import_npcs') }}</a>
+        <a href="{{ route('admin.tools.npc.import') }}">{{ __('view_admin.tools.list.mass_import_npcs') }}</a>
+    </div>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.npc.managespellvisibility') }}">{{ __('view_admin.tools.list.manage_spell_visibility') }}</a>
     </div>
 
     <h4>{{ __('view_admin.tools.list.subheader_dungeonroute') }}</h4>

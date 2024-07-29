@@ -3,7 +3,6 @@
 namespace App\Repositories\Database;
 
 use App\Models\File;
-use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\FileRepositoryInterface;
 
 class FileRepository extends DatabaseRepository implements FileRepositoryInterface
