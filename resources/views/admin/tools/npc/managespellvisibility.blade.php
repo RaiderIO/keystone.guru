@@ -13,6 +13,30 @@ use Illuminate\Support\Collection;
 
 @section('header-title', __('view_admin.tools.npc.managespellvisibility.header'))
 
+@section('scripts')
+    @parent
+
+    <script type="text/javascript">
+        $(function () {
+
+            // All input fields that are checkboxes with spell class
+            $('.spell').bind('change', function () {
+                $.ajax({
+                    type: 'PUT',
+                    url: `/ajax/admin/spell/${$(this).data('id')}/toggleVisibility`,
+                    dataType: 'json',
+                    success: function () {
+                        showSuccessNotification(lang.get('messages.toggle_spell_visibility_success'));
+                    },
+                    error: function () {
+                        showErrorNotification(lang.get('messages.toggle_spell_visibility_error'));
+                    }
+                });
+            });
+        });
+    </script>
+@endsection
+
 @section('content')
     {{ $npcs->links() }}
 
@@ -36,9 +60,10 @@ use Illuminate\Support\Collection;
                     @else
                         <div class="col-auto">
                             <input type="checkbox" id="spell-{{ $npcSpell->spell_id }}"
-                                   class="form-control left_checkbox"
+                                   class="form-control left_checkbox spell"
                                    name="spell-{{ $npcSpell->spell_id }}"
-                                   value="{{ $npcSpell->spell_id }}" {{ $spell->hidden ? 'checked' : '' }}>
+                                   data-id="{{ $npcSpell->spell_id }}"
+                                   value="{{ $npcSpell->spell_id }}" {{ $spell->hidden_on_map ? '' : 'checked' }}>
                         </div>
                         <div class="col">
                             <div class="form-element" style="line-height: 2.5">

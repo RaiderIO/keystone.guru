@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int    $schools_mask
  * @property bool   $aura
  * @property bool   $selectable
- * @property bool   $hidden
+ * @property bool   $hidden_on_map
  *
  * @property string $icon_url
  *
@@ -28,28 +28,6 @@ use Illuminate\Database\Eloquent\Builder;
 class Spell extends CacheModel implements MappingModelInterface
 {
     use SeederModel;
-
-    public $incrementing = false;
-
-    public $timestamps = false;
-
-    public $hidden = ['pivot'];
-
-    protected $appends = ['icon_url'];
-
-    protected $fillable = [
-        'id',
-        'category',
-        'cooldown_group',
-        'dispel_type',
-        'icon_name',
-        'name',
-        'schools_mask',
-        'aura',
-        'selectable',
-        'hidden',
-        'icon_url',
-    ];
 
     public const SCHOOL_PHYSICAL = 1;
     public const SCHOOL_HOLY     = 2;
@@ -164,6 +142,37 @@ class Spell extends CacheModel implements MappingModelInterface
     public const SPELL_PRIMAL_RAGE         = 264667;
     public const SPELL_FERAL_HIDE_DRUMS    = 381301;
 
+    public $incrementing = false;
+
+    public $timestamps = false;
+
+    public $hidden = ['pivot'];
+
+    protected $appends = ['icon_url'];
+
+    protected $fillable = [
+        'id',
+        'category',
+        'cooldown_group',
+        'dispel_type',
+        'icon_name',
+        'name',
+        'schools_mask',
+        'aura',
+        'selectable',
+        'hidden_on_map',
+        'icon_url',
+    ];
+
+    protected $casts = [
+        'id'            => 'integer',
+        'schools_mask'  => 'integer',
+        'aura'          => 'boolean',
+        'selectable'    => 'boolean',
+        'hidden_on_map' => 'boolean',
+    ];
+
+
     public function getSchoolsAsArray(): array
     {
         $result = [];
@@ -177,7 +186,7 @@ class Spell extends CacheModel implements MappingModelInterface
 
     public function scopeVisible(): Builder
     {
-        return $this->where('hidden', false);
+        return $this->where('hidden_on_map', false);
     }
 
     /**

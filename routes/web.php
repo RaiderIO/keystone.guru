@@ -32,6 +32,7 @@ use App\Http\Controllers\Ajax\AjaxPathController;
 use App\Http\Controllers\Ajax\AjaxPridefulEnemyController;
 use App\Http\Controllers\Ajax\AjaxProfileController;
 use App\Http\Controllers\Ajax\AjaxSiteController;
+use App\Http\Controllers\Ajax\AjaxSpellController;
 use App\Http\Controllers\Ajax\AjaxTagController;
 use App\Http\Controllers\Ajax\AjaxTeamController;
 use App\Http\Controllers\Ajax\AjaxUserController;
@@ -392,6 +393,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/user', (new AjaxUserController())->get(...));
                 Route::get('/npc', (new AjaxNpcController())->get(...));
                 Route::post('/thumbnail/{dungeonroute}/refresh', (new AjaxDungeonRouteController())->refreshThumbnail(...));
+
+                Route::put('/spell/{spell}/toggleVisibility', (new AjaxSpellController())->toggleVisibility(...));
 
                 Route::prefix('mappingVersion/{mappingVersion}')->group(static function () {
                     Route::patch('/', (new AjaxMappingVersionController())->store(...));
