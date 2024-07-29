@@ -403,18 +403,25 @@ return [
                 'submit' => 'Submit',
             ],
         ],
-        'npcimport'    => [
-            'title'                   => 'Mass import NPCs',
-            'header'                  => 'Mass import NPCs',
-            'paste_npc_import_string' => 'Paste the NPC import string',
-            'submit'                  => 'Submit',
+        'npc'          => [
+            'import'                => [
+                'title'                   => 'Mass import NPCs',
+                'header'                  => 'Mass import NPCs',
+                'paste_npc_import_string' => 'Paste the NPC import string',
+                'submit'                  => 'Submit',
+            ],
+            'managespellvisibility' => [
+                'title'  => 'Manage NPC Spell Visibility',
+                'header' => 'Manage NPC Spell Visibility',
+            ],
         ],
         'list'         => [
-            'title'            => 'Admin tools',
-            'header'           => 'Admin tools',
-            'header_tools'     => 'Tools',
-            'subheader_import' => 'Import',
-            'mass_import_npcs' => 'Mass import NPCs',
+            'title'                   => 'Admin tools',
+            'header'                  => 'Admin tools',
+            'header_tools'            => 'Tools',
+            'subheader_npcs'          => 'NPCs',
+            'mass_import_npcs'        => 'Mass import NPCs',
+            'manage_spell_visibility' => 'Manage NPC spell visibility',
 
             'subheader_dungeonroute'                  => 'Dungeonroute',
             'view_dungeonroute_details'               => 'View Dungeonroute details',

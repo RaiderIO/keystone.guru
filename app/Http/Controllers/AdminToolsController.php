@@ -17,6 +17,7 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcType;
+use App\Models\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -112,7 +113,7 @@ class AdminToolsController extends Controller
      */
     public function npcimport(): View
     {
-        return view('admin.tools.npcimport.import');
+        return view('admin.tools.npc.import');
     }
 
     /**
@@ -219,6 +220,17 @@ class AdminToolsController extends Controller
         } finally {
             dump($log);
         }
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function manageSpellVisibility(): View
+    {
+        return view('admin.tools.npc.managespellvisibility', [
+            'npcs'   => Npc::with('npcSpells')->has('npcSpells')->paginate(50),
+            'spells' => Spell::all()->keyBy('id'),
+        ]);
     }
 
     /**

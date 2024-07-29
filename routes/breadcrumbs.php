@@ -223,9 +223,9 @@ Breadcrumbs::for('admin.tools.mdt.string', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.view_mdt_string_contents'), route('admin.tools.mdt.dungeonroute.viewasstring'));
 });
-Breadcrumbs::for('admin.tools.npcimport.import', static function (Generator $trail) {
+Breadcrumbs::for('admin.tools.npc.import', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
-    $trail->push(__('breadcrumbs.home.admin.tools.import_npcs'), route('admin.tools.npcimport'));
+    $trail->push(__('breadcrumbs.home.admin.tools.import_npcs'), route('admin.tools.npc.import'));
 });
 
 // Releases

@@ -9,9 +9,12 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
- * @property int $npc_id
- * @property int $spell_id
+ * @property int   $id
+ * @property int   $npc_id
+ * @property int   $spell_id
+ *
+ * @property Npc   $npc
+ * @property Spell $spell
  *
  * @mixin Eloquent
  */
@@ -21,7 +24,7 @@ class NpcSpell extends CacheModel
 
     public $timestamps = false;
 
-    protected $fillable = ['id', 'npc_id', 'whitelist_npc_id'];
+    protected $fillable = ['id', 'npc_id', 'spell_id'];
 
     protected $hidden = ['id', 'npc_id'];
 
