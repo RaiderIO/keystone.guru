@@ -47457,7 +47457,7 @@
         "schools_mask": 8,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 434137,
@@ -48045,7 +48045,7 @@
         "schools_mask": 8,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 438826,
@@ -48069,7 +48069,7 @@
         "schools_mask": 8,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 438832,
@@ -48081,7 +48081,7 @@
         "schools_mask": 8,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 438860,
@@ -48117,7 +48117,7 @@
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 438883,
@@ -48129,7 +48129,7 @@
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 438949,
@@ -48717,7 +48717,7 @@
         "schools_mask": 8,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 443150,
@@ -48753,7 +48753,7 @@
         "schools_mask": 8,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 443405,
@@ -48801,7 +48801,7 @@
         "schools_mask": 8,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 443433,
@@ -48825,7 +48825,7 @@
         "schools_mask": 32,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 443435,
@@ -48837,7 +48837,7 @@
         "schools_mask": 32,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 443436,
@@ -48861,7 +48861,7 @@
         "schools_mask": 32,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 443438,
@@ -48921,7 +48921,7 @@
         "schools_mask": 8,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 443954,
@@ -49065,7 +49065,7 @@
         "schools_mask": 32,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 446726,
@@ -49113,7 +49113,7 @@
         "schools_mask": 8,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 447146,
@@ -49209,7 +49209,7 @@
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 448057,
@@ -49773,7 +49773,7 @@
         "schools_mask": 8,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 450784,
@@ -50001,7 +50001,7 @@
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 451222,
@@ -50049,7 +50049,7 @@
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 451241,
@@ -50085,7 +50085,7 @@
         "schools_mask": 32,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 451309,
@@ -50097,7 +50097,7 @@
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 451364,
@@ -50157,7 +50157,7 @@
         "schools_mask": 36,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 451391,
@@ -50229,7 +50229,7 @@
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 451428,
@@ -50241,7 +50241,7 @@
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 451543,
@@ -50277,7 +50277,7 @@
         "schools_mask": 32,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 451728,
@@ -50709,7 +50709,7 @@
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 456711,
@@ -50745,7 +50745,7 @@
         "schools_mask": 36,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 456718,
@@ -50949,7 +50949,7 @@
         "schools_mask": 8,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 461825,
@@ -51021,7 +51021,7 @@
         "schools_mask": 36,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 462220,
