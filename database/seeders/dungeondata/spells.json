@@ -1164,6 +1164,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 82850,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_10_elementalspiritfoozles_shadowflame",
+        "name": "Flaming Fixate",
+        "schools_mask": 4,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 85467,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -12180,6 +12192,18 @@
         "hidden_on_map": true
     },
     {
+        "id": 257288,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_hunter_swiftstrike",
+        "name": "Heavy Slash",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 257292,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -12223,6 +12247,18 @@
         "icon_name": "inv_misc_blackironbomb",
         "name": "Avast, ye!",
         "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 257326,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_warrior_decisivestrike",
+        "name": "Gore Crash",
+        "schools_mask": 1,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -12295,6 +12331,18 @@
         "icon_name": "ability_rogue_rollthebones",
         "name": "Loaded Dice: Man-O-War",
         "schools_mask": 64,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 257459,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "sha_ability_rogue_bloodyeye_nightmare",
+        "name": "On the Hook",
+        "schools_mask": 1,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -12655,6 +12703,18 @@
         "icon_name": "ability_warrior_battleshout",
         "name": "Motivating Cry",
         "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 257862,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "shaman_pvp_ripplingwaters",
+        "name": "Crashing Tide",
+        "schools_mask": 16,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -17100,6 +17160,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 268752,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_garrison_cargoship",
+        "name": "Withdraw",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 268797,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -17206,6 +17278,30 @@
         "aura": false,
         "selectable": false,
         "hidden_on_map": true
+    },
+    {
+        "id": 268963,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_shadow_mindbomb",
+        "name": "Unstable Ordnance",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 268976,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_shadow_mindbomb",
+        "name": "Unstable Ordnance",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
     },
     {
         "id": 268993,
@@ -17335,6 +17431,18 @@
         "icon_name": "ability_ironmaidens_whirlofblood",
         "name": "Blood Barrier",
         "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 269266,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_shaman_earthquake",
+        "name": "Slam",
+        "schools_mask": 1,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -17586,6 +17694,18 @@
         "dispel_type": "Enrage",
         "icon_name": "spell_totem_wardofdraining",
         "name": "Ancestral Fury",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 269984,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "trade_engineering",
+        "name": "Damage Boss 35%",
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
@@ -17862,6 +17982,18 @@
         "dispel_type": "N\/A",
         "icon_name": "ability_rogue_kidneyshot",
         "name": "Ground Crush",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 270590,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ships_ability_depthcharges",
+        "name": "Hull Cracker",
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
@@ -18624,6 +18756,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 272711,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_nature_earthquake",
+        "name": "Crushing Slam",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 272713,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -18822,6 +18966,18 @@
         "dispel_type": "N\/A",
         "icon_name": "inv_potion_11",
         "name": "Pyrrhic Blast",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 274002,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "trade_engineering",
+        "name": "Call Adds",
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
@@ -21972,6 +22128,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 319902,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_shadow_nightofthedead",
+        "name": "Land of the Dead",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 319941,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -22089,7 +22257,7 @@
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
     },
     {
         "id": 320120,
@@ -22308,6 +22476,30 @@
         "hidden_on_map": false
     },
     {
+        "id": 320365,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_archaeology_orcclans_jareye",
+        "name": "Embalming Ichor",
+        "schools_mask": 40,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 320366,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_rogue_deviouspoisons",
+        "name": "Embalming Ichor",
+        "schools_mask": 40,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 320376,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -22326,6 +22518,18 @@
         "dispel_type": "N\/A",
         "icon_name": "spell_necro_voodooblast",
         "name": "Necrotic Bolt",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 320464,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_necro_necroticsmash",
+        "name": "Shadow Well",
         "schools_mask": 32,
         "aura": false,
         "selectable": false,
@@ -22377,7 +22581,19 @@
         "schools_mask": 32,
         "aura": false,
         "selectable": false,
-        "hidden_on_map": false
+        "hidden_on_map": true
+    },
+    {
+        "id": 320573,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_necro_necroticsmash",
+        "name": "Shadow Well",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
     },
     {
         "id": 320576,
@@ -22387,6 +22603,18 @@
         "icon_name": "ability_warlock_burningembersgreen",
         "name": "Obliterating Ooze",
         "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 320580,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_rogue_kidneyshot",
+        "name": "Melee",
+        "schools_mask": 1,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -22522,6 +22750,18 @@
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
+    },
+    {
+        "id": 320784,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_mage_cometstorm",
+        "name": "Comet Storm",
+        "schools_mask": 16,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
     },
     {
         "id": 320785,
@@ -22668,6 +22908,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 321006,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_shadow_enslavedemon",
+        "name": "Soul Shackle",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 321009,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -22675,6 +22927,18 @@
         "icon_name": "inv_polearm_2h_odynspear_d_02",
         "name": "Charged Spear",
         "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 321010,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_warlock_soullink",
+        "name": "Soul Shackle",
+        "schools_mask": 32,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -22872,7 +23136,7 @@
         "hidden_on_map": false
     },
     {
-        "id": 321755,
+        "id": 321754,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
@@ -22882,6 +23146,18 @@
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
+    },
+    {
+        "id": 321755,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_mage_shattershield",
+        "name": "Icebound Aegis",
+        "schools_mask": 16,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
     },
     {
         "id": 321764,
@@ -22932,6 +23208,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 321821,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Disease",
+        "icon_name": "inv_fishing_innards_guts",
+        "name": "Disgusting Guts",
+        "schools_mask": 40,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 321828,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -22951,6 +23239,18 @@
         "icon_name": "inv_ammo_snowball",
         "name": "Dodge Ball",
         "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 321873,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_mage_freeze",
+        "name": "Freeze Tag",
+        "schools_mask": 8,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -23136,6 +23436,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 322487,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_misc_herb_nightmarevine",
+        "name": "Overgrowth",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 322491,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -23160,7 +23472,31 @@
         "hidden_on_map": false
     },
     {
+        "id": 322548,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_rogue_grapplinghook",
+        "name": "Meat Hook",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 322550,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_larva2_darkpurple",
+        "name": "Accelerated Incubation",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 322551,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
@@ -23196,6 +23532,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 322563,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_fixated_state_red",
+        "name": "Marked Prey",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 322569,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -23215,6 +23563,42 @@
         "icon_name": "spell_animaardenweald_debuff",
         "name": "Mind Link",
         "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 322654,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_creature_poison_02",
+        "name": "Acid Expulsion",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 322655,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_creature_poison_02",
+        "name": "Acid Expulsion",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 322681,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_rogue_grapplinghook",
+        "name": "Meat Hook",
+        "schools_mask": 1,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -23268,12 +23652,36 @@
         "hidden_on_map": false
     },
     {
+        "id": 322757,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_necro_dischargenecroticcore",
+        "name": "Wrath of Zolramus",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 322759,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_artifact_bloodoftheassassinated",
         "name": "Blood Barrier",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 322767,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_fire_twilightflamebolt",
+        "name": "Spirit Bolt",
         "schools_mask": 32,
         "aura": false,
         "selectable": false,
@@ -23352,6 +23760,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 322939,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_warlock_harvestoflife",
+        "name": "Harvest Essence",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 322943,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -23359,6 +23779,18 @@
         "icon_name": "inv_misc_food_legion_goochocovanilla_debris",
         "name": "Heave Debris",
         "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 322967,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "icon_name": "ability_demonhunter_shatteredsouls",
+        "name": "Dying Breath",
+        "schools_mask": 32,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -23413,6 +23845,18 @@
     },
     {
         "id": 323020,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_druid_ravage",
+        "name": "Bloodletting",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 323043,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
@@ -23568,6 +24012,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 323250,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_misc_volatilewater",
+        "name": "Anima Puddle",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 323347,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -23599,6 +24055,30 @@
         "icon_name": "ability_deathwing_bloodcorruption_death",
         "name": "Stigma of Pride",
         "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 323471,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_deathknight_butcher2",
+        "name": "Throw Cleaver",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 323489,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_deathknight_butcher2",
+        "name": "Throw Cleaver",
+        "schools_mask": 1,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -23695,6 +24175,18 @@
         "icon_name": "spell_nature_stormreach",
         "name": "Arcane Lightning",
         "schools_mask": 64,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 323730,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "icon_name": "spell_frost_chainsofice",
+        "name": "Frozen Binds",
+        "schools_mask": 16,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -23832,6 +24324,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 323957,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_shadow_nightofthedead",
+        "name": "Animate Dead",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
+    },
+    {
         "id": 324010,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -23842,6 +24346,30 @@
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
+    },
+    {
+        "id": 324026,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_shadow_nightofthedead",
+        "name": "Animate Dead",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
+    },
+    {
+        "id": 324027,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_shadow_nightofthedead",
+        "name": "Animate Dead",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
     },
     {
         "id": 324046,
@@ -24216,12 +24744,36 @@
         "hidden_on_map": false
     },
     {
+        "id": 324922,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_shaman_earthquake",
+        "name": "Furious Thrashing",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 324923,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "inv_misc_herb_nightmarevine",
         "name": "Bramble Burst",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 324986,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_druid_ferociousbite",
+        "name": "Mistveil Bite",
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
@@ -24235,6 +24787,30 @@
         "icon_name": "ability_druid_ferociousbite",
         "name": "Mistveil Bite",
         "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 325021,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_druid_ferociousbite",
+        "name": "Mistveil Tear",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 325027,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_misc_herb_nightmarevine",
+        "name": "Bramble Burst",
+        "schools_mask": 8,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -24259,6 +24835,30 @@
         "icon_name": "ability_poisonsting",
         "name": "Anima Injection",
         "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 325224,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "icon_name": "ability_poisonsting",
+        "name": "Anima Injection",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 325226,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_poisonsting",
+        "name": "Anima Detonation",
+        "schools_mask": 8,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -24307,6 +24907,18 @@
         "icon_name": "spell_animarevendreth_nova",
         "name": "Rite of Supremacy",
         "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 325413,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_creature_poison_02",
+        "name": "Volatile Acid",
+        "schools_mask": 1,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -24492,6 +25104,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 326022,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_nature_corrosivebreath",
+        "name": "Acid Globule",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 326039,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -24528,6 +25152,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 326092,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Poison",
+        "icon_name": "ability_poisonsting",
+        "name": "Debilitating Poison",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 326171,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -24535,6 +25171,18 @@
         "icon_name": "spell_warlock_focusshadow",
         "name": "Shatter Reality",
         "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 326263,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_animaardenweald_missile",
+        "name": "Anima Shedding",
+        "schools_mask": 1,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -24658,6 +25306,18 @@
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
+    },
+    {
+        "id": 326629,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_necro_undyingrelentlessness",
+        "name": "Noxious Fog",
+        "schools_mask": 40,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
     },
     {
         "id": 326632,
@@ -24900,6 +25560,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 327127,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "achievement_faction_craftsman",
+        "name": "Repair Flesh",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 327130,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -24970,6 +25642,30 @@
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
+    },
+    {
+        "id": 327396,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_necro_dischargenecroticcore",
+        "name": "Grim Fate",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
+    },
+    {
+        "id": 327397,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_necro_dischargenecroticcore",
+        "name": "Grim Fate",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
     },
     {
         "id": 327411,
@@ -25147,6 +25843,18 @@
         "icon_name": "spell_animarevendreth_wave",
         "name": "Erupting Torment",
         "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 327952,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_rogue_grapplinghook",
+        "name": "Meat Hook",
+        "schools_mask": 1,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -25579,6 +26287,18 @@
         "icon_name": "inv_maldraxxusslime",
         "name": "Slime Coated",
         "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 328664,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "icon_name": "spell_frost_wisp",
+        "name": "Chilled",
+        "schools_mask": 16,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -26676,6 +27396,30 @@
         "hidden_on_map": false
     },
     {
+        "id": 333485,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_shadow_plaguecloud",
+        "name": "Disease Cloud",
+        "schools_mask": 40,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
+    },
+    {
+        "id": 333488,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_necro_inevitableend",
+        "name": "Necrotic Breath",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
+    },
+    {
         "id": 333489,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -26719,6 +27463,18 @@
         "icon_name": "spell_necro_undyingrelentlessness",
         "name": "Possession",
         "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 333602,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_frost_frostbolt02",
+        "name": "Frostbolt",
+        "schools_mask": 16,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -26964,6 +27720,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 334321,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_shoulder_leather_maldraxxus_d_01",
+        "name": "Festering Rot",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 334322,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -27034,6 +27802,18 @@
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
+    },
+    {
+        "id": 334476,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_archaeology_orcclans_jareye",
+        "name": "Embalming Ichor",
+        "schools_mask": 40,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
     },
     {
         "id": 334485,
@@ -27348,6 +28128,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 335142,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_necro_undyingrelentlessness",
+        "name": "Dark Shroud",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 335143,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -27499,6 +28291,30 @@
         "icon_name": "ability_monk_renewingmists",
         "name": "Guessing Game",
         "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 336752,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_ammo_snowball",
+        "name": "Dodge Ball",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 336759,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_ammo_snowball",
+        "name": "Dodge Ball",
+        "schools_mask": 1,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -27696,6 +28512,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 338610,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_rogue_bloodyeye",
+        "name": "Morbid Fixation",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 338636,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -27852,6 +28680,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 340288,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Poison",
+        "icon_name": "spell_nature_nullifypoison",
+        "name": "Triple Bite",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 340289,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -27895,6 +28735,18 @@
         "icon_name": "ability_heroicleap",
         "name": "Crushing Leap",
         "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 340311,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_heroicleap",
+        "name": "Crushing Leap",
+        "schools_mask": 8,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -28128,6 +28980,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 343558,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_rogue_bloodyeye",
+        "name": "Morbid Fixation",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
+    },
+    {
         "id": 344003,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -28171,6 +29035,18 @@
         "icon_name": "spell_necro_necroticcore",
         "name": "Death Burst",
         "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 345625,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_necro_necroticcore",
+        "name": "Death Burst",
+        "schools_mask": 32,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -28542,6 +29418,18 @@
         "dispel_type": "N\/A",
         "icon_name": "inv_misc_enggizmos_02",
         "name": "Fully Armed",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 348170,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_shoulder_leather_maldraxxus_d_01",
+        "name": "Festering Rot",
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
@@ -43992,6 +44880,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 424795,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_animarevendreth_beam",
+        "name": "Refracting Beam",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 424805,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -44047,6 +44947,18 @@
         "icon_name": "ability_earthen_pillar",
         "name": "Volatile Spike",
         "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 424913,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_shaman_lavasurge",
+        "name": "Volatile Explosion",
+        "schools_mask": 4,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -44688,6 +45600,18 @@
         "hidden_on_map": true
     },
     {
+        "id": 427378,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_creature_cursed_03",
+        "name": "Dark Scars",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 427382,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -45228,6 +46152,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 428242,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_mechagon_spareparts",
+        "name": "Scrap Song",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 428263,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -45396,6 +46332,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 428520,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_siege_engineer_superheated",
+        "name": "Deconstruction",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 428526,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -45439,6 +46387,18 @@
         "icon_name": "inv_enchant_voidsphere",
         "name": "Unleash the Void",
         "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 428535,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_rhyolith_magmaflow_wave",
+        "name": "Metal Splinters",
+        "schools_mask": 4,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -45547,6 +46507,30 @@
         "icon_name": "spell_yorsahj_bloodboil_black",
         "name": "Gushing Ink",
         "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 428819,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_evoker_firebreath",
+        "name": "Exhaust Vents",
+        "schools_mask": 4,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 428820,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_evoker_firebreath",
+        "name": "Exhaust Vents",
+        "schools_mask": 4,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -45900,6 +46884,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 429999,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_shaman_lavasurge",
+        "name": "Flaming Scrap",
+        "schools_mask": 4,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 430097,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -45918,6 +46914,30 @@
         "dispel_type": "N\/A",
         "icon_name": "spell_priest_divinestar_shadow2",
         "name": "Night Bolt",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 431304,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_10_gearupgrade_aspectsshadowflamefragment",
+        "name": "Dark Floes",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 431305,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_10_gearupgrade_aspectsshadowflamefragment",
+        "name": "Dark Floes",
         "schools_mask": 32,
         "aura": false,
         "selectable": false,
@@ -46144,6 +47164,18 @@
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "Magic",
+        "icon_name": "spell_shadow_mindtwisting",
+        "name": "Stygian Seed",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 432454,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
         "icon_name": "spell_shadow_mindtwisting",
         "name": "Stygian Seed",
         "schools_mask": 32,
@@ -47292,12 +48324,36 @@
         "hidden_on_map": false
     },
     {
+        "id": 439600,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "trade_engineering",
+        "name": "Reclaim",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 439621,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
         "icon_name": "ability_rogue_shadowyduel",
         "name": "Shade Slash",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 439637,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_rogue_shadow_reflection",
+        "name": "Echoing Shade",
         "schools_mask": 1,
         "aura": false,
         "selectable": false,
@@ -47335,6 +48391,18 @@
         "icon_name": "spell_shadow_shadesofdarkness",
         "name": "Duskbringer",
         "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 439696,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_shadow_deathsembrace",
+        "name": "Duskbringer",
+        "schools_mask": 32,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -47616,6 +48684,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 442210,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_nature_web",
+        "name": "Web Wrap",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 442285,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -47712,6 +48792,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 443432,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_10_tailoring_silkrare_color3",
+        "name": "Silk Binding",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 443433,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -47784,6 +48876,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 443494,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_sandexplosion",
+        "name": "Crystalline Eruption",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 443500,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -47815,6 +48919,18 @@
         "icon_name": "spell_nature_insect_swarm2",
         "name": "Ravenous Swarm",
         "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 443954,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_evoker_firebreath",
+        "name": "Exhaust Vents",
+        "schools_mask": 4,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
@@ -48648,6 +49764,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 450783,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_potion_103",
+        "name": "Perfume Toss",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 450784,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -48697,6 +49825,18 @@
     },
     {
         "id": 451026,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_icon_shadowcouncilorb_purple",
+        "name": "Darkness Comes",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 451032,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
@@ -48948,6 +50088,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 451309,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "trade_engineering",
+        "name": "[DNT] Cosmetic",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 451364,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -49057,6 +50209,18 @@
     },
     {
         "id": 451423,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_ability_web_groundstate",
+        "name": "Gossamer Barrage",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 451426,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "N\/A",
@@ -49452,6 +50616,54 @@
         "hidden_on_map": false
     },
     {
+        "id": 454437,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_azeriteexplosion",
+        "name": "Azerite Charge",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 454438,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_azeriteexplosion",
+        "name": "Azerite Charge",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 454439,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_azeriteexplosion",
+        "name": "Azerite Charge",
+        "schools_mask": 64,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 454440,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Disease",
+        "icon_name": "ability_creature_poison_02",
+        "name": "Stinky Vomit",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 455406,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -49656,6 +50868,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 460092,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_nature_acid_01",
+        "name": "Acid Nova",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 460135,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -49812,6 +51036,30 @@
         "hidden_on_map": false
     },
     {
+        "id": 462372,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "trade_engineering",
+        "name": "Exhaust Vents",
+        "schools_mask": 4,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 462373,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_shaman_lavasurge",
+        "name": "Flaming Scrap",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 462597,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -49819,6 +51067,174 @@
         "icon_name": "trade_engineering",
         "name": "[DNT] In RP Combat",
         "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 463145,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_rhyolith_magmaflow_wave",
+        "name": "Magma Wave",
+        "schools_mask": 4,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 463182,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_vehicle_demolisherflamecatapult",
+        "name": "Fiery Ricochet",
+        "schools_mask": 4,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 463208,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "9xp_sigil_ardenweald01",
+        "name": "Protector of the Mists",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 463210,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_ardenweald_warlock",
+        "name": "Empowered",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 463217,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_ardenweald_warrior",
+        "name": "Anima Slash",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 463236,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_ardenweald_druid",
+        "name": "Mist Ward",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 463247,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_warrior_charge",
+        "name": "Expel",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
+    },
+    {
+        "id": 463248,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_warrior_charge",
+        "name": "Expel",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 463256,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_animaardenweald_groundstate",
+        "name": "Mist Ward",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 463257,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_animaardenweald_debuff",
+        "name": "Mist Ward",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": true
+    },
+    {
+        "id": 463428,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_ability_poison_debuff",
+        "name": "Lingering Erosion",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 463455,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "spell_priest_divinestar_shadow2",
+        "name": "Night Bolt",
+        "schools_mask": 32,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 463602,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_ability_poison_groundstate",
+        "name": "Coalescing Poison",
+        "schools_mask": 8,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 463603,
+        "category": "spells.category.unknown",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "inv_ability_poison_groundstate",
+        "name": "Coalescing Poison",
+        "schools_mask": 8,
         "aura": false,
         "selectable": false,
         "hidden_on_map": false
