@@ -61,7 +61,7 @@ use Illuminate\Support\Collection;
                     @if($spell === null)
                         <div class="col">
                             <div class="form-element">
-                                Spell not found
+                                Spell not found ({{ $npcSpell->spell_id }})
                             </div>
                         </div>
                     @else
