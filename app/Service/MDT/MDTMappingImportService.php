@@ -163,7 +163,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 // Save spells
                 foreach ($mdtNpc->getSpells() as $spellId => $obj) {
-                    $npcSpellsAttributes[] = [
+                    $npcSpellsAttributes[sprintf('%s-%s', $npc->id, $spellId)] = [
                         'npc_id'   => $npc->id,
                         'spell_id' => $spellId,
                     ];
