@@ -22,6 +22,8 @@ interface ChallengeModeSplitterLoggingInterface extends CombatLogSplitterLogging
 
     public function splitCombatLogLastRunNotCompleted(): void;
 
+    public function splitCombatLogChallengeModeAndResultMismatched(): void;
+
     public function splitCombatLogOnChallengeModesEnd(): void;
 
     public function resetCurrentChallengeMode(): void;

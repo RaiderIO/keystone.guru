@@ -17,51 +17,29 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
 {
     use ValidatesParameterCount;
 
-    public const SPECIAL_EVENT_COMBAT_LOG_VERSION = 'COMBAT_LOG_VERSION';
-
-    public const SPECIAL_EVENT_ZONE_CHANGE = 'ZONE_CHANGE';
-
-    public const SPECIAL_EVENT_MAP_CHANGE = 'MAP_CHANGE';
-
+    public const SPECIAL_EVENT_COMBAT_LOG_VERSION   = 'COMBAT_LOG_VERSION';
+    public const SPECIAL_EVENT_ZONE_CHANGE          = 'ZONE_CHANGE';
+    public const SPECIAL_EVENT_MAP_CHANGE           = 'MAP_CHANGE';
     public const SPECIAL_EVENT_CHALLENGE_MODE_START = 'CHALLENGE_MODE_START';
-
-    public const SPECIAL_EVENT_CHALLENGE_MODE_END = 'CHALLENGE_MODE_END';
-
-    public const SPECIAL_EVENT_ENCOUNTER_START = 'ENCOUNTER_START';
-
-    public const SPECIAL_EVENT_ENCOUNTER_END = 'ENCOUNTER_END';
-
-    public const SPECIAL_EVENT_COMBATANT_INFO = 'COMBATANT_INFO';
-
-    public const SPECIAL_EVENT_PARTY_KILL = 'PARTY_KILL';
-
-    public const SPECIAL_EVENT_UNIT_DESTROYED = 'UNIT_DESTROYED';
-
-    public const SPECIAL_EVENT_UNIT_DIED = 'UNIT_DIED';
-
-    public const SPECIAL_EVENT_UNIT_DISSIPATES = 'UNIT_DISSIPATES';
-
-    // Putting it here since it's a weird event that I don't want to decypher at the moment
-    public const SPECIAL_EVENT_SPELL_ABSORBED = 'SPELL_ABSORBED';
-
+    public const SPECIAL_EVENT_CHALLENGE_MODE_END   = 'CHALLENGE_MODE_END';
+    public const SPECIAL_EVENT_ENCOUNTER_START      = 'ENCOUNTER_START';
+    public const SPECIAL_EVENT_ENCOUNTER_END        = 'ENCOUNTER_END';
+    public const SPECIAL_EVENT_COMBATANT_INFO       = 'COMBATANT_INFO';
+    public const SPECIAL_EVENT_PARTY_KILL           = 'PARTY_KILL';
+    public const SPECIAL_EVENT_UNIT_DESTROYED       = 'UNIT_DESTROYED';
+    public const SPECIAL_EVENT_UNIT_DIED            = 'UNIT_DIED';
+    public const SPECIAL_EVENT_UNIT_DISSIPATES      = 'UNIT_DISSIPATES';
+    // Putting it here since it's a weird event that I don't want to decipher at the moment
+    public const SPECIAL_EVENT_SPELL_ABSORBED       = 'SPELL_ABSORBED';
     public const SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE = 'ENVIRONMENTAL_DAMAGE';
-
-    public const SPECIAL_EVENT_DAMAGE_SPLIT = 'DAMAGE_SPLIT';
-
+    public const SPECIAL_EVENT_DAMAGE_SPLIT         = 'DAMAGE_SPLIT';
     public const SPECIAL_EVENT_DAMAGE_SHIELD_MISSED = 'DAMAGE_SHIELD_MISSED';
-
-    public const SPECIAL_EVENT_DAMAGE_SHIELD = 'DAMAGE_SHIELD';
-
-    public const SPECIAL_EVENT_SPELL_RESURRECT = 'SPELL_RESURRECT';
-
-    public const SPECIAL_EVENT_EMOTE = 'EMOTE';
-
-    public const SPECIAL_EVENT_ENCHANT_APPLIED = 'ENCHANT_APPLIED';
-
-    public const SPECIAL_EVENT_ENCHANT_REMOVED = 'ENCHANT_REMOVED';
-
-    public const SPECIAL_EVENT_WORLD_MARKER_PLACED = 'WORLD_MARKER_PLACED';
-
+    public const SPECIAL_EVENT_DAMAGE_SHIELD        = 'DAMAGE_SHIELD';
+    public const SPECIAL_EVENT_SPELL_RESURRECT      = 'SPELL_RESURRECT';
+    public const SPECIAL_EVENT_EMOTE                = 'EMOTE';
+    public const SPECIAL_EVENT_ENCHANT_APPLIED      = 'ENCHANT_APPLIED';
+    public const SPECIAL_EVENT_ENCHANT_REMOVED      = 'ENCHANT_REMOVED';
+    public const SPECIAL_EVENT_WORLD_MARKER_PLACED  = 'WORLD_MARKER_PLACED';
     public const SPECIAL_EVENT_WORLD_MARKER_REMOVED = 'WORLD_MARKER_REMOVED';
 
     public const SPECIAL_EVENT_ALL = [

@@ -87,13 +87,15 @@ class ChallengeModeSplitter extends CombatLogSplitter
         }
 
         if ($foundChallengeModes !== $this->result->count()) {
-            throw new Exception('The number of challenge modes found does not match the number of challenge modes split from combat log');
+            // The number of challenge modes found does not match the number of challenge modes split from combat log,
+            // did they not finish a run? Something else going on perhaps?
+            $this->log->splitCombatLogChallengeModeAndResultMismatched();
         }
 
         return $this->result;
     }
 
-    private function parseCombatLogEvent(int $combatLogVersion, string $rawEvent, int $lineNr): BaseEvent
+    private function parseCombatLogEvent(int $combatLogVersion, string $rawEvent, int $lineNr): ?BaseEvent
     {
         $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
 
@@ -168,6 +170,8 @@ class ChallengeModeSplitter extends CombatLogSplitter
             $this->log->parseCombatLogEventMapChangeEvent();
             $this->lastMapChange = $rawEvent;
         }
+
+        $this->log->removeContext('lineNr');
 
         return $parsedEvent;
     }

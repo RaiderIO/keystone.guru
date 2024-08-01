@@ -49,10 +49,14 @@ class ChallengeModeSplitterLogging extends CombatLogSplitterLogging implements C
         $this->info(__METHOD__);
     }
 
-
     public function splitCombatLogLastRunNotCompleted(): void
     {
         $this->debug(__METHOD__);
+    }
+
+    public function splitCombatLogChallengeModeAndResultMismatched(): void
+    {
+        $this->warning(__METHOD__);
     }
 
     public function splitCombatLogOnChallengeModesEnd(): void
