@@ -20,6 +20,7 @@ return [
     'npc_id_label'                                                         => 'NPC_ID',
     'attached_to_pack_label'                                               => 'Pack',
     'attached_to_patrol_label'                                             => 'Patrol',
+    'skippable_label'                                                      => 'Skippable',
     'enemy_id_label'                                                       => 'ENEMY_ID',
     'visual_label'                                                         => 'Visual',
     'mdt_label'                                                            => 'MDT section',
