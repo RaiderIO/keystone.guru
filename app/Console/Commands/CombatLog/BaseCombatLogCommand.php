@@ -22,7 +22,7 @@ abstract class BaseCombatLogCommand extends Command
                 }
 
                 if (!str_ends_with($filePath, '.zip') && !str_ends_with($filePath, '.txt')) {
-                    $this->comment(sprintf('- Skipping file %s - not a .zip or .txt', $filePath));
+                    $this->comment(sprintf('Skipping file %s (not a .zip or .txt)', $filePath));
                     continue;
                 }
 

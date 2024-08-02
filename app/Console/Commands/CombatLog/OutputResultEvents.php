@@ -58,7 +58,7 @@ class OutputResultEvents extends BaseCombatLogCommand
         $resultingFile = str_replace(['.txt', '.zip'], '_events.txt', $filePath);
 
         if (!$force && file_exists($resultingFile)) {
-            $this->info(sprintf('Skipping %s - events already generated', $filePath));
+            $this->warn(sprintf('- Skipping %s (events already generated)', $filePath));
 
             $result = 1;
         } else {

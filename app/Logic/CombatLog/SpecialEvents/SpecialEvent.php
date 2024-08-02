@@ -9,6 +9,7 @@ use App\Logic\CombatLog\SpecialEvents\DamageShield\DamageShieldBuilder;
 use App\Logic\CombatLog\SpecialEvents\DamageShieldMissed\DamageShieldMissedBuilder;
 use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\EnvironmentalDamageBuilder;
 use App\Logic\CombatLog\SpecialEvents\SpellAbsorbed\SpellAbsorbedBuilder;
+use App\Logic\CombatLog\SpecialEvents\SpellAbsorbedSupport\SpellAbsorbedSupportBuilder;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -30,17 +31,18 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
     public const SPECIAL_EVENT_UNIT_DIED            = 'UNIT_DIED';
     public const SPECIAL_EVENT_UNIT_DISSIPATES      = 'UNIT_DISSIPATES';
     // Putting it here since it's a weird event that I don't want to decipher at the moment
-    public const SPECIAL_EVENT_SPELL_ABSORBED       = 'SPELL_ABSORBED';
-    public const SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE = 'ENVIRONMENTAL_DAMAGE';
-    public const SPECIAL_EVENT_DAMAGE_SPLIT         = 'DAMAGE_SPLIT';
-    public const SPECIAL_EVENT_DAMAGE_SHIELD_MISSED = 'DAMAGE_SHIELD_MISSED';
-    public const SPECIAL_EVENT_DAMAGE_SHIELD        = 'DAMAGE_SHIELD';
-    public const SPECIAL_EVENT_SPELL_RESURRECT      = 'SPELL_RESURRECT';
-    public const SPECIAL_EVENT_EMOTE                = 'EMOTE';
-    public const SPECIAL_EVENT_ENCHANT_APPLIED      = 'ENCHANT_APPLIED';
-    public const SPECIAL_EVENT_ENCHANT_REMOVED      = 'ENCHANT_REMOVED';
-    public const SPECIAL_EVENT_WORLD_MARKER_PLACED  = 'WORLD_MARKER_PLACED';
-    public const SPECIAL_EVENT_WORLD_MARKER_REMOVED = 'WORLD_MARKER_REMOVED';
+    public const SPECIAL_EVENT_SPELL_ABSORBED_SUPPORT = 'SPELL_ABSORBED_SUPPORT';
+    public const SPECIAL_EVENT_SPELL_ABSORBED         = 'SPELL_ABSORBED';
+    public const SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE   = 'ENVIRONMENTAL_DAMAGE';
+    public const SPECIAL_EVENT_DAMAGE_SPLIT           = 'DAMAGE_SPLIT';
+    public const SPECIAL_EVENT_DAMAGE_SHIELD_MISSED   = 'DAMAGE_SHIELD_MISSED';
+    public const SPECIAL_EVENT_DAMAGE_SHIELD          = 'DAMAGE_SHIELD';
+    public const SPECIAL_EVENT_SPELL_RESURRECT        = 'SPELL_RESURRECT';
+    public const SPECIAL_EVENT_EMOTE                  = 'EMOTE';
+    public const SPECIAL_EVENT_ENCHANT_APPLIED        = 'ENCHANT_APPLIED';
+    public const SPECIAL_EVENT_ENCHANT_REMOVED        = 'ENCHANT_REMOVED';
+    public const SPECIAL_EVENT_WORLD_MARKER_PLACED    = 'WORLD_MARKER_PLACED';
+    public const SPECIAL_EVENT_WORLD_MARKER_REMOVED   = 'WORLD_MARKER_REMOVED';
 
     public const SPECIAL_EVENT_ALL = [
         self::SPECIAL_EVENT_COMBAT_LOG_VERSION,
@@ -60,6 +62,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_UNIT_DIED,
         self::SPECIAL_EVENT_UNIT_DISSIPATES,
 
+        self::SPECIAL_EVENT_SPELL_ABSORBED_SUPPORT,
         self::SPECIAL_EVENT_SPELL_ABSORBED,
         self::SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE,
         self::SPECIAL_EVENT_DAMAGE_SPLIT,
@@ -105,10 +108,11 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
     ];
 
     private const SPECIAL_EVENT_BUILDER_CLASS_MAPPING = [
-        self::SPECIAL_EVENT_DAMAGE_SHIELD        => DamageShieldBuilder::class,
-        self::SPECIAL_EVENT_SPELL_ABSORBED       => SpellAbsorbedBuilder::class,
-        self::SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE => EnvironmentalDamageBuilder::class,
-        self::SPECIAL_EVENT_DAMAGE_SHIELD_MISSED => DamageShieldMissedBuilder::class,
+        self::SPECIAL_EVENT_DAMAGE_SHIELD          => DamageShieldBuilder::class,
+        self::SPECIAL_EVENT_SPELL_ABSORBED_SUPPORT => SpellAbsorbedSupportBuilder::class,
+        self::SPECIAL_EVENT_SPELL_ABSORBED         => SpellAbsorbedBuilder::class,
+        self::SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE   => EnvironmentalDamageBuilder::class,
+        self::SPECIAL_EVENT_DAMAGE_SHIELD_MISSED   => DamageShieldMissedBuilder::class,
     ];
 
     public function __construct(int $combatLogVersion, Carbon $timestamp, string $eventName, array $parameters, string $rawEvent)
@@ -146,7 +150,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
 
         foreach (self::SPECIAL_EVENT_BUILDER_CLASS_MAPPING as $specialEvent => $className) {
             if (Str::startsWith($eventName, $specialEvent)) {
-                /** @var $className SpecialEventBuilderInterface */
+                /** @var SpecialEventBuilderInterface $className */
                 return $className::create($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
             }
         }
