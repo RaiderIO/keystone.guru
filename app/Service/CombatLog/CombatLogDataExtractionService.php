@@ -72,6 +72,9 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             return $parsedEvent;
         });
 
+        // Remove the lineNr context since we stopped parsing lines, don't let the last line linger in the context
+        $this->log->removeContext('lineNr');
+
         return $result;
     }
 

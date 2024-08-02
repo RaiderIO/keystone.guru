@@ -114,7 +114,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         $npcs = collect();
 
         $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr) use ($extractDungeonCallable, $hasExistingMappingVersion, &$mappingVersion, &$dungeon, &$currentFloor, &$npcs) {
-            $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
+            $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => trim($rawEvent), 'lineNr' => $lineNr]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
             $parsedEvent    = $combatLogEntry->parseEvent([], $combatLogVersion);
@@ -221,6 +221,9 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
             return $parsedEvent;
         });
+
+        // Remove the lineNr context since we stopped parsing lines, don't let the last line linger in the context
+        $this->log->removeContext('lineNr');
 
         if ($dungeon === null) {
             $mappingVersion->delete();
