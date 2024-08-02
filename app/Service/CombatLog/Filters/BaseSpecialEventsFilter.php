@@ -33,6 +33,10 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
         12,
         // Feralas,
         69,
+        // Stormwind City
+        84,
+        // Orgrimmar
+        85,
         // Dire Maul (outside)
         234,
         // Pandaria

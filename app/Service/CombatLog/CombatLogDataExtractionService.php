@@ -111,7 +111,11 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
             $result = new DataExtractionCurrentDungeon($dungeon, $currentKeyLevel, $currentKeyAffixGroup);
 
-            $this->log->extractDataSetChallengeMode(__($dungeon->name, [], 'en_US'), $currentKeyLevel, $currentKeyAffixGroup->getTextAttribute());
+            $this->log->extractDataSetChallengeMode(
+                __($dungeon->name, [], 'en_US'),
+                $currentKeyLevel,
+                optional($currentKeyAffixGroup)->getTextAttribute()
+            );
         } else if ($parsedEvent instanceof ZoneChange) {
             if ($currentDungeon?->keyLevel !== null) {
                 $this->log->extractDataSetZoneFailedChallengeModeActive();
@@ -174,11 +178,15 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                 $prefix = $parsedEvent->getPrefix();
                 $suffix = $parsedEvent->getSuffix();
                 if ($prefix instanceof Spell && $suffix instanceof AuraApplied) {
-                    if ($parsedEvent->getGenericData()->getSourceGuid() instanceof Creature &&
-                        $parsedEvent->getGenericData()->getDestGuid() instanceof Player) {
-                        $spellIdsForDungeon->put($prefix->getSpellId(), $parsedEvent);
+                    $sourceGuid = $parsedEvent->getGenericData()->getSourceGuid();
+                    if ($sourceGuid instanceof Creature &&
+                        // Only actual creatures - not pets
+                        $sourceGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE) {
+                        if (!$spellIdsForDungeon->has($prefix->getSpellId())) {
+                            $spellIdsForDungeon->put($prefix->getSpellId(), $parsedEvent);
 
-                        $this->log->extractSpellAuraIdsFoundSpellId($prefix->getSpellId());
+                            $this->log->extractSpellAuraIdsFoundSpellId($prefix->getSpellId());
+                        }
                     }
 
                 }

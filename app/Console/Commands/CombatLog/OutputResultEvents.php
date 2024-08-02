@@ -33,8 +33,8 @@ class OutputResultEvents extends BaseCombatLogCommand
         ini_set('memory_limit', '2G');
 
         $filePath      = $this->argument('filePath');
-        $force         = $this->hasOption('force');
-        $dungeonOrRaid = $this->hasOption('dungeonOrRaid');
+        $force         = (bool)$this->option('force');
+        $dungeonOrRaid = (bool)$this->option('dungeonOrRaid');
 
         return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogService, $force, $dungeonOrRaid) {
             if (!str_contains($filePath, '.zip')) {
@@ -68,8 +68,10 @@ class OutputResultEvents extends BaseCombatLogCommand
                 $resultEvents = $combatLogService->getResultEventsForChallengeMode($filePath);
             }
 
-            $result = file_put_contents($resultingFile, $resultEvents->map(fn(BaseResultEvent $resultEvent) => // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
-            trim($resultEvent->getBaseEvent()->getRawEvent()))->implode(PHP_EOL));
+            $result = file_put_contents($resultingFile, $resultEvents->map(
+            // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
+                fn(BaseResultEvent $resultEvent) => trim($resultEvent->getBaseEvent()->getRawEvent())
+            )->implode(PHP_EOL));
 
             if ($result) {
                 $this->comment(sprintf('- Wrote %d events to %s', $resultEvents->count(), $resultingFile));

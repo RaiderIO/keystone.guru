@@ -17,7 +17,7 @@ class CombatLogDataExtractionServiceLogging extends RollbarStructuredLogging imp
     }
 
 
-    public function extractDataSetChallengeMode(string $dungeonName, int $keyLevel, string $affixGroup): void
+    public function extractDataSetChallengeMode(string $dungeonName, int $keyLevel, ?string $affixGroup): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
