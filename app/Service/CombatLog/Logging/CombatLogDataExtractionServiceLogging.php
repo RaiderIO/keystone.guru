@@ -36,4 +36,16 @@ class CombatLogDataExtractionServiceLogging extends RollbarStructuredLogging imp
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
+
+    public function extractSpellAuraIdsDungeonNotSet(): void
+    {
+        $this->debug(__METHOD__);
+    }
+
+    public function extractSpellAuraIdsFoundSpellId(int $spellId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+
 }

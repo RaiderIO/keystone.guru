@@ -9,6 +9,7 @@ use App\Console\Commands\CombatLog\CreateDungeonRoutes;
 use App\Console\Commands\CombatLog\CreateMappingVersion;
 use App\Console\Commands\CombatLog\EnsureChallengeMode;
 use App\Console\Commands\CombatLog\ExtractData;
+use App\Console\Commands\CombatLog\ExtractSpellAurasToCsv;
 use App\Console\Commands\CombatLog\ExtractUiMapIds;
 use App\Console\Commands\CombatLog\OutputCreateRouteJson;
 use App\Console\Commands\CombatLog\OutputResultEvents;
@@ -96,6 +97,7 @@ class Kernel extends ConsoleKernel
         CreateMappingVersion::class,
         EnsureChallengeMode::class,
         ExtractData::class,
+        ExtractSpellAurasToCsv::class,
         ExtractUiMapIds::class,
         OutputResultEvents::class,
         OutputCreateRouteJson::class,

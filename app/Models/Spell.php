@@ -6,6 +6,7 @@ use App\Models\Mapping\MappingModelInterface;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Str;
 
 /**
  * @property int    $id
@@ -201,6 +202,11 @@ class Spell extends CacheModel implements MappingModelInterface
     {
         // Spells aren't tied to a specific dungeon, but they're part of the mapping
         return 0;
+    }
+
+    public function getWowheadLink(): string
+    {
+        return sprintf('https://wowhead.com/spell=%d/%s', $this->id, Str::slug($this->name));
     }
 
     public static function maskToReadableString(int $spellSchoolMask): string

@@ -15,4 +15,8 @@ interface CombatLogDataExtractionServiceLoggingInterface
     public function extractDataZoneChangeDungeonNotFound(int $zoneId, string $zoneName): void;
 
     public function extractDataZoneChangeSetZone(string $dungeonName): void;
+
+    public function extractSpellAuraIdsDungeonNotSet(): void;
+
+    public function extractSpellAuraIdsFoundSpellId(int $spellId): void;
 }

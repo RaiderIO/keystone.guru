@@ -5676,6 +5676,18 @@
         "hidden_on_map": false
     },
     {
+        "id": 196816,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "N\/A",
+        "icon_name": "spell_holy_divineprovidence",
+        "name": "Tranquil Light",
+        "schools_mask": 2,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 196838,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -23256,6 +23268,30 @@
         "hidden_on_map": true
     },
     {
+        "id": 321891,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "N\/A",
+        "icon_name": "ability_fixated_state_blue",
+        "name": "Freeze Tag Fixation",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 321893,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "N\/A",
+        "icon_name": "inv_infernalmounice",
+        "name": "Freezing Burst",
+        "schools_mask": 16,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
         "id": 321894,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -26943,6 +26979,18 @@
         "id": 331718,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "icon_name": "ability_monk_spearhand",
+        "name": "Spear Flurry",
+        "schools_mask": 1,
+        "aura": false,
+        "selectable": false,
+        "hidden_on_map": false
+    },
+    {
+        "id": 331721,
+        "category": null,
+        "cooldown_group": null,
         "dispel_type": "N\/A",
         "icon_name": "ability_monk_spearhand",
         "name": "Spear Flurry",
