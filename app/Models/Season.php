@@ -241,7 +241,7 @@ class Season extends CacheModel
             $result                  = $timewalkingEventService->getAffixGroupAt($this->expansion, $date);
         } else {
             // Service injection, we do not know ourselves the total iterations done. Our history starts at a date,
-            // we do not know anything before that so we need help
+            // we do not know anything before that, so we need help
             $seasonService = resolve(SeasonService::class);
 
             // Get the affix group which occurs after a few weeks and return that
@@ -250,6 +250,32 @@ class Season extends CacheModel
             // Make sure that the affixes wrap over if we run out
             // $result = $this->affixgroups[$affixGroupIndex % $this->affixgroups->count()] ?? null;
             $result = $affixGroupIndex < $this->affixGroups->count() ? $this->affixGroups[$affixGroupIndex] : null;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param GameServerRegion $region
+     * @return Collection<AffixGroup>
+     */
+    public function getAffixGroupsPerWeekSinceStart(GameServerRegion $region): Collection
+    {
+        $result = collect();
+
+        $currentDate = $this->start;
+        $now         = Carbon::now();
+
+        while ($currentDate->lt($now)) {
+            $currentDate->addWeek();
+
+            $affixGroup = $this->getAffixGroupAt($currentDate, $region);
+
+            if ($affixGroup !== null) {
+                $result->push($affixGroup);
+            } else {
+                break;
+            }
         }
 
         return $result;

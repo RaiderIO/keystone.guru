@@ -21,6 +21,7 @@ use Illuminate\Support\Collection;
  * @var CarbonPeriod           $availableDateRange
  * @var int                    $keyLevelMin
  * @var int                    $keyLevelMax
+ * @var Collection<AffixGroup> $currentSeasonAffixGroupPerWeek
  */
 
 // By default, show it if we're not mobile, but allow overrides
@@ -28,12 +29,13 @@ $pullsSidebarState    = (int)($_COOKIE['pulls_sidebar_state'] ?? 1);
 $defaultState         ??= $isMobile ? 0 : $pullsSidebarState;
 $heatmapSearchEnabled = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
 
-$filterExpandedCookiePrefix = 'heatmap_search_expanded_';
-$expandedDataType           = (bool)($_COOKIE[sprintf('%sdata_type', $filterExpandedCookiePrefix)] ?? 0); // Hide by default
-$expandedKeyLevel           = (bool)($_COOKIE[sprintf('%skey_level', $filterExpandedCookiePrefix)] ?? 1);
-$expandedAffixes            = (bool)($_COOKIE[sprintf('%saffixes', $filterExpandedCookiePrefix)] ?? 1);
-$expandedDateRange          = (bool)($_COOKIE[sprintf('%sdate_range', $filterExpandedCookiePrefix)] ?? 1);
-$expandedDuration           = (bool)($_COOKIE[sprintf('%sduration', $filterExpandedCookiePrefix)] ?? 1);
+$filterExpandedCookiePrefix = 'heatmap_search_expanded';
+$expandedDataType           = (bool)($_COOKIE[sprintf('%s_data_type', $filterExpandedCookiePrefix)] ?? 0); // Hide by default
+$expandedKeyLevel           = (bool)($_COOKIE[sprintf('%s_key_level', $filterExpandedCookiePrefix)] ?? 1);
+$expandedAffixes            = (bool)($_COOKIE[sprintf('%s_affixes', $filterExpandedCookiePrefix)] ?? 1);
+$expandedAffixWeek          = (bool)($_COOKIE[sprintf('%s_affix_week', $filterExpandedCookiePrefix)] ?? 1);
+$expandedDateRange          = (bool)($_COOKIE[sprintf('%s_date_range', $filterExpandedCookiePrefix)] ?? 1);
+$expandedDuration           = (bool)($_COOKIE[sprintf('%s_duration', $filterExpandedCookiePrefix)] ?? 1);
 
 $shouldShowHeatmapSearchSidebar = $defaultState === 1;
 $hideOnMove                     ??= $isMobile;
@@ -66,6 +68,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'filterLevelSelector' => '#filter_level',
     'filterAffixGroupsSelector' => '#filter_affixes',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
+    'filterAffixWeekSelector' => '#filter_affix_week',
     'filterDateRangeFromSelector' => '#filter_date_from',
     'filterDateRangeToSelector' => '#filter_date_to',
     'filterDateRangeFromClearBtnSelector' => '#filter_date_from_clear_btn',
@@ -90,6 +93,11 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     @include('common.handlebars.affixgroupsselect', [
         'id' => 'filter_affixes',
         'affixgroups' => $affixGroups,
+    ])
+
+    @include('common.handlebars.affixweekselect', [
+        'id' => 'filter_affix_week',
+        'affixGroupsPerWeek' => $currentSeasonAffixGroupPerWeek,
     ])
 @endsection
 
@@ -164,7 +172,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                     'key' => 'data_type',
                     'text' => __('view_common.maps.controls.heatmapsearch.data_type'),
                     'expanded' => $expandedDataType,
-                    'title' => __('view_common.maps.controls.heatmapsearch.data_type_title')
+                    'title' => __('view_common.maps.controls.heatmapsearch.data_type_title'),
                 ])
                     <div id="filter_data_type_container" class="btn-group btn-group-toggle w-100 mb-1"
                          data-toggle="buttons">
@@ -223,6 +231,23 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                         </div>
                     @endcomponent
                 @endif
+
+                @component('common.search.filter', ['key' => 'affix_week', 'text' => __('view_common.maps.controls.heatmapsearch.affix_week'), 'expanded' => $expandedAffixWeek])
+                    <div class="filter_affix">
+                        <div class="row">
+                            <div class="col">
+                                {!! Form::select('filter_affix_week[]', $currentSeasonAffixGroupPerWeek->mapWithKeys(function(AffixGroup $affixGroup, int $index){
+                                        return [$index + 1 => $affixGroup->text];
+                                    }), [],
+                                    ['id' => 'filter_affix_week',
+                                    'class' => 'form-control affixselect selectpicker',
+                                    'title' => __('view_common.maps.controls.heatmapsearch.affix_week_title'),
+                                    'data-selected-text-format' => 'count > 1',
+                                    'data-count-selected-text' => __('view_common.maps.controls.heatmapsearch.affix_weeks_selected')]) !!}
+                            </div>
+                        </div>
+                    </div>
+                @endcomponent
 
                 @component('common.search.filter', ['key' => 'date_range', 'text' => __('view_common.maps.controls.heatmapsearch.date_range'), 'expanded' => $expandedDateRange])
                     <div class="row">

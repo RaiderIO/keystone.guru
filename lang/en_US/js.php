@@ -455,4 +455,5 @@ return [
     'simulate_pull'                                                        => 'Pull :index',
     'toggle_spell_visibility_success'                                      => 'Spell visibility toggled successfully',
     'toggle_spell_visibility_error'                                        => 'Spell visibility toggle failed',
+    'week_label'                                                           => 'Week',
 ];

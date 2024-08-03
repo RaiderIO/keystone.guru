@@ -314,6 +314,8 @@ return [
                 'affixes'          => 'Affixes',
                 'affixes_title'    => 'Affixes',
                 'affixes_selected' => '{0} affixes selected',
+                'affix_week'       => 'Week',
+                'affix_week_title' => 'Week',
                 'date_range'       => 'Date range',
                 'date_range_from'  => 'From',
                 'date_range_to'    => 'To',

@@ -9,37 +9,35 @@ use App\Models\AffixGroup\AffixGroup;
 @inject('seasonService', SeasonServiceInterface::class)
 <?php
 /**
- * This is the template for the Affix Selection when using it in a dropdown
+ * This is the template for the week selection, featuring the affix of that week, when using it in a dropdown
  *
- * @var SeasonServiceInterface      $seasonService
- * @var DungeonRoute                $model
- * @var Collection<AffixGroup>|null $affixgroups
+ * @var SeasonServiceInterface $seasonService
+ * @var DungeonRoute           $model
+ * @var Collection<AffixGroup> $affixGroupsPerWeek
  */
-
-if (!isset($affixgroups)) {
-    $affixgroups = $seasonService->getCurrentSeason()->affixGroups()->with('affixes')->get();
-}
 
 $id ??= 'affixes';
 ?>
 <script>
-    let _affixGroups{{ $id }} = {!! $affixgroups !!};
+    let _affixGroupsPerWeek{{ $id }} = {!! $affixGroupsPerWeek !!};
 
     $(function () {
-        handlebarsLoadAffixGroupSelect{{ $id }}();
+        handlebarsLoadAffixWeekSelect{{ $id }}();
     });
 
     /**
-     * Converts a received setup from a dungeon route (setup property) to a parsed handlebars template.
      * @returns {*}
      */
-    function handlebarsLoadAffixGroupSelect{{ $id }}() {
-        let affixSelectSelector = '#{{ $id }}';
+    function handlebarsLoadAffixWeekSelect{{ $id }}() {
+        let affixWeekSelectSelector = '#{{ $id }}';
+        let handlebarsDefaultVariables = $.extend({}, getHandlebarsDefaultVariables());
         // @TODO make one template with multiple options, rather than calling this template N amount of times?
-        for (let i in _affixGroups{{ $id }}) {
-            if (_affixGroups{{ $id }}.hasOwnProperty(i)) {
-                let affixGroup = _affixGroups{{ $id }}[i];
-                let template = Handlebars.templates['affixgroup_select_option_template'];
+        for (let i in _affixGroupsPerWeek{{ $id }}) {
+            if (_affixGroupsPerWeek{{ $id }}.hasOwnProperty(i)) {
+                let week = parseInt(i) + 1;
+
+                let affixGroup = _affixGroupsPerWeek{{ $id }}[i];
+                let template = Handlebars.templates['affix_week_select_option_template'];
 
                 let affixes = [];
                 for (let j in affixGroup.affixes) {
@@ -54,18 +52,19 @@ $id ??= 'affixes';
                 }
 
                 let handlebarsData = {
+                    week: week,
                     affixes: affixes,
                 };
 
-                let html = template(handlebarsData);
-                let selector = affixSelectSelector + ' option[value=' + affixGroup.id + ']';
+                let html = template($.extend(handlebarsDefaultVariables, handlebarsData));
+                let selector = affixWeekSelectSelector + ' option[value=' + week + ']';
                 $(selector).attr('data-content', html);
             }
         }
 
         refreshSelectPickers();
 
-        let $affixSelect = $(affixSelectSelector);
+        let $affixSelect = $(affixWeekSelectSelector);
         $affixSelect.on('shown.bs.select', function () {
             // Fix the select, it wraps the entire thing in a SPAN which completely destroys ability to do any form of layout on it
             // So remove the span

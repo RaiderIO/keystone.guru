@@ -1,19 +1,22 @@
 <?php
 
 use App\Logic\MapContext\MapContext;
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon      $dungeon
- * @var Floor        $floor
- * @var string       $title
- * @var MapContext   $mapContext
- * @var boolean      $showHeatmapSearch
- * @var CarbonPeriod $availableDateRange
- * @var int          $keyLevelMin
- * @var int          $keyLevelMax
+ * @var Dungeon                $dungeon
+ * @var Floor                  $floor
+ * @var string                 $title
+ * @var MapContext             $mapContext
+ * @var boolean                $showHeatmapSearch
+ * @var CarbonPeriod           $availableDateRange
+ * @var int                    $keyLevelMin
+ * @var int                    $keyLevelMax
+ * @var Collection<AffixGroup> $currentSeasonAffixGroupPerWeek
  */
 ?>
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $title])
@@ -51,6 +54,7 @@ use Carbon\CarbonPeriod;
                     'availableDateRange' => $availableDateRange,
                     'keyLevelMin' => $keyLevelMin,
                     'keyLevelMax' => $keyLevelMax,
+                    'currentSeasonAffixGroupPerWeek' => $currentSeasonAffixGroupPerWeek,
                 ],
             ],
             'hiddenMapObjectGroups' => [
