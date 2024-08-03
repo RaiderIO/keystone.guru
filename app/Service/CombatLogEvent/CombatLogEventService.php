@@ -191,16 +191,10 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                                    double docPosX = :player ? doc[\'pos_x\'].value : doc[\'pos_enemy_x\'].value;
                                    double docPosY = :player ? doc[\'pos_y\'].value : doc[\'pos_enemy_y\'].value;
 
-                                   // @TODO #2422
-                                   // if( (docPosX < minX) || (docPosX > maxX) ||
-                                   //     (docPosY < minY) || (docPosY > maxY)) {
-                                   //   return;
-                                   // }
-
                                    int gx = ((docPosX - minX) / width * sizeX).intValue();
                                    int gy = ((docPosY - minY) / height * sizeY).intValue();
 
-                                   // @TODO #2422
+                                   // Ignore events that are out of bounds
                                    if( gx < 0 || gx >= sizeX || gy < 0 || gy >= sizeY ) {
                                      return;
                                    }
