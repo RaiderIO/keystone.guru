@@ -88,15 +88,15 @@ class DungeonExploreController extends Controller
             $heatmapActive = Feature::active(Heatmap::class) && $dungeon->gameVersion->has_seasons;
 
             return view('dungeon.explore.view', [
-                'dungeon'                        => $dungeon,
-                'floor'                          => $floor,
-                'title'                          => __($dungeon->name),
-                'mapContext'                     => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
-                'showHeatmapSearch'              => $heatmapActive && $combatLogEventService->getRunCount($combatLogEventFilter),
-                'availableDateRange'             => $heatmapActive ? $combatLogEventService->getAvailableDateRange($combatLogEventFilter) : null,
-                'keyLevelMin'                    => $mostRecentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
-                'keyLevelMax'                    => $mostRecentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
-                'currentSeasonAffixGroupPerWeek' => $mostRecentSeason->getAffixGroupsPerWeekSinceStart(GameServerRegion::getUserOrDefaultRegion()),
+                'dungeon'                 => $dungeon,
+                'floor'                   => $floor,
+                'title'                   => __($dungeon->name),
+                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
+                'showHeatmapSearch'       => $heatmapActive && $combatLogEventService->getRunCount($combatLogEventFilter),
+                'availableDateRange'      => $heatmapActive ? $combatLogEventService->getAvailableDateRange($combatLogEventFilter) : null,
+                'keyLevelMin'             => $mostRecentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
+                'keyLevelMax'             => $mostRecentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+                'seasonWeeklyAffixGroups' => $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()),
             ]);
         }
     }

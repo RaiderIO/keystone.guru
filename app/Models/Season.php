@@ -256,32 +256,6 @@ class Season extends CacheModel
     }
 
     /**
-     * @param GameServerRegion $region
-     * @return Collection<AffixGroup>
-     */
-    public function getAffixGroupsPerWeekSinceStart(GameServerRegion $region): Collection
-    {
-        $result = collect();
-
-        $currentDate = $this->start;
-        $now         = Carbon::now();
-
-        while ($currentDate->lt($now)) {
-            $currentDate->addWeek();
-
-            $affixGroup = $this->getAffixGroupAt($currentDate, $region);
-
-            if ($affixGroup !== null) {
-                $result->push($affixGroup);
-            } else {
-                break;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * @throws Exception
      */
     public function getPresetForAffixGroup(AffixGroup $affixGroup): int

@@ -2,6 +2,7 @@
 
 namespace App\Service\Season;
 
+use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
@@ -9,6 +10,7 @@ use App\Models\Season;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Season\Dtos\SeasonWeeklyAffixGroup;
 use App\Traits\UserCurrentTime;
 use Exception;
 use Illuminate\Support\Carbon;
@@ -225,5 +227,41 @@ class SeasonService implements SeasonServiceInterface
 
         return $affixGroups;
         //        }, config('keystoneguru.cache.displayed_affix_groups.ttl'));
+    }
+
+    /**
+     * @param GameServerRegion $region
+     * @return Collection<SeasonWeeklyAffixGroup>
+     * @throws Exception
+     */
+    public function getWeeklyAffixGroupsSinceStart(Season $season, GameServerRegion $region): Collection
+    {
+        $result = collect();
+
+        $currentDate = $season->start;
+        $now         = Carbon::now();
+
+        $week = 1;
+        while ($currentDate->lt($now)) {
+            $currentDate->addWeek();
+
+            $affixGroup = $season->getAffixGroupAt($currentDate, $region);
+
+            if ($affixGroup !== null) {
+                $result->push(
+                    new SeasonWeeklyAffixGroup(
+                        $affixGroup,
+                        $week,
+                        $currentDate->copy()
+                    )
+                );
+            } else {
+                break;
+            }
+
+            $week++;
+        }
+
+        return $result;
     }
 }

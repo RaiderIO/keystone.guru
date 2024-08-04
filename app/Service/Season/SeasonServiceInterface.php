@@ -26,4 +26,6 @@ interface SeasonServiceInterface
     public function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): int;
 
     public function getDisplayedAffixGroups(int $iterationOffset): Collection;
+
+    public function getWeeklyAffixGroupsSinceStart(Season $season, GameServerRegion $region): Collection;
 }

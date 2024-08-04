@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Service\Season\Dtos\SeasonWeeklyAffixGroup;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
-use App\Models\AffixGroup\AffixGroup;
 
 ?>
 @inject('seasonService', SeasonServiceInterface::class)
@@ -11,33 +11,36 @@ use App\Models\AffixGroup\AffixGroup;
 /**
  * This is the template for the week selection, featuring the affix of that week, when using it in a dropdown
  *
- * @var SeasonServiceInterface $seasonService
- * @var DungeonRoute           $model
- * @var Collection<AffixGroup> $affixGroupsPerWeek
+ * @var SeasonServiceInterface             $seasonService
+ * @var DungeonRoute                       $model
+ * @var Collection<SeasonWeeklyAffixGroup> $seasonWeeklyAffixGroups
  */
 
 $id ??= 'affixes';
 ?>
-<script>
-    let _affixGroupsPerWeek{{ $id }} = {!! $affixGroupsPerWeek !!};
+<script>``
+    let _seasonWeeklyAffixGroups{{ $id }} = {!! $seasonWeeklyAffixGroups !!};
 
     $(function () {
-        handlebarsLoadAffixWeekSelect{{ $id }}();
+        handlebarsLoadWeekAffixGroupSelect{{ $id }}();
     });
 
     /**
      * @returns {*}
      */
-    function handlebarsLoadAffixWeekSelect{{ $id }}() {
+    function handlebarsLoadWeekAffixGroupSelect{{ $id }}() {
         let affixWeekSelectSelector = '#{{ $id }}';
         let handlebarsDefaultVariables = $.extend({}, getHandlebarsDefaultVariables());
         // @TODO make one template with multiple options, rather than calling this template N amount of times?
-        for (let i in _affixGroupsPerWeek{{ $id }}) {
-            if (_affixGroupsPerWeek{{ $id }}.hasOwnProperty(i)) {
+        for (let i in _seasonWeeklyAffixGroups{{ $id }}) {
+            if (_seasonWeeklyAffixGroups{{ $id }}.hasOwnProperty(i)) {
                 let week = parseInt(i) + 1;
 
-                let affixGroup = _affixGroupsPerWeek{{ $id }}[i];
-                let template = Handlebars.templates['affix_week_select_option_template'];
+                let seasonWeeklyAffixGroup = _seasonWeeklyAffixGroups{{ $id }}[i];
+                let affixGroup = seasonWeeklyAffixGroup.affixGroup;
+                console.log(seasonWeeklyAffixGroup);
+
+                let template = Handlebars.templates['weekly_affix_group_select_option_template'];
 
                 let affixes = [];
                 for (let j in affixGroup.affixes) {
@@ -51,8 +54,16 @@ $id ??= 'affixes';
                     }
                 }
 
+                // Use Intl.DateTimeFormat to format the date in DD/MM/YYYY
+                const formattedDate = new Intl.DateTimeFormat('default', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: '2-digit'
+                }).format(new Date(seasonWeeklyAffixGroup.date));
+
                 let handlebarsData = {
-                    week: week,
+                    week: seasonWeeklyAffixGroup.week,
+                    date: formattedDate,
                     affixes: affixes,
                 };
 
