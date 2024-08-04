@@ -1,7 +1,22 @@
+<?php
+
+use App\Models\Floor\Floor;
+use App\Models\Npc\Npc;
+use App\Models\Spell\Spell;
+
+/**
+ * @var Npc     $npc
+ * @var Floor   $floor
+ * @var array   $classifications
+ * @var Spell[] $spells
+ * @var array   $bolsteringNpcs
+ */
+?>
+
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$npc ?? null],
     'showAds' => false,
-    'title' => isset($npc) ? __('view_admin.npc.edit.title_edit', ['name' => $npc->name]) : __('view_admin.npc.edit.title_new')
+    'title' => isset($npc) ? __('view_admin.npc.edit.title_edit', ['name' => $npc->name]) : __('view_admin.npc.edit.title_new'),
 ])
 
 @include('common.general.inline', ['path' => 'admin/npc/edit', 'options' => [
@@ -17,16 +32,6 @@
 @section('header-title')
     {{ isset($npc) ? __('view_admin.npc.edit.header_edit', ['name' => $npc->name]) : __('view_admin.npc.edit.header_new') }}
 @endsection
-<?php
-/**
- * @var $npc \App\Models\Npc\Npc
- * @var $floor \App\Models\Floor\Floor
- * @var $classifications array
- * @var $spells \App\Models\Spell[]
- * @var $bolsteringNpcs array
- */
-?>
-
 @section('content')
     @isset($npc)
         {{ Form::model($npc, ['route' => ['admin.npc.update', $npc->id], 'autocomplete' => 'off', 'method' => 'patch', 'files' => true]) }}
@@ -62,7 +67,7 @@
         <span class="form-required">*</span>
         <?php
         $aggressivenessSelect = [];
-        foreach (\App\Models\Npc\Npc::ALL_AGGRESSIVENESS as $aggressiveness) {
+        foreach (Npc::ALL_AGGRESSIVENESS as $aggressiveness) {
             $aggressivenessSelect[$aggressiveness] = __(sprintf('npcaggressiveness.%s', $aggressiveness));
         }
         ?>
@@ -103,14 +108,14 @@
                         {!! Form::text('scaled_health', null, [
                             'id' => 'scaled_health',
                             'class' => 'form-control',
-                            'placeholder' => __('view_admin.npc.edit.scaled_health_placeholder')
+                            'placeholder' => __('view_admin.npc.edit.scaled_health_placeholder'),
                         ]) !!}
                     </div>
                     <div class="col">
                         {!! Form::text('scaled_health_percentage', null, [
                             'id' => 'scaled_health_percentage',
                             'class' => 'form-control',
-                            'placeholder' => __('view_admin.npc.edit.scaled_health_percentage_placeholder')
+                            'placeholder' => __('view_admin.npc.edit.scaled_health_percentage_placeholder'),
                             ]) !!}
                     </div>
                     <div class="col">
@@ -122,7 +127,7 @@
                             [
                                 'none' => __('view_admin.npc.edit.scaled_type_none'),
                                 'fortified' => __('view_admin.npc.edit.scaled_type_fortified', ['affix' => __('affixes.fortified.name')]),
-                                'tyrannical' => __('view_admin.npc.edit.scaled_type_tyrannical', ['affix' => __('affixes.tyrannical.name')])
+                                'tyrannical' => __('view_admin.npc.edit.scaled_type_tyrannical', ['affix' => __('affixes.tyrannical.name')]),
                             ],
                             null,
                             ['id' => 'scaled_health_type', 'class' => 'form-control selectpicker'])

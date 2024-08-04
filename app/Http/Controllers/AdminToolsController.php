@@ -17,7 +17,7 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcType;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;

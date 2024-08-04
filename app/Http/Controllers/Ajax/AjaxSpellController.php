@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Spell\AjaxSpellUpdateFormRequest;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 
 class AjaxSpellController extends Controller
 {

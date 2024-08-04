@@ -10,7 +10,7 @@ use App\Models\Enemy;
 use App\Models\EnemyActiveAura;
 use App\Models\Mapping\MappingVersion;
 use App\Models\RaidMarker;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;

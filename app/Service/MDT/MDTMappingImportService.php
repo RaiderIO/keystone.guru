@@ -21,7 +21,7 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcSpell;
 use App\Models\Npc\NpcType;
 use App\Models\Polyline;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;

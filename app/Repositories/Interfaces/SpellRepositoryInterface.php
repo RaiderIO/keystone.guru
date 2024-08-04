@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
 

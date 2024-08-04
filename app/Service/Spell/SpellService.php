@@ -3,7 +3,7 @@
 namespace App\Service\Spell;
 
 use App\Models\CharacterClass;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Service\Spell\Logging\SpellServiceLoggingInterface;
 use Illuminate\Support\Str;
 

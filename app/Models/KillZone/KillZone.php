@@ -7,7 +7,7 @@ use App\Models\Affix;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Models\Traits\HasLatLng;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;

@@ -1,35 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Spell;
 
-use App\Models\Mapping\MappingModelInterface;
-use App\Models\Traits\SeederModel;
-use Eloquent;
-use Illuminate\Database\Eloquent\Builder;
-use Str;
-
-/**
- * @property int    $id
- * @property string $category
- * @property string $cooldown_group
- * @property string $dispel_type
- * @property string $icon_name
- * @property string $name
- * @property int    $schools_mask
- * @property bool   $aura
- * @property bool   $selectable
- * @property bool   $hidden_on_map
- *
- * @property string $icon_url
- *
- * @method static Builder visible()
- *
- * @mixin Eloquent
- */
-class Spell extends CacheModel implements MappingModelInterface
+trait SpellConstants
 {
-    use SeederModel;
-
     public const SCHOOL_PHYSICAL = 1;
     public const SCHOOL_HOLY     = 2;
     public const SCHOOL_FIRE     = 4;
@@ -143,82 +117,69 @@ class Spell extends CacheModel implements MappingModelInterface
     public const SPELL_PRIMAL_RAGE         = 264667;
     public const SPELL_FERAL_HIDE_DRUMS    = 381301;
 
-    public $incrementing = false;
+    public const MECHANIC_ASLEEP        = 'asleep';
+    public const MECHANIC_BANISHED      = 'banished';
+    public const MECHANIC_BLEEDING      = 'bleeding';
+    public const MECHANIC_CHARMED       = 'charmed';
+    public const MECHANIC_GRIPPED       = 'gripped';
+    public const MECHANIC_DAZED         = 'dazed';
+    public const MECHANIC_DISARMED      = 'disarmed';
+    public const MECHANIC_DISCOVERY     = 'discovery';
+    public const MECHANIC_DISORIENTED   = 'disoriented';
+    public const MECHANIC_DISTRACTED    = 'distracted';
+    public const MECHANIC_ENRAGED       = 'enraged';
+    public const MECHANIC_SNARED        = 'snared';
+    public const MECHANIC_FLEEING       = 'fleeing';
+    public const MECHANIC_FROZEN        = 'frozen';
+    public const MECHANIC_HEALING       = 'healing';
+    public const MECHANIC_HORRIFIED     = 'horrified';
+    public const MECHANIC_INCAPACITATED = 'incapacitated';
+    public const MECHANIC_INTERRUPTED   = 'interrupted';
+    public const MECHANIC_INVULNERABLE  = 'invulnerable';
+    public const MECHANIC_MOUNTED       = 'mounted';
+    public const MECHANIC_SLOWED        = 'slowed';
+    public const MECHANIC_POLYMORPHED   = 'polymorphed';
+    public const MECHANIC_ROOTED        = 'rooted';
+    public const MECHANIC_SAPPED        = 'sapped';
+    public const MECHANIC_INFECTED      = 'infected';
+    public const MECHANIC_SHACKLED      = 'shackled';
+    public const MECHANIC_SHIELDED      = 'shielded';
+    public const MECHANIC_SILENCED      = 'silenced';
+    public const MECHANIC_STUNNED       = 'stunned';
+    public const MECHANIC_TURNED        = 'turned';
+    public const MECHANIC_WOUNDED       = 'wounded';
 
-    public $timestamps = false;
-
-    public $hidden = ['pivot'];
-
-    protected $appends = ['icon_url'];
-
-    protected $fillable = [
-        'id',
-        'category',
-        'cooldown_group',
-        'dispel_type',
-        'icon_name',
-        'name',
-        'schools_mask',
-        'aura',
-        'selectable',
-        'hidden_on_map',
-        'icon_url',
+    public const ALL_MECHANIC = [
+        self::MECHANIC_ASLEEP,
+        self::MECHANIC_BANISHED,
+        self::MECHANIC_BLEEDING,
+        self::MECHANIC_CHARMED,
+        self::MECHANIC_GRIPPED,
+        self::MECHANIC_DAZED,
+        self::MECHANIC_DISARMED,
+        self::MECHANIC_DISCOVERY,
+        self::MECHANIC_DISORIENTED,
+        self::MECHANIC_DISTRACTED,
+        self::MECHANIC_ENRAGED,
+        self::MECHANIC_SNARED,
+        self::MECHANIC_FLEEING,
+        self::MECHANIC_FROZEN,
+        self::MECHANIC_HEALING,
+        self::MECHANIC_HORRIFIED,
+        self::MECHANIC_INCAPACITATED,
+        self::MECHANIC_INTERRUPTED,
+        self::MECHANIC_INVULNERABLE,
+        self::MECHANIC_MOUNTED,
+        self::MECHANIC_SLOWED,
+        self::MECHANIC_POLYMORPHED,
+        self::MECHANIC_ROOTED,
+        self::MECHANIC_SAPPED,
+        self::MECHANIC_INFECTED,
+        self::MECHANIC_SHACKLED,
+        self::MECHANIC_SHIELDED,
+        self::MECHANIC_SILENCED,
+        self::MECHANIC_STUNNED,
+        self::MECHANIC_TURNED,
+        self::MECHANIC_WOUNDED,
     ];
-
-    protected $casts = [
-        'id'            => 'integer',
-        'schools_mask'  => 'integer',
-        'aura'          => 'boolean',
-        'selectable'    => 'boolean',
-        'hidden_on_map' => 'boolean',
-    ];
-
-
-    public function getSchoolsAsArray(): array
-    {
-        $result = [];
-
-        foreach (self::ALL_SCHOOLS as $school) {
-            $result[$school] = $this->schools_mask & $school;
-        }
-
-        return $result;
-    }
-
-    public function scopeVisible(): Builder
-    {
-        return $this->where('hidden_on_map', false);
-    }
-
-    /**
-     * @return string
-     */
-    public function getIconUrlAttribute(): string
-    {
-        return url(sprintf('/images/spells/%s.jpg', $this->icon_name));
-    }
-
-    public function getDungeonId(): ?int
-    {
-        // Spells aren't tied to a specific dungeon, but they're part of the mapping
-        return 0;
-    }
-
-    public function getWowheadLink(): string
-    {
-        return sprintf('https://wowhead.com/spell=%d/%s', $this->id, Str::slug($this->name));
-    }
-
-    public static function maskToReadableString(int $spellSchoolMask): string
-    {
-        $result = [];
-
-        foreach (self::ALL_SCHOOLS as $schoolName => $schoolMask) {
-            if ($spellSchoolMask & $schoolMask) {
-                $result[] = $schoolName;
-            }
-        }
-
-        return implode(', ', $result);
-    }
 }

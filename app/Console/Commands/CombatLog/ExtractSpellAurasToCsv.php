@@ -5,7 +5,7 @@ namespace App\Console\Commands\CombatLog;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Models\Dungeon;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Illuminate\Support\Collection;

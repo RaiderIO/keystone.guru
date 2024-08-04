@@ -11,7 +11,7 @@ use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\RaidMarker;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;

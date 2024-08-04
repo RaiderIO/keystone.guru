@@ -1,11 +1,11 @@
 <?php
 
 use App\Models\Npc\Npc;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Npc>   $npcs
+ * @var Collection<Npc> $npcs
  * @var Collection<Spell> $spells
  */
 ?>

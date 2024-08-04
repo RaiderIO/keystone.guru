@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Wowhead;
 
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Exception;
 use Illuminate\Console\Command;

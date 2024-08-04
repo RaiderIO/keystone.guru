@@ -4,7 +4,7 @@ namespace App\Service\Wowhead;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Service\Traits\Curl;
 use App\Service\Wowhead\Dtos\SpellDataResult;
 use App\Service\Wowhead\Logging\WowheadServiceLoggingInterface;

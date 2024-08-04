@@ -30,7 +30,7 @@ use App\Models\Path;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
 use App\Models\PublishedState;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;

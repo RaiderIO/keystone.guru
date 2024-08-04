@@ -12,7 +12,7 @@ use App\Models\Npc\NpcBolsteringWhitelist;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcSpell;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Service\Npc\NpcServiceInterface;
 use Exception;

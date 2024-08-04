@@ -2,7 +2,7 @@
 
 namespace App\SeederHelpers\RelationImport\Mapping;
 
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 
 class SpellRelationMapping extends RelationMapping
 {
