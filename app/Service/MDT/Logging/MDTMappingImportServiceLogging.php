@@ -92,7 +92,7 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
     }
 
 
-    public function importSpellDataFromMDTResult(int $count): void
+    public function importSpellDataFromMDTResult(int $spellCount, int $spellDungeonCount): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }

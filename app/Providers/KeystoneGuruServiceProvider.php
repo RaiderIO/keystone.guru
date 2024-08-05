@@ -134,7 +134,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
-        $this->app->bind(CombatLogDataExtractionServiceInterface::class, CombatLogDataExtractionService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
         $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
@@ -200,6 +199,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
 //        $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOApiService::class);
         $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
+
+        // Depends on CombatLogService, SeasonService, WowheadService
+        $this->app->bind(CombatLogDataExtractionServiceInterface::class, CombatLogDataExtractionService::class);
     }
 
     /**

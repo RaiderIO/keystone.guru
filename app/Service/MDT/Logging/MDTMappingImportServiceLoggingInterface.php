@@ -43,7 +43,7 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importSpellDataFromMDTSpellInExcludeList(): void;
 
-    public function importSpellDataFromMDTResult(int $count): void;
+    public function importSpellDataFromMDTResult(int $spellCount, int $spellDungeonCount): void;
 
     public function importSpellDataFromMDTFailed(): void;
 

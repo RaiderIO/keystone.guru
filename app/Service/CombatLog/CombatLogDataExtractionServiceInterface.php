@@ -8,6 +8,4 @@ use Illuminate\Support\Collection;
 interface CombatLogDataExtractionServiceInterface
 {
     public function extractData(string $filePath): ExtractedDataResult;
-
-    public function extractSpellAuraIds(string $filePath): Collection;
 }

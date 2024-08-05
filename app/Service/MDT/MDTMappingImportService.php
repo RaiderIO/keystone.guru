@@ -22,6 +22,7 @@ use App\Models\Npc\NpcSpell;
 use App\Models\Npc\NpcType;
 use App\Models\Polyline;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellDungeon;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Mapping\MappingServiceInterface;
@@ -163,7 +164,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 // Save spells
                 foreach ($mdtNpc->getSpells() as $spellId => $obj) {
-                    if( in_array($spellId, Spell::EXCLUDE_MDT_IMPORT_SPELLS) ) {
+                    if (in_array($spellId, Spell::EXCLUDE_MDT_IMPORT_SPELLS)) {
                         $this->log->importNpcsDataFromMDTSpellInExcludeList();
                         continue;
                     }
@@ -218,15 +219,25 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         try {
             $this->log->importSpellDataFromMDTStart($dungeon->key);
 
-            $existingSpells = Spell::all()->keyBy('id');
+            $existingSpells = Spell::with('spellDungeons')->get()->keyBy('id');
 
-            $spellsAttributes = [];
+            $spellsAttributes        = [];
+            $spellDungeonsAttributes = [];
             foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
                 $mdtSpells = $mdtNpc->getSpells();
 
                 foreach ($mdtSpells as $spellId => $spell) {
+                    /** @var Spell $existingSpell */
+                    $existingSpell = $existingSpells->get($spellId);
                     // Ignore spells that we know of - we really only have IDs from MDT, so keep any data that was already there
-                    if ($existingSpells->get($spellId) !== null) {
+                    if ($existingSpell !== null) {
+                        if (!$existingSpell->isAssignedDungeon($dungeon)) {
+                            // Assign to dungeon
+                            $spellDungeonsAttributes[sprintf('%d-%d', $spellId, $dungeon->id)] = [
+                                'spell_id'   => $existingSpell->id,
+                                'dungeon_id' => $dungeon->id,
+                            ];
+                        }
                         continue;
                     }
 
@@ -247,11 +258,17 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         'aura'           => 0,
                         'selectable'     => 0,
                     ];
+
+                    // Couple the spell to this dungeon
+                    $spellDungeonsAttributes[sprintf('%d-%d', $spellId, $dungeon->id)] = [
+                        'spell_id'   => $spellId,
+                        'dungeon_id' => $dungeon->id,
+                    ];
                 }
             }
 
-            if (Spell::insert($spellsAttributes)) {
-                $this->log->importSpellDataFromMDTResult(count($spellsAttributes));
+            if (Spell::insert($spellsAttributes) && SpellDungeon::insert($spellDungeonsAttributes)) {
+                $this->log->importSpellDataFromMDTResult(count($spellsAttributes), count($spellDungeonsAttributes));
             } else {
                 $this->log->importSpellDataFromMDTFailed();
             }

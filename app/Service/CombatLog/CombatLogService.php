@@ -277,7 +277,9 @@ class CombatLogService implements CombatLogServiceInterface
                 }
             }
         } catch (Exception $exception) {
-            throw new Exception(sprintf('%d: %s', $lineNr, $rawEvent), $exception->getCode(), $exception);
+            $this->log->parseCombatLogParseEventsException(sprintf('%d: %s', $lineNr, $rawEvent), $exception);
+
+            throw $exception;
         } finally {
             $this->log->parseCombatLogParseEventsEnd();
 

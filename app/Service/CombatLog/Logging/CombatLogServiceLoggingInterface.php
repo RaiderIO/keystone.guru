@@ -2,6 +2,8 @@
 
 namespace App\Service\CombatLog\Logging;
 
+use Exception;
+
 interface CombatLogServiceLoggingInterface
 {
     public function parseCombatLogToEventsUnableToParseRawEvent(string $rawEvent): void;
@@ -21,6 +23,8 @@ interface CombatLogServiceLoggingInterface
     public function parseCombatLogParseEventsStart(): void;
 
     public function parseCombatLogParseEventsChangedCombatLogVersion(int $combatLogVersion): void;
+
+    public function parseCombatLogParseEventsException(string $rawEvent, Exception $exception): void;
 
     public function parseCombatLogParseEventsEnd(): void;
 

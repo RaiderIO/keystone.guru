@@ -171,9 +171,9 @@ class Save extends Command
         // Save all spells
         $this->info('Saving Spells');
 
-        $spells = Spell::all();
+        $spells = Spell::with('spellDungeons')->get();
         foreach ($spells as $spell) {
-            $spell->makeHidden(['icon_url']);
+            $spell->makeHidden(['icon_url'])->makeVisible(['spellDungeons']);
         }
 
         $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');

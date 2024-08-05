@@ -38,11 +38,13 @@ class ExtractData extends BaseCombatLogCommand
         if ($result->hasUpdatedData()) {
             $this->info(
                 sprintf(
-                    'Added %d npcs. Updated %d floors, %d floor connections, %d npcs',
+                    'Added %d npcs, %d spells. Updated %d floors, %d floor connections, %d npcs, %d spells',
                     $result->getCreatedNpcs(),
+                    $result->getCreatedSpells(),
                     $result->getUpdatedFloors(),
                     $result->getUpdatedFloorConnections(),
-                    $result->getUpdatedNpcs()
+                    $result->getUpdatedNpcs(),
+                    $result->getUpdatedSpells()
                 )
             );
         } else {

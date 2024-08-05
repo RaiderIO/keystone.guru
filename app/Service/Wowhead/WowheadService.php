@@ -8,6 +8,7 @@ use App\Models\Spell\Spell;
 use App\Service\Traits\Curl;
 use App\Service\Wowhead\Dtos\SpellDataResult;
 use App\Service\Wowhead\Logging\WowheadServiceLoggingInterface;
+use Carbon\CarbonInterval;
 use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
@@ -27,8 +28,11 @@ class WowheadService implements WowheadServiceInterface
 
     private const IDENTIFYING_TOKEN_SPELL_NAME        = '<meta property="og:title" content=';
     private const IDENTIFYING_TOKEN_SPELL_ICON_NAME   = 'WH.Gatherer.addData(29,';
+    private const IDENTIFYING_TOKEN_SPELL_MECHANIC    = '<th>Mechanic</th>';
     private const IDENTIFYING_TOKEN_SPELL_SCHOOL      = '<th>School</th>';
     private const IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE = '<th>Dispel type</th>';
+    private const IDENTIFYING_TOKEN_SPELL_CAST_TIME   = '<th>Cast time</th>';
+    private const IDENTIFYING_TOKEN_SPELL_DURATION    = '<th>Duration</th>';
 
     public function __construct(
         private readonly WowheadServiceLoggingInterface $log
@@ -154,15 +158,18 @@ class WowheadService implements WowheadServiceInterface
 
         // More hacky shit to scrape data we need
         $spellId       = 0;
+        $mechanic      = null;
         $cooldownGroup = Spell::COOLDOWN_GROUP_UNKNOWN; // I can't find info on this on Wowhead?
         $dispelType    = '';
         $iconName      = '';
         $name          = '';
         $schoolsMask   = 0;
         $aura          = false;
+        $castTime      = null;
+        $duration      = null;
 
         // When set to true, the next line will contain the school.
-        $schoolFound = $dispelTypeFound = false;
+        $mechanicFound = $schoolFound = $dispelTypeFound = $castTimeFound = $durationFound = false;
 
         $lines = explode(PHP_EOL, $response);
         foreach ($lines as $line) {
@@ -184,6 +191,18 @@ class WowheadService implements WowheadServiceInterface
                     $json     = array_values($json);
                     $iconName = $json[0]['icon'];
                 }
+            } // Mechanic
+            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_MECHANIC)) {
+                $mechanicFound = true;
+            } // Triggered on the next line
+            else if ($mechanicFound) {
+                $mechanic = str_replace(['<td>', '</td>'], '', $line);
+                if (str_contains($dispelType, 'n/a')) {
+                    $mechanic = null;
+                } else {
+                    $mechanic = CarbonInterval::fromString($mechanic)->totalMilliseconds;
+                }
+                $mechanicFound = false;
             } // Spell name
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_NAME)) {
                 $name = str_replace([self::IDENTIFYING_TOKEN_SPELL_NAME, '"', '>'], '', $line);
@@ -217,12 +236,44 @@ class WowheadService implements WowheadServiceInterface
                     $dispelType = Spell::DISPEL_TYPE_UNKNOWN;
                 }
                 $dispelTypeFound = false;
+            } // Cast time
+            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_CAST_TIME)) {
+                $castTimeFound = true;
+            } // Triggered on the next line
+            else if ($castTimeFound) {
+                $castTime = str_replace(['<td>', '</td>'], '', $line);
+                if (str_contains($dispelType, 'n/a')) {
+                    $castTime = null;
+                } else {
+                    $castTime = CarbonInterval::fromString($castTime)->totalMilliseconds;
+                }
+                $castTimeFound = false;
+            } // Duration
+            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_DURATION)) {
+                $durationFound = true;
+            } // Triggered on the next line
+            else if ($durationFound) {
+                $duration = str_replace(['<td>', '</td>'], '', $line);
+                if (str_contains($dispelType, 'n/a')) {
+                    $duration = null;
+                } else {
+                    $duration = CarbonInterval::fromString($duration)->totalMilliseconds;
+                }
+                $durationFound = false;
             }
-
         }
 
         return new SpellDataResult(
-            $spellId, $cooldownGroup, $dispelType, $iconName, $name, $schoolsMask, $aura
+            $spellId,
+            $mechanic,
+            $cooldownGroup,
+            $dispelType,
+            $iconName,
+            $name,
+            $schoolsMask,
+            $aura,
+            $castTime,
+            $duration
         );
     }
 

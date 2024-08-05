@@ -15,7 +15,7 @@ use Illuminate\Support\Collection;
 
 class NpcUpdateDataExtractor implements DataExtractorInterface
 {
-    /** @var Collection<int>> */
+    /** @var Collection<int> */
     private Collection $checkedNpcIds;
 
     private NpcUpdateDataExtractorLoggingInterface $log;
@@ -27,6 +27,11 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
         /** @var NpcUpdateDataExtractorLoggingInterface $log */
 
         $this->log = $log;
+    }
+
+    public function beforeExtract(): void
+    {
+
     }
 
     public function extractData(ExtractedDataResult $result, DataExtractionCurrentDungeon $currentDungeon, BaseEvent $parsedEvent): void
@@ -75,6 +80,11 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
             $this->checkedNpcIds->push($npc->id);
 
         }
+    }
+
+    public function afterExtract(): void
+    {
+
     }
 
 }

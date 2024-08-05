@@ -8,6 +8,8 @@ class ExtractedDataResult
     private int $updatedNpcs             = 0;
     private int $updatedFloors           = 0;
     private int $updatedFloorConnections = 0;
+    private int $createdSpells           = 0;
+    private int $updatedSpells           = 0;
 
     public function getCreatedNpcs(): int
     {
@@ -49,8 +51,29 @@ class ExtractedDataResult
         $this->updatedFloorConnections++;
     }
 
+    public function getCreatedSpells(): int
+    {
+        return $this->createdSpells;
+    }
+
+    public function createdSpell(): void
+    {
+        $this->createdSpells++;
+    }
+
+    public function getUpdatedSpells(): int
+    {
+        return $this->updatedSpells;
+    }
+
+    public function updatedSpell(): void
+    {
+        $this->updatedSpells++;
+    }
+
     public function hasUpdatedData(): bool
     {
-        return $this->createdNpcs || $this->updatedFloors || $this->updatedFloorConnections || $this->updatedNpcs;
+        return $this->createdNpcs || $this->updatedFloors || $this->updatedFloorConnections || $this->updatedNpcs ||
+            $this->createdSpells || $this->updatedSpells;
     }
 }

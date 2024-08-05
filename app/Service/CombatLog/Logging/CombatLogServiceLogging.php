@@ -3,6 +3,7 @@
 namespace App\Service\CombatLog\Logging;
 
 use App\Logging\RollbarStructuredLogging;
+use Exception;
 
 class CombatLogServiceLogging extends RollbarStructuredLogging implements CombatLogServiceLoggingInterface
 {
@@ -49,6 +50,11 @@ class CombatLogServiceLogging extends RollbarStructuredLogging implements Combat
     public function parseCombatLogParseEventsChangedCombatLogVersion(int $combatLogVersion): void
     {
         $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function parseCombatLogParseEventsException(string $rawEvent, Exception $exception): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
     }
 
     public function parseCombatLogParseEventsEnd(): void

@@ -23,6 +23,7 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcSpell;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellDungeon;
 use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRelationMapping;
 use App\SeederHelpers\RelationImport\Mapping\DungeonRouteRelationMapping;
@@ -451,6 +452,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             MappingVersion::class,
             MappingCommitLog::class,
             Spell::class,
+            SpellDungeon::class,
             Npc::class,
             NpcBolsteringWhitelist::class,
             NpcEnemyForces::class,
