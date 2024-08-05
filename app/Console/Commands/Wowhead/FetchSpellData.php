@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Wowhead;
 
+use App\Models\Dungeon;
 use App\Models\Spell\Spell;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Exception;
@@ -14,7 +15,7 @@ class FetchSpellData extends Command
      *
      * @var string
      */
-    protected $signature = 'wowhead:fetchspelldata';
+    protected $signature = 'wowhead:fetchspelldata {--dungeon=}';
 
     /**
      * The console command description.
@@ -31,8 +32,20 @@ class FetchSpellData extends Command
      */
     public function handle(WowheadServiceInterface $wowheadService): void
     {
-        foreach (Spell::where('name', '')->get() as $spell) {
-//        foreach (Spell::where('id', 589)->get() as $spell) {
+        $dungeonKey = $this->option('dungeon');
+
+        if ($dungeonKey !== null) {
+            /** @var Dungeon $dungeon */
+            $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
+
+            $spells = $dungeon->spells;
+        } else {
+            $spells = Spell::where('name', '')->get();
+        }
+
+        $this->info(sprintf('Fetching spell data for %d spells', $spells->count()));
+
+        foreach ($spells as $spell) {
             $this->info(sprintf('Fetching spell data for spell %d', $spell->id));
 
             $spellDataResult = $wowheadService->getSpellData($spell->id);
@@ -40,21 +53,17 @@ class FetchSpellData extends Command
             if ($spellDataResult === null) {
                 $this->warn('- Unable to find spell data for spell!');
             } else {
-                $spell->update([
-                    'icon_name'    => $spellDataResult->getIconName(),
-                    'name'         => $spellDataResult->getName(),
-                    'dispel_type'  => $spellDataResult->getDispelType(),
-                    'schools_mask' => $spellDataResult->getSchoolsMask(),
-                ]);
+                $spellAttributes = $spellDataResult->toArray();
+                $spell->update($spellAttributes);
 
                 $this->info(sprintf('- %s', $spellDataResult->getName()));
-                $this->comment(sprintf('-- Icon name: %s', $spellDataResult->getIconName()));
-                $this->comment(sprintf('-- Dispel type: %s', $spellDataResult->getDispelType()));
-                $this->comment(sprintf('-- Schools: %s', Spell::maskToReadableString($spellDataResult->getSchoolsMask())));
+                foreach (array_filter($spellAttributes) as $key => $value) {
+                    $this->comment(sprintf('-- %s: %s', $key, $value));
+                }
             }
 
             // Don't DDOS
-            sleep(1);
+            usleep(500000);
         }
     }
 }

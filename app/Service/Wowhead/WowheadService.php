@@ -159,7 +159,7 @@ class WowheadService implements WowheadServiceInterface
         // More hacky shit to scrape data we need
         $spellId       = 0;
         $mechanic      = null;
-        $cooldownGroup = Spell::COOLDOWN_GROUP_UNKNOWN; // I can't find info on this on Wowhead?
+        $cooldownGroup = sprintf('spells.cooldown_group.%s', Spell::COOLDOWN_GROUP_UNKNOWN); // I can't find info on this on Wowhead?
         $dispelType    = '';
         $iconName      = '';
         $name          = '';
@@ -170,6 +170,7 @@ class WowheadService implements WowheadServiceInterface
 
         // When set to true, the next line will contain the school.
         $mechanicFound = $schoolFound = $dispelTypeFound = $castTimeFound = $durationFound = false;
+        $mechanicSet   = $schoolSet = $dispelTypeSet = $castTimeSet = $durationSet = false;
 
         $lines = explode(PHP_EOL, $response);
         foreach ($lines as $line) {
@@ -197,12 +198,13 @@ class WowheadService implements WowheadServiceInterface
             } // Triggered on the next line
             else if ($mechanicFound) {
                 $mechanic = str_replace(['<td>', '</td>'], '', $line);
-                if (str_contains($dispelType, 'n/a')) {
+                if (str_contains($mechanic, 'n/a')) {
                     $mechanic = null;
                 } else {
-                    $mechanic = CarbonInterval::fromString($mechanic)->totalMilliseconds;
+                    $mechanic = sprintf('spells.mechanic.%s', Str::slug($mechanic));
                 }
                 $mechanicFound = false;
+                $mechanicSet   = true;
             } // Spell name
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_NAME)) {
                 $name = str_replace([self::IDENTIFYING_TOKEN_SPELL_NAME, '"', '>'], '', $line);
@@ -222,6 +224,7 @@ class WowheadService implements WowheadServiceInterface
                     }
                 }
                 $schoolFound = false;
+                $schoolSet   = true;
             } // Spell dispel type
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE)) {
                 $dispelTypeFound = true;
@@ -236,31 +239,40 @@ class WowheadService implements WowheadServiceInterface
                     $dispelType = Spell::DISPEL_TYPE_UNKNOWN;
                 }
                 $dispelTypeFound = false;
+                $dispelTypeSet   = true;
             } // Cast time
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_CAST_TIME)) {
                 $castTimeFound = true;
             } // Triggered on the next line
             else if ($castTimeFound) {
                 $castTime = str_replace(['<td>', '</td>'], '', $line);
-                if (str_contains($dispelType, 'n/a')) {
+                if (str_contains($castTime, 'n/a')) {
                     $castTime = null;
+                } else if (str_contains($castTime, 'Instant')) {
+                    $castTime = 0;
                 } else {
                     $castTime = CarbonInterval::fromString($castTime)->totalMilliseconds;
                 }
                 $castTimeFound = false;
+                $castTimeSet   = true;
             } // Duration
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_DURATION)) {
                 $durationFound = true;
             } // Triggered on the next line
             else if ($durationFound) {
-                $duration = str_replace(['<td>', '</td>'], '', $line);
-                if (str_contains($dispelType, 'n/a')) {
+                $duration = str_replace(['<td width="100%">', '</td>'], '', $line);
+                if (str_contains($duration, 'n/a')) {
                     $duration = null;
                 } else {
                     $duration = CarbonInterval::fromString($duration)->totalMilliseconds;
                 }
                 $durationFound = false;
+                $durationSet   = true;
             }
+        }
+
+        if (!$mechanicSet || !$schoolSet || !$dispelTypeSet || !$castTimeSet || !$durationSet) {
+            $this->log->getSpellDataDataNotSet($mechanicSet, $schoolSet, $dispelTypeSet, $castTimeSet, $durationSet);
         }
 
         return new SpellDataResult(

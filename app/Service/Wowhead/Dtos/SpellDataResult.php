@@ -2,7 +2,9 @@
 
 namespace App\Service\Wowhead\Dtos;
 
-class SpellDataResult
+use Illuminate\Contracts\Support\Arrayable;
+
+class SpellDataResult implements Arrayable
 {
     public function __construct(
         private readonly int     $spellId,
@@ -67,5 +69,21 @@ class SpellDataResult
     public function getDuration(): ?int
     {
         return $this->duration;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'spell_id'       => $this->spellId,
+            'mechanic'       => $this->mechanic,
+            'cooldown_group' => $this->cooldownGroup,
+            'dispel_type'    => $this->dispelType,
+            'icon_name'      => $this->iconName,
+            'name'           => $this->name,
+            'schools_mask'   => $this->schoolsMask,
+            'aura'           => $this->aura,
+            'cast_time'      => $this->castTime,
+            'duration'       => $this->duration,
+        ];
     }
 }

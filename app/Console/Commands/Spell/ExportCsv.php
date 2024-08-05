@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Spell;
 
 use App\Models\Dungeon;
+use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use Illuminate\Console\Command;
 
@@ -25,27 +26,34 @@ class ExportCsv extends Command
     /**
      * Execute the console command.
      */
-    public function handle(
-    ): int {
+    public function handle(): int
+    {
         $dungeonKey = $this->argument('dungeon');
         // Cannot do ->with('npcs') here - it won't load the relationship properly due to orWhere(dungeon_id = -1)
         /** @var Dungeon $dungeon */
         $dungeon = Dungeon::with('spells')->where('key', $dungeonKey)->firstOrFail();
 
-        $csvData = $dungeon->spells->map(function (Spell $spell) {
+        $csvData = $dungeon->spells->where('hidden_on_map', 0)->map(function (Spell $spell) {
+            /** @var Npc $npc */
+            $npc = Npc::with('npcSpells')->whereRelation('npcSpells', 'spell_id', $spell->id)->firstOrFail();
+
             return [
                 'id'           => $spell->id,
+                'npc_id'       => $npc->id,
+                'mechanic'     => __($spell->mechanic, [], 'en_US'),
                 'name'         => $spell->name,
                 'dispel_type'  => $spell->dispel_type,
                 'schools'      => Spell::maskToReadableString($spell->schools_mask),
                 'aura'         => $spell->aura ? 1 : 0,
+                'cast_time'    => $spell->cast_time,
+                'duration'     => $spell->duration,
                 'wowhead_link' => $spell->getWowheadLink(),
             ];
         })->toArray();
 
         $this->outputToCsv(
             sprintf('%s_spells.csv', $dungeonKey),
-            ['id', 'name', 'dispel_type', 'schools', 'aura', 'wowhead_link'],
+            ['id', 'npc_id', 'mechanic', 'name', 'dispel_type', 'schools', 'aura', 'cast_time', 'duration', 'wowhead_link'],
             $csvData
         );
 
