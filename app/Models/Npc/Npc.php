@@ -159,10 +159,10 @@ class Npc extends CacheModel implements MappingModelInterface
         return $this->hasMany(NpcCharacteristic::class)->orderBy('characteristic_id');
     }
 
-    public function spells(): BelongsToMany
+    public function spells(bool $showHidden = false): BelongsToMany
     {
         return $this->belongsToMany(Spell::class, 'npc_spells')
-            ->where('hidden_on_map', false)
+            ->where('hidden_on_map', $showHidden)
             ->orderBy('spells.id');
     }
 

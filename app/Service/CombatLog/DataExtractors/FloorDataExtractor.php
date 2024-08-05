@@ -26,7 +26,7 @@ class FloorDataExtractor implements DataExtractorInterface
         $this->log = $log;
     }
 
-    public function beforeExtract(): void
+    public function beforeExtract(ExtractedDataResult $result): void
     {
 
     }
@@ -87,8 +87,9 @@ class FloorDataExtractor implements DataExtractorInterface
         }
     }
 
-    public function afterExtract(): void
+    public function afterExtract(ExtractedDataResult $result): void
     {
-
+        $this->currentFloor  = null;
+        $this->previousFloor = null;
     }
 }

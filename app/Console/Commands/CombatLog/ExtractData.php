@@ -35,18 +35,12 @@ class ExtractData extends BaseCombatLogCommand
         $this->info(sprintf('Parsing file %s', $filePath));
 
         $result = $combatLogDataExtractionService->extractData($filePath);
-        if ($result->hasUpdatedData()) {
-            $this->info(
-                sprintf(
-                    'Added %d npcs, %d spells. Updated %d floors, %d floor connections, %d npcs, %d spells',
-                    $result->getCreatedNpcs(),
-                    $result->getCreatedSpells(),
-                    $result->getUpdatedFloors(),
-                    $result->getUpdatedFloorConnections(),
-                    $result->getUpdatedNpcs(),
-                    $result->getUpdatedSpells()
-                )
-            );
+        $data   = array_filter($result->toArray());
+        if (!empty($data)) {
+            foreach ($data as $key => $value) {
+                // sprintf
+                $this->info(sprintf('%s: %s', $key, $value));
+            }
         } else {
             $this->comment(
                 'Did not find any data to update'

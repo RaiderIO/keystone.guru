@@ -2,33 +2,22 @@
 
 namespace App\Service\CombatLog\Dtos\DataExtraction;
 
-class ExtractedDataResult
+use Illuminate\Contracts\Support\Arrayable;
+
+class ExtractedDataResult implements Arrayable
 {
     private int $createdNpcs             = 0;
+    private int $createdNpcSpells        = 0;
     private int $updatedNpcs             = 0;
     private int $updatedFloors           = 0;
     private int $updatedFloorConnections = 0;
     private int $createdSpells           = 0;
+    private int $createdSpellDungeon     = 0;
     private int $updatedSpells           = 0;
-
-    public function getCreatedNpcs(): int
-    {
-        return $this->createdNpcs;
-    }
-
-    public function getUpdatedNpcs(): int
-    {
-        return $this->updatedNpcs;
-    }
 
     public function updatedNpc(): void
     {
         $this->updatedNpcs++;
-    }
-
-    public function getUpdatedFloors(): int
-    {
-        return $this->updatedFloors;
     }
 
     public function createdNpc(): void
@@ -36,14 +25,14 @@ class ExtractedDataResult
         $this->createdNpcs++;
     }
 
+    public function createdNpcSpell(): void
+    {
+        $this->createdNpcSpells++;
+    }
+
     public function updatedFloor(): void
     {
         $this->updatedFloors++;
-    }
-
-    public function getUpdatedFloorConnections(): int
-    {
-        return $this->updatedFloorConnections;
     }
 
     public function updatedFloorConnection(): void
@@ -51,19 +40,14 @@ class ExtractedDataResult
         $this->updatedFloorConnections++;
     }
 
-    public function getCreatedSpells(): int
-    {
-        return $this->createdSpells;
-    }
-
     public function createdSpell(): void
     {
         $this->createdSpells++;
     }
 
-    public function getUpdatedSpells(): int
+    public function createdSpellDungeon(): void
     {
-        return $this->updatedSpells;
+        $this->createdSpellDungeon++;
     }
 
     public function updatedSpell(): void
@@ -71,9 +55,17 @@ class ExtractedDataResult
         $this->updatedSpells++;
     }
 
-    public function hasUpdatedData(): bool
+    public function toArray(): array
     {
-        return $this->createdNpcs || $this->updatedFloors || $this->updatedFloorConnections || $this->updatedNpcs ||
-            $this->createdSpells || $this->updatedSpells;
+        return [
+            'createdNpcs'             => $this->createdNpcs,
+            'createdNpcSpells'        => $this->createdNpcSpells,
+            'updatedNpcs'             => $this->updatedNpcs,
+            'updatedFloors'           => $this->updatedFloors,
+            'updatedFloorConnections' => $this->updatedFloorConnections,
+            'createdSpells'           => $this->createdSpells,
+            'createdSpellDungeon'     => $this->createdSpellDungeon,
+            'updatedSpells'           => $this->updatedSpells,
+        ];
     }
 }

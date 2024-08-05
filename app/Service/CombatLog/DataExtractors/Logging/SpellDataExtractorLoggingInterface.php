@@ -4,7 +4,12 @@ namespace App\Service\CombatLog\DataExtractors\Logging;
 
 interface SpellDataExtractorLoggingInterface
 {
+
+    public function extractDataNpcWasSummoned(int $npcId, string $npcName): void;
+
     public function extractDataAssignedDungeonToSpell(int $spellId, int $dungeonId): void;
+
+    public function extractDataAssignedSpellToNpc(int $npcId, int $spellId): void;
 
     public function afterExtractDungeonStart(string $dungeonName): void;
 

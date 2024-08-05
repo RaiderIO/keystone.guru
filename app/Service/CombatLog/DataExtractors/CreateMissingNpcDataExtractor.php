@@ -34,7 +34,7 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
         $this->log = $log;
     }
 
-    public function beforeExtract(): void
+    public function beforeExtract(ExtractedDataResult $result): void
     {
 
     }
@@ -124,9 +124,10 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
                         ));
                 }
 
-                $createdNpc->update([
-                    'base_health' => $baseHealth,
-                ]);
+                // @TODO For now don't update base health - I may be doing the calculation wrong, MDT's got it?
+//                $createdNpc->update([
+//                    'base_health' => $baseHealth,
+//                ]);
 
                 $result->createdNpc();
 
@@ -145,7 +146,7 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
         }
     }
 
-    public function afterExtract(): void
+    public function afterExtract(ExtractedDataResult $result): void
     {
 
     }

@@ -14,7 +14,7 @@ use InvalidArgumentException;
 
 class CombatLogEntry
 {
-    public const DATE_FORMAT = 'm/d H:i:s.v';
+    public const DATE_FORMAT = 'm/d/Y H:i:s.v-4';
 
     private const RAW_EVENT_IGNORE = [
         'Search the gold piles for magic items!',
@@ -40,7 +40,7 @@ class CombatLogEntry
     public function parseEvent(array $eventWhiteList = [], int $combatLogVersion = CombatLogVersion::RETAIL): ?BaseEvent
     {
         $matches = [];
-        if (!preg_match('/(\d*\/\d* \d*:\d*:\d*.\d*)\s\s(.+)/', $this->rawEvent, $matches)) {
+        if (!preg_match('/(\d*\/\d*(?:\/\d*)? \d*:\d*:\d*.\d*(?:-\d*)?)\s\s(.+)/', $this->rawEvent, $matches)) {
             if (!in_array(trim($this->rawEvent), self::RAW_EVENT_IGNORE)) {
                 throw new InvalidArgumentException(sprintf('Unable to parse event %s', $this->rawEvent));
             }

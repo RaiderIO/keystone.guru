@@ -29,7 +29,7 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
         $this->log = $log;
     }
 
-    public function beforeExtract(): void
+    public function beforeExtract(ExtractedDataResult $result): void
     {
 
     }
@@ -82,7 +82,7 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
         }
     }
 
-    public function afterExtract(): void
+    public function afterExtract(ExtractedDataResult $result): void
     {
 
     }

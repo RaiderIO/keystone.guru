@@ -63,7 +63,7 @@ class FetchSpellData extends Command
             }
 
             // Don't DDOS
-            usleep(500000);
+//            usleep(500000);
         }
     }
 }

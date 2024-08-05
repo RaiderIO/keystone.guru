@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use Illuminate\Console\Command;
+use Str;
 
 class ExportCsv extends Command
 {
@@ -34,17 +35,18 @@ class ExportCsv extends Command
         $dungeon = Dungeon::with('spells')->where('key', $dungeonKey)->firstOrFail();
 
         $csvData = $dungeon->spells->where('hidden_on_map', 0)->map(function (Spell $spell) {
-            /** @var Npc $npc */
-            $npc = Npc::with('npcSpells')->whereRelation('npcSpells', 'spell_id', $spell->id)->firstOrFail();
+            /** @var Npc|null $npc */
+            $npc = Npc::with('npcSpells')->whereRelation('npcSpells', 'spell_id', $spell->id)->first();
 
             return [
                 'id'           => $spell->id,
-                'npc_id'       => $npc->id,
+                'npc_id'       => optional($npc)->id ?? 'UNKNOWN',
                 'mechanic'     => __($spell->mechanic, [], 'en_US'),
                 'name'         => $spell->name,
                 'dispel_type'  => $spell->dispel_type,
                 'schools'      => Spell::maskToReadableString($spell->schools_mask),
                 'aura'         => $spell->aura ? 1 : 0,
+                'debuff'       => $spell->debuff ? 1 : 0,
                 'cast_time'    => $spell->cast_time,
                 'duration'     => $spell->duration,
                 'wowhead_link' => $spell->getWowheadLink(),
@@ -52,8 +54,8 @@ class ExportCsv extends Command
         })->toArray();
 
         $this->outputToCsv(
-            sprintf('%s_spells.csv', $dungeonKey),
-            ['id', 'npc_id', 'mechanic', 'name', 'dispel_type', 'schools', 'aura', 'cast_time', 'duration', 'wowhead_link'],
+            sprintf('%s_spells.csv', Str::slug(__($dungeon->name, [], 'en_US'))),
+            ['id', 'npc_id', 'mechanic', 'name', 'dispel_type', 'schools', 'aura', 'debuff', 'cast_time', 'duration', 'wowhead_link'],
             $csvData
         );
 

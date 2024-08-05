@@ -22,7 +22,8 @@ use Str;
  * @property string                   $icon_name
  * @property string                   $name
  * @property int                      $schools_mask
- * @property bool                     $aura
+ * @property bool                     $aura Whenever it's a beneficial spell on a friendly target (extracted from CombatLogs)
+ * @property bool                     $debuff Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
  * @property int                      $cast_time
  * @property int                      $duration
  * @property bool                     $selectable
@@ -60,6 +61,7 @@ class Spell extends CacheModel implements MappingModelInterface
         'name',
         'schools_mask',
         'aura',
+        'debuff',
         'cast_time',
         'duration',
         'selectable',
@@ -71,6 +73,7 @@ class Spell extends CacheModel implements MappingModelInterface
         'id'            => 'integer',
         'schools_mask'  => 'integer',
         'aura'          => 'boolean',
+        'debuff'        => 'boolean',
         'cast_time'     => 'integer',
         'duration'      => 'integer',
         'selectable'    => 'boolean',

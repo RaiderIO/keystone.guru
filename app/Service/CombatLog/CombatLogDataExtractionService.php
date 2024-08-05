@@ -47,6 +47,10 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
         $result = new ExtractedDataResult();
 
+        foreach ($this->dataExtractors as $dataExtractor) {
+            $dataExtractor->beforeExtract($result);
+        }
+
         $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
         use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds) {
             $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => trim($rawEvent), 'lineNr' => $lineNr]);
@@ -78,6 +82,10 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
         // Remove the lineNr context since we stopped parsing lines, don't let the last line linger in the context
         $this->log->removeContext('lineNr');
+
+        foreach ($this->dataExtractors as $dataExtractor) {
+            $dataExtractor->afterExtract($result);
+        }
 
         return $result;
     }

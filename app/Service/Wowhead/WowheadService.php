@@ -260,6 +260,7 @@ class WowheadService implements WowheadServiceInterface
                 $durationFound = true;
             } // Triggered on the next line
             else if ($durationFound) {
+                /** @noinspection HtmlDeprecatedAttribute */
                 $duration = str_replace(['<td width="100%">', '</td>'], '', $line);
                 if (str_contains($duration, 'n/a')) {
                     $duration = null;
