@@ -108,15 +108,6 @@ trait SpellConstants
         self::COOLDOWN_GROUP_UNKNOWN,
     ];
 
-    // Some hard coded spells that we have exceptions for in the code
-    public const SPELL_BLOODLUST           = 2825;
-    public const SPELL_HEROISM             = 32182;
-    public const SPELL_TIME_WARP           = 80353;
-    public const SPELL_FURY_OF_THE_ASPECTS = 390386;
-    public const SPELL_ANCIENT_HYSTERIA    = 90355;
-    public const SPELL_PRIMAL_RAGE         = 264667;
-    public const SPELL_FERAL_HIDE_DRUMS    = 381301;
-
     public const MECHANIC_ASLEEP        = 'asleep';
     public const MECHANIC_BANISHED      = 'banished';
     public const MECHANIC_BLEEDING      = 'bleeding';
@@ -181,5 +172,18 @@ trait SpellConstants
         self::MECHANIC_STUNNED,
         self::MECHANIC_TURNED,
         self::MECHANIC_WOUNDED,
+    ];
+
+    // Some hard coded spells that we have exceptions for in the code
+    public const SPELL_BLOODLUST           = 2825;
+    public const SPELL_HEROISM             = 32182;
+    public const SPELL_TIME_WARP           = 80353;
+    public const SPELL_FURY_OF_THE_ASPECTS = 390386;
+    public const SPELL_ANCIENT_HYSTERIA    = 90355;
+    public const SPELL_PRIMAL_RAGE         = 264667;
+    public const SPELL_FERAL_HIDE_DRUMS    = 381301;
+
+    public const EXCLUDE_MDT_IMPORT_SPELLS = [
+        186439, // Shadow Mend, was removed from the game
     ];
 }

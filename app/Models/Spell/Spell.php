@@ -11,8 +11,8 @@ use Str;
 
 /**
  * @property int    $id
- * @property string $category
- * @property string $cooldown_group
+ * @property string|null $category
+ * @property string|null $cooldown_group
  * @property string $dispel_type
  * @property string $icon_name
  * @property string $name

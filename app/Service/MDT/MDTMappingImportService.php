@@ -163,6 +163,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 // Save spells
                 foreach ($mdtNpc->getSpells() as $spellId => $obj) {
+                    if( in_array($spellId, Spell::EXCLUDE_MDT_IMPORT_SPELLS) ) {
+                        $this->log->importNpcsDataFromMDTSpellInExcludeList();
+                        continue;
+                    }
+
                     $npcSpellsAttributes[sprintf('%s-%s', $npc->id, $spellId)] = [
                         'npc_id'   => $npc->id,
                         'spell_id' => $spellId,
@@ -222,6 +227,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 foreach ($mdtSpells as $spellId => $spell) {
                     // Ignore spells that we know of - we really only have IDs from MDT, so keep any data that was already there
                     if ($existingSpells->get($spellId) !== null) {
+                        continue;
+                    }
+
+                    if (in_array($spellId, Spell::EXCLUDE_MDT_IMPORT_SPELLS)) {
+                        $this->log->importSpellDataFromMDTSpellInExcludeList();
+
                         continue;
                     }
 
