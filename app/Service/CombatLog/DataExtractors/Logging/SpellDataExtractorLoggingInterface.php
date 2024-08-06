@@ -9,7 +9,7 @@ interface SpellDataExtractorLoggingInterface
 
     public function extractDataAssignedDungeonToSpell(int $spellId, int $dungeonId): void;
 
-    public function extractDataAssignedSpellToNpc(int $npcId, int $spellId): void;
+    public function extractDataAssignedSpellToNpc(int $npcId, int $spellId, string $rawEvent): void;
 
     public function afterExtractDungeonStart(string $dungeonName): void;
 

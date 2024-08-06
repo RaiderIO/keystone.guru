@@ -16,7 +16,7 @@ class SpellDataExtractorLogging extends StructuredLogging implements SpellDataEx
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    public function extractDataAssignedSpellToNpc(int $npcId, int $spellId): void
+    public function extractDataAssignedSpellToNpc(int $npcId, int $spellId, string $rawEvent): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }

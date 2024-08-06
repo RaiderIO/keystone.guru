@@ -142,7 +142,7 @@ class SpellDataExtractor implements DataExtractorInterface
 
                         $result->createdNpcSpell();
 
-                        $this->log->extractDataAssignedSpellToNpc($npc->id, $prefix->getSpellId());
+                        $this->log->extractDataAssignedSpellToNpc($npc->id, $prefix->getSpellId(), $parsedEvent->getRawEvent());
                     }
                 }
             }

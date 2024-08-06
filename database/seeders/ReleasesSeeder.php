@@ -16,7 +16,6 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding releases');
         $rootDir         = database_path('seeders/releases/');
         $rootDirIterator = new FilesystemIterator($rootDir);
 
@@ -60,17 +59,9 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
             $releaseAttributes[] = $releaseAttribute;
         }
 
-        $this->command->info(sprintf('Inserting %d releases..', count($releaseAttributes)));
-
-        $result = Release::from(DatabaseSeeder::getTempTableName(Release::class))->insert($releaseAttributes) &&
-            ReleaseChangelog::from(DatabaseSeeder::getTempTableName(ReleaseChangelog::class))->insert($releaseChangeLogAttributes) &&
-            ReleaseChangelogChange::from(DatabaseSeeder::getTempTableName(ReleaseChangelogChange::class))->insert($releaseChangeLogChangesAttributes);
-
-        if ($result) {
-            $this->command->info(sprintf('Inserting %d releases OK', count($releaseAttributes)));
-        } else {
-            $this->command->warn(sprintf('Inserting %d releases FAILED', count($releaseAttributes)));
-        }
+        Release::from(DatabaseSeeder::getTempTableName(Release::class))->insert($releaseAttributes) &&
+        ReleaseChangelog::from(DatabaseSeeder::getTempTableName(ReleaseChangelog::class))->insert($releaseChangeLogAttributes) &&
+        ReleaseChangelogChange::from(DatabaseSeeder::getTempTableName(ReleaseChangelogChange::class))->insert($releaseChangeLogChangesAttributes);
     }
 
     public static function getAffectedModelClasses(): array

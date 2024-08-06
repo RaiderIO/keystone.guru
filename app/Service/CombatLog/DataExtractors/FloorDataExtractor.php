@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class FloorDataExtractor implements DataExtractorInterface
 {
-    private ?Floor $previousFloor = null;
+//    private ?Floor $previousFloor = null;
     private ?Floor $currentFloor  = null;
 
     private FloorDataExtractorLoggingInterface $log;
@@ -38,7 +38,7 @@ class FloorDataExtractor implements DataExtractorInterface
             return;
         }
 
-        $this->previousFloor = $this->currentFloor;
+//        $this->previousFloor = $this->currentFloor;
 
         try {
             $this->currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID(), $currentDungeon->dungeon->id);
@@ -68,19 +68,20 @@ class FloorDataExtractor implements DataExtractorInterface
                 );
             }
 
-            if ($this->previousFloor !== null && $this->previousFloor !== $this->currentFloor) {
-                $assignedFloor = $this->previousFloor->ensureConnectionToFloor($this->currentFloor);
-                $assignedFloor = $this->currentFloor->ensureConnectionToFloor($this->previousFloor) || $assignedFloor;
-
-                if ($assignedFloor) {
-                    $result->updatedFloorConnection();
-
-                    $this->log->extractDataAddedNewFloorConnection(
-                        $this->previousFloor->id,
-                        $this->currentFloor->id
-                    );
-                }
-            }
+            // This doesn't always give me the correct results, so I'm disabling it for now
+//            if ($this->previousFloor !== null && $this->previousFloor !== $this->currentFloor) {
+//                $assignedFloor = $this->previousFloor->ensureConnectionToFloor($this->currentFloor);
+//                $assignedFloor = $this->currentFloor->ensureConnectionToFloor($this->previousFloor) || $assignedFloor;
+//
+//                if ($assignedFloor) {
+//                    $result->updatedFloorConnection();
+//
+//                    $this->log->extractDataAddedNewFloorConnection(
+//                        $this->previousFloor->id,
+//                        $this->currentFloor->id
+//                    );
+//                }
+//            }
         } catch (ModelNotFoundException $exception) {
             // We're now on an unknown floor - so don't try to connect floors to floors that aren't actually connected
             $this->currentFloor = null;
@@ -90,6 +91,6 @@ class FloorDataExtractor implements DataExtractorInterface
     public function afterExtract(ExtractedDataResult $result): void
     {
         $this->currentFloor  = null;
-        $this->previousFloor = null;
+//        $this->previousFloor = null;
     }
 }
