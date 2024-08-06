@@ -8,11 +8,6 @@ use Database\Seeders\DatabaseSeeder;
 
 class NpcNpcSpellsRelationParser implements RelationParserInterface
 {
-    public function canParseRootModel(string $modelClassName): bool
-    {
-        return false;
-    }
-
     public function canParseModel(string $modelClassName): bool
     {
         return $modelClassName === Npc::class;
@@ -25,11 +20,13 @@ class NpcNpcSpellsRelationParser implements RelationParserInterface
 
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array
     {
+        $npcSpellAttributes = [];
         foreach ($value as $npcSpell) {
             $npcSpell['npc_id'] = $modelData['id'];
 
-            NpcSpell::from(DatabaseSeeder::getTempTableName(NpcSpell::class))->insert($npcSpell);
+            $npcSpellAttributes[] = $npcSpell;
         }
+        NpcSpell::from(DatabaseSeeder::getTempTableName(NpcSpell::class))->insert($npcSpellAttributes);
 
         // Didn't really change anything so just return the value.
         return $modelData;

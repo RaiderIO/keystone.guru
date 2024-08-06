@@ -4,11 +4,6 @@ namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
 class NestedModelRelationParser implements RelationParserInterface
 {
-    public function canParseRootModel(string $modelClassName): bool
-    {
-        return false;
-    }
-
     public function canParseModel(string $modelClassName): bool
     {
         //  Can parse any model
