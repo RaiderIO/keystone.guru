@@ -268,7 +268,7 @@ class CombatLogService implements CombatLogServiceInterface
         $rawEvent = '';
         try {
             $this->log->parseCombatLogParseEventsStart();
-            $combatLogVersion = CombatLogVersion::RETAIL;
+            $combatLogVersion = CombatLogVersion::RETAIL_10_1_0;
             while (($rawEvent = fgets($handle)) !== false) {
                 $parsedEvent = $callback($combatLogVersion, $rawEvent, ++$lineNr);
                 if ($parsedEvent instanceof CombatLogVersionEvent) {
