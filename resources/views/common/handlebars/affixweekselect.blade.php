@@ -21,9 +21,8 @@ $id ??= 'affixes';
 <script>``
     let _seasonWeeklyAffixGroups{{ $id }} = {!! $seasonWeeklyAffixGroups !!};
 
-    $(function () {
-        handlebarsLoadWeekAffixGroupSelect{{ $id }}();
-    });
+    // Load it immediately so that the search headers can take advantage of the data that is set in the option elements
+    handlebarsLoadWeekAffixGroupSelect{{ $id }}();
 
     /**
      * @returns {*}
@@ -38,7 +37,6 @@ $id ??= 'affixes';
 
                 let seasonWeeklyAffixGroup = _seasonWeeklyAffixGroups{{ $id }}[i];
                 let affixGroup = seasonWeeklyAffixGroup.affixGroup;
-                console.log(seasonWeeklyAffixGroup);
 
                 let template = Handlebars.templates['weekly_affix_group_select_option_template'];
 
@@ -69,7 +67,7 @@ $id ??= 'affixes';
 
                 let html = template($.extend(handlebarsDefaultVariables, handlebarsData));
                 let selector = affixWeekSelectSelector + ' option[value=' + week + ']';
-                $(selector).attr('data-content', html);
+                $(selector).attr('data-content', html).attr('data-date', formattedDate);
             }
         }
 

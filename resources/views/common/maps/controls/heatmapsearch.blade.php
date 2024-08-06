@@ -69,7 +69,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'filterLevelSelector' => '#filter_level',
     'filterAffixGroupsSelector' => '#filter_affixes',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
-    'filterWeeklyAffixGroupSelector' => '#filter_weekly_affix_groups',
+    'filterWeeklyAffixGroupsSelector' => '#filter_weekly_affix_groups',
     'filterDateRangeFromSelector' => '#filter_date_from',
     'filterDateRangeToSelector' => '#filter_date_to',
     'filterDateRangeFromClearBtnSelector' => '#filter_date_from_clear_btn',
@@ -243,9 +243,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                                     }), [],
                                     ['id' => 'filter_weekly_affix_groups',
                                     'class' => 'form-control affixselect selectpicker',
-                                    'title' => __('view_common.maps.controls.heatmapsearch.weekly_affix_groups_title'),
-                                    'data-selected-text-format' => 'count > 1',
-                                    'data-count-selected-text' => __('view_common.maps.controls.heatmapsearch.weekly_affix_groupss_selected')]) !!}
+                                    'title' => __('view_common.maps.controls.heatmapsearch.weekly_affix_groups_title')]) !!}
                             </div>
                         </div>
                     </div>
