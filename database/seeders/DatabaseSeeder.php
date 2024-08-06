@@ -106,6 +106,8 @@ class DatabaseSeeder extends Seeder
                 }
             } catch (Exception $e) {
                 $this->command->error($e->getMessage());
+
+                throw $e;
             } finally {
                 $cleanupFailed = false;
                 foreach ($affectedModelClasses as $affectedModelClass) {
@@ -142,15 +144,19 @@ class DatabaseSeeder extends Seeder
         /** @var Model $instance */
         $instance = new $className();
 
-        $tableNameOld = $instance->getTable();
-        $tableNameNew = sprintf('%s%s', $tableNameOld, self::TEMP_TABLE_SUFFIX);
+        $tableNameOriginal = $instance->getTable();
+        $tableNameNewData  = sprintf('%s%s', $tableNameOriginal, self::TEMP_TABLE_SUFFIX);
 
-        // Remove contents from old table, replace it with contents from new table
-        //        DB::transaction(function () use ($tableNameOld, $tableNameNew, $className) {
-        DB::table($tableNameOld)->truncate();
-
-        return DB::statement(sprintf('INSERT INTO %s SELECT * FROM %s;', $tableNameOld, $tableNameNew));
-        //        });
+        // Rename tables in one statement to prevent any downtime
+        return DB::statement(
+            sprintf(
+                'RENAME TABLE %s TO temp_table, %s TO %s, temp_table TO %s;',
+                $tableNameOriginal,
+                $tableNameNewData,
+                $tableNameOriginal,
+                $tableNameNewData,
+            )
+        );
     }
 
     private function cleanupTempTableForModel(string $className): bool
