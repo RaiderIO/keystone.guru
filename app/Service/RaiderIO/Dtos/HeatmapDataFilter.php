@@ -22,6 +22,8 @@ class HeatmapDataFilter implements Arrayable
     /** @var Collection<Affix> */
     private Collection $affixes;
 
+    private ?int $weeklyAffixGroups = null;
+
     private ?Carbon $dateFrom = null;
 
     private ?Carbon $dateTo = null;
@@ -116,6 +118,18 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
+    public function getWeeklyAffixGroups(): ?int
+    {
+        return $this->weeklyAffixGroups;
+    }
+
+    public function setWeeklyAffixGroups(?int $weeklyAffixGroups): HeatmapDataFilter
+    {
+        $this->weeklyAffixGroups = $weeklyAffixGroups;
+
+        return $this;
+    }
+
     public function getDateFrom(): ?Carbon
     {
         return $this->dateFrom;
@@ -198,7 +212,9 @@ class HeatmapDataFilter implements Arrayable
             ])->toArray();
         }
 
-        // @TODO Add date ranges (going to get reworked anyway)
+        if ($this->getWeeklyAffixGroups() !== null) {
+            $result['weekly_affix_groups'] = $this->getWeeklyAffixGroups();
+        }
 
         return $result;
     }
@@ -228,6 +244,10 @@ class HeatmapDataFilter implements Arrayable
 
         if (isset($requestArray['affix_groups'])) {
             $heatmapDataFilter->setAffixGroups(AffixGroup::whereIn('id', $requestArray['affix_groups'])->get());
+        }
+
+        if (isset($requestArray['weekly_affix_groups'])) {
+            $heatmapDataFilter->setWeeklyAffixGroups($requestArray['weekly_affix_groups']);
         }
 
         if (isset($requestArray['date_range_from'])) {
