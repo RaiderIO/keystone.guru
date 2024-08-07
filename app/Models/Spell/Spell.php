@@ -10,6 +10,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Str;
 
@@ -28,6 +29,7 @@ use Str;
  * @property int                      $duration
  * @property bool                     $selectable
  * @property bool                     $hidden_on_map
+ * @property Carbon                   $fetched_data_at
  *
  * @property string                   $icon_url
  *
@@ -67,17 +69,19 @@ class Spell extends CacheModel implements MappingModelInterface
         'selectable',
         'hidden_on_map',
         'icon_url',
+        'fetched_data_at',
     ];
 
     protected $casts = [
-        'id'            => 'integer',
-        'schools_mask'  => 'integer',
-        'aura'          => 'boolean',
-        'debuff'        => 'boolean',
-        'cast_time'     => 'integer',
-        'duration'      => 'integer',
-        'selectable'    => 'boolean',
-        'hidden_on_map' => 'boolean',
+        'id'              => 'integer',
+        'schools_mask'    => 'integer',
+        'aura'            => 'boolean',
+        'debuff'          => 'boolean',
+        'cast_time'       => 'integer',
+        'duration'        => 'integer',
+        'selectable'      => 'boolean',
+        'hidden_on_map'   => 'boolean',
+        'fetched_data_at' => 'date',
     ];
 
     public function getSchoolsAsArray(): array

@@ -9,7 +9,6 @@ use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
-use App\Logic\CombatLog\Guid\Guid;
 use App\Logic\CombatLog\Guid\Player;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
@@ -19,6 +18,7 @@ use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLoggingInterf
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 use App\Service\Wowhead\WowheadServiceInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class SpellDataExtractor implements DataExtractorInterface
@@ -76,9 +76,21 @@ class SpellDataExtractor implements DataExtractorInterface
                 // Only actual creatures - not pets
                 $sourceGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE;
 
+            $destGuid  = $parsedEvent->getGenericData()->getDestGuid();
+            $destIsNpc = $destGuid instanceof Creature &&
+                // Only actual creatures - not pets
+                $destGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE;
+
+            // Npcs can cast buffs on one another, and it'll count for a spell that they cast
+            // Some player spells cause NPCs to cast spells on other NPCs, but those will be debuffs
+            // (such as Death Knight Blinding Sleet), we don't want to attribute that to the NPC
+            // 8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Creature-0-2085-2290-22744-164921-00012D4051,"Drust Harvester",0xa48,0x0,Creature-0-2085-2290-22744-164921-00012D4051,"Drust Harvester",0xa48,0x0,317898,"Blinding Sleet",0x10,DEBUFF
             if ($sourceIsNpc &&
                 // Ignore summoned NPCs
-                $this->summonedNpcs->search($sourceGuid->getId()) === false) {
+                $this->summonedNpcs->search($sourceGuid->getId()) === false &&
+                // If destination is an NPC and it's a buff, or if the target was a player
+                (($destIsNpc && $suffix->getAuraType() === AuraApplied::AURA_TYPE_BUFF) ||
+                    $destGuid instanceof Player)) {
 
                 $this->createMissingSpell($result, $parsedEvent, $prefix);
 
@@ -186,45 +198,32 @@ class SpellDataExtractor implements DataExtractorInterface
     private function assignSpellToNpc(
         ExtractedDataResult $result,
         CombatLogEvent      $parsedEvent,
-        Guid                $sourceGuid,
+        Creature            $sourceGuid,
         Spell               $prefix,
         AuraApplied         $suffix
     ): void {
-        $destGuid  = $parsedEvent->getGenericData()->getDestGuid();
-        $destIsNpc = $destGuid instanceof Creature &&
-            // Only actual creatures - not pets
-            $destGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE;
+        // Assign spell IDs to NPCs
+        /** @var Npc $npc */
+        $npc = Npc::with('npcSpells')->find($sourceGuid->getId());
+        if ($npc !== null) {
+            // use ->filter()
+            $npcHasSpell = $npc->npcSpells->filter(function (NpcSpell $npcSpell) use ($prefix) {
+                return $npcSpell->spell_id === $prefix->getSpellId();
+            })->isNotEmpty();
 
-        // Npcs can cast buffs on one another, and it'll count for a spell that they cast
-        // Some player spells cause NPCs to cast spells on other NPCs, but those will be debuffs
-        // (such as Death Knight Blinding Sleet), we don't want to attribute that to the NPC
-        // 8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Creature-0-2085-2290-22744-164921-00012D4051,"Drust Harvester",0xa48,0x0,Creature-0-2085-2290-22744-164921-00012D4051,"Drust Harvester",0xa48,0x0,317898,"Blinding Sleet",0x10,DEBUFF
-        if (($destIsNpc && $suffix->getAuraType() === AuraApplied::AURA_TYPE_BUFF) ||
-            $destGuid instanceof Player) {
+            // This NPC now casts this spell - we have proof
+            if (!$npcHasSpell) {
+                NpcSpell::create([
+                    'npc_id'   => $npc->id,
+                    'spell_id' => $prefix->getSpellId(),
+                ]);
 
-            // Assign spell IDs to NPCs
-            /** @var Npc $npc */
-            $npc = Npc::with('npcSpells')->find($sourceGuid->getId());
-            if ($npc !== null) {
-                // use ->filter()
-                $npcHasSpell = $npc->npcSpells->filter(function (NpcSpell $npcSpell) use ($prefix) {
-                    return $npcSpell->spell_id === $prefix->getSpellId();
-                })->isNotEmpty();
+                $result->createdNpcSpell();
 
-                // This NPC now casts this spell - we have proof
-                if (!$npcHasSpell) {
-                    NpcSpell::create([
-                        'npc_id'   => $npc->id,
-                        'spell_id' => $prefix->getSpellId(),
-                    ]);
-
-                    $result->createdNpcSpell();
-
-                    $this->log->extractDataAssignedSpellToNpc($npc->id, $prefix->getSpellId(), $parsedEvent->getRawEvent());
-                }
+                $this->log->extractDataAssignedSpellToNpc($npc->id, $prefix->getSpellId(), $parsedEvent->getRawEvent());
             }
         } else {
-            $this->log->extractDataSpellNotAssignedToNpc($destIsNpc, $suffix->getAuraType());
+            $this->log->extractDataSpellNpcNull($sourceGuid->getId());
         }
     }
 
@@ -264,7 +263,8 @@ class SpellDataExtractor implements DataExtractorInterface
             $spellDataResult = $wowheadService->getSpellData($spell->getSpellId());
 
             $spellAttributes = [
-                'id' => $spell->getSpellId(),
+                'id'              => $spell->getSpellId(),
+                'fetched_data_at' => Carbon::now(),
             ];
 
             if ($spellDataResult === null) {

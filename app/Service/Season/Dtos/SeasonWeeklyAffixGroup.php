@@ -3,8 +3,7 @@
 namespace App\Service\Season\Dtos;
 
 use App\Models\AffixGroup\AffixGroup;
-use App\Models\Season;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 readonly class SeasonWeeklyAffixGroup
 {

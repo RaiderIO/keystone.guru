@@ -21,11 +21,10 @@ class SpellDataExtractorLogging extends StructuredLogging implements SpellDataEx
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    public function extractDataSpellNotAssignedToNpc(bool $destIsNpc, string $auraType): void
+    public function extractDataSpellNpcNull(int $npcId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
-
 
     public function afterExtractDungeonStart(string $dungeonName): void
     {
@@ -56,6 +55,5 @@ class SpellDataExtractorLogging extends StructuredLogging implements SpellDataEx
     {
         $this->end(__METHOD__);
     }
-
 
 }
