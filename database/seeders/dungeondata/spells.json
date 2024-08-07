@@ -44595,7 +44595,7 @@
         "name": "Frozen Binds",
         "schools_mask": 16,
         "aura": false,
-        "debuff": null,
+        "debuff": true,
         "cast_time": null,
         "duration": null,
         "selectable": false,

@@ -96,7 +96,7 @@ class SpellDataExtractor implements DataExtractorInterface
 
                 $this->assignDungeonToSpell($result, $currentDungeon, $parsedEvent, $prefix);
 
-                $this->assignSpellToNpc($result, $parsedEvent, $sourceGuid, $prefix, $suffix);
+                $this->assignSpellToNpc($result, $parsedEvent, $sourceGuid, $prefix);
             }
         }
     }
@@ -199,8 +199,7 @@ class SpellDataExtractor implements DataExtractorInterface
         ExtractedDataResult $result,
         CombatLogEvent      $parsedEvent,
         Creature            $sourceGuid,
-        Spell               $prefix,
-        AuraApplied         $suffix
+        Spell               $prefix
     ): void {
         // Assign spell IDs to NPCs
         /** @var Npc $npc */
