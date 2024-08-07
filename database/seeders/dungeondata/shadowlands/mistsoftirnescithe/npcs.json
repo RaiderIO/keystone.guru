@@ -157,6 +157,9 @@
                 "spell_id": 322655
             },
             {
+                "spell_id": 322658
+            },
+            {
                 "spell_id": 322709
             },
             {
@@ -530,6 +533,9 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
         "npc_spells": [
+            {
+                "spell_id": 321669
+            },
             {
                 "spell_id": 321725
             }
@@ -1286,13 +1292,19 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
+                "spell_id": 324737
+            },
+            {
                 "spell_id": 463236
             },
             {
-                "spell_id": 463257
+                "spell_id": 463247
             },
             {
-                "spell_id": 324737
+                "spell_id": 463248
+            },
+            {
+                "spell_id": 463257
             }
         ],
         "npc_enemy_forces": [

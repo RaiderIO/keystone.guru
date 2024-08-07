@@ -168,7 +168,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function npcSpells(): HasMany
     {
-        return $this->hasMany(NpcSpell::class);
+        return $this->hasMany(NpcSpell::class)->orderBy('spell_id');
     }
 
     public function npcEnemyForces(): HasMany

@@ -7,6 +7,9 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBase;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBrokenSpell;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Missed;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Player;
@@ -73,33 +76,36 @@ class SpellDataExtractor implements DataExtractorInterface
             return;
         }
 
-        $suffix = $parsedEvent->getSuffix();
-        if ($suffix instanceof AuraApplied) {
-            $sourceGuid  = $parsedEvent->getGenericData()->getSourceGuid();
-            $sourceIsNpc = $sourceGuid instanceof Creature &&
-                // Only actual creatures - not pets
-                $sourceGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE;
+        $suffix      = $parsedEvent->getSuffix();
+        $sourceGuid  = $parsedEvent->getGenericData()->getSourceGuid();
+        $sourceIsNpc = $sourceGuid instanceof Creature &&
+            // Only actual creatures - not pets
+            $sourceGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE;
 
-            $destGuid  = $parsedEvent->getGenericData()->getDestGuid();
-            $destIsNpc = $destGuid instanceof Creature &&
-                // Only actual creatures - not pets
-                $destGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE;
+        $destGuid  = $parsedEvent->getGenericData()->getDestGuid();
+        $destIsNpc = $destGuid instanceof Creature &&
+            // Only actual creatures - not pets
+            $destGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE;
 
-            // Npcs can cast buffs on one another, and it'll count for a spell that they cast
-            // Some player spells cause NPCs to cast spells on other NPCs, but those will be debuffs
-            // (such as Death Knight Blinding Sleet), we don't want to attribute that to the NPC
-            // 8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Creature-0-2085-2290-22744-164921-00012D4051,"Drust Harvester",0xa48,0x0,Creature-0-2085-2290-22744-164921-00012D4051,"Drust Harvester",0xa48,0x0,317898,"Blinding Sleet",0x10,DEBUFF
-            if ($sourceIsNpc &&
-                // Ignore summoned NPCs
-                $this->summonedNpcs->search($sourceGuid->getId()) === false &&
-                // If destination is an NPC, and it's a buff, or if the target was a player
-                (($destIsNpc && $suffix->getAuraType() === AuraApplied::AURA_TYPE_BUFF) ||
-                    $destGuid instanceof Player)) {
+        // Npcs can cast buffs on one another, and it'll count for a spell that they cast
+        // Some player spells cause NPCs to cast spells on other NPCs, but those will be debuffs
+        // (such as Death Knight Blinding Sleet), we don't want to attribute that to the NPC
+        // 8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Creature-0-2085-2290-22744-164921-00012D4051,"Drust Harvester",0xa48,0x0,Creature-0-2085-2290-22744-164921-00012D4051,"Drust Harvester",0xa48,0x0,317898,"Blinding Sleet",0x10,DEBUFF
+        if ($sourceIsNpc &&
+            // Ignore summoned NPCs
+            $this->summonedNpcs->search($sourceGuid->getId()) === false &&
+            // If destination is an NPC, and it's a buff, or if the target was a player
+            (($destIsNpc && $suffix instanceof AuraApplied && $suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF) ||
+                $destGuid instanceof Player)) {
 
-                $this->extractSpellData($result, $parsedEvent, $prefix);
+            $this->extractSpellData($result, $parsedEvent, $prefix);
 
-                $this->assignDungeonToSpell($result, $currentDungeon, $parsedEvent, $prefix);
+            $this->assignDungeonToSpell($result, $currentDungeon, $parsedEvent, $prefix);
 
+            // 8/2/2024 16:37:04.342-4  SPELL_AURA_BROKEN_SPELL,Creature-0-2085-2290-22770-171772-00002D40C5,"Mistveil Defender",0xa48,0x0,Player-4184-005B8B04,"Gulagcool-TheseGoToEleven-TR",0x512,0x0,1784,"Stealth",0x1,457129,"Deathstalker's Mark",1,DEBUFF
+            // If the NPC broke an aura - that's not the NPC casting "Stealth" on a player - no it broke it out of it,
+            // so don't assign that spell to this NPC
+            if (!($suffix instanceof AuraBrokenSpell)) {
                 $this->assignSpellToNpc($result, $parsedEvent, $sourceGuid, $prefix);
             }
         }
@@ -230,6 +236,9 @@ class SpellDataExtractor implements DataExtractorInterface
                     'spell_id' => $prefix->getSpellId(),
                 ]);
 
+                // Refresh the relation
+                $npc->load('npcSpells');
+
                 $result->createdNpcSpell();
 
                 $this->log->extractDataAssignedSpellToNpc($npc->id, $prefix->getSpellId(), $parsedEvent->getRawEvent());
@@ -244,17 +253,17 @@ class SpellDataExtractor implements DataExtractorInterface
         SpellModel          $spell,
         CombatLogEvent      $combatLogEvent
     ): bool {
-        /** @var AuraApplied $suffix */
         $suffix        = $combatLogEvent->getSuffix();
         $spell->aura   = $spell->aura ||
-            ($suffix->getAuraType() === AuraApplied::AURA_TYPE_BUFF &&
+            ($suffix instanceof AuraApplied && $suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF &&
                 $combatLogEvent->getGenericData()->getDestGuid() instanceof Creature &&
                 $combatLogEvent->getGenericData()->getDestGuid()->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE);
         $spell->debuff = $spell->debuff ||
-            ($suffix->getAuraType() === AuraApplied::AURA_TYPE_DEBUFF &&
+            ($suffix instanceof AuraApplied && $suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF &&
                 $combatLogEvent->getGenericData()->getDestGuid() instanceof Player);
         // If a spell was missed somehow, write it to the miss_types_mask field
-        $spell->miss_types_mask |= SpellModel::GUID_MISS_TYPE_MAPPING[get_class($combatLogEvent->getGenericData()->getDestGuid())] ?? 0;
+        $spell->miss_types_mask |= $suffix instanceof Missed &&
+        SpellModel::ALL_MISS_TYPES[ucfirst(strtolower($suffix->getMissType()))] ?? 0;
 
         if ($spell->isDirty() && $spell->save()) {
             $result->updatedSpell();

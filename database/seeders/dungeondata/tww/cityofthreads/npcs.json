@@ -389,6 +389,9 @@
                 "spell_id": 440049
             },
             {
+                "spell_id": 440107
+            },
+            {
                 "spell_id": 440419
             },
             {
@@ -402,9 +405,6 @@
             },
             {
                 "spell_id": 441381
-            },
-            {
-                "spell_id": 440107
             }
         ],
         "npc_enemy_forces": []

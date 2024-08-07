@@ -1019,10 +1019,10 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "spell_id": 451096
+                "spell_id": 449026
             },
             {
-                "spell_id": 449026
+                "spell_id": 451096
             }
         ],
         "npc_enemy_forces": []
