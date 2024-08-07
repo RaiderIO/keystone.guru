@@ -262,8 +262,10 @@ class SpellDataExtractor implements DataExtractorInterface
             ($suffix instanceof AuraApplied && $suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF &&
                 $combatLogEvent->getGenericData()->getDestGuid() instanceof Player);
         // If a spell was missed somehow, write it to the miss_types_mask field
-        $spell->miss_types_mask |= $suffix instanceof Missed &&
-        SpellModel::ALL_MISS_TYPES[ucfirst(strtolower($suffix->getMissType()))] ?? 0;
+        if ($suffix instanceof Missed) {
+            $spell->miss_types_mask |=
+                SpellModel::ALL_MISS_TYPES[ucfirst(strtolower($suffix->getMissType()))] ?? 0;
+        }
 
         if ($spell->isDirty() && $spell->save()) {
             $result->updatedSpell();
