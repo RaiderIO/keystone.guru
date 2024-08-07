@@ -85,6 +85,9 @@
             },
             {
                 "spell_id": 425974
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -161,6 +164,9 @@
                 "spell_id": 443405
             },
             {
+                "spell_id": 443838
+            },
+            {
                 "spell_id": 445409
             },
             {
@@ -210,6 +216,9 @@
             },
             {
                 "spell_id": 427300
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -260,6 +269,9 @@
             },
             {
                 "spell_id": 449070
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -310,6 +322,9 @@
             },
             {
                 "spell_id": 452811
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -363,6 +378,9 @@
             },
             {
                 "spell_id": 427361
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -416,6 +434,9 @@
         "npc_spells": [
             {
                 "spell_id": 449455
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -468,6 +489,9 @@
                 "spell_id": 452811
             },
             {
+                "spell_id": 461978
+            },
+            {
                 "spell_id": 464876
             }
         ],
@@ -512,6 +536,9 @@
             },
             {
                 "spell_id": 459210
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -567,6 +594,35 @@
             },
             {
                 "spell_id": 457465
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 213125,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "Void Rift",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 427315
             }
         ],
         "npc_enemy_forces": []
@@ -666,6 +722,9 @@
                 "spell_id": 430097
             },
             {
+                "spell_id": 430098
+            },
+            {
                 "spell_id": 439577
             },
             {
@@ -721,6 +780,9 @@
             },
             {
                 "spell_id": 429110
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -861,6 +923,9 @@
             },
             {
                 "spell_id": 428887
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -955,6 +1020,9 @@
             },
             {
                 "spell_id": 429427
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -998,6 +1066,9 @@
             },
             {
                 "spell_id": 448975
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -1051,6 +1122,9 @@
             },
             {
                 "spell_id": 429545
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -1130,6 +1204,9 @@
         "npc_spells": [
             {
                 "spell_id": 445207
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -1208,6 +1285,9 @@
             },
             {
                 "spell_id": 447145
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -1261,6 +1341,9 @@
             },
             {
                 "spell_id": 429110
+            },
+            {
+                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
@@ -1272,5 +1355,55 @@
                 "enemy_forces_teeming": null
             }
         ]
+    },
+    {
+        "id": 227382,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 102538,
+        "encounter_id": null,
+        "name": "Superheated Slag",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 227383,
+        "dungeon_id": 115,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 102375,
+        "encounter_id": null,
+        "name": "Escaped Steam",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
     }
 ]

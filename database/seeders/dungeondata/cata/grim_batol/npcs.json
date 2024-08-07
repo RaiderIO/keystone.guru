@@ -96,6 +96,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 1604
+            },
+            {
                 "spell_id": 456718
             },
             {
@@ -153,6 +156,15 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
+                "spell_id": 1490
+            },
+            {
+                "spell_id": 391191
+            },
+            {
+                "spell_id": 448862
+            },
+            {
                 "spell_id": 451391
             },
             {
@@ -163,6 +175,9 @@
             },
             {
                 "spell_id": 451396
+            },
+            {
+                "spell_id": 453177
             }
         ],
         "npc_enemy_forces": [
@@ -1301,6 +1316,56 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 40535,
+        "dungeon_id": 116,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 716,
+        "encounter_id": null,
+        "name": "Ruby Defender",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 40537,
+        "dungeon_id": 116,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 8314,
+        "encounter_id": null,
+        "name": "Ruby Guardian",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 40600,
         "dungeon_id": 116,
         "classification_id": 2,
@@ -1664,6 +1729,31 @@
         "level": null,
         "mdt_scale": null,
         "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 223745,
+        "dungeon_id": 116,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "Twilight Drake",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
@@ -2116,6 +2206,9 @@
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 1604
+            },
             {
                 "spell_id": 456718
             },

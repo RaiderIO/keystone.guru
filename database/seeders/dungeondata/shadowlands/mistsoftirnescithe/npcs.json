@@ -23,6 +23,18 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
+                "spell_id": 324736
+            },
+            {
+                "spell_id": 324737
+            },
+            {
+                "spell_id": 331718
+            },
+            {
+                "spell_id": 331721
+            },
+            {
                 "spell_id": 463236
             },
             {
@@ -761,6 +773,18 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
+                "spell_id": 324859
+            },
+            {
+                "spell_id": 331743
+            },
+            {
+                "spell_id": 331747
+            },
+            {
+                "spell_id": 331748
+            },
+            {
                 "spell_id": 463208
             },
             {
@@ -1292,7 +1316,16 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
+                "spell_id": 324736
+            },
+            {
                 "spell_id": 324737
+            },
+            {
+                "spell_id": 331718
+            },
+            {
+                "spell_id": 331721
             },
             {
                 "spell_id": 463236
@@ -1585,6 +1618,9 @@
         "npc_spells": [
             {
                 "spell_id": 340279
+            },
+            {
+                "spell_id": 340283
             },
             {
                 "spell_id": 340288

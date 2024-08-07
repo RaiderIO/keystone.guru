@@ -361,6 +361,9 @@
                 "spell_id": 321576
             },
             {
+                "spell_id": 322493
+            },
+            {
                 "spell_id": 328664
             },
             {
@@ -986,7 +989,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 322274
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1128,7 +1135,17 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 324372
+            },
+            {
+                "spell_id": 324381
+            },
+            {
+                "spell_id": 324394
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16386,
@@ -2278,7 +2295,7 @@
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
-        "display_id": null,
+        "display_id": 98040,
         "encounter_id": null,
         "name": "Opeth",
         "base_health": 0,

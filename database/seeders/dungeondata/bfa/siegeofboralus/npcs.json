@@ -175,6 +175,9 @@
                 "spell_id": 269984
             },
             {
+                "spell_id": 270185
+            },
+            {
                 "spell_id": 270484
             },
             {
@@ -895,6 +898,60 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 129989,
+        "dungeon_id": 18,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81254,
+        "encounter_id": null,
+        "name": "Irontide Powdershot",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 257641
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 129996,
+        "dungeon_id": 18,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81286,
+        "encounter_id": null,
+        "name": "Irontide Cleaver",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 132530,
         "dungeon_id": 18,
         "classification_id": 2,
@@ -1423,6 +1480,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 257069
+            },
+            {
                 "spell_id": 275835
             },
             {
@@ -1579,6 +1639,64 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 137625,
+        "dungeon_id": 18,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 86691,
+        "encounter_id": null,
+        "name": "Demolishing Terror",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 269266
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 137626,
+        "dungeon_id": 18,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 86691,
+        "encounter_id": null,
+        "name": "Demolishing Terror",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 269266
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 138002,
         "dungeon_id": 18,
         "classification_id": 1,
@@ -1600,7 +1718,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 256616
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1104,
@@ -1925,6 +2047,31 @@
                 "enemy_forces_teeming": null
             }
         ]
+    },
+    {
+        "id": 139830,
+        "dungeon_id": 18,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 80857,
+        "encounter_id": null,
+        "name": "Kul Tiran Engineer",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
     },
     {
         "id": 141282,
@@ -2500,5 +2647,141 @@
                 "enemy_forces_teeming": null
             }
         ]
+    },
+    {
+        "id": 144167,
+        "dungeon_id": 18,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 84074,
+        "encounter_id": null,
+        "name": "Kul Tiran Vanguard",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 144168,
+        "dungeon_id": 18,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 82852,
+        "encounter_id": null,
+        "name": "Ashvane Destroyer",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 272888
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 144169,
+        "dungeon_id": 18,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 84067,
+        "encounter_id": null,
+        "name": "Ashvane Commander",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 144170,
+        "dungeon_id": 18,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 82843,
+        "encounter_id": null,
+        "name": "Ashvane Sniper",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 272528
+            },
+            {
+                "spell_id": 272542
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 144171,
+        "dungeon_id": 18,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 81291,
+        "encounter_id": null,
+        "name": "Taelia",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
     }
 ]
