@@ -2,6 +2,17 @@
 
 namespace App\Models\Spell;
 
+use App\Logic\CombatLog\Guid\MissType\Absorb;
+use App\Logic\CombatLog\Guid\MissType\Block;
+use App\Logic\CombatLog\Guid\MissType\Deflect;
+use App\Logic\CombatLog\Guid\MissType\Dodge;
+use App\Logic\CombatLog\Guid\MissType\Evade;
+use App\Logic\CombatLog\Guid\MissType\Immune;
+use App\Logic\CombatLog\Guid\MissType\Miss;
+use App\Logic\CombatLog\Guid\MissType\Parry;
+use App\Logic\CombatLog\Guid\MissType\Reflect;
+use App\Logic\CombatLog\Guid\MissType\Resist;
+
 trait SpellConstants
 {
     public const SCHOOL_PHYSICAL = 1;
@@ -20,6 +31,43 @@ trait SpellConstants
         'Frost'    => self::SCHOOL_FROST,
         'Shadow'   => self::SCHOOL_SHADOW,
         'Arcane'   => self::SCHOOL_ARCANE,
+    ];
+
+    public const MISS_TYPE_ABSORB  = 1;
+    public const MISS_TYPE_BLOCK   = 2;
+    public const MISS_TYPE_DEFLECT = 4;
+    public const MISS_TYPE_DODGE   = 8;
+    public const MISS_TYPE_EVADE   = 16;
+    public const MISS_TYPE_IMMUNE  = 32;
+    public const MISS_TYPE_MISS    = 64;
+    public const MISS_TYPE_PARRY   = 128;
+    public const MISS_TYPE_REFLECT = 256;
+    public const MISS_TYPE_RESIST  = 512;
+
+    public const ALL_MISS_TYPES = [
+        'Absorb'  => self::MISS_TYPE_ABSORB,
+        'Block'   => self::MISS_TYPE_BLOCK,
+        'Deflect' => self::MISS_TYPE_DEFLECT,
+        'Dodge'   => self::MISS_TYPE_DODGE,
+        'Evade'   => self::MISS_TYPE_EVADE,
+        'Immune'  => self::MISS_TYPE_IMMUNE,
+        'Miss'    => self::MISS_TYPE_MISS,
+        'Parry'   => self::MISS_TYPE_PARRY,
+        'Reflect' => self::MISS_TYPE_REFLECT,
+        'Resist'  => self::MISS_TYPE_RESIST,
+    ];
+
+    public const GUID_MISS_TYPE_MAPPING = [
+        Absorb::class  => self::MISS_TYPE_ABSORB,
+        Block::class   => self::MISS_TYPE_BLOCK,
+        Deflect::class => self::MISS_TYPE_DEFLECT,
+        Dodge::class   => self::MISS_TYPE_DODGE,
+        Evade::class   => self::MISS_TYPE_EVADE,
+        Immune::class  => self::MISS_TYPE_IMMUNE,
+        Miss::class    => self::MISS_TYPE_MISS,
+        Parry::class   => self::MISS_TYPE_PARRY,
+        Reflect::class => self::MISS_TYPE_REFLECT,
+        Resist::class  => self::MISS_TYPE_RESIST,
     ];
 
     public const DISPEL_TYPE_MAGIC         = 'Magic';

@@ -29,16 +29,20 @@ class SpellDataExtractor implements DataExtractorInterface
     /** @var Collection<int> */
     private Collection $summonedNpcs;
 
+    /** @var Collection<Npc> */
+    private Collection $npcCache;
+
     /** @var Collection<int, SpellModel> */
     private Collection $allSpells;
 
     private SpellDataExtractorLoggingInterface $log;
 
     public function __construct(
-        private WowheadServiceInterface $wowheadService
+        private readonly WowheadServiceInterface $wowheadService
     ) {
         $this->spellIdsForDungeon = collect();
         $this->summonedNpcs       = collect();
+        $this->npcCache           = collect();
         $this->allSpells          = SpellModel::all()->keyBy('id');
 
         $log = App::make(SpellDataExtractorLoggingInterface::class);
@@ -88,11 +92,11 @@ class SpellDataExtractor implements DataExtractorInterface
             if ($sourceIsNpc &&
                 // Ignore summoned NPCs
                 $this->summonedNpcs->search($sourceGuid->getId()) === false &&
-                // If destination is an NPC and it's a buff, or if the target was a player
+                // If destination is an NPC, and it's a buff, or if the target was a player
                 (($destIsNpc && $suffix->getAuraType() === AuraApplied::AURA_TYPE_BUFF) ||
                     $destGuid instanceof Player)) {
 
-                $this->createMissingSpell($result, $parsedEvent, $prefix);
+                $this->extractSpellData($result, $parsedEvent, $prefix);
 
                 $this->assignDungeonToSpell($result, $currentDungeon, $parsedEvent, $prefix);
 
@@ -106,6 +110,7 @@ class SpellDataExtractor implements DataExtractorInterface
         // Reset
         $this->spellIdsForDungeon = collect();
         $this->summonedNpcs       = collect();
+        $this->npcCache           = collect();
     }
 
     private function isSummonedNpc(CombatLogEvent $parsedEvent): bool
@@ -132,7 +137,7 @@ class SpellDataExtractor implements DataExtractorInterface
         return $result;
     }
 
-    private function createMissingSpell(
+    private function extractSpellData(
         ExtractedDataResult $result,
         CombatLogEvent      $parsedEvent,
         Spell               $spell
@@ -186,7 +191,6 @@ class SpellDataExtractor implements DataExtractorInterface
                         'dungeon_id' => $currentDungeon->dungeon->id,
                     ]);
 
-
                     $result->createdSpellDungeon();
 
                     $this->log->assignDungeonToSpellAssignedDungeonToSpell($prefix->getSpellId(), $currentDungeon->dungeon->id);
@@ -202,10 +206,19 @@ class SpellDataExtractor implements DataExtractorInterface
         Spell               $prefix
     ): void {
         // Assign spell IDs to NPCs
-        /** @var Npc $npc */
-        $npc = Npc::with('npcSpells')->find($sourceGuid->getId());
-        if ($npc !== null) {
-            // use ->filter()
+        /** @var Npc|null|boolean $npc */
+        $npc = $this->npcCache->get($sourceGuid->getId());
+        if ($npc === false) {
+            return;
+        }
+
+        if ($npc === null) {
+            $npc = Npc::with('npcSpells')->find($sourceGuid->getId());
+            // If we couldn't find the NPC, just write false and we'll never try it again for this NPC
+            $this->npcCache->put($sourceGuid->getId(), $npc ?? false);
+        }
+
+        if ($npc instanceof Npc) {
             $npcHasSpell = $npc->npcSpells->filter(function (NpcSpell $npcSpell) use ($prefix) {
                 return $npcSpell->spell_id === $prefix->getSpellId();
             })->isNotEmpty();
@@ -240,6 +253,8 @@ class SpellDataExtractor implements DataExtractorInterface
         $spell->debuff = $spell->debuff ||
             ($suffix->getAuraType() === AuraApplied::AURA_TYPE_DEBUFF &&
                 $combatLogEvent->getGenericData()->getDestGuid() instanceof Player);
+        // If a spell was missed somehow, write it to the miss_types_mask field
+        $spell->miss_types_mask |= SpellModel::GUID_MISS_TYPE_MAPPING[get_class($combatLogEvent->getGenericData()->getDestGuid())] ?? 0;
 
         if ($spell->isDirty() && $spell->save()) {
             $result->updatedSpell();

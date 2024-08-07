@@ -6,6 +6,8 @@ use App\Models\CacheModel;
 use App\Models\Dungeon;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Traits\SeederModel;
+use App\Models\Traits\SerializesDates;
+use Carbon\Exceptions\InvalidFormatException;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -23,6 +25,7 @@ use Str;
  * @property string                   $icon_name
  * @property string                   $name
  * @property int                      $schools_mask
+ * @property int                      $miss_types_mask
  * @property bool                     $aura Whenever it's a beneficial spell on a friendly target (extracted from CombatLogs)
  * @property bool                     $debuff Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
  * @property int                      $cast_time
@@ -44,6 +47,7 @@ class Spell extends CacheModel implements MappingModelInterface
 {
     use SeederModel;
     use SpellConstants;
+    use SerializesDates;
 
     public $incrementing = false;
 
@@ -62,6 +66,7 @@ class Spell extends CacheModel implements MappingModelInterface
         'icon_name',
         'name',
         'schools_mask',
+        'miss_types_mask',
         'aura',
         'debuff',
         'cast_time',
@@ -75,6 +80,7 @@ class Spell extends CacheModel implements MappingModelInterface
     protected $casts = [
         'id'              => 'integer',
         'schools_mask'    => 'integer',
+        'miss_types_mask' => 'integer',
         'aura'            => 'boolean',
         'debuff'          => 'boolean',
         'cast_time'       => 'integer',
@@ -83,6 +89,19 @@ class Spell extends CacheModel implements MappingModelInterface
         'hidden_on_map'   => 'boolean',
         'fetched_data_at' => 'date',
     ];
+
+    public function setFetchedDataAtAttribute($value): void
+    {
+        if (is_string($value)) {
+            try {
+                $this->attributes['fetched_data_at'] = Carbon::createFromFormat(self::$SERIALIZED_DATE_TIME_FORMAT, $value);
+            } catch (InvalidFormatException $exception) {
+                $this->attributes['fetched_data_at'] = Carbon::createFromFormat(self::$DATABASE_DATE_TIME_FORMAT, $value);
+            }
+        } else {
+            $this->attributes['fetched_data_at'] = $value;
+        }
+    }
 
     public function getSchoolsAsArray(): array
     {
@@ -142,13 +161,13 @@ class Spell extends CacheModel implements MappingModelInterface
         return $result;
     }
 
-    public static function maskToReadableString(int $spellSchoolMask): string
+    public static function maskToReadableString(array $mapping, int $mask): string
     {
         $result = [];
 
-        foreach (self::ALL_SCHOOLS as $schoolName => $schoolMask) {
-            if ($spellSchoolMask & $schoolMask) {
-                $result[] = $schoolName;
+        foreach ($mapping as $name => $bit) {
+            if ($mask & $bit) {
+                $result[] = $name;
             }
         }
 
