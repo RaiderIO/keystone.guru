@@ -38281,6 +38281,23 @@
         ]
     },
     {
+        "id": 317898,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_frost_chillingblast",
+        "name": "Blinding Sleet",
+        "schools_mask": 16,
+        "aura": true,
+        "debuff": null,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "spell_dungeons": []
+    },
+    {
         "id": 317936,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -41384,7 +41401,7 @@
         "icon_name": "ability_demonhunter_soulcleave2",
         "name": "Soul Split",
         "schools_mask": 32,
-        "aura": false,
+        "aura": true,
         "debuff": true,
         "cast_time": 500,
         "duration": 8000,
@@ -49978,6 +49995,23 @@
                 "dungeon_id": 31
             }
         ]
+    },
+    {
+        "id": 338137,
+        "category": null,
+        "cooldown_group": null,
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_misc_volatileearth",
+        "name": "Parched",
+        "schools_mask": 1,
+        "aura": true,
+        "debuff": null,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "spell_dungeons": []
     },
     {
         "id": 338353,

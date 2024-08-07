@@ -1374,6 +1374,38 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 172991,
+        "dungeon_id": 30,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "Drust Soulcleaver",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 322557
+            },
+            {
+                "spell_id": 322569
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 172995,
         "dungeon_id": 30,
         "classification_id": 1,
@@ -1395,7 +1427,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 338137
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1600,5 +1636,30 @@
                 "enemy_forces_teeming": null
             }
         ]
+    },
+    {
+        "id": 229227,
+        "dungeon_id": 30,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "Xal'atath",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
     }
 ]

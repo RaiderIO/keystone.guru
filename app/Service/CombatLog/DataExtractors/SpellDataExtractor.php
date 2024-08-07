@@ -85,10 +85,12 @@ class SpellDataExtractor implements DataExtractorInterface
 
         $suffix = $parsedEvent->getSuffix();
         if ($suffix instanceof AuraApplied) {
-            $sourceGuid = $parsedEvent->getGenericData()->getSourceGuid();
-            if ($sourceGuid instanceof Creature &&
+            $sourceGuid  = $parsedEvent->getGenericData()->getSourceGuid();
+            $sourceIsNpc = $sourceGuid instanceof Creature &&
                 // Only actual creatures - not pets
-                $sourceGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE &&
+                $sourceGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE;
+
+            if ($sourceIsNpc &&
                 // Ignore summoned NPCs
                 $this->summonedNpcs->search($sourceGuid->getId()) === false) {
 
@@ -124,26 +126,41 @@ class SpellDataExtractor implements DataExtractorInterface
                     }
                 }
 
-                // Assign spell IDs to NPCs
-                /** @var Npc $npc */
-                $npc = Npc::with('npcSpells')->find($sourceGuid->getId());
-                if ($npc !== null) {
-                    // use ->filter()
-                    $npcHasSpell = $npc->npcSpells->filter(function (NpcSpell $npcSpell) use ($prefix) {
-                        return $npcSpell->spell_id === $prefix->getSpellId();
-                    })->isNotEmpty();
+                $destGuid  = $parsedEvent->getGenericData()->getDestGuid();
+                $destIsNpc = $destGuid instanceof Creature &&
+                    // Only actual creatures - not pets
+                    $destGuid->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE;
 
-                    // This NPC now casts this spell - we have proof
-                    if (!$npcHasSpell) {
-                        NpcSpell::create([
-                            'npc_id'   => $npc->id,
-                            'spell_id' => $prefix->getSpellId(),
-                        ]);
+                // Npcs can cast buffs on one another, and it'll count for a spell that they cast
+                // Some player spells cause NPCs to cast spells on other NPCs, but those will be debuffs
+                // (such as Death Knight Blinding Sleet), we don't want to attribute that to the NPC
+                // 8/2/2024 16:24:18.477-4  SPELL_AURA_APPLIED,Creature-0-2085-2290-22744-164921-00012D4051,"Drust Harvester",0xa48,0x0,Creature-0-2085-2290-22744-164921-00012D4051,"Drust Harvester",0xa48,0x0,317898,"Blinding Sleet",0x10,DEBUFF
+                if (($destIsNpc && $suffix->getAuraType() === AuraApplied::AURA_TYPE_BUFF) ||
+                    $destGuid instanceof Player) {
 
-                        $result->createdNpcSpell();
+                    // Assign spell IDs to NPCs
+                    /** @var Npc $npc */
+                    $npc = Npc::with('npcSpells')->find($sourceGuid->getId());
+                    if ($npc !== null) {
+                        // use ->filter()
+                        $npcHasSpell = $npc->npcSpells->filter(function (NpcSpell $npcSpell) use ($prefix) {
+                            return $npcSpell->spell_id === $prefix->getSpellId();
+                        })->isNotEmpty();
 
-                        $this->log->extractDataAssignedSpellToNpc($npc->id, $prefix->getSpellId(), $parsedEvent->getRawEvent());
+                        // This NPC now casts this spell - we have proof
+                        if (!$npcHasSpell) {
+                            NpcSpell::create([
+                                'npc_id'   => $npc->id,
+                                'spell_id' => $prefix->getSpellId(),
+                            ]);
+
+                            $result->createdNpcSpell();
+
+                            $this->log->extractDataAssignedSpellToNpc($npc->id, $prefix->getSpellId(), $parsedEvent->getRawEvent());
+                        }
                     }
+                } else {
+                    $this->log->extractDataSpellNotAssignedToNpc($destIsNpc, $suffix->getAuraType());
                 }
             }
         }
@@ -187,9 +204,15 @@ class SpellDataExtractor implements DataExtractorInterface
 
     private function updateSpell(ExtractedDataResult $result, SpellModel $spell, CombatLogEvent $combatLogEvent): bool
     {
-        $spell->aura   = $combatLogEvent->getGenericData()->getDestGuid() instanceof Creature &&
+        /** @var AuraApplied $suffix */
+        $suffix        = $combatLogEvent->getSuffix();
+        $spell->aura   = $spell->aura ||
+            $suffix->getAuraType() === AuraApplied::AURA_TYPE_BUFF &&
+            $combatLogEvent->getGenericData()->getDestGuid() instanceof Creature &&
             $combatLogEvent->getGenericData()->getDestGuid()->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE;
-        $spell->debuff = $combatLogEvent->getGenericData()->getDestGuid() instanceof Player;
+        $spell->debuff = $spell->debuff ||
+            $suffix->getAuraType() === AuraApplied::AURA_TYPE_BUFF &&
+            $combatLogEvent->getGenericData()->getDestGuid() instanceof Player;
 
         if ($spell->isDirty() && $spell->save()) {
             $result->updatedSpell();

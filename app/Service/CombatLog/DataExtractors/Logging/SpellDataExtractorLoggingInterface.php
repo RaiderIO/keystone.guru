@@ -11,6 +11,8 @@ interface SpellDataExtractorLoggingInterface
 
     public function extractDataAssignedSpellToNpc(int $npcId, int $spellId, string $rawEvent): void;
 
+    public function extractDataSpellNotAssignedToNpc(bool $destIsNpc, string $auraType): void;
+
     public function afterExtractDungeonStart(string $dungeonName): void;
 
     public function afterExtractCreatedSpell(string $name, int $spellId): void;
