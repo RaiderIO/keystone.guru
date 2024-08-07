@@ -71399,6 +71399,28 @@
         ]
     },
     {
+        "id": 386195,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "warlock_pvp_callfelhunter",
+        "name": "Carnivorous Stalkers",
+        "schools_mask": 1,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 30000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-07T00:00:00.000000Z",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 110
+            }
+        ]
+    },
+    {
         "id": 386202,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -93676,8 +93698,8 @@
         "icon_name": "ability_druid_replenish",
         "name": "Mending Web",
         "schools_mask": 8,
-        "aura": false,
-        "debuff": null,
+        "aura": true,
+        "debuff": false,
         "cast_time": null,
         "duration": null,
         "selectable": false,
@@ -94669,7 +94691,7 @@
         "name": "Oozing Smash",
         "schools_mask": 32,
         "aura": false,
-        "debuff": null,
+        "debuff": true,
         "cast_time": null,
         "duration": null,
         "selectable": false,
@@ -94735,7 +94757,7 @@
         "name": "Oozing Smash",
         "schools_mask": 32,
         "aura": false,
-        "debuff": null,
+        "debuff": true,
         "cast_time": null,
         "duration": null,
         "selectable": false,
@@ -95224,6 +95246,9 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 113
+            },
+            {
+                "dungeon_id": 110
             }
         ]
     }

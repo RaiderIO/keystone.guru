@@ -402,6 +402,9 @@
             },
             {
                 "spell_id": 441381
+            },
+            {
+                "spell_id": 440107
             }
         ],
         "npc_enemy_forces": []
@@ -1114,7 +1117,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 448047
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1841,7 +1848,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 452162
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
