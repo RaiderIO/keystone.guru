@@ -87572,12 +87572,16 @@
         "name": "Radiant Light",
         "schools_mask": 6,
         "aura": true,
-        "debuff": null,
+        "debuff": false,
         "cast_time": null,
         "duration": null,
         "selectable": false,
         "hidden_on_map": false,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 113
+            }
+        ]
     },
     {
         "id": 449070,
@@ -88417,12 +88421,16 @@
         "name": "Radiant Light",
         "schools_mask": 6,
         "aura": true,
-        "debuff": null,
+        "debuff": false,
         "cast_time": null,
         "duration": null,
         "selectable": false,
         "hidden_on_map": false,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 113
+            }
+        ]
     },
     {
         "id": 451101,
@@ -90570,12 +90578,16 @@
         "name": "Shattered Essence",
         "schools_mask": 32,
         "aura": true,
-        "debuff": null,
+        "debuff": false,
         "cast_time": null,
         "duration": null,
         "selectable": false,
         "hidden_on_map": false,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 113
+            }
+        ]
     },
     {
         "id": 463145,
@@ -90881,11 +90893,15 @@
         "name": "Void Essence",
         "schools_mask": 32,
         "aura": false,
-        "debuff": null,
+        "debuff": false,
         "cast_time": null,
         "duration": null,
         "selectable": false,
         "hidden_on_map": false,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 113
+            }
+        ]
     }
 ]

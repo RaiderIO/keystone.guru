@@ -1020,6 +1020,9 @@
         "npc_spells": [
             {
                 "spell_id": 451096
+            },
+            {
+                "spell_id": 449026
             }
         ],
         "npc_enemy_forces": []

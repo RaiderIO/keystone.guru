@@ -6,12 +6,12 @@ use App\Logging\StructuredLogging;
 
 class SpellDataExtractorLogging extends StructuredLogging implements SpellDataExtractorLoggingInterface
 {
-    public function extractDataNpcWasSummoned(int $npcId, string $npcName): void
+    public function isSummonedNpcNpcWasSummoned(int $npcId, string $npcName): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function extractDataAssignedDungeonToSpell(int $spellId, int $dungeonId): void
+    public function assignDungeonToSpellAssignedDungeonToSpell(int $spellId, int $dungeonId): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }
@@ -32,7 +32,7 @@ class SpellDataExtractorLogging extends StructuredLogging implements SpellDataEx
         $this->start(__METHOD__, get_defined_vars());
     }
 
-    public function afterExtractCreatedSpell(string $name, int $spellId): void
+    public function createMissingSpellCreatedSpell(string $name, int $spellId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -41,4 +41,21 @@ class SpellDataExtractorLogging extends StructuredLogging implements SpellDataEx
     {
         $this->end(__METHOD__);
     }
+
+    public function createSpellAndFetchInfoSpellDataResultIsNull(int $spellId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function createSpellAndFetchInfoStart(int $spellId): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
+
+    public function createSpellAndFetchInfoEnd(): void
+    {
+        $this->end(__METHOD__);
+    }
+
+
 }
