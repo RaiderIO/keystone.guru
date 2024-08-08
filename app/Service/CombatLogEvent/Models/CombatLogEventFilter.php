@@ -5,7 +5,10 @@ namespace App\Service\CombatLogEvent\Models;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use App\Models\GameServerRegion;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
+use App\Service\Season\Dtos\WeeklyAffixGroup;
+use App\Service\Season\SeasonServiceInterface;
 use Codeart\OpensearchLaravel\Search\Query;
 use Codeart\OpensearchLaravel\Search\SearchQueries\BoolQuery;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Filter;
@@ -30,6 +33,8 @@ class CombatLogEventFilter implements Arrayable
     /** @var Collection<Affix> */
     private Collection $affixes;
 
+    private ?int $weeklyAffixGroups = null;
+
     private ?Carbon $dateFrom = null;
 
     private ?Carbon $dateTo = null;
@@ -39,9 +44,10 @@ class CombatLogEventFilter implements Arrayable
     private ?int $durationMax = null;
 
     public function __construct(
-        private readonly Dungeon $dungeon,
-        private readonly string  $eventType,
-        private readonly string  $dataType
+        private readonly SeasonServiceInterface $seasonService,
+        private readonly Dungeon                $dungeon,
+        private readonly string                 $eventType,
+        private readonly string                 $dataType
     ) {
         $this->affixGroups = collect();
         $this->affixes     = collect();
@@ -124,6 +130,18 @@ class CombatLogEventFilter implements Arrayable
         return $this;
     }
 
+    public function getWeeklyAffixGroups(): ?int
+    {
+        return $this->weeklyAffixGroups;
+    }
+
+    public function setWeeklyAffixGroups(?int $weeklyAffixGroups): CombatLogEventFilter
+    {
+        $this->weeklyAffixGroups = $weeklyAffixGroups;
+
+        return $this;
+    }
+
     public function getDateFrom(): ?Carbon
     {
         return $this->dateFrom;
@@ -175,21 +193,22 @@ class CombatLogEventFilter implements Arrayable
     public function toArray(): array
     {
         return [
-            'challenge_mode_id' => $this->dungeon->challenge_mode_id,
-            'event_type'        => $this->eventType,
-            'data_type'         => $this->dataType,
-            'level_min'         => $this->levelMin,
-            'level_max'         => $this->levelMax,
-            'affix_groups'      => $this->affixGroups->map(function (AffixGroup $affixGroup) {
+            'challenge_mode_id'   => $this->dungeon->challenge_mode_id,
+            'event_type'          => $this->eventType,
+            'data_type'           => $this->dataType,
+            'level_min'           => $this->levelMin,
+            'level_max'           => $this->levelMax,
+            'affix_groups'        => $this->affixGroups->map(function (AffixGroup $affixGroup) {
                 return $affixGroup->getTextAttribute();
             })->toArray(),
-            'affixes'           => $this->affixes->map(function (Affix $affix) {
+            'affixes'             => $this->affixes->map(function (Affix $affix) {
                 return __($affix->name, [], 'en_US');
             }),
-            'date_start'        => $this->dateFrom?->toDateTimeString(),
-            'date_end'          => $this->dateTo?->toDateTimeString(),
-            'duration_min'      => $this->durationMin,
-            'duration_max'      => $this->durationMax,
+            'weekly_affix_groups' => $this->weeklyAffixGroups,
+            'date_start'          => $this->dateFrom?->toDateTimeString(),
+            'date_end'            => $this->dateTo?->toDateTimeString(),
+            'duration_min'        => $this->durationMin,
+            'duration_max'        => $this->durationMax,
         ];
     }
 
@@ -243,10 +262,34 @@ class CombatLogEventFilter implements Arrayable
             ]);
         }
 
-        if ($this->affixGroups->isNotEmpty()) {
+
+        $affixGroups = $this->getAffixGroups();
+
+        if ($this->weeklyAffixGroups !== null) {
+            // Add an AffixGroup filter
+            /** @var Collection<WeeklyAffixGroup> $weeklyAffixGroupsSinceStart */
+            $weeklyAffixGroupsSinceStart = $this->seasonService->getWeeklyAffixGroupsSinceStart(
+                $this->seasonService->getMostRecentSeasonForDungeon($dungeon),
+                GameServerRegion::getUserOrDefaultRegion()
+            );
+
+            /** @var WeeklyAffixGroup $weeklyAffixGroup */
+            $weeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (WeeklyAffixGroup $weeklyAffixGroup) {
+                return $weeklyAffixGroup->week === $this->weeklyAffixGroups;
+            });
+            $affixGroups->push($weeklyAffixGroup->affixGroup);
+
+            // Add a date range filter
+            $must[] = Range::make('start', [
+                'gte' => $weeklyAffixGroup->date->getTimestamp(),
+                'lte' => $weeklyAffixGroup->date->addWeek()->getTimestamp(),
+            ]);
+        }
+
+        if ($affixGroups->isNotEmpty()) {
             $must[] = BoolQuery::make([
                 Should::make(
-                    $this->affixGroups->map(function (AffixGroup $affixGroup) {
+                    $affixGroups->map(function (AffixGroup $affixGroup) {
                         return BoolQuery::make([
                             Filter::make(
                                 $affixGroup->affixes->map(function (Affix $affix) {
@@ -282,9 +325,10 @@ class CombatLogEventFilter implements Arrayable
         ];
     }
 
-    public static function fromArray(array $requestArray): CombatLogEventFilter
+    public static function fromArray(SeasonServiceInterface $seasonService, array $requestArray): CombatLogEventFilter
     {
         $combatLogEventFilter = new CombatLogEventFilter(
+            seasonService: $seasonService,
             dungeon: Dungeon::firstWhere('id', $requestArray['dungeon_id']),
             eventType: $requestArray['event_type'],
             dataType: $requestArray['data_type']
@@ -308,6 +352,10 @@ class CombatLogEventFilter implements Arrayable
             $combatLogEventFilter->setAffixGroups(AffixGroup::whereIn('id', $requestArray['affix_groups'])->get());
         }
 
+        if(isset($requestArray['weekly_affix_groups'])) {
+            $combatLogEventFilter->setWeeklyAffixGroups($requestArray['weekly_affix_groups']);
+        }
+
         if (isset($requestArray['date_range_from'])) {
             $combatLogEventFilter->setDateFrom(Carbon::createFromFormat('Y-m-d', $requestArray['date_range_from']));
         }
@@ -319,9 +367,10 @@ class CombatLogEventFilter implements Arrayable
         return $combatLogEventFilter;
     }
 
-    public static function fromHeatmapDataFilter(HeatmapDataFilter $heatmapDataFilter): CombatLogEventFilter
+    public static function fromHeatmapDataFilter(SeasonServiceInterface $seasonService, HeatmapDataFilter $heatmapDataFilter): CombatLogEventFilter
     {
         $combatLogEventFilter = new CombatLogEventFilter(
+            $seasonService,
             $heatmapDataFilter->getDungeon(),
             $heatmapDataFilter->getEventType(),
             $heatmapDataFilter->getDataType()
@@ -331,6 +380,7 @@ class CombatLogEventFilter implements Arrayable
         $combatLogEventFilter->setLevelMax($heatmapDataFilter->getLevelMax());
         $combatLogEventFilter->setAffixGroups($heatmapDataFilter->getAffixGroups());
         $combatLogEventFilter->setAffixes($heatmapDataFilter->getAffixes());
+        $combatLogEventFilter->setWeeklyAffixGroups($heatmapDataFilter->getWeeklyAffixGroups());
         $combatLogEventFilter->setDateFrom($heatmapDataFilter->getDateFrom());
         $combatLogEventFilter->setDateTo($heatmapDataFilter->getDateTo());
         $combatLogEventFilter->setDurationMin($heatmapDataFilter->getDurationMin());

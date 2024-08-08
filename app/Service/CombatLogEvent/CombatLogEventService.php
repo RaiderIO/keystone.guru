@@ -58,6 +58,9 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         return new CombatLogEventSearchResult($this->coordinatesService, $filters, $combatLogEvents, 10);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getGridAggregation(CombatLogEventFilter $filters): ?CombatLogEventGridAggregationResult
     {
         // <editor-fold desc="OS Query" defaultState="collapsed">
@@ -161,7 +164,6 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                     MatchOne::make('ui_map_id', $floor->ui_map_id),
                 ]);
 
-
 //                dd(json_encode(CombatLogEvent::opensearch()
 //                    ->builder()
 //                    ->search($filterQuery)
@@ -246,6 +248,8 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             );
         } catch (\Exception $e) {
             $this->log->getGeotileGridAggregationException($e);
+
+            throw $e;
         } finally {
             $this->log->getGeotileGridAggregationEnd();
         }

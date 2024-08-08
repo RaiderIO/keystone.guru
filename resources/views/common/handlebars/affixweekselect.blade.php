@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Service\Season\Dtos\SeasonWeeklyAffixGroup;
+use App\Service\Season\Dtos\WeeklyAffixGroup;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
 
@@ -11,9 +11,9 @@ use Illuminate\Support\Collection;
 /**
  * This is the template for the week selection, featuring the affix of that week, when using it in a dropdown
  *
- * @var SeasonServiceInterface             $seasonService
- * @var DungeonRoute                       $model
- * @var Collection<SeasonWeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var SeasonServiceInterface       $seasonService
+ * @var DungeonRoute                 $model
+ * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
  */
 
 $id ??= 'affixes';

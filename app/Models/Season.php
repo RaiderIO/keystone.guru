@@ -28,6 +28,8 @@ use Illuminate\Support\Facades\Log;
  * @property int                       $key_level_min
  * @property int                       $key_level_max
  * @property string                    $name Dynamic attribute
+ * @property string                    $name_med Dynamic attribute
+ * @property string                    $name_long Dynamic attribute
  *
  * @property Expansion                 $expansion
  *
@@ -58,7 +60,7 @@ class Season extends CacheModel
 
     public $timestamps = false;
 
-    protected $appends = ['name'];
+    protected $appends = ['name', 'name_long'];
 
     protected $casts = [
         'start'         => 'date',
@@ -71,7 +73,12 @@ class Season extends CacheModel
 
     public function getNameAttribute(): string
     {
-        return __('seasons.name', ['expansion' => __($this->expansion->name), 'season' => $this->index]);
+        return __('seasons.name', ['season' => $this->index]);
+    }
+
+    public function getNameLongAttribute(): string
+    {
+        return __('seasons.name_long', ['expansion' => __($this->expansion->name), 'season' => $this->index]);
     }
 
     public function expansion(): BelongsTo

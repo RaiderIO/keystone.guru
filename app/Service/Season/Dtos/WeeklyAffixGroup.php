@@ -5,7 +5,7 @@ namespace App\Service\Season\Dtos;
 use App\Models\AffixGroup\AffixGroup;
 use Illuminate\Support\Carbon;
 
-readonly class SeasonWeeklyAffixGroup
+readonly class WeeklyAffixGroup
 {
     public function __construct(
         public AffixGroup $affixGroup,

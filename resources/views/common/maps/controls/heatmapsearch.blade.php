@@ -4,43 +4,43 @@ use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
-use App\Service\Season\Dtos\SeasonWeeklyAffixGroup;
+use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 
 /**
- * @var bool                               $showAds
- * @var Dungeon                            $dungeon
- * @var bool                               $embed
- * @var string                             $embedStyle
- * @var bool                               $isMobile
- * @var integer                            $defaultState
- * @var bool                               $hideOnMove
- * @var bool                               $showAllEnabled
- * @var Collection<AffixGroup>             $allAffixGroupsByActiveExpansion
- * @var Collection<Affix>                  $featuredAffixesByActiveExpansion
- * @var CarbonPeriod                       $availableDateRange
- * @var int                                $keyLevelMin
- * @var int                                $keyLevelMax
- * @var Collection<SeasonWeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var bool $showAds
+ * @var Dungeon $dungeon
+ * @var bool $embed
+ * @var string $embedStyle
+ * @var bool $isMobile
+ * @var integer $defaultState
+ * @var bool $hideOnMove
+ * @var bool $showAllEnabled
+ * @var Collection<AffixGroup> $allAffixGroupsByActiveExpansion
+ * @var Collection<Affix> $featuredAffixesByActiveExpansion
+ * @var CarbonPeriod $availableDateRange
+ * @var int $keyLevelMin
+ * @var int $keyLevelMax
+ * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
  */
 
 // By default, show it if we're not mobile, but allow overrides
-$pullsSidebarState    = (int)($_COOKIE['pulls_sidebar_state'] ?? 1);
-$defaultState         ??= $isMobile ? 0 : $pullsSidebarState;
+$pullsSidebarState = (int)($_COOKIE['pulls_sidebar_state'] ?? 1);
+$defaultState ??= $isMobile ? 0 : $pullsSidebarState;
 $heatmapSearchEnabled = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
 
 $filterExpandedCookiePrefix = 'heatmap_search_expanded';
-$expandedDataType           = (bool)($_COOKIE[sprintf('%s_data_type', $filterExpandedCookiePrefix)] ?? 0); // Hide by default
-$expandedKeyLevel           = (bool)($_COOKIE[sprintf('%s_key_level', $filterExpandedCookiePrefix)] ?? 1);
-$expandedAffixes            = (bool)($_COOKIE[sprintf('%s_affixes', $filterExpandedCookiePrefix)] ?? 1);
-$expandedAffixWeek          = (bool)($_COOKIE[sprintf('%s_weekly_affix_groups', $filterExpandedCookiePrefix)] ?? 1);
-$expandedDateRange          = (bool)($_COOKIE[sprintf('%s_date_range', $filterExpandedCookiePrefix)] ?? 1);
-$expandedDuration           = (bool)($_COOKIE[sprintf('%s_duration', $filterExpandedCookiePrefix)] ?? 1);
+$expandedDataType = (bool)($_COOKIE[sprintf('%s_data_type', $filterExpandedCookiePrefix)] ?? 0); // Hide by default
+$expandedKeyLevel = (bool)($_COOKIE[sprintf('%s_key_level', $filterExpandedCookiePrefix)] ?? 1);
+$expandedAffixes = (bool)($_COOKIE[sprintf('%s_affixes', $filterExpandedCookiePrefix)] ?? 1);
+$expandedAffixWeek = (bool)($_COOKIE[sprintf('%s_weekly_affix_groups', $filterExpandedCookiePrefix)] ?? 1);
+$expandedDateRange = (bool)($_COOKIE[sprintf('%s_date_range', $filterExpandedCookiePrefix)] ?? 1);
+$expandedDuration = (bool)($_COOKIE[sprintf('%s_duration', $filterExpandedCookiePrefix)] ?? 1);
 
 $shouldShowHeatmapSearchSidebar = $defaultState === 1;
-$hideOnMove                     ??= $isMobile;
-$showAds                        ??= true;
+$hideOnMove ??= $isMobile;
+$showAds ??= true;
 /** @var Collection<AffixGroup> $affixGroups */
 $affixGroups = $allAffixGroupsByActiveExpansion->get($dungeon->expansion->shortname);
 /** @var Collection<Affix> $featuredAffixes */
@@ -238,7 +238,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                         <div class="row">
                             <div class="col">
                                 {!! Form::select('filter_weekly_affix_groups[]',
-                                    $seasonWeeklyAffixGroups->mapWithKeys(function(SeasonWeeklyAffixGroup $seasonWeeklyAffixGroup){
+                                    $seasonWeeklyAffixGroups->mapWithKeys(function(WeeklyAffixGroup $seasonWeeklyAffixGroup){
                                         return [$seasonWeeklyAffixGroup->week => $seasonWeeklyAffixGroup->affixGroup->text];
                                     }), [],
                                     ['id' => 'filter_weekly_affix_groups',

@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
+use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -27,5 +28,8 @@ interface SeasonServiceInterface
 
     public function getDisplayedAffixGroups(int $iterationOffset): Collection;
 
+    /**
+     * @return Collection<WeeklyAffixGroup>
+     */
     public function getWeeklyAffixGroupsSinceStart(Season $season, GameServerRegion $region): Collection;
 }

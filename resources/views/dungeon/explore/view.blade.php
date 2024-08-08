@@ -3,20 +3,20 @@
 use App\Logic\MapContext\MapContext;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
-use App\Service\Season\Dtos\SeasonWeeklyAffixGroup;
+use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon                            $dungeon
- * @var Floor                              $floor
- * @var string                             $title
- * @var MapContext                         $mapContext
- * @var boolean                            $showHeatmapSearch
- * @var CarbonPeriod                       $availableDateRange
- * @var int                                $keyLevelMin
- * @var int                                $keyLevelMax
- * @var Collection<SeasonWeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var Dungeon $dungeon
+ * @var Floor $floor
+ * @var string $title
+ * @var MapContext $mapContext
+ * @var boolean $showHeatmapSearch
+ * @var CarbonPeriod $availableDateRange
+ * @var int $keyLevelMin
+ * @var int $keyLevelMax
+ * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
  */
 ?>
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $title])

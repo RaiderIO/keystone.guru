@@ -10,7 +10,7 @@ use App\Models\Season;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
-use App\Service\Season\Dtos\SeasonWeeklyAffixGroup;
+use App\Service\Season\Dtos\WeeklyAffixGroup;
 use App\Traits\UserCurrentTime;
 use Exception;
 use Illuminate\Support\Carbon;
@@ -217,6 +217,7 @@ class SeasonService implements SeasonServiceInterface
                 // Append to the list of when we have which affix groups
                 $affixGroups->push([
                     'date_start' => $simulatedTime->copy(),
+                    // $currentSeason->start_affix_group_index
                     'affixgroup' => $currentSeason->affixGroups[$i % $currentSeason->affix_group_count],
                 ]);
             }
@@ -231,7 +232,7 @@ class SeasonService implements SeasonServiceInterface
 
     /**
      * @param GameServerRegion $region
-     * @return Collection<SeasonWeeklyAffixGroup>
+     * @return Collection<WeeklyAffixGroup>
      * @throws Exception
      */
     public function getWeeklyAffixGroupsSinceStart(Season $season, GameServerRegion $region): Collection
@@ -243,13 +244,11 @@ class SeasonService implements SeasonServiceInterface
 
         $week = 1;
         while ($currentDate->lt($now)) {
-            $currentDate->addWeek();
-
             $affixGroup = $season->getAffixGroupAt($currentDate, $region);
 
             if ($affixGroup !== null) {
                 $result->push(
-                    new SeasonWeeklyAffixGroup(
+                    new WeeklyAffixGroup(
                         $affixGroup,
                         $week,
                         $currentDate->copy()
@@ -259,6 +258,7 @@ class SeasonService implements SeasonServiceInterface
                 break;
             }
 
+            $currentDate->addWeek();
             $week++;
         }
 
