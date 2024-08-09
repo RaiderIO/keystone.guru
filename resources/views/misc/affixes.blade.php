@@ -80,9 +80,9 @@ $now    = Carbon::now();
                         ?>
                     <tr class="table_row text-center bg-dark">
                         <td colspan="5">
-                            <h4 class="py-2 m-0">
+                            <h5 class="py-2 m-0">
                                 {{ __('view_misc.affixes.season_start', ['season' => $newSeason->name_long]) }}
-                            </h4>
+                            </h5>
                         </td>
                     </tr>
                     <?php }?>
