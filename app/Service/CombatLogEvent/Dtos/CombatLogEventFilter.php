@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\CombatLogEvent\Models;
+namespace App\Service\CombatLogEvent\Dtos;
 
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
@@ -34,10 +34,6 @@ class CombatLogEventFilter implements Arrayable
     private Collection $affixes;
 
     private ?int $weeklyAffixGroups = null;
-
-    private ?Carbon $dateFrom = null;
-
-    private ?Carbon $dateTo = null;
 
     private ?int $durationMin = null;
 
@@ -142,30 +138,6 @@ class CombatLogEventFilter implements Arrayable
         return $this;
     }
 
-    public function getDateFrom(): ?Carbon
-    {
-        return $this->dateFrom;
-    }
-
-    public function setDateFrom(?Carbon $dateFrom): CombatLogEventFilter
-    {
-        $this->dateFrom = $dateFrom;
-
-        return $this;
-    }
-
-    public function getDateTo(): ?Carbon
-    {
-        return $this->dateTo;
-    }
-
-    public function setDateTo(?Carbon $dateTo): CombatLogEventFilter
-    {
-        $this->dateTo = $dateTo;
-
-        return $this;
-    }
-
     public function getDurationMin(): ?int
     {
         return $this->durationMin;
@@ -205,8 +177,6 @@ class CombatLogEventFilter implements Arrayable
                 return __($affix->name, [], 'en_US');
             }),
             'weekly_affix_groups' => $this->weeklyAffixGroups,
-            'date_start'          => $this->dateFrom?->toDateTimeString(),
-            'date_end'            => $this->dateTo?->toDateTimeString(),
             'duration_min'        => $this->durationMin,
             'duration_max'        => $this->durationMax,
         ];
@@ -302,18 +272,6 @@ class CombatLogEventFilter implements Arrayable
             ]);
         }
 
-        if ($this->dateTo !== null || $this->dateFrom !== null) {
-            $params = [];
-            if ($this->dateFrom !== null) {
-                $params['gte'] = $this->dateFrom->getTimestamp();
-            }
-            if ($this->dateTo !== null) {
-                $params['lte'] = $this->dateTo->getTimestamp();
-            }
-
-            $must[] = Range::make('start', $params);
-        }
-
         return [
             Query::make([
                 BoolQuery::make([
@@ -356,14 +314,6 @@ class CombatLogEventFilter implements Arrayable
             $combatLogEventFilter->setWeeklyAffixGroups($requestArray['weekly_affix_groups']);
         }
 
-        if (isset($requestArray['date_range_from'])) {
-            $combatLogEventFilter->setDateFrom(Carbon::createFromFormat('Y-m-d', $requestArray['date_range_from']));
-        }
-
-        if (isset($requestArray['date_range_to'])) {
-            $combatLogEventFilter->setDateTo(Carbon::createFromFormat('Y-m-d', $requestArray['date_range_to']));
-        }
-
         return $combatLogEventFilter;
     }
 
@@ -381,8 +331,6 @@ class CombatLogEventFilter implements Arrayable
         $combatLogEventFilter->setAffixGroups($heatmapDataFilter->getAffixGroups());
         $combatLogEventFilter->setAffixes($heatmapDataFilter->getAffixes());
         $combatLogEventFilter->setWeeklyAffixGroups($heatmapDataFilter->getWeeklyAffixGroups());
-        $combatLogEventFilter->setDateFrom($heatmapDataFilter->getDateFrom());
-        $combatLogEventFilter->setDateTo($heatmapDataFilter->getDateTo());
         $combatLogEventFilter->setDurationMin($heatmapDataFilter->getDurationMin());
         $combatLogEventFilter->setDurationMax($heatmapDataFilter->getDurationMax());
 

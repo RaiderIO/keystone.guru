@@ -19,7 +19,6 @@ use Illuminate\Support\Collection;
  * @var bool $showAllEnabled
  * @var Collection<AffixGroup> $allAffixGroupsByActiveExpansion
  * @var Collection<Affix> $featuredAffixesByActiveExpansion
- * @var CarbonPeriod $availableDateRange
  * @var int $keyLevelMin
  * @var int $keyLevelMax
  * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
@@ -35,7 +34,6 @@ $expandedDataType = (bool)($_COOKIE[sprintf('%s_data_type', $filterExpandedCooki
 $expandedKeyLevel = (bool)($_COOKIE[sprintf('%s_key_level', $filterExpandedCookiePrefix)] ?? 1);
 $expandedAffixes = (bool)($_COOKIE[sprintf('%s_affixes', $filterExpandedCookiePrefix)] ?? 1);
 $expandedAffixWeek = (bool)($_COOKIE[sprintf('%s_weekly_affix_groups', $filterExpandedCookiePrefix)] ?? 1);
-$expandedDateRange = (bool)($_COOKIE[sprintf('%s_date_range', $filterExpandedCookiePrefix)] ?? 1);
 $expandedDuration = (bool)($_COOKIE[sprintf('%s_duration', $filterExpandedCookiePrefix)] ?? 1);
 
 $shouldShowHeatmapSearchSidebar = $defaultState === 1;
@@ -70,13 +68,9 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'filterAffixGroupsSelector' => '#filter_affixes',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
     'filterWeeklyAffixGroupsSelector' => '#filter_weekly_affix_groups',
-    'filterDateRangeFromSelector' => '#filter_date_from',
-    'filterDateRangeToSelector' => '#filter_date_to',
-    'filterDateRangeFromClearBtnSelector' => '#filter_date_from_clear_btn',
-    'filterDateRangeToClearBtnSelector' => '#filter_date_to_clear_btn',
     'filterDurationSelector' => '#filter_duration',
 
-    'filterCollapseNames' => ['level', 'affixes', 'date_range', 'duration'],
+    'filterCollapseNames' => ['level', 'affixes', 'duration'],
     'filterCookiePrefix' => $filterExpandedCookiePrefix,
 
     'dependencies' => ['common/maps/map'],
@@ -244,51 +238,6 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                                     ['id' => 'filter_weekly_affix_groups',
                                     'class' => 'form-control affixselect selectpicker',
                                     'title' => __('view_common.maps.controls.heatmapsearch.weekly_affix_groups_title')]) !!}
-                            </div>
-                        </div>
-                    </div>
-                @endcomponent
-
-                @component('common.search.filter', ['key' => 'date_range', 'text' => __('view_common.maps.controls.heatmapsearch.date_range'), 'expanded' => $expandedDateRange])
-                    <div class="row">
-                        <div class="col">
-                            <div class="row no-gutters">
-                                <div class="col">
-                                    <label for="date_range_from">
-                                        {{ __('view_common.maps.controls.heatmapsearch.date_range_from') }}
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <input id="filter_date_from" type="date" name="date_range_from"
-                                           value="{{ old('date_range_from') }}" style="width: 115px"
-                                           min="{{ $availableDateRange->start->toDateString() }}"
-                                           max="{{ $availableDateRange->end->toDateString() }}"/>
-                                </div>
-                                <div class="col">
-                                    <div id="filter_date_from_clear_btn" class="btn btn-sm text-danger">
-                                        <i class="fas fa-times"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="row no-gutters">
-                                <div class="col">
-                                    <label for="date_range_to">
-                                        {{ __('view_common.maps.controls.heatmapsearch.date_range_to') }}
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <input id="filter_date_to" type="date" name="date_range_to"
-                                           value="{{ old('date_range_to') }}" style="width: 115px"
-                                           min="{{ $availableDateRange->start->toDateString() }}"
-                                           max="{{ $availableDateRange->end->toDateString() }}">
-                                </div>
-                                <div class="col">
-                                    <div id="filter_date_to_clear_btn" class="btn btn-sm text-danger">
-                                        <i class="fas fa-times"></i>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

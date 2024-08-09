@@ -4,9 +4,9 @@ namespace App\Service\CombatLogEvent;
 
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Season;
-use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
-use App\Service\CombatLogEvent\Models\CombatLogEventGridAggregationResult;
-use App\Service\CombatLogEvent\Models\CombatLogEventSearchResult;
+use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
+use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
+use App\Service\CombatLogEvent\Dtos\CombatLogEventSearchResult;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 

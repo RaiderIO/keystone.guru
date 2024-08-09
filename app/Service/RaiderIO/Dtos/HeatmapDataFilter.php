@@ -23,11 +23,6 @@ class HeatmapDataFilter implements Arrayable
     private Collection $affixes;
 
     private ?int $weeklyAffixGroups = null;
-
-    private ?Carbon $dateFrom = null;
-
-    private ?Carbon $dateTo = null;
-
     private ?int $durationMin = null;
 
     private ?int $durationMax = null;
@@ -130,30 +125,6 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
-    public function getDateFrom(): ?Carbon
-    {
-        return $this->dateFrom;
-    }
-
-    public function setDateFrom(?Carbon $dateFrom): HeatmapDataFilter
-    {
-        $this->dateFrom = $dateFrom;
-
-        return $this;
-    }
-
-    public function getDateTo(): ?Carbon
-    {
-        return $this->dateTo;
-    }
-
-    public function setDateTo(?Carbon $dateTo): HeatmapDataFilter
-    {
-        $this->dateTo = $dateTo;
-
-        return $this;
-    }
-
     public function getDurationMin(): ?int
     {
         return $this->durationMin;
@@ -250,14 +221,6 @@ class HeatmapDataFilter implements Arrayable
             $heatmapDataFilter->setWeeklyAffixGroups($requestArray['weekly_affix_groups']);
         }
 
-        if (isset($requestArray['date_range_from'])) {
-            $heatmapDataFilter->setDateFrom(Carbon::createFromFormat('Y-m-d', $requestArray['date_range_from']));
-        }
-
-        if (isset($requestArray['date_range_to'])) {
-            $heatmapDataFilter->setDateTo(Carbon::createFromFormat('Y-m-d', $requestArray['date_range_to']));
-        }
-
         return $heatmapDataFilter;
     }
 
@@ -268,8 +231,6 @@ class HeatmapDataFilter implements Arrayable
 //        $heatmapDataFilter->setLevelMax($combatLogEventFilter->getLevelMax());
 //        $heatmapDataFilter->setAffixGroups($combatLogEventFilter->getAffixGroups());
 //        $heatmapDataFilter->setAffixes($combatLogEventFilter->getAffixes());
-//        $heatmapDataFilter->setDateFrom($combatLogEventFilter->getDateFrom());
-//        $heatmapDataFilter->setDateTo($combatLogEventFilter->getDateTo());
 //        $heatmapDataFilter->setDurationMin($combatLogEventFilter->getDurationMin());
 //        $heatmapDataFilter->setDurationMax($combatLogEventFilter->getDurationMax());
 //

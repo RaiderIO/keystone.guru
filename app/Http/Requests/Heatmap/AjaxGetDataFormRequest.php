@@ -34,8 +34,6 @@ class AjaxGetDataFormRequest extends FormRequest
             'affix_groups'        => ['nullable', 'array'],
             'affix_groups.*'      => ['integer', Rule::exists(AffixGroup::class, 'id')],
             'weekly_affix_groups' => ['integer'],
-            'date_range_from'     => ['nullable', 'date_format:Y-m-d'],
-            'date_range_to'       => ['nullable', 'date_format:Y-m-d'],
             'duration'            => ['nullable', 'regex:/^\d*;\d*$/'],
         ];
     }

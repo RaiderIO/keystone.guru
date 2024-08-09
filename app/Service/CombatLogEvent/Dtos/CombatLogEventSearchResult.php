@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\CombatLogEvent\Models;
+namespace App\Service\CombatLogEvent\Dtos;
 
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Floor\Floor;

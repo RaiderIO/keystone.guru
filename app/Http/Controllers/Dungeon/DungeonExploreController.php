@@ -9,7 +9,7 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
-use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
+use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Contracts\View\View;
