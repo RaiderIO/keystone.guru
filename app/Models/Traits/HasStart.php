@@ -6,6 +6,9 @@ use App\Models\GameServerRegion;
 use App\Traits\UserCurrentTime;
 use Illuminate\Support\Carbon;
 
+/**
+ * @property Carbon $start
+ */
 trait HasStart
 {
     use UserCurrentTime;

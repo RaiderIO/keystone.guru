@@ -239,7 +239,7 @@ class SeasonService implements SeasonServiceInterface
     {
         $result = collect();
 
-        $currentDate = $season->start;
+        $currentDate = $season->start($region)->copy();
         $now         = Carbon::now();
 
         $week = 1;

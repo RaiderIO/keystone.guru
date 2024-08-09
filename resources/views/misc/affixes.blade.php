@@ -74,7 +74,18 @@ $now    = Carbon::now();
                         $isLast = $affixGroups->count() - 1 === $affixGroupIndex;
 
                         $timewalkingEvent = $timewalkingEventService->getActiveTimewalkingEventAt($startDate);
+
+                    if($previousAffixGroupSeasonId !== null && $previousAffixGroupSeasonId !== $affixGroup->season_id) {
+                        $newSeason = Season::find($affixGroup->season_id);
                         ?>
+                    <tr class="table_row text-center bg-dark">
+                        <td colspan="5">
+                            <h4 class="py-2 m-0">
+                                {{ __('view_misc.affixes.season_start', ['season' => $newSeason->name_long]) }}
+                            </h4>
+                        </td>
+                    </tr>
+                    <?php }?>
                         @include('misc.table.affixrowtable', [
                             'timewalkingEvent' => null,
                             'affixGroup' => $affixGroup,
@@ -86,18 +97,6 @@ $now    = Carbon::now();
                             'isOdd' => $affixGroupIndex % 2 == 0
                             ])
                         <?php
-                        if($previousAffixGroupSeasonId !== null && $previousAffixGroupSeasonId !== $affixGroup->season_id) {
-                            $newSeason = Season::find($affixGroup->season_id);
-                            ?>
-                    <tr class="table_row text-center bg-dark">
-                        <td colspan="5">
-                            <h4 class="py-2 m-0">
-                                {{ __('view_misc.affixes.season_start', ['season' => $newSeason->name_long]) }}
-                            </h4>
-                        </td>
-                    </tr>
-                            <?php
-                        }
                         if ($timewalkingEvent !== null) {
                             $timewalkingEventAffixGroup = $timewalkingEventService->getAffixGroupAt($timewalkingEvent->expansion, $startDate);
                             if( $timewalkingEventAffixGroup !== null ) { ?>
@@ -149,7 +148,7 @@ $now    = Carbon::now();
 
         <div class="mt-4 text-center">
             <p>
-                {{ sprintf(__('view_misc.affixes.updated_at'), '2024/Apr/23') }}
+                {{ sprintf(__('view_misc.affixes.updated_at'), '2024/Aug/09') }}
                 <a href="https://mythicpl.us/" target="_blank" rel="noopener noreferrer">
                     https://mythicpl.us/ <i class="fas fa-external-link-alt"></i>
                 </a>

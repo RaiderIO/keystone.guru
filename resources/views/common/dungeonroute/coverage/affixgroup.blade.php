@@ -47,7 +47,7 @@ if ($nextSeason !== null) {
 $routeCoverageSeasonId = $_COOKIE['dungeonroute_coverage_season_id'] ?? $currentSeason->id;
 $seasons[]             = $currentSeason;
 
-$seasonSelect = collect($seasons)->pluck('name', 'id')->mapWithKeys(static fn($name, $id) => [$id => __($name)]);
+$seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static fn($name, $id) => [$id => __($name)]);
 ?>
 @include('common.general.inline', ['path' => 'common/dungeonroute/coverage/affixgroup',
     'dependencies' => [
