@@ -613,6 +613,29 @@
         "spell_dungeons": []
     },
     {
+        "id": 19196,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_warrior_charge",
+        "name": "Surge",
+        "schools_mask": 1,
+        "miss_types_mask": 65,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-11T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 117
+            }
+        ]
+    },
+    {
         "id": 19236,
         "category": "spells.category.priest",
         "cooldown_group": "spells.cooldown_group.dr_personal",
@@ -630,6 +653,75 @@
         "hidden_on_map": false,
         "fetched_data_at": null,
         "spell_dungeons": []
+    },
+    {
+        "id": 19497,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_fire_volcano",
+        "name": "Eruption",
+        "schools_mask": 4,
+        "miss_types_mask": 65,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-11T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 117
+            }
+        ]
+    },
+    {
+        "id": 19627,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_fire_immolation",
+        "name": "Fire Shield",
+        "schools_mask": 4,
+        "miss_types_mask": 64,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-11T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 117
+            }
+        ]
+    },
+    {
+        "id": 20620,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shadow_antishadow",
+        "name": "Aegis of Ragnaros",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 300000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-11T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 117
+            }
+        ]
     },
     {
         "id": 21910,

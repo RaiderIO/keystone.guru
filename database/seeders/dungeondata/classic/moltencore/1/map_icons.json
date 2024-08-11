@@ -1,0 +1,15 @@
+[
+    {
+        "mapping_version_id": 375,
+        "floor_id": 309,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -59.32035233312155,
+        "lng": 100.2319103926345,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

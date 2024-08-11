@@ -135,6 +135,8 @@ class WowheadService implements WowheadServiceInterface
     {
         $response = $this->getNpcPageHtml($gameVersion, $npc);
 
+        dump($response);
+
         // Hacky shit to scrape it
         $displayId = null;
         $lines     = explode(PHP_EOL, $response);
