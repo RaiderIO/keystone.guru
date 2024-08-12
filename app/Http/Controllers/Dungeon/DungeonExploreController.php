@@ -97,7 +97,9 @@ class DungeonExploreController extends Controller
                 'availableDateRange'      => $heatmapActive ? $combatLogEventService->getAvailableDateRange($combatLogEventFilter) : null,
                 'keyLevelMin'             => $mostRecentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
                 'keyLevelMax'             => $mostRecentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
-                'seasonWeeklyAffixGroups' => $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()),
+                'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons ?
+                    $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
+                    collect(),
             ]);
         }
     }
