@@ -1,7 +1,13 @@
 <?php
-/** @var $difficulty int */
-/** @var $dungeon \App\Models\Dungeon */
-/** @var $floor \App\Models\Floor\Floor */
+
+use App\Models\Dungeon;
+use App\Models\Floor\Floor;
+
+/**
+ * @var  int     $difficulty
+ * @var  Dungeon $dungeon
+ * @var  Floor   $floor
+ */
 ?>
 
 @section('scripts')
@@ -15,7 +21,7 @@
 @endsection
 
 <h4>
-    @if($difficulty === \App\Models\Dungeon::DIFFICULTY_10_MAN )
+    @if($difficulty === Dungeon::DIFFICULTY_10_MAN )
         {{ __('view_admin.floor.edit.speedrun_required_npcs.title_10_man') }}
     @else
         {{ __('view_admin.floor.edit.speedrun_required_npcs.title_25_man') }}
@@ -41,7 +47,7 @@
 
     <tbody>
     <?php
-    $speedrunRequiredNpcs = $difficulty === \App\Models\Dungeon::DIFFICULTY_10_MAN ?
+    $speedrunRequiredNpcs = $difficulty === Dungeon::DIFFICULTY_10_MAN ?
         $floor->dungeonSpeedrunRequiredNpcs10Man : $floor->dungeonSpeedrunRequiredNpcs25Man;
     ?>
     @foreach ($speedrunRequiredNpcs as $speedrunRequiredNpc)

@@ -827,7 +827,7 @@
         "icon_name": "ability_racial_cannibalize",
         "name": "Vicious Bite",
         "schools_mask": 1,
-        "miss_types_mask": 73,
+        "miss_types_mask": 201,
         "aura": false,
         "debuff": false,
         "cast_time": 0,
@@ -873,7 +873,7 @@
         "icon_name": "spell_shadow_curseoftounges",
         "name": "Ancient Dread",
         "schools_mask": 32,
-        "miss_types_mask": 0,
+        "miss_types_mask": 512,
         "aura": false,
         "debuff": true,
         "cast_time": 0,
@@ -1080,7 +1080,7 @@
         "icon_name": "spell_holy_dispelmagic",
         "name": "Antimagic Pulse",
         "schools_mask": 1,
-        "miss_types_mask": 32,
+        "miss_types_mask": 544,
         "aura": false,
         "debuff": false,
         "cast_time": 0,
@@ -1134,6 +1134,29 @@
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": "2024-08-11T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 117
+            }
+        ]
+    },
+    {
+        "id": 19516,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_warrior_battleshout",
+        "name": "Frenzy",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 1800000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-12T00:00:00+00:00",
         "spell_dungeons": [
             {
                 "dungeon_id": 117
@@ -1241,7 +1264,7 @@
         "icon_name": "spell_fire_flameblades",
         "name": "Incite Flames",
         "schools_mask": 4,
-        "miss_types_mask": 512,
+        "miss_types_mask": 544,
         "aura": false,
         "debuff": true,
         "cast_time": 0,
@@ -1287,7 +1310,7 @@
         "icon_name": "spell_fire_fireball02",
         "name": "Fire Blossom",
         "schools_mask": 4,
-        "miss_types_mask": 33,
+        "miss_types_mask": 545,
         "aura": false,
         "debuff": false,
         "cast_time": 0,
@@ -1356,7 +1379,7 @@
         "icon_name": "ability_rogue_ambush",
         "name": "Strike",
         "schools_mask": 1,
-        "miss_types_mask": 73,
+        "miss_types_mask": 201,
         "aura": false,
         "debuff": false,
         "cast_time": 0,
@@ -1379,7 +1402,7 @@
         "icon_name": "spell_fire_incinerate",
         "name": "Ignite Mana",
         "schools_mask": 4,
-        "miss_types_mask": 513,
+        "miss_types_mask": 545,
         "aura": false,
         "debuff": true,
         "cast_time": 0,
@@ -1471,7 +1494,7 @@
         "icon_name": "ability_gouge",
         "name": "Serrated Bite",
         "schools_mask": 1,
-        "miss_types_mask": 73,
+        "miss_types_mask": 233,
         "aura": false,
         "debuff": true,
         "cast_time": 0,
@@ -1517,7 +1540,7 @@
         "icon_name": "ability_thunderbolt",
         "name": "Dark Strike",
         "schools_mask": 32,
-        "miss_types_mask": 73,
+        "miss_types_mask": 201,
         "aura": false,
         "debuff": false,
         "cast_time": 0,
@@ -1540,7 +1563,7 @@
         "icon_name": "ability_warrior_warcry",
         "name": "Demoralizing Shout",
         "schools_mask": 1,
-        "miss_types_mask": 512,
+        "miss_types_mask": 544,
         "aura": false,
         "debuff": true,
         "cast_time": 0,
@@ -1591,6 +1614,29 @@
         "debuff": true,
         "cast_time": 0,
         "duration": 2000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-12T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 117
+            }
+        ]
+    },
+    {
+        "id": 19785,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_throw",
+        "name": "Throw",
+        "schools_mask": 1,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": "2024-08-12T00:00:00+00:00",
@@ -1862,7 +1908,7 @@
         "icon_name": "ability_warrior_cleave",
         "name": "Cleave",
         "schools_mask": 1,
-        "miss_types_mask": 9,
+        "miss_types_mask": 201,
         "aura": false,
         "debuff": false,
         "cast_time": 0,
@@ -2069,7 +2115,7 @@
         "icon_name": "spell_fire_immolation",
         "name": "Lava Shield",
         "schools_mask": 4,
-        "miss_types_mask": 513,
+        "miss_types_mask": 545,
         "aura": false,
         "debuff": false,
         "cast_time": 0,
@@ -100880,6 +100926,29 @@
         ]
     },
     {
+        "id": 458820,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Spells",
+        "schools_mask": 0,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-12T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 117
+            }
+        ]
+    },
+    {
         "id": 459210,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -101098,7 +101167,7 @@
         "icon_name": "",
         "name": "Spells",
         "schools_mask": 0,
-        "miss_types_mask": 513,
+        "miss_types_mask": 545,
         "aura": false,
         "debuff": false,
         "cast_time": null,
@@ -101306,6 +101375,29 @@
         "name": "Spells",
         "schools_mask": 0,
         "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-12T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 117
+            }
+        ]
+    },
+    {
+        "id": 461342,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Spells",
+        "schools_mask": 0,
+        "miss_types_mask": 513,
         "aura": false,
         "debuff": false,
         "cast_time": null,
@@ -102029,6 +102121,29 @@
         ]
     },
     {
+        "id": 463537,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "",
+        "mechanic": null,
+        "icon_name": "",
+        "name": "Spells",
+        "schools_mask": 0,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": null,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-12T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 117
+            }
+        ]
+    },
+    {
         "id": 463602,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -102158,7 +102273,7 @@
         "icon_name": "",
         "name": "Spells",
         "schools_mask": 0,
-        "miss_types_mask": 73,
+        "miss_types_mask": 201,
         "aura": false,
         "debuff": true,
         "cast_time": null,
