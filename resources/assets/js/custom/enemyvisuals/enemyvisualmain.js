@@ -16,6 +16,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
         let mainVisualOuterClasses = [];
         let mainVisualInnerClasses = ['enemy_icon', this.iconName];
+        let mainVisualInnerStyle = [];
 
         // Handle Teeming display
         let npc = this.enemyvisual.enemy.npc;
@@ -27,13 +28,16 @@ class EnemyVisualMain extends EnemyVisualIcon {
 
             if (state.hasEnemyDangerousBorder() && (npc.dangerous || this.enemyvisual.enemy.isImportant())) {
                 mainVisualInnerClasses.push('dangerous');
-                if( this.enemyvisual.enemy.isRareNpc() ) {
+                if (this.enemyvisual.enemy.isRareNpc()) {
                     mainVisualInnerClasses.push('rare');
                 }
             } else if (this.enemyvisual.enemy.isAwakenedNpc()) {
                 mainVisualInnerClasses.push('awakened');
             } else if (this.enemyvisual.enemy.enemy_patrol_id !== null) {
                 mainVisualInnerClasses.push('patrol');
+                if (this.enemyvisual.enemy.enemyPatrol instanceof EnemyPatrol) {
+                    mainVisualInnerStyle.push(`border-color: ${this.enemyvisual.enemy.enemyPatrol.polyline.color};`)
+                }
             }
 
             let mapContext = state.getMapContext();
@@ -65,6 +69,7 @@ class EnemyVisualMain extends EnemyVisualIcon {
             // Set the main icon
             main_visual_outer_classes: mainVisualOuterClasses.join(' '),
             main_visual_inner_classes: mainVisualInnerClasses.join(' '),
+            main_visual_inner_style: mainVisualInnerStyle.join(' '),
             selection_classes: [] // selectionClasses.join(' ')
         });
     }
