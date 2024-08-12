@@ -7,6 +7,8 @@ use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
 use App\Logic\CombatLog\SpecialEvents\DamageShield\DamageShieldBuilder;
 use App\Logic\CombatLog\SpecialEvents\DamageShieldMissed\DamageShieldMissedBuilder;
+use App\Logic\CombatLog\SpecialEvents\EncounterEnd\EncounterEndBuilder;
+use App\Logic\CombatLog\SpecialEvents\EncounterStart\EncounterStartBuilder;
 use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\EnvironmentalDamageBuilder;
 use App\Logic\CombatLog\SpecialEvents\SpellAbsorbed\SpellAbsorbedBuilder;
 use App\Logic\CombatLog\SpecialEvents\SpellAbsorbedSupport\SpellAbsorbedSupportBuilder;
@@ -86,9 +88,6 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_CHALLENGE_MODE_START => ChallengeModeStart::class,
         self::SPECIAL_EVENT_CHALLENGE_MODE_END   => ChallengeModeEnd::class,
 
-        self::SPECIAL_EVENT_ENCOUNTER_START => EncounterStart::class,
-        self::SPECIAL_EVENT_ENCOUNTER_END   => EncounterEnd::class,
-
         self::SPECIAL_EVENT_COMBATANT_INFO => CombatantInfo::class,
         self::SPECIAL_EVENT_PARTY_KILL     => PartyKill::class,
 
@@ -108,11 +107,13 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
     ];
 
     private const SPECIAL_EVENT_BUILDER_CLASS_MAPPING = [
+        self::SPECIAL_EVENT_DAMAGE_SHIELD_MISSED   => DamageShieldMissedBuilder::class,
         self::SPECIAL_EVENT_DAMAGE_SHIELD          => DamageShieldBuilder::class,
+        self::SPECIAL_EVENT_ENCOUNTER_START        => EncounterStartBuilder::class,
+        self::SPECIAL_EVENT_ENCOUNTER_END          => EncounterEndBuilder::class,
         self::SPECIAL_EVENT_SPELL_ABSORBED_SUPPORT => SpellAbsorbedSupportBuilder::class,
         self::SPECIAL_EVENT_SPELL_ABSORBED         => SpellAbsorbedBuilder::class,
         self::SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE   => EnvironmentalDamageBuilder::class,
-        self::SPECIAL_EVENT_DAMAGE_SHIELD_MISSED   => DamageShieldMissedBuilder::class,
     ];
 
     public function __construct(int $combatLogVersion, Carbon $timestamp, string $eventName, array $parameters, string $rawEvent)

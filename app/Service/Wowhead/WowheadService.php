@@ -97,7 +97,6 @@ class WowheadService implements WowheadServiceInterface
 
                 // Not missing = we continue
                 if (file_exists($targetFile)) {
-                    $this->log->downloadMissingSpellIconsFileExists($targetFile);
 
                     return true;
                 }

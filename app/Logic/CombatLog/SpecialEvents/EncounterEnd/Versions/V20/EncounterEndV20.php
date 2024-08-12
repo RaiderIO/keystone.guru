@@ -1,16 +1,19 @@
 <?php
 
-namespace App\Logic\CombatLog\SpecialEvents;
+namespace App\Logic\CombatLog\SpecialEvents\EncounterEnd\Versions\V20;
+
+use App\Logic\CombatLog\SpecialEvents\EncounterEnd\EncounterEndInterface;
+use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 
 /**
- * ENCOUNTER_START,2111,"Elder Leaxa",8,5,1841
  *
  * @author Wouter
  *
  * @since 26/05/2023
  */
-class EncounterEnd extends EncounterBase
+class EncounterEndV20 extends SpecialEvent implements EncounterEndInterface
 {
+
     private int $success;
 
     private int $fightTimeMS;

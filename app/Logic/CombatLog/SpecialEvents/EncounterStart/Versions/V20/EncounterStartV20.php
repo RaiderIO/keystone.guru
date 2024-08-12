@@ -1,6 +1,9 @@
 <?php
 
-namespace App\Logic\CombatLog\SpecialEvents;
+namespace App\Logic\CombatLog\SpecialEvents\EncounterStart\Versions\V20;
+
+use App\Logic\CombatLog\SpecialEvents\EncounterStart\EncounterStartInterface;
+use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 
 /**
  * ENCOUNTER_START,2111,"Elder Leaxa",8,5,1841
@@ -9,7 +12,7 @@ namespace App\Logic\CombatLog\SpecialEvents;
  *
  * @since 26/05/2023
  */
-class EncounterStart extends EncounterBase
+class EncounterStartV20 extends SpecialEvent implements EncounterStartInterface
 {
     private int $instanceID;
 
