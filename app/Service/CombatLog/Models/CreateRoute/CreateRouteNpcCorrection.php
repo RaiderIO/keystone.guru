@@ -16,7 +16,7 @@ namespace App\Service\CombatLog\Models\CreateRoute;
  *         "y": -17.76,
  *         "uiMapId": 2082
  *     },
- *     "coordNpc": {
+ *     "coordEnemy": {
  *         "x": -187.4,
  *         "y": -27.2,
  *         "uiMapId": 2082
@@ -31,7 +31,7 @@ class CreateRouteNpcCorrection extends CreateRouteNpc
         string                  $engagedAt,
         string                  $diedAt,
         CreateRouteCoord        $coord,
-        public CreateRouteCoord $coordNpc)
+        public CreateRouteCoord $coordEnemy)
     {
         parent::__construct(
             $npcId,
@@ -50,7 +50,7 @@ class CreateRouteNpcCorrection extends CreateRouteNpc
             $body['engagedAt'],
             $body['diedAt'],
             CreateRouteCoord::createFromArray($body['coord']),
-            CreateRouteCoord::createFromArray($body['coordNpc']),
+            CreateRouteCoord::createFromArray($body['coordEnemy']),
         );
     }
 }

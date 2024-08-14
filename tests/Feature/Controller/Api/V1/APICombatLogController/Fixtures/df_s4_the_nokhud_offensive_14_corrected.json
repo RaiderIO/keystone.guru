@@ -31,7 +31,7 @@
                     "y": -1230,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1117.31,
                     "y": -1173.39,
                     "uiMapId": 2093
@@ -47,7 +47,7 @@
                     "y": -1232.23,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1142.69,
                     "y": -1210.21,
                     "uiMapId": 2093
@@ -63,7 +63,7 @@
                     "y": -1228.24,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1112.51,
                     "y": -1213.82,
                     "uiMapId": 2093
@@ -79,7 +79,7 @@
                     "y": -1238.09,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1139.98,
                     "y": -1176.32,
                     "uiMapId": 2093
@@ -95,7 +95,7 @@
                     "y": -1228.71,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1095.37,
                     "y": -1184.36,
                     "uiMapId": 2093
@@ -111,7 +111,7 @@
                     "y": -1238.59,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1142.47,
                     "y": -1193.54,
                     "uiMapId": 2093
@@ -127,7 +127,7 @@
                     "y": -1227.5,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1095.61,
                     "y": -1203,
                     "uiMapId": 2093
@@ -143,7 +143,7 @@
                     "y": -1230.52,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1120.17,
                     "y": -1193.99,
                     "uiMapId": 2093
@@ -159,7 +159,7 @@
                     "y": -1224.52,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1228.8,
                     "y": -1216.05,
                     "uiMapId": 2093
@@ -175,7 +175,7 @@
                     "y": -1220.45,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1224.19,
                     "y": -1234.96,
                     "uiMapId": 2093
@@ -191,7 +191,7 @@
                     "y": -1220.39,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1243.83,
                     "y": -1233.02,
                     "uiMapId": 2093
@@ -207,7 +207,7 @@
                     "y": -1227.99,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1265.17,
                     "y": -1237.63,
                     "uiMapId": 2093
@@ -223,7 +223,7 @@
                     "y": -1227.51,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1260.32,
                     "y": -1251.21,
                     "uiMapId": 2093
@@ -239,7 +239,7 @@
                     "y": -1225.31,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1240.44,
                     "y": -1251.21,
                     "uiMapId": 2093
@@ -255,7 +255,7 @@
                     "y": -1155.19,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1259.35,
                     "y": -1128.26,
                     "uiMapId": 2093
@@ -271,7 +271,7 @@
                     "y": -1152.83,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1242.13,
                     "y": -1123.41,
                     "uiMapId": 2093
@@ -287,7 +287,7 @@
                     "y": -1149.33,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1240.92,
                     "y": -1137.96,
                     "uiMapId": 2093
@@ -303,7 +303,7 @@
                     "y": -1149.36,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1261.29,
                     "y": -1144.02,
                     "uiMapId": 2093
@@ -319,7 +319,7 @@
                     "y": -1143.03,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1249.41,
                     "y": -1147.18,
                     "uiMapId": 2093
@@ -335,7 +335,7 @@
                     "y": -1115.66,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1185.43,
                     "y": -1102.85,
                     "uiMapId": 2093
@@ -351,7 +351,7 @@
                     "y": -1117.64,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1197.46,
                     "y": -1089.04,
                     "uiMapId": 2093
@@ -367,7 +367,7 @@
                     "y": -1119.64,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1184.62,
                     "y": -1092.41,
                     "uiMapId": 2093
@@ -383,7 +383,7 @@
                     "y": -1115.21,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1193.77,
                     "y": -1098.03,
                     "uiMapId": 2093
@@ -399,7 +399,7 @@
                     "y": -1170.2,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1290.14,
                     "y": -1153.24,
                     "uiMapId": 2093
@@ -415,7 +415,7 @@
                     "y": -1176.77,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1281.9,
                     "y": -1169.73,
                     "uiMapId": 2093
@@ -431,7 +431,7 @@
                     "y": -1176.98,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1297.9,
                     "y": -1186.71,
                     "uiMapId": 2093
@@ -447,7 +447,7 @@
                     "y": -1169.83,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1317.54,
                     "y": -1181.37,
                     "uiMapId": 2093
@@ -463,7 +463,7 @@
                     "y": -1173.22,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1301.54,
                     "y": -1166.82,
                     "uiMapId": 2093
@@ -479,7 +479,7 @@
                     "y": -1156,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -1198.73,
                     "y": -1154.94,
                     "uiMapId": 2093
@@ -495,7 +495,7 @@
                     "y": -2533.98,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2587.52,
                     "y": -2535.33,
                     "uiMapId": 2093
@@ -511,7 +511,7 @@
                     "y": -2541.45,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2567.68,
                     "y": -2549.84,
                     "uiMapId": 2093
@@ -527,7 +527,7 @@
                     "y": -2543.94,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2578.93,
                     "y": -2553.98,
                     "uiMapId": 2093
@@ -543,7 +543,7 @@
                     "y": -2540.67,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2562.94,
                     "y": -2543.03,
                     "uiMapId": 2093
@@ -559,7 +559,7 @@
                     "y": -2532.28,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2566.79,
                     "y": -2530.89,
                     "uiMapId": 2093
@@ -575,7 +575,7 @@
                     "y": -2540.01,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2599.06,
                     "y": -2550.43,
                     "uiMapId": 2093
@@ -591,7 +591,7 @@
                     "y": -2537.87,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2701.02,
                     "y": -2551.51,
                     "uiMapId": 2093
@@ -607,7 +607,7 @@
                     "y": -2546.59,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2710.17,
                     "y": -2564.58,
                     "uiMapId": 2093
@@ -623,7 +623,7 @@
                     "y": -2533.71,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2693.96,
                     "y": -2567.2,
                     "uiMapId": 2093
@@ -639,7 +639,7 @@
                     "y": -2543.55,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2722.2,
                     "y": -2551.77,
                     "uiMapId": 2093
@@ -655,7 +655,7 @@
                     "y": -2543.6,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2711.22,
                     "y": -2537.12,
                     "uiMapId": 2093
@@ -671,7 +671,7 @@
                     "y": -2543.44,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2773.71,
                     "y": -2568.89,
                     "uiMapId": 2093
@@ -687,7 +687,7 @@
                     "y": -2542.88,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2630.07,
                     "y": -2481.38,
                     "uiMapId": 2093
@@ -703,7 +703,7 @@
                     "y": -2542.85,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2620.84,
                     "y": -2487.49,
                     "uiMapId": 2093
@@ -719,7 +719,7 @@
                     "y": -2488.53,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2611.23,
                     "y": -2513.35,
                     "uiMapId": 2093
@@ -735,7 +735,7 @@
                     "y": -2502.52,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2595.9,
                     "y": -2510.02,
                     "uiMapId": 2093
@@ -751,7 +751,7 @@
                     "y": -2495.22,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2626.3,
                     "y": -2399.37,
                     "uiMapId": 2093
@@ -767,7 +767,7 @@
                     "y": -2395.1,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2721.37,
                     "y": -2401.54,
                     "uiMapId": 2093
@@ -783,7 +783,7 @@
                     "y": -2393.9,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2739.36,
                     "y": -2399.6,
                     "uiMapId": 2093
@@ -799,7 +799,7 @@
                     "y": -2389.88,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2729.15,
                     "y": -2385.5,
                     "uiMapId": 2093
@@ -815,7 +815,7 @@
                     "y": -2389.22,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2741.3,
                     "y": -2369.94,
                     "uiMapId": 2093
@@ -831,7 +831,7 @@
                     "y": -2393.85,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2754.43,
                     "y": -2387.44,
                     "uiMapId": 2093
@@ -847,7 +847,7 @@
                     "y": -2375.64,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2572.27,
                     "y": -2370.47,
                     "uiMapId": 2093
@@ -863,7 +863,7 @@
                     "y": -2380.36,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2577.63,
                     "y": -2385.48,
                     "uiMapId": 2093
@@ -879,7 +879,7 @@
                     "y": -2372.49,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2558.55,
                     "y": -2373.26,
                     "uiMapId": 2093
@@ -895,7 +895,7 @@
                     "y": -2376.75,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2560.48,
                     "y": -2386.77,
                     "uiMapId": 2093
@@ -911,7 +911,7 @@
                     "y": -2446.07,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -2638.48,
                     "y": -2443.3,
                     "uiMapId": 2093
@@ -927,7 +927,7 @@
                     "y": -1870.62,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4064.56,
                     "y": -1854.32,
                     "uiMapId": 2093
@@ -943,7 +943,7 @@
                     "y": -1880.74,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4040.82,
                     "y": -1873.32,
                     "uiMapId": 2093
@@ -959,7 +959,7 @@
                     "y": -1873.44,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4069.31,
                     "y": -1872.53,
                     "uiMapId": 2093
@@ -975,7 +975,7 @@
                     "y": -1876.91,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4043.72,
                     "y": -1856.17,
                     "uiMapId": 2093
@@ -991,7 +991,7 @@
                     "y": -1874.61,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4055.59,
                     "y": -1867.25,
                     "uiMapId": 2093
@@ -1007,7 +1007,7 @@
                     "y": -1879.63,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4162.66,
                     "y": -1887.38,
                     "uiMapId": 2093
@@ -1023,7 +1023,7 @@
                     "y": -1887.23,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4137.02,
                     "y": -1886.91,
                     "uiMapId": 2093
@@ -1039,7 +1039,7 @@
                     "y": -1883.17,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4139.03,
                     "y": -1868.7,
                     "uiMapId": 2093
@@ -1055,7 +1055,7 @@
                     "y": -1874.44,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4161.72,
                     "y": -1868.94,
                     "uiMapId": 2093
@@ -1071,7 +1071,7 @@
                     "y": -1881.42,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4150.02,
                     "y": -1875.8,
                     "uiMapId": 2093
@@ -1087,7 +1087,7 @@
                     "y": -1877.98,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4111.95,
                     "y": -1865.78,
                     "uiMapId": 2093
@@ -1103,7 +1103,7 @@
                     "y": -1866.52,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4103.18,
                     "y": -1850.19,
                     "uiMapId": 2093
@@ -1119,7 +1119,7 @@
                     "y": -1875.75,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4094.73,
                     "y": -1867.41,
                     "uiMapId": 2093
@@ -1135,7 +1135,7 @@
                     "y": -1901.06,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4206.89,
                     "y": -1870.15,
                     "uiMapId": 2093
@@ -1151,7 +1151,7 @@
                     "y": -1903.45,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4213.06,
                     "y": -1864.13,
                     "uiMapId": 2093
@@ -1167,7 +1167,7 @@
                     "y": -1905.32,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4202.53,
                     "y": -1876.02,
                     "uiMapId": 2093
@@ -1183,7 +1183,7 @@
                     "y": -1900.25,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4218.48,
                     "y": -1858.71,
                     "uiMapId": 2093
@@ -1199,7 +1199,7 @@
                     "y": -1949.33,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4235.67,
                     "y": -1943.02,
                     "uiMapId": 2093
@@ -1215,7 +1215,7 @@
                     "y": -1961.49,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4235.9,
                     "y": -1963.97,
                     "uiMapId": 2093
@@ -1231,7 +1231,7 @@
                     "y": -1948.39,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4249.64,
                     "y": -1943.24,
                     "uiMapId": 2093
@@ -1247,7 +1247,7 @@
                     "y": -1955.45,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4241.08,
                     "y": -1954.51,
                     "uiMapId": 2093
@@ -1263,7 +1263,7 @@
                     "y": -1950.39,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4250.54,
                     "y": -1963.75,
                     "uiMapId": 2093
@@ -1279,7 +1279,7 @@
                     "y": -1953.2,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4201.93,
                     "y": -1945.67,
                     "uiMapId": 2093
@@ -1295,7 +1295,7 @@
                     "y": -1959.2,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4206.99,
                     "y": -1967.19,
                     "uiMapId": 2093
@@ -1311,7 +1311,7 @@
                     "y": -1964.82,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4205.04,
                     "y": -1959.05,
                     "uiMapId": 2093
@@ -1327,7 +1327,7 @@
                     "y": -1960.58,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4203.8,
                     "y": -1951.27,
                     "uiMapId": 2093
@@ -1343,7 +1343,7 @@
                     "y": -1947.81,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4209.29,
                     "y": -1974.09,
                     "uiMapId": 2093
@@ -1359,7 +1359,7 @@
                     "y": -1938.07,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4146.12,
                     "y": -1910.31,
                     "uiMapId": 2093
@@ -1375,7 +1375,7 @@
                     "y": -1944.28,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4124.6,
                     "y": -1965.83,
                     "uiMapId": 2093
@@ -1391,7 +1391,7 @@
                     "y": -1934.73,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4160.42,
                     "y": -1910.42,
                     "uiMapId": 2093
@@ -1407,7 +1407,7 @@
                     "y": -1944.7,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4117.4,
                     "y": -1955.52,
                     "uiMapId": 2093
@@ -1423,7 +1423,7 @@
                     "y": -1946.52,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4109.54,
                     "y": -1965.83,
                     "uiMapId": 2093
@@ -1439,7 +1439,7 @@
                     "y": -2055.61,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4121.27,
                     "y": -2048.66,
                     "uiMapId": 2093
@@ -1455,7 +1455,7 @@
                     "y": -2050.29,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4097.63,
                     "y": -2049.66,
                     "uiMapId": 2093
@@ -1471,7 +1471,7 @@
                     "y": -2051.76,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4118.77,
                     "y": -2065.42,
                     "uiMapId": 2093
@@ -1487,7 +1487,7 @@
                     "y": -2055.09,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4098.52,
                     "y": -2065.32,
                     "uiMapId": 2093
@@ -1503,7 +1503,7 @@
                     "y": -2052.59,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4109,
                     "y": -2057.14,
                     "uiMapId": 2093
@@ -1519,7 +1519,7 @@
                     "y": -540.58,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4139.54,
                     "y": -526.93,
                     "uiMapId": 2093
@@ -1535,7 +1535,7 @@
                     "y": -551.91,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4142.23,
                     "y": -601.2,
                     "uiMapId": 2093
@@ -1551,7 +1551,7 @@
                     "y": -544.27,
                     "uiMapId": 2093
                 },
-                "coordNpc": {
+                "coordEnemy": {
                     "x": -4236.52,
                     "y": -547.74,
                     "uiMapId": 2093
