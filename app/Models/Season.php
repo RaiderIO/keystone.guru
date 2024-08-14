@@ -256,7 +256,8 @@ class Season extends CacheModel
 
             // Make sure that the affixes wrap over if we run out
             // $result = $this->affixgroups[$affixGroupIndex % $this->affixgroups->count()] ?? null;
-            $result = $affixGroupIndex < $this->affixGroups->count() ? $this->affixGroups[$affixGroupIndex] : null;
+            $result = $affixGroupIndex === null ? null :
+                ($affixGroupIndex < $this->affixGroups->count() ? $this->affixGroups[$affixGroupIndex] : null);
         }
 
         return $result;

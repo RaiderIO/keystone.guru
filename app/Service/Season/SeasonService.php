@@ -101,7 +101,6 @@ class SeasonService implements SeasonServiceInterface
         )
             ->where('expansion_id', $expansion->id)
             ->orderBy('start', 'desc')
-            ->limit(1)
             ->first();
 
         return $season;
@@ -137,15 +136,20 @@ class SeasonService implements SeasonServiceInterface
     }
 
     /**
-     * Get the index in the list of affix groups that we're currently at. Each season has 12 affix groups per iteration.
+     * Get the index in the list of affix groups that we're currently at.
      * We can calculate where exactly we are in the current iteration, we just don't know the affix group that represents
      * that index, that's up to the current season.
      *
      * @throws Exception
      */
-    public function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): int
+    public function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): ?int
     {
-        $season      = $this->getSeasonAt($date, $expansion, $region);
+        $season = $this->getSeasonAt($date, $expansion, $region);
+        // There's no season active at the given time!
+        if ($season === null) {
+            return null;
+        }
+
         $seasonStart = $season->start($region);
 
         if ($seasonStart->gt($date)) {
