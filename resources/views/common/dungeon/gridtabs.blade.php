@@ -18,7 +18,7 @@ $linkMapFn        = static fn(\App\Models\Dungeon $dungeon) => [
     'link'    => route($route, array_merge($routeParams, ['dungeon' => $dungeon])),
 ];
 $subtextFn        ??= null;
-
+$showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $currentSeason->expansion_id;
 ?>
 <div id="{{ $id }}">
     <ul id="{{ $tabsId }}" class="nav nav-tabs" role="tablist">
@@ -33,7 +33,7 @@ $subtextFn        ??= null;
                        aria-selected="{{ $selectedSeasonId === $nextSeason->id ? 'true' : 'false' }}"
                        data-toggle="tab"
                        data-season="{{ $nextSeason->id }}"
-                    >{{ $nextSeason->name }}</a>
+                    >{{ $showFullExpansionName ? $nextSeason->name_long : $nextSeason->name }}</a>
                 </li>
             @endif
             <li class="nav-item">

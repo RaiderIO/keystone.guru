@@ -2,6 +2,8 @@
 
 use App\Models\Floor\Floor;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcClass;
+use App\Models\Npc\NpcType;
 use App\Models\Spell\Spell;
 
 /**
@@ -78,14 +80,14 @@ use App\Models\Spell\Spell;
     <div class="form-group{{ $errors->has('npc_type_id') ? ' has-error' : '' }}">
         {!! Form::label('npc_class_id', __('view_admin.npc.edit.type'), [], false) !!}
         <span class="form-required">*</span>
-        {!! Form::select('npc_type_id', \App\Models\Npc\NpcType::pluck('type', 'id'), null, ['class' => 'form-control selectpicker']) !!}
+        {!! Form::select('npc_type_id', NpcType::pluck('type', 'id'), null, ['class' => 'form-control selectpicker']) !!}
         @include('common.forms.form-error', ['key' => 'npc_type_id'])
     </div>
 
     <div class="form-group{{ $errors->has('npc_class_id') ? ' has-error' : '' }}">
         {!! Form::label('npc_class_id', __('view_admin.npc.edit.class'), [], false) !!}
         <span class="form-required">*</span>
-        {!! Form::select('npc_class_id', \App\Models\Npc\NpcClass::pluck('name', 'id')->mapWithKeys(static fn($name, $id) => [$id => __($name)]), null,
+        {!! Form::select('npc_class_id', NpcClass::pluck('name', 'id')->mapWithKeys(static fn($name, $id) => [$id => __($name)]), null,
                         ['class' => 'form-control selectpicker']) !!}
         @include('common.forms.form-error', ['key' => 'npc_class_id'])
     </div>
@@ -211,7 +213,7 @@ use App\Models\Spell\Spell;
 
     <div class="form-group">
         {!! Form::label('spells[]', __('view_admin.npc.edit.spells'), [], false) !!}
-        @php($selectedSpells = isset($npc) ? $npc->spells->pluck(['id'])->toArray() : [])
+        @php($selectedSpells = isset($npc) ? $npc->spells(false)->get()->pluck(['id'])->toArray() : [])
         <!--suppress HtmlFormInputWithoutLabel -->
         <select class="form-control selectpicker" name="spells[]" multiple="multiple"
                 data-live-search="true" data-selected-text-format="count > 1"
