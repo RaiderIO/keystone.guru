@@ -82,20 +82,25 @@ class ChallengeModeSplitter extends CombatLogSplitter
             fn($combatLogVersion, $rawEvent, $lineNr) => $this->parseCombatLogEvent($combatLogVersion, $rawEvent, $lineNr)
         );
 
+        // Remove the lineNr context since we stopped parsing lines, don't let the last line linger in the context
+        $this->log->removeContext('lineNr');
+
         if ($this->lastChallengeModeStartEvent !== null) {
             $this->log->splitCombatLogLastRunNotCompleted();
         }
 
         if ($foundChallengeModes !== $this->result->count()) {
-            throw new Exception('The number of challenge modes found does not match the number of challenge modes split from combat log');
+            // The number of challenge modes found does not match the number of challenge modes split from combat log,
+            // did they not finish a run? Something else going on perhaps?
+            $this->log->splitCombatLogChallengeModeAndResultMismatched();
         }
 
         return $this->result;
     }
 
-    private function parseCombatLogEvent(int $combatLogVersion, string $rawEvent, int $lineNr): BaseEvent
+    private function parseCombatLogEvent(int $combatLogVersion, string $rawEvent, int $lineNr): ?BaseEvent
     {
-        $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
+        $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => trim($rawEvent), 'lineNr' => $lineNr]);
 
         $combatLogEntry = (new CombatLogEntry($rawEvent));
         $parsedEvent    = $combatLogEntry->parseEvent(self::EVENTS_TO_KEEP, $combatLogVersion);

@@ -10,7 +10,7 @@ use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Traits\SavesArrayToJsonFile;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
@@ -171,9 +171,9 @@ class Save extends Command
         // Save all spells
         $this->info('Saving Spells');
 
-        $spells = Spell::all();
+        $spells = Spell::with('spellDungeons')->get();
         foreach ($spells as $spell) {
-            $spell->makeHidden(['icon_url']);
+            $spell->makeHidden(['icon_url'])->makeVisible(['spellDungeons']);
         }
 
         $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');

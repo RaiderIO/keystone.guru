@@ -46,7 +46,7 @@ class CombatLogService implements CombatLogServiceInterface
             if ($parsedEvent !== null) {
                 $events->push($parsedEvent);
             } else {
-                $this->log->parseCombatLogToEventsUnableToParseRawEvent($rawEvent);
+                $this->log->parseCombatLogToEventsUnableToParseRawEvent(trim($rawEvent));
             }
 
             return $parsedEvent;
@@ -66,7 +66,7 @@ class CombatLogService implements CombatLogServiceInterface
             if ($parsedEvent !== null) {
                 $callable($parsedEvent, $lineNr);
             } else {
-                $this->log->parseCombatLogToEventsUnableToParseRawEvent($rawEvent);
+                $this->log->parseCombatLogToEventsUnableToParseRawEvent(trim($rawEvent));
             }
 
             return $parsedEvent;
@@ -268,16 +268,18 @@ class CombatLogService implements CombatLogServiceInterface
         $rawEvent = '';
         try {
             $this->log->parseCombatLogParseEventsStart();
-            $combatLogVersion = CombatLogVersion::RETAIL;
+            $combatLogVersion = CombatLogVersion::RETAIL_10_1_0;
             while (($rawEvent = fgets($handle)) !== false) {
-                $parsedEvent = $callback($combatLogVersion, trim($rawEvent), ++$lineNr);
+                $parsedEvent = $callback($combatLogVersion, $rawEvent, ++$lineNr);
                 if ($parsedEvent instanceof CombatLogVersionEvent) {
                     $combatLogVersion = $parsedEvent->getVersion();
                     $this->log->parseCombatLogParseEventsChangedCombatLogVersion($combatLogVersion);
                 }
             }
         } catch (Exception $exception) {
-            throw new Exception(sprintf('%d: %s', $lineNr, trim($rawEvent)), $exception->getCode(), $exception);
+            $this->log->parseCombatLogParseEventsException(sprintf('%d: %s', $lineNr, $rawEvent), $exception);
+
+            throw $exception;
         } finally {
             $this->log->parseCombatLogParseEventsEnd();
 
@@ -291,13 +293,20 @@ class CombatLogService implements CombatLogServiceInterface
 
     public function saveCombatLogToFile(Collection $rawEvents, string $filePath): bool
     {
-        $fileHandle = fopen($filePath, 'w');
-        if ($fileHandle === false) {
-            return false;
-        }
+        $fileHandle = null;
+        try {
+            $fileHandle = fopen($filePath, 'w');
+            if ($fileHandle === false) {
+                return false;
+            }
 
-        foreach ($rawEvents as $rawEvent) {
-            fwrite($fileHandle, (string)$rawEvent);
+            foreach ($rawEvents as $rawEvent) {
+                fwrite($fileHandle, (string)$rawEvent);
+            }
+        } finally {
+            if ($fileHandle !== null) {
+                fclose($fileHandle);
+            }
         }
 
         return true;

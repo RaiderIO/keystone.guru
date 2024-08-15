@@ -14,10 +14,15 @@ use App\Models\Mapping\MappingVersion;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 
 class MapContextService implements MapContextServiceInterface
 {
-    public function __construct(private readonly CacheServiceInterface $cacheService, private readonly CoordinatesServiceInterface $coordinatesService, private readonly OverpulledEnemyServiceInterface $overpulledEnemyService)
+    public function __construct(
+        private readonly CacheServiceInterface           $cacheService,
+        private readonly CoordinatesServiceInterface     $coordinatesService,
+        private readonly OverpulledEnemyServiceInterface $overpulledEnemyService,
+        private readonly SeasonServiceInterface          $seasonService)
     {
     }
 
@@ -48,6 +53,7 @@ class MapContextService implements MapContextServiceInterface
         return new MapContextDungeonExplore(
             $this->cacheService,
             $this->coordinatesService,
+            $this->seasonService,
             $dungeon,
             $floor,
             $mappingVersion

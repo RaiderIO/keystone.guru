@@ -31,7 +31,7 @@ class CreateMissingNpcDataExtractorLogging extends RollbarStructuredLogging impl
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    public function extractDataNpcNotCreated(int $npcId, string $name, int $baseHealth): void
+    public function extractDataNpcNotCreated(int $npcId, string $name): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }

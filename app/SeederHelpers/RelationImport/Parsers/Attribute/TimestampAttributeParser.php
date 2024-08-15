@@ -14,6 +14,7 @@ class TimestampAttributeParser implements AttributeParserInterface
     public function parseAttribute(string $modelClassName, array $modelData, string $name, $value): array
     {
         $fieldNames = [
+            'fetched_data_at',
             'created_at',
             'updated_at',
             'deleted_at',

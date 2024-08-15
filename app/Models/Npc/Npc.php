@@ -8,7 +8,7 @@ use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -159,16 +159,16 @@ class Npc extends CacheModel implements MappingModelInterface
         return $this->hasMany(NpcCharacteristic::class)->orderBy('characteristic_id');
     }
 
-    public function spells(): BelongsToMany
+    public function spells(bool $onlyVisibleOnMap = true): BelongsToMany
     {
         return $this->belongsToMany(Spell::class, 'npc_spells')
-            ->where('hidden_on_map', false)
+            ->when($onlyVisibleOnMap, static fn($query) => $query->where('hidden_on_map', false))
             ->orderBy('spells.id');
     }
 
     public function npcSpells(): HasMany
     {
-        return $this->hasMany(NpcSpell::class);
+        return $this->hasMany(NpcSpell::class)->orderBy('spell_id');
     }
 
     public function npcEnemyForces(): HasMany

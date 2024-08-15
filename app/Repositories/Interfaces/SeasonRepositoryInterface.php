@@ -20,4 +20,6 @@ use Illuminate\Support\Collection;
 interface SeasonRepositoryInterface extends BaseRepositoryInterface
 {
     public function getMostRecentSeasonForDungeon(Dungeon $dungeon): ?Season;
+
+    public function getUpcomingSeasonForDungeon(Dungeon $dungeon): ?Season;
 }

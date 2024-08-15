@@ -28,6 +28,8 @@ use Illuminate\Support\Facades\Log;
  * @property int                       $key_level_min
  * @property int                       $key_level_max
  * @property string                    $name Dynamic attribute
+ * @property string                    $name_med Dynamic attribute
+ * @property string                    $name_long Dynamic attribute
  *
  * @property Expansion                 $expansion
  *
@@ -58,7 +60,7 @@ class Season extends CacheModel
 
     public $timestamps = false;
 
-    protected $appends = ['name'];
+    protected $appends = ['name', 'name_long'];
 
     protected $casts = [
         'start'         => 'date',
@@ -71,7 +73,12 @@ class Season extends CacheModel
 
     public function getNameAttribute(): string
     {
-        return __('seasons.name', ['expansion' => __($this->expansion->name), 'season' => $this->index]);
+        return __('seasons.name', ['season' => $this->index]);
+    }
+
+    public function getNameLongAttribute(): string
+    {
+        return __('seasons.name_long', ['expansion' => __($this->expansion->name), 'season' => $this->index]);
     }
 
     public function expansion(): BelongsTo
@@ -241,7 +248,7 @@ class Season extends CacheModel
             $result                  = $timewalkingEventService->getAffixGroupAt($this->expansion, $date);
         } else {
             // Service injection, we do not know ourselves the total iterations done. Our history starts at a date,
-            // we do not know anything before that so we need help
+            // we do not know anything before that, so we need help
             $seasonService = resolve(SeasonService::class);
 
             // Get the affix group which occurs after a few weeks and return that
@@ -249,7 +256,8 @@ class Season extends CacheModel
 
             // Make sure that the affixes wrap over if we run out
             // $result = $this->affixgroups[$affixGroupIndex % $this->affixgroups->count()] ?? null;
-            $result = $affixGroupIndex < $this->affixGroups->count() ? $this->affixGroups[$affixGroupIndex] : null;
+            $result = $affixGroupIndex === null ? null :
+                ($affixGroupIndex < $this->affixGroups->count() ? $this->affixGroups[$affixGroupIndex] : null);
         }
 
         return $result;

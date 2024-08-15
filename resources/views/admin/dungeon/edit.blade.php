@@ -1,8 +1,13 @@
 <?php
+
+use App\Models\Dungeon;
+use App\Models\Floor\Floor;
+use Illuminate\Support\Collection;
+
 /**
- * @var $dungeon             \App\Models\Dungeon
- * @var $floor               \App\Models\Floor\Floor
- * @var $availableKeysSelect \Illuminate\Support\Collection
+ * @var Dungeon    $dungeon
+ * @var Floor      $floor
+ * @var Collection $availableKeysSelect
  */
 
 $gameVersionsSelect = \App\Models\GameVersion\GameVersion::all()
@@ -12,7 +17,7 @@ $gameVersionsSelect = \App\Models\GameVersion\GameVersion::all()
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$dungeon ?? null],
     'showAds' => false,
-    'title' => isset($dungeon) ? __('view_admin.dungeon.edit.title_edit') : __('view_admin.dungeon.edit.title_new')
+    'title' => isset($dungeon) ? __('view_admin.dungeon.edit.title_edit') : __('view_admin.dungeon.edit.title_new'),
     ])
 
 @section('header-title')

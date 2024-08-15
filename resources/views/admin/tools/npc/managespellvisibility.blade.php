@@ -1,11 +1,11 @@
 <?php
 
 use App\Models\Npc\Npc;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Npc>   $npcs
+ * @var Collection<Npc> $npcs
  * @var Collection<Spell> $spells
  */
 ?>
@@ -21,18 +21,19 @@ use Illuminate\Support\Collection;
 
             // All input fields that are checkboxes with spell class
             $('.spell').bind('change', function () {
-                let hiddenOnMap = !$(this).is(':checked');
+                let hiddenOnMap = $(this).is(':checked');
+                let spellId = $(this).data('id');
                 $.ajax({
                     type: 'PUT',
-                    url: `/ajax/admin/spell/${$(this).data('id')}`,
+                    url: `/ajax/admin/spell/${spellId}`,
                     data: {
-                        hidden_on_map: hiddenOnMap ? 1 : 0
+                        hidden_on_map: hiddenOnMap ? 0 : 1
                     },
                     dataType: 'json',
                     success: function () {
                         showSuccessNotification(lang.get('messages.toggle_spell_visibility_success'));
 
-                        $(`.spell-${$(this).data('id')}`).prop('checked', !hiddenOnMap);
+                        $(`.spell-${spellId}`).prop('checked', hiddenOnMap);
                     },
                     error: function () {
                         showErrorNotification(lang.get('messages.toggle_spell_visibility_error'));
@@ -60,7 +61,7 @@ use Illuminate\Support\Collection;
                     @if($spell === null)
                         <div class="col">
                             <div class="form-element">
-                                Spell not found
+                                Spell not found ({{ $npcSpell->spell_id }})
                             </div>
                         </div>
                     @else

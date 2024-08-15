@@ -12,7 +12,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Logging\MDTMappingExportServiceLoggingInterface;
 use Illuminate\Support\Collection;

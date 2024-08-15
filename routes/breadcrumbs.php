@@ -11,7 +11,7 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Release;
 use App\Models\Season;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Models\Team;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator;

@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Database;
 
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 
 class SpellRepository extends DatabaseRepository implements SpellRepositoryInterface

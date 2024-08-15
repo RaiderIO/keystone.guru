@@ -1,5 +1,30 @@
 [
     {
+        "id": 165416,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 95012,
+        "encounter_id": null,
+        "name": "Xandria",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 210966,
         "dungeon_id": 113,
         "classification_id": 2,
@@ -198,7 +223,7 @@
         "level": 80,
         "mdt_scale": 3,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -251,7 +276,7 @@
         "level": 80,
         "mdt_scale": 3,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -311,7 +336,7 @@
         "level": 80,
         "mdt_scale": 3,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -969,5 +994,91 @@
                 "enemy_forces_teeming": null
             }
         ]
+    },
+    {
+        "id": 223660,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115582,
+        "encounter_id": null,
+        "name": "Arathi Lamplighter",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 449026
+            },
+            {
+                "spell_id": 451096
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 223994,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115539,
+        "encounter_id": null,
+        "name": "Nightfall Shadowmage",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 431303
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 223995,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115528,
+        "encounter_id": null,
+        "name": "Nightfall Curseblade",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
     }
 ]

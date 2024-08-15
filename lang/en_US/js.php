@@ -20,6 +20,7 @@ return [
     'npc_id_label'                                                         => 'NPC_ID',
     'attached_to_pack_label'                                               => 'Pack',
     'attached_to_patrol_label'                                             => 'Patrol',
+    'skippable_label'                                                      => 'Skippable',
     'enemy_id_label'                                                       => 'ENEMY_ID',
     'visual_label'                                                         => 'Visual',
     'mdt_label'                                                            => 'MDT section',
@@ -435,6 +436,7 @@ return [
     'filter_enemy_forces_header_complete'                                  => 'Enemy forces: complete',
     'filter_image_select_affixes_header'                                   => 'Affixes: :number selected',
     'filter_image_select_dungeons_header'                                  => 'Dungeons: :number selected',
+    'filter_image_select_weekly_affix_groups_header'                       => 'Week: :week (:date)',
     'filter_input_affix_group_header'                                      => 'Affix groups: :number selected',
     'filter_input_level_header'                                            => 'Level: :value',
     'filter_input_rating_header'                                           => 'Rating: :value and higher',
@@ -454,4 +456,5 @@ return [
     'simulate_pull'                                                        => 'Pull :index',
     'toggle_spell_visibility_success'                                      => 'Spell visibility toggled successfully',
     'toggle_spell_visibility_error'                                        => 'Spell visibility toggle failed',
+    'week_label'                                                           => 'Week',
 ];

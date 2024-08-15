@@ -16,7 +16,7 @@ use App\Models\PublishedState;
 use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\RouteAttribute;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\Cache\CacheServiceInterface;

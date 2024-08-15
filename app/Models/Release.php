@@ -20,9 +20,11 @@ use Throwable;
  * @property bool             $spotlight
  * @property Carbon           $updated_at
  * @property Carbon           $created_at
+ *
  * @property string           $github_body
  * @property string           $discord_body
  * @property string           $reddit_body
+ *
  * @property ReleaseChangelog $changelog
  *
  * @mixin Eloquent

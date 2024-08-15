@@ -12,10 +12,12 @@ use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
 use App\Service\CombatLog\DataExtractors\DataExtractorInterface;
 use App\Service\CombatLog\DataExtractors\FloorDataExtractor;
 use App\Service\CombatLog\DataExtractors\NpcUpdateDataExtractor;
+use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLoggingInterface;
 use App\Service\Season\SeasonServiceInterface;
+use App\Service\Wowhead\WowheadServiceInterface;
 use Illuminate\Support\Collection;
 
 class CombatLogDataExtractionService implements CombatLogDataExtractionServiceInterface
@@ -26,12 +28,14 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
     public function __construct(
         private readonly CombatLogServiceInterface                      $combatLogService,
         private readonly SeasonServiceInterface                         $seasonService,
+        private readonly WowheadServiceInterface                        $wowheadService,
         private readonly CombatLogDataExtractionServiceLoggingInterface $log
     ) {
         $this->dataExtractors = collect([
-            new FloorDataExtractor(),
             new CreateMissingNpcDataExtractor(),
             new NpcUpdateDataExtractor(),
+            new FloorDataExtractor(),
+            new SpellDataExtractor($this->wowheadService),
         ]);
     }
 
@@ -42,6 +46,10 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         $currentDungeon = null;
 
         $result = new ExtractedDataResult();
+
+        foreach ($this->dataExtractors as $dataExtractor) {
+            $dataExtractor->beforeExtract($result);
+        }
 
         $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
         use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds) {
@@ -72,6 +80,13 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             return $parsedEvent;
         });
 
+        // Remove the lineNr context since we stopped parsing lines, don't let the last line linger in the context
+        $this->log->removeContext('lineNr');
+
+        foreach ($this->dataExtractors as $dataExtractor) {
+            $dataExtractor->afterExtract($result);
+        }
+
         return $result;
     }
 
@@ -100,7 +115,11 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
             $result = new DataExtractionCurrentDungeon($dungeon, $currentKeyLevel, $currentKeyAffixGroup);
 
-            $this->log->extractDataSetChallengeMode(__($dungeon->name, [], 'en_US'), $currentKeyLevel, $currentKeyAffixGroup->getTextAttribute());
+            $this->log->extractDataSetChallengeMode(
+                __($dungeon->name, [], 'en_US'),
+                $currentKeyLevel,
+                optional($currentKeyAffixGroup)->getTextAttribute()
+            );
         } else if ($parsedEvent instanceof ZoneChange) {
             if ($currentDungeon?->keyLevel !== null) {
                 $this->log->extractDataSetZoneFailedChallengeModeActive();

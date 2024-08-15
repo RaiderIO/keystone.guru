@@ -9,9 +9,9 @@ use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Season;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
-use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
-use App\Service\CombatLogEvent\Models\CombatLogEventGridAggregationResult;
-use App\Service\CombatLogEvent\Models\CombatLogEventSearchResult;
+use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
+use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
+use App\Service\CombatLogEvent\Dtos\CombatLogEventSearchResult;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Carbon\CarbonPeriod;
 use Codeart\OpensearchLaravel\Aggregations\Aggregation;
@@ -58,6 +58,9 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         return new CombatLogEventSearchResult($this->coordinatesService, $filters, $combatLogEvents, 10);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getGridAggregation(CombatLogEventFilter $filters): ?CombatLogEventGridAggregationResult
     {
         // <editor-fold desc="OS Query" defaultState="collapsed">
@@ -161,7 +164,6 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                     MatchOne::make('ui_map_id', $floor->ui_map_id),
                 ]);
 
-
 //                dd(json_encode(CombatLogEvent::opensearch()
 //                    ->builder()
 //                    ->search($filterQuery)
@@ -191,16 +193,10 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                                    double docPosX = :player ? doc[\'pos_x\'].value : doc[\'pos_enemy_x\'].value;
                                    double docPosY = :player ? doc[\'pos_y\'].value : doc[\'pos_enemy_y\'].value;
 
-                                   // @TODO #2422
-                                   // if( (docPosX < minX) || (docPosX > maxX) ||
-                                   //     (docPosY < minY) || (docPosY > maxY)) {
-                                   //   return;
-                                   // }
-
                                    int gx = ((docPosX - minX) / width * sizeX).intValue();
                                    int gy = ((docPosY - minY) / height * sizeY).intValue();
 
-                                   // @TODO #2422
+                                   // Ignore events that are out of bounds
                                    if( gx < 0 || gx >= sizeX || gy < 0 || gy >= sizeY ) {
                                      return;
                                    }
@@ -252,6 +248,8 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             );
         } catch (\Exception $e) {
             $this->log->getGeotileGridAggregationException($e);
+
+            throw $e;
         } finally {
             $this->log->getGeotileGridAggregationEnd();
         }

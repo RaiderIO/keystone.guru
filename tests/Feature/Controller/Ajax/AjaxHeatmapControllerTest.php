@@ -2,11 +2,13 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
-use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
-use App\Service\CombatLogEvent\Models\CombatLogEventGridAggregationResult;
+use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
+use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
+use App\Service\Season\SeasonServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Controller\DungeonRouteTestBase;
@@ -86,6 +88,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     private function setUpTestForDungeon(Dungeon $dungeon, int $rowCountPerFloor, int $runCount, bool $useFacade = false): void
     {
         $combatLogEventFilter = new CombatLogEventFilter(
+            App::make(SeasonServiceInterface::class),
             $dungeon,
             self::EVENT_TYPE,
             self::DATA_TYPE

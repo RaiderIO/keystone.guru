@@ -21,7 +21,7 @@
         "dungeon_difficulty": null,
         "lat": -99.128031796814,
         "lng": 179.45307586511,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 29232,
@@ -45,7 +45,7 @@
         "dungeon_difficulty": null,
         "lat": -80.984798023686,
         "lng": 186.71036937436,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 29233,
@@ -69,7 +69,7 @@
         "dungeon_difficulty": null,
         "lat": -95.334446553342,
         "lng": 194.627416839,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 29234,
@@ -93,7 +93,7 @@
         "dungeon_difficulty": null,
         "lat": -64.512686362099,
         "lng": 210.44777203143,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 29235,
@@ -117,7 +117,7 @@
         "dungeon_difficulty": null,
         "lat": -51.036026773235,
         "lng": 228.193066404,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 29236,
@@ -141,7 +141,7 @@
         "dungeon_difficulty": null,
         "lat": -42.11288349945,
         "lng": 244.62470828621,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 29237,
@@ -165,7 +165,7 @@
         "dungeon_difficulty": null,
         "lat": -67.250031014626,
         "lng": 247.56281643734,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 29238,
@@ -189,7 +189,7 @@
         "dungeon_difficulty": null,
         "lat": -62.897278198145,
         "lng": 261.38280662966,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 29239,
@@ -213,7 +213,7 @@
         "dungeon_difficulty": null,
         "lat": -203.20421825903,
         "lng": 206.17311105826,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 29240,
@@ -237,6 +237,6 @@
         "dungeon_difficulty": null,
         "lat": -231.57363834064,
         "lng": 187.2051848409,
-        "kill_priority": -1
+        "kill_priority": null
     }
 ]

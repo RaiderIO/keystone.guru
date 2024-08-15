@@ -4,40 +4,41 @@ use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
+use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 
 /**
- * @var bool                   $showAds
- * @var Dungeon                $dungeon
- * @var bool                   $embed
- * @var string                 $embedStyle
- * @var bool                   $isMobile
- * @var integer                $defaultState
- * @var bool                   $hideOnMove
- * @var bool                   $showAllEnabled
+ * @var bool $showAds
+ * @var Dungeon $dungeon
+ * @var bool $embed
+ * @var string $embedStyle
+ * @var bool $isMobile
+ * @var integer $defaultState
+ * @var bool $hideOnMove
+ * @var bool $showAllEnabled
  * @var Collection<AffixGroup> $allAffixGroupsByActiveExpansion
- * @var Collection<Affix>      $featuredAffixesByActiveExpansion
- * @var CarbonPeriod           $availableDateRange
- * @var int                    $keyLevelMin
- * @var int                    $keyLevelMax
+ * @var Collection<Affix> $featuredAffixesByActiveExpansion
+ * @var int $keyLevelMin
+ * @var int $keyLevelMax
+ * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
  */
 
 // By default, show it if we're not mobile, but allow overrides
-$pullsSidebarState    = (int)($_COOKIE['pulls_sidebar_state'] ?? 1);
-$defaultState         ??= $isMobile ? 0 : $pullsSidebarState;
+$pullsSidebarState = (int)($_COOKIE['pulls_sidebar_state'] ?? 1);
+$defaultState ??= $isMobile ? 0 : $pullsSidebarState;
 $heatmapSearchEnabled = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
 
-$filterExpandedCookiePrefix = 'heatmap_search_expanded_';
-$expandedDataType           = (bool)($_COOKIE[sprintf('%sdata_type', $filterExpandedCookiePrefix)] ?? 0); // Hide by default
-$expandedKeyLevel           = (bool)($_COOKIE[sprintf('%skey_level', $filterExpandedCookiePrefix)] ?? 1);
-$expandedAffixes            = (bool)($_COOKIE[sprintf('%saffixes', $filterExpandedCookiePrefix)] ?? 1);
-$expandedDateRange          = (bool)($_COOKIE[sprintf('%sdate_range', $filterExpandedCookiePrefix)] ?? 1);
-$expandedDuration           = (bool)($_COOKIE[sprintf('%sduration', $filterExpandedCookiePrefix)] ?? 1);
+$filterExpandedCookiePrefix = 'heatmap_search_expanded';
+$expandedDataType = (bool)($_COOKIE[sprintf('%s_data_type', $filterExpandedCookiePrefix)] ?? 0); // Hide by default
+$expandedKeyLevel = (bool)($_COOKIE[sprintf('%s_key_level', $filterExpandedCookiePrefix)] ?? 1);
+$expandedAffixes = (bool)($_COOKIE[sprintf('%s_affixes', $filterExpandedCookiePrefix)] ?? 1);
+$expandedAffixWeek = (bool)($_COOKIE[sprintf('%s_weekly_affix_groups', $filterExpandedCookiePrefix)] ?? 1);
+$expandedDuration = (bool)($_COOKIE[sprintf('%s_duration', $filterExpandedCookiePrefix)] ?? 1);
 
 $shouldShowHeatmapSearchSidebar = $defaultState === 1;
-$hideOnMove                     ??= $isMobile;
-$showAds                        ??= true;
+$hideOnMove ??= $isMobile;
+$showAds ??= true;
 /** @var Collection<AffixGroup> $affixGroups */
 $affixGroups = $allAffixGroupsByActiveExpansion->get($dungeon->expansion->shortname);
 /** @var Collection<Affix> $featuredAffixes */
@@ -66,13 +67,10 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'filterLevelSelector' => '#filter_level',
     'filterAffixGroupsSelector' => '#filter_affixes',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
-    'filterDateRangeFromSelector' => '#filter_date_from',
-    'filterDateRangeToSelector' => '#filter_date_to',
-    'filterDateRangeFromClearBtnSelector' => '#filter_date_from_clear_btn',
-    'filterDateRangeToClearBtnSelector' => '#filter_date_to_clear_btn',
+    'filterWeeklyAffixGroupsSelector' => '#filter_weekly_affix_groups',
     'filterDurationSelector' => '#filter_duration',
 
-    'filterCollapseNames' => ['level', 'affixes', 'date_range', 'duration'],
+    'filterCollapseNames' => ['level', 'affixes', 'duration'],
     'filterCookiePrefix' => $filterExpandedCookiePrefix,
 
     'dependencies' => ['common/maps/map'],
@@ -90,6 +88,11 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     @include('common.handlebars.affixgroupsselect', [
         'id' => 'filter_affixes',
         'affixgroups' => $affixGroups,
+    ])
+
+    @include('common.handlebars.affixweekselect', [
+        'id' => 'filter_weekly_affix_groups',
+        'seasonWeeklyAffixGroups' => $seasonWeeklyAffixGroups,
     ])
 @endsection
 
@@ -164,7 +167,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                     'key' => 'data_type',
                     'text' => __('view_common.maps.controls.heatmapsearch.data_type'),
                     'expanded' => $expandedDataType,
-                    'title' => __('view_common.maps.controls.heatmapsearch.data_type_title')
+                    'title' => __('view_common.maps.controls.heatmapsearch.data_type_title'),
                 ])
                     <div id="filter_data_type_container" class="btn-group btn-group-toggle w-100 mb-1"
                          data-toggle="buttons">
@@ -211,10 +214,10 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                                             <?php /** @var $affix Affix */ ?>
                                         <div class="col px-xl-1">
                                             <div
-                                                class="select_icon class_icon affix_icon_{{ strtolower($affix->key) }} selectable"
-                                                data-toggle="tooltip" data-id="{{ $affix->id }}"
-                                                title="{{ __($affix->description) }}"
-                                                style="height: 24px;">
+                                                    class="select_icon class_icon affix_icon_{{ strtolower($affix->key) }} selectable"
+                                                    data-toggle="tooltip" data-id="{{ $affix->id }}"
+                                                    title="{{ __($affix->description) }}"
+                                                    style="height: 24px;">
                                             </div>
                                         </div>
                                     @endforeach
@@ -224,46 +227,17 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                     @endcomponent
                 @endif
 
-                @component('common.search.filter', ['key' => 'date_range', 'text' => __('view_common.maps.controls.heatmapsearch.date_range'), 'expanded' => $expandedDateRange])
-                    <div class="row">
-                        <div class="col">
-                            <div class="row no-gutters">
-                                <div class="col">
-                                    <label for="date_range_from">
-                                        {{ __('view_common.maps.controls.heatmapsearch.date_range_from') }}
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <input id="filter_date_from" type="date" name="date_range_from"
-                                           value="{{ old('date_range_from') }}" style="width: 115px"
-                                           min="{{ $availableDateRange->start->toDateString() }}"
-                                           max="{{ $availableDateRange->end->toDateString() }}"/>
-                                </div>
-                                <div class="col">
-                                    <div id="filter_date_from_clear_btn" class="btn btn-sm text-danger">
-                                        <i class="fas fa-times"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="row no-gutters">
-                                <div class="col">
-                                    <label for="date_range_to">
-                                        {{ __('view_common.maps.controls.heatmapsearch.date_range_to') }}
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <input id="filter_date_to" type="date" name="date_range_to"
-                                           value="{{ old('date_range_to') }}" style="width: 115px"
-                                           min="{{ $availableDateRange->start->toDateString() }}"
-                                           max="{{ $availableDateRange->end->toDateString() }}">
-                                </div>
-                                <div class="col">
-                                    <div id="filter_date_to_clear_btn" class="btn btn-sm text-danger">
-                                        <i class="fas fa-times"></i>
-                                    </div>
-                                </div>
+                @component('common.search.filter', ['key' => 'weekly_affix_groups', 'text' => __('view_common.maps.controls.heatmapsearch.weekly_affix_groups'), 'expanded' => $expandedAffixWeek])
+                    <div class="filter_affix">
+                        <div class="row">
+                            <div class="col">
+                                {!! Form::select('filter_weekly_affix_groups[]',
+                                    $seasonWeeklyAffixGroups->mapWithKeys(function(WeeklyAffixGroup $seasonWeeklyAffixGroup){
+                                        return [$seasonWeeklyAffixGroup->week => $seasonWeeklyAffixGroup->affixGroup->text];
+                                    }), [],
+                                    ['id' => 'filter_weekly_affix_groups',
+                                    'class' => 'form-control affixselect selectpicker',
+                                    'title' => __('view_common.maps.controls.heatmapsearch.weekly_affix_groups_title')]) !!}
                             </div>
                         </div>
                     </div>

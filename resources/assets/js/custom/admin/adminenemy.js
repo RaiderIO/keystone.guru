@@ -36,7 +36,7 @@ class AdminEnemy extends Enemy {
             }
         });
 
-        // When successfull, re-set our NPC
+        // When successful, re-set our NPC
         this.register('save:success', this, function (saveSuccessEvent) {
             let json = saveSuccessEvent.data.json;
             // May be null if not set at all (yet)
@@ -47,6 +47,21 @@ class AdminEnemy extends Enemy {
             // In case floor ID changed
             let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
             enemyMapObjectGroup.setMapObjectVisibility(self, self.shouldBeVisible());
+
+            // Ensure that skippable property is synced to all of our pack buddies - if you pull this pack,
+            // you also pull all our buddies. If you can skip one of us, you can skip all of us.
+            let packBuddies = self.getPackBuddies();
+            for (let index in packBuddies) {
+                if (!packBuddies.hasOwnProperty(index)) {
+                    continue;
+                }
+
+                let packBuddy = packBuddies[index];
+                if (packBuddy.skippable !== self.skippable) {
+                    packBuddy.skippable = self.skippable;
+                    packBuddy.save();
+                }
+            }
         });
 
         // Register for changes to the selection event
@@ -409,7 +424,6 @@ class AdminEnemy extends Enemy {
         console.assert(this instanceof AdminEnemy, 'this is not an AdminEnemy', this);
         let template = Handlebars.templates['map_enemy_tooltip_template'];
 
-        let data = {};
         // Determine what to show for enemy forces based on override or not
         let enemyForces = this.enemy_forces;
 
@@ -428,10 +442,10 @@ class AdminEnemy extends Enemy {
 
         let mapContext = getState().getMapContext();
 
-        data = $.extend({}, getHandlebarsDefaultVariables(), {
+        let data = $.extend({}, getHandlebarsDefaultVariables(), {
             npc_name: this.npc === null ? lang.get('messages.no_npc_found_label') : this.npc.name,
             enemy_forces: enemyForces,
-            base_health: this.npc === null ? '-' : this.npc.base_health,
+            base_health: this.npc === null ? '-' : this.npc.base_health.toLocaleString(),
             health_percentage: this.npc === null ? '-' : this.npc.health_percentage,
             teeming: (this.teeming === TEEMING_VISIBLE ? 'yes' : (this.teeming === TEEMING_HIDDEN ? TEEMING_HIDDEN : 'no')),
             is_teeming: this.teeming === TEEMING_VISIBLE,
@@ -446,13 +460,16 @@ class AdminEnemy extends Enemy {
             seasonal_index: this.seasonal_index,
             npc_id: this.npc_id,
             npc_id_type: typeof this.npc_id,
+            attached_to_pack: this.enemy_pack_id !== null ? `true (${this.enemy_pack_id})` : 'false',
+            attached_to_patrol: this.enemy_patrol_id !== null ? `true (${this.enemy_patrol_id})` : 'false',
+            skippable: this.skippable,
+
+            visual: this.visual !== null ? this.visual.getName() : 'undefined',
+
             is_mdt: this.is_mdt ? 'true' : 'false',
             mdt_id: this.mdt_id,
             mdt_npc_id: this.mdt_npc_id,
-            enemy_id: this.enemy_id,
-            attached_to_pack: this.enemy_pack_id !== null ? `true (${this.enemy_pack_id})` : 'false',
-            attached_to_patrol: this.enemy_patrol_id !== null ? `true (${this.enemy_patrol_id})` : 'false',
-            visual: this.visual !== null ? this.visual.getName() : 'undefined'
+            enemy_id: this.enemy_id
         });
 
         // Remove any previous tooltip

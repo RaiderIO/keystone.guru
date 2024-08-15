@@ -81,7 +81,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 434122
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -377,6 +381,12 @@
                 "spell_id": 439637
             },
             {
+                "spell_id": 439686
+            },
+            {
+                "spell_id": 439687
+            },
+            {
                 "spell_id": 439692
             },
             {
@@ -387,6 +397,9 @@
             },
             {
                 "spell_id": 440049
+            },
+            {
+                "spell_id": 440107
             },
             {
                 "spell_id": 440419
@@ -1114,7 +1127,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 448047
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1524,9 +1541,6 @@
         "npc_spells": [
             {
                 "spell_id": 448030
-            },
-            {
-                "spell_id": 448030
             }
         ],
         "npc_enemy_forces": [
@@ -1608,7 +1622,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 448305
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1680,7 +1698,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 448047
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1719,12 +1741,6 @@
             }
         ],
         "npc_spells": [
-            {
-                "spell_id": 442536
-            },
-            {
-                "spell_id": 452162
-            },
             {
                 "spell_id": 442536
             },
@@ -1850,7 +1866,14 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 442536
+            },
+            {
+                "spell_id": 452162
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1926,6 +1949,35 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
         "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 228361,
+        "dungeon_id": 110,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 119370,
+        "encounter_id": null,
+        "name": "Agile Pursuer",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 448030
+            }
+        ],
         "npc_enemy_forces": []
     }
 ]

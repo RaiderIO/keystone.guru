@@ -2,20 +2,29 @@
     'rootClass' => 'discover col-xl-8 offset-xl-2',
     'disableDefaultRootClasses' => true,
     'showLegalModal' => false,
-    'title' => __('view_misc.affixes.title')
+    'title' => __('view_misc.affixes.title'),
 ])
 <?php
+
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\Expansion;
+use App\Models\GameServerRegion;
+use App\Models\Season;
+use App\Service\Season\SeasonService;
+use App\Service\TimewalkingEvent\TimewalkingEventService;
+use Illuminate\Support\Carbon;
+
 /**
- * @var $timewalkingEventService \App\Service\TimewalkingEvent\TimewalkingEventService
- * @var $seasonService \App\Service\Season\SeasonService
- * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
- * @var $nextAffixGroup \App\Models\AffixGroup\AffixGroup
- * @var $offset int
- * @var $expansion \App\Models\Expansion
+ * @var TimewalkingEventService $timewalkingEventService
+ * @var SeasonService           $seasonService
+ * @var AffixGroup              $currentAffixGroup
+ * @var AffixGroup              $nextAffixGroup
+ * @var int                     $offset
+ * @var Expansion               $expansion
  */
 
-$region = \App\Models\GameServerRegion::getUserOrDefaultRegion();
-$now    = \Carbon\Carbon::now();
+$region = GameServerRegion::getUserOrDefaultRegion();
+$now    = Carbon::now();
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
@@ -51,20 +60,32 @@ $now    = \Carbon\Carbon::now();
                     </thead>
                     <tbody>
                     <?php
-                    $affixGroups     = $seasonService->getDisplayedAffixGroups($offset);
-                    $affixGroupIndex = 0;
+                    $affixGroups                = $seasonService->getDisplayedAffixGroups($offset);
+                    $affixGroupIndex            = 0;
+                    $previousAffixGroupSeasonId = null;
                     // @formatter:off
                     foreach($affixGroups as $index => $arr){
-                        /** @var \Illuminate\Support\Carbon $startDate */
+                        /** @var Carbon $startDate */
                         $startDate = $arr['date_start'];
-                        /** @var \App\Models\AffixGroup\AffixGroup $affixGroup */
+                        /** @var AffixGroup $affixGroup */
                         $affixGroup = $arr['affixgroup'];
                         $isCurrentWeek = $affixGroup->id === $currentAffixGroup->id && $startDate->diffInWeeks($now) <= 1;
                         $isFirst = $affixGroupIndex === 0;
                         $isLast = $affixGroups->count() - 1 === $affixGroupIndex;
 
                         $timewalkingEvent = $timewalkingEventService->getActiveTimewalkingEventAt($startDate);
+
+                    if($previousAffixGroupSeasonId !== null && $previousAffixGroupSeasonId !== $affixGroup->season_id) {
+                        $newSeason = Season::find($affixGroup->season_id);
                         ?>
+                    <tr class="table_row text-center bg-dark">
+                        <td colspan="5">
+                            <h5 class="py-2 m-0">
+                                {{ __('view_misc.affixes.season_start', ['season' => $newSeason->name_long]) }}
+                            </h5>
+                        </td>
+                    </tr>
+                    <?php }?>
                         @include('misc.table.affixrowtable', [
                             'timewalkingEvent' => null,
                             'affixGroup' => $affixGroup,
@@ -91,6 +112,8 @@ $now    = \Carbon\Carbon::now();
                                 <?php
                             }
                         }
+
+                        $previousAffixGroupSeasonId = $affixGroup->season_id;
 
                         ++$affixGroupIndex;
                     }
@@ -125,7 +148,7 @@ $now    = \Carbon\Carbon::now();
 
         <div class="mt-4 text-center">
             <p>
-                {{ sprintf(__('view_misc.affixes.updated_at'), '2024/Apr/23') }}
+                {{ sprintf(__('view_misc.affixes.updated_at'), '2024/Aug/09') }}
                 <a href="https://mythicpl.us/" target="_blank" rel="noopener noreferrer">
                     https://mythicpl.us/ <i class="fas fa-external-link-alt"></i>
                 </a>

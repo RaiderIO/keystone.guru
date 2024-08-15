@@ -56,6 +56,7 @@ use App\Console\Commands\Scheduler\DeleteExpiredDungeonRoutes;
 use App\Console\Commands\Scheduler\RefreshAffixGroupEaseTiers;
 use App\Console\Commands\Scheduler\RefreshOutdatedThumbnails;
 use App\Console\Commands\Scheduler\Telemetry\Telemetry;
+use App\Console\Commands\Spell\ExportCsv;
 use App\Console\Commands\Spell\ImportCsv;
 use App\Console\Commands\Supervisor\StartSupervisor;
 use App\Console\Commands\Supervisor\StopSupervisor;
@@ -177,6 +178,7 @@ class Kernel extends ConsoleKernel
 
         // Spell
         ImportCsv::class,
+        ExportCsv::class,
 
         // Supervisor
         StartSupervisor::class,

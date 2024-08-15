@@ -4,10 +4,16 @@ namespace App\Service\GameVersion;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\User;
+use App\Service\Cookies\CookieServiceInterface;
 
 class GameVersionService implements GameVersionServiceInterface
 {
     private const GAME_VERSION_COOKIE = 'game_version';
+
+    public function __construct(
+        private readonly CookieServiceInterface $cookieService
+    ) {
+    }
 
     public function setGameVersion(GameVersion $gameVersion, ?User $user): void
     {
@@ -16,8 +22,7 @@ class GameVersionService implements GameVersionServiceInterface
         // Unit tests and artisan commands don't like this
         if (!app()->runningInConsole()) {
             // Set the new cookie
-            $_COOKIE[self::GAME_VERSION_COOKIE] = $gameVersion->key;
-            setcookie(self::GAME_VERSION_COOKIE, $gameVersion->key, ['expires' => 0, 'path' => '/', 'domain' => null, 'secure' => true, 'httponly' => false]);
+            $this->cookieService->setCookie(self::GAME_VERSION_COOKIE, $gameVersion->key);
         }
     }
 

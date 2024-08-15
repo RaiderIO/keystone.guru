@@ -1,11 +1,11 @@
 <?php
 
 use App\Models\Floor\Floor;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 
 /**
- * @var Spell         $spell
- * @var Floor         $floor
+ * @var Spell $spell
+ * @var Floor $floor
  * @var array<string> $categories
  * @var array<string> $dispelTypes
  * @var array<string> $cooldownGroups

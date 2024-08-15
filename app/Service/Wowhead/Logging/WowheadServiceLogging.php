@@ -16,11 +16,6 @@ class WowheadServiceLogging extends StructuredLogging implements WowheadServiceL
         $this->start(__METHOD__);
     }
 
-    public function downloadMissingSpellIconsFileExists(string $targetFile): void
-    {
-        $this->debug(__METHOD__, get_defined_vars());
-    }
-
     public function downloadMissingSpellIconsEnd(): void
     {
         $this->end(__METHOD__);
@@ -45,5 +40,11 @@ class WowheadServiceLogging extends StructuredLogging implements WowheadServiceL
     {
         $this->error(__METHOD__, get_defined_vars());
     }
+
+    public function getSpellDataDataNotSet(bool $mechanicSet, bool $schoolSet, bool $dispelTypeSet, bool $castTimeSet, bool $durationSet): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
 
 }

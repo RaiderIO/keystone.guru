@@ -19,8 +19,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'level': new SearchFilterLevel(this.options.filterLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
             'affix_groups': new SearchFilterAffixGroups(this.options.filterAffixGroupsSelector, this._search.bind(this)),
             'affixes': new SearchFilterAffixes(this.options.filterAffixesSelector, this._search.bind(this)),
-            'date_range_from': new SearchFilterInputDateFrom(this.options.filterDateRangeFromSelector, this._search.bind(this)),
-            'date_range_to': new SearchFilterInputDateTo(this.options.filterDateRangeToSelector, this._search.bind(this)),
+            'weekly_affix_groups': new SearchFilterWeeklyAffixGroups(this.options.filterWeeklyAffixGroupsSelector, this._search.bind(this)),
             'duration': new SearchFilterDuration(this.options.filterDurationSelector, this._search.bind(this), this.options.durationMin, this.options.durationMax),
         };
 
@@ -68,9 +67,6 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
             self._search();
         };
-
-        $(this.options.filterDateRangeFromClearBtnSelector).bind('click', clearInputFn)
-        $(this.options.filterDateRangeToClearBtnSelector).bind('click', clearInputFn);
 
         let $enabledState = $(this.options.enabledStateSelector);
         $enabledState.on('change', function () {

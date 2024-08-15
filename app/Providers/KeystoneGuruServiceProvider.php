@@ -41,6 +41,8 @@ use App\Service\CombatLog\ResultEventDungeonRouteService;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\CombatLogEvent\CombatLogEventService;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Service\Cookies\CookieService;
+use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Discord\DiscordApiService;
@@ -132,16 +134,18 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
-        $this->app->bind(CombatLogDataExtractionServiceInterface::class, CombatLogDataExtractionService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
         $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
-        $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);
         $this->app->bind(StructuredLoggingServiceInterface::class, StructuredLoggingService::class);
         $this->app->bind(SpellServiceInterface::class, SpellService::class);
         $this->app->bind(ChallengeModeRunDataServiceInterface::class, ChallengeModeRunDataService::class);
         $this->app->bind(CombatLogEventServiceInterface::class, CombatLogEventService::class);
         $this->app->bind(DungeonServiceInterface::class, DungeonService::class);
+        $this->app->bind(CookieServiceInterface::class, CookieService::class);
+
+        // Depends on CookieService
+        $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);
 
         // Depends on CoordinatesService
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
@@ -170,7 +174,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Depends on SeasonService
         $this->app->bind(AffixGroupEaseTierServiceInterface::class, AffixGroupEaseTierService::class);
 
-        // Depends on CacheService, CoordinatesService, OverpulledEnemyService
+        // Depends on CacheService, CoordinatesService, OverpulledEnemyService, SeasonService
         $this->app->bind(MapContextServiceInterface::class, MapContextService::class);
 
         // Depends on SeasonService, CacheService, CoordinatesService
@@ -195,6 +199,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
 //        $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOApiService::class);
         $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
+
+        // Depends on CombatLogService, SeasonService, WowheadService
+        $this->app->bind(CombatLogDataExtractionServiceInterface::class, CombatLogDataExtractionService::class);
     }
 
     /**

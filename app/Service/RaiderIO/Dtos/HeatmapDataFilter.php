@@ -22,10 +22,7 @@ class HeatmapDataFilter implements Arrayable
     /** @var Collection<Affix> */
     private Collection $affixes;
 
-    private ?Carbon $dateFrom = null;
-
-    private ?Carbon $dateTo = null;
-
+    private ?int $weeklyAffixGroups = null;
     private ?int $durationMin = null;
 
     private ?int $durationMax = null;
@@ -116,26 +113,14 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
-    public function getDateFrom(): ?Carbon
+    public function getWeeklyAffixGroups(): ?int
     {
-        return $this->dateFrom;
+        return $this->weeklyAffixGroups;
     }
 
-    public function setDateFrom(?Carbon $dateFrom): HeatmapDataFilter
+    public function setWeeklyAffixGroups(?int $weeklyAffixGroups): HeatmapDataFilter
     {
-        $this->dateFrom = $dateFrom;
-
-        return $this;
-    }
-
-    public function getDateTo(): ?Carbon
-    {
-        return $this->dateTo;
-    }
-
-    public function setDateTo(?Carbon $dateTo): HeatmapDataFilter
-    {
-        $this->dateTo = $dateTo;
+        $this->weeklyAffixGroups = $weeklyAffixGroups;
 
         return $this;
     }
@@ -198,7 +183,9 @@ class HeatmapDataFilter implements Arrayable
             ])->toArray();
         }
 
-        // @TODO Add date ranges (going to get reworked anyway)
+        if ($this->getWeeklyAffixGroups() !== null) {
+            $result['weekly_affix_groups'] = $this->getWeeklyAffixGroups();
+        }
 
         return $result;
     }
@@ -230,12 +217,8 @@ class HeatmapDataFilter implements Arrayable
             $heatmapDataFilter->setAffixGroups(AffixGroup::whereIn('id', $requestArray['affix_groups'])->get());
         }
 
-        if (isset($requestArray['date_range_from'])) {
-            $heatmapDataFilter->setDateFrom(Carbon::createFromFormat('Y-m-d', $requestArray['date_range_from']));
-        }
-
-        if (isset($requestArray['date_range_to'])) {
-            $heatmapDataFilter->setDateTo(Carbon::createFromFormat('Y-m-d', $requestArray['date_range_to']));
+        if (isset($requestArray['weekly_affix_groups'])) {
+            $heatmapDataFilter->setWeeklyAffixGroups($requestArray['weekly_affix_groups']);
         }
 
         return $heatmapDataFilter;
@@ -248,8 +231,6 @@ class HeatmapDataFilter implements Arrayable
 //        $heatmapDataFilter->setLevelMax($combatLogEventFilter->getLevelMax());
 //        $heatmapDataFilter->setAffixGroups($combatLogEventFilter->getAffixGroups());
 //        $heatmapDataFilter->setAffixes($combatLogEventFilter->getAffixes());
-//        $heatmapDataFilter->setDateFrom($combatLogEventFilter->getDateFrom());
-//        $heatmapDataFilter->setDateTo($combatLogEventFilter->getDateTo());
 //        $heatmapDataFilter->setDurationMin($combatLogEventFilter->getDurationMin());
 //        $heatmapDataFilter->setDurationMax($combatLogEventFilter->getDurationMax());
 //

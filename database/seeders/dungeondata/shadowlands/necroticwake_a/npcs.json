@@ -129,7 +129,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 320170
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -355,6 +359,9 @@
         "npc_spells": [
             {
                 "spell_id": 321576
+            },
+            {
+                "spell_id": 322493
             },
             {
                 "spell_id": 328664
@@ -925,7 +932,14 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 320614
+            },
+            {
+                "spell_id": 320717
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -975,7 +989,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 322274
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1117,7 +1135,17 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 324372
+            },
+            {
+                "spell_id": 324381
+            },
+            {
+                "spell_id": 324394
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 16386,
@@ -2260,5 +2288,34 @@
                 "enemy_forces_teeming": null
             }
         ]
+    },
+    {
+        "id": 174783,
+        "dungeon_id": 34,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 98040,
+        "encounter_id": null,
+        "name": "Opeth",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 343504
+            }
+        ],
+        "npc_enemy_forces": []
     }
 ]

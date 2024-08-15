@@ -199,6 +199,53 @@ return [
                 'zul_farrak' => 'Zul\'Farrak',
             ],
         ],
+        'zulgurub'                    => [
+            'name'   => 'Zul\'Gurub',
+            'floors' => [
+                'zul_gurub' => 'Zul\'Gurub',
+            ],
+        ],
+        'onyxias_lair_classic'        => [
+            'name'   => 'Onyxia\'s Lair',
+            'floors' => [
+                'onyxias_lair' => 'Onyxia\'s Lair',
+            ],
+        ],
+        'moltencore'                  => [
+            'name'   => 'Molten Core',
+            'floors' => [
+                'molten_core' => 'Molten Core',
+            ],
+        ],
+        'blackwinglair'                  => [
+            'name'   => 'Blackwing Lair',
+            'floors' => [
+                'blackwinglair' => 'Blackwing Lair',
+            ],
+        ],
+        'ruinsofahnqiraj'                  => [
+            'name'   => 'Ruins of Ahn\'Qiraj',
+            'floors' => [
+                'ruinsofahnqiraj' => 'Ruins of Ahn\'Qiraj',
+            ],
+        ],
+        'templeofahnqiraj'                  => [
+            'name'   => 'Temple of Ahn\'Qiraj',
+            'floors' => [
+                'templeofahnqiraj' => 'Temple of Ahn\'Qiraj',
+            ],
+        ],
+        'naxxramas_classic'           => [
+            'name'   => 'Naxxramas',
+            'floors' => [
+                'the_construct_quarter' => 'The Construct Quarter',
+                'the_arachnid_quarter'  => 'The Arachnid Quarter',
+                'the_military_quarter'  => 'The Military Quarter',
+                'the_plague_quarter'    => 'The Plague Quarter',
+                'the_lower_necropolis'  => 'The Lower Necropolis',
+                'the_upper_necropolis'  => 'The Upper Necropolis',
+            ],
+        ],
     ],
     'wotlk'        => [
         'ahn_kahet_the_old_kingdom'                => [

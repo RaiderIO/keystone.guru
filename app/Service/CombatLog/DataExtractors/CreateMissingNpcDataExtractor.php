@@ -34,6 +34,11 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
         $this->log = $log;
     }
 
+    public function beforeExtract(ExtractedDataResult $result): void
+    {
+
+    }
+
     public function extractData(ExtractedDataResult $result, DataExtractionCurrentDungeon $currentDungeon, BaseEvent $parsedEvent): void
     {
         // Don't create summoned enemies!
@@ -91,19 +96,6 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
                 return;
             }
 
-            // Determine health
-            if ($currentDungeon->keyLevel === null) {
-                $baseHealth = $parsedEvent->getAdvancedData()->getMaxHP();
-            } else {
-                // Calculate the base health based on the current key level + current max hp
-                $baseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
-                        $currentDungeon->keyLevel,
-                        $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_FORTIFIED) ?? false,
-                        $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_TYRANNICAL) ?? false,
-                        $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false,
-                    ));
-            }
-
             $createdNpc = Npc::create([
                 'id'                => $guid->getId(),
                 'dungeon_id'        => $currentDungeon->dungeon->id,
@@ -112,7 +104,6 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
                 'npc_class_id'      => NpcClass::ALL[NpcClass::NPC_CLASS_MELEE],
                 'display_id'        => null,
                 'name'              => $name,
-                'base_health'       => $baseHealth,
                 'health_percentage' => null,
                 'aggressiveness'    => Npc::AGGRESSIVENESS_AGGRESSIVE,
                 'dangerous'         => 0,
@@ -120,6 +111,24 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
             ]);
 
             if ($createdNpc instanceof Npc) {
+                // Determine health
+                if ($currentDungeon->keyLevel === null) {
+                    $baseHealth = $parsedEvent->getAdvancedData()->getMaxHP();
+                } else {
+                    // Calculate the base health based on the current key level + current max hp
+                    $baseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $createdNpc->getScalingFactor(
+                            $currentDungeon->keyLevel,
+                            $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_FORTIFIED) ?? false,
+                            $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_TYRANNICAL) ?? false,
+                            $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false,
+                        ));
+                }
+
+                // @TODO For now don't update base health - I may be doing the calculation wrong, MDT's got it?
+//                $createdNpc->update([
+//                    'base_health' => $baseHealth,
+//                ]);
+
                 $result->createdNpc();
 
                 $this->log->extractDataCreatedNpc(
@@ -131,11 +140,15 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
             } else {
                 $this->log->extractDataNpcNotCreated(
                     $guid->getId(),
-                    $name,
-                    $baseHealth
+                    $name
                 );
             }
         }
+    }
+
+    public function afterExtract(ExtractedDataResult $result): void
+    {
+
     }
 
 }

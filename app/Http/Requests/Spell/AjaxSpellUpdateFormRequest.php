@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Spell;
 
 use App\Models\Laratrust\Role;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

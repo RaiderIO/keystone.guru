@@ -26,6 +26,8 @@ use App\Service\CombatLog\DataExtractors\Logging\FloorDataExtractorLogging;
 use App\Service\CombatLog\DataExtractors\Logging\FloorDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\Logging\NpcUpdateDataExtractorLogging;
 use App\Service\CombatLog\DataExtractors\Logging\NpcUpdateDataExtractorLoggingInterface;
+use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLogging;
+use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLoggingInterface;
 use App\Service\CombatLog\Filters\Logging\BaseCombatFilterLogging;
 use App\Service\CombatLog\Filters\Logging\BaseCombatFilterLoggingInterface;
 use App\Service\CombatLog\Filters\Logging\DungeonRouteCombatFilterLogging;
@@ -101,6 +103,7 @@ class LoggingServiceProvider extends ServiceProvider
         $this->app->bind(CreateMissingNpcDataExtractorLoggingInterface::class, CreateMissingNpcDataExtractorLogging::class);
         $this->app->bind(FloorDataExtractorLoggingInterface::class, FloorDataExtractorLogging::class);
         $this->app->bind(NpcUpdateDataExtractorLoggingInterface::class, NpcUpdateDataExtractorLogging::class);
+        $this->app->bind(SpellDataExtractorLoggingInterface::class, SpellDataExtractorLogging::class);
         /// Filters
         $this->app->bind(BaseCombatFilterLoggingInterface::class, BaseCombatFilterLogging::class);
         $this->app->bind(DungeonRouteCombatFilterLoggingInterface::class, DungeonRouteCombatFilterLogging::class);

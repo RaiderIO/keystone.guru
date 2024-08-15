@@ -7,8 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
+use App\Models\GameServerRegion;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
-use App\Service\CombatLogEvent\Models\CombatLogEventFilter;
+use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Contracts\View\View;
@@ -77,22 +78,28 @@ class DungeonExploreController extends Controller
             }
 
             $combatLogEventFilter = new CombatLogEventFilter(
+                $seasonService,
                 $dungeon,
                 CombatLogEvent::EVENT_TYPE_ENEMY_KILLED,
                 CombatLogEvent::DATA_TYPE_PLAYER_POSITION,
             );
 
-            $mostRecentSeason = $seasonService->getMostRecentSeasonForDungeon($dungeon);
+            $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
+
+            $heatmapActive = Feature::active(Heatmap::class) && $dungeon->gameVersion->has_seasons;
 
             return view('dungeon.explore.view', [
-                'dungeon'            => $dungeon,
-                'floor'              => $floor,
-                'title'              => __($dungeon->name),
-                'mapContext'         => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
-                'showHeatmapSearch'  => Feature::active(Heatmap::class) && $combatLogEventService->getRunCount($combatLogEventFilter),
-                'availableDateRange' => Feature::active(Heatmap::class) ? $combatLogEventService->getAvailableDateRange($combatLogEventFilter) : null,
-                'keyLevelMin'        => $mostRecentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
-                'keyLevelMax'        => $mostRecentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+                'dungeon'                 => $dungeon,
+                'floor'                   => $floor,
+                'title'                   => __($dungeon->name),
+                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
+                'showHeatmapSearch'       => $heatmapActive && $combatLogEventService->getRunCount($combatLogEventFilter),
+                'availableDateRange'      => $heatmapActive ? $combatLogEventService->getAvailableDateRange($combatLogEventFilter) : null,
+                'keyLevelMin'             => $mostRecentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
+                'keyLevelMax'             => $mostRecentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+                'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons ?
+                    $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
+                    collect(),
             ]);
         }
     }

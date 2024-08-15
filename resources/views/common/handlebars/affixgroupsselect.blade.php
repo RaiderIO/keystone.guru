@@ -1,9 +1,21 @@
-@inject('seasonService', 'App\Service\Season\SeasonService')
 <?php
-/** @var $seasonService \App\Service\Season\SeasonService */
-/** This is the template for the Affix Selection when using it in a dropdown */
 
-/** @var \App\Models\DungeonRoute\DungeonRoute $model */
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Support\Collection;
+use App\Models\AffixGroup\AffixGroup;
+
+?>
+@inject('seasonService', SeasonServiceInterface::class)
+<?php
+/**
+ * This is the template for the Affix Selection when using it in a dropdown
+ *
+ * @var SeasonServiceInterface      $seasonService
+ * @var DungeonRoute                $model
+ * @var Collection<AffixGroup>|null $affixgroups
+ */
+
 if (!isset($affixgroups)) {
     $affixgroups = $seasonService->getCurrentSeason()->affixGroups()->with('affixes')->get();
 }

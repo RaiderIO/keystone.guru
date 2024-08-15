@@ -15,7 +15,7 @@ use Illuminate\Support\Collection;
 
 class NpcUpdateDataExtractor implements DataExtractorInterface
 {
-    /** @var Collection<int>> */
+    /** @var Collection<int> */
     private Collection $checkedNpcIds;
 
     private NpcUpdateDataExtractorLoggingInterface $log;
@@ -27,6 +27,11 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
         /** @var NpcUpdateDataExtractorLoggingInterface $log */
 
         $this->log = $log;
+    }
+
+    public function beforeExtract(ExtractedDataResult $result): void
+    {
+
     }
 
     public function extractData(ExtractedDataResult $result, DataExtractionCurrentDungeon $currentDungeon, BaseEvent $parsedEvent): void
@@ -47,34 +52,46 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
                 return;
             }
 
-            // Determine health
-            if ($currentDungeon->keyLevel === null) {
-                $newBaseHealth = $parsedEvent->getAdvancedData()->getMaxHP();
-            } else {
-                // Calculate the base health based on the current key level + current max hp
-                $newBaseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
-                        $currentDungeon->keyLevel,
-                        $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_FORTIFIED) ?? false,
-                        $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_TYRANNICAL) ?? false,
-                        $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false,
-                    ));
-            }
-
-            if ($npc->base_health !== $newBaseHealth) {
-                $baseHealth = $npc->base_health;
-
-                $npc->update([
-                    'base_health' => $newBaseHealth,
-                ]);
-
-                $result->updatedNpc();
-
-                $this->log->extractDataUpdatedNpc($baseHealth, $newBaseHealth);
-            }
+            // @TODO Disabled for now since I think it's calculated incorrectly - we also don't need it now
+//            $this->extractBaseHealth($result, $currentDungeon, $parsedEvent, $npc);
 
             $this->checkedNpcIds->push($npc->id);
-
         }
     }
 
+    public function afterExtract(ExtractedDataResult $result): void
+    {
+
+    }
+
+    private function extractBaseHealth(
+        ExtractedDataResult          $result,
+        DataExtractionCurrentDungeon $currentDungeon,
+        AdvancedCombatLogEvent       $parsedEvent,
+        Npc                          $npc): void
+    {
+        if ($currentDungeon->keyLevel === null) {
+            $newBaseHealth = $parsedEvent->getAdvancedData()->getMaxHP();
+        } else {
+            // Calculate the base health based on the current key level + current max hp
+            $newBaseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
+                    $currentDungeon->keyLevel,
+                    $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_FORTIFIED) ?? false,
+                    $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_TYRANNICAL) ?? false,
+                    $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false,
+                ));
+        }
+
+        if ($npc->base_health !== $newBaseHealth) {
+            $baseHealth = $npc->base_health;
+
+            $npc->update([
+                'base_health' => $newBaseHealth,
+            ]);
+
+            $result->updatedNpc();
+
+            $this->log->extractDataUpdatedNpc($baseHealth, $newBaseHealth);
+        }
+    }
 }

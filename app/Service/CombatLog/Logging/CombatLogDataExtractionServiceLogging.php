@@ -17,7 +17,7 @@ class CombatLogDataExtractionServiceLogging extends RollbarStructuredLogging imp
     }
 
 
-    public function extractDataSetChallengeMode(string $dungeonName, int $keyLevel, string $affixGroup): void
+    public function extractDataSetChallengeMode(string $dungeonName, int $keyLevel, ?string $affixGroup): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
@@ -36,4 +36,16 @@ class CombatLogDataExtractionServiceLogging extends RollbarStructuredLogging imp
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
+
+    public function extractSpellAuraIdsDungeonNotSet(): void
+    {
+        $this->debug(__METHOD__);
+    }
+
+    public function extractSpellAuraIdsFoundSpellId(int $spellId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+
 }

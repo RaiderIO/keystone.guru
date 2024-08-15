@@ -11,7 +11,7 @@ use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Npc\NpcClassification;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
