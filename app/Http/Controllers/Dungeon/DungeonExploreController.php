@@ -84,7 +84,7 @@ class DungeonExploreController extends Controller
                 CombatLogEvent::DATA_TYPE_PLAYER_POSITION,
             );
 
-            $mostRecentSeason = $seasonService->getMostRecentSeasonForDungeon($dungeon);
+            $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
 
             $heatmapActive = Feature::active(Heatmap::class) && $dungeon->gameVersion->has_seasons;
 
