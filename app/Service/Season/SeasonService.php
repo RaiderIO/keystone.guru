@@ -135,6 +135,15 @@ class SeasonService implements SeasonServiceInterface
         return $this->seasonRepository->getMostRecentSeasonForDungeon($dungeon);
     }
 
+    public function getUpcomingSeasonForDungeon(Dungeon $dungeon): ?Season
+    {
+        if (!$dungeon->gameVersion->has_seasons) {
+            return null;
+        }
+
+        return $this->seasonRepository->getUpcomingSeasonForDungeon($dungeon);
+    }
+
     /**
      * Get the index in the list of affix groups that we're currently at.
      * We can calculate where exactly we are in the current iteration, we just don't know the affix group that represents

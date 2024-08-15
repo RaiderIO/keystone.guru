@@ -335,22 +335,14 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
     /**
      * Get the season that is active for this dungeon right now (preferring upcoming seasons if current and next season overlap)
+     * @TODO business logic should not be in a model - move to service
      */
     public function getActiveSeason(SeasonServiceInterface $seasonService): ?Season
     {
-        $nextSeason = $seasonService->getNextSeasonOfExpansion();
-        if ($nextSeason !== null && $nextSeason->hasDungeon($this)) {
-            return $nextSeason;
-        }
-
-        // $currentSeason cannot be null - there's always a season for the current expansion
-        $currentSeason = $seasonService->getCurrentSeason();
-        if ($currentSeason->hasDungeon($this)) {
-            return $currentSeason;
-        }
-
-        // Timewalking fallback
-        return $seasonService->getCurrentSeason($this->expansion);
+        return $seasonService->getUpcomingSeasonForDungeon($this) ??
+            $seasonService->getMostRecentSeasonForDungeon($this) ??
+            // Timewalking fallback
+            $seasonService->getCurrentSeason($this->expansion);
     }
 
     private function getNpcsHealthBuilderEnemyForcesDungeonExclusionList(): array

@@ -24,6 +24,8 @@ interface SeasonServiceInterface
 
     public function getMostRecentSeasonForDungeon(Dungeon $dungeon): ?Season;
 
+    public function getUpcomingSeasonForDungeon(Dungeon $dungeon): ?Season;
+
     public function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): ?int;
 
     public function getDisplayedAffixGroups(int $iterationOffset): Collection;
