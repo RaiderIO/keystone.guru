@@ -291,7 +291,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('/combatlog', (new AdminToolsController())->combatlog(...))->name('admin.combatlog');
                 Route::get('/npc/import', (new AdminToolsController())->npcimport(...))->name('admin.tools.npc.import');
                 Route::post('/npc/import', (new AdminToolsController())->npcimportsubmit(...))->name('admin.tools.npc.import.submit');
-                Route::get('/npc/manage-spell-visibility', (new AdminToolsController())->manageSpellVisibility(...))->name('admin.tools.npc.managespellvisibility');
+                Route::get('/npc/manage-spell-visibility/{dungeon?}', (new AdminToolsController())->manageSpellVisibility(...))->name('admin.tools.npc.managespellvisibility');
+                Route::post('/npc/manage-spell-visibility/submit', (new AdminToolsController())->manageSpellVisibilitySubmit(...))->name('admin.tools.npc.managespellvisibility.submit');
 
                 // Dungeonroute
                 Route::get('/dungeonroute', (new AdminToolsController())->dungeonroute(...))->name('admin.tools.dungeonroute.view');

@@ -223,14 +223,34 @@ class AdminToolsController extends Controller
     }
 
     /**
-     * @return Application|Factory|View
+     * @param Dungeon|null $dungeon
+     * @return View
      */
-    public function manageSpellVisibility(): View
+    public function manageSpellVisibility(Request $request, ?Dungeon $dungeon = null): View
     {
         return view('admin.tools.npc.managespellvisibility', [
-            'npcs'   => Npc::with('npcSpells')->has('npcSpells')->paginate(50),
-            'spells' => Spell::all()->keyBy('id'),
+            'npcs'    => Npc::when($dungeon !== null, function (Builder $builder) use ($dungeon) {
+                return $builder->where('dungeon_id', $dungeon->id);
+            })->with('npcSpells')
+                ->has('npcSpells')
+                ->paginate(50),
+            'spells'  => Spell::when($dungeon !== null, function (Builder $builder) use ($dungeon) {
+                return $builder->whereRelation('spellDungeons', 'dungeon_id', $dungeon->id);
+            })->get()
+                ->keyBy('id'),
+            'dungeon' => $dungeon,
         ]);
+    }
+
+    public function manageSpellVisibilitySubmit(Request $request): RedirectResponse
+    {
+        $dungeonId = (int)$request->get('dungeon_id');
+        $dungeon   = null;
+        if ($dungeonId !== -1) {
+            $dungeon = Dungeon::findOrFail($dungeonId);
+        }
+
+        return redirect()->route('admin.tools.npc.managespellvisibility', ['dungeon' => $dungeon]);
     }
 
     /**
