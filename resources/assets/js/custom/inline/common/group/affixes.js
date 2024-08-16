@@ -64,8 +64,6 @@ class CommonGroupAffixes extends InlineCode {
                 initialize = true;
             }
 
-            console.log(this.currentSelection, seasonForSelectedDungeon);
-
             if (seasonForSelectedDungeon !== null) {
                 // Don't override the default selection at the start
                 if (!initialize) {
@@ -268,7 +266,6 @@ class CommonGroupAffixes extends InlineCode {
         let $list = $(`${this.options.selectSelector}_list_custom`);
         let selectedSeasonalIndices = [];
 
-        console.log(self.currentSelection);
         $.each($list.children(), function (index, child) {
             let $child = $(child);
             let found = false;
@@ -277,7 +274,6 @@ class CommonGroupAffixes extends InlineCode {
             for (let i = 0; i < self.currentSelection.length; i++) {
                 let currentSelection = self.currentSelection[i];
 
-                console.log(currentSelection, childId);
                 if (currentSelection === childId) {
                     let affixGroup = self._getAffixGroupById(childId);
 
