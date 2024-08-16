@@ -1,11 +1,17 @@
 <?php
+
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\DungeonRoute\DungeonRoute;
+use Illuminate\Support\Collection;
+
 /**
- * @var $dungeonroutes \App\Models\DungeonRoute\DungeonRoute[]|\Illuminate\Support\Collection
- * @var $affixgroup \App\Models\AffixGroup\AffixGroup|null
- * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
- * @var $__env array
- * @var $orientation string
+ * @var DungeonRoute[]|Collection $dungeonroutes
+ * @var AffixGroup|null $affixgroup
+ * @var AffixGroup|null $currentAffixGroup
+ * @var array $__env
+ * @var string $orientation
  */
+
 $cols             ??= 1;
 $showDungeonImage ??= false;
 $affixgroup       ??= null;
@@ -15,7 +21,7 @@ $orientation      ??= 'vertical';
 $i = 0;
 
 // @formatter:off
-$renderDungeonRouteCollection = static function (\Illuminate\Support\Collection $collection, string $header = null) use ($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $orientation, $__env) {
+$renderDungeonRouteCollection = static function (Collection $collection, string $header = null) use ($cols, $affixgroup, $currentAffixGroup, $showDungeonImage, $cache, $orientation, $__env) {
     $count = $collection->count();
     if( $count > 0 && $header !== null ) { ?>
     <div class="row no-gutters mt-2">
@@ -57,7 +63,7 @@ $renderDungeonRouteCollection = static function (\Illuminate\Support\Collection 
 @else
     <?php
     // If it's grouped by something, add a loop
-    if( $dungeonroutes->first() instanceof \Illuminate\Support\Collection ){
+    if( $dungeonroutes->first() instanceof Collection ){
         foreach($dungeonroutes as $header => $groupedDungeonRoutes ) {
             $renderDungeonRouteCollection($groupedDungeonRoutes, $header);
         }

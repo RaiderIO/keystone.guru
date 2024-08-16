@@ -44,7 +44,7 @@ class AssignMDTIDs extends Command
             if ($enemies->filter(static fn(Enemy $enemy) => $enemy->mdt_id > 0)->isNotEmpty()) {
                 $this->comment(
                     sprintf(
-                        '- Skipping mapping version %d (%s) - already assigned has assigned MDT IDs',
+                        '- Skipping mapping version %d (%s) - already has assigned MDT IDs',
                         $mappingVersion->id,
                         __($mappingVersion->dungeon->name, [], 'en_US')
                     )

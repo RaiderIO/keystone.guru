@@ -226,14 +226,12 @@ class AjaxDungeonRouteController extends Controller
         // May be modified/adjusted later on
         $selectRaw = 'dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required';
         $season    = null;
-        $expansion = null;
+        $expansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
 
         if ($request->has('expansion')) {
             $expansion = Expansion::where('shortname', $request->get('expansion'))->first();
         } else if ($request->has('season')) {
             $season = Season::find($request->get('season'));
-        } else {
-            $expansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
         }
 
         $query = DungeonRoute::with(['faction', 'specializations', 'classes', 'races', 'author', 'affixes',
@@ -342,7 +340,10 @@ class AjaxDungeonRouteController extends Controller
             $userRegion = GameServerRegion::getUserOrDefaultRegion();
 
             return view('common.dungeonroute.cardlist', [
-                'currentAffixGroup' => $season?->getCurrentAffixGroupInRegion($userRegion) ?? $expansionService->getCurrentAffixGroup($expansion, $userRegion),
+                'currentAffixGroup' =>
+                    $season?->getCurrentAffixGroupInRegion($userRegion) ??
+                        $expansionService->getCurrentAffixGroup($expansion, $userRegion) ??
+                        null,
                 'dungeonroutes'     => $result,
                 'showAffixes'       => true,
                 'showDungeonImage'  => true,

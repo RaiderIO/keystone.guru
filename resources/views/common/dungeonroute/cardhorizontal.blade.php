@@ -9,7 +9,7 @@ use App\Service\Cache\CacheServiceInterface;
 /**
  * @var CacheServiceInterface $cacheService
  * @var DungeonRoute          $dungeonroute
- * @var AffixGroup            $currentAffixGroup
+ * @var AffixGroup|null       $currentAffixGroup
  * @var AffixGroup|null       $tierAffixGroup
  * @var array                 $__env
  * @var boolean               $cache
@@ -161,7 +161,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                         @include('common.dungeonroute.level', [
                             'season' => $dungeonroute->season,
                             'levelMin' => $dungeonroute->level_min,
-                            'levelMax' => $dungeonroute->level_max
+                            'levelMax' => $dungeonroute->level_max,
                         ])
                     @endif
                 </div>
