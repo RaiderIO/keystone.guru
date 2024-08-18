@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
  * @var Collection<Dungeon>      $dungeons
  * @var Collection<AffixGroup>   $affixgroups
  * @var Collection<DungeonRoute> $dungeonRoutes
- * @var AffixGroup               $currentAffixGroup
+ * @var AffixGroup|null          $currentAffixGroup
  * @var Season                   $currentSeason
  * @var Season|null              $nextSeason
  * @var Season|null              $selectedSeason
@@ -75,7 +75,7 @@ $seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static 
                 @endif
             </th>
             @foreach($affixgroups as $affixGroup)
-                <th class="p-1 {{ $currentAffixGroup->id === $affixGroup->id ? 'bg-success' : '' }}">
+                <th class="p-1 {{ optional($currentAffixGroup)->id === $affixGroup->id ? 'bg-success' : '' }}">
                     @include('common.affixgroup.affixgroup', [
                         'affixgroup' => $affixGroup,
                         'showText' => false,
@@ -103,9 +103,9 @@ $seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static 
                         )->isNotEmpty();
                         ?>
                     <td
-                        @if($availableDungeonRoutes->isNotEmpty())
-                            class="{{ $hasEnemyForces ? 'covered' : 'covered_warning' }}"
-                        @endif
+                            @if($availableDungeonRoutes->isNotEmpty())
+                                class="{{ $hasEnemyForces ? 'covered' : 'covered_warning' }}"
+                            @endif
                     >
                         @if($availableDungeonRoutes->isNotEmpty())
                             <div class="dungeonroute_coverage_filter_select">
