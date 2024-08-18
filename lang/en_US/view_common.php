@@ -469,6 +469,7 @@ return [
             'link'                             => 'Link',
             'short_link'                       => 'Short link',
             'copy_shareable_link_to_clipboard' => 'Copy shareable link to clipboard',
+            'include_location_in_link'         => 'Include current zoom and location in link',
             'embed'                            => 'Embed',
             'copy_embed_code_to_clipboard'     => 'Copy embed code to clipboard',
             'mdt_string'                       => 'MDT String',
