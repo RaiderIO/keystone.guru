@@ -96,9 +96,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::get('login/discord', (new DiscordLoginController())->redirectToProvider(...))->name('login.discord');
     Route::get('login/discord/callback', (new DiscordLoginController())->handleProviderCallback(...))->name('login.discord.callback');
     Route::get('new', (new DungeonRouteController())->create(...))->name('dungeonroute.new');
-    Route::post('new', (new DungeonRouteController())->savenew(...))->name('dungeonroute.savenew');
+    Route::post('new', (new DungeonRouteController())->saveNew(...))->name('dungeonroute.savenew');
     Route::get('new/temporary', (new DungeonRouteController())->createTemporary(...))->name('dungeonroute.temporary.new');
-    Route::post('new/temporary', (new DungeonRouteController())->savenewtemporary(...))->name('dungeonroute.temporary.savenew');
+    Route::post('new/temporary', (new DungeonRouteController())->saveNewTemporary(...))->name('dungeonroute.temporary.savenew');
     Route::post('new/mdtimport', (new MDTImportController())->import(...))->name('dungeonroute.new.mdtimport');
     Route::get('patreon-link', (new PatreonController())->link(...))->name('patreon.link');
     Route::get('patreon-oauth', (new PatreonController())->oauth_redirect(...))->name('patreon.oauth.redirect');
@@ -151,7 +151,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('upgrade', (new DungeonRouteController())->upgrade(...))->name('dungeonroute.upgrade');
             // Edit your own dungeon routes
             Route::get('edit', (new DungeonRouteController())->edit(...))->name('dungeonroute.edit');
-            Route::get('edit/{floorindex}', (new DungeonRouteController())->editfloor(...))->name('dungeonroute.edit.floor');
+            Route::get('edit/{floorindex}', (new DungeonRouteController())->editFloor(...))->name('dungeonroute.edit.floor');
             // Submit a patch for your own dungeon route
             Route::patch('edit', (new DungeonRouteController())->update(...))->name('dungeonroute.update');
             Route::middleware(['auth', 'role:user|admin'])->group(static function () {
@@ -527,7 +527,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('present/{floorindex}', (new DungeonRouteController())->presentFloor(...))->name('dungeonroute.present.floor');
             Route::get('embed/', (new DungeonRouteController())->embed(...))->name('dungeonroute.embed');
             Route::get('embed/{floorindex}', (new DungeonRouteController())->embed(...))->name('dungeonroute.embed.floor');
-            Route::get('{floorindex}', (new DungeonRouteController())->viewfloor(...))->name('dungeonroute.view.floor');
+            Route::get('{floorindex}', (new DungeonRouteController())->viewFloor(...))->name('dungeonroute.view.floor');
             // Preview of a route for image capturing library
             Route::get('preview/{floorindex}', (new DungeonRouteController())->preview(...))->name('dungeonroute.preview');
         });

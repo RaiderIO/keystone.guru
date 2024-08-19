@@ -13,9 +13,9 @@ use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteDataFormRequest;
-use App\Http\Requests\DungeonRoute\AjaxDungeonRouteFormRequest;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSubmitFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSearchFormRequest;
-use App\Http\Requests\DungeonRoute\AjaxSimulateFormRequest;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSimulateFormRequest;
 use App\Http\Requests\PublishFormRequest;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\AuthorNameColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonColumnHandler;
@@ -443,11 +443,11 @@ class AjaxDungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function store(
-        AjaxDungeonRouteFormRequest $request,
-        SeasonService               $seasonService,
-        ExpansionServiceInterface   $expansionService,
-        ThumbnailServiceInterface   $thumbnailService,
-        ?DungeonRoute               $dungeonRoute = null
+        AjaxDungeonRouteSubmitFormRequest $request,
+        SeasonService                     $seasonService,
+        ExpansionServiceInterface         $expansionService,
+        ThumbnailServiceInterface         $thumbnailService,
+        ?DungeonRoute                     $dungeonRoute = null
     ): DungeonRoute {
         $this->authorize('edit', $dungeonRoute);
 
@@ -742,7 +742,7 @@ class AjaxDungeonRouteController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function simulate(AjaxSimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonRoute): array
+    public function simulate(AjaxDungeonRouteSimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonRoute): array
     {
         $this->authorize('view', $dungeonRoute);
 

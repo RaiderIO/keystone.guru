@@ -1,3 +1,26 @@
+<?php
+
+use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Floor\Floor;
+
+/**
+ * @var DungeonRoute $dungeonroute
+ * @var Floor        $floor
+ * @var array        $embedOptions
+ * @var array        $parameters
+ */
+
+$dungeon = Dungeon::findOrFail($dungeonroute->dungeon_id)->load(['expansion', 'floors']);
+
+$affixes         = $dungeonroute->affixes->pluck('text', 'id');
+$selectedAffixes = $dungeonroute->affixes->pluck('id');
+if (count($affixes) == 0) {
+    $affixes         = [-1 => __('view_dungeonroute.embed.any')];
+    $selectedAffixes = -1;
+}
+?>
+
 @extends('layouts.map', [
     'showAds' => false,
     'custom' => true,
@@ -7,19 +30,7 @@
     'bodyClass' => 'overflow-hidden',
     'cookieConsent' => false,
 ])
-<?php
-/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
-/** @var $floor \App\Models\Floor\Floor */
-/** @var $embedOptions array */
-$dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id)->load(['expansion', 'floors']);
 
-$affixes         = $dungeonroute->affixes->pluck('text', 'id');
-$selectedAffixes = $dungeonroute->affixes->pluck('id');
-if (count($affixes) == 0) {
-    $affixes         = [-1 => __('view_dungeonroute.embed.any')];
-    $selectedAffixes = -1;
-}
-?>
 @section('scripts')
     @parent
 
@@ -35,7 +46,7 @@ if (count($affixes) == 0) {
     'dependencies' => ['common/maps/map'],
     'switchDungeonFloorSelect' => '#map_floor_selection_dropdown',
     'defaultSelectedFloorId' => $floor->id,
-    'mdtStringCopyEnabled' => $dungeon->mdt_supported
+    'mdtStringCopyEnabled' => $dungeon->mdt_supported,
 ]])
 
 @section('content')
@@ -59,6 +70,7 @@ if (count($affixes) == 0) {
             'defaultZoom' => 1,
             'floorId' => $floor->id,
             'showAttribution' => false,
+            'parameters' => $parameters,
             'hiddenMapObjectGroups' => [
                 'enemypack',
                 'mountablearea',

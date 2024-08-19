@@ -2,7 +2,7 @@
 
 namespace App\Models\DungeonRoute;
 
-use App\Http\Requests\DungeonRoute\DungeonRouteTemporaryFormRequest;
+use App\Http\Requests\DungeonRoute\DungeonRouteSubmitTemporaryFormRequest;
 use App\Logic\Structs\LatLng;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
@@ -739,7 +739,7 @@ class DungeonRoute extends Model
      * @throws Exception
      */
     public function saveTemporaryFromRequest(
-        DungeonRouteTemporaryFormRequest $request,
+        DungeonRouteSubmitTemporaryFormRequest $request,
         SeasonServiceInterface           $seasonService,
         ExpansionServiceInterface        $expansionService
     ): bool {

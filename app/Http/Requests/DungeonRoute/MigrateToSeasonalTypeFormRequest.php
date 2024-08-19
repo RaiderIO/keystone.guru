@@ -6,7 +6,7 @@ use App\Models\Affix;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class MigrateToSeasonalTypeRequest extends FormRequest
+class MigrateToSeasonalTypeFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
