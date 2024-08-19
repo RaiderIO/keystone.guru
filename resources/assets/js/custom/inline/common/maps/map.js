@@ -1,38 +1,3 @@
-/**
- * @typedef {Object} DungeonMapOptions
- * @property {Array} teemingOptions
- * @property {Array} factions
- * @property {boolean} embed
- * @property {boolean} edit
- * @property {boolean} readonly
- * @property {boolean} sandbox
- * @property {String} defaultEnemyVisualType
- * @property {String} defaultUnkilledEnemyOpacity
- * @property {String} defaultUnkilledImportantEnemyOpacity
- * @property {String} defaultEnemyAggressivenessBorder
- * @property {String} mapFacadeStyle
- * @property {boolean} noUI
- * @property {Array} showControls
- * @property {boolean} gestureHandling
- * @property {boolean} zoomToContents
- * @property {Array} hiddenMapObjectGroups
- * @property {Number} defaultZoom
- * @property {Number} defaultZoomMax
- * @property {boolean} showAttribution
- * @property {Object} dungeonroute
- * @property {DungeonMapOptionsParamters} parameters
- */
-
-/**
- * @typedef {Object} DungeonMapOptionsParamters
- * @property {Number|null} lat
- * @property {Number|null} lng
- * @property {Number|null} z
- */
-
-/**
- * @property {DungeonMapOptions} options
- */
 class CommonMapsMap extends InlineCode {
 
     constructor(options) {
