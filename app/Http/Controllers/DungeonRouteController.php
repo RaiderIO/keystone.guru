@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DungeonRoute\DungeonRouteBaseUrlFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteEmbedUrlFormRequest;
+use App\Http\Requests\DungeonRoute\DungeonRoutePreviewUrlFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteSubmitFormRequest;
 use App\Http\Requests\DungeonRoute\DungeonRouteSubmitTemporaryFormRequest;
 use App\Http\Requests\DungeonRoute\MigrateToSeasonalTypeFormRequest;
@@ -123,7 +124,7 @@ class DungeonRouteController extends Controller
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'floorindex'   => $defaultFloor?->index ?? '1',
+                'floorIndex'   => $defaultFloor?->index ?? '1',
             ]);
         } else {
             if ($floor->index !== (int)$floorIndex) {
@@ -131,7 +132,7 @@ class DungeonRouteController extends Controller
                     'dungeon'      => $dungeonroute->dungeon,
                     'dungeonroute' => $dungeonroute,
                     'title'        => $dungeonroute->getTitleSlug(),
-                    'floorindex'   => $floor->index,
+                    'floorIndex'   => $floor->index,
                 ]);
             }
 
@@ -141,6 +142,7 @@ class DungeonRouteController extends Controller
                 'title'          => $dungeonroute->getTitleSlug(),
                 'current_report' => $currentReport,
                 'floor'          => $floor,
+                'parameters'     => $request->validated(),
                 'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
             ]);
         }
@@ -239,6 +241,7 @@ class DungeonRouteController extends Controller
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
                 'floor'        => $floor,
+                'parameters'   => $request->validated(),
                 'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
             ]);
         }
@@ -250,12 +253,12 @@ class DungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function preview(
-        Request                    $request,
-        MapContextServiceInterface $mapContextService,
-        Dungeon                    $dungeon,
-        DungeonRoute               $dungeonroute,
-        string                     $title,
-        string                     $floorIndex
+        DungeonRoutePreviewUrlFormRequest $request,
+        MapContextServiceInterface        $mapContextService,
+        Dungeon                           $dungeon,
+        DungeonRoute                      $dungeonroute,
+        string                            $title,
+        string                            $floorIndex
     ) {
         $this->authorize('preview', [$dungeonroute, $request->get('secret', '') ?? '']);
 
@@ -263,7 +266,7 @@ class DungeonRouteController extends Controller
             $floorIndex = '1';
         }
 
-        $zoomLevel = $request->get('zoomLevel');
+        $zoomLevel = $request->get('z');
 
         $titleSlug = $dungeonroute->getTitleSlug();
         if (!isset($title) || $titleSlug !== $title) {
@@ -271,14 +274,14 @@ class DungeonRouteController extends Controller
                 'dungeon'      => $dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $titleSlug,
-                'floorindex'   => $floorIndex,
-                'zoomLevel'    => $zoomLevel,
+                'floorIndex'   => $floorIndex,
+                'z'            => $zoomLevel,
             ]);
         }
 
         /** @var FLoor $floor */
         $floor = Floor::where('dungeon_id', $dungeonroute->dungeon_id)
-            // Force usage of facade
+            // Force usage of facade if requested
             ->where('index', $floorIndex)
             ->first();
 
@@ -290,6 +293,7 @@ class DungeonRouteController extends Controller
             'mapContext'     => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor, $mapFacadeStyle),
             'defaultZoom'    => $zoomLevel,
             'mapFacadeStyle' => $mapFacadeStyle,
+            'parameters'     => $request->validated(),
         ]);
     }
 
@@ -308,7 +312,11 @@ class DungeonRouteController extends Controller
 
         $dungeonroute->migrateToSeasonalType($expansionService, $seasonalType);
 
-        return redirect()->route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $title]);
+        return redirect()->route('dungeonroute.edit', [
+            'dungeon'      => $dungeonroute->dungeon,
+            'dungeonroute' => $dungeonroute,
+            'title'        => $title,
+        ]);
     }
 
     /**
@@ -486,6 +494,7 @@ class DungeonRouteController extends Controller
                 'floorindex'   => $floorIndex,
                 'keyLevelMin'  => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
                 'keyLevelMax'  => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+                'parameters'   => $request->validated(),
             ]);
         }
     }

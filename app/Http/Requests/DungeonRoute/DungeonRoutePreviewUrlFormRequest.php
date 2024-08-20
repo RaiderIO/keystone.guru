@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class DungeonRouteBaseUrlFormRequest extends FormRequest
+class DungeonRoutePreviewUrlFormRequest extends DungeonRouteBaseUrlFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,10 +17,8 @@ class DungeonRouteBaseUrlFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'lat' => 'numeric',
-            'lng' => 'numeric',
-            'z'   => 'numeric',
-        ];
+        return array_merge(parent::rules(), [
+            'secret' => ['nullable', 'string'],
+        ]);
     }
 }

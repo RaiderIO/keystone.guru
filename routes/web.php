@@ -529,7 +529,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('embed/{floorindex}', (new DungeonRouteController())->embed(...))->name('dungeonroute.embed.floor');
             Route::get('{floorindex}', (new DungeonRouteController())->viewFloor(...))->name('dungeonroute.view.floor');
             // Preview of a route for image capturing library
-            Route::get('preview/{floorindex}', (new DungeonRouteController())->preview(...))->name('dungeonroute.preview');
+            Route::get('preview/{floorIndex}', (new DungeonRouteController())->preview(...))->name('dungeonroute.preview');
         });
     });
     Route::prefix('{dungeonroute}')->group(static function () {

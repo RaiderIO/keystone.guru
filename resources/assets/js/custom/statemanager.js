@@ -46,7 +46,7 @@ class StateManager extends Signalable {
 
     /**
      * Sets the mapContext, may either be options for a dungeonroute or options for a dungeon (admin pages)
-     * @param mapContext {Object}
+     * @param {Object} mapContext
      */
     setMapContext(mapContext) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -101,7 +101,7 @@ class StateManager extends Signalable {
 
     /**
      * Sets the map icon types to be used in the state.
-     * @param mapIconTypes int
+     * @param {Number} mapIconTypes
      */
     setMapIconTypes(mapIconTypes) {
         this.mapIconTypes = [];
@@ -109,7 +109,7 @@ class StateManager extends Signalable {
 
     /**
      *
-     * @param patreonBenefits
+     * @param {Object} patreonBenefits
      */
     setPatreonBenefits(patreonBenefits) {
         this.patreonBenefits = patreonBenefits;
@@ -117,7 +117,7 @@ class StateManager extends Signalable {
 
     /**
      * Sets the dungeon map for the state manager.
-     * @param map DungeonMap
+     * @param {DungeonMap} map
      */
     setDungeonMap(map) {
         let self = this;
@@ -168,7 +168,7 @@ class StateManager extends Signalable {
 
     /**
      * Sets the visual type that is currently being displayed.
-     * @param enemyDisplayType int
+     * @param {Number} enemyDisplayType
      */
     setEnemyDisplayType(enemyDisplayType) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -182,7 +182,7 @@ class StateManager extends Signalable {
 
     /**
      * Sets the opacity at which unkilled enemies should be rendered.
-     * @param unkilledEnemyOpacity int
+     * @param {Number} unkilledEnemyOpacity
      */
     setUnkilledEnemyOpacity(unkilledEnemyOpacity) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -194,7 +194,7 @@ class StateManager extends Signalable {
 
     /**
      * Sets the opacity at which unkilled important enemies should be rendered.
-     * @param unkilledImportantEnemyOpacity int
+     * @param {Number} unkilledImportantEnemyOpacity
      */
     setUnkilledImportantEnemyOpacity(unkilledImportantEnemyOpacity) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -206,7 +206,7 @@ class StateManager extends Signalable {
 
     /**
      * Sets whether enemies should feature an aggressiveness border or not.
-     * @param visible {Boolean}
+     * @param {Boolean} visible
      */
     setEnemyAggressivenessBorder(visible) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -218,7 +218,7 @@ class StateManager extends Signalable {
 
     /**
      * Sets whether enemies should feature a dangerous border or not.
-     * @param visible {Boolean}
+     * @param {Boolean} visible
      */
     setEnemyDangerousBorder(visible) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -230,9 +230,9 @@ class StateManager extends Signalable {
 
     /**
      * Sets the floor ID.
-     * @param floorId {Number}
-     * @param center {Array}
-     * @param zoom {Number}
+     * @param {Number} floorId
+     * @param {Array} center
+     * @param {Number} zoom
      */
     setFloorId(floorId, center = null, zoom = null) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -244,7 +244,7 @@ class StateManager extends Signalable {
 
     /**
      * Sets the current map zoom level.
-     * @param zoom
+     * @param {Number} zoom
      */
     setMapZoomLevel(zoom) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -264,7 +264,7 @@ class StateManager extends Signalable {
 
     /**
      * Sets the data of the currently logged in user.
-     * @param userData {Object|null}
+     * @param {Object|null} userData
      */
     setUserData(userData) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -274,7 +274,7 @@ class StateManager extends Signalable {
 
     /**
      *
-     * @param mapFacadeStyle {string}
+     * @param {string} mapFacadeStyle
      */
     setMapFacadeStyle(mapFacadeStyle) {
         Cookies.set('map_facade_style', mapFacadeStyle, cookieDefaultAttributes);
@@ -284,7 +284,7 @@ class StateManager extends Signalable {
 
     /**
      *
-     * @param numberStyle {string}
+     * @param {string} numberStyle
      */
     setMapNumberStyle(numberStyle) {
         Cookies.set('map_number_style', numberStyle, cookieDefaultAttributes);
@@ -294,7 +294,7 @@ class StateManager extends Signalable {
 
     /**
      *
-     * @param numberStyle {string}
+     * @param {string} numberStyle
      */
     setKillZonesNumberStyle(numberStyle) {
         Cookies.set('kill_zones_number_style', numberStyle, cookieDefaultAttributes);
@@ -304,7 +304,7 @@ class StateManager extends Signalable {
 
     /**
      * Sets whether to show floor switches in the pull sidebar
-     * @param visible {boolean}
+     * @param {boolean} visible
      */
     setPullsSidebarFloorSwitchVisibility(visible) {
         Cookies.set('pulls_sidebar_floor_switch_visibility', visible ? 1 : 0, cookieDefaultAttributes);
@@ -314,7 +314,7 @@ class StateManager extends Signalable {
 
     /**
      * Sets whether to show all required enemies when viewing a speedrun
-     * @param visible {boolean}
+     * @param {boolean} visible
      */
     setDungeonSpeedrunRequiredNpcsShowAllEnabled(visible) {
         Cookies.set('dungeon_speedrun_required_npcs_show_all', visible ? 1 : 0, cookieDefaultAttributes);
@@ -324,7 +324,7 @@ class StateManager extends Signalable {
 
     /**
      *
-     * @param enabled {boolean}
+     * @param {boolean} enabled
      */
     setEchoCursorsEnabled(enabled) {
         Cookies.set('echo_cursors_enabled', enabled ? 1 : 0, cookieDefaultAttributes);
@@ -480,7 +480,7 @@ class StateManager extends Signalable {
 
     /**
      * Updates the killzones in the local list to the list that was edited by the user.
-     * @param killZones {KillZone[]}
+     * @param{KillZone[]} killZones
      */
     updateKillZones(killZones) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -609,8 +609,8 @@ class StateManager extends Signalable {
     /**
      * Adds a snackbar to be displayed on the page (only works in map view!)
      *
-     * @param html {String}
-     * @param options {Object}
+     * @param {String} html
+     * @param {Object} options
      * @return {String} The created Snackbar's id.
      */
     addSnackbar(html, options = {}) {
@@ -631,7 +631,7 @@ class StateManager extends Signalable {
 
     /**
      * Removes a snackbar by its id
-     * @param snackbarId {String}
+     * @param {String} snackbarId
      */
     removeSnackbar(snackbarId) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -648,9 +648,9 @@ class StateManager extends Signalable {
 
     /**
      *
-     * @param category {Number}
-     * @param tag {String}
-     * @param value {Number}
+     * @param {Number} category
+     * @param {String} tag
+     * @param {Number} value
      */
     sendMetric(category, tag, value = 1) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -669,9 +669,9 @@ class StateManager extends Signalable {
 
     /**
      *
-     * @param category {Number}
-     * @param tag {String}
-     * @param value {Number}
+     * @param {Number} category
+     * @param {String} tag
+     * @param {Number} value
      */
     sendMetricForDungeonRoute(category, tag, value = 1) {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
