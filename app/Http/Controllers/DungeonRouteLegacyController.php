@@ -69,7 +69,7 @@ class DungeonRouteLegacyController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $floorIndex,
+            'floorIndex'   => $floorIndex,
         ]);
     }
 
