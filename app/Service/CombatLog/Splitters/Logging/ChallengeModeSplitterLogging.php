@@ -14,14 +14,19 @@ class ChallengeModeSplitterLogging extends CombatLogSplitterLogging implements C
         $this->info(__METHOD__);
     }
 
-    public function parseCombatLogEventTimestampNotSet(): void
-    {
-        $this->info(__METHOD__);
-    }
-
     public function parseCombatLogEventTooBigTimestampGap(float $seconds, string $previousTimestamp, string $timestamp): void
     {
         $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function parseCombatLogEventZoneChangeMismatch(int $zoneId, string $zoneName, int $dungeonZoneId, string $dungeonName): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function parseCombatLogEventZoneChangeMismatchResolved(): void
+    {
+        $this->info(__METHOD__);
     }
 
     public function parseCombatLogEventChallengeModeStartEvent(): void
@@ -72,5 +77,10 @@ class ChallengeModeSplitterLogging extends CombatLogSplitterLogging implements C
     public function reset(): void
     {
         $this->debug(__METHOD__);
+    }
+
+    public function parseCombatLogEventTimestampNotSet(): void
+    {
+        $this->info(__METHOD__);
     }
 }

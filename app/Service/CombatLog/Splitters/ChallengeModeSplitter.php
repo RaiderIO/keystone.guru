@@ -10,9 +10,9 @@ use App\Logic\CombatLog\SpecialEvents\CombatLogVersion as CombatLogVersionEvent;
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange as ZoneChangeEvent;
+use App\Models\Dungeon;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\Splitters\Logging\ChallengeModeSplitterLoggingInterface;
-use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -31,23 +31,17 @@ class ChallengeModeSplitter extends CombatLogSplitter
     ];
 
     private ChallengeModeSplitterLoggingInterface $log;
-
     /** @var Collection<string> */
-    private Collection $rawEvents;
-
-    private ?string $lastCombatLogVersion;
-
+    private Collection               $rawEvents;
+    private ?CombatLogVersionEvent   $lastCombatLogVersionEvent;
     private ?ChallengeModeStartEvent $lastChallengeModeStartEvent = null;
-
-    private ?string $lastZoneChange;
-
-    private ?string $lastMapChange;
-
-    private ?Carbon $lastTimestamp = null;
-
-    private ?Collection $result = null;
-
+    private ?Dungeon                 $currentDungeon              = null;
+    private ?ZoneChangeEvent         $lastZoneChangeEvent;
+    private ?MapChangeEvent          $lastMapChangeEvent;
+    private ?Carbon                  $lastTimestamp               = null;
+    private ?Collection              $result                      = null;
     private ?string $filePath;
+    private bool    $isInWrongZone = false;
 
     public function __construct(
         private readonly CombatLogServiceInterface $combatLogService
@@ -128,6 +122,39 @@ class ChallengeModeSplitter extends CombatLogSplitter
                 return $parsedEvent;
             }
 
+            // If the zone changes again, and it matches up, log that we're capturing again and reset the flag
+            if ($parsedEvent instanceof ZoneChangeEvent &&
+                $parsedEvent->getZoneId() === $this->currentDungeon->map_id &&
+                $this->isInWrongZone) {
+                // Reset the flag
+                $this->isInWrongZone       = false;
+                // Capture the zone change though!
+                $this->lastZoneChangeEvent = $parsedEvent;
+
+                $this->log->parseCombatLogEventZoneChangeMismatchResolved();
+            }
+
+            // Did someone hearth out in the middle of a run?
+            if ($this->lastZoneChangeEvent instanceof ZoneChangeEvent &&
+                // This is correct - zoneID in the combatlog is mapID in the database/in WCDB stuff
+                $this->lastZoneChangeEvent->getZoneId() !== $this->currentDungeon->map_id) {
+                // Don't spam this to death - just log this once
+                if (!$this->isInWrongZone) {
+                    $this->isInWrongZone = true;
+
+                    $this->log->parseCombatLogEventZoneChangeMismatch(
+                        $this->lastZoneChangeEvent->getZoneId(),
+                        $this->lastZoneChangeEvent->getZoneName(),
+                        $this->currentDungeon->zone_id,
+                        __($this->currentDungeon->name, [], 'en_US')
+                    );
+                }
+
+                // Return - consume the event, we don't want events from whatever place you hearthed to in our dungeon
+                return $parsedEvent;
+            }
+
+
             // Save ALL events that come through after the challenge mode start event has been given
             $this->rawEvents->push($rawEvent);
             $this->lastTimestamp = $combatLogEntry->getParsedTimestamp();
@@ -155,23 +182,24 @@ class ChallengeModeSplitter extends CombatLogSplitter
             $this->log->parseCombatLogEventChallengeModeStartEvent();
 
             $this->lastChallengeModeStartEvent = $parsedEvent;
+            $this->currentDungeon              = Dungeon::firstWhere('challenge_mode_id', $parsedEvent->getChallengeModeID());
 
-            $this->rawEvents->push($this->lastCombatLogVersion);
-            $this->rawEvents->push($this->lastZoneChange);
-            $this->rawEvents->push($this->lastMapChange);
+            $this->rawEvents->push($this->lastCombatLogVersionEvent->getRawEvent());
+            $this->rawEvents->push($this->lastZoneChangeEvent->getRawEvent());
+            $this->rawEvents->push($this->lastMapChangeEvent->getRawEvent());
             $this->rawEvents->push($rawEvent);
         }
 
         // Always keep track of these events
         if ($parsedEvent instanceof CombatLogVersionEvent) {
             $this->log->parseCombatLogEventCombatLogVersionEvent();
-            $this->lastCombatLogVersion = $rawEvent;
+            $this->lastCombatLogVersionEvent = $parsedEvent;
         } else if ($parsedEvent instanceof ZoneChangeEvent) {
             $this->log->parseCombatLogEventZoneChangeEvent();
-            $this->lastZoneChange = $rawEvent;
+            $this->lastZoneChangeEvent = $parsedEvent;
         } else if ($parsedEvent instanceof MapChangeEvent) {
             $this->log->parseCombatLogEventMapChangeEvent();
-            $this->lastMapChange = $rawEvent;
+            $this->lastMapChangeEvent = $parsedEvent;
         }
 
         return $parsedEvent;
@@ -192,10 +220,10 @@ class ChallengeModeSplitter extends CombatLogSplitter
         $this->log->reset();
         $this->resetCurrentChallengeMode();
 
-        $this->lastCombatLogVersion = null;
-        $this->lastZoneChange       = null;
-        $this->lastMapChange        = null;
-        $this->result               = collect();
+        $this->lastCombatLogVersionEvent = null;
+        $this->lastZoneChangeEvent       = null;
+        $this->lastMapChangeEvent        = null;
+        $this->result                    = collect();
     }
 
     protected function getCombatLogFileName(string $countStr): string
