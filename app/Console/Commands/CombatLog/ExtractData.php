@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\CombatLog;
 
+use App\Models\CombatLog\ParsedCombatLog;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 
 class ExtractData extends BaseCombatLogCommand
@@ -34,18 +35,33 @@ class ExtractData extends BaseCombatLogCommand
     {
         $this->info(sprintf('Parsing file %s', $filePath));
 
+        if (ParsedCombatLog::where('combat_log_path', $filePath)->exists()) {
+            $this->warn(
+                '- Data already extracted for this file'
+            );
+
+            return 0;
+        }
+
         $result = $combatLogDataExtractionService->extractData($filePath);
         $data   = array_filter($result->toArray());
         if (!empty($data)) {
             foreach ($data as $key => $value) {
                 // sprintf
-                $this->info(sprintf('%s: %s', $key, $value));
+                $this->info(sprintf('- %s: %s', $key, $value));
             }
         } else {
             $this->comment(
-                'Did not find any data to update'
+                '- Did not find any data to update'
             );
         }
+
+        ParsedCombatLog::insert([
+            'combat_log_path' => $filePath,
+            'extracted_data'  => true,
+            'created_at'      => now(),
+            'updated_at'      => now(),
+        ]);
 
         return 0;
     }

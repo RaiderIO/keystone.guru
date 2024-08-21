@@ -17,7 +17,16 @@ class CombatLogEntry
     public const DATE_FORMATS = [
         'm/d H:i:s.v',
         'm/d/Y H:i:s.v-4', // I don't  know what the -4 stands for - assuming timezone? There's no thingy for it though
-        'm/d/Y H:i:s.v1', // I don't know what the 1 stands for
+        'm/d/Y H:i:s.v1', // I don't know what the 1-9 stands for
+        'm/d/Y H:i:s.v2',
+        'm/d/Y H:i:s.v3',
+        'm/d/Y H:i:s.v4',
+        'm/d/Y H:i:s.v5',
+        'm/d/Y H:i:s.v6',
+        'm/d/Y H:i:s.v7',
+        'm/d/Y H:i:s.v8',
+        'm/d/Y H:i:s.v9',
+        'm/d/Y H:i:s.v0',
     ];
 
     private const RAW_EVENT_IGNORE = [

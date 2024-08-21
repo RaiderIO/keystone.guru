@@ -16,6 +16,16 @@ class CombatLogSplitServiceLogging extends RollbarStructuredLogging implements C
         $this->warning(__METHOD__);
     }
 
+    public function splitCombatLogUsingSplitterMovingFile(string $originalCombatLogPath, string $targetCombatLogPath): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function splitCombatLogUsingSplitterMovingFileFailed(string $originalCombatLogPath, string $targetCombatLogPath): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
     public function splitCombatLogUsingSplitterEnd(): void
     {
         $this->end(__METHOD__);
