@@ -27,6 +27,7 @@ use App\Models\User;
  * @var bool              $adFree
  * @var string|null       $mapBackgroundColor
  * @var string|null       $mapFacadeStyle
+ * @var array|null        $parameters
  */
 
 $user               = Auth::user();
@@ -39,6 +40,7 @@ $dungeonroute       ??= null;
 $livesession        ??= null;
 $mapBackgroundColor ??= null;
 $controlOptions     ??= [];
+$parameters         ??= [];
 
 // Ensure default values for showing/hiding certain elements
 $show['controls']                  ??= [];
@@ -120,6 +122,7 @@ if ($isAdmin) {
     'defaultZoomMax' => $defaultZoomMax,
     'showAttribution' => $showAttribution,
     'dungeonroute' => $dungeonroute ?? null,
+    'parameters' => $parameters,
 ], $adminOptions)])
 
 @section('scripts')

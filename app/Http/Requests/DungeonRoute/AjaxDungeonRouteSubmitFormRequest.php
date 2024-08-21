@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
-class AjaxDungeonRouteFormRequest extends DungeonRouteFormRequest
+class AjaxDungeonRouteSubmitFormRequest extends DungeonRouteSubmitFormRequest
 {
     /**
      * Get the validation rules that apply to the request.

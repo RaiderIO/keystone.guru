@@ -1,6 +1,12 @@
 <?php
-/** @var \App\Models\DungeonRoute\DungeonRoute $model */
-/** @var array $parameters */
+
+use App\Models\DungeonRoute\DungeonRoute;
+use Illuminate\Support\Str;
+
+/**
+ * @var DungeonRoute $model
+ * @var array        $parameters
+ */
 
 $showStyle = 'regular';
 ?>
@@ -15,7 +21,7 @@ $showStyle = 'regular';
                 <iframe src="{{ route('dungeonroute.embed', array_merge([
                         'dungeon' => $model->dungeon,
                         'dungeonroute' => $model,
-                        'title' => \Illuminate\Support\Str::slug($model->title)],
+                        'title' => Str::slug($model->title)],
                         $parameters
                     )) }}"
                         style="width: 800px; height: 600px; border: none;"></iframe>
@@ -23,7 +29,7 @@ $showStyle = 'regular';
                 <iframe src="{{ route('dungeonroute.embed', [
                         'dungeon' => $model->dungeon,
                         'dungeonroute' => $model,
-                        'title' => \Illuminate\Support\Str::slug($model->title),
+                        'title' => Str::slug($model->title),
                         'style' => 'compact',
                         'pulls' => 1,
                         'pullsDefaultState' => 0,
@@ -39,7 +45,7 @@ $showStyle = 'regular';
                 <iframe src="{{ route('dungeonroute.embed', [
                         'dungeon' => $model->dungeon,
                         'dungeonroute' => $model,
-                        'title' => \Illuminate\Support\Str::slug($model->title),
+                        'title' => Str::slug($model->title),
                         'style' => 'regular',
                         'pulls' => 1,
                         'pullsDefaultState' => 0,
