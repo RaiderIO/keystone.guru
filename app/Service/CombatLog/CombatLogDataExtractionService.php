@@ -48,7 +48,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         $result = new ExtractedDataResult();
 
         foreach ($this->dataExtractors as $dataExtractor) {
-            $dataExtractor->beforeExtract($result);
+            $dataExtractor->beforeExtract($result, $filePath);
         }
 
         $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
@@ -84,7 +84,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         $this->log->removeContext('lineNr');
 
         foreach ($this->dataExtractors as $dataExtractor) {
-            $dataExtractor->afterExtract($result);
+            $dataExtractor->afterExtract($result, $filePath);
         }
 
         return $result;

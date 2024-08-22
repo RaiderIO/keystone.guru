@@ -8,11 +8,14 @@ use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBase;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBroken;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBrokenSpell;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Missed;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Player;
+use App\Models\CombatLog\CombatLogNpcSpellAssignment;
+use App\Models\CombatLog\CombatLogSpellUpdate;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell as SpellModel;
@@ -40,6 +43,8 @@ class SpellDataExtractor implements DataExtractorInterface
 
     private SpellDataExtractorLoggingInterface $log;
 
+    private ?string $currentCombatLogFilePath = null;
+
     public function __construct(
         private readonly WowheadServiceInterface $wowheadService
     ) {
@@ -54,9 +59,9 @@ class SpellDataExtractor implements DataExtractorInterface
         $this->log = $log;
     }
 
-    public function beforeExtract(ExtractedDataResult $result): void
+    public function beforeExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
-
+        $this->currentCombatLogFilePath = $combatLogFilePath;
     }
 
     public function extractData(ExtractedDataResult $result, DataExtractionCurrentDungeon $currentDungeon, BaseEvent $parsedEvent): void
@@ -98,25 +103,27 @@ class SpellDataExtractor implements DataExtractorInterface
             (($destIsNpc && $suffix instanceof AuraApplied && $suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF) ||
                 $destGuid instanceof Player)) {
 
-            $this->extractSpellData($result, $parsedEvent, $prefix);
-
-            $this->assignDungeonToSpell($result, $currentDungeon, $parsedEvent, $prefix);
 
             // 8/2/2024 16:37:04.342-4  SPELL_AURA_BROKEN_SPELL,Creature-0-2085-2290-22770-171772-00002D40C5,"Mistveil Defender",0xa48,0x0,Player-4184-005B8B04,"Gulagcool-TheseGoToEleven-TR",0x512,0x0,1784,"Stealth",0x1,457129,"Deathstalker's Mark",1,DEBUFF
             // If the NPC broke an aura - that's not the NPC casting "Stealth" on a player - no it broke it out of it,
             // so don't assign that spell to this NPC
-            if (!($suffix instanceof AuraBrokenSpell)) {
+            if (!($suffix instanceof AuraBrokenSpell) && !($suffix instanceof AuraBroken)) {
+                $this->extractSpellData($result, $parsedEvent, $prefix);
+
+                $this->assignDungeonToSpell($result, $currentDungeon, $parsedEvent, $prefix);
+
                 $this->assignSpellToNpc($result, $parsedEvent, $sourceGuid, $prefix);
             }
         }
     }
 
-    public function afterExtract(ExtractedDataResult $result): void
+    public function afterExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
         // Reset
-        $this->spellIdsForDungeon = collect();
-        $this->summonedNpcs       = collect();
-        $this->npcCache           = collect();
+        $this->spellIdsForDungeon       = collect();
+        $this->summonedNpcs             = collect();
+        $this->npcCache                 = collect();
+        $this->currentCombatLogFilePath = null;
     }
 
     private function isSummonedNpc(CombatLogEvent $parsedEvent): bool
@@ -236,6 +243,13 @@ class SpellDataExtractor implements DataExtractorInterface
                     'spell_id' => $prefix->getSpellId(),
                 ]);
 
+                CombatLogNpcSpellAssignment::create([
+                    'npc_id'          => $npc->id,
+                    'spell_id'        => $prefix->getSpellId(),
+                    'combat_log_path' => $this->currentCombatLogFilePath,
+                    'raw_event'       => $parsedEvent->getRawEvent(),
+                ]);
+
                 // Refresh the relation
                 $npc->load('npcSpells');
 
@@ -253,14 +267,16 @@ class SpellDataExtractor implements DataExtractorInterface
         SpellModel          $spell,
         CombatLogEvent      $combatLogEvent
     ): bool {
+        $before = $spell->getAttributes();
+
         $suffix        = $combatLogEvent->getSuffix();
         $spell->aura   = $spell->aura ||
-            ($suffix instanceof AuraApplied && $suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF &&
-                $combatLogEvent->getGenericData()->getDestGuid() instanceof Creature &&
-                $combatLogEvent->getGenericData()->getDestGuid()->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE);
+        ($suffix instanceof AuraApplied && $suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF &&
+            $combatLogEvent->getGenericData()->getDestGuid() instanceof Creature &&
+            $combatLogEvent->getGenericData()->getDestGuid()->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE) ? 1 : 0;
         $spell->debuff = $spell->debuff ||
-            ($suffix instanceof AuraApplied && $suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF &&
-                $combatLogEvent->getGenericData()->getDestGuid() instanceof Player);
+        ($suffix instanceof AuraApplied && $suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF &&
+            $combatLogEvent->getGenericData()->getDestGuid() instanceof Player) ? 1 : 0;
         // If a spell was missed somehow, write it to the miss_types_mask field
         if ($suffix instanceof Missed) {
             $spell->miss_types_mask |=
@@ -268,6 +284,15 @@ class SpellDataExtractor implements DataExtractorInterface
         }
 
         if ($spell->isDirty() && $spell->save()) {
+            $boolToInt = fn($value) => is_bool($value) ? (int)$value : $value;
+            CombatLogSpellUpdate::create([
+                'spell_id'        => $spell->id,
+                'before'          => json_encode(array_map($boolToInt, $before)),
+                'after'           => json_encode(array_map($boolToInt, $spell->getAttributes())),
+                'combat_log_path' => $this->currentCombatLogFilePath,
+                'raw_event'       => $combatLogEvent->getRawEvent(),
+            ]);
+
             $result->updatedSpell();
 
             return true;
@@ -309,6 +334,15 @@ class SpellDataExtractor implements DataExtractorInterface
             $result->createdSpell();
 
             $createdSpell = SpellModel::create($spellAttributes);
+
+            // Ensure we know this is when the spell was created
+            CombatLogSpellUpdate::create([
+                'spell_id'        => $createdSpell->id,
+                'before'          => null,
+                'after'           => json_encode($createdSpell->getAttributes()),
+                'combat_log_path' => $this->currentCombatLogFilePath,
+                'raw_event'       => $combatLogEvent->getRawEvent(),
+            ]);
 
             // With the created spell, update it according to the combat log event that created it (aura assignments etc)
             $this->updateSpell($result, $createdSpell, $combatLogEvent);
