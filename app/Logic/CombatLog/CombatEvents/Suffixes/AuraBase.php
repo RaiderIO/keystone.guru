@@ -12,14 +12,14 @@ abstract class AuraBase extends Suffix
     /** @var string ex. BUFF */
     private string $auraType;
 
-    private int $amount;
+    private ?int $amount = null;
 
     public function getAuraType(): string
     {
         return $this->auraType;
     }
 
-    public function getAmount(): int
+    public function getAmount(): ?int
     {
         return $this->amount;
     }

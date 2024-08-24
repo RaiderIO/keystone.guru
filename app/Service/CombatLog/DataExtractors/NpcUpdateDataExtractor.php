@@ -8,6 +8,7 @@ use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Models\Affix;
 use App\Models\Npc\Npc;
+use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\DataExtractors\Logging\NpcUpdateDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
@@ -22,7 +23,7 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
 
     public function __construct()
     {
-        $this->checkedNpcIds = collect();
+        $this->checkedNpcIds = collect(CombatLogDataExtractionService::SUMMONED_NPC_IDS);
         $log                 = App::make(NpcUpdateDataExtractorLoggingInterface::class);
         /** @var NpcUpdateDataExtractorLoggingInterface $log */
 

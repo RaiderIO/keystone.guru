@@ -788,6 +788,9 @@
         "npc_spells": [
             {
                 "spell_id": 324776
+            },
+            {
+                "spell_id": 324859
             }
         ],
         "npc_enemy_forces": [
@@ -983,6 +986,9 @@
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 324859
+            },
             {
                 "spell_id": 324986
             },

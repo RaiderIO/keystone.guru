@@ -22,6 +22,15 @@ use Illuminate\Support\Collection;
 
 class CombatLogDataExtractionService implements CombatLogDataExtractionServiceInterface
 {
+    /**
+     * @var int[] Additional NPC IDs that are summoned but do not have a SUMMON combat log event.
+     */
+    public const SUMMONED_NPC_IDS = [
+        // Storm, Earth and Fire talent (Monk)
+        69791, // Fire Spirit
+        69792, // Earth Spirit
+    ];
+
     /** @var Collection<DataExtractorInterface> */
     private Collection $dataExtractors;
 

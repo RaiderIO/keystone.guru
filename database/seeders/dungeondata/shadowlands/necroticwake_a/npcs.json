@@ -181,6 +181,9 @@
                 "spell_id": 321894
             },
             {
+                "spell_id": 321956
+            },
+            {
                 "spell_id": 323730
             }
         ],
@@ -937,6 +940,9 @@
                 "spell_id": 320614
             },
             {
+                "spell_id": 320631
+            },
+            {
                 "spell_id": 320717
             }
         ],
@@ -1143,6 +1149,9 @@
                 "spell_id": 324381
             },
             {
+                "spell_id": 324391
+            },
+            {
                 "spell_id": 324394
             }
         ],
@@ -1264,7 +1273,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 338022
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1724,6 +1737,31 @@
         "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 166936,
+        "dungeon_id": 34,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "Keeneye Bowman",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
