@@ -1,0 +1,236 @@
+[
+    {
+        "id": 1,
+        "npc_id": 165597,
+        "spell_id": 338022,
+        "combat_log_path": "tmp\/WoWCombatLog-081424_214425_10_the-necrotic-wake-1.zip",
+        "raw_event": "8\/14\/2024 23:33:12.0062  SPELL_CAST_SUCCESS,Creature-0-2085-2286-12669-165597-00003D2294,\"Patchwerk Soldier\",0xa48,0x0,Player-4184-00C93B20,\"Dfjkhfgvdhsf-TheseGoToEleven-TR\",0x512,0x0,338022,\"Leap\",0x1,Creature-0-2085-2286-12669-165597-00003D2294,Creature-0-2085-2286-12669-165136-00003D2274,30939858,30939858,0,0,42857,0,1,0,0,0,-3327.85,-3751.45,1666,4.6685,80\n",
+        "created_at": "2024-08-22T20:39:56+00:00",
+        "updated_at": "2024-08-22T20:39:56+00:00"
+    },
+    {
+        "id": 2,
+        "npc_id": 164702,
+        "spell_id": 320631,
+        "combat_log_path": "tmp\/WoWCombatLog-081424_214425_10_the-necrotic-wake.zip",
+        "raw_event": "8\/14\/2024 23:25:18.2372  SPELL_AURA_APPLIED,Creature-0-2085-2286-12409-164702-00003D20A7,\"Carrion Worm\",0xa48,0x0,Player-4184-0095BE28,\"Drewvoker-TheseGoToEleven-TR\",0x512,0x0,320631,\"Carrion Eruption\",0x8,DEBUFF\n",
+        "created_at": "2024-08-22T20:40:10+00:00",
+        "updated_at": "2024-08-22T20:40:10+00:00"
+    },
+    {
+        "id": 3,
+        "npc_id": 66207,
+        "spell_id": 129953,
+        "combat_log_path": "tmp\/WoWCombatLog-081424_214425_3_grim-batol.zip",
+        "raw_event": "8\/14\/2024 22:13:37.5772  SPELL_AURA_APPLIED,Creature-0-2085-870-11344-66207-00003D0D41,\"Master Hsu\",0xa18,0x0,Creature-0-2085-870-11344-66207-00003D0D41,\"Master Hsu\",0xa18,0x0,129953,\"Followthrough\",0x1,BUFF\n",
+        "created_at": "2024-08-22T20:40:12+00:00",
+        "updated_at": "2024-08-22T20:40:12+00:00"
+    },
+    {
+        "id": 4,
+        "npc_id": 66947,
+        "spell_id": 131575,
+        "combat_log_path": "tmp\/WoWCombatLog-081424_214425_3_grim-batol.zip",
+        "raw_event": "8\/14\/2024 22:13:37.7782  SPELL_AURA_APPLIED,Creature-0-2085-870-11344-66947-00003D0D43,\"Monk Trainee\",0xa18,0x0,Creature-0-2085-870-11344-66257-00003D0D43,\"Master Tsang\",0xa18,0x0,131575,\"Throw Rock\",0x1,BUFF\n",
+        "created_at": "2024-08-22T20:40:15+00:00",
+        "updated_at": "2024-08-22T20:40:15+00:00"
+    },
+    {
+        "id": 5,
+        "npc_id": 224609,
+        "spell_id": 451614,
+        "combat_log_path": "tmp\/WoWCombatLog-081424_214425_7_grim-batol.zip",
+        "raw_event": "8\/14\/2024 21:50:19.4032  SPELL_CAST_SUCCESS,Creature-0-2085-670-11033-224609-0000BD0A28,\"Twilight Destroyer\",0x10a48,0x0,Player-4184-00C9B1C8,\"Samos-TheseGoToEleven-TR\",0x512,0x0,451614,\"Twilight Ember\",0x20,Creature-0-2085-670-11033-224609-0000BD0A28,0000000000000000,46420731,77349638,0,0,42857,0,1,0,0,0,-536.67,-312.45,293,0.1002,81\n",
+        "created_at": "2024-08-22T20:40:16+00:00",
+        "updated_at": "2024-08-22T20:40:16+00:00"
+    },
+    {
+        "id": 6,
+        "npc_id": 162693,
+        "spell_id": 321956,
+        "combat_log_path": "tmp\/WoWCombatLog-081524_162830_2_the-necrotic-wake.zip",
+        "raw_event": "8\/15\/2024 16:52:11.4732  SPELL_DAMAGE,Creature-0-2085-2286-25099-162693-00003E1147,\"Nalthor the Rimebinder\",0x10a48,0x0,Player-4184-00945364,\"Hywalleh-TheseGoToEleven-TR\",0x512,0x0,321956,\"Comet Storm\",0x10,Player-4184-00945364,0000000000000000,1511776,4135780,21379,51263,52972,0,11,69,150,0,-3135.13,-3455.35,1668,1.6578,580,2329315,2854744,-1,16,0,0,0,nil,nil,nil\n",
+        "created_at": "2024-08-22T20:40:42+00:00",
+        "updated_at": "2024-08-22T20:40:42+00:00"
+    },
+    {
+        "id": 7,
+        "npc_id": 166301,
+        "spell_id": 324859,
+        "combat_log_path": "tmp\/WoWCombatLog-081624_140124_10_mists-of-tirna-scithe.zip",
+        "raw_event": "8\/16\/2024 15:21:42.5552  SPELL_AURA_APPLIED,Creature-0-2085-2290-9705-166301-0000BF4F07,\"Mistveil Stalker\",0xa48,0x0,Player-4184-00C8E51F,\"Cokdok-TheseGoToEleven-TR\",0x512,0x0,324859,\"Bramblethorn Entanglement\",0x8,DEBUFF\n",
+        "created_at": "2024-08-22T20:40:52+00:00",
+        "updated_at": "2024-08-22T20:40:52+00:00"
+    },
+    {
+        "id": 8,
+        "npc_id": 223745,
+        "spell_id": 448566,
+        "combat_log_path": "tmp\/WoWCombatLog-081724_211308_10_grim-batol.zip",
+        "raw_event": "8\/17\/2024 22:05:42.3882  SPELL_DAMAGE,Creature-0-2085-670-17747-223745-000041028F,\"Twilight Drake\",0xa48,0x0,Player-4184-00CA3868,\"Patoumonk-TheseGoToEleven-TR\",0x512,0x0,448566,\"Shadowflame Breath\",0x24,Player-4184-00CA3868,0000000000000000,2327960,7762473,75327,72430,24402,0,0,2306318,2625000,0,-694.50,-428.17,293,6.0220,626,5434513,8369058,-1,36,0,0,0,nil,nil,nil\n",
+        "created_at": "2024-08-22T20:42:39+00:00",
+        "updated_at": "2024-08-22T20:42:39+00:00"
+    },
+    {
+        "id": 9,
+        "npc_id": 223995,
+        "spell_id": 431493,
+        "combat_log_path": "tmp\/WoWCombatLog-081724_211308_10_the-dawnbreaker.zip",
+        "raw_event": "8\/17\/2024 22:58:10.7922  SPELL_AURA_APPLIED,Creature-0-2085-2662-18948-223995-0001C10E72,\"Nightfall Curseblade\",0xa48,0x0,Creature-0-2085-2662-18948-223995-0001C10E72,\"Nightfall Curseblade\",0xa48,0x0,431493,\"Darkblade\",0x20,BUFF\n",
+        "created_at": "2024-08-22T20:43:12+00:00",
+        "updated_at": "2024-08-22T20:43:12+00:00"
+    },
+    {
+        "id": 10,
+        "npc_id": 213905,
+        "spell_id": 451114,
+        "combat_log_path": "tmp\/WoWCombatLog-081724_211308_10_the-dawnbreaker.zip",
+        "raw_event": "8\/17\/2024 23:08:27.2072  SPELL_CAST_SUCCESS,Creature-0-2085-2662-18948-213905-0005C11041,\"Animated Darkness\",0xa48,0x0,Player-4184-00C95900,\"Mayy-TheseGoToEleven-TR\",0x512,0x0,451114,\"Congealed Shadow\",0x20,Creature-0-2085-2662-18948-213905-0005C11041,0000000000000000,20493250,20493250,0,0,34914,0,1,0,0,0,2137.29,730.19,2359,3.8284,79\n",
+        "created_at": "2024-08-22T20:43:18+00:00",
+        "updated_at": "2024-08-22T20:43:18+00:00"
+    },
+    {
+        "id": 11,
+        "npc_id": 213932,
+        "spell_id": 451099,
+        "combat_log_path": "tmp\/WoWCombatLog-081724_211308_10_the-dawnbreaker.zip",
+        "raw_event": "8\/17\/2024 23:08:44.6192  SPELL_CAST_SUCCESS,Creature-0-2085-2662-18948-213932-000041103E,\"Sureki Militant\",0xa48,0x0,Player-4184-00C6FE1A,\"Roflkekk-TheseGoToEleven-TR\",0x512,0x0,451099,\"Entwining Threads\",0x8,Creature-0-2085-2662-18948-213932-000041103E,0000000000000000,113239244,113446146,0,0,42857,0,1,0,0,0,2124.89,742.27,2359,4.5591,81\n",
+        "created_at": "2024-08-22T20:43:19+00:00",
+        "updated_at": "2024-08-22T20:43:19+00:00"
+    },
+    {
+        "id": 12,
+        "npc_id": 213932,
+        "spell_id": 451098,
+        "combat_log_path": "tmp\/WoWCombatLog-081724_211308_10_the-dawnbreaker.zip",
+        "raw_event": "8\/17\/2024 23:13:06.7012  SPELL_DAMAGE,Creature-0-2085-2662-18948-213932-0000C11041,\"Sureki Militant\",0xa48,0x0,Player-4184-00C9C9C9,\"Alfredopasta-TheseGoToEleven-TR\",0x512,0x0,451098,\"Tacky Nova\",0x8,Player-4184-00C9C9C9,0000000000000000,744348,6855660,83419,9531,55260,0,6,350,1000,0,1903.36,947.61,2359,1.7635,626,6111312,7670415,-1,8,0,0,706649,nil,nil,nil\n",
+        "created_at": "2024-08-22T20:43:22+00:00",
+        "updated_at": "2024-08-22T20:43:22+00:00"
+    },
+    {
+        "id": 13,
+        "npc_id": 165197,
+        "spell_id": 324391,
+        "combat_log_path": "tmp\/WoWCombatLog-081724_211308_10_the-necrotic-wake.zip",
+        "raw_event": "8\/18\/2024 02:00:40.8182  SPELL_DAMAGE,Creature-0-2085-2286-22253-165197-00004138DD,\"Skeletal Monstrosity\",0x10a48,0x0,Player-4184-00C9E313,\"Nainbecile-TheseGoToEleven-TR\",0x512,0x1,324391,\"Frigid Spikes\",0x10,Player-4184-00C9E313,0000000000000000,2669227,5735620,7590,72828,14894,0,0,1762520,3348060,0,-3386.06,-3518.60,1666,0.8161,626,3066393,6237808,-1,16,0,0,1227444,nil,nil,nil\n",
+        "created_at": "2024-08-22T20:43:33+00:00",
+        "updated_at": "2024-08-22T20:43:33+00:00"
+    },
+    {
+        "id": 14,
+        "npc_id": 228537,
+        "spell_id": 431637,
+        "combat_log_path": "tmp\/WoWCombatLog-081824_134432_10_the-dawnbreaker.zip",
+        "raw_event": "8\/18\/2024 14:24:27.3152  SPELL_CAST_SUCCESS,Creature-0-2085-2662-31810-228537-000041E7F7,\"Nightfall Shadowalker\",0xa48,0x0,Player-4184-00C9CE4F,\"Isak-TheseGoToEleven-TR\",0x511,0x20,431637,\"Umbral Rush\",0x20,Creature-0-2085-2662-31810-228537-000041E7F7,0000000000000000,11694872,15469928,0,0,42857,0,3,100,100,60,1482.38,792.81,2359,0.4522,80\n",
+        "created_at": "2024-08-22T20:44:29+00:00",
+        "updated_at": "2024-08-22T20:44:29+00:00"
+    },
+    {
+        "id": 15,
+        "npc_id": 228537,
+        "spell_id": 431638,
+        "combat_log_path": "tmp\/WoWCombatLog-081824_134432_10_the-dawnbreaker.zip",
+        "raw_event": "8\/18\/2024 14:24:27.4442  SPELL_MISSED,Creature-0-2085-2662-31810-228537-000041E7F7,\"Nightfall Shadowalker\",0xa48,0x0,Player-4184-00C9CE4F,\"Isak-TheseGoToEleven-TR\",0x511,0x20,431638,\"Umbral Rush\",0x20,MISS,nil\n",
+        "created_at": "2024-08-22T20:44:29+00:00",
+        "updated_at": "2024-08-22T20:44:29+00:00"
+    },
+    {
+        "id": 16,
+        "npc_id": 228538,
+        "spell_id": 431493,
+        "combat_log_path": "tmp\/WoWCombatLog-081824_134432_10_the-dawnbreaker.zip",
+        "raw_event": "8\/18\/2024 14:24:33.9642  SPELL_AURA_APPLIED,Creature-0-2085-2662-31810-228538-000041E7F7,\"Nightfall Curseblade\",0xa48,0x0,Creature-0-2085-2662-31810-228538-000041E7F7,\"Nightfall Curseblade\",0xa48,0x0,431493,\"Darkblade\",0x20,BUFF\n",
+        "created_at": "2024-08-22T20:44:29+00:00",
+        "updated_at": "2024-08-22T20:44:29+00:00"
+    },
+    {
+        "id": 17,
+        "npc_id": 228540,
+        "spell_id": 431309,
+        "combat_log_path": "tmp\/WoWCombatLog-081824_134432_10_the-dawnbreaker.zip",
+        "raw_event": "8\/18\/2024 14:24:39.1092  SPELL_CAST_SUCCESS,Creature-0-2085-2662-31810-228540-000041E7F7,\"Nightfall Shadowmage\",0xa48,0x0,Player-4184-00A818A9,\"C\u00e9pako-TheseGoToEleven-TR\",0x512,0x0,431309,\"Ensnaring Shadows\",0x20,Creature-0-2085-2662-31810-228540-000041E7F7,0000000000000000,7832829,13922936,0,0,42857,0,0,7988,7988,160,1511.42,691.80,2359,3.2396,80\n",
+        "created_at": "2024-08-22T20:44:29+00:00",
+        "updated_at": "2024-08-22T20:44:29+00:00"
+    },
+    {
+        "id": 18,
+        "npc_id": 228540,
+        "spell_id": 431303,
+        "combat_log_path": "tmp\/WoWCombatLog-081824_134432_10_the-dawnbreaker.zip",
+        "raw_event": "8\/18\/2024 14:24:45.7022  SPELL_CAST_SUCCESS,Creature-0-2085-2662-31810-228540-000041E807,\"Nightfall Shadowmage\",0x10a48,0x0,Player-4184-006F5A7D,\"Kusa-TheseGoToEleven-TR\",0x512,0x2,431303,\"Night Bolt\",0x20,Creature-0-2085-2662-31810-228540-000041E807,0000000000000000,3813838,13922936,0,0,42857,0,0,7988,7988,80,1531.80,613.41,2359,2.0962,80\n",
+        "created_at": "2024-08-22T20:44:29+00:00",
+        "updated_at": "2024-08-22T20:44:29+00:00"
+    },
+    {
+        "id": 19,
+        "npc_id": 228537,
+        "spell_id": 431660,
+        "combat_log_path": "tmp\/WoWCombatLog-081824_134432_10_the-dawnbreaker.zip",
+        "raw_event": "8\/18\/2024 14:24:45.8322  SPELL_DAMAGE,Creature-0-2085-2662-31810-228537-000041E807,\"Nightfall Shadowalker\",0xa48,0x0,Player-4184-00A818A9,\"C\u00e9pako-TheseGoToEleven-TR\",0x512,0x0,431660,\"Umbral Rush\",0x20,Player-4184-00A818A9,0000000000000000,6711412,7287104,23375,71231,61805,0,11,35,175,0,1515.45,616.59,2359,6.2146,626,575692,654269,-1,32,0,0,0,nil,nil,nil\n",
+        "created_at": "2024-08-22T20:44:29+00:00",
+        "updated_at": "2024-08-22T20:44:29+00:00"
+    },
+    {
+        "id": 20,
+        "npc_id": 228539,
+        "spell_id": 431333,
+        "combat_log_path": "tmp\/WoWCombatLog-081824_134432_10_the-dawnbreaker.zip",
+        "raw_event": "8\/18\/2024 14:24:49.4862  SPELL_CAST_SUCCESS,Creature-0-2085-2662-31810-228539-000041E807,\"Nightfall Darkcaster\",0xa48,0x0,Player-4184-00A818A9,\"C\u00e9pako-TheseGoToEleven-TR\",0x512,0x0,431333,\"Tormenting Beam\",0x20,Creature-0-2085-2662-31810-228539-000041E807,0000000000000000,9141758,14696432,0,0,42857,0,0,7988,7988,0,1544.53,570.69,2359,2.5029,80\n",
+        "created_at": "2024-08-22T20:44:29+00:00",
+        "updated_at": "2024-08-22T20:44:29+00:00"
+    },
+    {
+        "id": 21,
+        "npc_id": 228539,
+        "spell_id": 432520,
+        "combat_log_path": "tmp\/WoWCombatLog-081824_134432_10_the-dawnbreaker.zip",
+        "raw_event": "8\/18\/2024 14:24:59.0382  SPELL_AURA_APPLIED,Creature-0-2085-2662-31810-228539-000041E807,\"Nightfall Darkcaster\",0xa48,0x0,Creature-0-2085-2662-31810-228539-000041E807,\"Nightfall Darkcaster\",0xa48,0x0,432520,\"Umbral Barrier\",0x20,BUFF,3603110\n",
+        "created_at": "2024-08-22T20:44:29+00:00",
+        "updated_at": "2024-08-22T20:44:29+00:00"
+    },
+    {
+        "id": 22,
+        "npc_id": 225601,
+        "spell_id": 453856,
+        "combat_log_path": "tmp\/WoWCombatLog-081824_134432_10_the-dawnbreaker.zip",
+        "raw_event": "8\/18\/2024 14:26:11.3392  SPELL_AURA_APPLIED,Creature-0-2085-2662-31810-225601-0003C1E447,\"Mereldar Citizen\",0xa28,0x0,Creature-0-2085-2662-31810-225601-0003C1E447,\"Mereldar Citizen\",0xa28,0x0,453856,\"Webbed Victim\",0x8,BUFF\n",
+        "created_at": "2024-08-22T20:44:32+00:00",
+        "updated_at": "2024-08-22T20:44:32+00:00"
+    },
+    {
+        "id": 23,
+        "npc_id": 166275,
+        "spell_id": 324859,
+        "combat_log_path": "tmp\/WoWCombatLog-081924_203759_2_mists-of-tirna-scithe.zip",
+        "raw_event": "8\/19\/2024 21:05:16.2682  SPELL_AURA_APPLIED,Creature-0-2085-2290-30590-166275-000043960F,\"Mistveil Shaper\",0xa48,0x0,Player-4184-00CAEB7E,\"Wayofmagic-TheseGoToEleven-TR\",0x512,0x0,324859,\"Bramblethorn Entanglement\",0x8,DEBUFF\n",
+        "created_at": "2024-08-22T20:45:24+00:00",
+        "updated_at": "2024-08-22T20:45:24+00:00"
+    },
+    {
+        "id": 24,
+        "npc_id": 217124,
+        "spell_id": 434668,
+        "combat_log_path": "tmp\/WoWCombatLog-081924_203759_3_the-dawnbreaker.zip",
+        "raw_event": "8\/19\/2024 22:30:52.6602  SPELL_AURA_APPLIED,Creature-0-2085-2662-32079-217124-0000C3AB70,\"Arathi Bomb\",0xa48,0x0,Player-4184-00CAE5F7,\"Housenbolt-TheseGoToEleven-TR\",0x512,0x0,434668,\"Sparking Arathi Bomb\",0x4,DEBUFF\n",
+        "created_at": "2024-08-22T20:46:22+00:00",
+        "updated_at": "2024-08-22T20:46:22+00:00"
+    },
+    {
+        "id": 25,
+        "npc_id": 223767,
+        "spell_id": 449498,
+        "combat_log_path": "tmp\/WoWCombatLog-081924_203759_3_the-dawnbreaker.zip",
+        "raw_event": "8\/19\/2024 22:32:04.4922  SPELL_AURA_APPLIED,Creature-0-2085-2662-32079-223767-000043ABC0,\"Arathi Lamplighter\",0xa18,0x0,Creature-0-2085-2662-32079-223767-000043ABC0,\"Arathi Lamplighter\",0xa18,0x0,449498,\"Radiant Light\",0x6,BUFF\n",
+        "created_at": "2024-08-22T20:46:23+00:00",
+        "updated_at": "2024-08-22T20:46:23+00:00"
+    },
+    {
+        "id": 26,
+        "npc_id": 223767,
+        "spell_id": 449570,
+        "combat_log_path": "tmp\/WoWCombatLog-081924_203759_3_the-dawnbreaker.zip",
+        "raw_event": "8\/19\/2024 22:32:34.2772  SPELL_AURA_APPLIED,Creature-0-2085-2662-32079-223767-0000C3ABC0,\"Arathi Lamplighter\",0xa18,0x0,Creature-0-2085-2662-32079-223767-0000C3ABC0,\"Arathi Lamplighter\",0xa18,0x0,449570,\"Radiant Light\",0x6,BUFF\n",
+        "created_at": "2024-08-22T20:46:23+00:00",
+        "updated_at": "2024-08-22T20:46:23+00:00"
+    }
+]

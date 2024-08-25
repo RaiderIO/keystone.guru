@@ -2,6 +2,8 @@
 
 namespace App\Models\CombatLog;
 
+use App\Models\Traits\SeederModel;
+use App\Models\Traits\SerializesDates;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -18,6 +20,8 @@ use Illuminate\Support\Carbon;
  */
 class ParsedCombatLog extends Model
 {
+    use SeederModel, SerializesDates;
+
     protected $connection = 'combatlog';
 
     public $timestamps = true;

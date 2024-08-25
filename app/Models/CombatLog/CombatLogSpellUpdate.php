@@ -3,6 +3,8 @@
 namespace App\Models\CombatLog;
 
 use App\Models\Spell\Spell;
+use App\Models\Traits\SeederModel;
+use App\Models\Traits\SerializesDates;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,6 +27,8 @@ use Illuminate\Support\Carbon;
  */
 class CombatLogSpellUpdate extends Model
 {
+    use SeederModel, SerializesDates;
+
     protected $connection = 'combatlog';
 
     public $timestamps = true;
