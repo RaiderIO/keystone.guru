@@ -538,9 +538,8 @@ class DungeonRouteDiscoverController extends Controller
         Expansion                $originalExpansion,
         Dungeon                  $dungeon,
         DiscoverServiceInterface $discoverService,
-        SeasonServiceInterface   $seasonService): Expansion
-    {
-
+        SeasonServiceInterface   $seasonService
+    ): Expansion {
         $result = $originalExpansion;
 
         // First - check if this dungeon is part of the current expansion's season, regardless of the season it originated from
