@@ -19,6 +19,7 @@ use App\Models\CombatLog\CombatLogSpellUpdate;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell as SpellModel;
+use App\Models\Spell\SpellConstants;
 use App\Models\Spell\SpellDungeon;
 use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
@@ -51,7 +52,7 @@ class SpellDataExtractor implements DataExtractorInterface
         $this->spellIdsForDungeon = collect();
         $this->summonedNpcs       = collect();
         $this->npcCache           = collect();
-        $this->allSpells          = SpellModel::all()->keyBy('id');
+        $this->allSpells          = SpellModel::with('spellDungeons')->get()->keyBy('id');
 
         $log = App::make(SpellDataExtractorLoggingInterface::class);
         /** @var SpellDataExtractorLoggingInterface $log */
@@ -191,18 +192,22 @@ class SpellDataExtractor implements DataExtractorInterface
         if (!$spellIdsForDungeon->has($prefix->getSpellId())) {
             $spellIdsForDungeon->put($prefix->getSpellId(), $parsedEvent);
 
-            $spell = SpellModel::find($prefix->getSpellId());
-            if ($spell !== null) {
+            $spell = $this->allSpells->get($prefix->getSpellId());
+            // Only assign spells that are NOT player spells!
+            if ($spell !== null && $spell->category === SpellModel::CATEGORY_UNKNOWN) {
                 // If this dungeon wasn't assigned to the spell yet..
-                if (!$spell->spellDungeons()
+                if ($spell->spellDungeons
                     ->where('dungeon_id', $currentDungeon->dungeon->id)
-                    ->exists()) {
+                    ->isEmpty()) {
 
                     // Assign it
                     SpellDungeon::create([
                         'spell_id'   => $spell->id,
                         'dungeon_id' => $currentDungeon->dungeon->id,
                     ]);
+
+                    // Refresh relationship
+                    $spell->unsetRelation('spellDungeons')->load('spellDungeons');
 
                     $result->createdSpellDungeon();
 
@@ -218,6 +223,12 @@ class SpellDataExtractor implements DataExtractorInterface
         Creature            $sourceGuid,
         Spell               $prefix
     ): void {
+        // Check if the spell can be assigned
+        $spell = $this->allSpells->get($prefix->getSpellId());
+        if ($spell === null || $spell->category !== SpellModel::CATEGORY_UNKNOWN) {
+            return;
+        }
+
         // Assign spell IDs to NPCs
         /** @var Npc|null|boolean $npc */
         $npc = $this->npcCache->get($sourceGuid->getId());
@@ -251,7 +262,7 @@ class SpellDataExtractor implements DataExtractorInterface
                 ]);
 
                 // Refresh the relation
-                $npc->load('npcSpells');
+                $npc->unsetRelation('npcSpells')->load('npcSpells');
 
                 $result->createdNpcSpell();
 
@@ -334,6 +345,8 @@ class SpellDataExtractor implements DataExtractorInterface
             $result->createdSpell();
 
             $createdSpell = SpellModel::create($spellAttributes);
+            // Load the relationship in advance
+            $createdSpell->setRelation('spellDungeons', collect());
 
             // Ensure we know this is when the spell was created
             CombatLogSpellUpdate::create([

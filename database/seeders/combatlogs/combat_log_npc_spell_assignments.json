@@ -232,5 +232,2237 @@
         "raw_event": "8\/19\/2024 22:32:34.2772  SPELL_AURA_APPLIED,Creature-0-2085-2662-32079-223767-0000C3ABC0,\"Arathi Lamplighter\",0xa18,0x0,Creature-0-2085-2662-32079-223767-0000C3ABC0,\"Arathi Lamplighter\",0xa18,0x0,449570,\"Radiant Light\",0x6,BUFF\n",
         "created_at": "2024-08-22T20:46:23+00:00",
         "updated_at": "2024-08-22T20:46:23+00:00"
+    },
+    {
+        "id": 28,
+        "npc_id": 214840,
+        "spell_id": 1604,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_ara-kara-city-of-echoes.zip",
+        "raw_event": "8\/27\/2024 20:33:19.2082  SPELL_AURA_APPLIED,Creature-0-1631-2660-6903-214840-00004E1B6C,\"Engorged Crawler\",0xa48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,1604,\"Dazed\",0x1,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:39:31+00:00",
+        "updated_at": "2024-08-28T07:39:31+00:00"
+    },
+    {
+        "id": 35,
+        "npc_id": 223423,
+        "spell_id": 449106,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_ara-kara-city-of-echoes.zip",
+        "raw_event": "8\/27\/2024 20:45:34.7202  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-223423-00004E1EC8,\"Careless Hopgoblin\",0xa48,0x0,Creature-0-4241-2661-29028-223423-00004E1EC8,\"Careless Hopgoblin\",0xa48,0x0,449106,\"Delicate Brew Barrel\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:39:37+00:00",
+        "updated_at": "2024-08-28T07:39:37+00:00"
+    },
+    {
+        "id": 36,
+        "npc_id": 222964,
+        "spell_id": 447046,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_ara-kara-city-of-echoes.zip",
+        "raw_event": "8\/27\/2024 20:45:34.7222  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-222964-00004E1EC8,\"Flavor Scientist\",0xa48,0x0,Creature-0-4241-2661-29028-222964-00004E1EC8,\"Flavor Scientist\",0xa48,0x0,447046,\"Secret Ingredient\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:39:40+00:00",
+        "updated_at": "2024-08-28T07:39:40+00:00"
+    },
+    {
+        "id": 37,
+        "npc_id": 222964,
+        "spell_id": 447136,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_ara-kara-city-of-echoes.zip",
+        "raw_event": "8\/27\/2024 20:45:34.7242  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-222964-0000CE1EC8,\"Flavor Scientist\",0xa48,0x0,Creature-0-4241-2661-29028-222964-0000CE1EC8,\"Flavor Scientist\",0xa48,0x0,447136,\"Secret Ingredient\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:39:43+00:00",
+        "updated_at": "2024-08-28T07:39:43+00:00"
+    },
+    {
+        "id": 38,
+        "npc_id": 218671,
+        "spell_id": 453909,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_ara-kara-city-of-echoes.zip",
+        "raw_event": "8\/27\/2024 20:45:34.7252  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-218671-00064E1EC8,\"Venture Co. Pyromaniac\",0xa48,0x0,Creature-0-4241-2661-29028-225633-00004E1EC9,\"Mead Machine\",0xa48,0x0,453909,\"Boiling Flames\",0x4,BUFF\r\n",
+        "created_at": "2024-08-28T07:39:45+00:00",
+        "updated_at": "2024-08-28T07:39:45+00:00"
+    },
+    {
+        "id": 39,
+        "npc_id": 222964,
+        "spell_id": 447060,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_ara-kara-city-of-echoes.zip",
+        "raw_event": "8\/27\/2024 20:45:34.7252  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-222964-00004E1EC8,\"Flavor Scientist\",0xa48,0x0,Creature-0-4241-2661-29028-222889-00004E1EC8,\"Mead Machine\",0xa48,0x0,447060,\"Secret Ingredient\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:39:48+00:00",
+        "updated_at": "2024-08-28T07:39:48+00:00"
+    },
+    {
+        "id": 40,
+        "npc_id": 222964,
+        "spell_id": 447135,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_ara-kara-city-of-echoes.zip",
+        "raw_event": "8\/27\/2024 20:45:34.7252  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-222964-0000CE1EC8,\"Flavor Scientist\",0xa48,0x0,Creature-0-4241-2661-29028-222889-0000CE1EC8,\"Mead Machine\",0xa48,0x0,447135,\"Secret Ingredient\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:39:51+00:00",
+        "updated_at": "2024-08-28T07:39:51+00:00"
+    },
+    {
+        "id": 41,
+        "npc_id": 218671,
+        "spell_id": 453989,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_ara-kara-city-of-echoes.zip",
+        "raw_event": "8\/27\/2024 20:45:34.7262  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-218671-00074E1EC8,\"Venture Co. Pyromaniac\",0xa48,0x0,Creature-0-4241-2661-29028-220060-00014E1EC8,\"Taste Tester\",0xa48,0x0,453989,\"Boiling Flames\",0x4,BUFF\r\n",
+        "created_at": "2024-08-28T07:39:53+00:00",
+        "updated_at": "2024-08-28T07:39:53+00:00"
+    },
+    {
+        "id": 42,
+        "npc_id": 214697,
+        "spell_id": 434745,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_ara-kara-city-of-echoes.zip",
+        "raw_event": "8\/27\/2024 20:45:34.7262  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-214697-00004E1EC9,\"Chef Chewie\",0xa48,0x0,Creature-0-4241-2661-29028-217126-00034E1EC9,\"Over-Indulged Patron\",0xa28,0x0,434745,\"Compliments of the Chef\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:39:56+00:00",
+        "updated_at": "2024-08-28T07:39:56+00:00"
+    },
+    {
+        "id": 43,
+        "npc_id": 218671,
+        "spell_id": 454318,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_ara-kara-city-of-echoes.zip",
+        "raw_event": "8\/27\/2024 20:45:34.7272  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-218671-00034E1EC8,\"Venture Co. Pyromaniac\",0xa48,0x0,Creature-0-4241-2661-29028-220060-00004E1EC8,\"Taste Tester\",0xa48,0x0,454318,\"Boiling Flames\",0x4,BUFF\r\n",
+        "created_at": "2024-08-28T07:39:58+00:00",
+        "updated_at": "2024-08-28T07:39:58+00:00"
+    },
+    {
+        "id": 44,
+        "npc_id": 214697,
+        "spell_id": 434743,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_ara-kara-city-of-echoes.zip",
+        "raw_event": "8\/27\/2024 20:45:34.7272  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-214697-00004E1EC9,\"Chef Chewie\",0xa48,0x0,Creature-0-4241-2661-29028-214697-00004E1EC9,\"Chef Chewie\",0xa48,0x0,434743,\"Compliments of the Chef\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:40:01+00:00",
+        "updated_at": "2024-08-28T07:40:01+00:00"
+    },
+    {
+        "id": 46,
+        "npc_id": 210267,
+        "spell_id": 439365,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-1.zip",
+        "raw_event": "8\/27\/2024 20:58:19.2622  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-210267-00004E2196,\"I'pa\",0x10a48,0x0,Creature-0-4241-2661-29028-210267-00004E2196,\"I'pa\",0x10a48,0x0,439365,\"Spouting Stout\",0x4,BUFF\r\n",
+        "created_at": "2024-08-28T07:40:03+00:00",
+        "updated_at": "2024-08-28T07:40:03+00:00"
+    },
+    {
+        "id": 47,
+        "npc_id": 210267,
+        "spell_id": 439645,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-1.zip",
+        "raw_event": "8\/27\/2024 20:58:19.3152  SPELL_DAMAGE,Creature-0-4241-2661-29028-210267-00004E2196,\"I'pa\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,439645,\"Spouting Stout\",0x4,Player-1084-0ACEBF33,0000000000000000,4210216,4341560,57100,9527,37128,0,6,700,1000,0,2759.75,-4960.88,2335,3.1714,572,131344,265443,-1,4,0,0,65611,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:40:06+00:00",
+        "updated_at": "2024-08-28T07:40:06+00:00"
+    },
+    {
+        "id": 48,
+        "npc_id": 210267,
+        "spell_id": 439031,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-1.zip",
+        "raw_event": "8\/27\/2024 20:58:36.0652  SPELL_CAST_SUCCESS,Creature-0-4241-2661-29028-210267-00004E2196,\"I'pa\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,439031,\"Bottoms Uppercut\",0x1,Creature-0-4241-2661-29028-210267-00004E2196,0000000000000000,28509005,60115720,0,0,42857,0,3,21,100,0,2766.70,-4956.87,2335,3.4215,82\r\n",
+        "created_at": "2024-08-28T07:40:12+00:00",
+        "updated_at": "2024-08-28T07:40:12+00:00"
+    },
+    {
+        "id": 49,
+        "npc_id": 210267,
+        "spell_id": 440147,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-1.zip",
+        "raw_event": "8\/27\/2024 20:58:37.0782  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-210267-00004E2196,\"I'pa\",0xa48,0x0,Creature-0-4241-2661-29028-210267-00004E2196,\"I'pa\",0xa48,0x0,440147,\"Fill 'Er Up\",0x1,BUFF,12023144\r\n",
+        "created_at": "2024-08-28T07:40:17+00:00",
+        "updated_at": "2024-08-28T07:40:17+00:00"
+    },
+    {
+        "id": 50,
+        "npc_id": 210267,
+        "spell_id": 442108,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-1.zip",
+        "raw_event": "8\/27\/2024 20:58:37.0792  SPELL_DAMAGE,Creature-0-4241-2661-29028-210267-00004E2196,\"I'pa\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,442108,\"Fill 'Er Up\",0x4,Player-1084-0ACEBF33,0000000000000000,3479332,4341560,63306,9527,37128,0,6,1000,1000,0,2765.56,-4955.97,2335,4.7016,572,862228,1297392,-1,4,0,0,100417,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:40:21+00:00",
+        "updated_at": "2024-08-28T07:40:21+00:00"
+    },
+    {
+        "id": 51,
+        "npc_id": 210267,
+        "spell_id": 439325,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-1.zip",
+        "raw_event": "8\/27\/2024 20:58:44.8312  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-210267-00004E2196,\"I'pa\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,439325,\"Burning Fermentation\",0x4,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:40:24+00:00",
+        "updated_at": "2024-08-28T07:40:24+00:00"
+    },
+    {
+        "id": 52,
+        "npc_id": 210264,
+        "spell_id": 456891,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-1.zip",
+        "raw_event": "8\/27\/2024 21:00:09.8052  SPELL_CAST_SUCCESS,Creature-0-4241-2661-29028-210264-00014E1EC9,\"Bee Wrangler\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,456891,\"Shoot\",0x1,Creature-0-4241-2661-29028-210264-00014E1EC9,0000000000000000,8513172,8587960,0,0,42857,0,1,0,0,0,2574.07,-4924.86,2335,6.2426,80\r\n",
+        "created_at": "2024-08-28T07:42:37+00:00",
+        "updated_at": "2024-08-28T07:42:37+00:00"
+    },
+    {
+        "id": 53,
+        "npc_id": 210265,
+        "spell_id": 441410,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-1.zip",
+        "raw_event": "8\/27\/2024 21:00:12.5742  SPELL_CAST_SUCCESS,Creature-0-4241-2661-29028-210265-00034E1EC9,\"Worker Bee\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,441410,\"Shredding Sting\",0x1,Creature-0-4241-2661-29028-210265-00034E1EC9,0000000000000000,8336456,8587960,0,0,42857,0,1,0,0,0,2576.83,-4923.80,2335,6.0403,80\r\n",
+        "created_at": "2024-08-28T07:42:41+00:00",
+        "updated_at": "2024-08-28T07:42:41+00:00"
+    },
+    {
+        "id": 54,
+        "npc_id": 210265,
+        "spell_id": 441413,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-1.zip",
+        "raw_event": "8\/27\/2024 21:00:12.5902  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-210265-00034E1EC9,\"Worker Bee\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,441413,\"Shredding Sting\",0x1,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:42:45+00:00",
+        "updated_at": "2024-08-28T07:42:45+00:00"
+    },
+    {
+        "id": 55,
+        "npc_id": 210264,
+        "spell_id": 441119,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-1.zip",
+        "raw_event": "8\/27\/2024 21:00:17.6902  SPELL_CAST_SUCCESS,Creature-0-4241-2661-29028-210264-00014E1EC9,\"Bee Wrangler\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,441119,\"Bee-Zooka\",0x1,Creature-0-4241-2661-29028-210264-00014E1EC9,0000000000000000,7866574,8587960,0,0,42857,0,1,0,0,0,2574.32,-4924.87,2335,2.8872,80\r\n",
+        "created_at": "2024-08-28T07:42:48+00:00",
+        "updated_at": "2024-08-28T07:42:48+00:00"
+    },
+    {
+        "id": 56,
+        "npc_id": 210264,
+        "spell_id": 441344,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-1.zip",
+        "raw_event": "8\/27\/2024 21:00:17.6912  SPELL_MISSED,Creature-0-4241-2661-29028-210264-00014E1EC9,\"Bee Wrangler\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,441344,\"Bee-Zooka\",0x4,ABSORB,nil,648071,788032,nil\r\n",
+        "created_at": "2024-08-28T07:42:51+00:00",
+        "updated_at": "2024-08-28T07:42:51+00:00"
+    },
+    {
+        "id": 57,
+        "npc_id": 210264,
+        "spell_id": 441353,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-1.zip",
+        "raw_event": "8\/27\/2024 21:00:20.3242  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-210264-00014E1EC9,\"Bee Wrangler\",0xa48,0x0,Creature-0-4241-2661-29028-210264-00014E1EC9,\"Bee Wrangler\",0xa48,0x0,441353,\"Bee-stial Wrath\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:42:54+00:00",
+        "updated_at": "2024-08-28T07:42:54+00:00"
+    },
+    {
+        "id": 58,
+        "npc_id": 220946,
+        "spell_id": 442995,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-1.zip",
+        "raw_event": "8\/27\/2024 21:00:26.2182  SPELL_MISSED,Creature-0-4241-2661-29028-220946-00004E1EC9,\"Venture Co. Honey Harvester\",0xa48,0x0,Player-1084-0AF2E1D9,\"Druiddz-TarrenMill-EU\",0x512,0x0,442995,\"Swarming Surprise\",0x1,DODGE,nil\r\n",
+        "created_at": "2024-08-28T07:42:59+00:00",
+        "updated_at": "2024-08-28T07:42:59+00:00"
+    },
+    {
+        "id": 60,
+        "npc_id": 220141,
+        "spell_id": 440687,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/27\/2024 21:01:47.3112  SPELL_DAMAGE,Creature-0-4241-2661-29028-220141-00024E1EC8,\"Royal Jelly Purveyor\",0x10a48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,440687,\"Honey Volley\",0x8,Player-1084-0A59B96F,0000000000000000,2825568,3470280,47015,45207,17974,0,0,2489160,2625000,0,2513.46,-4937.57,2335,4.6723,565,644712,729967,-1,8,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:43:01+00:00",
+        "updated_at": "2024-08-28T07:43:01+00:00"
+    },
+    {
+        "id": 61,
+        "npc_id": 220141,
+        "spell_id": 440887,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/27\/2024 21:01:51.0002  SPELL_DAMAGE,Creature-0-4241-2661-29028-220141-00024E1EC8,\"Royal Jelly Purveyor\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,440887,\"Rain of Honey\",0x8,Player-1084-0A912E3E,0000000000000000,2361256,5441680,55745,17647,25646,0,3,59,100,0,2512.88,-4984.66,2335,6.0627,570,648954,1327213,-1,8,0,0,409791,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:43:07+00:00",
+        "updated_at": "2024-08-28T07:43:07+00:00"
+    },
+    {
+        "id": 62,
+        "npc_id": 210265,
+        "spell_id": 443487,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/27\/2024 21:02:01.4212  SPELL_CAST_SUCCESS,Creature-0-4241-2661-29028-210265-0001CE1EC8,\"Worker Bee\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x10512,0x0,443487,\"Final Sting\",0x1,Creature-0-4241-2661-29028-210265-0001CE1EC8,0000000000000000,355205,8587960,0,0,42857,0,1,0,0,0,2513.11,-4985.04,2335,2.0283,80\r\n",
+        "created_at": "2024-08-28T07:43:10+00:00",
+        "updated_at": "2024-08-28T07:43:10+00:00"
+    },
+    {
+        "id": 63,
+        "npc_id": 210265,
+        "spell_id": 443491,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/27\/2024 21:02:01.4212  SPELL_MISSED,Creature-0-4241-2661-29028-210265-0001CE1EC8,\"Worker Bee\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x10512,0x0,443491,\"Final Sting\",0x4,DODGE,nil\r\n",
+        "created_at": "2024-08-28T07:43:14+00:00",
+        "updated_at": "2024-08-28T07:43:14+00:00"
+    },
+    {
+        "id": 65,
+        "npc_id": 220946,
+        "spell_id": 442589,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/27\/2024 21:02:54.6502  SPELL_MISSED,Creature-0-4241-2661-29028-220946-00004E1EC8,\"Venture Co. Honey Harvester\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,442589,\"Beeswax\",0x8,ABSORB,nil,492385,663606,nil\r\n",
+        "created_at": "2024-08-28T07:43:20+00:00",
+        "updated_at": "2024-08-28T07:43:20+00:00"
+    },
+    {
+        "id": 66,
+        "npc_id": 218865,
+        "spell_id": 441397,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/27\/2024 21:03:15.2292  SPELL_MISSED,Creature-0-4241-2661-29028-218865-00014E1EC9,\"Bee-let\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,441397,\"Bee Venom\",0x8,DODGE,nil\r\n",
+        "created_at": "2024-08-28T07:43:20+00:00",
+        "updated_at": "2024-08-28T07:43:20+00:00"
+    },
+    {
+        "id": 67,
+        "npc_id": 219588,
+        "spell_id": 439468,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/27\/2024 21:06:05.3782  SPELL_DAMAGE,Creature-0-4241-2661-29028-219588-00004E2355,\"Yes Man\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,439468,\"Downward Trend\",0x1,Player-1084-0ACEBF33,0000000000000000,3878032,4341560,54362,9527,37128,0,6,619,1000,0,2648.19,-4984.64,2335,0.1027,572,463528,829508,-1,1,0,0,38284,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:43:24+00:00",
+        "updated_at": "2024-08-28T07:43:24+00:00"
+    },
+    {
+        "id": 68,
+        "npc_id": 219588,
+        "spell_id": 439403,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/27\/2024 21:06:12.6382  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-219588-00004E2355,\"Yes Man\",0x10a48,0x0,Creature-0-4241-2661-29028-219588-00004E2355,\"Yes Man\",0x10a48,0x0,439403,\"Field Promotion\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:43:28+00:00",
+        "updated_at": "2024-08-28T07:43:28+00:00"
+    },
+    {
+        "id": 70,
+        "npc_id": 214661,
+        "spell_id": 436624,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/27\/2024 21:07:02.9432  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-214661-00004E2355,\"Goldie Baronbottom\",0x10a48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,436624,\"Cash Cannon\",0x1,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:43:31+00:00",
+        "updated_at": "2024-08-28T07:43:31+00:00"
+    },
+    {
+        "id": 71,
+        "npc_id": 214661,
+        "spell_id": 436592,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/27\/2024 21:07:05.9572  SPELL_CAST_SUCCESS,Creature-0-4241-2661-29028-214661-00004E2355,\"Goldie Baronbottom\",0x10a48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,436592,\"Cash Cannon\",0x1,Creature-0-4241-2661-29028-214661-00004E2355,0000000000000000,61282642,68703680,0,0,42857,0,3,23,100,0,2647.81,-4999.28,2335,0.7107,82\r\n",
+        "created_at": "2024-08-28T07:43:34+00:00",
+        "updated_at": "2024-08-28T07:43:34+00:00"
+    },
+    {
+        "id": 72,
+        "npc_id": 214661,
+        "spell_id": 436644,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/27\/2024 21:07:11.9822  SPELL_CAST_SUCCESS,Creature-0-4241-2661-29028-214661-00004E2355,\"Goldie Baronbottom\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,436644,\"Burning Ricochet\",0x4,Creature-0-4241-2661-29028-214661-00004E2355,0000000000000000,51211526,68703680,0,0,42857,0,3,43,100,0,2646.77,-4996.63,2335,2.1097,82\r\n",
+        "created_at": "2024-08-28T07:43:37+00:00",
+        "updated_at": "2024-08-28T07:43:37+00:00"
+    },
+    {
+        "id": 73,
+        "npc_id": 214661,
+        "spell_id": 436640,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/27\/2024 21:07:17.3852  SPELL_DAMAGE,Creature-0-4241-2661-29028-214661-00004E2355,\"Goldie Baronbottom\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,436640,\"Burning Ricochet\",0x4,Player-1084-0ACEBF33,0000000000000000,4322079,4341560,60205,9527,37128,0,6,890,1000,0,2647.15,-4994.07,2335,4.6503,572,19481,265443,-1,4,0,0,183565,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:43:41+00:00",
+        "updated_at": "2024-08-28T07:43:41+00:00"
+    },
+    {
+        "id": 74,
+        "npc_id": 214661,
+        "spell_id": 435788,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/27\/2024 21:07:22.2832  SPELL_DAMAGE,Creature-0-4241-2661-29028-214661-00004E2355,\"Goldie Baronbottom\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,435788,\"Cinder-BOOM!\",0x4,Player-1084-0ACEBF33,0000000000000000,2654268,4341560,60205,9527,37128,0,6,1000,1000,0,2645.17,-4982.27,2335,4.8054,572,1015229,1327213,-1,4,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:43:44+00:00",
+        "updated_at": "2024-08-28T07:43:44+00:00"
+    },
+    {
+        "id": 76,
+        "npc_id": 214661,
+        "spell_id": 442484,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/27\/2024 21:07:35.9612  SPELL_DAMAGE,Creature-0-4241-2661-29028-214661-00004E2355,\"Goldie Baronbottom\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,442484,\"Let It Hail!\",0x4,Player-1084-0ACEBF33,0000000000000000,3772373,4341560,53463,9527,37128,0,6,60,1000,0,2648.74,-5009.02,2335,0.0792,572,87495,215672,-1,4,0,0,88477,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:43:47+00:00",
+        "updated_at": "2024-08-28T07:43:47+00:00"
+    },
+    {
+        "id": 77,
+        "npc_id": 218671,
+        "spell_id": 454319,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:45:36.8052  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-218671-0002CE1EC8,\"Venture Co. Pyromaniac\",0xa48,0x0,Creature-0-4241-2661-29028-220060-0001CE1EC8,\"Taste Tester\",0xa48,0x0,454319,\"Boiling Flames\",0x4,BUFF\r\n",
+        "created_at": "2024-08-28T07:43:52+00:00",
+        "updated_at": "2024-08-28T07:43:52+00:00"
+    },
+    {
+        "id": 78,
+        "npc_id": 218671,
+        "spell_id": 441408,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:45:43.0102  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-218671-0000CE1EC9,\"Venture Co. Pyromaniac\",0xa48,0x0,Creature-0-4241-2661-29028-218671-0000CE1EC9,\"Venture Co. Pyromaniac\",0xa48,0x0,441408,\"Thirsty\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:43:55+00:00",
+        "updated_at": "2024-08-28T07:43:55+00:00"
+    },
+    {
+        "id": 79,
+        "npc_id": 214668,
+        "spell_id": 441408,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:45:47.4612  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-214668-0000CE1ECA,\"Venture Co. Patron\",0xa48,0x0,Creature-0-4241-2661-29028-214668-0000CE1ECA,\"Venture Co. Patron\",0xa48,0x0,441408,\"Thirsty\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:43:55+00:00",
+        "updated_at": "2024-08-28T07:43:55+00:00"
+    },
+    {
+        "id": 80,
+        "npc_id": 218671,
+        "spell_id": 437956,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:45:47.9302  SPELL_CAST_SUCCESS,Creature-0-4241-2661-29028-218671-00014E1EC8,\"Venture Co. Pyromaniac\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,437956,\"Erupting Inferno\",0x4,Creature-0-4241-2661-29028-218671-00014E1EC8,0000000000000000,7160415,7729164,0,0,42857,0,1,0,0,0,2661.41,-4889.42,2335,2.3445,80\r\n",
+        "created_at": "2024-08-28T07:43:59+00:00",
+        "updated_at": "2024-08-28T07:43:59+00:00"
+    },
+    {
+        "id": 81,
+        "npc_id": 214668,
+        "spell_id": 434773,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:45:47.9312  SPELL_CAST_SUCCESS,Creature-0-4241-2661-29028-214668-00024E1EC9,\"Venture Co. Patron\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,434773,\"Mean Mug\",0x1,Creature-0-4241-2661-29028-214668-00024E1EC9,0000000000000000,6688115,7729164,0,0,42857,0,1,0,0,0,2659.72,-4884.20,2335,1.8458,80\r\n",
+        "created_at": "2024-08-28T07:44:01+00:00",
+        "updated_at": "2024-08-28T07:44:01+00:00"
+    },
+    {
+        "id": 83,
+        "npc_id": 210269,
+        "spell_id": 434756,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:45:53.2842  SPELL_CAST_SUCCESS,Creature-0-4241-2661-29028-210269-00004E1EC9,\"Hired Muscle\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,434756,\"Throw Chair\",0x1,Creature-0-4241-2661-29028-210269-00004E1EC9,0000000000000000,10309917,13740736,0,0,42857,0,1,0,0,0,2657.66,-4882.84,2335,3.6204,81\r\n",
+        "created_at": "2024-08-28T07:44:04+00:00",
+        "updated_at": "2024-08-28T07:44:04+00:00"
+    },
+    {
+        "id": 84,
+        "npc_id": 210269,
+        "spell_id": 434758,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:45:54.2912  SPELL_MISSED,Creature-0-4241-2661-29028-210269-00004E1EC9,\"Hired Muscle\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,434758,\"Throw Chair\",0x1,ABSORB,nil,174807,315212,nil\r\n",
+        "created_at": "2024-08-28T07:44:08+00:00",
+        "updated_at": "2024-08-28T07:44:08+00:00"
+    },
+    {
+        "id": 85,
+        "npc_id": 210269,
+        "spell_id": 463227,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:45:54.2912  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-210269-00004E1EC9,\"Hired Muscle\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,463227,\"Splintered\",0x1,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:44:11+00:00",
+        "updated_at": "2024-08-28T07:44:11+00:00"
+    },
+    {
+        "id": 86,
+        "npc_id": 218671,
+        "spell_id": 437721,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:45:55.9212  SPELL_CAST_SUCCESS,Creature-0-4241-2661-29028-218671-00014E1EC8,\"Venture Co. Pyromaniac\",0x10a48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,437721,\"Boiling Flames\",0x4,Creature-0-4241-2661-29028-218671-00014E1EC8,0000000000000000,3498891,7729164,0,0,42857,0,1,0,0,0,2657.07,-4880.14,2335,2.0260,80\r\n",
+        "created_at": "2024-08-28T07:44:14+00:00",
+        "updated_at": "2024-08-28T07:44:14+00:00"
+    },
+    {
+        "id": 87,
+        "npc_id": 218671,
+        "spell_id": 437733,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:45:56.9252  SPELL_DAMAGE,Creature-0-4241-2661-29028-218671-00014E1EC8,\"Venture Co. Pyromaniac\",0x10a48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,437733,\"Boiling Flames\",0x4,Player-1084-0A59B96F,0000000000000000,3319222,3470280,47110,45298,17974,0,0,2625000,2625000,0,2654.26,-4874.41,2335,5.3737,565,151058,165902,-1,4,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:44:18+00:00",
+        "updated_at": "2024-08-28T07:44:18+00:00"
+    },
+    {
+        "id": 88,
+        "npc_id": 210269,
+        "spell_id": 463218,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:45:57.4342  SPELL_DAMAGE,Creature-0-4241-2661-29028-210269-00004E1EC9,\"Hired Muscle\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,463218,\"Volatile Keg\",0x4,Player-1084-0ACEBF33,0000000000000000,4117397,4341560,47369,9527,37128,0,6,440,1000,0,2657.15,-4879.48,2335,4.1312,572,224163,331803,-1,4,0,0,33641,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:44:21+00:00",
+        "updated_at": "2024-08-28T07:44:21+00:00"
+    },
+    {
+        "id": 89,
+        "npc_id": 210269,
+        "spell_id": 463220,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:45:57.4372  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-210269-00004E1EC9,\"Hired Muscle\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,463220,\"Volatile Keg\",0x4,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:44:24+00:00",
+        "updated_at": "2024-08-28T07:44:24+00:00"
+    },
+    {
+        "id": 92,
+        "npc_id": 210271,
+        "spell_id": 432229,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:48:46.4452  SPELL_CAST_SUCCESS,Creature-0-4241-2661-29028-210271-00004E1EC8,\"Brew Master Aldryr\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x10512,0x0,432229,\"Keg Smash\",0x1,Creature-0-4241-2661-29028-210271-00004E1EC8,0000000000000000,57063913,60115720,0,0,42857,0,3,68,100,0,2650.48,-4931.92,2335,0.9602,82\r\n",
+        "created_at": "2024-08-28T07:44:29+00:00",
+        "updated_at": "2024-08-28T07:44:29+00:00"
+    },
+    {
+        "id": 93,
+        "npc_id": 210271,
+        "spell_id": 432196,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:48:47.5042  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-210271-00004E1EC8,\"Brew Master Aldryr\",0xa48,0x0,Player-1084-0AF2E1D9,\"Druiddz-TarrenMill-EU\",0x512,0x0,432196,\"Hot Honey\",0x4,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:44:31+00:00",
+        "updated_at": "2024-08-28T07:44:31+00:00"
+    },
+    {
+        "id": 94,
+        "npc_id": 214697,
+        "spell_id": 463206,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:48:50.2942  SPELL_MISSED,Creature-0-4241-2661-29028-214697-00004E1EC9,\"Chef Chewie\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,463206,\"Tenderize\",0x1,ABSORB,nil,234302,472819,nil\r\n",
+        "created_at": "2024-08-28T07:44:35+00:00",
+        "updated_at": "2024-08-28T07:44:35+00:00"
+    },
+    {
+        "id": 95,
+        "npc_id": 210271,
+        "spell_id": 432182,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:48:52.3412  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-210271-00004E1EC8,\"Brew Master Aldryr\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,432182,\"Throw Cinderbrew\",0x4,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:44:38+00:00",
+        "updated_at": "2024-08-28T07:44:38+00:00"
+    },
+    {
+        "id": 96,
+        "npc_id": 214697,
+        "spell_id": 435000,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:48:55.0352  SPELL_DAMAGE,Creature-0-4241-2661-29028-214697-00004E1EC9,\"Chef Chewie\",0xa48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,435000,\"High Steaks\",0x1,Player-1084-0A59B96F,0000000000000000,2499984,3470280,47110,45298,17974,0,0,2276440,2625000,0,2653.92,-4898.93,2335,4.7787,565,721408,995409,-1,1,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:44:42+00:00",
+        "updated_at": "2024-08-28T07:44:42+00:00"
+    },
+    {
+        "id": 97,
+        "npc_id": 210271,
+        "spell_id": 442525,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:49:07.0962  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-210271-00004E1EC8,\"Brew Master Aldryr\",0xa48,0x0,Creature-0-4241-2661-29028-210271-00004E1EC8,\"Brew Master Aldryr\",0xa48,0x0,442525,\"Happy Hour\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:44:45+00:00",
+        "updated_at": "2024-08-28T07:44:45+00:00"
+    },
+    {
+        "id": 98,
+        "npc_id": 210271,
+        "spell_id": 442611,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:49:07.0972  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-210271-00004E1EC8,\"Brew Master Aldryr\",0xa48,0x0,Creature-0-4241-2661-29028-210271-00004E1EC8,\"Brew Master Aldryr\",0xa48,0x0,442611,\"Disregard\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:44:48+00:00",
+        "updated_at": "2024-08-28T07:44:48+00:00"
+    },
+    {
+        "id": 99,
+        "npc_id": 220060,
+        "spell_id": 441242,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:50:57.4342  SPELL_CAST_SUCCESS,Creature-0-4241-2661-29028-220060-00014E1EC9,\"Taste Tester\",0xa48,0x0,Player-1084-0AF2E1D9,\"Druiddz-TarrenMill-EU\",0x512,0x0,441242,\"Free Samples?\",0x4,Creature-0-4241-2661-29028-220060-00014E1EC9,0000000000000000,6316690,8587960,0,0,42857,0,1,0,0,0,2756.32,-4887.04,2335,3.2126,80\r\n",
+        "created_at": "2024-08-28T07:45:00+00:00",
+        "updated_at": "2024-08-28T07:45:00+00:00"
+    },
+    {
+        "id": 100,
+        "npc_id": 223423,
+        "spell_id": 449090,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:51:00.1642  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-223423-00014E1EC8,\"Careless Hopgoblin\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,449090,\"Reckless Delivery\",0x1,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:45:03+00:00",
+        "updated_at": "2024-08-28T07:45:03+00:00"
+    },
+    {
+        "id": 102,
+        "npc_id": 220060,
+        "spell_id": 441214,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:51:03.4862  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-220060-00014E1EC9,\"Taste Tester\",0xa48,0x0,Creature-0-4241-2661-29028-220060-00014E1EC9,\"Taste Tester\",0xa48,0x0,441214,\"Spill Drink\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:45:06+00:00",
+        "updated_at": "2024-08-28T07:45:06+00:00"
+    },
+    {
+        "id": 103,
+        "npc_id": 223423,
+        "spell_id": 448619,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:51:04.1172  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-223423-00014E1EC8,\"Careless Hopgoblin\",0xa48,0x0,Creature-0-4241-2661-29028-223423-00014E1EC8,\"Careless Hopgoblin\",0xa48,0x0,448619,\"Reckless Delivery\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:45:10+00:00",
+        "updated_at": "2024-08-28T07:45:10+00:00"
+    },
+    {
+        "id": 104,
+        "npc_id": 223423,
+        "spell_id": 448920,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:51:04.1532  SPELL_DAMAGE,Creature-0-4241-2661-29028-223423-00014E1EC8,\"Careless Hopgoblin\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,448920,\"Reckless Delivery\",0x1,Player-1084-0ACEBF33,0000000000000000,3800367,4341560,65845,9527,37128,0,6,900,1000,0,2763.35,-4883.39,2335,3.3559,572,296210,507408,-1,1,0,0,18665,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:45:13+00:00",
+        "updated_at": "2024-08-28T07:45:13+00:00"
+    },
+    {
+        "id": 105,
+        "npc_id": 223423,
+        "spell_id": 448977,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:51:05.8642  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-223423-00014E1EC8,\"Careless Hopgoblin\",0xa48,0x0,Creature-0-4241-2661-29028-223423-00014E1EC8,\"Careless Hopgoblin\",0xa48,0x0,448977,\"Stunned\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:45:16+00:00",
+        "updated_at": "2024-08-28T07:45:16+00:00"
+    },
+    {
+        "id": 106,
+        "npc_id": 223423,
+        "spell_id": 448935,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:51:05.8652  SPELL_DAMAGE,Creature-0-4241-2661-29028-223423-00014E1EC8,\"Careless Hopgoblin\",0xa48,0x0,Player-1084-0AF2E1D9,\"Druiddz-TarrenMill-EU\",0x512,0x0,448935,\"Reckless Delivery\",0x1,Player-1084-0AF2E1D9,0000000000000000,2497518,3456480,44616,42900,37892,0,8,1000,1000,0,2751.26,-4887.50,2335,0.0744,566,577144,652049,-1,1,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:45:20+00:00",
+        "updated_at": "2024-08-28T07:45:20+00:00"
+    },
+    {
+        "id": 107,
+        "npc_id": 214673,
+        "spell_id": 441627,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:51:50.4552  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-214673-00004E1EC8,\"Flavor Scientist\",0xa48,0x0,Creature-0-4241-2661-29028-214673-00004E1EC8,\"Flavor Scientist\",0xa48,0x0,441627,\"Rejuvenating Honey\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:45:23+00:00",
+        "updated_at": "2024-08-28T07:45:23+00:00"
+    },
+    {
+        "id": 108,
+        "npc_id": 210270,
+        "spell_id": 449702,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:53:13.6182  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-210270-00024E1EC8,\"Brew Drop\",0xa48,0x0,Creature-0-4241-2661-29028-210270-00024E1EC8,\"Brew Drop\",0xa48,0x0,449702,\"Oozing Honey\",0x4,BUFF\r\n",
+        "created_at": "2024-08-28T07:45:27+00:00",
+        "updated_at": "2024-08-28T07:45:27+00:00"
+    },
+    {
+        "id": 109,
+        "npc_id": 210270,
+        "spell_id": 441179,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:53:14.1842  SPELL_CAST_SUCCESS,Creature-0-4241-2661-29028-210270-00024E1EC8,\"Brew Drop\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,441179,\"Oozing Honey\",0x4,Creature-0-4241-2661-29028-210270-00024E1EC8,0000000000000000,0,2919906,0,0,42857,0,1,0,0,0,2760.53,-4967.96,2335,5.1599,80\r\n",
+        "created_at": "2024-08-28T07:45:30+00:00",
+        "updated_at": "2024-08-28T07:45:30+00:00"
+    },
+    {
+        "id": 112,
+        "npc_id": 222964,
+        "spell_id": 441627,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:54:32.7152  SPELL_AURA_APPLIED,Creature-0-4241-2661-29028-222964-00004E1EC9,\"Flavor Scientist\",0xa48,0x0,Creature-0-4241-2661-29028-222964-00004E1EC9,\"Flavor Scientist\",0xa48,0x0,441627,\"Rejuvenating Honey\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:45:31+00:00",
+        "updated_at": "2024-08-28T07:45:31+00:00"
+    },
+    {
+        "id": 114,
+        "npc_id": 210267,
+        "spell_id": 439991,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_cinderbrew-meadery.zip",
+        "raw_event": "8\/27\/2024 20:56:45.6992  SPELL_DAMAGE,Creature-0-4241-2661-29028-210267-00004E20FB,\"I'pa\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,439991,\"Spouting Stout\",0x4,Player-1084-0ACEBF33,0000000000000000,2070766,4341560,53463,9527,37128,0,6,1000,1000,0,2761.26,-4954.69,2335,6.2343,572,1255792,1523230,-1,4,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:45:35+00:00",
+        "updated_at": "2024-08-28T07:45:35+00:00"
+    },
+    {
+        "id": 115,
+        "npc_id": 219983,
+        "spell_id": 451222,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_city-of-threads-1.zip",
+        "raw_event": "8\/27\/2024 22:55:20.1642  SPELL_AURA_APPLIED,Creature-0-3891-2669-15124-219983-00014E3D06,\"Hollows Resident\",0x10a48,0x0,Creature-0-3891-2669-15124-219983-00014E3D06,\"Hollows Resident\",0x10a48,0x0,451222,\"Void Rush\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:45:36+00:00",
+        "updated_at": "2024-08-28T07:45:36+00:00"
+    },
+    {
+        "id": 116,
+        "npc_id": 219983,
+        "spell_id": 451295,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_city-of-threads-1.zip",
+        "raw_event": "8\/27\/2024 22:55:20.1642  SPELL_CAST_SUCCESS,Creature-0-3891-2669-15124-219983-00014E3D06,\"Hollows Resident\",0x10a48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,451295,\"Void Rush\",0x20,Creature-0-3891-2669-15124-219983-00014E3D06,0000000000000000,9407461,15458328,0,0,42857,0,3,100,100,0,-2009.83,-1276.56,2343,4.3249,81\r\n",
+        "created_at": "2024-08-28T07:45:36+00:00",
+        "updated_at": "2024-08-28T07:45:36+00:00"
+    },
+    {
+        "id": 117,
+        "npc_id": 219983,
+        "spell_id": 451218,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_city-of-threads-1.zip",
+        "raw_event": "8\/27\/2024 22:55:20.1852  SPELL_DAMAGE,Creature-0-3891-2669-15124-219983-00014E3D06,\"Hollows Resident\",0x10a48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,451218,\"Void Rush\",0x1,Player-1084-0A59B96F,0000000000000000,3197621,3484640,48471,46607,18513,0,0,2604200,2625000,0,-2003.21,-1267.67,2343,4.0306,567,287019,398164,-1,1,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:45:36+00:00",
+        "updated_at": "2024-08-28T07:45:36+00:00"
+    },
+    {
+        "id": 118,
+        "npc_id": 219983,
+        "spell_id": 451543,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_city-of-threads-1.zip",
+        "raw_event": "8\/27\/2024 22:58:32.2432  SPELL_DAMAGE,Creature-0-3891-2669-15124-219983-00004E3D06,\"Hollows Resident\",0xa48,0x0,Player-1084-05D21C13,\"Noctus-TarrenMill-EU\",0x512,0x0,451543,\"Null Slam\",0x20,Player-1084-05D21C13,0000000000000000,2386835,3861600,58304,11999,43794,0,1,515,1300,0,-2139.09,-1131.74,2343,0.8288,575,1393140,1519720,-1,32,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:45:37+00:00",
+        "updated_at": "2024-08-28T07:45:37+00:00"
+    },
+    {
+        "id": 119,
+        "npc_id": 216320,
+        "spell_id": 438601,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_city-of-threads-1.zip",
+        "raw_event": "8\/27\/2024 23:03:22.5362  SPELL_DAMAGE,Creature-0-3891-2669-15124-216320-00004E3C4B,\"The Coaglamation\",0xa48,0x0,Player-1084-05D21C13,\"Noctus-TarrenMill-EU\",0x512,0x0,438601,\"Black Blood\",0x20,Player-1084-05D21C13,0000000000000000,3708992,3876320,58749,11999,44873,0,1,244,1300,0,-2585.87,-1158.68,2344,2.6577,576,167328,199082,-1,32,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:45:42+00:00",
+        "updated_at": "2024-08-28T07:45:42+00:00"
+    },
+    {
+        "id": 133,
+        "npc_id": 210812,
+        "spell_id": 423479,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:55:32.5122  SPELL_CAST_SUCCESS,Creature-0-4241-2651-3474-210812-00014E2F18,\"Royal Wicklighter\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,423479,\"Wicklighter Bolt\",0x4,Creature-0-4241-2651-3474-210812-00014E2F18,0000000000000000,6739463,6870368,0,0,42857,0,0,7988,7988,0,358.08,21.32,2303,2.4338,80\r\n",
+        "created_at": "2024-08-28T07:45:54+00:00",
+        "updated_at": "2024-08-28T07:45:54+00:00"
+    },
+    {
+        "id": 134,
+        "npc_id": 211121,
+        "spell_id": 423501,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:55:32.6952  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-211121-00014E2F17,\"Rank Overseer\",0xa48,0x0,Creature-0-4241-2651-3474-210810-000BCE2F17,\"Menial Laborer\",0xa48,0x0,423501,\"Wild Wallop\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:45:57+00:00",
+        "updated_at": "2024-08-28T07:45:57+00:00"
+    },
+    {
+        "id": 135,
+        "npc_id": 211977,
+        "spell_id": 425561,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:55:35.0312  SPELL_CAST_SUCCESS,Creature-0-4241-2651-3474-211977-00034E2F17,\"Pack Mole\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,425561,\"Nasty Nibble\",0x1,Creature-0-4241-2651-3474-211977-00034E2F17,0000000000000000,7518440,7729164,0,0,42857,0,1,0,0,0,363.32,50.45,2303,0.4098,80\r\n",
+        "created_at": "2024-08-28T07:46:02+00:00",
+        "updated_at": "2024-08-28T07:46:02+00:00"
+    },
+    {
+        "id": 136,
+        "npc_id": 211977,
+        "spell_id": 427929,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:55:35.0322  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-211977-00034E2F17,\"Pack Mole\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,427929,\"Nasty Nibble\",0x1,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:46:06+00:00",
+        "updated_at": "2024-08-28T07:46:06+00:00"
+    },
+    {
+        "id": 137,
+        "npc_id": 210818,
+        "spell_id": 428089,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:55:35.6352  SPELL_CAST_SUCCESS,Creature-0-4241-2651-3474-210818-00014E2F17,\"Lowly Moleherd\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,428089,\"Throw Rock\",0x1,Creature-0-4241-2651-3474-210818-00014E2F17,0000000000000000,8334694,8587960,0,0,42857,0,1,0,0,0,356.96,50.24,2303,0.0370,80\r\n",
+        "created_at": "2024-08-28T07:46:09+00:00",
+        "updated_at": "2024-08-28T07:46:09+00:00"
+    },
+    {
+        "id": 138,
+        "npc_id": 210812,
+        "spell_id": 428019,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:55:37.3222  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-210812-00014E2F18,\"Royal Wicklighter\",0xa48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,428019,\"Flashpoint\",0x4,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:46:15+00:00",
+        "updated_at": "2024-08-28T07:46:15+00:00"
+    },
+    {
+        "id": 139,
+        "npc_id": 211977,
+        "spell_id": 425704,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:55:40.2042  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-211977-00034E2F17,\"Pack Mole\",0xa48,0x0,Creature-0-4241-2651-3474-211977-00034E2F17,\"Pack Mole\",0xa48,0x0,425704,\"Enrage\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:46:19+00:00",
+        "updated_at": "2024-08-28T07:46:19+00:00"
+    },
+    {
+        "id": 140,
+        "npc_id": 211121,
+        "spell_id": 428064,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:55:42.3972  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-211121-00014E2F17,\"Rank Overseer\",0xa48,0x0,Creature-0-4241-2651-3474-211977-0002CE2F17,\"Pack Mole\",0xa48,0x0,428064,\"Overpowered\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:46:23+00:00",
+        "updated_at": "2024-08-28T07:46:23+00:00"
+    },
+    {
+        "id": 141,
+        "npc_id": 211121,
+        "spell_id": 428066,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:55:42.3982  SPELL_MISSED,Creature-0-4241-2651-3474-211121-00014E2F17,\"Rank Overseer\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,428066,\"Overpowering Roar\",0x1,ABSORB,nil,116703,831384,nil\r\n",
+        "created_at": "2024-08-28T07:46:29+00:00",
+        "updated_at": "2024-08-28T07:46:29+00:00"
+    },
+    {
+        "id": 142,
+        "npc_id": 211121,
+        "spell_id": 427955,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:55:50.9102  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-211121-0000CE2F17,\"Rank Overseer\",0xa48,0x0,Creature-0-4241-2651-3474-210818-00004E2F18,\"Lowly Moleherd\",0xa48,0x0,427955,\"Wild Wallop\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:46:32+00:00",
+        "updated_at": "2024-08-28T07:46:32+00:00"
+    },
+    {
+        "id": 143,
+        "npc_id": 210818,
+        "spell_id": 424650,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:56:35.1492  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-210818-00004E2F18,\"Lowly Moleherd\",0xa48,0x0,Creature-0-4241-2651-3474-210818-00004E2F18,\"Lowly Moleherd\",0xa48,0x0,424650,\"Panicked!\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:46:35+00:00",
+        "updated_at": "2024-08-28T07:46:35+00:00"
+    },
+    {
+        "id": 144,
+        "npc_id": 210149,
+        "spell_id": 421665,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:57:54.3602  SPELL_CAST_SUCCESS,Creature-0-4241-2651-3474-210149-00004E2FB0,\"Ol' Waxbeard\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,421665,\"Rock Buster\",0x1,Creature-0-4241-2651-3474-210149-00004E2FB0,0000000000000000,60115720,60115720,0,0,42857,0,1,0,0,0,543.72,31.50,2303,2.8931,82\r\n",
+        "created_at": "2024-08-28T07:46:38+00:00",
+        "updated_at": "2024-08-28T07:46:38+00:00"
+    },
+    {
+        "id": 145,
+        "npc_id": 208450,
+        "spell_id": 430171,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:59:21.1102  SPELL_DAMAGE,Creature-0-4241-2651-3474-208450-00014E2F17,\"Wandering Candle\",0xa48,0x0,Player-1084-05CF324C,\"Madcuzbad-TarrenMill-EU\",0x512,0x0,430171,\"Quenching Blast\",0x4,Player-1084-05CF324C,0000000000000000,3559567,3847739,50715,11999,34596,0,1,335,1150,0,489.92,-153.50,2303,3.1953,552,288172,331906,-1,4,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:46:45+00:00",
+        "updated_at": "2024-08-28T07:46:45+00:00"
+    },
+    {
+        "id": 146,
+        "npc_id": 220815,
+        "spell_id": 424322,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:59:25.0692  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-220815-00014E2F17,\"Blazing Fiend\",0xa48,0x0,Creature-0-4241-2651-3474-220815-00014E2F17,\"Blazing Fiend\",0xa48,0x0,424322,\"Explosive Flame\",0x4,BUFF\r\n",
+        "created_at": "2024-08-28T07:46:47+00:00",
+        "updated_at": "2024-08-28T07:46:47+00:00"
+    },
+    {
+        "id": 147,
+        "npc_id": 220815,
+        "spell_id": 426779,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:59:26.3362  SPELL_DAMAGE,Creature-0-4241-2651-3474-220815-00014E2F17,\"Blazing Fiend\",0xa48,0x0,Player-1084-0A787AA0,\"Darkmanus-TarrenMill-EU\",0x512,0x0,426779,\"Explosive Flame\",0x4,Player-1084-0A787AA0,0000000000000000,3150678,4743059,7413,39283,21132,0,0,2500000,2500000,0,494.06,-155.02,2303,3.1605,571,132507,165902,-1,4,0,0,14723,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:46:50+00:00",
+        "updated_at": "2024-08-28T07:46:50+00:00"
+    },
+    {
+        "id": 148,
+        "npc_id": 208450,
+        "spell_id": 440653,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:59:32.4292  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-208450-00004E2F17,\"Wandering Candle\",0xa48,0x0,Player-1084-05CF324C,\"Madcuzbad-TarrenMill-EU\",0x512,0x0,440653,\"Surging Wax\",0x4,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:46:54+00:00",
+        "updated_at": "2024-08-28T07:46:54+00:00"
+    },
+    {
+        "id": 149,
+        "npc_id": 212383,
+        "spell_id": 426883,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:59:34.9822  SPELL_MISSED,Creature-0-4241-2651-3474-212383-0003CE2F17,\"Kobold Taskworker\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,426883,\"Bonk!\",0x1,PARRY,nil\r\n",
+        "created_at": "2024-08-28T07:46:59+00:00",
+        "updated_at": "2024-08-28T07:46:59+00:00"
+    },
+    {
+        "id": 150,
+        "npc_id": 208450,
+        "spell_id": 440652,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 21:59:54.4492  SPELL_DAMAGE,Creature-0-4241-2651-3474-208450-00014E2F17,\"Wandering Candle\",0xa48,0x0,Player-1084-05CF324C,\"Madcuzbad-TarrenMill-EU\",0x512,0x0,440652,\"Surging Wax\",0x4,Player-1084-05CF324C,0000000000000000,2695405,3847739,50715,11999,34596,0,1,440,1150,0,455.23,-153.90,2303,5.7859,552,1152334,1327213,-1,4,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:47:02+00:00",
+        "updated_at": "2024-08-28T07:47:02+00:00"
+    },
+    {
+        "id": 151,
+        "npc_id": 223770,
+        "spell_id": 424322,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:00:20.5072  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-223770-00004E2F17,\"Blazing Fiend\",0xa48,0x0,Creature-0-4241-2651-3474-223770-00004E2F17,\"Blazing Fiend\",0xa48,0x0,424322,\"Explosive Flame\",0x4,BUFF\r\n",
+        "created_at": "2024-08-28T07:47:02+00:00",
+        "updated_at": "2024-08-28T07:47:02+00:00"
+    },
+    {
+        "id": 152,
+        "npc_id": 223770,
+        "spell_id": 426779,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:00:20.9742  SPELL_MISSED,Creature-0-4241-2651-3474-223770-00004E2F17,\"Blazing Fiend\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,426779,\"Explosive Flame\",0x4,ABSORB,nil,91767,165902,nil\r\n",
+        "created_at": "2024-08-28T07:47:02+00:00",
+        "updated_at": "2024-08-28T07:47:02+00:00"
+    },
+    {
+        "id": 153,
+        "npc_id": 208743,
+        "spell_id": 425394,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:00:33.8402  SPELL_MISSED,Creature-0-4241-2651-3474-208743-00004E3059,\"Blazikon\",0x10a48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,425394,\"Dousing Breath\",0x8,ABSORB,nil,725287,829665,nil\r\n",
+        "created_at": "2024-08-28T07:47:07+00:00",
+        "updated_at": "2024-08-28T07:47:07+00:00"
+    },
+    {
+        "id": 154,
+        "npc_id": 208743,
+        "spell_id": 421817,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:00:39.9182  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-208743-00004E3059,\"Blazikon\",0x10a48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,421817,\"Wicklighter Barrage\",0x4,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:47:12+00:00",
+        "updated_at": "2024-08-28T07:47:12+00:00"
+    },
+    {
+        "id": 155,
+        "npc_id": 208743,
+        "spell_id": 421638,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:00:41.3382  SPELL_MISSED,Creature-0-4241-2651-3474-208743-00004E3059,\"Blazikon\",0x10a48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x2,421638,\"Wicklighter Barrage\",0x4,ABSORB,nil,406084,663606,nil\r\n",
+        "created_at": "2024-08-28T07:47:15+00:00",
+        "updated_at": "2024-08-28T07:47:15+00:00"
+    },
+    {
+        "id": 156,
+        "npc_id": 208743,
+        "spell_id": 443969,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:01:01.6002  SPELL_MISSED,Creature-0-4241-2651-3474-208743-00004E3059,\"Blazikon\",0x10a48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,443969,\"Enkindling Inferno\",0x4,ABSORB,nil,810659,1028455,nil\r\n",
+        "created_at": "2024-08-28T07:47:20+00:00",
+        "updated_at": "2024-08-28T07:47:20+00:00"
+    },
+    {
+        "id": 157,
+        "npc_id": 213913,
+        "spell_id": 428563,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:01:25.4892  SPELL_CAST_SUCCESS,Creature-0-4241-2651-3474-213913-0002CE2F17,\"Kobold Flametender\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x4,428563,\"Flame Bolt\",0x4,Creature-0-4241-2651-3474-213913-0002CE2F17,0000000000000000,1717592,1717592,0,0,42857,0,0,7988,7988,0,293.79,-169.93,2303,0.7812,80\r\n",
+        "created_at": "2024-08-28T07:47:23+00:00",
+        "updated_at": "2024-08-28T07:47:23+00:00"
+    },
+    {
+        "id": 158,
+        "npc_id": 212412,
+        "spell_id": 426677,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:01:51.4172  SPELL_CAST_SUCCESS,Creature-0-4241-2651-3474-212412-00004E2F17,\"Sootsnout\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x4,426677,\"Candleflame Bolt\",0x4,Creature-0-4241-2651-3474-212412-00004E2F17,0000000000000000,25763880,25763880,0,0,42857,0,1,0,0,0,185.82,-158.79,2303,0.3098,81\r\n",
+        "created_at": "2024-08-28T07:47:26+00:00",
+        "updated_at": "2024-08-28T07:47:26+00:00"
+    },
+    {
+        "id": 159,
+        "npc_id": 212412,
+        "spell_id": 426261,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:01:56.4762  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-212412-00004E2F17,\"Sootsnout\",0xa48,0x0,Creature-0-4241-2651-3474-212412-00004E2F17,\"Sootsnout\",0xa48,0x0,426261,\"Ceaseless Flame\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:47:29+00:00",
+        "updated_at": "2024-08-28T07:47:29+00:00"
+    },
+    {
+        "id": 160,
+        "npc_id": 212412,
+        "spell_id": 426265,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:01:56.9762  SPELL_DAMAGE,Creature-0-4241-2651-3474-212412-00004E2F17,\"Sootsnout\",0xa48,0x0,Player-1084-05CF324C,\"Madcuzbad-TarrenMill-EU\",0x512,0x0,426265,\"Ceaseless Flame\",0x4,Player-1084-05CF324C,0000000000000000,3690910,3847739,55886,11999,34596,0,1,1150,1150,0,186.34,-150.78,2303,4.6474,552,156829,182492,-1,4,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:47:32+00:00",
+        "updated_at": "2024-08-28T07:47:32+00:00"
+    },
+    {
+        "id": 161,
+        "npc_id": 208745,
+        "spell_id": 422648,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:02:44.4482  SPELL_CAST_SUCCESS,Creature-0-4241-2651-3474-208745-00004E2F17,\"The Candle King\",0x10a48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x4,422648,\"Darkflame Pickaxe\",0x1,Creature-0-4241-2651-3474-208745-00004E2F17,0000000000000000,38619221,60115720,0,0,42857,0,1,0,0,0,104.40,-154.74,2303,3.8297,82\r\n",
+        "created_at": "2024-08-28T07:47:36+00:00",
+        "updated_at": "2024-08-28T07:47:36+00:00"
+    },
+    {
+        "id": 162,
+        "npc_id": 208745,
+        "spell_id": 421277,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:02:50.4502  SPELL_CAST_SUCCESS,Creature-0-4241-2651-3474-208745-00004E2F17,\"The Candle King\",0x10a48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x4,421277,\"Darkflame Pickaxe\",0x20,Creature-0-4241-2651-3474-208745-00004E2F17,0000000000000000,27983299,60115720,0,0,42857,0,1,0,0,0,104.40,-154.74,2303,2.5438,82\r\n",
+        "created_at": "2024-08-28T07:47:39+00:00",
+        "updated_at": "2024-08-28T07:47:39+00:00"
+    },
+    {
+        "id": 163,
+        "npc_id": 208745,
+        "spell_id": 420696,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:02:51.7362  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-208745-00004E2F17,\"The Candle King\",0x10a48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,420696,\"Throw Darkflame\",0x20,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:47:42+00:00",
+        "updated_at": "2024-08-28T07:47:42+00:00"
+    },
+    {
+        "id": 164,
+        "npc_id": 208745,
+        "spell_id": 421146,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:02:58.5072  SPELL_DAMAGE,Creature-0-4241-2651-3474-208745-00004E2F17,\"The Candle King\",0x10a48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,421146,\"Throw Darkflame\",0x20,Player-1084-0A59B96F,0000000000000000,2958215,3833104,47334,45513,18513,0,0,2538220,2625000,0,116.58,-168.62,2303,2.4711,566,732628,829508,-1,32,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:47:45+00:00",
+        "updated_at": "2024-08-28T07:47:45+00:00"
+    },
+    {
+        "id": 165,
+        "npc_id": 208456,
+        "spell_id": 422692,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:03:48.0742  SPELL_DAMAGE,Creature-0-4241-2651-3474-208456-0000CE2F17,\"Shuffling Horror\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x4,422692,\"Drain Light\",0x20,Player-1084-0AC5747D,0000000000000000,5427851,5976432,55415,18538,131179,0,0,2500000,2500000,0,172.93,-295.44,2303,4.8324,564,80422,132721,-1,32,0,0,33249,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:47:52+00:00",
+        "updated_at": "2024-08-28T07:47:52+00:00"
+    },
+    {
+        "id": 166,
+        "npc_id": 210539,
+        "spell_id": 422628,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:04:07.4182  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-210539-00014E2F17,\"Corridor Creeper\",0xa48,0x0,Creature-0-4241-2651-3474-210539-00014E2F17,\"Corridor Creeper\",0xa48,0x0,422628,\"Eater of the Dead\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:47:56+00:00",
+        "updated_at": "2024-08-28T07:47:56+00:00"
+    },
+    {
+        "id": 167,
+        "npc_id": 208457,
+        "spell_id": 422393,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:04:08.8022  SPELL_DAMAGE,Creature-0-4241-2651-3474-208457-000ECE2F17,\"Skittering Darkness\",0xa48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,422393,\"Suffocating Darkness\",0x20,Player-1084-0A59B96F,0000000000000000,3252984,3833104,48471,46607,18513,0,0,2625000,2625000,0,214.21,-349.86,2303,4.6827,567,580120,663606,-1,32,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:48:00+00:00",
+        "updated_at": "2024-08-28T07:48:00+00:00"
+    },
+    {
+        "id": 168,
+        "npc_id": 208456,
+        "spell_id": 422414,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:04:18.1032  SPELL_DAMAGE,Creature-0-4241-2651-3474-208456-00024E2F17,\"Shuffling Horror\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x4,422414,\"Shadow Smash\",0x20,Player-1084-0AC5747D,0000000000000000,4223809,6210798,56108,18538,145335,0,0,2500000,2500000,0,212.12,-363.61,2303,1.0178,564,446543,870983,-1,32,0,163567,35233,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:48:03+00:00",
+        "updated_at": "2024-08-28T07:48:03+00:00"
+    },
+    {
+        "id": 169,
+        "npc_id": 210797,
+        "spell_id": 423566,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:06:25.3092  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-210797-00004E31C0,\"The Darkness\",0xa48,0x0,Creature-0-4241-2651-3474-210797-00004E31C0,\"The Darkness\",0xa48,0x0,423566,\"Shadowy Cloak\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:48:06+00:00",
+        "updated_at": "2024-08-28T07:48:06+00:00"
+    },
+    {
+        "id": 170,
+        "npc_id": 213008,
+        "spell_id": 427176,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:08:36.3982  SPELL_AURA_APPLIED,Creature-0-4241-2651-3474-213008-0000CE323A,\"Wriggling Darkspawn\",0xa48,0x0,Creature-0-4241-2651-3474-212777-00004E319F,\"Massive Candle\",0xa28,0x0,427176,\"Drain Light\",0x20,BUFF\r\n",
+        "created_at": "2024-08-28T07:48:34+00:00",
+        "updated_at": "2024-08-28T07:48:34+00:00"
+    },
+    {
+        "id": 171,
+        "npc_id": 213008,
+        "spell_id": 439010,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-1.zip",
+        "raw_event": "8\/27\/2024 22:09:23.6022  SPELL_DAMAGE,Creature-0-4241-2651-3474-213008-00004E3268,\"Wriggling Darkspawn\",0xa48,0x0,Player-1084-05CF324C,\"Madcuzbad-TarrenMill-EU\",0x512,0x0,439010,\"Drain Light\",0x20,Player-1084-05CF324C,0000000000000000,3792605,3878214,51489,11999,36289,0,1,1093,1150,0,412.59,34.71,2303,5.2237,554,85609,82951,-1,32,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:48:38+00:00",
+        "updated_at": "2024-08-28T07:48:38+00:00"
+    },
+    {
+        "id": 172,
+        "npc_id": 223774,
+        "spell_id": 424322,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-2.zip",
+        "raw_event": "8\/27\/2024 23:10:05.7422  SPELL_AURA_APPLIED,Creature-0-3112-2651-4807-223774-00004E3F9D,\"Blazing Fiend\",0xa48,0x0,Creature-0-3112-2651-4807-223774-00004E3F9D,\"Blazing Fiend\",0xa48,0x0,424322,\"Explosive Flame\",0x4,BUFF\r\n",
+        "created_at": "2024-08-28T07:48:44+00:00",
+        "updated_at": "2024-08-28T07:48:44+00:00"
+    },
+    {
+        "id": 173,
+        "npc_id": 223774,
+        "spell_id": 426779,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-2.zip",
+        "raw_event": "8\/27\/2024 23:10:08.4292  SPELL_DAMAGE,Creature-0-3112-2651-4807-223774-00004E3F9D,\"Blazing Fiend\",0x10a48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,426779,\"Explosive Flame\",0x4,Player-1084-0AC5747D,0000000000000000,5528427,5636360,60756,18538,151109,0,0,2489403,2500000,0,402.51,-157.40,2303,0.1414,566,61949,165902,-1,4,0,0,64003,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:48:44+00:00",
+        "updated_at": "2024-08-28T07:48:44+00:00"
+    },
+    {
+        "id": 174,
+        "npc_id": 208747,
+        "spell_id": 424074,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-2.zip",
+        "raw_event": "8\/27\/2024 23:16:47.6192  SPELL_AURA_APPLIED,Creature-0-3112-2651-4807-208747-00004E423F,\"The Darkness\",0xa48,0x0,Creature-0-3112-2651-4807-208747-00004E423F,\"The Darkness\",0xa48,0x0,424074,\"Flame-Scarred\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:48:46+00:00",
+        "updated_at": "2024-08-28T07:48:46+00:00"
+    },
+    {
+        "id": 175,
+        "npc_id": 208747,
+        "spell_id": 427015,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-2.zip",
+        "raw_event": "8\/27\/2024 23:17:18.8272  SPELL_AURA_APPLIED,Creature-0-3112-2651-4807-208747-00004E423F,\"The Darkness\",0x10a48,0x0,Player-1084-05D21C13,\"Noctus-TarrenMill-EU\",0x512,0x0,427015,\"Shadowblast\",0x20,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:48:46+00:00",
+        "updated_at": "2024-08-28T07:48:46+00:00"
+    },
+    {
+        "id": 176,
+        "npc_id": 208747,
+        "spell_id": 427011,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-2.zip",
+        "raw_event": "8\/27\/2024 23:17:24.7732  SPELL_DAMAGE,Creature-0-3112-2651-4807-208747-00004E423F,\"The Darkness\",0x10a48,0x0,Player-1084-05D21C13,\"Noctus-TarrenMill-EU\",0x512,0x0,427011,\"Shadowblast\",0x20,Player-1084-05D21C13,0000000000000000,2770029,3876320,58749,11999,44873,0,1,1300,1300,0,407.26,52.25,2303,3.0067,576,1106291,1327213,-1,32,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:48:46+00:00",
+        "updated_at": "2024-08-28T07:48:46+00:00"
+    },
+    {
+        "id": 177,
+        "npc_id": 208747,
+        "spell_id": 427100,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-2.zip",
+        "raw_event": "8\/27\/2024 23:17:33.4782  SPELL_DAMAGE,Creature-0-3112-2651-4807-208747-00004E423F,\"The Darkness\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,427100,\"Umbral Slash\",0x20,Player-1084-0ACEBF33,0000000000000000,3556307,4351500,68951,9527,38636,0,6,830,1000,0,389.91,30.17,2303,2.9560,573,795193,1327213,-1,32,0,0,321197,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:48:49+00:00",
+        "updated_at": "2024-08-28T07:48:49+00:00"
+    },
+    {
+        "id": 178,
+        "npc_id": 208747,
+        "spell_id": 427157,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_darkflame-cleft-2.zip",
+        "raw_event": "8\/27\/2024 23:17:38.2092  SPELL_AURA_APPLIED,Creature-0-3112-2651-4807-208747-00004E423F,\"The Darkness\",0x10a48,0x0,Creature-0-3112-2651-4807-208747-00004E423F,\"The Darkness\",0x10a48,0x0,427157,\"Call Darkspawn\",0x20,BUFF\r\n",
+        "created_at": "2024-08-28T07:48:49+00:00",
+        "updated_at": "2024-08-28T07:48:49+00:00"
+    },
+    {
+        "id": 179,
+        "npc_id": 206694,
+        "spell_id": 427629,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:09:23.8612  SPELL_DAMAGE,Creature-0-3773-2649-9768-206694-0002CE243E,\"Fervent Sharpshooter\",0xa28,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,427629,\"Shoot\",0x1,Player-1084-0A912E3E,0000000000000000,3560253,5441680,52764,17647,25646,0,3,83,100,0,2994.03,1160.50,2308,2.7568,570,143840,633027,-1,1,0,0,269491,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:48:52+00:00",
+        "updated_at": "2024-08-28T07:48:52+00:00"
+    },
+    {
+        "id": 180,
+        "npc_id": 206696,
+        "spell_id": 427621,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:09:24.6632  SPELL_DAMAGE,Creature-0-3773-2649-9768-206696-0000CE243E,\"Arathi Knight\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,427621,\"Impale\",0x1,Player-1084-0ACEBF33,0000000000000000,4036799,4341560,44452,9527,37128,0,6,39,1000,0,2999.26,1153.20,2308,2.4387,572,304761,464524,-1,1,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:48:56+00:00",
+        "updated_at": "2024-08-28T07:48:56+00:00"
+    },
+    {
+        "id": 181,
+        "npc_id": 212827,
+        "spell_id": 464240,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:09:25.6302  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-212827-00004E243C,\"High Priest Aemya\",0xa48,0x0,Creature-0-3773-2649-9768-212827-00004E243C,\"High Priest Aemya\",0xa48,0x0,464240,\"Reflective Shield\",0x2,BUFF,8295079\r\n",
+        "created_at": "2024-08-28T07:49:01+00:00",
+        "updated_at": "2024-08-28T07:49:01+00:00"
+    },
+    {
+        "id": 182,
+        "npc_id": 206697,
+        "spell_id": 428916,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:09:26.6732  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-206697-00014E243E,\"Devout Priest\",0xa48,0x0,Creature-0-3773-2649-9768-206694-00014E243E,\"Fervent Sharpshooter\",0xa48,0x0,428916,\"Inner Fire\",0x2,BUFF\r\n",
+        "created_at": "2024-08-28T07:49:03+00:00",
+        "updated_at": "2024-08-28T07:49:03+00:00"
+    },
+    {
+        "id": 183,
+        "npc_id": 206705,
+        "spell_id": 426964,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:09:26.7292  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-206705-0005CE243E,\"Arathi Footman\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,426964,\"Mortal Strike\",0x1,Creature-0-3773-2649-9768-206705-0005CE243E,0000000000000000,10982074,11164348,0,0,42857,0,1,0,0,0,2994.09,1155.92,2308,4.9098,80\r\n",
+        "created_at": "2024-08-28T07:49:06+00:00",
+        "updated_at": "2024-08-28T07:49:06+00:00"
+    },
+    {
+        "id": 184,
+        "npc_id": 206694,
+        "spell_id": 462859,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:09:29.6622  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-206694-0002CE243E,\"Fervent Sharpshooter\",0xa48,0x0,Player-1084-0AF2E1D9,\"Druiddz-TarrenMill-EU\",0x512,0x0,462859,\"Pot Shot\",0x1,Creature-0-3773-2649-9768-206694-0002CE243E,0000000000000000,7624543,7729164,0,0,42857,0,1,0,0,0,3000.79,1152.53,2308,4.7442,80\r\n",
+        "created_at": "2024-08-28T07:49:09+00:00",
+        "updated_at": "2024-08-28T07:49:09+00:00"
+    },
+    {
+        "id": 186,
+        "npc_id": 206705,
+        "spell_id": 427342,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:09:39.8332  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-206705-0002CE243B,\"Arathi Footman\",0xa48,0x0,Creature-0-3773-2649-9768-206705-0002CE243B,\"Arathi Footman\",0xa48,0x0,427342,\"Defend\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:49:14+00:00",
+        "updated_at": "2024-08-28T07:49:14+00:00"
+    },
+    {
+        "id": 187,
+        "npc_id": 206705,
+        "spell_id": 427359,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:09:39.8352  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-206705-0002CE243B,\"Arathi Footman\",0xa48,0x0,Creature-0-3773-2649-9768-206705-0002CE243B,\"Arathi Footman\",0xa48,0x0,427359,\"Defend\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:49:17+00:00",
+        "updated_at": "2024-08-28T07:49:17+00:00"
+    },
+    {
+        "id": 188,
+        "npc_id": 206696,
+        "spell_id": 427359,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:09:39.8352  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-206696-00004E243E,\"Arathi Knight\",0xa48,0x0,Creature-0-3773-2649-9768-206696-00004E243E,\"Arathi Knight\",0xa48,0x0,427359,\"Defend\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:49:17+00:00",
+        "updated_at": "2024-08-28T07:49:17+00:00"
+    },
+    {
+        "id": 189,
+        "npc_id": 206694,
+        "spell_id": 453461,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:09:40.3472  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-206694-0002CE243B,\"Fervent Sharpshooter\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,453461,\"Caltrops\",0x1,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:49:20+00:00",
+        "updated_at": "2024-08-28T07:49:20+00:00"
+    },
+    {
+        "id": 190,
+        "npc_id": 206696,
+        "spell_id": 427609,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:09:40.5912  SPELL_MISSED,Creature-0-3773-2649-9768-206696-0000CE243E,\"Arathi Knight\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,427609,\"Disrupting Shout\",0x1,DODGE,nil\r\n",
+        "created_at": "2024-08-28T07:49:22+00:00",
+        "updated_at": "2024-08-28T07:49:22+00:00"
+    },
+    {
+        "id": 191,
+        "npc_id": 206694,
+        "spell_id": 427359,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:09:41.1192  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-206694-0002CE243E,\"Fervent Sharpshooter\",0xa48,0x0,Creature-0-3773-2649-9768-206694-0002CE243E,\"Fervent Sharpshooter\",0xa48,0x0,427359,\"Defend\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:49:23+00:00",
+        "updated_at": "2024-08-28T07:49:23+00:00"
+    },
+    {
+        "id": 192,
+        "npc_id": 212826,
+        "spell_id": 448485,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:10:35.1972  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-212826-00004E243D,\"Guard Captain Suleyman\",0x10a48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,448485,\"Shield Slam\",0x1,Creature-0-3773-2649-9768-212826-00004E243D,0000000000000000,33197836,34351840,0,0,42857,0,3,40,100,0,2963.78,1178.62,2308,5.4307,81\r\n",
+        "created_at": "2024-08-28T07:49:27+00:00",
+        "updated_at": "2024-08-28T07:49:27+00:00"
+    },
+    {
+        "id": 194,
+        "npc_id": 212826,
+        "spell_id": 448492,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:10:45.6452  SPELL_DAMAGE,Creature-0-3773-2649-9768-212826-00004E243D,\"Guard Captain Suleyman\",0x10a48,0x0,Player-1084-0AF2E1D9,\"Druiddz-TarrenMill-EU\",0x512,0x0,448492,\"Thunderclap\",0x8,Player-1084-0AF2E1D9,0000000000000000,3051613,3456480,44616,42900,37892,0,8,330,1000,0,2982.99,1162.13,2308,3.6686,566,404867,464524,-1,8,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:49:30+00:00",
+        "updated_at": "2024-08-28T07:49:30+00:00"
+    },
+    {
+        "id": 196,
+        "npc_id": 211291,
+        "spell_id": 424426,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:11:37.0012  SPELL_DAMAGE,Creature-0-3773-2649-9768-211291-00004E243B,\"Sergeant Shaynemail\",0xa48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,424426,\"Lunging Strike\",0x1,Player-1084-0A59B96F,0000000000000000,2202439,3484640,47334,45513,18513,0,0,1804299,2625000,0,3019.92,1183.95,2308,2.1677,566,440096,663606,-1,1,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:49:33+00:00",
+        "updated_at": "2024-08-28T07:49:33+00:00"
+    },
+    {
+        "id": 197,
+        "npc_id": 211291,
+        "spell_id": 424621,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:11:56.7412  SPELL_DAMAGE,Creature-0-3773-2649-9768-211291-00004E243B,\"Sergeant Shaynemail\",0x10a48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,424621,\"Brutal Smash\",0x1,Player-1084-0AC5747D,0000000000000000,2806279,3978420,50871,18354,53759,0,0,2500000,2500000,0,3005.63,1188.68,2308,3.1410,571,1172141,3318032,-1,1,0,0,446268,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:49:35+00:00",
+        "updated_at": "2024-08-28T07:49:35+00:00"
+    },
+    {
+        "id": 198,
+        "npc_id": 206699,
+        "spell_id": 427635,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:12:19.6532  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-206699-0003CE243C,\"War Lynx\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,427635,\"Grievous Rip\",0x1,Creature-0-3773-2649-9768-206699-0003CE243C,0000000000000000,8314036,8587960,0,0,42857,0,1,0,0,0,3090.89,1298.55,2308,0.6625,80\r\n",
+        "created_at": "2024-08-28T07:49:39+00:00",
+        "updated_at": "2024-08-28T07:49:39+00:00"
+    },
+    {
+        "id": 200,
+        "npc_id": 206698,
+        "spell_id": 427469,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:12:24.9012  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-206698-00014E243E,\"Fanatical Conjuror\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,427469,\"Fireball\",0x4,Creature-0-3773-2649-9768-206698-00014E243E,0000000000000000,7364641,7729164,0,0,42857,0,0,7988,7988,0,3122.73,1307.61,2308,3.5434,80\r\n",
+        "created_at": "2024-08-28T07:49:43+00:00",
+        "updated_at": "2024-08-28T07:49:43+00:00"
+    },
+    {
+        "id": 201,
+        "npc_id": 206697,
+        "spell_id": 427357,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:12:24.9012  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-206697-0000CE243E,\"Devout Priest\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,427357,\"Holy Smite\",0x2,Creature-0-3773-2649-9768-206697-0000CE243E,0000000000000000,6954411,7299766,0,0,42857,0,0,7988,7988,0,3120.73,1307.61,2308,3.6221,80\r\n",
+        "created_at": "2024-08-28T07:49:48+00:00",
+        "updated_at": "2024-08-28T07:49:48+00:00"
+    },
+    {
+        "id": 202,
+        "npc_id": 206697,
+        "spell_id": 427346,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:12:34.6872  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-206697-0000CE243E,\"Devout Priest\",0xa48,0x0,Creature-0-3773-2649-9768-206699-0003CE243C,\"War Lynx\",0xa48,0x0,427346,\"Inner Fire\",0x2,BUFF\r\n",
+        "created_at": "2024-08-28T07:49:52+00:00",
+        "updated_at": "2024-08-28T07:49:52+00:00"
+    },
+    {
+        "id": 204,
+        "npc_id": 212831,
+        "spell_id": 427950,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:13:01.2792  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-212831-00004E243C,\"Forge Master Damian\",0xa48,0x0,Creature-0-3773-2649-9768-212831-00004E243C,\"Forge Master Damian\",0xa48,0x0,427950,\"Seal of Flame\",0x4,BUFF\r\n",
+        "created_at": "2024-08-28T07:49:57+00:00",
+        "updated_at": "2024-08-28T07:49:57+00:00"
+    },
+    {
+        "id": 205,
+        "npc_id": 212831,
+        "spell_id": 427897,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:13:03.7282  SPELL_DAMAGE,Creature-0-3773-2649-9768-212831-00004E243C,\"Forge Master Damian\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,427897,\"Heat Wave\",0x4,Player-1084-0ACEBF33,0000000000000000,3821850,4341560,45170,9527,37128,0,6,1000,1000,0,3175.73,1302.71,2308,0.9244,572,519710,746557,-1,4,0,0,34224,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:50:02+00:00",
+        "updated_at": "2024-08-28T07:50:02+00:00"
+    },
+    {
+        "id": 206,
+        "npc_id": 212831,
+        "spell_id": 427951,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:13:04.5472  SPELL_DAMAGE,Creature-0-3773-2649-9768-212831-00004E243C,\"Forge Master Damian\",0x10a48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,427951,\"Seal of Flame\",0x4,Player-1084-0A912E3E,0000000000000000,4008947,5441680,53758,17647,25646,0,3,69,100,0,3179.24,1304.28,2308,3.1299,570,145871,283691,-1,4,0,0,89865,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:50:05+00:00",
+        "updated_at": "2024-08-28T07:50:05+00:00"
+    },
+    {
+        "id": 207,
+        "npc_id": 212831,
+        "spell_id": 427900,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:13:05.6252  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-212831-00004E243C,\"Forge Master Damian\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,427900,\"Molten Pool\",0x4,Creature-0-3773-2649-9768-212831-00004E243C,0000000000000000,20567170,25763880,0,0,42857,0,0,8162,8162,0,3177.32,1303.89,2308,0.2141,81\r\n",
+        "created_at": "2024-08-28T07:50:10+00:00",
+        "updated_at": "2024-08-28T07:50:10+00:00"
+    },
+    {
+        "id": 208,
+        "npc_id": 211290,
+        "spell_id": 448515,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:13:47.3572  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-211290-00004E243B,\"Elaena Emberlanz\",0x10a48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,448515,\"Divine Judgment\",0x2,Creature-0-3773-2649-9768-211290-00004E243B,0000000000000000,22672696,25763880,0,0,42857,0,3,24,100,0,3105.52,1314.18,2308,5.5849,81\r\n",
+        "created_at": "2024-08-28T07:50:13+00:00",
+        "updated_at": "2024-08-28T07:50:13+00:00"
+    },
+    {
+        "id": 209,
+        "npc_id": 206697,
+        "spell_id": 427359,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:14:28.8652  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-206697-0002CE243E,\"Devout Priest\",0xa48,0x0,Creature-0-3773-2649-9768-206697-0002CE243E,\"Devout Priest\",0xa48,0x0,427359,\"Defend\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:50:13+00:00",
+        "updated_at": "2024-08-28T07:50:13+00:00"
+    },
+    {
+        "id": 210,
+        "npc_id": 206705,
+        "spell_id": 427360,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:14:32.2942  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-206705-0004CE243E,\"Arathi Footman\",0xa48,0x0,Creature-0-3773-2649-9768-206705-0004CE243E,\"Arathi Footman\",0xa48,0x0,427360,\"Shattered Defenses\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:50:16+00:00",
+        "updated_at": "2024-08-28T07:50:16+00:00"
+    },
+    {
+        "id": 211,
+        "npc_id": 212827,
+        "spell_id": 429091,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:15:09.6892  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-212827-00004E243C,\"High Priest Aemya\",0xa48,0x0,Creature-0-3773-2649-9768-207943-0003CE243F,\"Arathi Neophyte\",0xa48,0x0,429091,\"Inner Fire\",0x2,BUFF\r\n",
+        "created_at": "2024-08-28T07:50:20+00:00",
+        "updated_at": "2024-08-28T07:50:20+00:00"
+    },
+    {
+        "id": 212,
+        "npc_id": 206698,
+        "spell_id": 427359,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:15:37.2282  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-206698-00034E243D,\"Fanatical Conjuror\",0x10a48,0x0,Creature-0-3773-2649-9768-206698-00034E243D,\"Fanatical Conjuror\",0x10a48,0x0,427359,\"Defend\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:50:20+00:00",
+        "updated_at": "2024-08-28T07:50:20+00:00"
+    },
+    {
+        "id": 213,
+        "npc_id": 206710,
+        "spell_id": 427359,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:15:37.4472  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-206710-00004E243E,\"Lightspawn\",0xa48,0x0,Creature-0-3773-2649-9768-206710-00004E243E,\"Lightspawn\",0xa48,0x0,427359,\"Defend\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:50:20+00:00",
+        "updated_at": "2024-08-28T07:50:20+00:00"
+    },
+    {
+        "id": 215,
+        "npc_id": 212827,
+        "spell_id": 428151,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:16:09.9082  SPELL_DAMAGE,Creature-0-3773-2649-9768-212827-00004E243C,\"High Priest Aemya\",0xa48,0x0,Player-1084-0AF2E1D9,\"Druiddz-TarrenMill-EU\",0x512,0x0,428151,\"Reflective Shield\",0x2,Player-1084-0AF2E1D9,0000000000000000,2612378,3456480,44616,42900,37892,0,8,570,1000,0,2843.11,1270.56,2308,3.1583,566,4570,5242,-1,2,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:50:24+00:00",
+        "updated_at": "2024-08-28T07:50:24+00:00"
+    },
+    {
+        "id": 216,
+        "npc_id": 212827,
+        "spell_id": 427357,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:16:10.7162  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-212827-00004E243C,\"High Priest Aemya\",0xa48,0x0,Player-1084-0AF2E1D9,\"Druiddz-TarrenMill-EU\",0x512,0x0,427357,\"Holy Smite\",0x2,Creature-0-3773-2649-9768-212827-00004E243C,0000000000000000,25714147,25763880,0,0,42857,8281973,3,0,100,0,2816.27,1268.75,2308,0.0674,81\r\n",
+        "created_at": "2024-08-28T07:50:24+00:00",
+        "updated_at": "2024-08-28T07:50:24+00:00"
+    },
+    {
+        "id": 218,
+        "npc_id": 211289,
+        "spell_id": 424421,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:17:12.6662  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-211289-00004E243B,\"Taener Duelmal\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,424421,\"Fireball\",0x4,Creature-0-3773-2649-9768-211289-00004E243B,0000000000000000,23558591,25763880,0,0,42857,0,3,24,100,0,2980.15,1349.34,2308,3.4807,81\r\n",
+        "created_at": "2024-08-28T07:50:27+00:00",
+        "updated_at": "2024-08-28T07:50:27+00:00"
+    },
+    {
+        "id": 219,
+        "npc_id": 207946,
+        "spell_id": 424414,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:17:13.8812  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-207946-00004E243B,\"Captain Dailcry\",0x10a48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,424414,\"Pierce Armor\",0x1,Creature-0-3773-2649-9768-207946-00004E243B,0000000000000000,57135735,60115720,0,0,42857,0,3,78,100,0,2978.99,1349.50,2308,3.5731,82\r\n",
+        "created_at": "2024-08-28T07:50:30+00:00",
+        "updated_at": "2024-08-28T07:50:30+00:00"
+    },
+    {
+        "id": 220,
+        "npc_id": 211289,
+        "spell_id": 424420,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:17:15.5852  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-211289-00004E243B,\"Taener Duelmal\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,424420,\"Cinderblast\",0x4,Creature-0-3773-2649-9768-211289-00004E243B,0000000000000000,20654854,25763880,0,0,42857,0,3,36,100,0,2978.03,1349.04,2308,3.1810,81\r\n",
+        "created_at": "2024-08-28T07:50:33+00:00",
+        "updated_at": "2024-08-28T07:50:33+00:00"
+    },
+    {
+        "id": 221,
+        "npc_id": 207946,
+        "spell_id": 447272,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:17:17.3522  SPELL_DAMAGE,Creature-0-3773-2649-9768-207946-00004E243B,\"Captain Dailcry\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,447272,\"Hurl Spear\",0x1,Player-1084-0ACEBF33,0000000000000000,3003786,4341560,57100,9527,37128,0,6,700,1000,0,2980.15,1350.22,2308,4.1265,572,1337774,1493114,-1,1,0,0,41612,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:50:36+00:00",
+        "updated_at": "2024-08-28T07:50:36+00:00"
+    },
+    {
+        "id": 222,
+        "npc_id": 207946,
+        "spell_id": 424419,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:17:20.4952  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-207946-00004E243B,\"Captain Dailcry\",0x10a48,0x0,Creature-0-3773-2649-9768-207946-00004E243B,\"Captain Dailcry\",0x10a48,0x0,424419,\"Battle Cry\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:50:38+00:00",
+        "updated_at": "2024-08-28T07:50:38+00:00"
+    },
+    {
+        "id": 223,
+        "npc_id": 207946,
+        "spell_id": 447439,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:17:20.8942  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-207946-00004E243B,\"Captain Dailcry\",0x10a48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,447439,\"Savage Mauling\",0x1,Creature-0-3773-2649-9768-207946-00004E243B,0000000000000000,48387429,60115720,0,0,42857,4977047,3,100,100,0,2979.99,1349.64,2308,5.1257,82\r\n",
+        "created_at": "2024-08-28T07:50:41+00:00",
+        "updated_at": "2024-08-28T07:50:41+00:00"
+    },
+    {
+        "id": 224,
+        "npc_id": 211289,
+        "spell_id": 424462,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:17:23.5732  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-211289-00004E243B,\"Taener Duelmal\",0xa48,0x0,Creature-0-3773-2649-9768-211289-00004E243B,\"Taener Duelmal\",0xa48,0x0,424462,\"Ember Storm\",0x4,BUFF\r\n",
+        "created_at": "2024-08-28T07:50:44+00:00",
+        "updated_at": "2024-08-28T07:50:44+00:00"
+    },
+    {
+        "id": 225,
+        "npc_id": 211289,
+        "spell_id": 424460,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:17:26.8442  SPELL_DAMAGE,Creature-0-3773-2649-9768-211289-00004E243B,\"Taener Duelmal\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,424460,\"Ember Storm\",0x4,Player-1084-0AC5747D,0000000000000000,3585381,3978420,49942,18354,53759,0,0,2500000,2500000,0,2981.68,1345.80,2308,1.7179,571,393039,1891278,-1,4,0,0,1132767,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:50:48+00:00",
+        "updated_at": "2024-08-28T07:50:48+00:00"
+    },
+    {
+        "id": 227,
+        "npc_id": 207940,
+        "spell_id": 429091,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:18:35.7232  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-207940-00004E243B,\"Prioress Murrpray\",0xa48,0x0,Creature-0-3773-2649-9768-212838-0002CE243B,\"Arathi Neophyte\",0xa48,0x0,429091,\"Inner Fire\",0x2,BUFF\r\n",
+        "created_at": "2024-08-28T07:50:49+00:00",
+        "updated_at": "2024-08-28T07:50:49+00:00"
+    },
+    {
+        "id": 228,
+        "npc_id": 207949,
+        "spell_id": 444722,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:18:37.1982  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-207949-0001CE243B,\"Zealous Templar\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,444722,\"Templar Strike\",0x2,Creature-0-3773-2649-9768-207949-0001CE243B,0000000000000000,10971785,11164348,0,0,42857,0,0,8162,8162,0,2972.84,1450.99,2309,1.1978,81\r\n",
+        "created_at": "2024-08-28T07:50:52+00:00",
+        "updated_at": "2024-08-28T07:50:52+00:00"
+    },
+    {
+        "id": 229,
+        "npc_id": 206704,
+        "spell_id": 427596,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:18:38.6242  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-206704-00014E243B,\"Ardent Paladin\",0xa48,0x0,Creature-0-3773-2649-9768-206704-00014E243B,\"Ardent Paladin\",0xa48,0x0,427596,\"Seal of Light's Fury\",0x2,BUFF\r\n",
+        "created_at": "2024-08-28T07:50:56+00:00",
+        "updated_at": "2024-08-28T07:50:56+00:00"
+    },
+    {
+        "id": 230,
+        "npc_id": 206704,
+        "spell_id": 448791,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:18:39.6782  SPELL_DAMAGE,Creature-0-3773-2649-9768-206704-00014E243B,\"Ardent Paladin\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,448791,\"Sacred Toll\",0x2,Player-1084-0ACEBF33,0000000000000000,3974878,4341560,46607,9527,37128,0,6,1000,1000,0,2971.75,1458.60,2309,1.2103,572,366682,497705,-1,2,0,0,10814,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:51:00+00:00",
+        "updated_at": "2024-08-28T07:51:00+00:00"
+    },
+    {
+        "id": 231,
+        "npc_id": 206704,
+        "spell_id": 427597,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:18:41.0032  SPELL_DAMAGE,Creature-0-3773-2649-9768-206704-00014E243B,\"Ardent Paladin\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,427597,\"Seal of Light's Fury\",0x2,Player-1084-0A912E3E,0000000000000000,3433988,5441680,61788,17647,25646,0,3,75,100,0,2972.78,1459.06,2309,2.1482,570,67917,132721,-1,2,0,0,42369,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:51:03+00:00",
+        "updated_at": "2024-08-28T07:51:03+00:00"
+    },
+    {
+        "id": 232,
+        "npc_id": 206704,
+        "spell_id": 424430,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:18:41.0972  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-206704-00014E243B,\"Ardent Paladin\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,424430,\"Consecration\",0x2,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:51:06+00:00",
+        "updated_at": "2024-08-28T07:51:06+00:00"
+    },
+    {
+        "id": 233,
+        "npc_id": 207949,
+        "spell_id": 444705,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:18:43.7902  SPELL_DAMAGE,Creature-0-3773-2649-9768-207949-0001CE243B,\"Zealous Templar\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,444705,\"Divine Storm\",0x2,Player-1084-0ACEBF33,0000000000000000,2906023,4341560,46607,9527,37128,0,6,1000,1000,0,2975.42,1457.61,2309,2.4002,572,246193,331803,-1,2,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:51:10+00:00",
+        "updated_at": "2024-08-28T07:51:10+00:00"
+    },
+    {
+        "id": 234,
+        "npc_id": 207949,
+        "spell_id": 444728,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:18:48.3562  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-207949-0001CE243B,\"Zealous Templar\",0xa48,0x0,Creature-0-3773-2649-9768-207949-0001CE243B,\"Zealous Templar\",0xa48,0x0,444728,\"Templar's Wrath\",0x2,BUFF\r\n",
+        "created_at": "2024-08-28T07:51:13+00:00",
+        "updated_at": "2024-08-28T07:51:13+00:00"
+    },
+    {
+        "id": 238,
+        "npc_id": 221760,
+        "spell_id": 427469,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:24:43.7012  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-221760-00004E243B,\"Risen Mage\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,427469,\"Fireball\",0x4,Creature-0-3773-2649-9768-221760-00004E243B,0000000000000000,7729164,7729164,0,0,42857,0,0,7988,7988,0,2940.58,1692.96,2309,5.1392,80\r\n",
+        "created_at": "2024-08-28T07:51:15+00:00",
+        "updated_at": "2024-08-28T07:51:15+00:00"
+    },
+    {
+        "id": 239,
+        "npc_id": 221760,
+        "spell_id": 444743,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:24:54.5642  SPELL_MISSED,Creature-0-3773-2649-9768-221760-00004E243B,\"Risen Mage\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,444743,\"Fireball Volley\",0x4,ABSORB,nil,658810,803792,nil\r\n",
+        "created_at": "2024-08-28T07:51:18+00:00",
+        "updated_at": "2024-08-28T07:51:18+00:00"
+    },
+    {
+        "id": 240,
+        "npc_id": 221760,
+        "spell_id": 435156,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:25:10.9162  SPELL_DAMAGE,Creature-0-3773-2649-9768-221760-00004E243B,\"Risen Mage\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,435156,\"Light Expulsion\",0x2,Player-1084-0ACEBF33,0000000000000000,3732864,4341560,55261,9527,37128,0,6,980,1000,0,2960.76,1635.84,2309,2.5016,572,167099,331803,-1,2,0,0,82971,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:51:21+00:00",
+        "updated_at": "2024-08-28T07:51:21+00:00"
+    },
+    {
+        "id": 242,
+        "npc_id": 212835,
+        "spell_id": 435148,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:25:39.6902  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-212835-00004E243B,\"Risen Footman\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,435148,\"Blazing Strike\",0x2,Creature-0-3773-2649-9768-212835-00004E243B,0000000000000000,9199075,11164348,0,0,42857,0,3,100,100,0,2960.85,1677.89,2309,1.4701,80\r\n",
+        "created_at": "2024-08-28T07:51:25+00:00",
+        "updated_at": "2024-08-28T07:51:25+00:00"
+    },
+    {
+        "id": 243,
+        "npc_id": 212835,
+        "spell_id": 435156,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:26:00.8592  SPELL_DAMAGE,Creature-0-3773-2649-9768-212835-00004E243B,\"Risen Footman\",0xa48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,435156,\"Light Expulsion\",0x2,Player-1084-0A59B96F,0000000000000000,3043712,3484640,47334,45513,18513,0,0,2041780,2625000,0,2954.77,1662.67,2309,1.4122,566,297685,331803,-1,2,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:51:26+00:00",
+        "updated_at": "2024-08-28T07:51:26+00:00"
+    },
+    {
+        "id": 244,
+        "npc_id": 217658,
+        "spell_id": 451763,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:26:42.6212  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-217658-00004E243B,\"Sir Braunpyke\",0xa48,0x0,Creature-0-3773-2649-9768-217658-00004E243B,\"Sir Braunpyke\",0xa48,0x0,451763,\"Radiant Flame\",0x2,BUFF\r\n",
+        "created_at": "2024-08-28T07:51:29+00:00",
+        "updated_at": "2024-08-28T07:51:29+00:00"
+    },
+    {
+        "id": 245,
+        "npc_id": 217658,
+        "spell_id": 451764,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:26:42.6542  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-217658-00004E243B,\"Sir Braunpyke\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,451764,\"Radiant Flame\",0x2,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:51:32+00:00",
+        "updated_at": "2024-08-28T07:51:32+00:00"
+    },
+    {
+        "id": 246,
+        "npc_id": 217658,
+        "spell_id": 435165,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:26:47.2712  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-217658-00004E243B,\"Sir Braunpyke\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,435165,\"Blazing Strike\",0x2,Creature-0-3773-2649-9768-217658-00004E243B,0000000000000000,24901969,25763880,0,0,42857,0,3,26,100,0,2947.55,1718.00,2309,5.1707,81\r\n",
+        "created_at": "2024-08-28T07:51:35+00:00",
+        "updated_at": "2024-08-28T07:51:35+00:00"
+    },
+    {
+        "id": 247,
+        "npc_id": 217658,
+        "spell_id": 435156,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:27:17.9322  SPELL_DAMAGE,Creature-0-3773-2649-9768-217658-00004E243B,\"Sir Braunpyke\",0xa48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,435156,\"Light Expulsion\",0x2,Player-1084-0A59B96F,0000000000000000,2699214,3484640,47334,45513,18513,0,0,1370560,2625000,0,2949.77,1720.29,2309,1.4468,566,297685,331803,-1,2,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:51:35+00:00",
+        "updated_at": "2024-08-28T07:51:35+00:00"
+    },
+    {
+        "id": 249,
+        "npc_id": 207940,
+        "spell_id": 423536,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:27:49.3732  SPELL_CAST_SUCCESS,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,423536,\"Holy Smite\",0x2,Creature-0-3773-2649-9768-207940-0000CE243B,0000000000000000,64562428,68703680,0,0,42857,0,3,55,100,0,2935.82,1795.93,2309,4.2127,82\r\n",
+        "created_at": "2024-08-28T07:51:39+00:00",
+        "updated_at": "2024-08-28T07:51:39+00:00"
+    },
+    {
+        "id": 250,
+        "npc_id": 207940,
+        "spell_id": 451606,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:27:52.4282  SPELL_DAMAGE,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,451606,\"Holy Flame\",0x2,Player-1084-0ACEBF33,0000000000000000,2893137,4341560,45889,9527,37128,0,6,1000,1000,0,2938.87,1796.79,2309,4.1933,572,889214,1244262,-1,2,0,0,48550,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:51:42+00:00",
+        "updated_at": "2024-08-28T07:51:42+00:00"
+    },
+    {
+        "id": 251,
+        "npc_id": 207940,
+        "spell_id": 444546,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:27:58.1742  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,Creature-0-3773-2649-9768-210851-00004E243B,\"Eternal Flame\",0xa48,0x0,444546,\"Purify\",0x2,BUFF\r\n",
+        "created_at": "2024-08-28T07:51:46+00:00",
+        "updated_at": "2024-08-28T07:51:46+00:00"
+    },
+    {
+        "id": 252,
+        "npc_id": 207940,
+        "spell_id": 425554,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:28:00.7192  SPELL_DAMAGE,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,425554,\"Purify\",0x2,Player-1084-0AC5747D,0000000000000000,1604791,3978420,52731,18354,53759,0,0,2500000,2500000,0,2943.95,1796.49,2309,3.4859,571,581303,709229,-1,2,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:51:49+00:00",
+        "updated_at": "2024-08-28T07:51:49+00:00"
+    },
+    {
+        "id": 253,
+        "npc_id": 207940,
+        "spell_id": 444608,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:28:00.8322  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,444608,\"Inner Fire\",0x2,BUFF\r\n",
+        "created_at": "2024-08-28T07:51:52+00:00",
+        "updated_at": "2024-08-28T07:51:52+00:00"
+    },
+    {
+        "id": 254,
+        "npc_id": 207940,
+        "spell_id": 425556,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:28:01.0402  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,425556,\"Sanctified Ground\",0x2,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:51:55+00:00",
+        "updated_at": "2024-08-28T07:51:55+00:00"
+    },
+    {
+        "id": 255,
+        "npc_id": 207940,
+        "spell_id": 423547,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:28:03.8362  SPELL_DAMAGE,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,Player-1084-0AF2E1D9,\"Druiddz-TarrenMill-EU\",0x512,0x0,423547,\"Inner Fire\",0x2,Player-1084-0AF2E1D9,0000000000000000,3126082,3456480,44616,42900,37892,0,8,802,1000,0,2945.08,1777.37,2309,2.0895,566,330398,373279,-1,2,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:51:59+00:00",
+        "updated_at": "2024-08-28T07:51:59+00:00"
+    },
+    {
+        "id": 256,
+        "npc_id": 207940,
+        "spell_id": 423682,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:28:42.5472  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,423682,\"Embrace the Light\",0x2,BUFF\r\n",
+        "created_at": "2024-08-28T07:52:03+00:00",
+        "updated_at": "2024-08-28T07:52:03+00:00"
+    },
+    {
+        "id": 258,
+        "npc_id": 207940,
+        "spell_id": 423588,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:28:42.8302  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,423588,\"Barrier of Light\",0x2,BUFF,13272126\r\n",
+        "created_at": "2024-08-28T07:52:05+00:00",
+        "updated_at": "2024-08-28T07:52:05+00:00"
+    },
+    {
+        "id": 259,
+        "npc_id": 207940,
+        "spell_id": 423664,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:28:47.5512  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,423664,\"Embrace the Light\",0x2,BUFF\r\n",
+        "created_at": "2024-08-28T07:52:09+00:00",
+        "updated_at": "2024-08-28T07:52:09+00:00"
+    },
+    {
+        "id": 260,
+        "npc_id": 207940,
+        "spell_id": 423665,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:28:47.5512  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,423665,\"Embrace the Light\",0x2,BUFF\r\n",
+        "created_at": "2024-08-28T07:52:12+00:00",
+        "updated_at": "2024-08-28T07:52:12+00:00"
+    },
+    {
+        "id": 261,
+        "npc_id": 210851,
+        "spell_id": 425011,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:28:47.5662  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-210851-00004E243B,\"Eternal Flame\",0xa48,0x0,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,425011,\"Embrace the Light\",0x2,BUFF\r\n",
+        "created_at": "2024-08-28T07:52:14+00:00",
+        "updated_at": "2024-08-28T07:52:14+00:00"
+    },
+    {
+        "id": 262,
+        "npc_id": 211140,
+        "spell_id": 425018,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:29:04.5962  SPELL_DAMAGE,Creature-0-3773-2649-9768-211140-00034E28EF,\"Arathi Neophyte\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,425018,\"Overwhelming Power\",0x2,Player-1084-0ACEBF33,0000000000000000,1475483,4341560,53463,9527,37128,0,6,1000,1000,0,2942.11,1827.63,2309,5.5638,572,67519,89587,-1,2,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:52:17+00:00",
+        "updated_at": "2024-08-28T07:52:17+00:00"
+    },
+    {
+        "id": 263,
+        "npc_id": 207940,
+        "spell_id": 444609,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_priory-of-the-sacred-flame.zip",
+        "raw_event": "8\/27\/2024 21:29:14.9312  SPELL_AURA_APPLIED,Creature-0-3773-2649-9768-207940-0000CE243B,\"Prioress Murrpray\",0xa48,0x0,Creature-0-3773-2649-9768-210851-00004E243B,\"Eternal Flame\",0xa48,0x0,444609,\"Stoke the Flame\",0x2,BUFF\r\n",
+        "created_at": "2024-08-28T07:52:21+00:00",
+        "updated_at": "2024-08-28T07:52:21+00:00"
+    },
+    {
+        "id": 264,
+        "npc_id": 211087,
+        "spell_id": 425264,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-dawnbreaker.zip",
+        "raw_event": "8\/27\/2024 22:39:41.9022  SPELL_CAST_SUCCESS,Creature-0-3773-2662-15211-211087-00004E3977,\"Speaker Shadowcrown\",0x10a48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,425264,\"Obsidian Blast\",0x20,Creature-0-3773-2662-15211-211087-00004E3977,0000000000000000,52183419,60115720,0,0,42857,0,3,60,100,0,2341.65,709.74,2359,3.5640,82\r\n",
+        "created_at": "2024-08-28T07:52:33+00:00",
+        "updated_at": "2024-08-28T07:52:33+00:00"
+    },
+    {
+        "id": 265,
+        "npc_id": 211087,
+        "spell_id": 425489,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-dawnbreaker.zip",
+        "raw_event": "8\/27\/2024 22:39:42.6572  SPELL_MISSED,Creature-0-3773-2662-15211-211087-00004E3977,\"Speaker Shadowcrown\",0x10a48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,425489,\"Obsidian Blast\",0x20,ABSORB,nil,1511407,2011662,nil\r\n",
+        "created_at": "2024-08-28T07:52:38+00:00",
+        "updated_at": "2024-08-28T07:52:38+00:00"
+    },
+    {
+        "id": 266,
+        "npc_id": 211087,
+        "spell_id": 426715,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-dawnbreaker.zip",
+        "raw_event": "8\/27\/2024 22:39:51.4032  SPELL_DAMAGE,Creature-0-3773-2662-15211-211087-00004E3977,\"Speaker Shadowcrown\",0x10a48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,426715,\"Collapsing Darkness\",0x20,Player-1084-0A59B96F,0000000000000000,3398232,3484640,48471,46607,18513,0,0,2567780,2625000,0,2324.15,685.02,2359,1.1107,567,86408,1032398,-1,32,0,0,830380,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:52:42+00:00",
+        "updated_at": "2024-08-28T07:52:42+00:00"
+    },
+    {
+        "id": 267,
+        "npc_id": 207197,
+        "spell_id": 427402,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:13:25.0742  SPELL_CAST_SUCCESS,Creature-0-4248-2648-12306-207197-00044E333B,\"Cursed Rookguard\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,427402,\"Crackling Crush\",0x9,Creature-0-4248-2648-12306-207197-00044E333B,0000000000000000,6204452,8587960,0,0,42857,0,1,0,0,0,2793.23,-2085.32,2315,5.5125,80\r\n",
+        "created_at": "2024-08-28T07:52:47+00:00",
+        "updated_at": "2024-08-28T07:52:47+00:00"
+    },
+    {
+        "id": 268,
+        "npc_id": 207198,
+        "spell_id": 430109,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:13:26.1872  SPELL_CAST_SUCCESS,Creature-0-4248-2648-12306-207198-0002CE333B,\"Cursed Thunderer\",0xa48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,430109,\"Lightning Bolt\",0x8,Creature-0-4248-2648-12306-207198-0002CE333B,0000000000000000,6843778,8587960,0,0,42857,0,0,7988,7988,0,2797.73,-2090.93,2315,4.1953,80\r\n",
+        "created_at": "2024-08-28T07:52:51+00:00",
+        "updated_at": "2024-08-28T07:52:51+00:00"
+    },
+    {
+        "id": 269,
+        "npc_id": 209801,
+        "spell_id": 426893,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:13:26.1882  SPELL_CAST_SUCCESS,Creature-0-4248-2648-12306-209801-00004E333B,\"Quartermaster Koratite\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,426893,\"Bounding Void\",0x20,Creature-0-4248-2648-12306-209801-00004E333B,0000000000000000,8078833,13740736,0,0,42857,0,0,8162,8162,0,2794.76,-2087.62,2315,2.4986,81\r\n",
+        "created_at": "2024-08-28T07:52:53+00:00",
+        "updated_at": "2024-08-28T07:52:53+00:00"
+    },
+    {
+        "id": 270,
+        "npc_id": 209801,
+        "spell_id": 426968,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:13:26.2552  SPELL_DAMAGE,Creature-0-4248-2648-12306-209801-00004E333B,\"Quartermaster Koratite\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,426968,\"Bounding Void\",0x20,Player-1084-0ACEBF33,0000000000000000,3758301,4558638,47369,9527,37128,0,6,690,1000,0,2792.23,-2086.20,2315,6.2548,572,800337,995409,-1,32,0,0,41734,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:52:57+00:00",
+        "updated_at": "2024-08-28T07:52:57+00:00"
+    },
+    {
+        "id": 271,
+        "npc_id": 209801,
+        "spell_id": 430125,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:13:29.3312  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-209801-00004E333B,\"Quartermaster Koratite\",0xa48,0x0,Creature-0-4248-2648-12306-209801-00004E333B,\"Quartermaster Koratite\",0xa48,0x0,430125,\"Entropy Shield\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:53:00+00:00",
+        "updated_at": "2024-08-28T07:53:00+00:00"
+    },
+    {
+        "id": 272,
+        "npc_id": 209801,
+        "spell_id": 450628,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:13:29.3312  SPELL_CAST_SUCCESS,Creature-0-4248-2648-12306-209801-00004E333B,\"Quartermaster Koratite\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,450628,\"Entropy Shield\",0x1,Creature-0-4248-2648-12306-209801-00004E333B,0000000000000000,6721438,13740736,0,0,42857,0,0,8162,8162,0,2794.51,-2090.04,2315,6.0034,81\r\n",
+        "created_at": "2024-08-28T07:53:02+00:00",
+        "updated_at": "2024-08-28T07:53:02+00:00"
+    },
+    {
+        "id": 273,
+        "npc_id": 207199,
+        "spell_id": 427260,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:14:15.3492  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-207199-00004E333B,\"Cursed Rooktender\",0xa48,0x0,Creature-0-4248-2648-12306-207186-0000CE333B,\"Unruly Stormrook\",0xa48,0x0,427260,\"Enrage Rook\",0x8,BUFF\r\n",
+        "created_at": "2024-08-28T07:53:06+00:00",
+        "updated_at": "2024-08-28T07:53:06+00:00"
+    },
+    {
+        "id": 274,
+        "npc_id": 207186,
+        "spell_id": 427616,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:14:18.7602  SPELL_CAST_SUCCESS,Creature-0-4248-2648-12306-207186-00004E333B,\"Unruly Stormrook\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,427616,\"Energized Barrage\",0x8,Creature-0-4248-2648-12306-207186-00004E333B,0000000000000000,12229905,13740736,0,0,42857,0,3,100,100,0,2760.19,-1628.93,2316,1.7572,81\r\n",
+        "created_at": "2024-08-28T07:53:09+00:00",
+        "updated_at": "2024-08-28T07:53:09+00:00"
+    },
+    {
+        "id": 275,
+        "npc_id": 207186,
+        "spell_id": 430013,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:14:38.2962  SPELL_MISSED,Creature-0-4248-2648-12306-207186-0000CE333B,\"Unruly Stormrook\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,430013,\"Thunderstrike\",0x8,ABSORB,nil,220239,995409,nil\r\n",
+        "created_at": "2024-08-28T07:53:13+00:00",
+        "updated_at": "2024-08-28T07:53:13+00:00"
+    },
+    {
+        "id": 276,
+        "npc_id": 217339,
+        "spell_id": 434432,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:16:22.4822  SPELL_CAST_SUCCESS,Creature-0-4248-2648-12306-217339-0001CE340E,\"Stormrook Feather\",0xa18,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,434432,\"Lightning Charge\",0x8,Creature-0-4248-2648-12306-217339-0001CE340E,0000000000000000,1717592,1717592,0,0,42857,0,1,0,0,0,2801.42,-1613.84,2318,3.2050,80\r\n",
+        "created_at": "2024-08-28T07:53:22+00:00",
+        "updated_at": "2024-08-28T07:53:22+00:00"
+    },
+    {
+        "id": 277,
+        "npc_id": 214421,
+        "spell_id": 430812,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:16:39.1362  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-214421-0000CE340F,\"Coalescing Void Diffuser\",0xa48,0x0,Creature-0-4248-2648-12306-214421-0000CE340F,\"Coalescing Void Diffuser\",0xa48,0x0,430812,\"Attracting Shadows\",0x20,BUFF\r\n",
+        "created_at": "2024-08-28T07:53:24+00:00",
+        "updated_at": "2024-08-28T07:53:24+00:00"
+    },
+    {
+        "id": 278,
+        "npc_id": 214421,
+        "spell_id": 430814,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:16:39.2432  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-214421-0000CE340F,\"Coalescing Void Diffuser\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,430814,\"Attracting Shadows\",0x20,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:53:27+00:00",
+        "updated_at": "2024-08-28T07:53:27+00:00"
+    },
+    {
+        "id": 279,
+        "npc_id": 214419,
+        "spell_id": 433078,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:16:48.4642  SPELL_MISSED,Creature-0-4248-2648-12306-214419-00004E3410,\"Void Cursed Crusher\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,433078,\"Implosion\",0x20,ABSORB,nil,424305,663606,nil\r\n",
+        "created_at": "2024-08-28T07:53:33+00:00",
+        "updated_at": "2024-08-28T07:53:33+00:00"
+    },
+    {
+        "id": 280,
+        "npc_id": 214439,
+        "spell_id": 430179,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:16:50.9042  SPELL_CAST_SUCCESS,Creature-0-4248-2648-12306-214439-0000CE340E,\"Corrupted Oracle\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,430179,\"Seeping Corruption\",0x20,Creature-0-4248-2648-12306-214439-0000CE340E,0000000000000000,6393135,8587960,0,0,42857,0,0,7988,7988,0,2717.25,-1570.70,2318,1.8307,80\r\n",
+        "created_at": "2024-08-28T07:53:36+00:00",
+        "updated_at": "2024-08-28T07:53:36+00:00"
+    },
+    {
+        "id": 281,
+        "npc_id": 214421,
+        "spell_id": 430805,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:16:53.9952  SPELL_CAST_SUCCESS,Creature-0-4248-2648-12306-214421-0000CE340F,\"Coalescing Void Diffuser\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,430805,\"Arcing Void\",0x20,Creature-0-4248-2648-12306-214421-0000CE340F,0000000000000000,7795690,10305552,0,0,42857,0,0,8162,8162,0,2738.07,-1574.76,2318,2.9300,81\r\n",
+        "created_at": "2024-08-28T07:53:39+00:00",
+        "updated_at": "2024-08-28T07:53:39+00:00"
+    },
+    {
+        "id": 282,
+        "npc_id": 214439,
+        "spell_id": 430754,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:16:58.4862  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-214439-0000CE340E,\"Corrupted Oracle\",0xa48,0x0,Creature-0-4248-2648-12306-207197-00014E340E,\"Cursed Rookguard\",0xa48,0x0,430754,\"Void Shell\",0x20,BUFF,995409\r\n",
+        "created_at": "2024-08-28T07:53:41+00:00",
+        "updated_at": "2024-08-28T07:53:41+00:00"
+    },
+    {
+        "id": 283,
+        "npc_id": 207197,
+        "spell_id": 430758,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:16:58.7622  SPELL_MISSED,Creature-0-4248-2648-12306-207197-00014E340E,\"Cursed Rookguard\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,430758,\"Void Shell\",0x20,ABSORB,nil,5857,9954,nil\r\n",
+        "created_at": "2024-08-28T07:53:44+00:00",
+        "updated_at": "2024-08-28T07:53:44+00:00"
+    },
+    {
+        "id": 284,
+        "npc_id": 214421,
+        "spell_id": 452932,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:17:03.6012  SPELL_DAMAGE,Creature-0-4248-2648-12306-214421-00004E340E,\"Coalescing Void Diffuser\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,452932,\"Attracting Shadows\",0x20,Player-1084-0ACEBF33,0000000000000000,2281824,4558638,45170,9527,37128,0,6,280,1000,0,2678.76,-1572.50,2318,1.7894,572,743972,995409,-1,32,0,0,60172,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:53:49+00:00",
+        "updated_at": "2024-08-28T07:53:49+00:00"
+    },
+    {
+        "id": 285,
+        "npc_id": 214419,
+        "spell_id": 423981,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:17:08.4672  SPELL_DAMAGE,Creature-0-4248-2648-12306-214419-00004E3410,\"Void Cursed Crusher\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,423981,\"Implosion\",0x20,Player-1084-0ACEBF33,0000000000000000,2227354,4558638,51767,9527,37128,0,6,410,1000,0,2674.54,-1576.68,2318,4.2683,572,452430,829508,-1,32,0,0,217690,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:53:52+00:00",
+        "updated_at": "2024-08-28T07:53:52+00:00"
+    },
+    {
+        "id": 286,
+        "npc_id": 207198,
+        "spell_id": 430758,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:17:37.1772  SPELL_MISSED,Creature-0-4248-2648-12306-207198-00014E340E,\"Cursed Thunderer\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,430758,\"Void Shell\",0x20,ABSORB,nil,7846,9954,nil\r\n",
+        "created_at": "2024-08-28T07:53:52+00:00",
+        "updated_at": "2024-08-28T07:53:52+00:00"
+    },
+    {
+        "id": 287,
+        "npc_id": 214419,
+        "spell_id": 430758,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:17:59.0832  SPELL_DAMAGE,Creature-0-4248-2648-12306-214419-00004E340E,\"Void Cursed Crusher\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,430758,\"Void Shell\",0x20,Player-1084-0AC5747D,0000000000000000,5807941,5928489,53436,18538,145335,0,0,1737273,2500000,0,2625.95,-1623.73,2318,5.8783,564,7846,9954,-1,32,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:53:53+00:00",
+        "updated_at": "2024-08-28T07:53:53+00:00"
+    },
+    {
+        "id": 288,
+        "npc_id": 219066,
+        "spell_id": 443854,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:18:53.2102  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-219066-0001CE3410,\"Inflicted Civilian\",0xa48,0x0,Creature-0-4248-2648-12306-219066-0001CE3410,\"Inflicted Civilian\",0xa48,0x0,443854,\"Instability\",0x20,BUFF\r\n",
+        "created_at": "2024-08-28T07:53:56+00:00",
+        "updated_at": "2024-08-28T07:53:56+00:00"
+    },
+    {
+        "id": 289,
+        "npc_id": 219066,
+        "spell_id": 443847,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:18:56.7012  SPELL_DAMAGE,Creature-0-4248-2648-12306-219066-0000CE340F,\"Inflicted Civilian\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,443847,\"Instability\",0x20,Player-1084-0ACEBF33,0000000000000000,4070139,4558638,45170,9527,37128,0,6,1000,1000,0,2785.71,-1633.76,2319,2.9621,572,488499,663606,-1,32,0,0,47597,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:53:59+00:00",
+        "updated_at": "2024-08-28T07:53:59+00:00"
+    },
+    {
+        "id": 290,
+        "npc_id": 207205,
+        "spell_id": 425113,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:19:01.1412  SPELL_DAMAGE,Creature-0-4248-2648-12306-207205-00004E333B,\"Stormguard Gorren\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,425113,\"Crush Reality\",0x20,Player-1084-0ACEBF33,0000000000000000,3267500,4558638,55009,9527,37128,0,6,1000,1000,0,2781.92,-1632.94,2319,5.2263,572,436654,663606,-1,32,0,0,99442,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:54:03+00:00",
+        "updated_at": "2024-08-28T07:54:03+00:00"
+    },
+    {
+        "id": 291,
+        "npc_id": 207205,
+        "spell_id": 424966,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:19:03.2242  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-207205-00004E333B,\"Stormguard Gorren\",0x10a48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,424966,\"Lingering Void\",0x8,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:54:05+00:00",
+        "updated_at": "2024-08-28T07:54:05+00:00"
+    },
+    {
+        "id": 292,
+        "npc_id": 207205,
+        "spell_id": 425048,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:19:06.1452  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-207205-00004E333B,\"Stormguard Gorren\",0x10a48,0x0,Creature-0-4248-2648-12306-207205-00004E333B,\"Stormguard Gorren\",0x10a48,0x0,425048,\"Dark Gravity\",0x20,BUFF\r\n",
+        "created_at": "2024-08-28T07:54:08+00:00",
+        "updated_at": "2024-08-28T07:54:08+00:00"
+    },
+    {
+        "id": 293,
+        "npc_id": 207205,
+        "spell_id": 426160,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:19:06.2172  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-207205-00004E333B,\"Stormguard Gorren\",0x10a48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,426160,\"Dark Gravity\",0x20,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:54:11+00:00",
+        "updated_at": "2024-08-28T07:54:11+00:00"
+    },
+    {
+        "id": 294,
+        "npc_id": 207205,
+        "spell_id": 425052,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:19:12.1672  SPELL_MISSED,Creature-0-4248-2648-12306-207205-00004E333B,\"Stormguard Gorren\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,425052,\"Dark Gravity\",0x20,ABSORB,nil,1895684,2322622,nil\r\n",
+        "created_at": "2024-08-28T07:54:14+00:00",
+        "updated_at": "2024-08-28T07:54:14+00:00"
+    },
+    {
+        "id": 295,
+        "npc_id": 207205,
+        "spell_id": 424739,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:19:21.4822  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-207205-00004E333B,\"Stormguard Gorren\",0x10a48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,424739,\"Chaotic Corruption\",0x20,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:54:19+00:00",
+        "updated_at": "2024-08-28T07:54:19+00:00"
+    },
+    {
+        "id": 296,
+        "npc_id": 207205,
+        "spell_id": 426171,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:19:26.5072  SPELL_DAMAGE,Creature-0-4248-2648-12306-207205-00004E333B,\"Stormguard Gorren\",0x10a48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,426171,\"Chaotic Explosion\",0x20,Player-1084-0A912E3E,0000000000000000,2834428,3824856,48342,17647,18072,0,3,143,150,0,2803.53,-1638.27,2319,0.3732,573,214206,265443,-1,32,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:54:22+00:00",
+        "updated_at": "2024-08-28T07:54:22+00:00"
+    },
+    {
+        "id": 297,
+        "npc_id": 207202,
+        "spell_id": 430238,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:19:42.1182  SPELL_CAST_SUCCESS,Creature-0-4248-2648-12306-207202-00004E333B,\"Void Fragment\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,430238,\"Void Bolt\",0x20,Creature-0-4248-2648-12306-207202-00004E333B,0000000000000000,4528236,5152776,0,0,42857,0,0,7988,7988,0,2891.10,-1599.28,2319,3.4067,80\r\n",
+        "created_at": "2024-08-28T07:54:25+00:00",
+        "updated_at": "2024-08-28T07:54:25+00:00"
+    },
+    {
+        "id": 298,
+        "npc_id": 207202,
+        "spell_id": 430282,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:19:46.4842  SPELL_CAST_SUCCESS,Creature-0-4248-2648-12306-207202-0000CE333B,\"Void Fragment\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,430282,\"Crushing Darkness\",0x1,Creature-0-4248-2648-12306-207202-0000CE333B,0000000000000000,3332104,5152776,0,0,42857,0,0,7988,7988,0,2876.39,-1597.89,2319,5.4769,80\r\n",
+        "created_at": "2024-08-28T07:54:28+00:00",
+        "updated_at": "2024-08-28T07:54:28+00:00"
+    },
+    {
+        "id": 299,
+        "npc_id": 207202,
+        "spell_id": 430288,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:19:50.4172  SPELL_DAMAGE,Creature-0-4248-2648-12306-207202-0000CE333B,\"Void Fragment\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,430288,\"Crushing Darkness\",0x20,Player-1084-0ACEBF33,0000000000000000,4109486,4558638,58857,9527,37128,0,6,282,1000,0,2857.58,-1605.56,2319,1.8625,572,449152,597246,-1,32,0,0,38310,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:54:31+00:00",
+        "updated_at": "2024-08-28T07:54:31+00:00"
+    },
+    {
+        "id": 300,
+        "npc_id": 212739,
+        "spell_id": 432781,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:20:19.3612  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-212739-0000CE34D1,\"Radiating Voidstone\",0xa48,0x0,Creature-0-4248-2648-12306-212739-0000CE34D1,\"Radiating Voidstone\",0xa48,0x0,432781,\"Embrace the Void\",0x20,BUFF,5668053\r\n",
+        "created_at": "2024-08-28T07:54:34+00:00",
+        "updated_at": "2024-08-28T07:54:34+00:00"
+    },
+    {
+        "id": 301,
+        "npc_id": 212739,
+        "spell_id": 432903,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:20:21.3592  SPELL_DAMAGE,Creature-0-4248-2648-12306-212739-0000CE34D1,\"Radiating Voidstone\",0xa48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,432903,\"Embrace the Void\",0x20,Player-1084-0ACEBF33,0000000000000000,4331156,4558638,44452,9527,37128,0,6,337,1000,0,2880.39,-1659.41,2320,2.5576,572,227482,278714,-1,32,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:54:37+00:00",
+        "updated_at": "2024-08-28T07:54:37+00:00"
+    },
+    {
+        "id": 302,
+        "npc_id": 212793,
+        "spell_id": 432959,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:20:26.1132  SPELL_DAMAGE,Creature-0-4248-2648-12306-212793-0000CE34D1,\"Void Ascendant\",0xa48,0x0,Player-1084-0AAC17BF,\"Knatterd\u00f6rte-TarrenMill-EU\",0x512,0x0,432959,\"Void Volley\",0x20,Player-1084-0AAC17BF,0000000000000000,3987870,4582317,4546,46224,19701,0,0,2489575,2500000,0,2899.30,-1637.63,2320,3.4824,564,210960,298623,-1,32,0,0,66550,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:54:41+00:00",
+        "updated_at": "2024-08-28T07:54:41+00:00"
+    },
+    {
+        "id": 303,
+        "npc_id": 211260,
+        "spell_id": 460190,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:20:33.6122  SPELL_CAST_SUCCESS,Creature-0-4248-2648-12306-211260-00004E34D1,\"Stormrider Vokmar\",0xa18,0x0,Player-1084-0AAC17BF,\"Knatterd\u00f6rte-TarrenMill-EU\",0x512,0x0,460190,\"Storm's Vengeance\",0x8,Creature-0-4248-2648-12306-211260-00004E34D1,0000000000000000,17175920,17175920,0,0,42857,0,3,100,100,0,2805.24,-1567.26,2320,0.1702,82\r\n",
+        "created_at": "2024-08-28T07:54:43+00:00",
+        "updated_at": "2024-08-28T07:54:43+00:00"
+    },
+    {
+        "id": 304,
+        "npc_id": 211260,
+        "spell_id": 442355,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:20:40.6882  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-211260-00004E34D1,\"Stormrider Vokmar\",0xa18,0x0,Creature-0-4248-2648-12306-212739-0002CE34D1,\"Radiating Voidstone\",0xa48,0x0,442355,\"Storm's Vengeance\",0x8,BUFF\r\n",
+        "created_at": "2024-08-28T07:54:49+00:00",
+        "updated_at": "2024-08-28T07:54:49+00:00"
+    },
+    {
+        "id": 305,
+        "npc_id": 212739,
+        "spell_id": 438848,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:20:41.0672  SPELL_DAMAGE,Creature-0-4248-2648-12306-212739-0000CE34D1,\"Radiating Voidstone\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,438848,\"Embrace the Void\",0x20,Player-1084-0AC5747D,0000000000000000,3183748,6521338,53436,18538,132123,0,0,2355203,2500000,0,2839.76,-1625.09,2320,3.7264,564,426773,995409,-1,32,0,155778,32061,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:54:52+00:00",
+        "updated_at": "2024-08-28T07:54:52+00:00"
+    },
+    {
+        "id": 306,
+        "npc_id": 207207,
+        "spell_id": 445262,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:22:12.2212  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-207207-00004E356F,\"Voidstone Monstrosity\",0x10a48,0x0,Creature-0-4248-2648-12306-207207-00004E356F,\"Voidstone Monstrosity\",0x10a48,0x0,445262,\"Void Shell\",0x7f,BUFF,13740736\r\n",
+        "created_at": "2024-08-28T07:54:56+00:00",
+        "updated_at": "2024-08-28T07:54:56+00:00"
+    },
+    {
+        "id": 307,
+        "npc_id": 207207,
+        "spell_id": 445537,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:22:20.0312  SPELL_DAMAGE,Creature-0-4248-2648-12306-207207-00004E356F,\"Voidstone Monstrosity\",0x10a48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,445537,\"Oblivion Wave\",0x20,Player-1084-0AC5747D,0000000000000000,6065545,6560492,54918,18538,147667,0,0,2500000,2500000,0,2771.79,-1613.55,2320,6.1610,564,494947,1493114,-1,32,0,0,328895,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:54:59+00:00",
+        "updated_at": "2024-08-28T07:54:59+00:00"
+    },
+    {
+        "id": 308,
+        "npc_id": 207207,
+        "spell_id": 181089,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:22:22.6812  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-207207-00004E356F,\"Voidstone Monstrosity\",0x10a48,0x0,Creature-0-4248-2648-12306-207207-00004E356F,\"Voidstone Monstrosity\",0x10a48,0x0,181089,\"Encounter Event\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:54:59+00:00",
+        "updated_at": "2024-08-28T07:54:59+00:00"
+    },
+    {
+        "id": 309,
+        "npc_id": 207207,
+        "spell_id": 423839,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:22:28.0562  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-207207-00004E356F,\"Voidstone Monstrosity\",0x10a48,0x0,Creature-0-4248-2648-12306-207207-00004E356F,\"Voidstone Monstrosity\",0x10a48,0x0,423839,\"Electrocuted\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:55:02+00:00",
+        "updated_at": "2024-08-28T07:55:02+00:00"
+    },
+    {
+        "id": 310,
+        "npc_id": 213684,
+        "spell_id": 428269,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:22:30.0842  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-213684-00004E3585,\"Void Chunk\",0xa48,0x0,Creature-0-4248-2648-12306-213684-00004E3585,\"Void Chunk\",0xa48,0x0,428269,\"Reshape\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:55:05+00:00",
+        "updated_at": "2024-08-28T07:55:05+00:00"
+    },
+    {
+        "id": 311,
+        "npc_id": 207207,
+        "spell_id": 429493,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:22:32.1142  SPELL_AURA_APPLIED,Creature-0-4248-2648-12306-207207-00004E356F,\"Voidstone Monstrosity\",0x10a48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,429493,\"Unleash Corruption\",0x20,DEBUFF\r\n",
+        "created_at": "2024-08-28T07:55:08+00:00",
+        "updated_at": "2024-08-28T07:55:08+00:00"
+    },
+    {
+        "id": 312,
+        "npc_id": 207207,
+        "spell_id": 429521,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery-1.zip",
+        "raw_event": "8\/27\/2024 22:22:38.1292  SPELL_MISSED,Creature-0-4248-2648-12306-207207-00004E356F,\"Voidstone Monstrosity\",0x10a48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,429521,\"Unleash Corruption\",0x20,ABSORB,nil,440481,829508,nil\r\n",
+        "created_at": "2024-08-28T07:55:11+00:00",
+        "updated_at": "2024-08-28T07:55:11+00:00"
+    },
+    {
+        "id": 314,
+        "npc_id": 228803,
+        "spell_id": 461081,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery.zip",
+        "raw_event": "8\/27\/2024 20:22:06.0272  SPELL_AURA_APPLIED,Creature-0-1471-2648-10637-228803-00004E194D,\"Stormrook Tunnel Stalker\",0xa48,0x0,Creature-0-1471-2648-10637-228803-00004E194D,\"Stormrook Tunnel Stalker\",0xa48,0x0,461081,\"Lightning Swirl\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:55:12+00:00",
+        "updated_at": "2024-08-28T07:55:12+00:00"
+    },
+    {
+        "id": 315,
+        "npc_id": 221296,
+        "spell_id": 465356,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery.zip",
+        "raw_event": "8\/27\/2024 20:22:39.3842  SPELL_AURA_APPLIED,Creature-0-1471-2648-10637-221296-00004E1960,\"Stormrider Cadet\",0xa18,0x0,Creature-0-1471-2648-10637-221296-00004E1960,\"Stormrider Cadet\",0xa18,0x0,465356,\"[DNT] Build Barricade\",0x1,BUFF\r\n",
+        "created_at": "2024-08-28T07:55:12+00:00",
+        "updated_at": "2024-08-28T07:55:12+00:00"
+    },
+    {
+        "id": 317,
+        "npc_id": 214421,
+        "spell_id": 430758,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery.zip",
+        "raw_event": "8\/27\/2024 20:23:32.3762  SPELL_MISSED,Creature-0-1471-2648-10637-214421-00004E194D,\"Coalescing Void Diffuser\",0x10a48,0x0,Player-1084-0AF2E1D9,\"Druiddz-TarrenMill-EU\",0x512,0x0,430758,\"Void Shell\",0x20,ABSORB,nil,8592,9954,nil\r\n",
+        "created_at": "2024-08-28T07:55:13+00:00",
+        "updated_at": "2024-08-28T07:55:13+00:00"
+    },
+    {
+        "id": 319,
+        "npc_id": 214439,
+        "spell_id": 430758,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery.zip",
+        "raw_event": "8\/27\/2024 20:24:36.5202  SPELL_DAMAGE,Creature-0-1471-2648-10637-214439-00014E194D,\"Corrupted Oracle\",0xa48,0x0,Player-1084-0A912E3E,\"Panglong-TarrenMill-EU\",0x512,0x0,430758,\"Void Shell\",0x20,Player-1084-0A912E3E,0000000000000000,1876076,3625560,56771,17647,18072,0,3,97,150,0,2668.69,-1616.86,2318,0.3390,573,8393,9954,-1,32,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:55:13+00:00",
+        "updated_at": "2024-08-28T07:55:13+00:00"
+    },
+    {
+        "id": 320,
+        "npc_id": 207205,
+        "spell_id": 426136,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery.zip",
+        "raw_event": "8\/27\/2024 20:25:21.0702  SPELL_DAMAGE,Creature-0-1471-2648-10637-207205-00004E187E,\"Stormguard Gorren\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,426136,\"Reality Tear\",0x20,Player-1084-0ACEBF33,0000000000000000,2479090,4337340,60925,9527,37057,0,6,700,1000,0,2784.91,-1640.31,2319,5.5818,572,743507,995409,-1,32,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:55:18+00:00",
+        "updated_at": "2024-08-28T07:55:18+00:00"
+    },
+    {
+        "id": 324,
+        "npc_id": 207202,
+        "spell_id": 430758,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery.zip",
+        "raw_event": "8\/27\/2024 20:28:45.5972  SPELL_DAMAGE,Creature-0-1471-2648-10637-207202-0001CE1A3C,\"Void Fragment\",0xa48,0x0,Player-1084-0AF2E1D9,\"Druiddz-TarrenMill-EU\",0x512,0x0,430758,\"Void Shell\",0x20,Player-1084-0AF2E1D9,0000000000000000,2258171,3424060,43899,42211,35316,0,8,662,1000,0,2752.28,-1631.84,2320,0.4241,563,8679,9954,-1,32,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:55:22+00:00",
+        "updated_at": "2024-08-28T07:55:22+00:00"
+    },
+    {
+        "id": 325,
+        "npc_id": 207207,
+        "spell_id": 423356,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery.zip",
+        "raw_event": "8\/27\/2024 20:30:19.6702  SPELL_DAMAGE,Creature-0-1471-2648-10637-207207-00004E1B06,\"Voidstone Monstrosity\",0x10a48,0x0,Player-1084-0ACEBF33,\"Nakedplague-TarrenMill-EU\",0x512,0x0,423356,\"Null Upheaval\",0x20,Player-1084-0ACEBF33,0000000000000000,3321162,4341560,63306,9527,37128,0,6,860,1000,0,2761.11,-1630.09,2320,1.2087,572,653103,995409,-1,32,0,0,78089,nil,nil,nil\r\n",
+        "created_at": "2024-08-28T07:55:26+00:00",
+        "updated_at": "2024-08-28T07:55:26+00:00"
+    },
+    {
+        "id": 326,
+        "npc_id": 211260,
+        "spell_id": 458082,
+        "combat_log_path": "tmp\/\/WoWCombatLog-082724_201826_the-rookery.zip",
+        "raw_event": "8\/27\/2024 20:30:27.2442  SPELL_CAST_SUCCESS,Creature-0-1471-2648-10637-211260-00004E1A3C,\"Stormrider Vokmar\",0xa18,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,458082,\"Stormrider's Charge\",0x8,Creature-0-1471-2648-10637-211260-00004E1A3C,0000000000000000,17175920,17175920,0,0,42857,0,3,0,100,0,2831.18,-1623.41,2320,1.5299,82\r\n",
+        "created_at": "2024-08-28T07:55:29+00:00",
+        "updated_at": "2024-08-28T07:55:29+00:00"
     }
 ]

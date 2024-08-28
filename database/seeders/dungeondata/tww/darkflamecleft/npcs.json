@@ -1,5 +1,80 @@
 [
     {
+        "id": 130683,
+        "dungeon_id": 111,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 74845,
+        "encounter_id": null,
+        "name": "Starved Rat",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 208446,
+        "dungeon_id": 111,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 114170,
+        "encounter_id": null,
+        "name": "Kobold Worker",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 208448,
+        "dungeon_id": 111,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 114157,
+        "encounter_id": null,
+        "name": "Kobold Mystic",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 208449,
         "dungeon_id": 111,
         "classification_id": 2,
@@ -46,7 +121,17 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 430171
+            },
+            {
+                "spell_id": 440652
+            },
+            {
+                "spell_id": 440653
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -71,7 +156,14 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 422414
+            },
+            {
+                "spell_id": 422692
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -96,7 +188,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 422393
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -121,7 +217,20 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 421638
+            },
+            {
+                "spell_id": 421817
+            },
+            {
+                "spell_id": 425394
+            },
+            {
+                "spell_id": 443969
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -146,7 +255,61 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 420696
+            },
+            {
+                "spell_id": 421146
+            },
+            {
+                "spell_id": 421277
+            },
+            {
+                "spell_id": 422648
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 208747,
+        "dungeon_id": 111,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 117773,
+        "encounter_id": null,
+        "name": "The Darkness",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 424074
+            },
+            {
+                "spell_id": 427011
+            },
+            {
+                "spell_id": 427015
+            },
+            {
+                "spell_id": 427100
+            },
+            {
+                "spell_id": 427157
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -196,7 +359,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 421665
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -246,7 +413,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 422628
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -271,7 +442,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 423566
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -321,7 +496,14 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 423479
+            },
+            {
+                "spell_id": 428019
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -346,7 +528,14 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 424650
+            },
+            {
+                "spell_id": 428089
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -371,7 +560,20 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 423501
+            },
+            {
+                "spell_id": 427955
+            },
+            {
+                "spell_id": 428064
+            },
+            {
+                "spell_id": 428066
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -421,7 +623,17 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 425561
+            },
+            {
+                "spell_id": 425704
+            },
+            {
+                "spell_id": 427929
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -496,7 +708,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 426883
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -546,7 +762,17 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 426261
+            },
+            {
+                "spell_id": 426265
+            },
+            {
+                "spell_id": 426677
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -571,7 +797,14 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 427176
+            },
+            {
+                "spell_id": 439010
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -584,6 +817,35 @@
         "encounter_id": null,
         "name": "Kobold Flametender",
         "base_health": 980151,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 428563
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 220616,
+        "dungeon_id": 111,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 92709,
+        "encounter_id": null,
+        "name": "Corridor Sleeper",
+        "base_health": 0,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -621,6 +883,38 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 424322
+            },
+            {
+                "spell_id": 426779
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 221300,
+        "dungeon_id": 111,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 119788,
+        "encounter_id": null,
+        "name": "Direweb Ritualist",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
         "npc_spells": [],
         "npc_enemy_forces": []
     },
@@ -646,7 +940,14 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 424322
+            },
+            {
+                "spell_id": 426779
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -721,7 +1022,14 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 424322
+            },
+            {
+                "spell_id": 426779
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -784,6 +1092,56 @@
         "encounter_id": null,
         "name": "Blazing Fiend",
         "base_health": 3920606,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 225308,
+        "dungeon_id": 111,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 120263,
+        "encounter_id": null,
+        "name": "Stubling",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 230119,
+        "dungeon_id": 111,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 118700,
+        "encounter_id": null,
+        "name": "Direweb Skyrazor",
+        "base_health": 0,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,

@@ -46,6 +46,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
     public const SPECIAL_EVENT_WORLD_MARKER_PLACED    = 'WORLD_MARKER_PLACED';
     public const SPECIAL_EVENT_WORLD_MARKER_REMOVED   = 'WORLD_MARKER_REMOVED';
     public const SPECIAL_EVENT_STAGGER_CLEAR          = 'STAGGER_CLEAR';
+    public const SPECIAL_EVENT_STAGGER_PREVENTED      = 'STAGGER_PREVENTED';
 
     public const SPECIAL_EVENT_ALL = [
         self::SPECIAL_EVENT_COMBAT_LOG_VERSION,
@@ -81,6 +82,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_WORLD_MARKER_REMOVED,
 
         self::SPECIAL_EVENT_STAGGER_CLEAR,
+        self::SPECIAL_EVENT_STAGGER_PREVENTED,
     ];
 
     private const SPECIAL_EVENT_CLASS_MAPPING = [
@@ -108,7 +110,8 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_WORLD_MARKER_PLACED  => WorldMarkerPlaced::class,
         self::SPECIAL_EVENT_WORLD_MARKER_REMOVED => WorldMarkerRemoved::class,
 
-        self::SPECIAL_EVENT_STAGGER_CLEAR => StaggerClear::class,
+        self::SPECIAL_EVENT_STAGGER_CLEAR     => StaggerClear::class,
+        self::SPECIAL_EVENT_STAGGER_PREVENTED => StaggerPrevented::class,
     ];
 
     private const SPECIAL_EVENT_BUILDER_CLASS_MAPPING = [

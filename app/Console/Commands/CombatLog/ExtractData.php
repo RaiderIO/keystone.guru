@@ -4,6 +4,7 @@ namespace App\Console\Commands\CombatLog;
 
 use App\Models\CombatLog\ParsedCombatLog;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
+use Illuminate\Support\Collection;
 
 class ExtractData extends BaseCombatLogCommand
 {
@@ -21,6 +22,8 @@ class ExtractData extends BaseCombatLogCommand
      */
     protected $description = 'Extracts data such as floor bounding boxes, enemy health etc and applies it to the current mapping/static data.';
 
+    private array $combinedDataResult = [];
+
     /**
      * Execute the console command.
      */
@@ -28,7 +31,14 @@ class ExtractData extends BaseCombatLogCommand
     {
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->extractData($combatLogDataExtractionService, $filePath));
+        $parseResult = $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->extractData($combatLogDataExtractionService, $filePath));
+
+        $this->info('Total result:');
+        foreach ($this->combinedDataResult as $key => $value) {
+            $this->info(sprintf(' - %s: %s', $key, $value));
+        }
+
+        return $parseResult;
     }
 
     private function extractData(CombatLogDataExtractionServiceInterface $combatLogDataExtractionService, string $filePath): int
@@ -47,7 +57,11 @@ class ExtractData extends BaseCombatLogCommand
         $data   = array_filter($result->toArray());
         if (!empty($data)) {
             foreach ($data as $key => $value) {
-                // sprintf
+                if (!isset($this->combinedDataResult[$key])) {
+                    $this->combinedDataResult[$key] = 0;
+                }
+                $this->combinedDataResult[$key] += $value;
+
                 $this->info(sprintf('- %s: %s', $key, $value));
             }
         } else {

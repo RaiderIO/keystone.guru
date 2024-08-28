@@ -102,6 +102,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 1604
+            },
+            {
                 "spell_id": 438618
             },
             {

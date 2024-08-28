@@ -243,6 +243,9 @@
             },
             {
                 "dungeon_id": 117
+            },
+            {
+                "dungeon_id": 108
             }
         ]
     },
@@ -5856,6 +5859,15 @@
             },
             {
                 "dungeon_id": 115
+            },
+            {
+                "dungeon_id": 110
+            },
+            {
+                "dungeon_id": 111
+            },
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -10625,8 +10637,8 @@
         "name": "Encounter Event",
         "schools_mask": 1,
         "miss_types_mask": 0,
-        "aura": false,
-        "debuff": null,
+        "aura": true,
+        "debuff": false,
         "cast_time": null,
         "duration": null,
         "selectable": false,
@@ -10653,6 +10665,9 @@
             },
             {
                 "dungeon_id": 103
+            },
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -11500,6 +11515,29 @@
         "hidden_on_map": false,
         "fetched_data_at": null,
         "spell_dungeons": []
+    },
+    {
+        "id": 192082,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_shaman_windwalktotem",
+        "name": "Wind Rush",
+        "schools_mask": 8,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 5000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 110
+            }
+        ]
     },
     {
         "id": 192132,
@@ -89109,6 +89147,144 @@
         ]
     },
     {
+        "id": 420696,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shadow_painspike",
+        "name": "Throw Darkflame",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 421146,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shadow_painspike",
+        "name": "Throw Darkflame",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 30000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 421277,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_ironmaidens_convulsiveshadows",
+        "name": "Darkflame Pickaxe",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 6000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 421638,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_helm_misc_candle_a_01",
+        "name": "Wicklighter Barrage",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 2000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 421665,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_axe_1h_6dr_pickaxe_a_01",
+        "name": "Rock Buster",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 421817,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_helm_misc_candle_a_01",
+        "name": "Wicklighter Barrage",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 3000,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
         "id": 422233,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -89151,6 +89327,147 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 115
+            }
+        ]
+    },
+    {
+        "id": 422382,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "ability_druid_flourish",
+        "name": "Wild Growth",
+        "schools_mask": 8,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 7000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 108
+            },
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 422393,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_warlock_everlastingaffliction",
+        "name": "Suffocating Darkness",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 422414,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_fire_twilightflamestrike",
+        "name": "Shadow Smash",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 422628,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_qiraj_skinsandworm",
+        "name": "Eater of the Dead",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 12000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 422648,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_ironmaidens_convulsiveshadows",
+        "name": "Darkflame Pickaxe",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 422692,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_demonhunter_darkness",
+        "name": "Drain Light",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
             }
         ]
     },
@@ -89270,6 +89587,98 @@
         ]
     },
     {
+        "id": 423356,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_chest_armor_voidelf_d_01",
+        "name": "Null Upheaval",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 423479,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_fire_fireball02",
+        "name": "Wicklighter Bolt",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 423501,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.snared",
+        "icon_name": "inv_hammer_31",
+        "name": "Wild Wallop",
+        "schools_mask": 1,
+        "miss_types_mask": 137,
+        "aura": true,
+        "debuff": true,
+        "cast_time": 3000,
+        "duration": 4000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 423536,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_holy_holysmite",
+        "name": "Holy Smite",
+        "schools_mask": 2,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 423538,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -89289,6 +89698,52 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 115
+            }
+        ]
+    },
+    {
+        "id": 423547,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_ability_holyfire_buff",
+        "name": "Inner Fire",
+        "schools_mask": 2,
+        "miss_types_mask": 33,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 423566,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_rogue_envelopingshadows",
+        "name": "Shadowy Cloak",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
             }
         ]
     },
@@ -89316,6 +89771,98 @@
         ]
     },
     {
+        "id": 423588,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_racial_holyresistance",
+        "name": "Barrier of Light",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 423664,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_holy_fanaticism",
+        "name": "Embrace the Light",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": 604800000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 423665,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_priest_holywordlife",
+        "name": "Embrace the Light",
+        "schools_mask": 2,
+        "miss_types_mask": 1,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 5000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 423682,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_priest_archangel",
+        "name": "Embrace the Light",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 423766,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -89335,6 +89882,351 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 115
+            }
+        ]
+    },
+    {
+        "id": 423839,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.stunned",
+        "icon_name": "spell_shaman_staticshock",
+        "name": "Electrocuted",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 423981,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_priest_void-blast",
+        "name": "Implosion",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 424074,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_misc_bomb_07",
+        "name": "Flame-Scarred",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 424322,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_fire_elemental_totem",
+        "name": "Explosive Flame",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": 3000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 424414,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.bleeding",
+        "icon_name": "inv_polearm_2h_arathoroutdoor_d_01",
+        "name": "Pierce Armor",
+        "schools_mask": 1,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 1500,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 424419,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Enrage",
+        "mechanic": "spells.mechanic.enraged",
+        "icon_name": "warrior_disruptingshout",
+        "name": "Battle Cry",
+        "schools_mask": 1,
+        "miss_types_mask": 137,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 30000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 424420,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": "spells.mechanic.stunned",
+        "icon_name": "inv_misc_volatilefire",
+        "name": "Cinderblast",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 2000,
+        "duration": 5000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 424421,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_fire_flamebolt",
+        "name": "Fireball",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 424426,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.bleeding",
+        "icon_name": "inv_spear_11",
+        "name": "Lunging Strike",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 18000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 424430,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_holy_innerfire",
+        "name": "Consecration",
+        "schools_mask": 2,
+        "miss_types_mask": 33,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 424460,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shadow_rainoffire",
+        "name": "Ember Storm",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 424462,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shadow_rainoffire",
+        "name": "Ember Storm",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 424621,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.stunned",
+        "icon_name": "spell_nature_earthquake",
+        "name": "Brutal Smash",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 2000,
+        "duration": 5000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 424650,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Enrage",
+        "mechanic": "spells.mechanic.fleeing",
+        "icon_name": "spell_nzinsanity_panicattack",
+        "name": "Panicked!",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 424739,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_artifact_powerofthedarkside",
+        "name": "Chaotic Corruption",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 5000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -89381,6 +90273,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 115
+            }
+        ]
+    },
+    {
+        "id": 424821,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.gripped",
+        "icon_name": "ability_hunter_survivalinstincts",
+        "name": "High Speed Collision",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
             }
         ]
     },
@@ -89500,6 +90415,75 @@
         ]
     },
     {
+        "id": 424966,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_priest_void-blast",
+        "name": "Lingering Void",
+        "schools_mask": 8,
+        "miss_types_mask": 32,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 425011,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_holy_fanaticism",
+        "name": "Embrace the Light",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 604800000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 425018,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_ability_holyfire_debuff",
+        "name": "Overwhelming Power",
+        "schools_mask": 2,
+        "miss_types_mask": 33,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 425027,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -89523,6 +90507,236 @@
         ]
     },
     {
+        "id": 425048,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cosmicvoid_groundsate",
+        "name": "Dark Gravity",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 425052,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cosmicvoid_groundsate",
+        "name": "Dark Gravity",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 425113,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_priest_void-blast",
+        "name": "Crush Reality",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 425264,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_elemental_primal_shadow",
+        "name": "Obsidian Blast",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 113
+            }
+        ]
+    },
+    {
+        "id": 425394,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_skyreach_four_wind",
+        "name": "Dousing Breath",
+        "schools_mask": 8,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 425489,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_elemental_primal_shadow",
+        "name": "Obsidian Blast",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 113
+            }
+        ]
+    },
+    {
+        "id": 425554,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_paladin_toweroflight",
+        "name": "Purify",
+        "schools_mask": 2,
+        "miss_types_mask": 33,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 60000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 425556,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_ability_holyfire_groundstate",
+        "name": "Sanctified Ground",
+        "schools_mask": 2,
+        "miss_types_mask": 32,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 425561,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_creature_poison_01",
+        "name": "Nasty Nibble",
+        "schools_mask": 1,
+        "miss_types_mask": 193,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2100,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 425704,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Enrage",
+        "mechanic": null,
+        "icon_name": "spell_shadow_unholyfrenzy",
+        "name": "Enrage",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 30000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
         "id": 425974,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -89542,6 +90756,121 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 115
+            }
+        ]
+    },
+    {
+        "id": 426136,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_icon_shadowcouncilorb_purple",
+        "name": "Reality Tear",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 426160,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cosmicvoid_groundsate",
+        "name": "Dark Gravity",
+        "schools_mask": 32,
+        "miss_types_mask": 33,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 426171,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_artifact_powerofthedarkside",
+        "name": "Chaotic Explosion",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 426261,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_monk_breathoffire",
+        "name": "Ceaseless Flame",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": 4000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 426265,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_monk_breathoffire",
+        "name": "Ceaseless Flame",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
             }
         ]
     },
@@ -89822,6 +91151,29 @@
         ]
     },
     {
+        "id": 426677,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_fire_fireball02",
+        "name": "Candleflame Bolt",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
         "id": 426684,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -89887,6 +91239,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 103
+            }
+        ]
+    },
+    {
+        "id": 426715,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_enchant_voidsphere",
+        "name": "Collapsing Darkness",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 113
             }
         ]
     },
@@ -90071,6 +91446,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 115
+            }
+        ]
+    },
+    {
+        "id": 426779,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_fire_elemental_totem",
+        "name": "Explosive Flame",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
             }
         ]
     },
@@ -90305,6 +91703,98 @@
         ]
     },
     {
+        "id": 426883,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.stunned",
+        "icon_name": "inv_misc_volatileearth",
+        "name": "Bonk!",
+        "schools_mask": 1,
+        "miss_types_mask": 128,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 3000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 426892,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_helm_misc_candle_a_01",
+        "name": "Holding a Candle",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 426893,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_hammer_27",
+        "name": "Bounding Void",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 426896,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_helm_misc_candle_a_01",
+        "name": "Holding a Candle",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
         "id": 426905,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -90324,6 +91814,75 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 103
+            }
+        ]
+    },
+    {
+        "id": 426943,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_warlock_everlastingaffliction",
+        "name": "Rising Gloom",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 1000,
+        "duration": 600000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 426964,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_warrior_savageblow",
+        "name": "Mortal Strike",
+        "schools_mask": 1,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 1500,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 426968,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_icon_shadowcouncilorb_purple",
+        "name": "Bounding Void",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -90489,6 +92048,144 @@
         ]
     },
     {
+        "id": 427011,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_elemental_primal_shadow",
+        "name": "Shadowblast",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 6000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 427015,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_elemental_primal_shadow",
+        "name": "Shadowblast",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 427100,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "warlock_curse_shadow",
+        "name": "Umbral Slash",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 427157,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_warlock_soulswap",
+        "name": "Call Darkspawn",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 427176,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_misc_emotionsad",
+        "name": "Drain Light",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 427180,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.fleeing",
+        "icon_name": "spell_shadow_possession",
+        "name": "Fear of the Gloom",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 1000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
         "id": 427192,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -90577,6 +92274,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 102
+            }
+        ]
+    },
+    {
+        "id": 427260,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Enrage",
+        "mechanic": "spells.mechanic.enraged",
+        "icon_name": "ability_hunter_beasttaming",
+        "name": "Enrage Rook",
+        "schools_mask": 8,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 15000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -90696,6 +92416,121 @@
         ]
     },
     {
+        "id": 427342,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_defend",
+        "name": "Defend",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 5000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 427346,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "spell_holy_devineaegis",
+        "name": "Inner Fire",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 12000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 427357,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_holy_holysmite",
+        "name": "Holy Smite",
+        "schools_mask": 2,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 427359,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_defend",
+        "name": "Defend",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 427360,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_warrior_sunder",
+        "name": "Shattered Defenses",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 427361,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -90811,6 +92646,29 @@
         ]
     },
     {
+        "id": 427402,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_hammer_1h_silverhand_b_01",
+        "name": "Crackling Crush",
+        "schools_mask": 9,
+        "miss_types_mask": 201,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
         "id": 427451,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -90876,6 +92734,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 102
+            }
+        ]
+    },
+    {
+        "id": 427469,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_fire_flamebolt",
+        "name": "Fireball",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
             }
         ]
     },
@@ -91106,6 +92987,167 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 103
+            }
+        ]
+    },
+    {
+        "id": 427596,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_holy_sealofvengeance",
+        "name": "Seal of Light&apos;s Fury",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 8000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 427597,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_holy_sealofvengeance",
+        "name": "Seal of Light&apos;s Fury",
+        "schools_mask": 2,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 427609,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "warrior_disruptingshout",
+        "name": "Disrupting Shout",
+        "schools_mask": 1,
+        "miss_types_mask": 9,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 4000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 427616,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_fire_blueflamebreath",
+        "name": "Energized Barrage",
+        "schools_mask": 8,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 427621,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.bleeding",
+        "icon_name": "inv_spear_05",
+        "name": "Impale",
+        "schools_mask": 1,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 8000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 427629,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_weapon_rifle_36",
+        "name": "Shoot",
+        "schools_mask": 1,
+        "miss_types_mask": 105,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 427635,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.bleeding",
+        "icon_name": "ability_druid_ferociousbite",
+        "name": "Grievous Rip",
+        "schools_mask": 1,
+        "miss_types_mask": 9,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 15000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
             }
         ]
     },
@@ -91386,6 +93428,29 @@
         ]
     },
     {
+        "id": 427897,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": "spells.mechanic.snared",
+        "icon_name": "ability_rhyolith_lavapool",
+        "name": "Heat Wave",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 1500,
+        "duration": 3000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 427899,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -91405,6 +93470,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 102
+            }
+        ]
+    },
+    {
+        "id": 427900,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_rhyolith_lavapool",
+        "name": "Molten Pool",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
             }
         ]
     },
@@ -91455,6 +93543,121 @@
         ]
     },
     {
+        "id": 427929,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Disease",
+        "mechanic": null,
+        "icon_name": "ability_creature_poison_01",
+        "name": "Nasty Nibble",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 15000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 427950,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_shaman_lavalash",
+        "name": "Seal of Flame",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": 15000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 427951,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_shaman_lavalash",
+        "name": "Seal of Flame",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 427955,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_hammer_31",
+        "name": "Wild Wallop",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": 7500,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 428019,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "ability_mage_hotstreak",
+        "name": "Flashpoint",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 750,
+        "duration": 8000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
         "id": 428054,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -91474,6 +93677,52 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 103
+            }
+        ]
+    },
+    {
+        "id": 428064,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_druid_tigersroar",
+        "name": "Overpowered",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 428066,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_druid_tigersroar",
+        "name": "Overpowering Roar",
+        "schools_mask": 1,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
             }
         ]
     },
@@ -91543,6 +93792,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 113
+            }
+        ]
+    },
+    {
+        "id": 428089,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_stone_10",
+        "name": "Throw Rock",
+        "schools_mask": 1,
+        "miss_types_mask": 73,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
             }
         ]
     },
@@ -91681,6 +93953,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 102
+            }
+        ]
+    },
+    {
+        "id": 428151,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_priest_reflectiveshield",
+        "name": "Reflective Shield",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
             }
         ]
     },
@@ -91842,6 +94137,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 103
+            }
+        ]
+    },
+    {
+        "id": 428269,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_netherportal",
+        "name": "Reshape",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 15000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -92306,6 +94624,29 @@
         ]
     },
     {
+        "id": 428563,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_fire_fireball02",
+        "name": "Flame Bolt",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 4000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
         "id": 428594,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -92697,6 +95038,29 @@
         ]
     },
     {
+        "id": 428916,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "spell_holy_devineaegis",
+        "name": "Inner Fire",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 428926,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -92973,6 +95337,29 @@
         ]
     },
     {
+        "id": 429091,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "spell_holy_devineaegis",
+        "name": "Inner Fire",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 429109,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -93180,6 +95567,52 @@
         ]
     },
     {
+        "id": 429493,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cosmicvoid_missile",
+        "name": "Unleash Corruption",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 429521,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cosmicvoid_missile",
+        "name": "Unleash Corruption",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
         "id": 429545,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -93226,6 +95659,29 @@
         ]
     },
     {
+        "id": 430013,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_nature_unrelentingstorm",
+        "name": "Thunderstrike",
+        "schools_mask": 8,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
         "id": 430097,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -93268,6 +95724,282 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 115
+            }
+        ]
+    },
+    {
+        "id": 430109,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_nature_lightning",
+        "name": "Lightning Bolt",
+        "schools_mask": 8,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 430125,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_shield_1h_artifactstormfist_d_05",
+        "name": "Entropy Shield",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 4000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 430171,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_fire_felflamering_red",
+        "name": "Quenching Blast",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2700,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 430179,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Curse",
+        "mechanic": null,
+        "icon_name": "inv_enchant_voidsphere",
+        "name": "Seeping Corruption",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 1500,
+        "duration": 8000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 430238,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cosmicvoid_nova",
+        "name": "Void Bolt",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 430282,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cosmicvoid_nova",
+        "name": "Crushing Darkness",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 430288,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cosmicvoid_nova",
+        "name": "Crushing Darkness",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 430754,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "spell_shadow_mindtwisting",
+        "name": "Void Shell",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 15000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 430758,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shadow_mindtwisting",
+        "name": "Void Shell",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 430805,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_priest_voidsear",
+        "name": "Arcing Void",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 430812,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_mage_arcaneorb",
+        "name": "Attracting Shadows",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": 3000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 430814,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_mage_arcaneorb",
+        "name": "Attracting Shadows",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -93640,6 +96372,52 @@
         ]
     },
     {
+        "id": 431896,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_fomor_boss_shout",
+        "name": "Rowdy Yell",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": 3600000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 431897,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_fomor_boss_shout",
+        "name": "Rowdy Yell",
+        "schools_mask": 1,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 3000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 431985,
         "category": null,
         "cooldown_group": null,
@@ -93694,7 +96472,7 @@
         "icon_name": "inv_cosmicvoid_orb",
         "name": "Cosmic Singularity",
         "schools_mask": 32,
-        "miss_types_mask": 32,
+        "miss_types_mask": 33,
         "aura": false,
         "debuff": false,
         "cast_time": null,
@@ -93778,6 +96556,52 @@
         ]
     },
     {
+        "id": 432182,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_brew_bolt_wheat",
+        "name": "Throw Cinderbrew",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 9000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 432196,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shaman_lavasurge",
+        "name": "Hot Honey",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 432227,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -93797,6 +96621,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 108
+            }
+        ]
+    },
+    {
+        "id": 432229,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cask_03",
+        "name": "Keg Smash",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -93832,7 +96679,7 @@
         "icon_name": "spell_shadow_mindtwisting",
         "name": "Stygian Seed",
         "schools_mask": 32,
-        "miss_types_mask": 0,
+        "miss_types_mask": 1,
         "aura": false,
         "debuff": false,
         "cast_time": null,
@@ -93901,7 +96748,7 @@
         "icon_name": "inv_jewelcrafting_shadowspirit_02",
         "name": "Black Hail",
         "schools_mask": 32,
-        "miss_types_mask": 0,
+        "miss_types_mask": 1,
         "aura": false,
         "debuff": false,
         "cast_time": null,
@@ -93912,6 +96759,75 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 113
+            }
+        ]
+    },
+    {
+        "id": 432781,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shadow_summonvoidwalker",
+        "name": "Embrace the Void",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 30000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 432903,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shadow_summonvoidwalker",
+        "name": "Embrace the Void",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 432959,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_mage_arcanebarrage",
+        "name": "Void Volley",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -93958,6 +96874,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 108
+            }
+        ]
+    },
+    {
+        "id": 433078,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_priest_void-blast",
+        "name": "Implosion",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -94131,7 +97070,7 @@
         "icon_name": "ability_demonhunter_soulcleave4",
         "name": "Grasping Slash",
         "schools_mask": 1,
-        "miss_types_mask": 72,
+        "miss_types_mask": 201,
         "aura": false,
         "debuff": true,
         "cast_time": null,
@@ -94430,7 +97369,7 @@
         "icon_name": "ability_creature_poison_02",
         "name": "Venomous Spray",
         "schools_mask": 8,
-        "miss_types_mask": 32,
+        "miss_types_mask": 33,
         "aura": false,
         "debuff": false,
         "cast_time": null,
@@ -94602,6 +97541,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 108
+            }
+        ]
+    },
+    {
+        "id": 434432,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_icon_feather01d",
+        "name": "Lightning Charge",
+        "schools_mask": 8,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 300000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -94813,6 +97775,124 @@
         ]
     },
     {
+        "id": 434743,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_helm_armor_chefhat_b_01",
+        "name": "Compliments of the Chef",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 108
+            }
+        ]
+    },
+    {
+        "id": 434745,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_helm_armor_chefhat_b_01",
+        "name": "Compliments of the Chef",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 108
+            },
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 434756,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_nature_strength",
+        "name": "Throw Chair",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 434758,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_nature_strength",
+        "name": "Throw Chair",
+        "schools_mask": 1,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 434773,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.bleeding",
+        "icon_name": "inv_misc_1h_earthenmug_b_01",
+        "name": "Mean Mug",
+        "schools_mask": 1,
+        "miss_types_mask": 137,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 1000,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 434779,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -94936,7 +98016,7 @@
         "icon_name": "inv_ability_web_wave",
         "name": "Web Spray",
         "schools_mask": 1,
-        "miss_types_mask": 0,
+        "miss_types_mask": 1,
         "aura": false,
         "debuff": false,
         "cast_time": null,
@@ -95005,7 +98085,7 @@
         "icon_name": "ability_warlock_everlastingaffliction",
         "name": "Lingering Influence",
         "schools_mask": 32,
-        "miss_types_mask": 0,
+        "miss_types_mask": 33,
         "aura": false,
         "debuff": true,
         "cast_time": null,
@@ -95016,6 +98096,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 110
+            }
+        ]
+    },
+    {
+        "id": 435000,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cooking_80_thickpaleosteak",
+        "name": "High Steaks",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 3000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -95043,6 +98146,29 @@
         ]
     },
     {
+        "id": 435148,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "spell_holy_crusaderstrike",
+        "name": "Blazing Strike",
+        "schools_mask": 2,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 1500,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 435151,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -95066,6 +98192,52 @@
         ]
     },
     {
+        "id": 435156,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_holy_holyguidance",
+        "name": "Light Expulsion",
+        "schools_mask": 2,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 435165,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_holy_crusaderstrike",
+        "name": "Blazing Strike",
+        "schools_mask": 2,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 1500,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 435193,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -95085,6 +98257,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 108
+            }
+        ]
+    },
+    {
+        "id": 435788,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_vehicle_liquidpyrite",
+        "name": "Cinder-BOOM!",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -95200,6 +98395,98 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 108
+            }
+        ]
+    },
+    {
+        "id": 436592,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_ore_gold_nugget",
+        "name": "Cash Cannon",
+        "schools_mask": 1,
+        "miss_types_mask": 8,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 436624,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_ore_gold_nugget",
+        "name": "Cash Cannon",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 3000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 436640,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "ability_vehicle_demolisherflamecatapult",
+        "name": "Burning Ricochet",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 436644,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_vehicle_demolisherflamecatapult",
+        "name": "Burning Ricochet",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -95342,6 +98629,29 @@
         ]
     },
     {
+        "id": 437721,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_mage_firestarter",
+        "name": "Boiling Flames",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 500,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 437730,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -95361,6 +98671,52 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 69
+            }
+        ]
+    },
+    {
+        "id": 437733,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_mage_firestarter",
+        "name": "Boiling Flames",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 437956,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "ability_mage_livingbomb",
+        "name": "Erupting Inferno",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 1000,
+        "duration": 9000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -95503,6 +98859,29 @@
         ]
     },
     {
+        "id": 438601,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_maldraxxusslime_red",
+        "name": "Black Blood",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 110
+            }
+        ]
+    },
+    {
         "id": 438618,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -95557,7 +98936,7 @@
         "icon_name": "trade_engineering",
         "name": "Toxic Rupture",
         "schools_mask": 8,
-        "miss_types_mask": 0,
+        "miss_types_mask": 1,
         "aura": false,
         "debuff": false,
         "cast_time": null,
@@ -95683,6 +99062,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 108
+            }
+        ]
+    },
+    {
+        "id": 438848,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shadow_summonvoidwalker",
+        "name": "Embrace the Void",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -95890,6 +99292,52 @@
         ]
     },
     {
+        "id": 439010,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_demonhunter_darkness",
+        "name": "Drain Light",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 439031,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_relics_totemofrage",
+        "name": "Bottoms Uppercut",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 439040,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -95978,6 +99426,29 @@
         ]
     },
     {
+        "id": 439325,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "spell_brew_bolt_wheat",
+        "name": "Burning Fermentation",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 16000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 439333,
         "category": null,
         "cooldown_group": null,
@@ -96020,6 +99491,29 @@
         ]
     },
     {
+        "id": 439365,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_creature_amber_01",
+        "name": "Spouting Stout",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 8000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 439401,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -96039,6 +99533,52 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 110
+            }
+        ]
+    },
+    {
+        "id": 439403,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_warrior_battleshout",
+        "name": "Field Promotion",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 120000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 439468,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.bleeding",
+        "icon_name": "ability_heroicleap",
+        "name": "Downward Trend",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 12000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -96250,6 +99790,29 @@
         ]
     },
     {
+        "id": 439645,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_creature_amber_01",
+        "name": "Spouting Stout",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 439646,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -96327,7 +99890,7 @@
         "icon_name": "ability_rogue_shadowyduel",
         "name": "Shade Slash",
         "schools_mask": 32,
-        "miss_types_mask": 0,
+        "miss_types_mask": 1,
         "aura": false,
         "debuff": false,
         "cast_time": 0,
@@ -96373,7 +99936,7 @@
         "icon_name": "spell_shadow_deathsembrace",
         "name": "Duskbringer",
         "schools_mask": 32,
-        "miss_types_mask": 64,
+        "miss_types_mask": 65,
         "aura": false,
         "debuff": false,
         "cast_time": null,
@@ -96480,6 +100043,29 @@
         ]
     },
     {
+        "id": 439991,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_creature_amber_01",
+        "name": "Spouting Stout",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 440049,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -96522,6 +100108,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 110
+            }
+        ]
+    },
+    {
+        "id": 440147,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_brew_wheat",
+        "name": "Fill &apos;Er Up",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -96580,7 +100189,7 @@
         "icon_name": "spell_priest_voidsear",
         "name": "Chains of Oppression",
         "schools_mask": 32,
-        "miss_types_mask": 0,
+        "miss_types_mask": 32,
         "aura": false,
         "debuff": true,
         "cast_time": null,
@@ -96687,6 +100296,121 @@
         ]
     },
     {
+        "id": 440652,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_helm_misc_candle_a_01",
+        "name": "Surging Wax",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 3500,
+        "duration": 12000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 440653,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_helm_misc_candle_a_01",
+        "name": "Surging Wax",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 440687,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "misc_2h_honeydipper_b_01_icon",
+        "name": "Honey Volley",
+        "schools_mask": 8,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 2000,
+        "duration": 8000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 440887,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cooking_80_choralhoney",
+        "name": "Rain of Honey",
+        "schools_mask": 8,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 441119,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_10_engineering2_pvpflaregun_color1",
+        "name": "Bee-Zooka",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 441131,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -96706,6 +100430,98 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 108
+            }
+        ]
+    },
+    {
+        "id": 441171,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shaman_lavasurge",
+        "name": "Oozing Honey",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 20000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 441179,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shaman_lavasurge",
+        "name": "Oozing Honey",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 441214,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Enrage",
+        "mechanic": "spells.mechanic.enraged",
+        "icon_name": "inv_drink_13",
+        "name": "Spill Drink",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": 20000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 441242,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_holiday_brewfestbuff_01",
+        "name": "Free Samples?",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -96825,6 +100641,52 @@
         ]
     },
     {
+        "id": 441344,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_10_engineering2_pvpflaregun_color1",
+        "name": "Bee-Zooka",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 441353,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_druid_ferociousbite",
+        "name": "Bee-stial Wrath",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 15000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 441381,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -96913,6 +100775,167 @@
         ]
     },
     {
+        "id": 441397,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "inv_bee_default",
+        "name": "Bee Venom",
+        "schools_mask": 8,
+        "miss_types_mask": 73,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 16000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 441408,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Enrage",
+        "mechanic": null,
+        "icon_name": "ability_fomor_boss_shout",
+        "name": "Thirsty",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 441410,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_beemount",
+        "name": "Shredding Sting",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 441413,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_beemount",
+        "name": "Shredding Sting",
+        "schools_mask": 1,
+        "miss_types_mask": 73,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 441627,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "spell_brew_wheat",
+        "name": "Rejuvenating Honey",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": 18000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 442108,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_brew_wheat",
+        "name": "Fill &apos;Er Up",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 442192,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_priest_cascade_shadow",
+        "name": "Oppressive Void",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
         "id": 442210,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -96932,6 +100955,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 108
+            }
+        ]
+    },
+    {
+        "id": 442224,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_nature_sleep",
+        "name": "Dormant",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
             }
         ]
     },
@@ -96959,6 +101005,75 @@
         ]
     },
     {
+        "id": 442355,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_offhand_1h_artifactdoomhammer_d_02",
+        "name": "Storm&apos;s Vengeance",
+        "schools_mask": 8,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 4000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 442484,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_legendary_gun",
+        "name": "Let It Hail!",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 442525,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ui_embercourt-emoji-elated",
+        "name": "Happy Hour",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 3600000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 442536,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -96978,6 +101093,75 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 110
+            }
+        ]
+    },
+    {
+        "id": 442589,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": "spells.mechanic.stunned",
+        "icon_name": "inv_cooking_80_honeyglazedhaunch",
+        "name": "Beeswax",
+        "schools_mask": 8,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 3000,
+        "duration": 3000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 442611,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_racial_brushitoff",
+        "name": "Disregard",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 442995,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_ability_honey_nova",
+        "name": "Swarming Surprise",
+        "schools_mask": 1,
+        "miss_types_mask": 9,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 3000,
+        "duration": 30000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -97082,7 +101266,7 @@
         "icon_name": "inv_ability_web_missile",
         "name": "Web Bolt",
         "schools_mask": 8,
-        "miss_types_mask": 0,
+        "miss_types_mask": 1,
         "aura": false,
         "debuff": true,
         "cast_time": null,
@@ -97243,7 +101427,7 @@
         "icon_name": "ability_rogue_envelopingshadows",
         "name": "Shadows of Doubt",
         "schools_mask": 32,
-        "miss_types_mask": 32,
+        "miss_types_mask": 33,
         "aura": false,
         "debuff": true,
         "cast_time": null,
@@ -97281,6 +101465,52 @@
         ]
     },
     {
+        "id": 443487,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_demonhunter_demonspikes2",
+        "name": "Final Sting",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 443491,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_demonhunter_demonspikes2",
+        "name": "Final Sting",
+        "schools_mask": 4,
+        "miss_types_mask": 72,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 443494,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -97312,7 +101542,7 @@
         "icon_name": "spell_nature_earthquake",
         "name": "Earthshatter",
         "schools_mask": 8,
-        "miss_types_mask": 0,
+        "miss_types_mask": 1,
         "aura": false,
         "debuff": false,
         "cast_time": null,
@@ -97396,6 +101626,52 @@
         ]
     },
     {
+        "id": 443847,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cosmicvoid_groundsate",
+        "name": "Instability",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
+        "id": 443854,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cosmicvoid_groundsate",
+        "name": "Instability",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 3000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
         "id": 443954,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -97415,6 +101691,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 115
+            }
+        ]
+    },
+    {
+        "id": 443969,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_summerfest_firespirit",
+        "name": "Enkindling Inferno",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
             }
         ]
     },
@@ -97442,6 +101741,190 @@
         ]
     },
     {
+        "id": 444546,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_paladin_toweroflight",
+        "name": "Purify",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 3000,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 444608,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_ability_holyfire_buff",
+        "name": "Inner Fire",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 12000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 444609,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_priest_holybolts01",
+        "name": "Stoke the Flame",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 2000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 444705,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_paladin_divinestorm",
+        "name": "Divine Storm",
+        "schools_mask": 2,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 1500,
+        "duration": 5000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 444722,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_holy_crusaderstrike",
+        "name": "Templar Strike",
+        "schools_mask": 2,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 444728,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "spell_holy_avenginewrath",
+        "name": "Templar&apos;s Wrath",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 20000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 444741,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shadow_antimagicshell",
+        "name": "Anti-Magic Shell",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 5000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 113
+            }
+        ]
+    },
+    {
+        "id": 444743,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_fire_fireball02",
+        "name": "Fireball Volley",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 445207,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -97465,6 +101948,29 @@
         ]
     },
     {
+        "id": 445262,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cosmicvoid_buff",
+        "name": "Void Shell",
+        "schools_mask": 127,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
         "id": 445409,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -97484,6 +101990,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 115
+            }
+        ]
+    },
+    {
+        "id": 445537,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cosmicvoid_wave",
+        "name": "Oblivion Wave",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -97588,9 +102117,9 @@
         "icon_name": "ability_bossfelmagnaron_waveempowered",
         "name": "Void Wave",
         "schools_mask": 32,
-        "miss_types_mask": 0,
+        "miss_types_mask": 1,
         "aura": false,
-        "debuff": null,
+        "debuff": true,
         "cast_time": null,
         "duration": null,
         "selectable": false,
@@ -97657,7 +102186,7 @@
         "icon_name": "inv_misc_web_02",
         "name": "Umbral Weave",
         "schools_mask": 32,
-        "miss_types_mask": 0,
+        "miss_types_mask": 1,
         "aura": false,
         "debuff": true,
         "cast_time": null,
@@ -97714,6 +102243,110 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 108
+            }
+        ]
+    },
+    {
+        "id": 447046,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "misc_2h_honeydipper_b_01_icon",
+        "name": "Secret Ingredient",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 604800000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 108
+            },
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 447060,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "misc_2h_honeydipper_b_01_icon",
+        "name": "Secret Ingredient",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 604800000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 108
+            },
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 447135,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "misc_2h_honeydipper_b_01_icon",
+        "name": "Secret Ingredient",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 108
+            },
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 447136,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "misc_2h_honeydipper_b_01_icon",
+        "name": "Secret Ingredient",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 108
+            },
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -97856,6 +102489,29 @@
         ]
     },
     {
+        "id": 447272,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.bleeding",
+        "icon_name": "inv_spear_01",
+        "name": "Hurl Spear",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 8000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 447395,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -97875,6 +102531,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 116
+            }
+        ]
+    },
+    {
+        "id": 447439,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_arathilynxmount_black",
+        "name": "Savage Mauling",
+        "schools_mask": 1,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 30000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
             }
         ]
     },
@@ -98132,6 +102811,75 @@
         ]
     },
     {
+        "id": 448485,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_warrior_shieldbash",
+        "name": "Shield Slam",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 448492,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.snared",
+        "icon_name": "ability_thunderclap",
+        "name": "Thunderclap",
+        "schools_mask": 8,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 1000,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 448515,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_holy_righteousfury",
+        "name": "Divine Judgment",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 1000,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 448560,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -98224,6 +102972,29 @@
         ]
     },
     {
+        "id": 448619,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_warrior_victoryrush",
+        "name": "Reckless Delivery",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 4000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 448640,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -98243,6 +103014,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 115
+            }
+        ]
+    },
+    {
+        "id": 448791,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_bastion_paladin",
+        "name": "Sacred Toll",
+        "schools_mask": 2,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
             }
         ]
     },
@@ -98385,6 +103179,52 @@
         ]
     },
     {
+        "id": 448920,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_warrior_victoryrush",
+        "name": "Reckless Delivery",
+        "schools_mask": 1,
+        "miss_types_mask": 72,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 448935,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_warrior_victoryrush",
+        "name": "Reckless Delivery",
+        "schools_mask": 1,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 448953,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -98431,6 +103271,29 @@
         ]
     },
     {
+        "id": 448977,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_frost_stun",
+        "name": "Stunned",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 3000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 449026,
         "category": null,
         "cooldown_group": null,
@@ -98473,6 +103336,55 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 115
+            }
+        ]
+    },
+    {
+        "id": 449090,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_warrior_victoryrush",
+        "name": "Reckless Delivery",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 4000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 449106,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_cask_03",
+        "name": "Delicate Brew Barrel",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 108
+            },
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -98841,6 +103753,29 @@
         "spell_dungeons": []
     },
     {
+        "id": 449702,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shaman_lavasurge",
+        "name": "Oozing Honey",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 20000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 449734,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -99201,6 +104136,29 @@
         ]
     },
     {
+        "id": 450628,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_shield_1h_artifactstormfist_d_05",
+        "name": "Entropy Shield",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
         "id": 450756,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -99232,7 +104190,7 @@
         "icon_name": "inv_potion_103",
         "name": "Perfume Toss",
         "schools_mask": 8,
-        "miss_types_mask": 0,
+        "miss_types_mask": 1,
         "aura": false,
         "debuff": true,
         "cast_time": null,
@@ -99649,7 +104607,7 @@
         "icon_name": "ability_ironmaidens_convulsiveshadows",
         "name": "Congealed Shadow",
         "schools_mask": 32,
-        "miss_types_mask": 0,
+        "miss_types_mask": 1,
         "aura": false,
         "debuff": false,
         "cast_time": 3000,
@@ -100249,7 +105207,7 @@
         "schools_mask": 32,
         "miss_types_mask": 0,
         "aura": false,
-        "debuff": null,
+        "debuff": false,
         "cast_time": null,
         "duration": null,
         "selectable": false,
@@ -100258,6 +105216,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 110
+            }
+        ]
+    },
+    {
+        "id": 451606,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "inv_ability_holyfire_missile",
+        "name": "Holy Flame",
+        "schools_mask": 2,
+        "miss_types_mask": 33,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 12000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
             }
         ]
     },
@@ -100373,6 +105354,52 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 116
+            }
+        ]
+    },
+    {
+        "id": 451763,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_holy_auramastery",
+        "name": "Radiant Flame",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
+        "id": 451764,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_holy_auramastery",
+        "name": "Radiant Flame",
+        "schools_mask": 2,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
             }
         ]
     },
@@ -100699,6 +105726,29 @@
         ]
     },
     {
+        "id": 452932,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_mage_arcaneorb",
+        "name": "Attracting Shadows",
+        "schools_mask": 32,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
         "id": 453140,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -100929,6 +105979,29 @@
         ]
     },
     {
+        "id": 453461,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.bleeding",
+        "icon_name": "ability_hunter_traplauncher",
+        "name": "Caltrops",
+        "schools_mask": 1,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 453583,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -100977,6 +106050,29 @@
             },
             {
                 "dungeon_id": 110
+            }
+        ]
+    },
+    {
+        "id": 453773,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_deathknight_subversion",
+        "name": "Pact of the Apocalypse",
+        "schools_mask": 32,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 113
             }
         ]
     },
@@ -101042,6 +106138,107 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 113
+            }
+        ]
+    },
+    {
+        "id": 453909,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_mage_firestarter",
+        "name": "Boiling Flames",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 108
+            },
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 453989,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_mage_firestarter",
+        "name": "Boiling Flames",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 108
+            },
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 454318,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_mage_firestarter",
+        "name": "Boiling Flames",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 108
+            },
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 454319,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_mage_firestarter",
+        "name": "Boiling Flames",
+        "schools_mask": 4,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -101134,6 +106331,41 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 18
+            }
+        ]
+    },
+    {
+        "id": 454782,
+        "category": "spells.category.priest",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_inscriptions_darkmoondeckshine_0",
+        "name": "Radiant Focus",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 15000,
+        "selectable": false,
+        "hidden_on_map": true,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 108
+            },
+            {
+                "dungeon_id": 109
+            },
+            {
+                "dungeon_id": 110
+            },
+            {
+                "dungeon_id": 112
+            },
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -101391,6 +106623,29 @@
         ]
     },
     {
+        "id": 456891,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_misc_ammo_arrow_05",
+        "name": "Shoot",
+        "schools_mask": 1,
+        "miss_types_mask": 73,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 1500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
         "id": 456900,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -101506,6 +106761,52 @@
         ]
     },
     {
+        "id": 457913,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_relics_totemoflife",
+        "name": "Wind at Your Back",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 3600000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 111
+            }
+        ]
+    },
+    {
+        "id": 458082,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_nature_unrelentingstorm",
+        "name": "Stormrider&apos;s Charge",
+        "schools_mask": 8,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
+            }
+        ]
+    },
+    {
         "id": 458820,
         "category": null,
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -101594,6 +106895,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 113
+            }
+        ]
+    },
+    {
+        "id": 460190,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_offhand_1h_artifactdoomhammer_d_02",
+        "name": "Storm&apos;s Vengeance",
+        "schools_mask": 8,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 10000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -101758,6 +107082,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 117
+            }
+        ]
+    },
+    {
+        "id": 461081,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "trade_engineering",
+        "name": "Lightning Swirl",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
             }
         ]
     },
@@ -102521,6 +107868,29 @@
         ]
     },
     {
+        "id": 462859,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_firearm_2h_arathoroutdoor_d_01",
+        "name": "Pot Shot",
+        "schools_mask": 1,
+        "miss_types_mask": 40,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 463145,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -102563,6 +107933,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 18
+            }
+        ]
+    },
+    {
+        "id": 463206,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_nature_earthquake",
+        "name": "Tenderize",
+        "schools_mask": 1,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2500,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -102632,6 +108025,75 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 30
+            }
+        ]
+    },
+    {
+        "id": 463218,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_vehicle_liquidpyrite",
+        "name": "Volatile Keg",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 463220,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_vehicle_liquidpyrite",
+        "name": "Volatile Keg",
+        "schools_mask": 4,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 8000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
+            }
+        ]
+    },
+    {
+        "id": 463227,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": "spells.mechanic.bleeding",
+        "icon_name": "inv_misc_wailingbone",
+        "name": "Splintered",
+        "schools_mask": 1,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": true,
+        "cast_time": 0,
+        "duration": 6000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -102904,6 +108366,29 @@
         ]
     },
     {
+        "id": 464240,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_priest_reflectiveshield",
+        "name": "Reflective Shield",
+        "schools_mask": 2,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 2000,
+        "duration": 5000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 112
+            }
+        ]
+    },
+    {
         "id": 464876,
         "category": null,
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -102969,6 +108454,29 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 108
+            }
+        ]
+    },
+    {
+        "id": 465356,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "trade_engineering",
+        "name": "[DNT] Build Barricade",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": true,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-08-28T00:00:00+00:00",
+        "spell_dungeons": [
+            {
+                "dungeon_id": 114
             }
         ]
     },

@@ -30,6 +30,9 @@
                 "spell_id": 437533
             },
             {
+                "spell_id": 438601
+            },
+            {
                 "spell_id": 441289
             },
             {
@@ -594,7 +597,20 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 451218
+            },
+            {
+                "spell_id": 451222
+            },
+            {
+                "spell_id": 451295
+            },
+            {
+                "spell_id": 451543
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1649,6 +1665,31 @@
                 "enemy_forces_teeming": null
             }
         ]
+    },
+    {
+        "id": 223208,
+        "dungeon_id": 110,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 119375,
+        "encounter_id": null,
+        "name": "Favored Novice",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
     },
     {
         "id": 223254,
