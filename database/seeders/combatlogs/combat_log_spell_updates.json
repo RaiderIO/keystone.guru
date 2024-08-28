@@ -9488,5 +9488,235 @@
         "raw_event": "8\/27\/2024 20:27:57.0901  SPELL_MISSED,Creature-0-1465-2649-15485-206694-0003CE2807,\"Fervent Sharpshooter\",0x10a48,0x0,Player-1084-07AC72B6,\"Qu\u00edm-TarrenMill-EU\",0x512,0x0,462859,\"Pot Shot\",0x1,ABSORB,nil,153276,334634,nil\r\n",
         "created_at": "2024-08-28T09:53:40+00:00",
         "updated_at": "2024-08-28T09:53:40+00:00"
+    },
+    {
+        "id": 950,
+        "spell_id": 434756,
+        "before": "{\"id\": 434756, \"aura\": 0, \"name\": \"Throw Chair\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 1500, \"icon_name\": \"spell_nature_strength\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:44:04\", \"miss_types_mask\": 0}",
+        "after": "{\"id\": 434756, \"aura\": 0, \"name\": \"Throw Chair\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 1500, \"icon_name\": \"spell_nature_strength\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:44:04\", \"miss_types_mask\": 8}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/28\/2024 20:49:57.9802  SPELL_MISSED,Creature-0-4255-2661-12320-210269-0000CF70C0,\"Hired Muscle\",0xa48,0x0,Player-1084-0A5F83FA,\"Desiderion-TarrenMill-EU\",0x512,0x0,434756,\"Throw Chair\",0x1,DODGE,nil\r\n",
+        "created_at": "2024-08-28T20:31:54+00:00",
+        "updated_at": "2024-08-28T20:31:54+00:00"
+    },
+    {
+        "id": 951,
+        "spell_id": 437956,
+        "before": "{\"id\": 437956, \"aura\": 0, \"name\": \"Erupting Inferno\", \"debuff\": 1, \"category\": null, \"duration\": 9000, \"mechanic\": null, \"cast_time\": 1000, \"icon_name\": \"ability_mage_livingbomb\", \"selectable\": 0, \"dispel_type\": \"Magic\", \"schools_mask\": 4, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:43:59\", \"miss_types_mask\": 1}",
+        "after": "{\"id\": 437956, \"aura\": 0, \"name\": \"Erupting Inferno\", \"debuff\": 1, \"category\": null, \"duration\": 9000, \"mechanic\": null, \"cast_time\": 1000, \"icon_name\": \"ability_mage_livingbomb\", \"selectable\": 0, \"dispel_type\": \"Magic\", \"schools_mask\": 4, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:43:59\", \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/28\/2024 20:58:24.6452  SPELL_PERIODIC_MISSED,Creature-0-4255-2661-12320-218671-00034F70BE,\"Venture Co. Pyromaniac\",0xa48,0x0,Player-1084-0A5F83FA,\"Desiderion-TarrenMill-EU\",0x512,0x0,437956,\"Erupting Inferno\",0x4,IMMUNE,nil\r\n",
+        "created_at": "2024-08-28T20:31:56+00:00",
+        "updated_at": "2024-08-28T20:31:56+00:00"
+    },
+    {
+        "id": 952,
+        "spell_id": 440876,
+        "before": null,
+        "after": "{\"id\": 440876, \"aura\": false, \"name\": \"Rain of Honey\", \"duration\": null, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"inv_cooking_80_choralhoney\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28T20:32:01.217710Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/28\/2024 21:09:51.5752  SPELL_MISSED,Creature-0-4255-2661-12320-220141-00004F70BE,\"Royal Jelly Purveyor\",0xa48,0x0,Player-1084-0A5F8449,\"Heid\u00eeke-TarrenMill-EU\",0x512,0x0,440876,\"Rain of Honey\",0x1,IMMUNE,nil\r\n",
+        "created_at": "2024-08-28T20:32:01+00:00",
+        "updated_at": "2024-08-28T20:32:01+00:00"
+    },
+    {
+        "id": 953,
+        "spell_id": 440876,
+        "before": "{\"id\": 440876, \"aura\": 0, \"name\": \"Rain of Honey\", \"duration\": null, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"inv_cooking_80_choralhoney\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28T20:32:01.217710Z\"}",
+        "after": "{\"id\": 440876, \"aura\": 0, \"name\": \"Rain of Honey\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"inv_cooking_80_choralhoney\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28T20:32:01.217710Z\", \"miss_types_mask\": 32}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/28\/2024 21:09:51.5752  SPELL_MISSED,Creature-0-4255-2661-12320-220141-00004F70BE,\"Royal Jelly Purveyor\",0xa48,0x0,Player-1084-0A5F8449,\"Heid\u00eeke-TarrenMill-EU\",0x512,0x0,440876,\"Rain of Honey\",0x1,IMMUNE,nil\r\n",
+        "created_at": "2024-08-28T20:32:01+00:00",
+        "updated_at": "2024-08-28T20:32:01+00:00"
+    },
+    {
+        "id": 954,
+        "spell_id": 442995,
+        "before": "{\"id\": 442995, \"aura\": 0, \"name\": \"Swarming Surprise\", \"debuff\": 1, \"category\": null, \"duration\": 30000, \"mechanic\": null, \"cast_time\": 3000, \"icon_name\": \"inv_ability_honey_nova\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:42:59\", \"miss_types_mask\": 9}",
+        "after": "{\"id\": 442995, \"aura\": 0, \"name\": \"Swarming Surprise\", \"debuff\": 1, \"category\": null, \"duration\": 30000, \"mechanic\": null, \"cast_time\": 3000, \"icon_name\": \"inv_ability_honey_nova\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:42:59\", \"miss_types_mask\": 41}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/28\/2024 21:09:52.5572  SPELL_MISSED,Creature-0-4255-2661-12320-220946-0000CF70BF,\"Venture Co. Honey Harvester\",0xa48,0x0,Player-1084-0A5F8449,\"Heid\u00eeke-TarrenMill-EU\",0x512,0x0,442995,\"Swarming Surprise\",0x1,IMMUNE,nil\r\n",
+        "created_at": "2024-08-28T20:32:01+00:00",
+        "updated_at": "2024-08-28T20:32:01+00:00"
+    },
+    {
+        "id": 955,
+        "spell_id": 440687,
+        "before": "{\"id\": 440687, \"aura\": 0, \"name\": \"Honey Volley\", \"debuff\": 1, \"category\": null, \"duration\": 8000, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"misc_2h_honeydipper_b_01_icon\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:43:01\", \"miss_types_mask\": 1}",
+        "after": "{\"id\": 440687, \"aura\": 0, \"name\": \"Honey Volley\", \"debuff\": 1, \"category\": null, \"duration\": 8000, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"misc_2h_honeydipper_b_01_icon\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:43:01\", \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/28\/2024 21:09:55.3452  SPELL_MISSED,Creature-0-4255-2661-12320-220141-00004F70BE,\"Royal Jelly Purveyor\",0xa48,0x0,Player-1084-0A5F8449,\"Heid\u00eeke-TarrenMill-EU\",0x512,0x0,440687,\"Honey Volley\",0x8,IMMUNE,nil\r\n",
+        "created_at": "2024-08-28T20:32:01+00:00",
+        "updated_at": "2024-08-28T20:32:01+00:00"
+    },
+    {
+        "id": 956,
+        "spell_id": 442995,
+        "before": "{\"id\": 442995, \"aura\": 0, \"name\": \"Swarming Surprise\", \"debuff\": 1, \"category\": null, \"duration\": 30000, \"mechanic\": null, \"cast_time\": 3000, \"icon_name\": \"inv_ability_honey_nova\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:42:59\", \"miss_types_mask\": 41}",
+        "after": "{\"id\": 442995, \"aura\": 0, \"name\": \"Swarming Surprise\", \"debuff\": 1, \"category\": null, \"duration\": 30000, \"mechanic\": null, \"cast_time\": 3000, \"icon_name\": \"inv_ability_honey_nova\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:42:59\", \"miss_types_mask\": 105}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/28\/2024 21:12:36.8292  SPELL_MISSED,Creature-0-4255-2661-12320-220946-00004F70BF,\"Venture Co. Honey Harvester\",0xa48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,442995,\"Swarming Surprise\",0x1,MISS,nil\r\n",
+        "created_at": "2024-08-28T20:32:02+00:00",
+        "updated_at": "2024-08-28T20:32:02+00:00"
+    },
+    {
+        "id": 957,
+        "spell_id": 439468,
+        "before": "{\"id\": 439468, \"aura\": 0, \"name\": \"Downward Trend\", \"debuff\": 1, \"category\": null, \"duration\": 12000, \"mechanic\": \"spells.mechanic.bleeding\", \"cast_time\": 0, \"icon_name\": \"ability_heroicleap\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:43:24\", \"miss_types_mask\": 0}",
+        "after": "{\"id\": 439468, \"aura\": 0, \"name\": \"Downward Trend\", \"debuff\": 1, \"category\": null, \"duration\": 12000, \"mechanic\": \"spells.mechanic.bleeding\", \"cast_time\": 0, \"icon_name\": \"ability_heroicleap\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:43:24\", \"miss_types_mask\": 1}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery-2.zip",
+        "raw_event": "8\/28\/2024 21:20:54.6012  SPELL_MISSED,Creature-0-4255-2661-12320-219588-0000CF782A,\"Yes Man\",0xa48,0x0,Player-1084-0A5F8449,\"Heid\u00eeke-TarrenMill-EU\",0x512,0x0,439468,\"Downward Trend\",0x1,ABSORB,nil,493240,866835,nil\r\n",
+        "created_at": "2024-08-28T20:32:03+00:00",
+        "updated_at": "2024-08-28T20:32:03+00:00"
+    },
+    {
+        "id": 958,
+        "spell_id": 434756,
+        "before": "{\"id\": 434756, \"aura\": 0, \"name\": \"Throw Chair\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 1500, \"icon_name\": \"spell_nature_strength\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:44:04\", \"miss_types_mask\": 8}",
+        "after": "{\"id\": 434756, \"aura\": 0, \"name\": \"Throw Chair\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 1500, \"icon_name\": \"spell_nature_strength\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:44:04\", \"miss_types_mask\": 40}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery.zip",
+        "raw_event": "8\/28\/2024 20:48:15.9572  SPELL_MISSED,Creature-0-4255-2661-12320-210269-0000CF70C0,\"Hired Muscle\",0xa48,0x0,Player-1084-0A5F8449,\"Heid\u00eeke-TarrenMill-EU\",0x512,0x0,434756,\"Throw Chair\",0x1,IMMUNE,nil\r\n",
+        "created_at": "2024-08-28T20:32:04+00:00",
+        "updated_at": "2024-08-28T20:32:04+00:00"
+    },
+    {
+        "id": 959,
+        "spell_id": 463218,
+        "before": "{\"id\": 463218, \"aura\": 0, \"name\": \"Volatile Keg\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"ability_vehicle_liquidpyrite\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:44:21\", \"miss_types_mask\": 1}",
+        "after": "{\"id\": 463218, \"aura\": 0, \"name\": \"Volatile Keg\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"ability_vehicle_liquidpyrite\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:44:21\", \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery.zip",
+        "raw_event": "8\/28\/2024 20:48:17.5862  SPELL_MISSED,Creature-0-4255-2661-12320-210269-00014F70C0,\"Hired Muscle\",0xa48,0x0,Player-1084-0A5F8449,\"Heid\u00eeke-TarrenMill-EU\",0x512,0x0,463218,\"Volatile Keg\",0x4,IMMUNE,nil\r\n",
+        "created_at": "2024-08-28T20:32:04+00:00",
+        "updated_at": "2024-08-28T20:32:04+00:00"
+    },
+    {
+        "id": 960,
+        "spell_id": 463223,
+        "before": null,
+        "after": "{\"id\": 463223, \"aura\": false, \"name\": \"Volatile Keg\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_vehicle_liquidpyrite\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28T20:32:06.682212Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery.zip",
+        "raw_event": "8\/28\/2024 20:48:17.7982  SPELL_MISSED,Creature-0-4255-2661-12320-210269-00014F70C0,\"Hired Muscle\",0xa48,0x0,Player-1084-0A5F8449,\"Heid\u00eeke-TarrenMill-EU\",0x512,0x0,463223,\"Volatile Keg\",0x4,IMMUNE,nil\r\n",
+        "created_at": "2024-08-28T20:32:06+00:00",
+        "updated_at": "2024-08-28T20:32:06+00:00"
+    },
+    {
+        "id": 961,
+        "spell_id": 463223,
+        "before": "{\"id\": 463223, \"aura\": 0, \"name\": \"Volatile Keg\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_vehicle_liquidpyrite\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28T20:32:06.682212Z\"}",
+        "after": "{\"id\": 463223, \"aura\": 0, \"name\": \"Volatile Keg\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_vehicle_liquidpyrite\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28T20:32:06.682212Z\", \"miss_types_mask\": 32}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery.zip",
+        "raw_event": "8\/28\/2024 20:48:17.7982  SPELL_MISSED,Creature-0-4255-2661-12320-210269-00014F70C0,\"Hired Muscle\",0xa48,0x0,Player-1084-0A5F8449,\"Heid\u00eeke-TarrenMill-EU\",0x512,0x0,463223,\"Volatile Keg\",0x4,IMMUNE,nil\r\n",
+        "created_at": "2024-08-28T20:32:06+00:00",
+        "updated_at": "2024-08-28T20:32:06+00:00"
+    },
+    {
+        "id": 962,
+        "spell_id": 434756,
+        "before": "{\"id\": 434756, \"aura\": 0, \"name\": \"Throw Chair\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 1500, \"icon_name\": \"spell_nature_strength\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:44:04\", \"miss_types_mask\": 40}",
+        "after": "{\"id\": 434756, \"aura\": 0, \"name\": \"Throw Chair\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 1500, \"icon_name\": \"spell_nature_strength\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:44:04\", \"miss_types_mask\": 104}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery.zip",
+        "raw_event": "8\/28\/2024 20:48:30.5162  SPELL_MISSED,Creature-0-4255-2661-12320-210269-00014F70C0,\"Hired Muscle\",0xa48,0x0,Player-1084-0A5FB3C2,\"Tryingh-TarrenMill-EU\",0x512,0x0,434756,\"Throw Chair\",0x1,MISS,nil\r\n",
+        "created_at": "2024-08-28T20:32:06+00:00",
+        "updated_at": "2024-08-28T20:32:06+00:00"
+    },
+    {
+        "id": 963,
+        "spell_id": 1459,
+        "before": null,
+        "after": "{\"id\": 1459, \"aura\": false, \"name\": \"Arcane Intellect\", \"duration\": 3600000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_holy_magicalsentry\", \"dispel_type\": \"Magic\", \"schools_mask\": 64, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28T20:32:09.680716Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery.zip",
+        "raw_event": "8\/28\/2024 20:48:39.0922  SPELL_AURA_APPLIED,Creature-0-4248-2648-28695-224549-00004F6390,\"Meadworker Nedam\",0xa28,0x0,Player-1084-0A569CCC,\"Shrubbz-TarrenMill-EU\",0x518,0x0,1459,\"Arcane Intellect\",0x40,BUFF\r\n",
+        "created_at": "2024-08-28T20:32:09+00:00",
+        "updated_at": "2024-08-28T20:32:09+00:00"
+    },
+    {
+        "id": 964,
+        "spell_id": 1459,
+        "before": "{\"id\": 1459, \"aura\": 0, \"name\": \"Arcane Intellect\", \"duration\": 3600000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_holy_magicalsentry\", \"dispel_type\": \"Magic\", \"schools_mask\": 64, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28T20:32:09.680716Z\"}",
+        "after": "{\"id\": 1459, \"aura\": 0, \"name\": \"Arcane Intellect\", \"debuff\": 0, \"duration\": 3600000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_holy_magicalsentry\", \"dispel_type\": \"Magic\", \"schools_mask\": 64, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28T20:32:09.680716Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_cinderbrew-meadery.zip",
+        "raw_event": "8\/28\/2024 20:48:39.0922  SPELL_AURA_APPLIED,Creature-0-4248-2648-28695-224549-00004F6390,\"Meadworker Nedam\",0xa28,0x0,Player-1084-0A569CCC,\"Shrubbz-TarrenMill-EU\",0x518,0x0,1459,\"Arcane Intellect\",0x40,BUFF\r\n",
+        "created_at": "2024-08-28T20:32:09+00:00",
+        "updated_at": "2024-08-28T20:32:09+00:00"
+    },
+    {
+        "id": 965,
+        "spell_id": 426883,
+        "before": "{\"id\": 426883, \"aura\": 0, \"name\": \"Bonk!\", \"debuff\": 0, \"category\": null, \"duration\": 3000, \"mechanic\": \"spells.mechanic.stunned\", \"cast_time\": 2000, \"icon_name\": \"inv_misc_volatileearth\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:46:59\", \"miss_types_mask\": 136}",
+        "after": "{\"id\": 426883, \"aura\": 0, \"name\": \"Bonk!\", \"debuff\": 1, \"category\": null, \"duration\": 3000, \"mechanic\": \"spells.mechanic.stunned\", \"cast_time\": 2000, \"icon_name\": \"inv_misc_volatileearth\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:46:59\", \"miss_types_mask\": 136}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_darkflame-cleft.zip",
+        "raw_event": "8\/28\/2024 22:01:58.3212  SPELL_AURA_APPLIED,Creature-0-4255-2651-17111-212383-0000CF8098,\"Kobold Taskworker\",0xa48,0x0,Player-1084-0A685166,\"Ayagajin-TarrenMill-EU\",0x512,0x0,426883,\"Bonk!\",0x1,DEBUFF\r\n",
+        "created_at": "2024-08-28T20:32:11+00:00",
+        "updated_at": "2024-08-28T20:32:11+00:00"
+    },
+    {
+        "id": 966,
+        "spell_id": 422692,
+        "before": "{\"id\": 422692, \"aura\": 0, \"name\": \"Drain Light\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 1500, \"icon_name\": \"ability_demonhunter_darkness\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:47:52\", \"miss_types_mask\": 1}",
+        "after": "{\"id\": 422692, \"aura\": 0, \"name\": \"Drain Light\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 1500, \"icon_name\": \"ability_demonhunter_darkness\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:47:52\", \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_darkflame-cleft.zip",
+        "raw_event": "8\/28\/2024 22:10:50.6192  SPELL_MISSED,Creature-0-4255-2651-17111-208456-00004F8099,\"Shuffling Horror\",0xa48,0x0,Player-1084-0A5F8449,\"Heid\u00eeke-TarrenMill-EU\",0x512,0x0,422692,\"Drain Light\",0x20,IMMUNE,nil\r\n",
+        "created_at": "2024-08-28T20:32:12+00:00",
+        "updated_at": "2024-08-28T20:32:12+00:00"
+    },
+    {
+        "id": 967,
+        "spell_id": 422393,
+        "before": "{\"id\": 422393, \"aura\": 0, \"name\": \"Suffocating Darkness\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 2500, \"icon_name\": \"ability_warlock_everlastingaffliction\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:48:00\", \"miss_types_mask\": 1}",
+        "after": "{\"id\": 422393, \"aura\": 0, \"name\": \"Suffocating Darkness\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 2500, \"icon_name\": \"ability_warlock_everlastingaffliction\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:48:00\", \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_darkflame-cleft.zip",
+        "raw_event": "8\/28\/2024 22:10:50.8722  SPELL_MISSED,Creature-0-4255-2651-17111-208457-000A4F8098,\"Skittering Darkness\",0xa48,0x0,Player-1084-0A5F8449,\"Heid\u00eeke-TarrenMill-EU\",0x512,0x0,422393,\"Suffocating Darkness\",0x20,IMMUNE,nil\r\n",
+        "created_at": "2024-08-28T20:32:12+00:00",
+        "updated_at": "2024-08-28T20:32:12+00:00"
+    },
+    {
+        "id": 968,
+        "spell_id": 426943,
+        "before": "{\"id\": 426943, \"aura\": 0, \"name\": \"Rising Gloom\", \"debuff\": 1, \"category\": null, \"duration\": 600000, \"mechanic\": null, \"cast_time\": 1000, \"icon_name\": \"ability_warlock_everlastingaffliction\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:48:25\", \"miss_types_mask\": 1}",
+        "after": "{\"id\": 426943, \"aura\": 0, \"name\": \"Rising Gloom\", \"debuff\": 1, \"category\": null, \"duration\": 600000, \"mechanic\": null, \"cast_time\": 1000, \"icon_name\": \"ability_warlock_everlastingaffliction\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:48:25\", \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_darkflame-cleft.zip",
+        "raw_event": "8\/28\/2024 22:15:20.3772  SPELL_MISSED,Creature-0-4255-2651-17111-208747-00004F8504,\"The Darkness\",0xa48,0x0,Player-1084-0A5F8449,\"Heid\u00eeke-TarrenMill-EU\",0x512,0x0,426943,\"Rising Gloom\",0x20,IMMUNE,nil\r\n",
+        "created_at": "2024-08-28T20:32:13+00:00",
+        "updated_at": "2024-08-28T20:32:13+00:00"
+    },
+    {
+        "id": 969,
+        "spell_id": 427180,
+        "before": "{\"id\": 427180, \"aura\": 0, \"name\": \"Fear of the Gloom\", \"debuff\": 1, \"category\": null, \"duration\": 1000, \"mechanic\": \"spells.mechanic.fleeing\", \"cast_time\": 0, \"icon_name\": \"spell_shadow_possession\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:48:29\", \"miss_types_mask\": 0}",
+        "after": "{\"id\": 427180, \"aura\": 0, \"name\": \"Fear of the Gloom\", \"debuff\": 1, \"category\": null, \"duration\": 1000, \"mechanic\": \"spells.mechanic.fleeing\", \"cast_time\": 0, \"icon_name\": \"spell_shadow_possession\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 07:48:29\", \"miss_types_mask\": 32}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_darkflame-cleft.zip",
+        "raw_event": "8\/28\/2024 22:15:20.4102  SPELL_MISSED,Creature-0-4255-2651-17111-208747-00004F8504,\"The Darkness\",0xa48,0x0,Player-1084-0A5F8449,\"Heid\u00eeke-TarrenMill-EU\",0x512,0x0,427180,\"Fear of the Gloom\",0x20,IMMUNE,nil\r\n",
+        "created_at": "2024-08-28T20:32:13+00:00",
+        "updated_at": "2024-08-28T20:32:13+00:00"
+    },
+    {
+        "id": 970,
+        "spell_id": 432059,
+        "before": null,
+        "after": "{\"id\": 432059, \"aura\": false, \"name\": \"Candlelight Scorch\", \"duration\": 3000, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"spell_fire_flamebolt\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28T20:32:16.541827Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_darkflame-cleft.zip",
+        "raw_event": "8\/28\/2024 22:23:00.5862  SPELL_AURA_APPLIED,Creature-0-4246-2601-15598-212528-00004F85D0,\"Flickerflame Geomancer\",0xa28,0x0,Player-1084-0AED882B,\"Vindharpen-TarrenMill-EU\",0x518,0x0,432059,\"Candlelight Scorch\",0x4,DEBUFF\r\n",
+        "created_at": "2024-08-28T20:32:16+00:00",
+        "updated_at": "2024-08-28T20:32:16+00:00"
+    },
+    {
+        "id": 971,
+        "spell_id": 432059,
+        "before": "{\"id\": 432059, \"aura\": 0, \"name\": \"Candlelight Scorch\", \"duration\": 3000, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"spell_fire_flamebolt\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28T20:32:16.541827Z\"}",
+        "after": "{\"id\": 432059, \"aura\": 0, \"name\": \"Candlelight Scorch\", \"debuff\": 1, \"duration\": 3000, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"spell_fire_flamebolt\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28T20:32:16.541827Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_darkflame-cleft.zip",
+        "raw_event": "8\/28\/2024 22:23:00.5862  SPELL_AURA_APPLIED,Creature-0-4246-2601-15598-212528-00004F85D0,\"Flickerflame Geomancer\",0xa28,0x0,Player-1084-0AED882B,\"Vindharpen-TarrenMill-EU\",0x518,0x0,432059,\"Candlelight Scorch\",0x4,DEBUFF\r\n",
+        "created_at": "2024-08-28T20:32:16+00:00",
+        "updated_at": "2024-08-28T20:32:16+00:00"
+    },
+    {
+        "id": 972,
+        "spell_id": 449070,
+        "before": "{\"id\": 449070, \"aura\": 0, \"name\": \"Crystal Salvo\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_enchanting_wod_crystalshard2\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 0}",
+        "after": "{\"id\": 449070, \"aura\": 0, \"name\": \"Crystal Salvo\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_enchanting_wod_crystalshard2\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 1}",
+        "combat_log_path": "tmp\/WoWCombatLog-082824_204614_the-stonevault.zip",
+        "raw_event": "8\/28\/2024 21:35:42.6162  SPELL_MISSED,Creature-0-3890-2652-10322-212400-00014F7A81,\"Void Touched Elemental\",0xa48,0x0,Player-1084-0A5F8449,\"Heid\u00eeke-TarrenMill-EU\",0x512,0x0,449070,\"Crystal Salvo\",0x20,ABSORB,nil,704861,829508,nil\r\n",
+        "created_at": "2024-08-28T20:32:18+00:00",
+        "updated_at": "2024-08-28T20:32:18+00:00"
     }
 ]
