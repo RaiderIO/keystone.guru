@@ -4,10 +4,13 @@ namespace Tests\Feature\App\Service\AffixGroup;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupEaseTierPull;
+use App\Models\Season;
+use App\Service\Season\SeasonServiceInterface;
 use DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use Tests\Feature\Traits\LoadsJsonFiles;
 use Tests\Fixtures\LoggingFixtures;
 use Tests\Fixtures\ServiceFixtures;
@@ -130,7 +133,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
-            null,
+            $this->getSeasonService(),
             $log
         );
 
@@ -164,7 +167,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
-            null,
+            $this->getSeasonService(),
             $log
         );
         // Act
@@ -204,7 +207,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
-            null,
+            $this->getSeasonService(),
             $log
         );
 
@@ -231,9 +234,10 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $log                       = LoggingFixtures::createAffixGroupEaseTierServiceLogging($this);
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock(
             $this,
-            null,
+            $this->getSeasonService(),
             $log
         );
+
         // Act
         $result                         = null;
         $previousAffixGroupEaseTierPull = null;
@@ -251,5 +255,26 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
         $this->assertGreaterThan(0, $previousAffixGroupEaseTierPull->id);
 
         $this->assertNull($result);
+    }
+
+    /**
+     * @return SeasonServiceInterface|MockObject
+     */
+    private function getSeasonService(): MockObject|SeasonServiceInterface
+    {
+        // Hard code a season that fits the affix groups for the response, DF S4
+        $season        = Season::find(13);
+        $seasonService = ServiceFixtures::getSeasonServiceMock(
+            $this,
+            null,
+            ['getCurrentSeason'],
+            collect([
+                $season,
+            ])
+        );
+        $seasonService->method('getCurrentSeason')
+            ->willReturn($season);
+
+        return $seasonService;
     }
 }
