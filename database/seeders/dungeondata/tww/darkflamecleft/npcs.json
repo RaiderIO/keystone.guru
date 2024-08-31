@@ -397,7 +397,7 @@
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
-        "display_id": null,
+        "display_id": 114731,
         "encounter_id": null,
         "name": "Flimflam the Cowardly",
         "base_health": 0,

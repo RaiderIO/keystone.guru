@@ -432,5 +432,68 @@
         "extracted_data": 1,
         "created_at": "2024-08-28T20:32:20+00:00",
         "updated_at": "2024-08-28T20:32:20+00:00"
+    },
+    {
+        "id": 63,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_212104_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-29T12:04:17+00:00",
+        "updated_at": "2024-08-29T12:04:17+00:00"
+    },
+    {
+        "id": 64,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_212104_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-29T12:04:20+00:00",
+        "updated_at": "2024-08-29T12:04:20+00:00"
+    },
+    {
+        "id": 65,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_001641_ara-kara-city-of-echoes-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-29T12:04:23+00:00",
+        "updated_at": "2024-08-29T12:04:23+00:00"
+    },
+    {
+        "id": 66,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_001641_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-29T12:04:25+00:00",
+        "updated_at": "2024-08-29T12:04:25+00:00"
+    },
+    {
+        "id": 67,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_001641_priory-of-the-sacred-flame-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-29T12:04:35+00:00",
+        "updated_at": "2024-08-29T12:04:35+00:00"
+    },
+    {
+        "id": 68,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_001641_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-29T12:04:43+00:00",
+        "updated_at": "2024-08-29T12:04:43+00:00"
+    },
+    {
+        "id": 69,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_001641_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-29T12:04:45+00:00",
+        "updated_at": "2024-08-29T12:04:45+00:00"
+    },
+    {
+        "id": 70,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_001641_the-rookery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-29T12:04:54+00:00",
+        "updated_at": "2024-08-29T12:04:54+00:00"
+    },
+    {
+        "id": 71,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_001641_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-29T12:04:57+00:00",
+        "updated_at": "2024-08-29T12:04:57+00:00"
     }
 ]
