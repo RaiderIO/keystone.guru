@@ -495,5 +495,173 @@
         "extracted_data": 1,
         "created_at": "2024-08-29T12:04:57+00:00",
         "updated_at": "2024-08-29T12:04:57+00:00"
+    },
+    {
+        "id": 72,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_140858_cinderbrew-meadery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:01:08+00:00",
+        "updated_at": "2024-08-31T20:01:08+00:00"
+    },
+    {
+        "id": 73,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_140858_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:01:15+00:00",
+        "updated_at": "2024-08-31T20:01:15+00:00"
+    },
+    {
+        "id": 74,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_140858_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:01:20+00:00",
+        "updated_at": "2024-08-31T20:01:20+00:00"
+    },
+    {
+        "id": 75,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_ara-kara-city-of-echoes-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:01:22+00:00",
+        "updated_at": "2024-08-31T20:01:22+00:00"
+    },
+    {
+        "id": 76,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_ara-kara-city-of-echoes-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:01:25+00:00",
+        "updated_at": "2024-08-31T20:01:25+00:00"
+    },
+    {
+        "id": 77,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:01:28+00:00",
+        "updated_at": "2024-08-31T20:01:28+00:00"
+    },
+    {
+        "id": 78,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_cinderbrew-meadery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:01:39+00:00",
+        "updated_at": "2024-08-31T20:01:39+00:00"
+    },
+    {
+        "id": 79,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:01:45+00:00",
+        "updated_at": "2024-08-31T20:01:45+00:00"
+    },
+    {
+        "id": 80,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_priory-of-the-sacred-flame-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:01:54+00:00",
+        "updated_at": "2024-08-31T20:01:54+00:00"
+    },
+    {
+        "id": 81,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_priory-of-the-sacred-flame-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:02:01+00:00",
+        "updated_at": "2024-08-31T20:02:01+00:00"
+    },
+    {
+        "id": 82,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:02:05+00:00",
+        "updated_at": "2024-08-31T20:02:05+00:00"
+    },
+    {
+        "id": 83,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_the-rookery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:02:08+00:00",
+        "updated_at": "2024-08-31T20:02:08+00:00"
+    },
+    {
+        "id": 84,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_the-rookery-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:02:11+00:00",
+        "updated_at": "2024-08-31T20:02:11+00:00"
+    },
+    {
+        "id": 85,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:02:17+00:00",
+        "updated_at": "2024-08-31T20:02:17+00:00"
+    },
+    {
+        "id": 86,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:02:21+00:00",
+        "updated_at": "2024-08-31T20:02:21+00:00"
+    },
+    {
+        "id": 87,
+        "combat_log_path": "tmp\/WoWCombatLog-083024_201959_ara-kara-city-of-echoes-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:02:24+00:00",
+        "updated_at": "2024-08-31T20:02:24+00:00"
+    },
+    {
+        "id": 88,
+        "combat_log_path": "tmp\/WoWCombatLog-083024_201959_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:02:32+00:00",
+        "updated_at": "2024-08-31T20:02:32+00:00"
+    },
+    {
+        "id": 89,
+        "combat_log_path": "tmp\/WoWCombatLog-083024_201959_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:02:36+00:00",
+        "updated_at": "2024-08-31T20:02:36+00:00"
+    },
+    {
+        "id": 90,
+        "combat_log_path": "tmp\/WoWCombatLog-083024_201959_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:02:42+00:00",
+        "updated_at": "2024-08-31T20:02:42+00:00"
+    },
+    {
+        "id": 91,
+        "combat_log_path": "tmp\/WoWCombatLog-083024_201959_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:02:46+00:00",
+        "updated_at": "2024-08-31T20:02:46+00:00"
+    },
+    {
+        "id": 92,
+        "combat_log_path": "tmp\/WoWCombatLog-083024_201959_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:02:48+00:00",
+        "updated_at": "2024-08-31T20:02:48+00:00"
+    },
+    {
+        "id": 93,
+        "combat_log_path": "tmp\/WoWCombatLog-083024_201959_the-rookery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:02:56+00:00",
+        "updated_at": "2024-08-31T20:02:56+00:00"
+    },
+    {
+        "id": 94,
+        "combat_log_path": "tmp\/WoWCombatLog-083024_201959_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:03:02+00:00",
+        "updated_at": "2024-08-31T20:03:02+00:00"
+    },
+    {
+        "id": 95,
+        "combat_log_path": "tmp\/WoWCombatLog-083024_201959_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-08-31T20:03:05+00:00",
+        "updated_at": "2024-08-31T20:03:05+00:00"
     }
 ]
