@@ -183,10 +183,10 @@ return [
     ],
     'general'      => [
         'linkpreview' => [
-            'title_suffix'               => ' | Keystone.guru',
-            'description_suffix'         => ' Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one place to manage and share your M+ routes.',
-            'twitter_title_suffix'       => ' | Keystone.guru',
-            'twitter_description_suffix' => ' Keystone.guru is the one place to find, manage and share your M+ routes.',
+            'title'               => ':title | Keystone.guru',
+            'description'         => ':description Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one place to manage and share your M+ routes.',
+            'twitter_title'       => ':title | Keystone.guru',
+            'twitter_description' => ':description Keystone.guru is the one place to find, manage and share your M+ routes.',
         ],
     ],
     'group'        => [
