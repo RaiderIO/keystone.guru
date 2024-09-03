@@ -108,7 +108,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $this->log->importNpcsDataFromMDTStart($dungeon->key);
 
             // Get a list of NPCs and update/save them
-            $existingNpcs = $dungeon->npcs->keyBy('id');
+            $existingNpcs = $dungeon->npcs()->with('npcSpells')->get()->keyBy('id');
 
             $characteristicsByName = Characteristic::all()->mapWithKeys(function (Characteristic $characteristic) {
                 return [__($characteristic->name, [], 'en_US') => $characteristic];
@@ -162,11 +162,19 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     ];
                 }
 
-                // Save spells
+                // Save spells that we don't know of yet
                 foreach ($mdtNpc->getSpells() as $spellId => $obj) {
                     if (in_array($spellId, Spell::EXCLUDE_MDT_IMPORT_SPELLS)) {
                         $this->log->importNpcsDataFromMDTSpellInExcludeList();
                         continue;
+                    }
+
+                    // Check if it's already associated
+                    foreach ($npc->npcSpells as $npcSpell) {
+                        if ($npcSpell->spell_id === $spellId) {
+                            // It is, don't save the attributes
+                            continue 2;
+                        }
                     }
 
                     $npcSpellsAttributes[sprintf('%s-%s', $npc->id, $spellId)] = [
@@ -197,7 +205,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             // It's easier to delete/insert new ones than try to maintain the IDs which don't really mean anything anyway
             // Clear characteristics/spells for all affected NPCs
             $npcCharacteristicsDeleted = NpcCharacteristic::whereIn('npc_id', $affectedNpcIds)->delete();
-            $npcSpellsDeleted          = NpcSpell::whereIn('npc_id', $affectedNpcIds)->delete();
+            // Do not delete existing spells - we're only interested in new ones
+//            $npcSpellsDeleted          = NpcSpell::whereIn('npc_id', $affectedNpcIds)->delete();
 
             // Insert new ones
             NpcCharacteristic::insert($npcCharacteristicsAttributes);
@@ -206,7 +215,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $this->log->importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
                 $npcCharacteristicsDeleted,
                 count($npcCharacteristicsAttributes),
-                $npcSpellsDeleted,
+                0,
                 count($npcSpellsAttributes)
             );
         } finally {
