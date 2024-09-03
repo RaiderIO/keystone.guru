@@ -18,5 +18,15 @@
         "lng": 176.97,
         "size": 292,
         "rotation": 0
+    },
+    {
+        "id": 342,
+        "mapping_version_id": 378,
+        "floor_id": 308,
+        "target_floor_id": 301,
+        "lat": -142.35,
+        "lng": 176.97,
+        "size": 292,
+        "rotation": 0
     }
 ]

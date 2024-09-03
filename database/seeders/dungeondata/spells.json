@@ -108270,7 +108270,7 @@
     },
     {
         "id": 461978,
-        "category": null,
+        "category": "spells.category.general",
         "cooldown_group": null,
         "dispel_type": "N\/A",
         "mechanic": null,
@@ -108283,7 +108283,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {

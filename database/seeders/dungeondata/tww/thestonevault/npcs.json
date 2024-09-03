@@ -8,7 +8,7 @@
         "display_id": 120054,
         "encounter_id": 2572,
         "name": "E.D.N.A",
-        "base_health": 145572975,
+        "base_health": 150911928,
         "health_percentage": 100,
         "level": 80,
         "mdt_scale": 1.5,
@@ -42,6 +42,9 @@
                 "spell_id": 424889
             },
             {
+                "spell_id": 424893
+            },
+            {
                 "spell_id": 424903
             },
             {
@@ -49,6 +52,9 @@
             },
             {
                 "spell_id": 451728
+            },
+            {
+                "spell_id": 464888
             }
         ],
         "npc_enemy_forces": []
@@ -62,7 +68,7 @@
         "display_id": 117402,
         "encounter_id": null,
         "name": "Earth Infused Golem",
-        "base_health": 29154165,
+        "base_health": 29114839,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -85,12 +91,16 @@
             },
             {
                 "spell_id": 425974
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16495,
+                "mapping_version_id": 378,
+                "npc_id": 210109,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16442,
                 "mapping_version_id": 366,
@@ -107,9 +117,9 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 118714,
-        "encounter_id": 2572,
+        "encounter_id": 2579,
         "name": "Skarmorak",
-        "base_health": 127376353,
+        "base_health": 132047937,
         "health_percentage": 100,
         "level": 80,
         "mdt_scale": 2,
@@ -164,9 +174,6 @@
                 "spell_id": 443405
             },
             {
-                "spell_id": 443838
-            },
-            {
                 "spell_id": 445409
             },
             {
@@ -184,7 +191,7 @@
         "display_id": 118702,
         "encounter_id": null,
         "name": "Cursedheart Invader",
-        "base_health": 18221353,
+        "base_health": 18196774,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -198,13 +205,55 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
             },
             {
                 "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -216,12 +265,16 @@
             },
             {
                 "spell_id": 427300
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16494,
+                "mapping_version_id": 378,
+                "npc_id": 212389,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16441,
                 "mapping_version_id": 366,
@@ -240,7 +293,7 @@
         "display_id": 109870,
         "encounter_id": null,
         "name": "Void Touched Elemental",
-        "base_health": 20043489,
+        "base_health": 20016452,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -254,6 +307,33 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 13
+            },
+            {
                 "characteristic_id": 14
             },
             {
@@ -261,6 +341,9 @@
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
             }
         ],
         "npc_spells": [
@@ -269,12 +352,16 @@
             },
             {
                 "spell_id": 449070
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16502,
+                "mapping_version_id": 378,
+                "npc_id": 212400,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16449,
                 "mapping_version_id": 366,
@@ -293,7 +380,7 @@
         "display_id": 118702,
         "encounter_id": null,
         "name": "Cursedheart Invader",
-        "base_health": 18221353,
+        "base_health": 18196774,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -307,10 +394,55 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
                 "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -322,12 +454,16 @@
             },
             {
                 "spell_id": 452811
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16510,
+                "mapping_version_id": 378,
+                "npc_id": 212403,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16457,
                 "mapping_version_id": 366,
@@ -346,7 +482,7 @@
         "display_id": 114686,
         "encounter_id": null,
         "name": "Aspiring Forgehand",
-        "base_health": 10932812,
+        "base_health": 10918065,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -363,13 +499,52 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
             },
             {
                 "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -378,12 +553,16 @@
             },
             {
                 "spell_id": 427361
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16503,
+                "mapping_version_id": 378,
+                "npc_id": 212405,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16450,
                 "mapping_version_id": 366,
@@ -402,7 +581,7 @@
         "display_id": 118731,
         "encounter_id": null,
         "name": "Ghastly Voidsoul",
-        "base_health": 16399218,
+        "base_health": 16377097,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -419,27 +598,67 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
                 "characteristic_id": 11
             },
             {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
             },
             {
                 "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
             {
                 "spell_id": 449455
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16496,
+                "mapping_version_id": 378,
+                "npc_id": 212453,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16443,
                 "mapping_version_id": 366,
@@ -458,7 +677,7 @@
         "display_id": 117641,
         "encounter_id": null,
         "name": "Engine Speaker",
-        "base_health": 20043489,
+        "base_health": 20016452,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -472,13 +691,55 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
             },
             {
                 "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -489,13 +750,17 @@
                 "spell_id": 452811
             },
             {
-                "spell_id": 461978
-            },
-            {
                 "spell_id": 464876
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16499,
+                "mapping_version_id": 378,
+                "npc_id": 212764,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16446,
                 "mapping_version_id": 366,
@@ -514,7 +779,7 @@
         "display_id": 117973,
         "encounter_id": null,
         "name": "Void Bound Despoiler",
-        "base_health": 29154165,
+        "base_health": 29114839,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.3,
@@ -526,7 +791,14 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 426771
@@ -536,12 +808,16 @@
             },
             {
                 "spell_id": 459210
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16498,
+                "mapping_version_id": 378,
+                "npc_id": 212765,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16445,
                 "mapping_version_id": 366,
@@ -558,9 +834,9 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 119856,
-        "encounter_id": 2572,
-        "name": "High Speaker Eirich",
-        "base_health": 145572975,
+        "encounter_id": 2582,
+        "name": "Void Speaker Eirich",
+        "base_health": 150911928,
         "health_percentage": 100,
         "level": 80,
         "mdt_scale": 2,
@@ -572,10 +848,20 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 427329
+            },
+            {
+                "spell_id": 427461
             },
             {
                 "spell_id": 427852
@@ -634,9 +920,9 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 116916,
-        "encounter_id": 2572,
+        "encounter_id": 2590,
         "name": "Speaker Dorlita",
-        "base_health": 109179731,
+        "base_health": 101865552,
         "health_percentage": 100,
         "level": 80,
         "mdt_scale": 2,
@@ -648,7 +934,14 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 428120
@@ -670,6 +963,9 @@
             },
             {
                 "spell_id": 449169
+            },
+            {
+                "spell_id": 457144
             }
         ],
         "npc_enemy_forces": []
@@ -681,9 +977,9 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 115818,
-        "encounter_id": 2572,
+        "encounter_id": 2590,
         "name": "Speaker Brokk",
-        "base_health": 90983109,
+        "base_health": 84887960,
         "health_percentage": 100,
         "level": 80,
         "mdt_scale": 2,
@@ -695,7 +991,14 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 428161
@@ -734,6 +1037,9 @@
                 "spell_id": 445541
             },
             {
+                "spell_id": 457144
+            },
+            {
                 "spell_id": 462372
             },
             {
@@ -751,7 +1057,7 @@
         "display_id": 115974,
         "encounter_id": null,
         "name": "Forgebound Mender",
-        "base_health": 16399218,
+        "base_health": 16377097,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -765,13 +1071,55 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
             },
             {
                 "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -780,12 +1128,16 @@
             },
             {
                 "spell_id": 429110
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16504,
+                "mapping_version_id": 378,
+                "npc_id": 213338,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16451,
                 "mapping_version_id": 366,
@@ -804,7 +1156,7 @@
         "display_id": 116911,
         "encounter_id": null,
         "name": "Forge Loader",
-        "base_health": 32798436,
+        "base_health": 32754194,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.4,
@@ -816,7 +1168,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 429114
@@ -836,6 +1192,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16505,
+                "mapping_version_id": 378,
+                "npc_id": 213343,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16452,
                 "mapping_version_id": 366,
                 "npc_id": 213343,
@@ -851,7 +1214,7 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 91401,
-        "encounter_id": 2572,
+        "encounter_id": 2590,
         "name": "Scrap Block",
         "base_health": 90983109,
         "health_percentage": null,
@@ -865,7 +1228,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 428242
@@ -877,7 +1244,13 @@
                 "spell_id": 428535
             },
             {
+                "spell_id": 428547
+            },
+            {
                 "spell_id": 463145
+            },
+            {
+                "spell_id": 464392
             }
         ],
         "npc_enemy_forces": []
@@ -891,7 +1264,7 @@
         "display_id": 117855,
         "encounter_id": null,
         "name": "Rock Smasher",
-        "base_health": 36442707,
+        "base_health": 36393549,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -923,12 +1296,16 @@
             },
             {
                 "spell_id": 428887
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16508,
+                "mapping_version_id": 378,
+                "npc_id": 213954,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16455,
                 "mapping_version_id": 366,
@@ -945,7 +1322,7 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 100728,
-        "encounter_id": 2572,
+        "encounter_id": 2590,
         "name": "Vent Stalker",
         "base_health": 90983109,
         "health_percentage": null,
@@ -959,7 +1336,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 428819
@@ -991,7 +1372,7 @@
         "display_id": 115945,
         "encounter_id": null,
         "name": "Cursedforge Stoneshaper",
-        "base_health": 17310286,
+        "base_health": 17286936,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1005,13 +1386,55 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
             },
             {
                 "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -1020,12 +1443,16 @@
             },
             {
                 "spell_id": 429427
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16507,
+                "mapping_version_id": 378,
+                "npc_id": 214066,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16454,
                 "mapping_version_id": 366,
@@ -1044,7 +1471,7 @@
         "display_id": 115944,
         "encounter_id": null,
         "name": "Cursedforge Honor Guard",
-        "base_health": 29154165,
+        "base_health": 29114839,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1056,7 +1483,14 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 428894
@@ -1066,12 +1500,16 @@
             },
             {
                 "spell_id": 448975
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16506,
+                "mapping_version_id": 378,
+                "npc_id": 214264,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16453,
                 "mapping_version_id": 366,
@@ -1090,7 +1528,7 @@
         "display_id": 118692,
         "encounter_id": null,
         "name": "Turned Speaker",
-        "base_health": 19132421,
+        "base_health": 19106613,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1104,7 +1542,28 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
                 "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 13
             },
             {
                 "characteristic_id": 14
@@ -1114,6 +1573,9 @@
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
             }
         ],
         "npc_spells": [
@@ -1122,12 +1584,16 @@
             },
             {
                 "spell_id": 429545
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16501,
+                "mapping_version_id": 378,
+                "npc_id": 214350,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16448,
                 "mapping_version_id": 366,
@@ -1144,9 +1610,9 @@
         "npc_type_id": 11,
         "npc_class_id": 1,
         "display_id": 37518,
-        "encounter_id": 2572,
+        "encounter_id": 2579,
         "name": "Crystal Shard",
-        "base_health": 1399740,
+        "base_health": 1160861,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1158,7 +1624,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 439600
@@ -1178,7 +1648,7 @@
         "display_id": 118365,
         "encounter_id": null,
         "name": "Void Bound Howler",
-        "base_health": 17310286,
+        "base_health": 17286936,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1192,24 +1662,70 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
             },
             {
                 "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
             {
                 "spell_id": 445207
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16500,
+                "mapping_version_id": 378,
+                "npc_id": 221979,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16447,
                 "mapping_version_id": 366,
@@ -1253,7 +1769,7 @@
         "display_id": 118231,
         "encounter_id": null,
         "name": "Repurposed Loaderbot",
-        "base_health": 19132421,
+        "base_health": 19106613,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1267,7 +1783,25 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
                 "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
             },
             {
                 "characteristic_id": 14
@@ -1277,6 +1811,9 @@
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
             }
         ],
         "npc_spells": [
@@ -1285,12 +1822,16 @@
             },
             {
                 "spell_id": 447145
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16497,
+                "mapping_version_id": 378,
+                "npc_id": 222923,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16444,
                 "mapping_version_id": 366,
@@ -1309,7 +1850,7 @@
         "display_id": 120170,
         "encounter_id": null,
         "name": "Cursedforge Mender",
-        "base_health": 16399218,
+        "base_health": 16377097,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1326,13 +1867,52 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
             },
             {
                 "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -1341,12 +1921,16 @@
             },
             {
                 "spell_id": 429110
-            },
-            {
-                "spell_id": 461978
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16509,
+                "mapping_version_id": 378,
+                "npc_id": 224962,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16456,
                 "mapping_version_id": 366,
