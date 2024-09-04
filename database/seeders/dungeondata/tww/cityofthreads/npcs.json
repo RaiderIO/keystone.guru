@@ -6,9 +6,9 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 117254,
-        "encounter_id": 2593,
+        "encounter_id": 2600,
         "name": "The Coaglamation",
-        "base_health": 127376353,
+        "base_health": 151317619,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -100,7 +100,7 @@
         "display_id": 116499,
         "encounter_id": null,
         "name": "Unstable Test Subject",
-        "base_health": 29154165,
+        "base_health": 29091043,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.4,
@@ -115,6 +115,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -136,6 +139,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16555,
+                "mapping_version_id": 381,
+                "npc_id": 216328,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16369,
                 "mapping_version_id": 359,
                 "npc_id": 216328,
@@ -153,7 +163,7 @@
         "display_id": 114555,
         "encounter_id": null,
         "name": "Congealed Droplet",
-        "base_health": 3644271,
+        "base_health": 3636380,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -167,14 +177,51 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 13
+            },
+            {
                 "characteristic_id": 14
             },
             {
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
             }
         ],
         "npc_spells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16549,
+                "mapping_version_id": 381,
+                "npc_id": 216329,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16363,
                 "mapping_version_id": 359,
@@ -193,7 +240,7 @@
         "display_id": 120894,
         "encounter_id": null,
         "name": "Sureki Unnaturaler",
-        "base_health": 14577083,
+        "base_health": 14545521,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -210,6 +257,24 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
             },
             {
@@ -217,6 +282,9 @@
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
             }
         ],
         "npc_spells": [
@@ -225,6 +293,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16556,
+                "mapping_version_id": 381,
+                "npc_id": 216339,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16370,
                 "mapping_version_id": 359,
@@ -243,7 +318,7 @@
         "display_id": 120891,
         "encounter_id": null,
         "name": "Assistant Unnaturaler",
-        "base_health": 10932812,
+        "base_health": 7272761,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -257,7 +332,55 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -269,6 +392,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16554,
+                "mapping_version_id": 381,
+                "npc_id": 216342,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16368,
                 "mapping_version_id": 359,
@@ -285,12 +415,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 116692,
-        "encounter_id": 2593,
+        "encounter_id": 2594,
         "name": "Orator Krixvizk",
-        "base_health": 127376353,
+        "base_health": 132402917,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 0.8,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -302,6 +432,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -351,9 +484,9 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 116699,
-        "encounter_id": 2593,
+        "encounter_id": 2595,
         "name": "Nx",
-        "base_health": 200162840,
+        "base_health": 208061726,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -368,6 +501,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -429,9 +565,9 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 116700,
-        "encounter_id": 2593,
+        "encounter_id": 2595,
         "name": "Vx",
-        "base_health": 200162840,
+        "base_health": 208061726,
         "health_percentage": 100,
         "level": 80,
         "mdt_scale": 1.5,
@@ -446,6 +582,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -489,9 +628,9 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 116701,
-        "encounter_id": 2593,
+        "encounter_id": 2596,
         "name": "Izo The Grand Splicer",
-        "base_health": 145572975,
+        "base_health": 151317619,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -506,6 +645,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -548,7 +690,7 @@
         "display_id": 116480,
         "encounter_id": null,
         "name": "Ravenous Scarab",
-        "base_health": 2799480,
+        "base_health": 3030317,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -562,7 +704,55 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 21
+            },
+            {
+                "characteristic_id": 22
             }
         ],
         "npc_spells": [
@@ -571,6 +761,9 @@
             },
             {
                 "spell_id": 450047
+            },
+            {
+                "spell_id": 450055
             }
         ],
         "npc_enemy_forces": []
@@ -622,12 +815,12 @@
         "display_id": 119732,
         "encounter_id": null,
         "name": "Xephitik",
-        "base_health": 27332030,
+        "base_health": 27272853,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1,
+        "mdt_scale": 1.8,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -661,6 +854,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16545,
+                "mapping_version_id": 381,
+                "npc_id": 219984,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16359,
                 "mapping_version_id": 359,
                 "npc_id": 219984,
@@ -678,7 +878,7 @@
         "display_id": 119371,
         "encounter_id": null,
         "name": "Eye Of The Queen",
-        "base_health": 32798436,
+        "base_health": 32727423,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -693,6 +893,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -713,6 +916,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16546,
+                "mapping_version_id": 381,
+                "npc_id": 220003,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16360,
                 "mapping_version_id": 359,
@@ -831,7 +1041,7 @@
         "display_id": 120868,
         "encounter_id": null,
         "name": "Sureki Venomblade",
-        "base_health": 16763645,
+        "base_health": 16727349,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -845,10 +1055,37 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
             },
             {
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
             }
         ],
         "npc_spells": [
@@ -860,6 +1097,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16542,
+                "mapping_version_id": 381,
+                "npc_id": 220193,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16356,
                 "mapping_version_id": 359,
@@ -878,7 +1122,7 @@
         "display_id": 120872,
         "encounter_id": null,
         "name": "Sureki Silkbinder",
-        "base_health": 15670365,
+        "base_health": 15636436,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -895,13 +1139,52 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
             },
             {
                 "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -916,6 +1199,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16541,
+                "mapping_version_id": 381,
+                "npc_id": 220195,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16355,
                 "mapping_version_id": 359,
@@ -934,7 +1224,7 @@
         "display_id": 120905,
         "encounter_id": null,
         "name": "Herald Of Ansurek",
-        "base_health": 29154165,
+        "base_health": 29091043,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.4,
@@ -949,6 +1239,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -973,6 +1266,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16544,
+                "mapping_version_id": 381,
+                "npc_id": 220196,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16358,
                 "mapping_version_id": 359,
                 "npc_id": 220196,
@@ -990,7 +1290,7 @@
         "display_id": 120882,
         "encounter_id": null,
         "name": "Royal Swarmguard",
-        "base_health": 32798436,
+        "base_health": 32727423,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.4,
@@ -1020,6 +1320,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16543,
+                "mapping_version_id": 381,
+                "npc_id": 220197,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16357,
                 "mapping_version_id": 359,
                 "npc_id": 220197,
@@ -1037,7 +1344,7 @@
         "display_id": 120589,
         "encounter_id": null,
         "name": "Battle Scarab",
-        "base_health": 3644271,
+        "base_health": 3636380,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 0.6,
@@ -1054,14 +1361,63 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
             },
             {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 21
+            },
+            {
+                "characteristic_id": 22
             }
         ],
         "npc_spells": [],
         "npc_enemy_forces": [
+            {
+                "id": 16550,
+                "mapping_version_id": 381,
+                "npc_id": 220199,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16364,
                 "mapping_version_id": 359,
@@ -1184,19 +1540,26 @@
         "display_id": 120885,
         "encounter_id": null,
         "name": "Retired Lord Vul'azak",
-        "base_health": 32798436,
-        "health_percentage": 100,
+        "base_health": 32727423,
+        "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1.5,
+        "mdt_scale": 2.1,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 443500
@@ -1209,6 +1572,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16562,
+                "mapping_version_id": 381,
+                "npc_id": 220423,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16373,
                 "mapping_version_id": 359,
@@ -1227,19 +1597,26 @@
         "display_id": 120890,
         "encounter_id": null,
         "name": "Royal Venomshell",
-        "base_health": 36442707,
+        "base_health": 36363803,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 434133
@@ -1255,6 +1632,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16553,
+                "mapping_version_id": 381,
+                "npc_id": 220730,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16367,
                 "mapping_version_id": 359,
@@ -1348,19 +1732,23 @@
         "display_id": 118827,
         "encounter_id": null,
         "name": "Elder Shadeweaver",
-        "base_health": 36442707,
+        "base_health": 36363803,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 443427
@@ -1380,6 +1768,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16557,
+                "mapping_version_id": 381,
+                "npc_id": 221102,
+                "enemy_forces": 40,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16371,
                 "mapping_version_id": 359,
                 "npc_id": 221102,
@@ -1397,12 +1792,12 @@
         "display_id": 118826,
         "encounter_id": null,
         "name": "Hulking Warshell",
-        "base_health": 51019789,
+        "base_health": 50909324,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -1412,6 +1807,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -1429,6 +1827,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16558,
+                "mapping_version_id": 381,
+                "npc_id": 221103,
+                "enemy_forces": 40,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16372,
                 "mapping_version_id": 359,
@@ -1572,10 +1977,10 @@
         "display_id": 119370,
         "encounter_id": null,
         "name": "Agile Pursuer",
-        "base_health": 18221353,
+        "base_health": 18181901,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1589,19 +1994,52 @@
                 "characteristic_id": 1
             },
             {
-                "characteristic_id": 1
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
             },
             {
                 "characteristic_id": 14
             },
             {
-                "characteristic_id": 14
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
             },
             {
-                "characteristic_id": 19
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -1610,6 +2048,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16548,
+                "mapping_version_id": 381,
+                "npc_id": 223181,
+                "enemy_forces": 14,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16362,
                 "mapping_version_id": 359,
@@ -1628,10 +2073,10 @@
         "display_id": 119369,
         "encounter_id": null,
         "name": "Web Marauder",
-        "base_health": 23687760,
+        "base_health": 23636473,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1.5,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1642,13 +2087,55 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
             },
             {
                 "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -1657,6 +2144,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16547,
+                "mapping_version_id": 381,
+                "npc_id": 223182,
+                "enemy_forces": 14,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16361,
                 "mapping_version_id": 359,
@@ -1729,7 +2223,7 @@
         "display_id": 120886,
         "encounter_id": null,
         "name": "Sureki Conscript",
-        "base_health": 10932812,
+        "base_health": 10909141,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 0.7,
@@ -1743,10 +2237,55 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
             },
             {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -1758,6 +2297,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16552,
+                "mapping_version_id": 381,
+                "npc_id": 223357,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16366,
                 "mapping_version_id": 359,
@@ -1805,10 +2351,10 @@
         "display_id": 118106,
         "encounter_id": null,
         "name": "Covert Webmancer",
-        "base_health": 18221353,
+        "base_health": 18181901,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1819,16 +2365,55 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 14
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
             },
             {
                 "characteristic_id": 14
             },
             {
-                "characteristic_id": 19
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -1840,6 +2425,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16551,
+                "mapping_version_id": 381,
+                "npc_id": 223844,
+                "enemy_forces": 14,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16365,
                 "mapping_version_id": 359,
@@ -1908,7 +2500,7 @@
         "display_id": 119369,
         "encounter_id": null,
         "name": "Web Marauder",
-        "base_health": 23687760,
+        "base_health": 23636473,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1922,10 +2514,55 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 14
             },
             {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -1933,7 +2570,15 @@
                 "spell_id": 452151
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16559,
+                "mapping_version_id": 381,
+                "npc_id": 224731,
+                "enemy_forces": 14,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 224732,
@@ -1944,10 +2589,10 @@
         "display_id": 118106,
         "encounter_id": null,
         "name": "Covert Webmancer",
-        "base_health": 5545770,
+        "base_health": 18181901,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1956,7 +2601,59 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 442536
@@ -1965,7 +2662,15 @@
                 "spell_id": 452162
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16560,
+                "mapping_version_id": 381,
+                "npc_id": 224732,
+                "enemy_forces": 14,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 226058,
@@ -2051,10 +2756,10 @@
         "display_id": 119370,
         "encounter_id": null,
         "name": "Agile Pursuer",
-        "base_health": 0,
+        "base_health": 18181901,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2063,12 +2768,72 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 448030
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 16561,
+                "mapping_version_id": 381,
+                "npc_id": 228361,
+                "enemy_forces": 14,
+                "enemy_forces_teeming": null
+            }
+        ]
     }
 ]
