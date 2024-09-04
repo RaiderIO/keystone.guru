@@ -1,10 +1,11 @@
 <?php
 $enemyVisualType  = $_COOKIE['enemy_display_type'] ?? 'enemy_portrait';
 $enemyVisualTypes = [
-    'enemy_portrait' => __('view_common.maps.controls.elements.enemyvisualtype.portrait'),
-    'npc_class'      => __('view_common.maps.controls.elements.enemyvisualtype.npc_class'),
-    'npc_type'       => __('view_common.maps.controls.elements.enemyvisualtype.npc_type'),
-    'enemy_forces'   => __('view_common.maps.controls.elements.enemyvisualtype.enemy_forces'),
+    'enemy_portrait'  => __('view_common.maps.controls.elements.enemyvisualtype.portrait'),
+    'npc_class'       => __('view_common.maps.controls.elements.enemyvisualtype.npc_class'),
+    'npc_type'        => __('view_common.maps.controls.elements.enemyvisualtype.npc_type'),
+    'enemy_forces'    => __('view_common.maps.controls.elements.enemyvisualtype.enemy_forces'),
+    'enemy_skippable' => __('view_common.maps.controls.elements.enemyvisualtype.enemy_skippable'),
 ];
 ?>
 <div class="row no-gutters">

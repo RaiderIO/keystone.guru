@@ -276,6 +276,7 @@ return [
                     'enemy_forces'            => 'Enemy forces',
                     'enemy_visual_type'       => 'Visuals',
                     'enemy_visual_type_title' => 'Visuals',
+                    'enemy_skippable'         => 'Skippable',
                 ],
                 'floor_switch'             => [
                     'switch_floors' => 'Floors',
