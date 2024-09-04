@@ -72,4 +72,10 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
             ReleaseChangelogChange::class,
         ];
     }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
+    }
 }

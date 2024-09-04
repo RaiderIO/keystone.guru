@@ -20,6 +20,7 @@ return [
     'evoker'       => [
         'devastation'  => 'Devastation',
         'preservation' => 'Preservation',
+        'augmentation' => 'Augmentation',
     ],
     'hunter'       => [
         'beast_mastery' => 'Beast Mastery',

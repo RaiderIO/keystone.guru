@@ -14,8 +14,6 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding known Expansions');
-
         $expansions = [
             'expansions.legion.name'                 => new Expansion([
                 'active'      => 1,
@@ -107,5 +105,11 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
     public static function getAffectedModelClasses(): array
     {
         return [Expansion::class];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

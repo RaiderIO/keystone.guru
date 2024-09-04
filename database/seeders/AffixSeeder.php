@@ -20,8 +20,6 @@ class AffixSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding known affixes');
-
         $affixes = collect([
             new Affix(['key' => Affix::AFFIX_BOLSTERING, 'name' => 'affixes.bolstering.name', 'icon_file_id' => -1, 'affix_id' => 7, 'description' => 'affixes.bolstering.description']),
             new Affix(['key' => Affix::AFFIX_BURSTING, 'name' => 'affixes.bursting.name', 'icon_file_id' => -1, 'affix_id' => 11, 'description' => 'affixes.bursting.description']),
@@ -303,5 +301,11 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             AffixGroup::class,
             AffixGroupCoupling::class,
         ];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

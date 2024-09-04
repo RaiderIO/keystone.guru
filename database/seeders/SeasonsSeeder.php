@@ -16,8 +16,6 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding known Seasons');
-
         /** @var Collection<Expansion> $expansions */
         $expansions = Expansion::all()->mapWithKeys(function (Expansion $expansion) {
             return [$expansion->shortname => $expansion->id];
@@ -282,5 +280,11 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
             Season::class,
             SeasonDungeon::class,
         ];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

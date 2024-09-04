@@ -12,8 +12,6 @@ class NpcClassesSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding known Npc classes');
-
         $npcClassAttributes = [];
         foreach (NpcClass::ALL as $key => $id) {
             $npcClassAttributes[] = [
@@ -31,5 +29,11 @@ class NpcClassesSeeder extends Seeder implements TableSeederInterface
         return [
             NpcClass::class,
         ];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

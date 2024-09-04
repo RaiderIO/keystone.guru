@@ -73,4 +73,15 @@ class CombatLogSeeder extends Seeder implements TableSeederInterface
             ParsedCombatLog::class,
         ];
     }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // Skip staging since it will collide with testing - testing will always run,
+        // staging only when a release is staged
+        return [
+            'local',
+            'testing',
+            'production',
+        ];
+    }
 }

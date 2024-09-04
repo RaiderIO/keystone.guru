@@ -12,8 +12,6 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding known game server regions');
-
         $gameServerRegionAttributes = [
             // https://us.battle.net/forums/en/wow/topic/20745655899?page=1#post-1
             [
@@ -65,5 +63,11 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
     public static function getAffectedModelClasses(): array
     {
         return [GameServerRegion::class];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

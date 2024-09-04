@@ -29,4 +29,10 @@ class CharacteristicsSeeder extends Seeder implements TableSeederInterface
     {
         return [Characteristic::class];
     }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
+    }
 }

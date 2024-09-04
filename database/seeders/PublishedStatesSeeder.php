@@ -27,4 +27,10 @@ class PublishedStatesSeeder extends Seeder implements TableSeederInterface
     {
         return [PublishedState::class];
     }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
+    }
 }

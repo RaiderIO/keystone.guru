@@ -78,12 +78,26 @@ class DatabaseSeeder extends Seeder
         // 3. Cleanup: Remove existing table, rename temporary table
 
         foreach (self::SEEDERS as $seederClass) {
+            /** @var TableSeederInterface $seederClass */
+            $affectedEnvironments = $seederClass::getAffectedEnvironments();
+            if ($affectedEnvironments !== null && !in_array(app()->environment(), $affectedEnvironments)) {
+                $this->command->info(
+                    sprintf(
+                        'Skipping %s because it is not meant for this environment (%s vs %s).',
+                        $seederClass,
+                        app()->environment(),
+                        implode(', ', $affectedEnvironments)
+                    )
+                );
+
+                continue;
+            }
+
             $affectedModelClasses = [];
 
             try {
                 $prepareFailed = false;
 
-                /** @var TableSeederInterface $seederClass */
                 $affectedModelClasses = $seederClass::getAffectedModelClasses();
                 foreach ($affectedModelClasses as $affectedModel) {
                     $prepareFailed = !$prepareFailed && !$this->prepareTempTableForModel($affectedModel);

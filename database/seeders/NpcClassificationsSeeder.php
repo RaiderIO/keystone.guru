@@ -12,8 +12,6 @@ class NpcClassificationsSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding known Npc Classifications');
-
         $npcClassificationAttributes = [
             [
                 'id'    => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL],
@@ -49,5 +47,11 @@ class NpcClassificationsSeeder extends Seeder implements TableSeederInterface
     public static function getAffectedModelClasses(): array
     {
         return [NpcClassification::class];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }
