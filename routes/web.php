@@ -151,7 +151,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('upgrade', (new DungeonRouteController())->upgrade(...))->name('dungeonroute.upgrade');
             // Edit your own dungeon routes
             Route::get('edit', (new DungeonRouteController())->edit(...))->name('dungeonroute.edit');
-            Route::get('edit/{floorindex}', (new DungeonRouteController())->editFloor(...))->name('dungeonroute.edit.floor');
+            Route::get('edit/{floorIndex}', (new DungeonRouteController())->editFloor(...))->name('dungeonroute.edit.floor');
             // Submit a patch for your own dungeon route
             Route::patch('edit', (new DungeonRouteController())->update(...))->name('dungeonroute.update');
             Route::middleware(['auth', 'role:user|admin'])->group(static function () {
@@ -170,7 +170,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::prefix('{dungeonroute}')->group(static function () {
         // Edit your own dungeon routes
         Route::get('edit', (new DungeonRouteLegacyController())->edit(...));
-        Route::get('edit/{floorindex}', (new DungeonRouteLegacyController())->editfloor(...));
+        Route::get('edit/{floorIndex}', (new DungeonRouteLegacyController())->editfloor(...));
         Route::middleware(['auth', 'role:user|admin'])->group(static function () {
             // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
             Route::get('live/{livesession}', (new LiveSessionLegacyController())->view(...));
@@ -524,10 +524,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::prefix('{title?}')->group(static function () {
             Route::get('/', (new DungeonRouteController())->view(...))->name('dungeonroute.view');
             Route::get('present/', (new DungeonRouteController())->present(...))->name('dungeonroute.present');
-            Route::get('present/{floorindex}', (new DungeonRouteController())->presentFloor(...))->name('dungeonroute.present.floor');
+            Route::get('present/{floorIndex}', (new DungeonRouteController())->presentFloor(...))->name('dungeonroute.present.floor');
             Route::get('embed/', (new DungeonRouteController())->embed(...))->name('dungeonroute.embed');
-            Route::get('embed/{floorindex}', (new DungeonRouteController())->embed(...))->name('dungeonroute.embed.floor');
-            Route::get('{floorindex}', (new DungeonRouteController())->viewFloor(...))->name('dungeonroute.view.floor');
+            Route::get('embed/{floorIndex}', (new DungeonRouteController())->embed(...))->name('dungeonroute.embed.floor');
+            Route::get('{floorIndex}', (new DungeonRouteController())->viewFloor(...))->name('dungeonroute.view.floor');
             // Preview of a route for image capturing library
             Route::get('preview/{floorIndex}', (new DungeonRouteController())->preview(...))->name('dungeonroute.preview');
         });
@@ -535,10 +535,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::prefix('{dungeonroute}')->group(static function () {
         Route::get('/', (new DungeonRouteLegacyController())->viewold(...))->name('dungeonroute.viewold');
         Route::get('embed/', (new DungeonRouteLegacyController())->embedold(...));
-        Route::get('embed/{floorindex}', (new DungeonRouteLegacyController())->embedold(...));
-        Route::get('{floorindex}', (new DungeonRouteLegacyController())->viewfloorold(...));
+        Route::get('embed/{floorIndex}', (new DungeonRouteLegacyController())->embedold(...));
+        Route::get('{floorIndex}', (new DungeonRouteLegacyController())->viewfloorold(...));
         // Preview of a route for image capturing library
-        Route::get('preview/{floorindex}', (new DungeonRouteLegacyController())->previewold(...));
+        Route::get('preview/{floorIndex}', (new DungeonRouteLegacyController())->previewold(...));
     });
 });
 

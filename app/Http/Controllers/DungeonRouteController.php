@@ -65,7 +65,7 @@ class DungeonRouteController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $defaultFloor?->index ?? '1',
+            'floorIndex'   => $defaultFloor?->index ?? '1',
         ]);
     }
 
@@ -167,7 +167,7 @@ class DungeonRouteController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $defaultFloor?->index ?? '1',
+            'floorIndex'   => $defaultFloor?->index ?? '1',
         ]);
     }
 
@@ -224,7 +224,7 @@ class DungeonRouteController extends Controller
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'floorindex'   => $defaultFloor?->index ?? '1',
+                'floorIndex'   => $defaultFloor?->index ?? '1',
             ]);
         } else {
             if ($floor->index !== (int)$floorIndex) {
@@ -232,7 +232,7 @@ class DungeonRouteController extends Controller
                     'dungeon'      => $dungeonroute->dungeon,
                     'dungeonroute' => $dungeonroute,
                     'title'        => $dungeonroute->getTitleSlug(),
-                    'floorindex'   => $floor->index,
+                    'floorIndex'   => $floor->index,
                 ]);
             }
 
@@ -416,7 +416,7 @@ class DungeonRouteController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $defaultFloor?->index ?? '1',
+            'floorIndex'   => $defaultFloor?->index ?? '1',
         ]);
     }
 
@@ -446,7 +446,7 @@ class DungeonRouteController extends Controller
                 'dungeon'      => $dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $titleSlug,
-                'floorindex'   => $floorIndex,
+                'floorIndex'   => $floorIndex,
             ]);
         }
 
@@ -465,7 +465,7 @@ class DungeonRouteController extends Controller
                 'dungeon'      => $dungeonroute->dungeon,
                 'dungeonroute' => $dungeonroute,
                 'title'        => $dungeonroute->getTitleSlug(),
-                'floorindex'   => $defaultFloor?->index ?? '1',
+                'floorIndex'   => $defaultFloor?->index ?? '1',
             ]);
         } else {
             if ($floor->index !== (int)$floorIndex) {
@@ -473,7 +473,7 @@ class DungeonRouteController extends Controller
                     'dungeon'      => $dungeonroute->dungeon,
                     'dungeonroute' => $dungeonroute,
                     'title'        => $dungeonroute->getTitleSlug(),
-                    'floorindex'   => $floor->index,
+                    'floorIndex'   => $floor->index,
                 ]);
             }
 
@@ -491,7 +491,7 @@ class DungeonRouteController extends Controller
                 'title'        => $dungeonroute->getTitleSlug(),
                 'floor'        => $floor,
                 'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonroute, $floor),
-                'floorindex'   => $floorIndex,
+                'floorIndex'   => $floorIndex,
                 'keyLevelMin'  => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
                 'keyLevelMax'  => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
                 'parameters'   => $request->validated(),
