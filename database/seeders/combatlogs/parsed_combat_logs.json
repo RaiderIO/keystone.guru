@@ -782,5 +782,509 @@
         "extracted_data": 1,
         "created_at": "2024-09-04T21:10:36+00:00",
         "updated_at": "2024-09-04T21:10:36+00:00"
+    },
+    {
+        "id": 113,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_ara-kara-city-of-echoes-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:20+00:00",
+        "updated_at": "2024-09-06T21:33:20+00:00"
+    },
+    {
+        "id": 114,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_ara-kara-city-of-echoes-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:26+00:00",
+        "updated_at": "2024-09-06T21:33:26+00:00"
+    },
+    {
+        "id": 115,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_ara-kara-city-of-echoes-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:29+00:00",
+        "updated_at": "2024-09-06T21:33:29+00:00"
+    },
+    {
+        "id": 116,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_ara-kara-city-of-echoes-4.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:31+00:00",
+        "updated_at": "2024-09-06T21:33:31+00:00"
+    },
+    {
+        "id": 117,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_ara-kara-city-of-echoes-5.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:31+00:00",
+        "updated_at": "2024-09-06T21:33:31+00:00"
+    },
+    {
+        "id": 118,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_ara-kara-city-of-echoes-6.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:33+00:00",
+        "updated_at": "2024-09-06T21:33:33+00:00"
+    },
+    {
+        "id": 119,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_ara-kara-city-of-echoes-7.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:33+00:00",
+        "updated_at": "2024-09-06T21:33:33+00:00"
+    },
+    {
+        "id": 120,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:37+00:00",
+        "updated_at": "2024-09-06T21:33:37+00:00"
+    },
+    {
+        "id": 121,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_azj-kahet.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:37+00:00",
+        "updated_at": "2024-09-06T21:33:37+00:00"
+    },
+    {
+        "id": 122,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_cinderbrew-meadery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:42+00:00",
+        "updated_at": "2024-09-06T21:33:42+00:00"
+    },
+    {
+        "id": 123,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_cinderbrew-meadery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:47+00:00",
+        "updated_at": "2024-09-06T21:33:47+00:00"
+    },
+    {
+        "id": 124,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:51+00:00",
+        "updated_at": "2024-09-06T21:33:51+00:00"
+    },
+    {
+        "id": 125,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_darkflame-cleft-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:51+00:00",
+        "updated_at": "2024-09-06T21:33:51+00:00"
+    },
+    {
+        "id": 126,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 127,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 128,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-10.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 129,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-11.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 130,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-12.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 131,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-13.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 132,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-14.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 133,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-15.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 134,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-16.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 135,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-17.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 136,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-18.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 137,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-19.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 138,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 139,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-20.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 140,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 141,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-4.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 142,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-5.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 143,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-6.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 144,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-7.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 145,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-8.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 146,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal-9.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 147,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_dornogal.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:33:55+00:00",
+        "updated_at": "2024-09-06T21:33:55+00:00"
+    },
+    {
+        "id": 148,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:34:00+00:00",
+        "updated_at": "2024-09-06T21:34:00+00:00"
+    },
+    {
+        "id": 149,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:34:14+00:00",
+        "updated_at": "2024-09-06T21:34:14+00:00"
+    },
+    {
+        "id": 150,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:34:20+00:00",
+        "updated_at": "2024-09-06T21:34:20+00:00"
+    },
+    {
+        "id": 151,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-4.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:34:26+00:00",
+        "updated_at": "2024-09-06T21:34:26+00:00"
+    },
+    {
+        "id": 152,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:34:30+00:00",
+        "updated_at": "2024-09-06T21:34:30+00:00"
+    },
+    {
+        "id": 153,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:34:30+00:00",
+        "updated_at": "2024-09-06T21:34:30+00:00"
+    },
+    {
+        "id": 154,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:34:33+00:00",
+        "updated_at": "2024-09-06T21:34:33+00:00"
+    },
+    {
+        "id": 155,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:34:36+00:00",
+        "updated_at": "2024-09-06T21:34:36+00:00"
+    },
+    {
+        "id": 156,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-4.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:34:47+00:00",
+        "updated_at": "2024-09-06T21:34:47+00:00"
+    },
+    {
+        "id": 157,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-5.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:34:50+00:00",
+        "updated_at": "2024-09-06T21:34:50+00:00"
+    },
+    {
+        "id": 158,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-6.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:34:55+00:00",
+        "updated_at": "2024-09-06T21:34:55+00:00"
+    },
+    {
+        "id": 159,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-7.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:34:55+00:00",
+        "updated_at": "2024-09-06T21:34:55+00:00"
+    },
+    {
+        "id": 160,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-8.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:34:58+00:00",
+        "updated_at": "2024-09-06T21:34:58+00:00"
+    },
+    {
+        "id": 161,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-9.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:34:58+00:00",
+        "updated_at": "2024-09-06T21:34:58+00:00"
+    },
+    {
+        "id": 162,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:01+00:00",
+        "updated_at": "2024-09-06T21:35:01+00:00"
+    },
+    {
+        "id": 163,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:04+00:00",
+        "updated_at": "2024-09-06T21:35:04+00:00"
+    },
+    {
+        "id": 164,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:07+00:00",
+        "updated_at": "2024-09-06T21:35:07+00:00"
+    },
+    {
+        "id": 165,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:10+00:00",
+        "updated_at": "2024-09-06T21:35:10+00:00"
+    },
+    {
+        "id": 166,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-4.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:10+00:00",
+        "updated_at": "2024-09-06T21:35:10+00:00"
+    },
+    {
+        "id": 167,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-5.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:16+00:00",
+        "updated_at": "2024-09-06T21:35:16+00:00"
+    },
+    {
+        "id": 168,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-6.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:19+00:00",
+        "updated_at": "2024-09-06T21:35:19+00:00"
+    },
+    {
+        "id": 169,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-7.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:19+00:00",
+        "updated_at": "2024-09-06T21:35:19+00:00"
+    },
+    {
+        "id": 170,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-8.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:21+00:00",
+        "updated_at": "2024-09-06T21:35:21+00:00"
+    },
+    {
+        "id": 171,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-9.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:21+00:00",
+        "updated_at": "2024-09-06T21:35:21+00:00"
+    },
+    {
+        "id": 172,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:25+00:00",
+        "updated_at": "2024-09-06T21:35:25+00:00"
+    },
+    {
+        "id": 173,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_ara-kara-city-of-echoes-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:26+00:00",
+        "updated_at": "2024-09-06T21:35:26+00:00"
+    },
+    {
+        "id": 174,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_ara-kara-city-of-echoes-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:27+00:00",
+        "updated_at": "2024-09-06T21:35:27+00:00"
+    },
+    {
+        "id": 175,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_ara-kara-city-of-echoes-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:28+00:00",
+        "updated_at": "2024-09-06T21:35:28+00:00"
+    },
+    {
+        "id": 176,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:29+00:00",
+        "updated_at": "2024-09-06T21:35:29+00:00"
+    },
+    {
+        "id": 177,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_city-of-threads-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:29+00:00",
+        "updated_at": "2024-09-06T21:35:29+00:00"
+    },
+    {
+        "id": 178,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_city-of-threads-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:29+00:00",
+        "updated_at": "2024-09-06T21:35:29+00:00"
+    },
+    {
+        "id": 179,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_city-of-threads-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:29+00:00",
+        "updated_at": "2024-09-06T21:35:29+00:00"
+    },
+    {
+        "id": 180,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_city-of-threads-4.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:29+00:00",
+        "updated_at": "2024-09-06T21:35:29+00:00"
+    },
+    {
+        "id": 181,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:29+00:00",
+        "updated_at": "2024-09-06T21:35:29+00:00"
+    },
+    {
+        "id": 182,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_dornogal-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:29+00:00",
+        "updated_at": "2024-09-06T21:35:29+00:00"
+    },
+    {
+        "id": 183,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_dornogal.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:29+00:00",
+        "updated_at": "2024-09-06T21:35:29+00:00"
+    },
+    {
+        "id": 184,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_the-ringing-deeps.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-06T21:35:29+00:00",
+        "updated_at": "2024-09-06T21:35:29+00:00"
     }
 ]
