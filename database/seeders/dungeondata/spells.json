@@ -44659,7 +44659,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -45598,7 +45598,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -48904,7 +48904,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
