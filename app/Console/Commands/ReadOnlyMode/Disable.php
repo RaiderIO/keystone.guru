@@ -29,14 +29,6 @@ class Disable extends Command
     protected $description = 'Disables read-only mode - the site will once again accept all request types';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(ReadOnlyModeServiceInterface $readOnlyModeService): int

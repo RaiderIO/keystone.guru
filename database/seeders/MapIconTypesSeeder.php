@@ -12,8 +12,6 @@ class MapIconTypesSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding known Map Icon Types');
-
         $mapIconTypes = [
             MapIconType::MAP_ICON_TYPE_UNKNOWN                   => ['name' => 'mapicontypes.unknown'],
             MapIconType::MAP_ICON_TYPE_COMMENT                   => ['name' => 'mapicontypes.comment'],
@@ -166,5 +164,11 @@ class MapIconTypesSeeder extends Seeder implements TableSeederInterface
     public static function getAffectedModelClasses(): array
     {
         return [MapIconType::class];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

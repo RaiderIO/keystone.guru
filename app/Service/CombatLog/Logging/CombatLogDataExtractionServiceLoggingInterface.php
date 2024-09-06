@@ -6,15 +6,17 @@ interface CombatLogDataExtractionServiceLoggingInterface
 {
     public function extractDataTimestampNotSet(): void;
 
-    public function extractDataSetChallengeMode(string $dungeonName, int $keyLevel, string $affixGroup): void;
+    public function extractDataDungeonNotSet(): void;
+
+    public function extractDataSetChallengeMode(string $dungeonName, int $keyLevel, ?string $affixGroup): void;
 
     public function extractDataSetZoneFailedChallengeModeActive(): void;
 
-    public function extractDataSetZone(string $dungeonName): void;
+    public function extractDataZoneChangeDungeonNotFound(int $zoneId, string $zoneName): void;
 
-    public function extractDataAddedNewFloorConnection(int $previousFloorId, int $currentFloorId);
+    public function extractDataZoneChangeSetZone(string $dungeonName): void;
 
-    public function extractDataNpcNotFound(int $npcId): void;
+    public function extractSpellAuraIdsDungeonNotSet(): void;
 
-    public function extractDataUpdatedNpc(int $baseHealth): void;
+    public function extractSpellAuraIdsFoundSpellId(int $spellId): void;
 }

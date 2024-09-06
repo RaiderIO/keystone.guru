@@ -11,7 +11,7 @@ interface ThumbnailServiceInterface
     public function queueThumbnailRefresh(DungeonRoute $dungeonRoute): bool;
 
     /**
-     * @return Collection|DungeonRouteThumbnailJob[]
+     * @return Collection<DungeonRouteThumbnailJob>
      */
     public function queueThumbnailRefreshForApi(
         DungeonRoute $dungeonRoute,

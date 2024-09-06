@@ -15,7 +15,7 @@ class ExportMapping extends Command
      *
      * @var string
      */
-    protected $signature = 'mdt:exportmapping {expansion} {targetFolder}';
+    protected $signature = 'mdt:exportmapping {expansion} {targetFolder} {--excludeTranslations}';
 
     /**
      * The console command description.
@@ -25,22 +25,15 @@ class ExportMapping extends Command
     protected $description = 'Exports the current mapping of all dungeons to MDT';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @throws Exception
      */
     public function handle(MDTMappingExportServiceInterface $mappingExportService): int
     {
-        $expansion    = Expansion::where('shortname', $this->argument('expansion'))->firstOrFail();
-        $targetFolder = $this->argument('targetFolder');
+        $expansion           = Expansion::where('shortname', $this->argument('expansion'))->firstOrFail();
+        $targetFolder        = $this->argument('targetFolder');
+        $excludeTranslations = $this->option('excludeTranslations');
 
         foreach ($expansion->dungeons as $dungeon) {
             if (!$dungeon->enemies()->exists()) {
@@ -56,12 +49,12 @@ class ExportMapping extends Command
                 continue;
             }
 
-            $luaString = $mappingExportService->getMDTMappingAsLuaString($dungeon->currentMappingVersion);
+            $luaString = $mappingExportService->getMDTMappingAsLuaString($dungeon->currentMappingVersion, $excludeTranslations);
 
             if (!Conversion::hasMDTDungeonName($dungeon->key)) {
                 $this->warn(sprintf('Unable to find MDT dungeon for key %s!', $dungeon->key));
             } else {
-                $fileName = sprintf('%s/%s.lua', $targetFolder, Conversion::getMDTDungeonName($dungeon->key));
+                $fileName = sprintf('%s/%s.lua', realpath($targetFolder), Conversion::getMDTDungeonName($dungeon->key));
 
                 $this->info(sprintf('Saving %s', $fileName));
                 file_put_contents($fileName, $luaString);

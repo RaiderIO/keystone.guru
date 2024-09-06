@@ -13,8 +13,8 @@ use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Polyline;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -55,8 +55,11 @@ trait SavesPolylines
             'model_id'       => $ownerModel->id,
             'model_class'    => $ownerModel::class,
             'color'          => $data['color'] ?? '#f00',
-            'color_animated' => Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES) ? $data['color_animated'] : null,
-            'weight'         => (int)$data['weight'] ?? 2,
+            'color_animated' =>
+                Auth::check() &&
+                Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES) ?
+                    $data['color_animated'] : null,
+            'weight'         => (int)($data['weight'] ?? 2),
             'vertices_json'  => $data['vertices_json'] ?? '{}',
         ]);
     }

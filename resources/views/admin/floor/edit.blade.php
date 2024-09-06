@@ -76,8 +76,15 @@ $floor ??= null;
         @include('common.forms.form-error', ['key' => 'ui_map_id'])
     </div>
 
+    <div class="form-group{{ $errors->has('map_name') ? ' has-error' : '' }}">
+        {!! Form::label('map_name', __('view_admin.floor.edit.map_name'), ['class' => 'font-weight-bold']) !!}
+        <span class="form-required">*</span>
+        {!! Form::text('map_name', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'map_name'])
+    </div>
+
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-        {!! Form::label('name', __('view_admin.floor.edit.floor_name'), ['class' => 'font-weight-bold']) !!}
+        {!! Form::label('name', __('view_admin.floor.edit.name'), ['class' => 'font-weight-bold']) !!}
         <span class="form-required">*</span>
         {!! Form::text('name', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'name'])
@@ -97,13 +104,13 @@ $floor ??= null;
 
     <div class="form-group{{ $errors->has('enemy_engagement_max_range') ? ' has-error' : '' }}">
         {!! Form::label('enemy_engagement_max_range', sprintf(__('view_admin.floor.edit.enemy_engagement_max_range'), config('keystoneguru.enemy_engagement_max_range_default')), ['class' => 'font-weight-bold']) !!}
-        {!! Form::number('enemy_engagement_max_range', $floor?->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'), ['class' => 'form-control']) !!}
+        {!! Form::number('enemy_engagement_max_range', $floor?->enemy_engagement_max_range, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'enemy_engagement_max_range'])
     </div>
 
     <div class="form-group{{ $errors->has('enemy_engagement_max_range_patrols') ? ' has-error' : '' }}">
         {!! Form::label('enemy_engagement_max_range_patrols', sprintf(__('view_admin.floor.edit.enemy_engagement_max_range_patrols'), config('keystoneguru.enemy_engagement_max_range_patrols_default')), ['class' => 'font-weight-bold']) !!}
-        {!! Form::number('enemy_engagement_max_range_patrols', $floor?->enemy_engagement_max_range_patrols ?? config('keystoneguru.enemy_engagement_max_range_patrols_default'), ['class' => 'form-control']) !!}
+        {!! Form::number('enemy_engagement_max_range_patrols', $floor?->enemy_engagement_max_range_patrols, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'enemy_engagement_max_range_patrols'])
     </div>
 
@@ -111,6 +118,12 @@ $floor ??= null;
         {!! Form::label('percentage_display_zoom', __('view_admin.floor.edit.percentage_display_zoom'), ['class' => 'font-weight-bold']) !!}
         {!! Form::number('percentage_display_zoom', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'percentage_display_zoom'])
+    </div>
+
+    <div class="form-group{{ $errors->has('zoom_max') ? ' has-error' : '' }}">
+        {!! Form::label('zoom_max', sprintf(__('view_admin.floor.edit.zoom_max'), config('keystoneguru.zoom_max_default')), ['class' => 'font-weight-bold']) !!}
+        {!! Form::number('zoom_max', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'zoom_max'])
     </div>
 
     <div class="form-group">

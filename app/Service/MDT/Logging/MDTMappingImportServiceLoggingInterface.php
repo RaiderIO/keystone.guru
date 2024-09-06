@@ -24,13 +24,42 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importDungeonEnd(): void;
 
+    public function importNpcsDataFromMDTStart(string $key): void;
+
+    public function importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
+        int $npcCharacteristicsDeleted,
+        int $npcCharacteristicsInserted,
+        int $npcSpellsDeleted,
+        int $npcSpellsInserted
+    ): void;
+
+    public function importNpcsDataFromMDTNpcNotMarkedForAllDungeons(int $npcId): void;
+
+    public function importNpcsDataFromMDTSaveNpcException(Exception $exception): void;
+
+    public function importNpcsDataFromMDTEnd(): void;
+
+    public function importSpellDataFromMDTStart(string $key): void;
+
+    public function importSpellDataFromMDTSpellInExcludeList(): void;
+
+    public function importSpellDataFromMDTResult(int $spellCount, int $spellDungeonCount): void;
+
+    public function importSpellDataFromMDTFailed(): void;
+
+    public function importSpellDataFromMDTEnd(): void;
+
     public function importNpcsStart(): void;
 
-    public function importNpcsSaveNewNpc(int $npcId): void;
+    public function importNpcsDataFromMDTUnableToFindCharacteristicForNpc(int $id, string $characteristicName): void;
+
+    public function importNpcsDataFromMDTSpellInExcludeList(): void;
+
+    public function importNpcsDataFromMDTSaveNewNpc(int $npcId): void;
+
+    public function importNpcsUnableToFindNpc(int $npcId): void;
 
     public function importNpcsUpdateExistingNpc(int $npcId): void;
-
-    public function importNpcsSaveNpcException(Exception $exception): void;
 
     public function importNpcsEnd(): void;
 
@@ -83,6 +112,8 @@ interface MDTMappingImportServiceLoggingInterface
     public function importDungeonFloorSwitchMarkersImportFromMDT(): void;
 
     public function importDungeonFloorSwitchMarkersNewDungeonFloorSwitchMarkerOK(int $dungeonFloorSwitchMarkerId, int $floorId, int $targetFloorId): void;
+
+    public function importDungeonFloorSwitchMarkersHaveExistingFloorSwitchMarkers(int $count): void;
 
     public function importDungeonFloorSwitchMarkersEnd(): void;
 }

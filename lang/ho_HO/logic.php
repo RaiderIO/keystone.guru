@@ -26,6 +26,7 @@ return [
                     'pull'              => 'Hodor',
                     'object'            => 'Hodor',
                 ],
+                'object_out_of_bounds'                                 => 'Hodor',
                 'limit_reached_pulls'                                  => 'Hodor',
                 'limit_reached_brushlines'                             => 'Hodor',
                 'limit_reached_paths'                                  => 'Hodor',

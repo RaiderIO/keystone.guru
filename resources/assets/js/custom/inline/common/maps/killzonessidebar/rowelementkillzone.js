@@ -173,8 +173,9 @@ class RowElementKillZone extends RowElement {
             .find('.shrouded_stacks').text(cumulativeShroudedEnemyStacks);
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_shrouded_zul_gamux:not(.draggable--original)`).toggle(hasShroudedZulGamux)
             .find('.shrouded_stacks').text(cumulativeShroudedEnemyStacks);
-        $(`#map_killzonessidebar_killzone_${this.killZone.id}_description:not(.draggable--original)`).text(this.killZone.description);
-
+        $(`#map_killzonessidebar_killzone_${this.killZone.id}_description:not(.draggable--original)`).html(
+            c.map.sanitizeText(this.killZone.description)
+        );
         // $(`#map_killzonessidebar_killzone_${this.killZone.id}_grip:not(.draggable--original)`).css('color', this.killZone.color);
         // .css('color', killZone.color).css('text-shadow', `1px 1px #222`);
     }
@@ -281,7 +282,7 @@ class RowElementKillZone extends RowElement {
         let $spellList = $(`#map_killzonessidebar_killzone_${this.killZone.id}_spell_list`);
         $spellList.children().remove();
         let template = Handlebars.templates['map_killzonessidebar_killzone_row_spell_template'];
-        
+
         for (let index in this.killZone.spells) {
             let spell = this.killZone.spells[index];
 

@@ -1,0 +1,29 @@
+{
+    "id": 242,
+    "release_changelog_id": 249,
+    "version": "v10.1.2",
+    "title": "Fixed Nokhud Offensive Auto-Route creator issues",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-06-18T09:40:45+00:00",
+    "updated_at": "2024-06-18T09:40:45+00:00",
+    "changelog": {
+        "id": 249,
+        "release_id": 242,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 249,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2339,
+                "change": "Enemies in the Nokhud Offensive have been placed exactly where they are in the in-game map. As a result, added support for a higher zoom level for Nokhud Offensive."
+            },
+            {
+                "release_changelog_id": 249,
+                "release_changelog_category_id": 11,
+                "ticket_id": 2340,
+                "change": "The above was needed to make the Auto-Route creator work properly for Nokhud Offensive. Most issues have been resolved - though the area around the last boss may still be problematic, this will be reviewed later."
+            }
+        ]
+    }
+}

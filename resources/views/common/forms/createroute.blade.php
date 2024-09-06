@@ -1,7 +1,16 @@
 <?php
-/** @var \App\Models\DungeonRoute\DungeonRoute|null $dungeonroute */
-/** @var int $routeKeyLevelFrom */
-/** @var int $routeKeyLevelTo */
+
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
+use App\Models\Season;
+
+/**
+ * @var DungeonRoute|null $dungeonroute
+ * @var Season            $currentSeason
+ * @var Season|null       $nextSeason
+ * @var int               $routeKeyLevelFrom
+ * @var int               $routeKeyLevelTo
+ */
 
 $teeming                = old('teeming') ?? false;
 $defaultSelectedAffixes = old('affixes') ?? [];
@@ -13,8 +22,11 @@ $dungeonSelectId = 'dungeon_id_select';
 
 @include('common.general.inline', ['path' => 'common/forms/createroute', 'options' => [
     'levelSelector' => '#dungeon_route_level',
-    'levelMin' => config('keystoneguru.keystone.levels.min'),
-    'levelMax' => config('keystoneguru.keystone.levels.max'),
+    'dungeonSelector' => sprintf('#%s', $dungeonSelectId),
+    'currentSeason' => $currentSeason,
+    'nextSeason' => $nextSeason,
+    'keyLevelMinDefault' => config('keystoneguru.keystone.levels.default_min'),
+    'keyLevelMaxDefault' => config('keystoneguru.keystone.levels.default_max'),
     'levelFrom' => $routeKeyLevelFrom,
     'levelTo' => $routeKeyLevelTo,
 ]])
@@ -132,7 +144,7 @@ $dungeonSelectId = 'dungeon_id_select';
                                 ])
                         </div>
 
-                        @if(Auth::check() && Auth::user()->hasRole('admin'))
+                        @if(Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN))
                             <h3>
                                 {{ __('view_common.forms.createroute.admin') }}
                             </h3>

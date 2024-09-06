@@ -4,9 +4,12 @@
 
 @section('content')
     <h3>{{ __('view_admin.tools.list.header_tools') }}</h3>
-    <h4>{{ __('view_admin.tools.list.subheader_import') }}</h4>
+    <h4>{{ __('view_admin.tools.list.subheader_npcs') }}</h4>
     <div class="form-group">
-        <a href="{{ route('admin.tools.npcimport') }}">{{ __('view_admin.tools.list.mass_import_npcs') }}</a>
+        <a href="{{ route('admin.tools.npc.import') }}">{{ __('view_admin.tools.list.mass_import_npcs') }}</a>
+    </div>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.npc.managespellvisibility') }}">{{ __('view_admin.tools.list.manage_spell_visibility') }}</a>
     </div>
 
     <h4>{{ __('view_admin.tools.list.subheader_dungeonroute') }}</h4>
@@ -55,9 +58,9 @@
         <a href="{{ route('admin.tools.wowtools.import_ingame_coordinates') }}">{{ __('view_admin.tools.list.wowtools_import_ingame_coordinates') }}</a>
     </div>
 
-    <h4>{{ __('view_admin.tools.list.subheader_misc') }}</h4>
+    <h4>{{ __('view_admin.tools.list.subheader_features') }}</h4>
     <div class="form-group">
-        <a href="{{ route('admin.tools.exception.select') }}">{{ __('view_admin.tools.list.throw_an_exception') }}</a>
+        <a href="{{ route('admin.tools.features.list') }}">{{ __('view_admin.tools.list.manage_features') }}</a>
     </div>
 
     @if(config('app.type') === 'mapping')
@@ -67,6 +70,11 @@
                href="{{ route('admin.tools.mapping.forcesync') }}">{{ __('view_admin.tools.list.force_sync_mapping') }}</a>
         </div>
     @endif
+
+    <h4>{{ __('view_admin.tools.list.subheader_misc') }}</h4>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.exception.select') }}">{{ __('view_admin.tools.list.throw_an_exception') }}</a>
+    </div>
 
     <h3>{{ __('view_admin.tools.list.subheader_actions') }}</h3>
     <div class="form-group">

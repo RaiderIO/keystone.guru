@@ -13,15 +13,15 @@ class ImportStringDetails implements Arrayable
     private ?string $faction = null;
 
     /**
-     * @param ImportWarning|Collection $warnings
-     * @param Collection|string[]      $affixes
+     * @param Collection<ImportWarning> $warnings
+     * @param Collection<string>        $affixes
      */
     public function __construct(private readonly Collection $warnings, private readonly Collection $errors, private readonly Dungeon $dungeon, private readonly Collection $affixes, private readonly bool $hasThisWeeksAffixGroup, private readonly int $pulls, private readonly int $paths, private readonly int $lines, private readonly int $notes, private readonly int $enemyForces, private readonly int $enemyForcesMax)
     {
     }
 
     /**
-     * @return Collection|ImportWarning[]
+     * @return Collection<ImportWarning>
      */
     public function getWarnings(): Collection
     {
@@ -29,7 +29,7 @@ class ImportStringDetails implements Arrayable
     }
 
     /**
-     * @return Collection|ImportError[]
+     * @return Collection<ImportError>
      */
     public function getErrors(): Collection
     {

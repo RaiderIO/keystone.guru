@@ -8,15 +8,36 @@
 
 namespace App\Logic\Datatables;
 
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Floor\Floor;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class DungeonRoutesDatatablesHandler extends DatatablesHandler
 {
+    public function getResult(): array
+    {
+        /** @var array{ draw: int, recordsTotal: int, data: Collection<Builder>, recordsFiltered: int, input: array, queries: array } $result */
+        $result = parent::getResult();
+
+        $result['data'] = $result['data']->each(function (DungeonRoute $dungeonRoute) {
+            $dungeonRoute->makeHidden(['mappingVersion']);
+            $dungeonRoute->dungeon->makeHidden(['gameVersion']);
+            $dungeonRoute->dungeon->floors->each(function (Floor $floor) {
+                $floor->setVisible(['active', 'index', 'facade']);
+            });
+        });
+
+        return $result;
+    }
+
+
     protected function calculateRecordsTotal(): int
     {
         // Clear them
         $countQuery = $this->builder->getQuery()
-            ->cloneWithout(['having', 'groups'])
+            ->cloneWithout(['havings', 'groups'])
             // ->cloneWithoutBindings(['select'])
             ->selectRaw('count(distinct dungeon_routes.id) as aggregate');
         // Get the count

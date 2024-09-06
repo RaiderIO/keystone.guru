@@ -3,7 +3,7 @@
 namespace App\Service\CombatLog\Models\CreateRoute;
 
 use App\Models\Enemy;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class CreateRouteNpc
 {
@@ -13,7 +13,12 @@ class CreateRouteNpc
 
     private ?Enemy $resolvedEnemy = null;
 
-    public function __construct(public int $npcId, public string $spawnUid, public string $engagedAt, public string $diedAt, public CreateRouteCoord $coord)
+    public function __construct(
+        public int              $npcId,
+        public string           $spawnUid,
+        public string           $engagedAt,
+        public string           $diedAt,
+        public CreateRouteCoord $coord)
     {
     }
 

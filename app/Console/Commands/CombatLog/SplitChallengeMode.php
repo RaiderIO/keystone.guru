@@ -4,7 +4,7 @@ namespace App\Console\Commands\CombatLog;
 
 use App\Service\CombatLog\CombatLogSplitServiceInterface;
 
-class SplitChallengeMode extends BaseCombatLogCommand
+class SplitChallengeMode extends BaseSplitCombatLogCommand
 {
     /**
      * The name and signature of the console command.
@@ -29,30 +29,8 @@ class SplitChallengeMode extends BaseCombatLogCommand
 
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->splitCombatLog($combatLogSplitService, $filePath));
-    }
-
-    private function splitCombatLog(CombatLogSplitServiceInterface $combatLogSplitService, string $filePath): int
-    {
-        $this->info(sprintf('Parsing file %s', $filePath));
-
-        $resultingFiles = $combatLogSplitService->splitCombatLogOnChallengeModes($filePath);
-        foreach ($resultingFiles as $resultingFile) {
-            $this->comment(sprintf('- Created file %s', $resultingFile));
-        }
-
-        // Rename the original file AFTER it was split, if nothing was done, don't do it
-        $targetFileExtension = '.bak';
-        if ($resultingFiles->count() === 0) {
-            $targetFileExtension = '.del';
-            $this->warn('- File contained no challenge modes!');
-        }
-
-        $targetFileName = str_replace(['.txt', '.zip'], $targetFileExtension, $filePath);
-
-        $this->comment(sprintf('- Renaming original file to %s', $targetFileName));
-        rename($filePath, $targetFileName);
-
-        return 0;
+        return $this->parseCombatLogSplitRecursively($filePath, function (string $filePath) use ($combatLogSplitService) {
+            return $combatLogSplitService->splitCombatLogOnChallengeModes($filePath);
+        });
     }
 }

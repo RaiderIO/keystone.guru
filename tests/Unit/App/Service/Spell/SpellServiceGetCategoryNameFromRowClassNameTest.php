@@ -4,15 +4,14 @@ namespace Tests\Unit\App\Service\Spell;
 
 use App\Models\CharacterClass;
 use Illuminate\Support\Collection;
-use JetBrains\PhpStorm\NoReturn;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
+use Tests\Fixtures\LoggingFixtures;
+use Tests\Fixtures\ServiceFixtures;
 use Tests\TestCases\PublicTestCase;
-use Tests\Unit\Fixtures\LoggingFixtures;
-use Tests\Unit\Fixtures\ServiceFixtures;
 
 class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
 {
@@ -33,7 +32,6 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
      *
      * @throws Exception
      */
-    #[NoReturn]
     #[Test]
     #[Group('SpellService')]
     #[DataProvider('getCategoryNameFromRowClassName_ShouldReturnCategoryName_GivenValidClassBasedRowClassName_DataProvider')]
@@ -148,7 +146,6 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
      *
      * @throws Exception
      */
-    #[NoReturn]
     #[Test]
     #[Group('SpellService')]
     #[DataProvider('getCategoryNameFromRowClassName_ShouldReturnCategoryName_GivenValidNonClassBasedRowClassName_DataProvider')]
@@ -200,7 +197,6 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
      *
      * @throws Exception
      */
-    #[NoReturn]
     #[Test]
     #[Group('SpellService')]
     public function getCategoryNameFromRowClassName_ShouldReturnNull_GivenInvalidRowClassName(): void
@@ -241,7 +237,6 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
      *
      * @throws Exception
      */
-    #[NoReturn]
     #[Test]
     #[Group('SpellService')]
     public function getCategoryNameFromRowClassName_ShouldReturnNull_GivenNewClassButNoCategory(): void
@@ -250,7 +245,7 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         $rowClassName = 'Tinker Explosivist';
 
         // Just make up a new class here
-        $characterClassTinker = $this->characterClasses->first();
+        $characterClassTinker       = $this->characterClasses->first();
         $characterClassTinker->name = 'classes.tinker';
 
         $log          = LoggingFixtures::createSpellServiceLogging($this);

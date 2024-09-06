@@ -6,9 +6,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 78188,
+        "encounter_id": 2083,
         "name": "Rezan",
         "base_health": 10375700,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -17,7 +20,34 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 255371
+            },
+            {
+                "spell_id": 255372
+            },
+            {
+                "spell_id": 255373
+            },
+            {
+                "spell_id": 255421
+            },
+            {
+                "spell_id": 255434
+            },
+            {
+                "spell_id": 255445
+            },
+            {
+                "spell_id": 257407
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -27,9 +57,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 79453,
+        "encounter_id": 2036,
         "name": "Vol'kaal",
         "base_health": 9338130,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -38,7 +71,34 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 250241
+            },
+            {
+                "spell_id": 250258
+            },
+            {
+                "spell_id": 250259
+            },
+            {
+                "spell_id": 250368
+            },
+            {
+                "spell_id": 250372
+            },
+            {
+                "spell_id": 259572
+            },
+            {
+                "spell_id": 259574
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -48,9 +108,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 80293,
+        "encounter_id": 2082,
         "name": "Priestess Alun'za",
         "base_health": 13340185,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -59,7 +122,40 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 255575
+            },
+            {
+                "spell_id": 255577
+            },
+            {
+                "spell_id": 255579
+            },
+            {
+                "spell_id": 255581
+            },
+            {
+                "spell_id": 255591
+            },
+            {
+                "spell_id": 255835
+            },
+            {
+                "spell_id": 255836
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -69,9 +165,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 79568,
+        "encounter_id": 2030,
         "name": "Yazma",
         "base_health": 11857942,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -80,7 +179,46 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 249919
+            },
+            {
+                "spell_id": 250022
+            },
+            {
+                "spell_id": 250028
+            },
+            {
+                "spell_id": 250050
+            },
+            {
+                "spell_id": 250096
+            },
+            {
+                "spell_id": 256577
+            },
+            {
+                "spell_id": 257066
+            },
+            {
+                "spell_id": 259187
+            },
+            {
+                "spell_id": 259191
+            },
+            {
+                "spell_id": 418339
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -90,9 +228,12 @@
         "npc_type_id": 8,
         "npc_class_id": 2,
         "display_id": 80622,
+        "encounter_id": null,
         "name": "Zanchuli Witch-Doctor",
         "base_health": 1333013,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -101,7 +242,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 252781
+            },
+            {
+                "spell_id": 252923
+            },
+            {
+                "spell_id": 258653
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15724,
@@ -147,9 +351,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 84712,
+        "encounter_id": null,
         "name": "Shadowblade Stalker",
         "base_health": 1333013,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -158,7 +365,79 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 252661
+            },
+            {
+                "spell_id": 252666
+            },
+            {
+                "spell_id": 252687
+            },
+            {
+                "spell_id": 252692
+            },
+            {
+                "spell_id": 258653
+            },
+            {
+                "spell_id": 427000
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15722,
@@ -204,9 +483,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81325,
+        "encounter_id": null,
         "name": "Dazar'ai Juggernaut",
         "base_health": 1703294,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -215,7 +497,79 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 253239
+            },
+            {
+                "spell_id": 253279
+            },
+            {
+                "spell_id": 253548
+            },
+            {
+                "spell_id": 253654
+            },
+            {
+                "spell_id": 253666
+            },
+            {
+                "spell_id": 255824
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15717,
@@ -261,9 +615,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81336,
+        "encounter_id": null,
         "name": "Dazar'ai Augur",
         "base_health": 1333013,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -272,7 +629,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 253548
+            },
+            {
+                "spell_id": 253562
+            },
+            {
+                "spell_id": 253583
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15719,
@@ -318,9 +738,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81330,
+        "encounter_id": null,
         "name": "Dazar'ai Confessor",
         "base_health": 1184900,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -329,7 +752,73 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 253517
+            },
+            {
+                "spell_id": 253544
+            },
+            {
+                "spell_id": 253548
+            },
+            {
+                "spell_id": 254974
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15718,
@@ -375,9 +864,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 80338,
+        "encounter_id": null,
         "name": "Dazar'ai Colossus",
         "base_health": 2517913,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -386,7 +878,19 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 254958
+            },
+            {
+                "spell_id": 254959
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15720,
@@ -429,12 +933,15 @@
         "id": 127315,
         "dungeon_id": 14,
         "classification_id": 1,
-        "npc_type_id": 8,
+        "npc_type_id": 100,
         "npc_class_id": 1,
         "display_id": 82388,
+        "encounter_id": null,
         "name": "Reanimation Totem",
         "base_health": 296225,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 0.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -443,7 +950,16 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 258653
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -453,9 +969,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 80376,
+        "encounter_id": null,
         "name": "Reanimated Honor Guard",
         "base_health": 1777350,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -464,7 +983,76 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 4
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 8
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 13
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 23
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 255620
+            },
+            {
+                "spell_id": 255626
+            },
+            {
+                "spell_id": 255814
+            },
+            {
+                "spell_id": 256959
+            },
+            {
+                "spell_id": 256960
+            },
+            {
+                "spell_id": 258653
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15723,
@@ -510,9 +1098,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81326,
+        "encounter_id": null,
         "name": "Dazar'ai Honor Guard",
         "base_health": 1481125,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -521,7 +1112,67 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 253548
+            },
+            {
+                "spell_id": 256138
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15716,
@@ -567,9 +1218,12 @@
         "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 80904,
+        "encounter_id": null,
         "name": "Shieldbearer of Zul",
         "base_health": 1629238,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
@@ -578,7 +1232,64 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 4
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 8
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 13
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 23
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 253721
+            },
+            {
+                "spell_id": 258653
+            },
+            {
+                "spell_id": 273185
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15725,
@@ -624,9 +1335,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 76913,
+        "encounter_id": null,
         "name": "Feasting Skyscreamer",
         "base_health": 1481125,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -635,7 +1349,67 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 21
+            },
+            {
+                "characteristic_id": 22
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 255041
+            },
+            {
+                "spell_id": 258653
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15727,
@@ -681,9 +1455,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 81323,
+        "encounter_id": null,
         "name": "Toxic Saurid",
         "base_health": 296225,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 0.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -692,7 +1469,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 21
+            },
+            {
+                "characteristic_id": 22
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 251187
+            },
+            {
+                "spell_id": 251188
+            },
+            {
+                "spell_id": 255895
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15726,
@@ -738,9 +1578,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 47659,
+        "encounter_id": null,
         "name": "T'lonja",
         "base_health": 2962250,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -749,7 +1592,16 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 255567
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15729,
@@ -795,9 +1647,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 76483,
+        "encounter_id": null,
         "name": "Monzumi",
         "base_health": 3021495,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -812,7 +1667,19 @@
                 "whitelist_npc_id": 129552
             }
         ],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 256882
+            },
+            {
+                "spell_id": 256884
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15730,
@@ -858,9 +1725,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 80709,
+        "encounter_id": null,
         "name": "Dinomancer Kish'o",
         "base_health": 3554700,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -869,7 +1739,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 256846
+            },
+            {
+                "spell_id": 256849
+            },
+            {
+                "spell_id": 256864
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15728,
@@ -915,9 +1803,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 82238,
+        "encounter_id": null,
         "name": "Gilded Priestess",
         "base_health": 1481125,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -926,7 +1817,70 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 260666
+            },
+            {
+                "spell_id": 260667
+            },
+            {
+                "spell_id": 260668
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 15721,

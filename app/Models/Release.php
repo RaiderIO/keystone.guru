@@ -5,9 +5,9 @@ namespace App\Models;
 use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
 use App\Vendor\SemVer\Version;
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 use PHLAK\SemVer\Exceptions\InvalidVersionException;
 use Throwable;
 
@@ -20,9 +20,11 @@ use Throwable;
  * @property bool             $spotlight
  * @property Carbon           $updated_at
  * @property Carbon           $created_at
+ *
  * @property string           $github_body
  * @property string           $discord_body
  * @property string           $reddit_body
+ *
  * @property ReleaseChangelog $changelog
  *
  * @mixin Eloquent

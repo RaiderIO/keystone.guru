@@ -9,7 +9,7 @@ use App\Service\Coordinates\CoordinatesService;
 class LatLngFixtures
 {
     public static function getLatLng(
-        Floor $floor,
+        Floor  $floor,
         ?float $lat = null,
         ?float $lng = null
     ): LatLng {

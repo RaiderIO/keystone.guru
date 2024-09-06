@@ -2,8 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Service\StructuredLogging\StructuredLoggingServiceInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
+use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class Random extends Command
 {
@@ -22,20 +27,86 @@ class Random extends Command
     protected $description = 'Command description';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(
-        StructuredLoggingServiceInterface $structuredLoggingService
+        CombatLogEventServiceInterface       $combatLogEventService,
+        ChallengeModeRunDataServiceInterface $challengeModeRunDataService,
+        CoordinatesServiceInterface          $coordinatesService,
+        SeasonServiceInterface               $seasonService,
+        DungeonRouteRepositoryInterface      $dungeonRouteRepository
     ): int {
-        $structuredLoggingService->all();
+        $count = 0;
+
+        $this->info('Test');
+
+        $progressBar = $this->output->createProgressBar(100);
+        $progressBar->setFormat(ProgressBar::FORMAT_DEBUG); // ""
+        $progressBar->start();
+
+        for ($i = 0; $i < 100; $i++) {
+            $progressBar->setMessage(sprintf('Processing %d', $count));
+            $progressBar->advance();
+            usleep(500000);
+            $count++;
+        }
+        $progressBar->finish();
+
+//        $dungeonRoute = $dungeonRouteRepository->find(1715);
+//
+//        $season = $dungeonRoute->getSeasonFromAffixes() ??
+//            $seasonService->getMostRecentSeasonForDungeon($dungeonRoute->dungeon) ??
+//            $seasonService->getSeasonAt($dungeonRoute->created_at);
+//
+//        if ($season?->hasDungeon($dungeonRoute->dungeon)) {
+//            $this->info(sprintf('Would update season_id to %d', $season->id));
+////            $dungeonRoute->update([
+////                'season_id' => $season->id,
+////            ]);
+//        }
+//
+//        dd($dungeonRoute->id);
+
+//        $dungeonFloorSwitchMarker = DungeonFloorSwitchMarker::find(1654);
+//        $hallsOfInfusion          = Dungeon::firstWhere('key', Dungeon::DUNGEON_HALLS_OF_INFUSION);
+//
+//        $latLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+//            $hallsOfInfusion->currentMappingVersion,
+//            $dungeonFloorSwitchMarker->getLatLng()
+//        );
+//
+//        dd($latLng->toArrayWithFloor());
+
+//        $combatLogEvents = $combatLogEventService->generateCombatLogEvents(
+//            Season::findOrFail(13),
+//            CombatLogEvent::EVENT_TYPE_PLAYER_DEATH,
+//            1000,
+//            10
+//        );
+
+//        dd($combatLogEventService->getAvailableDateRange(
+//            new CombatLogEventFilter(
+//                Dungeon::find(69)
+//            )
+//        ));
+
+//        dd($combatLogEventService->getGridAggregation(
+//            new CombatLogEventFilter(
+//                Dungeon::find(69)
+//            )
+//        )->toArray());
+
+//        $challengeModeRunDataService->insertAllToOpensearch();
+
+//        $combatLogEvents = $combatLogEventService->getCombatLogEvents(
+//            new CombatLogEventFilter(
+//                Dungeon::find(69)
+//            )
+//        );
+//
+//        dd($combatLogEvents->count());
+
+//        $structuredLoggingService->all();
 
 //        dd($combatLogSplitService->splitCombatLogOnChallengeModes(
 //            base_path('tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651.zip')

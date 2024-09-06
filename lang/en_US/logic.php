@@ -27,6 +27,7 @@ return [
                     'pull'              => 'Pull %d',
                     'object'            => 'Object %d',
                 ],
+                'object_out_of_bounds'                                 => 'Unable to place comment: could not place comment ":comment" object is out of bounds.',
                 'limit_reached_pulls'                                  => 'Unable to import route: more than the max of :limit pulls.',
                 'limit_reached_brushlines'                             => 'Unable to import route: more than the max of :limit lines.',
                 'limit_reached_paths'                                  => 'Unable to import route: more than the max of :limit paths.',

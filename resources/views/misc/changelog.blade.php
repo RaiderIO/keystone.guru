@@ -1,6 +1,6 @@
 <?php
 /** @var $releases Illuminate\Pagination\LengthAwarePaginator|\App\Models\Release[] */
-/** @var $categories \Illuminate\Support\Collection|\App\Models\ReleaseChangelogCategory[] */
+/** @var $categories \Illuminate\Support\Collection<\App\Models\ReleaseChangelogCategory> */
 /** @var $isUserAdmin boolean */
 ?>
 @extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('view_misc.changelog.title')])

@@ -22,9 +22,11 @@ return [
             'caches_dropped_successfully' => 'Hodor',
             'releases_exported'           => 'Hodor',
             'exception'                   => [
-                'token_mismatch'        => 'Hodor',
                 'internal_server_error' => 'Hodor',
             ],
+            'feature_toggle_activated'    => 'Hodor',
+            'feature_toggle_deactivated'  => 'Hodor',
+            'feature_forgotten'           => 'Hodor',
         ],
     ],
     'apidungeonroute'             => [
@@ -121,8 +123,9 @@ return [
         ],
     ],
     'mappingversion'              => [
-        'created_successfully' => 'Hodor',
-        'deleted_successfully' => 'Hodor',
+        'created_successfully'      => 'Hodor',
+        'created_bare_successfully' => 'Hodor',
+        'deleted_successfully'      => 'Hodor',
     ],
     'mdtimport'                   => [
         'unknown_dungeon' => 'Hodor',
@@ -193,6 +196,7 @@ return [
             'user_is_now_an_admin'              => 'Hodor',
             'user_is_no_longer_an_admin'        => 'Hodor',
             'user_is_now_a_user'                => 'Hodor',
+            'user_is_now_a_role'                => 'Hodor',
             'account_deleted_successfully'      => 'Hodor',
             'account_deletion_error'            => 'Hodor',
             'user_is_not_a_patron'              => 'Hodor',

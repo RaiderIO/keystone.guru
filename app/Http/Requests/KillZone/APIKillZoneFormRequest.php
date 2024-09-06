@@ -3,7 +3,7 @@
 namespace App\Http\Requests\KillZone;
 
 use App\Models\Floor\Floor;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

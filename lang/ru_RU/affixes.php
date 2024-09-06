@@ -106,6 +106,26 @@ return [
         'name'        => 'Зашифрованный',
         'description' => 'Противники в подземелье завладели реликвиями Предвечных. Уничтожьте эти реликвии, чтобы призвать автомов и получить мощное усиление. Порядок уничтожения влияет на то, какое усиление вы получите.',
     ],
+    'shrouded'              => [
+        'name'        => '',
+        'description' => '',
+    ],
+    'thundering'            => [
+        'name'        => '',
+        'description' => '',
+    ],
+    'afflicted'             => [
+        'name'        => '',
+        'description' => '',
+    ],
+    'entangling'            => [
+        'name'        => '',
+        'description' => '',
+    ],
+    'incorporeal'           => [
+        'name'        => '',
+        'description' => '',
+    ],
     'seasonal_index_preset' => '%s расстановка %d',
 
 ];

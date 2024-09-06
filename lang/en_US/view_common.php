@@ -84,7 +84,7 @@ return [
             'create_route'                                   => 'Create route',
             'save_settings'                                  => 'Save settings',
         ],
-        'createtemporaryroute' => [
+        'createroutetemporary' => [
             'key_levels'                => 'Key levels',
             'key_levels_title'          => 'Indicate for which key levels your route is suited. Setting this will allow the correct calculation enemy health values.',
             'unregistered_user_message' => 'As an unregistered user, all created routes will be temporary routes which expire after %d hours.',
@@ -183,10 +183,10 @@ return [
     ],
     'general'      => [
         'linkpreview' => [
-            'title_suffix'               => ' | Keystone.guru',
-            'description_suffix'         => ' Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one place to manage and share your M+ routes.',
-            'twitter_title_suffix'       => ' | Keystone.guru',
-            'twitter_description_suffix' => ' Keystone.guru is the one place to find, manage and share your M+ routes.',
+            'title'               => ':title | Keystone.guru',
+            'description'         => ':description Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one place to manage and share your M+ routes.',
+            'twitter_title'       => ':title | Keystone.guru',
+            'twitter_description' => ':description Keystone.guru is the one place to find, manage and share your M+ routes.',
         ],
     ],
     'group'        => [
@@ -276,6 +276,7 @@ return [
                     'enemy_forces'            => 'Enemy forces',
                     'enemy_visual_type'       => 'Visuals',
                     'enemy_visual_type_title' => 'Visuals',
+                    'enemy_skippable'         => 'Skippable',
                 ],
                 'floor_switch'             => [
                     'switch_floors' => 'Floors',
@@ -300,6 +301,29 @@ return [
             'enemyinfo'      => [
                 'enemy_info'      => 'Enemy info',
                 'report_an_issue' => 'Report an issue',
+            ],
+            'heatmapsearch'  => [
+                'settings_title'            => 'Map settings',
+                'enabled'                   => 'Enabled',
+                'disabled'                  => 'Disabled',
+                'event_type'                => 'Event type',
+                'data_type'                 => 'Data type',
+                'data_type_title'           => 'Enemy position uses the original position of the enemy that was engaged (powered by Auto-Route Creator), player position uses the position of the player when an enemy was engaged (combat log position).',
+                'filter'                    => 'Filter',
+                'loading'                   => 'Loading',
+                'key_level'                 => 'Key level',
+                'affixes'                   => 'Affixes',
+                'affixes_title'             => 'Affixes',
+                'affixes_selected'          => '{0} affixes selected',
+                'weekly_affix_groups'       => 'Week',
+                'weekly_affix_groups_title' => 'Week',
+                'date_range'                => 'Date range',
+                'date_range_from'           => 'From',
+                'date_range_to'             => 'To',
+                'duration'                  => 'Duration',
+                'data'                      => [
+                    'dungeon_routes' => 'Showing data from :count runs',
+                ],
             ],
             'header'         => [
                 'toggle_navigation'              => 'Toggle navigation',
@@ -338,8 +362,9 @@ return [
             'pullsworkbench' => [
                 'modal'            => [
                     'description' => [
-                        'label' => 'Description',
-                        'save'  => 'Save',
+                        'label'               => 'Description',
+                        'supported_html_tags' => 'Supported HTML tags: ',
+                        'save'                => 'Save',
                     ],
                     'spells'      => [
                         'label' => 'Spells',
@@ -445,6 +470,7 @@ return [
             'link'                             => 'Link',
             'short_link'                       => 'Short link',
             'copy_shareable_link_to_clipboard' => 'Copy shareable link to clipboard',
+            'include_location_in_link'         => 'Include current zoom and location in link',
             'embed'                            => 'Embed',
             'copy_embed_code_to_clipboard'     => 'Copy embed code to clipboard',
             'mdt_string'                       => 'MDT String',

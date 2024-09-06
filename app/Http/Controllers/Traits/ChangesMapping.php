@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Traits;
 use App\Models\Mapping\MappingChangeLog;
 use App\Models\Mapping\MappingModelInterface;
 use Exception;
-use Illuminate\Database\Eloquent\Model;
 
 trait ChangesMapping
 {

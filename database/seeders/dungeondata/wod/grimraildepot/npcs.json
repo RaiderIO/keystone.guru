@@ -6,9 +6,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 55280,
+        "encounter_id": null,
         "name": "Grom'kar Gunner",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -17,7 +20,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 2322,
@@ -35,9 +39,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 54096,
+        "encounter_id": 1138,
         "name": "Railmaster Rocketspark",
         "base_health": 937420,
         "health_percentage": null,
+        "level": 62,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -46,7 +53,55 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 161091
+            },
+            {
+                "spell_id": 162171
+            },
+            {
+                "spell_id": 162407
+            },
+            {
+                "spell_id": 162422
+            },
+            {
+                "spell_id": 162423
+            },
+            {
+                "spell_id": 162491
+            },
+            {
+                "spell_id": 162500
+            },
+            {
+                "spell_id": 162507
+            },
+            {
+                "spell_id": 162513
+            },
+            {
+                "spell_id": 162572
+            },
+            {
+                "spell_id": 163929
+            },
+            {
+                "spell_id": 163930
+            },
+            {
+                "spell_id": 163947
+            },
+            {
+                "spell_id": 166561
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -56,9 +111,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 60108,
+        "encounter_id": 1138,
         "name": "Borka the Brute",
         "base_health": 1129165,
         "health_percentage": null,
+        "level": 62,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -67,7 +125,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 161090
+            },
+            {
+                "spell_id": 161092
+            },
+            {
+                "spell_id": 162617
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -77,9 +150,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 55162,
+        "encounter_id": 1163,
         "name": "Nitrogg Thundertower",
         "base_health": 1491350,
         "health_percentage": null,
+        "level": 62,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -88,7 +164,31 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 161153
+            },
+            {
+                "spell_id": 163536
+            },
+            {
+                "spell_id": 163539
+            },
+            {
+                "spell_id": 163541
+            },
+            {
+                "spell_id": 163550
+            },
+            {
+                "spell_id": 163741
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -98,9 +198,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 55161,
+        "encounter_id": null,
         "name": "Assault Cannon",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -109,7 +212,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -119,9 +223,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 55281,
+        "encounter_id": null,
         "name": "Grom'kar Boomer",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -130,7 +237,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 2327,
@@ -148,9 +256,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 55306,
+        "encounter_id": null,
         "name": "Grom'kar Grenadier",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -159,7 +270,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 2328,
@@ -177,9 +289,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 55374,
+        "encounter_id": null,
         "name": "Iron Infantry",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -188,7 +303,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 2329,
@@ -206,9 +322,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 55630,
+        "encounter_id": 1133,
         "name": "Skylord Tovra",
         "base_health": 1704400,
         "health_percentage": null,
+        "level": 62,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -217,7 +336,31 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 161588
+            },
+            {
+                "spell_id": 162055
+            },
+            {
+                "spell_id": 162057
+            },
+            {
+                "spell_id": 162058
+            },
+            {
+                "spell_id": 162065
+            },
+            {
+                "spell_id": 162066
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -227,9 +370,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 55281,
+        "encounter_id": null,
         "name": "Grom'kar Boomer",
         "base_health": 202646,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -238,7 +384,37 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 156301
+            },
+            {
+                "spell_id": 160963
+            },
+            {
+                "spell_id": 161258
+            },
+            {
+                "spell_id": 176127
+            },
+            {
+                "spell_id": 176131
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2331,
@@ -256,9 +432,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 55306,
+        "encounter_id": null,
         "name": "Grom'kar Grenadier",
         "base_health": 223978,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -267,7 +446,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 161150
+            },
+            {
+                "spell_id": 161153
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2332,
@@ -285,9 +485,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 55280,
+        "encounter_id": null,
         "name": "Grom'kar Gunner",
         "base_health": 191980,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -296,7 +499,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 166675
+            },
+            {
+                "spell_id": 166676
+            },
+            {
+                "spell_id": 176147
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2333,
@@ -314,9 +538,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 58663,
+        "encounter_id": null,
         "name": "Grom'kar Hulk",
         "base_health": 426623,
         "health_percentage": null,
+        "level": 61,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -325,7 +552,16 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 176023
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2334,
@@ -343,9 +579,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 55374,
+        "encounter_id": null,
         "name": "Iron Infantry",
         "base_health": 213311,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -354,7 +593,15 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 2335,
@@ -372,9 +619,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 56280,
+        "encounter_id": null,
         "name": "Grimrail Overseer",
         "base_health": 341298,
         "health_percentage": null,
+        "level": 61,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -383,7 +633,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 164163
+            },
+            {
+                "spell_id": 164168
+            },
+            {
+                "spell_id": 164170
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2336,
@@ -401,9 +666,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 55909,
+        "encounter_id": null,
         "name": "Grimrail Laborer",
         "base_health": 213311,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -412,7 +680,16 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 164102
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2337,
@@ -430,9 +707,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 56293,
+        "encounter_id": null,
         "name": "Grimrail Technician",
         "base_health": 213311,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -441,7 +721,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 163966
+            },
+            {
+                "spell_id": 164192
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2338,
@@ -459,9 +754,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 59182,
+        "encounter_id": null,
         "name": "Grimrail Bombardier",
         "base_health": 351964,
         "health_percentage": null,
+        "level": 61,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -470,7 +768,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 164187
+            },
+            {
+                "spell_id": 164188
+            },
+            {
+                "spell_id": 164218
+            },
+            {
+                "spell_id": 164241
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2339,
@@ -488,9 +804,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 57126,
+        "encounter_id": null,
         "name": "Grom'kar Far Seer",
         "base_health": 341298,
         "health_percentage": null,
+        "level": 61,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -499,7 +818,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 166335
+            },
+            {
+                "spell_id": 166336
+            },
+            {
+                "spell_id": 166340
+            },
+            {
+                "spell_id": 166341
+            },
+            {
+                "spell_id": 166364
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2340,
@@ -517,9 +857,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 57131,
+        "encounter_id": null,
         "name": "Grimrail Scout",
         "base_health": 277305,
         "health_percentage": null,
+        "level": 61,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -528,7 +871,18 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 166350
+            },
+            {
+                "spell_id": 166397
+            },
+            {
+                "spell_id": 166404
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2341,
@@ -546,9 +900,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 55909,
+        "encounter_id": null,
         "name": "Grimrail Loader",
         "base_health": 85325,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -557,7 +914,15 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 14
+            }
+        ],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 2342,
@@ -575,9 +940,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 57133,
+        "encounter_id": null,
         "name": "Grom'kar Captain",
         "base_health": 426623,
         "health_percentage": null,
+        "level": 61,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -586,7 +954,19 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 166378
+            },
+            {
+                "spell_id": 166380
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2343,
@@ -604,9 +984,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 60769,
+        "encounter_id": null,
         "name": "Grom'kar Cinderseer",
         "base_health": 202646,
         "health_percentage": null,
+        "level": 60,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -615,7 +998,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 14
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 176025
+            },
+            {
+                "spell_id": 176032
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 2344,

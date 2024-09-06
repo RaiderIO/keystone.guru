@@ -16,9 +16,7 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding known Seasons');
-
-        /** @var Collection|Expansion[] $expansions */
+        /** @var Collection<Expansion> $expansions */
         $expansions = Expansion::all()->mapWithKeys(function (Expansion $expansion) {
             return [$expansion->shortname => $expansion->id];
         });
@@ -34,6 +32,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'presets'                 => 3,
                 'affix_group_count'       => 12,
                 'start_affix_group_index' => 0,
+                'key_level_min'           => 2,
+                'key_level_max'           => 25,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_BFA),
@@ -43,6 +43,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'presets'                 => 0,
                 'affix_group_count'       => 12,
                 'start_affix_group_index' => 4,
+                'key_level_min'           => 2,
+                'key_level_max'           => 25,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_BFA),
@@ -52,6 +54,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'presets'                 => 3,
                 'affix_group_count'       => 12,
                 'start_affix_group_index' => 8,
+                'key_level_min'           => 2,
+                'key_level_max'           => 25,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_BFA),
@@ -61,6 +65,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'presets'                 => 0,
                 'affix_group_count'       => 12,
                 'start_affix_group_index' => 0,
+                'key_level_min'           => 2,
+                'key_level_max'           => 25,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
             ], [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
@@ -70,6 +76,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'presets'                 => 0,
                 'affix_group_count'       => 12,
                 'start_affix_group_index' => 11,
+                'key_level_min'           => 2,
+                'key_level_max'           => 30,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
             ], [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
@@ -79,6 +87,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'presets'                 => 2,
                 'affix_group_count'       => 12,
                 'start_affix_group_index' => 4,
+                'key_level_min'           => 2,
+                'key_level_max'           => 30,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
             ], [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_LEGION),
@@ -88,6 +98,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'presets'                 => 0,
                 'affix_group_count'       => 12,
                 'start_affix_group_index' => 0,
+                'key_level_min'           => 2,
+                'key_level_max'           => 30,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_LEGION)),
             ], [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
@@ -97,6 +109,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'presets'                 => 0,
                 'affix_group_count'       => 12,
                 'start_affix_group_index' => 2,
+                'key_level_min'           => 2,
+                'key_level_max'           => 30,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
             ], [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
@@ -106,6 +120,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'presets'                 => 0,
                 'affix_group_count'       => 12,
                 'start_affix_group_index' => 0,
+                'key_level_min'           => 2,
+                'key_level_max'           => 30,
                 'dungeons'                => Dungeon::select('dungeons.*')
                     ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
                     ->whereIn('key', [
@@ -127,6 +143,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'presets'                 => 0,
                 'affix_group_count'       => 10,
                 'start_affix_group_index' => 3,
+                'key_level_min'           => 2,
+                'key_level_max'           => 30,
                 'dungeons'                => Dungeon::select('dungeons.*')
                     ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
                     ->whereIn('key', [
@@ -148,6 +166,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'presets'                 => 0,
                 'affix_group_count'       => 10,
                 'start_affix_group_index' => 4,
+                'key_level_min'           => 2,
+                'key_level_max'           => 30,
                 'dungeons'                => Dungeon::select('dungeons.*')
                     ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
                     ->whereIn('dungeons.key', [
@@ -169,6 +189,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'presets'                 => 0,
                 'affix_group_count'       => 10,
                 'start_affix_group_index' => 1,
+                'key_level_min'           => 2,
+                'key_level_max'           => 30,
                 'dungeons'                => Dungeon::select('dungeons.*')
                     ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
                     ->whereIn('dungeons.key', [
@@ -189,7 +211,9 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'start'                   => '2024-04-22 00:00:00',
                 'presets'                 => 0,
                 'affix_group_count'       => 10,
-                'start_affix_group_index' => 1,
+                'start_affix_group_index' => 4,
+                'key_level_min'           => 2,
+                'key_level_max'           => 22,
                 'dungeons'                => Dungeon::select('dungeons.*')
                     ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
                     ->whereIn('dungeons.key', [
@@ -201,6 +225,29 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                         Dungeon::DUNGEON_BRACKENHIDE_HOLLOW,
                         Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
                         Dungeon::DUNGEON_NELTHARUS,
+                    ])->orderBy('expansions.released_at')
+                    ->get(),
+            ], [
+                'expansion_id'            => $expansions->get(Expansion::EXPANSION_TWW),
+                'seasonal_affix_id'       => null,
+                'index'                   => 1,
+                'start'                   => '2024-08-26 00:00:00',
+                'presets'                 => 0,
+                'affix_group_count'       => 10,
+                'start_affix_group_index' => 4,
+                'key_level_min'           => 2,
+                'key_level_max'           => 22,
+                'dungeons'                => Dungeon::select('dungeons.*')
+                    ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
+                    ->whereIn('dungeons.key', [
+                        Dungeon::DUNGEON_THE_STONEVAULT,
+                        Dungeon::DUNGEON_THE_DAWNBREAKER,
+                        Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES,
+                        Dungeon::DUNGEON_CITY_OF_THREADS,
+                        Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE,
+                        Dungeon::DUNGEON_THE_NECROTIC_WAKE,
+                        Dungeon::DUNGEON_SIEGE_OF_BORALUS,
+                        Dungeon::DUNGEON_GRIM_BATOL,
                     ])->orderBy('expansions.released_at')
                     ->get(),
             ],
@@ -233,5 +280,11 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
             Season::class,
             SeasonDungeon::class,
         ];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

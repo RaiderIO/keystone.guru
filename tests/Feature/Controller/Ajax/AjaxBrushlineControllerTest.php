@@ -17,7 +17,10 @@ final class AjaxBrushlineControllerTest extends DungeonRouteTestBase
     {
         // Arrange
         /** @var Floor $randomFloor */
-        $randomFloor = $this->dungeonRoute->dungeon->floors->random();
+        $randomFloor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->inRandomOrder()
+            ->first();
 
         $polyline = PolylineFixtures::createPolyline($randomFloor);
 
@@ -59,12 +62,12 @@ final class AjaxBrushlineControllerTest extends DungeonRouteTestBase
     public function store_givenBrushlineWithValidButNotMatchingFloorId_shouldReturnError(): void
     {
         // Arrange
-        $validIds = $this->dungeonRoute->dungeon->floors->pluck('id');
+        $validIds  = $this->dungeonRoute->dungeon->floors->pluck('id');
         $allFloors = Floor::all()->keyBy('id');
 
-        $randomInvalidId = $allFloors->pluck('id')->diff($validIds)->random();
+        $randomInvalidId    = $allFloors->pluck('id')->diff($validIds)->random();
         $randomInvalidFloor = $allFloors->get($randomInvalidId);
-        $polyline = PolylineFixtures::createPolyline($randomInvalidFloor);
+        $polyline           = PolylineFixtures::createPolyline($randomInvalidFloor);
 
         // Act
         $response = $this->post(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $this->dungeonRoute]), [

@@ -1,4 +1,5 @@
 <?php
+
 use App\Logic\MapContext\MapContext;
 use App\Logic\MapContext\MapContextDungeonExplore;
 use App\Logic\MapContext\MapContextDungeonRoute;
@@ -22,9 +23,11 @@ use App\Models\User;
  * @var string|null       $embedStyle
  * @var bool|null         $edit
  * @var array             $show
+ * @var array|null        $controlOptions
  * @var bool              $adFree
  * @var string|null       $mapBackgroundColor
  * @var string|null       $mapFacadeStyle
+ * @var array|null        $parameters
  */
 
 $user               = Auth::user();
@@ -36,16 +39,19 @@ $mapClasses         ??= '';
 $dungeonroute       ??= null;
 $livesession        ??= null;
 $mapBackgroundColor ??= null;
+$controlOptions     ??= [];
+$parameters         ??= [];
 
 // Ensure default values for showing/hiding certain elements
-$show['controls']                ??= [];
-$show['controls']['enemyInfo']   ??= true;
-$show['controls']['pulls']       ??= true;
-$show['controls']['enemyForces'] = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
-$show['controls']['draw']        ??= false;
-$show['controls']['view']        ??= false;
-$show['controls']['present']     ??= false;
-$show['controls']['live']        ??= false;
+$show['controls']                  ??= [];
+$show['controls']['enemyInfo']     ??= true;
+$show['controls']['pulls']         ??= true;
+$show['controls']['heatmapSearch'] ??= false;
+$show['controls']['enemyForces']   = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
+$show['controls']['draw']          ??= false;
+$show['controls']['view']          ??= false;
+$show['controls']['present']       ??= false;
+$show['controls']['live']          ??= false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;
@@ -71,7 +77,8 @@ if ($embed || $dungeonroute?->demo === 1) {
 $noUI            = isset($noUI) && $noUI;
 $gestureHandling = isset($gestureHandling) && $gestureHandling;
 // Default zoom for the map
-$defaultZoom ??= 2;
+$defaultZoom    ??= 2;
+$defaultZoomMax = config('keystoneguru.zoom_max_default');
 // By default hidden elements
 $hiddenMapObjectGroups ??= [];
 // Show the attribution
@@ -112,8 +119,10 @@ if ($isAdmin) {
     'zoomToContents' => $zoomToContents,
     'hiddenMapObjectGroups' => $hiddenMapObjectGroups,
     'defaultZoom' => $defaultZoom,
+    'defaultZoomMax' => $defaultZoomMax,
     'showAttribution' => $showAttribution,
     'dungeonroute' => $dungeonroute ?? null,
+    'parameters' => $parameters,
 ], $adminOptions)])
 
 @section('scripts')
@@ -151,7 +160,7 @@ if ($isAdmin) {
                                style="width: 15px"></i>
                             <img src="{{ $faction->iconfile->icon_url }}" class="select_icon faction_icon"
                                  data-toggle="tooltip" title="{{ __($faction->name) }}"
-								 alt="Faction"/>
+                                 alt="Faction"/>
                         </a>
 
             @endforeach
@@ -215,6 +224,14 @@ if ($isAdmin) {
         ])
     @endif
 
+    @if(isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])
+        @include('common.maps.controls.heatmapsearch', array_merge($controlOptions['heatmapSearch'] ?? [], [
+            'showAds' => $showAds && !$adFree,
+            'defaultState' => $show['controls']['pullsDefaultState'] ?? null,
+            'hideOnMove' => $show['controls']['pullsHideOnMove'] ?? null,
+        ]))
+    @endif
+
     @if(isset($show['controls']['enemyInfo']) && $show['controls']['enemyInfo'])
         @include('common.maps.controls.enemyinfo')
     @endif
@@ -274,7 +291,8 @@ if ($isAdmin) {
         @endcomponent
     @endisset
 
-    @if(isset($show['controls']['pulls']) && $show['controls']['pulls'])
+    @if(isset($show['controls']['pulls']) && $show['controls']['pulls'] ||
+        isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])
         @component('common.general.modal', ['id' => 'map_settings_modal', 'size' => 'xl'])
             @include('common.modal.mapsettings', ['dungeonroute' => $dungeonroute, 'edit' => $edit])
         @endcomponent

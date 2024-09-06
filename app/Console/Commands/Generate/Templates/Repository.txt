@@ -1,0 +1,15 @@
+<?php
+
+namespace :namespace;
+
+use :modelFullClassName;
+use App\Repositories\Database\DatabaseRepository;
+use :interfaceNamespace\:modelClassNameRepositoryInterface;
+
+class :modelClassNameRepository extends DatabaseRepository implements :modelClassNameRepositoryInterface
+{
+    public function __construct()
+    {
+        parent::__construct(:modelClassName::class);
+    }
+}

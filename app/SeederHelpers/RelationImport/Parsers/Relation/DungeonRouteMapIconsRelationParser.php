@@ -8,11 +8,6 @@ use App\Models\MapObjectToAwakenedObeliskLink;
 
 class DungeonRouteMapIconsRelationParser implements RelationParserInterface
 {
-    public function canParseRootModel(string $modelClassName): bool
-    {
-        return false;
-    }
-
     public function canParseModel(string $modelClassName): bool
     {
         return $modelClassName === DungeonRoute::class;

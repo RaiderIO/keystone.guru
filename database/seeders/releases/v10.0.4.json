@@ -1,0 +1,23 @@
+{
+    "id": 238,
+    "release_changelog_id": 245,
+    "version": "v10.0.4",
+    "title": "Fixed MDT importer not working if you had comments in your route",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-05-17T08:53:42+00:00",
+    "updated_at": "2024-05-17T08:53:42+00:00",
+    "changelog": {
+        "id": 245,
+        "release_id": 238,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 245,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2379,
+                "change": "Fixed MDT importer not working if you had comments in your route. I added additional checks last release which exposed this bug and caused it to crash. As a result, any map comments next to your pulls (for Bloodlust~) are now automatically assigned as spells to your pulls as was intended."
+            }
+        ]
+    }
+}

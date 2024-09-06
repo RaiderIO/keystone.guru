@@ -6,9 +6,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 91216,
+        "encounter_id": 2336,
         "name": "The Platinum Pummeler",
         "base_health": 510742,
         "health_percentage": null,
+        "level": 122,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -17,7 +20,28 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 282801
+            },
+            {
+                "spell_id": 285020
+            },
+            {
+                "spell_id": 285344
+            },
+            {
+                "spell_id": 285377
+            },
+            {
+                "spell_id": 305393
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -27,9 +51,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 90775,
+        "encounter_id": 2339,
         "name": "K.U.-J.0.",
         "base_health": 1361979,
         "health_percentage": null,
+        "level": 122,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -38,7 +65,34 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 291922
+            },
+            {
+                "spell_id": 291946
+            },
+            {
+                "spell_id": 291949
+            },
+            {
+                "spell_id": 291972
+            },
+            {
+                "spell_id": 291973
+            },
+            {
+                "spell_id": 292035
+            },
+            {
+                "spell_id": 294929
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -48,9 +102,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 23397,
+        "encounter_id": 2348,
         "name": "Head Machinist Sparkflux",
         "base_health": 1489665,
         "health_percentage": null,
+        "level": 122,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -59,7 +116,22 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 285440
+            },
+            {
+                "spell_id": 285454
+            },
+            {
+                "spell_id": 285460
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -69,9 +141,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 90998,
+        "encounter_id": 2331,
         "name": "Omega Buster",
         "base_health": 1276856,
         "health_percentage": null,
+        "level": 122,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -80,7 +155,25 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 283551
+            },
+            {
+                "spell_id": 292264
+            },
+            {
+                "spell_id": 292267
+            },
+            {
+                "spell_id": 292290
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -90,9 +183,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 92177,
+        "encounter_id": null,
         "name": "Waste Processing Unit",
         "base_health": 392012,
         "health_percentage": null,
+        "level": 121,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -101,7 +197,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 294290
+            },
+            {
+                "spell_id": 294291
+            },
+            {
+                "spell_id": 294324
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1434,
@@ -119,9 +233,12 @@
         "npc_type_id": 8,
         "npc_class_id": 3,
         "display_id": 91170,
+        "encounter_id": null,
         "name": "Mechagon Tinkerer",
         "base_health": 213050,
         "health_percentage": null,
+        "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -130,7 +247,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 293827
+            },
+            {
+                "spell_id": 293854
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1435,
@@ -148,9 +304,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 91171,
+        "encounter_id": null,
         "name": "Mechagon Mechanic",
         "base_health": 213050,
         "health_percentage": null,
+        "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -159,7 +318,40 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 293729
+            },
+            {
+                "spell_id": 293930
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1436,
@@ -177,9 +369,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 90710,
+        "encounter_id": null,
         "name": "Spider Tank",
         "base_health": 340880,
         "health_percentage": null,
+        "level": 121,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -188,7 +383,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 293986
+            },
+            {
+                "spell_id": 294015
+            },
+            {
+                "spell_id": 296348
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1437,
@@ -206,9 +416,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 90855,
+        "encounter_id": null,
         "name": "Defense Bot Mk III",
         "base_health": 340880,
         "health_percentage": null,
+        "level": 121,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -217,7 +430,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 294195
+            },
+            {
+                "spell_id": 297127
+            },
+            {
+                "spell_id": 297128
+            },
+            {
+                "spell_id": 297133
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1438,
@@ -235,9 +466,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 91183,
+        "encounter_id": null,
         "name": "Workshop Defender",
         "base_health": 213050,
         "health_percentage": null,
+        "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -246,7 +480,37 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 293670
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1439,
@@ -264,9 +528,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 91167,
+        "encounter_id": null,
         "name": "Mechagon Citizen",
         "base_health": 53263,
         "health_percentage": null,
+        "level": 120,
+        "mdt_scale": 0.7,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -275,7 +542,15 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -285,9 +560,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 92217,
+        "encounter_id": null,
         "name": "Living Waste",
         "base_health": 21305,
         "health_percentage": null,
+        "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -296,7 +574,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 294349
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1441,
@@ -314,9 +613,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 68856,
+        "encounter_id": null,
         "name": "G.U.A.R.D.",
         "base_health": 281758,
         "health_percentage": null,
+        "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -325,7 +627,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 294107
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1442,
@@ -343,9 +666,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 91879,
+        "encounter_id": 2336,
         "name": "Gnomercy 4.U.",
         "base_health": 1021484,
         "health_percentage": null,
+        "level": 122,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -354,7 +680,37 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 283421
+            },
+            {
+                "spell_id": 283422
+            },
+            {
+                "spell_id": 283565
+            },
+            {
+                "spell_id": 283640
+            },
+            {
+                "spell_id": 285152
+            },
+            {
+                "spell_id": 285388
+            },
+            {
+                "spell_id": 285468
+            },
+            {
+                "spell_id": 318587
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -364,9 +720,12 @@
         "npc_type_id": 9,
         "npc_class_id": 2,
         "display_id": 90547,
+        "encounter_id": 2331,
         "name": "Aerial Unit R-21\/X",
         "base_health": 1021484,
         "health_percentage": null,
+        "level": 122,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -375,7 +734,28 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 291613
+            },
+            {
+                "spell_id": 291626
+            },
+            {
+                "spell_id": 291865
+            },
+            {
+                "spell_id": 291878
+            },
+            {
+                "spell_id": 291928
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -385,9 +765,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 91120,
+        "encounter_id": null,
         "name": "King Mechagon",
         "base_health": 385308,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -396,7 +779,8 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -406,9 +790,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 90874,
+        "encounter_id": null,
         "name": "Alarm-o-Bot",
         "base_health": 10653,
         "health_percentage": null,
+        "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "neutral",
         "dangerous": 1,
         "truesight": 0,
@@ -417,7 +804,15 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -427,9 +822,12 @@
         "npc_type_id": 9,
         "npc_class_id": 3,
         "display_id": 90712,
+        "encounter_id": null,
         "name": "Blastatron X-80",
         "base_health": 532625,
         "health_percentage": null,
+        "level": 121,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -438,7 +836,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 293986
+            },
+            {
+                "spell_id": 294015
+            },
+            {
+                "spell_id": 295168
+            },
+            {
+                "spell_id": 295169
+            },
+            {
+                "spell_id": 295170
+            },
+            {
+                "spell_id": 295183
+            },
+            {
+                "spell_id": 296348
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1447,
@@ -456,9 +881,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 91349,
+        "encounter_id": null,
         "name": "Defense Bot Mk I",
         "base_health": 223703,
         "health_percentage": null,
+        "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -467,7 +895,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 294195
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1448,
@@ -485,9 +931,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 21209,
+        "encounter_id": null,
         "name": "Bomb Tonk",
         "base_health": 127830,
         "health_percentage": null,
+        "level": 120,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -496,7 +945,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 301088
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1449,
@@ -514,9 +978,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 91229,
+        "encounter_id": null,
         "name": "Strider Tonk",
         "base_health": 281758,
         "health_percentage": null,
+        "level": 120,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -525,7 +992,31 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 294061
+            },
+            {
+                "spell_id": 294064
+            },
+            {
+                "spell_id": 294073
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1450,
@@ -543,9 +1034,12 @@
         "npc_type_id": 9,
         "npc_class_id": 3,
         "display_id": 91228,
+        "encounter_id": null,
         "name": "Rocket Tonk",
         "base_health": 213050,
         "health_percentage": null,
+        "level": 120,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -554,7 +1048,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 294103
+            },
+            {
+                "spell_id": 294128
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1451,
@@ -572,9 +1087,12 @@
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 90511,
+        "encounter_id": null,
         "name": "Junkyard D.0.G.",
         "base_health": 213050,
         "health_percentage": null,
+        "level": 120,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -583,7 +1101,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 294107
+            },
+            {
+                "spell_id": 294180
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 1452,
@@ -601,9 +1140,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 90878,
+        "encounter_id": null,
         "name": "Detect-o-Bot",
         "base_health": 192654,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "unfriendly",
         "dangerous": 1,
         "truesight": 0,
@@ -612,7 +1154,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     }
 ]

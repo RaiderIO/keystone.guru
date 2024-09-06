@@ -2,7 +2,7 @@
 /** @var \App\Models\DungeonRoute\Dungeonroute $dungeonroute */
 $currentUserRating = $dungeonroute->getRatingByCurrentUser();
 ?>
-<!-- Rating -->
+    <!-- Rating -->
 <div class="row no-gutters">
     <div class="col btn-group dropright">
         <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"

@@ -28,14 +28,6 @@ class CreateGithubRelease extends GithubReleaseCommand
     protected $description = 'Creates a new release of Keystone.guru';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      *

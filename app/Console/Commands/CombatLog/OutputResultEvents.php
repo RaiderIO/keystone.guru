@@ -13,7 +13,7 @@ class OutputResultEvents extends BaseCombatLogCommand
      *
      * @var string
      */
-    protected $signature = 'combatlog:outputresultevents {filePath} {--force=} {--dungeonOrRaid=}';
+    protected $signature = 'combatlog:outputresultevents {filePath} {--force} {--dungeonOrRaid}';
 
     /**
      * The console command description.
@@ -58,7 +58,7 @@ class OutputResultEvents extends BaseCombatLogCommand
         $resultingFile = str_replace(['.txt', '.zip'], '_events.txt', $filePath);
 
         if (!$force && file_exists($resultingFile)) {
-            $this->info(sprintf('Skipping %s - events already generated', $filePath));
+            $this->warn(sprintf('- Skipping %s (events already generated)', $filePath));
 
             $result = 1;
         } else {
@@ -68,8 +68,10 @@ class OutputResultEvents extends BaseCombatLogCommand
                 $resultEvents = $combatLogService->getResultEventsForChallengeMode($filePath);
             }
 
-            $result = file_put_contents($resultingFile, $resultEvents->map(fn(BaseResultEvent $resultEvent) => // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
-            trim($resultEvent->getBaseEvent()->getRawEvent()))->implode(PHP_EOL));
+            $result = file_put_contents($resultingFile, $resultEvents->map(
+            // Trim to remove CRLF, implode with PHP_EOL to convert to (most likely) linux line endings
+                fn(BaseResultEvent $resultEvent) => trim($resultEvent->getBaseEvent()->getRawEvent())
+            )->implode(PHP_EOL));
 
             if ($result) {
                 $this->comment(sprintf('- Wrote %d events to %s', $resultEvents->count(), $resultingFile));

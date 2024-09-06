@@ -30,10 +30,10 @@ class DungeonController extends Controller
         $validated['active']           ??= 0;
         $validated['speedrun_enabled'] ??= 0;
 
+        $beforeDungeon = null;
         if ($dungeon === null) {
-            $beforeDungeon = new Dungeon();
-            $dungeon       = Dungeon::create($validated);
-            $saveResult    = true;
+            $dungeon    = Dungeon::create($validated);
+            $saveResult = true;
         } else {
             $beforeDungeon = clone $dungeon;
             $saveResult    = $dungeon->update($validated);
@@ -55,7 +55,7 @@ class DungeonController extends Controller
     {
         $dungeons            = Dungeon::all()->keyBy('key');
         $availableKeysSelect = collect();
-        foreach (Dungeon::ALL as $expansion => $dungeonKeys) {
+        foreach (array_merge_recursive(Dungeon::ALL, Dungeon::ALL_RAID) as $expansion => $dungeonKeys) {
 
             $availableKeysForExpansion = collect();
             foreach ($dungeonKeys as $dungeonKey) {

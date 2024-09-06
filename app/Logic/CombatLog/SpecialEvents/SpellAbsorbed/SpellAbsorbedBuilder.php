@@ -7,7 +7,7 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEventBuilderInterface;
 use App\Logic\CombatLog\SpecialEvents\SpellAbsorbed\Versions\V20\SpellAbsorbedV20;
 use App\Logic\CombatLog\SpecialEvents\SpellAbsorbed\Versions\V9\SpellAbsorbedV9;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class SpellAbsorbedBuilder implements SpecialEventBuilderInterface
 {

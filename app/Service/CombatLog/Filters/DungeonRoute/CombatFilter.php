@@ -5,8 +5,8 @@ namespace App\Service\CombatLog\Filters\DungeonRoute;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Service\CombatLog\Filters\BaseCombatFilter;
+use App\Service\CombatLog\Filters\Logging\DungeonRouteCombatFilterLoggingInterface;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
-use App\Service\CombatLog\Logging\DungeonRouteCombatFilterLoggingInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 

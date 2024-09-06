@@ -1,8 +1,8 @@
 <?php
-    $fortified = \App\Models\Npc::find(15929);
-    $fortified->base_health = 100000;
-    $tyrannical = \App\Models\Npc::find(15928);
-    $tyrannical->base_health = 100000;
+$fortified               = \App\Models\Npc\Npc::find(15929);
+$fortified->base_health  = 100000;
+$tyrannical              = \App\Models\Npc\Npc::find(15928);
+$tyrannical->base_health = 100000;
 
 ?>
 @extends('layouts.sitepage', ['cookieConsent' => false, 'showAds' => false, 'analytics' => false, 'title' => __('view_misc.health.title')])
@@ -41,7 +41,7 @@
                     {{ $i }}
                 </td>
                 <td>
-                    {{ $fortified->getScalingFactor($i, false, false) }}
+                    {{ $fortified->getScalingFactor($i, false, false, false) }}
                 </td>
                 <td>
                     {{ $fortified->calculateHealthForKey($i, true, false, false) }}

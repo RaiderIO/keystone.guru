@@ -1,3 +1,15 @@
+
+<?php
+
+use App\Models\Laratrust\Role;
+use App\Models\Patreon\PatreonBenefit;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection<PatreonBenefit> $allPatreonBenefits
+ * @var Collection<Role>           $allRoles
+ */
+?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.user.list.title')])
 
 @section('header-title')
@@ -9,7 +21,9 @@
 
     <script type="text/javascript">
         /** @type object */
-        let patreonBenefits = {!! $patreonBenefits; !!};
+        let patreonBenefits = {!! $allPatreonBenefits; !!};
+        /** @type object */
+        let roles = {!! $allRoles; !!};
 
         $(function () {
             $('#admin_user_table').DataTable({
@@ -95,7 +109,10 @@
                         'render': function (data, type, row, meta) {
                             let template = Handlebars.templates['admin_users_table_row_actions'];
 
-                            return template($.extend({}, getHandlebarsDefaultVariables(), row));
+                            return template($.extend({}, getHandlebarsDefaultVariables(), {
+                                user: row,
+                                roles: roles
+                            }));
                         }
                     },
                     {

@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 
 class ExpansionSeasonAffixGroups
 {
-    /** @var Collection|Affix[] */
+    /** @var Collection<Affix> */
     private readonly Collection $featuredAffixes;
 
     private readonly ?AffixGroup $currentAffixGroup;
@@ -26,7 +26,7 @@ class ExpansionSeasonAffixGroups
         $this->nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $gameServerRegion);
 
         if ($expansionSeason->getSeason() !== null) {
-            $this->allAffixGroups = $expansionSeason->getSeason()->affixgroups()
+            $this->allAffixGroups = $expansionSeason->getSeason()->affixGroups()
                 ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
                 ->get();
         } else {
@@ -35,7 +35,7 @@ class ExpansionSeasonAffixGroups
     }
 
     /**
-     * @return Collection|Affix[]
+     * @return Collection<Affix>
      */
     public function getFeaturedAffixes(): Collection
     {
@@ -53,7 +53,7 @@ class ExpansionSeasonAffixGroups
     }
 
     /**
-     * @return Collection|AffixGroup[]
+     * @return Collection<AffixGroup>
      */
     public function getAllAffixGroups(): Collection
     {

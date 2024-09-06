@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**

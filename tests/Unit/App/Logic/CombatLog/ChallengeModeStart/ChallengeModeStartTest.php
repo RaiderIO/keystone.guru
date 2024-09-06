@@ -19,10 +19,10 @@ final class ChallengeModeStartTest extends PublicTestCase
     public function parseEvent_ShouldReturnChallengeModeStartEvent_GivenChallengeModeStartEvent(
         string $challengeModeStartEvent,
         string $expectedZoneName,
-        int $expectedInstanceId,
-        int $expectedChallengeModeId,
-        int $expectedKeystoneLevel,
-        array $expectedAffixIds
+        int    $expectedInstanceId,
+        int    $expectedChallengeModeId,
+        int    $expectedKeystoneLevel,
+        array  $expectedAffixIds
     ): void {
         // Arrange
         $combatLogEntry = new CombatLogEntry($challengeModeStartEvent);

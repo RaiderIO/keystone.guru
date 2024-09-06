@@ -7,8 +7,8 @@ use App\Jobs\ProcessRouteFloorThumbnailCustom;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use App\Models\Floor\Floor;
-use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
@@ -106,9 +106,9 @@ class ThumbnailService implements ThumbnailServiceInterface
                 'dungeon'      => $dungeonRoute->dungeon,
                 'dungeonroute' => $dungeonRoute->public_key,
                 'title'        => $dungeonRoute->getTitleSlug(),
-                'floorindex'   => $floorIndex,
+                'floorIndex'   => $floorIndex,
                 'secret'       => config('keystoneguru.thumbnail.preview_secret'),
-                'zoomLevel'    => $zoomLevel,
+                'z'            => $zoomLevel,
             ]),
             // Second argument; where to save the resulting image
             $tmpFile,

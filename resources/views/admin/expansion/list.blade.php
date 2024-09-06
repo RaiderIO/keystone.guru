@@ -49,7 +49,8 @@
                         <i class="fas fa-times-circle text-danger"></i>
                     </td>
                 @endif
-                <td><img src="{{ url(sprintf('images/expansions/%s.png', $expansion->shortname)) }}" style="width: 50px;"/></td>
+                <td><img src="{{ url(sprintf('images/expansions/%s.png', $expansion->shortname)) }}"
+                         style="width: 50px;"/></td>
                 <td>{{ $expansion->id }}</td>
                 <td>{{ __($expansion->name) }}</td>
                 <td>{{ $expansion->color }}</td>

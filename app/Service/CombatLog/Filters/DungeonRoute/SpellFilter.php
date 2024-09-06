@@ -6,7 +6,7 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Spell as SpellPrefix;
 use App\Logic\CombatLog\CombatEvents\Suffixes\CastSuccess;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 use App\Service\CombatLog\ResultEvents\SpellCast;
 use Illuminate\Support\Collection;

@@ -13,10 +13,11 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
-use App\Models\NpcClassification;
-use App\Models\NpcType;
+use App\Models\Npc\NpcType;
+use App\Models\Spell\Spell;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -29,6 +30,7 @@ use App\Service\MDT\MDTMappingImportServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Artisan;
 use Exception;
+use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
@@ -38,6 +40,7 @@ use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
+use Laravel\Pennant\Feature;
 use Session;
 use Throwable;
 
@@ -101,7 +104,7 @@ class AdminToolsController extends Controller
             'title'        => $dungeonRoute->getTitleSlug(),
             'floor'        => $floor,
             'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonRoute, $floor),
-            'floorindex'   => 1,
+            'floorIndex'   => 1,
         ]);
     }
 
@@ -110,7 +113,7 @@ class AdminToolsController extends Controller
      */
     public function npcimport(): View
     {
-        return view('admin.tools.npcimport.import');
+        return view('admin.tools.npc.import');
     }
 
     /**
@@ -217,6 +220,37 @@ class AdminToolsController extends Controller
         } finally {
             dump($log);
         }
+    }
+
+    /**
+     * @param Dungeon|null $dungeon
+     * @return View
+     */
+    public function manageSpellVisibility(Request $request, ?Dungeon $dungeon = null): View
+    {
+        return view('admin.tools.npc.managespellvisibility', [
+            'npcs'    => Npc::when($dungeon !== null, function (Builder $builder) use ($dungeon) {
+                return $builder->where('dungeon_id', $dungeon->id);
+            })->with('npcSpells')
+                ->has('npcSpells')
+                ->paginate(50),
+            'spells'  => Spell::when($dungeon !== null, function (Builder $builder) use ($dungeon) {
+                return $builder->whereRelation('spellDungeons', 'dungeon_id', $dungeon->id);
+            })->get()
+                ->keyBy('id'),
+            'dungeon' => $dungeon,
+        ]);
+    }
+
+    public function manageSpellVisibilitySubmit(Request $request): RedirectResponse
+    {
+        $dungeonId = (int)$request->get('dungeon_id');
+        $dungeon   = null;
+        if ($dungeonId !== -1) {
+            $dungeon = Dungeon::findOrFail($dungeonId);
+        }
+
+        return redirect()->route('admin.tools.npc.managespellvisibility', ['dungeon' => $dungeon]);
     }
 
     /**
@@ -595,7 +629,7 @@ class AdminToolsController extends Controller
         $uiMapAssignmentTableHeaderIndexMaxX       = array_search('Region[3]', $uiMapAssignmentTableHeaders, true);
         $uiMapAssignmentTableHeaderIndexMaxY       = array_search('Region[4]', $uiMapAssignmentTableHeaders, true);
 
-        /** @var Collection|Dungeon[] $allDungeons */
+        /** @var Collection<Dungeon> $allDungeons */
         //        $allDungeons = Dungeon::where('key', Dungeon::DUNGEON_AZJOL_NERUB)->get()->keyBy('id');
         $allDungeons = Dungeon::where('map_id', '>', 0)->get()->keyBy('id');
 
@@ -746,7 +780,7 @@ class AdminToolsController extends Controller
                 }
 
                 // Find our own NPC
-                /** @var Npc $npc */
+                /** @var \App\Models\Npc\Npc $npc */
                 $npc = $npcs->where('id', $mdtNpc->getId())->first();
 
                 // Not found..
@@ -852,7 +886,7 @@ class AdminToolsController extends Controller
         $npcId    = $request->get('npc_id');
         $value    = $request->get('value');
 
-        /** @var Npc $npc */
+        /** @var \App\Models\Npc\Npc $npc */
         $npc = Npc::with(['enemyForces'])->find($npcId);
 
         switch ($category) {
@@ -926,5 +960,44 @@ class AdminToolsController extends Controller
             case 'InternalServerError':
                 throw new Exception(__('controller.admintools.flash.exception.internal_server_error'));
         }
+    }
+
+    public function listFeatures(Request $request): View
+    {
+        return view('admin.tools.features.list', [
+            'features' => collect(ClassFinder::getClassesInNamespace('App\\Features')),
+        ]);
+    }
+
+    public function toggleFeature(Request $request): RedirectResponse
+    {
+        $feature = (string)$request->get('feature');
+
+        $wasActive = Feature::active($feature);
+        if ($wasActive) {
+            Feature::deactivateForEveryone($feature);
+        } else {
+            Feature::activateForEveryone($feature);
+        }
+
+        Session::flash('status', __(!$wasActive ?
+            'controller.admintools.flash.feature_toggle_activated' :
+            'controller.admintools.flash.feature_toggle_deactivated', [
+            'feature' => $feature,
+        ]));
+
+        return redirect()->route('admin.tools.features.list');
+    }
+
+    public function forgetFeature(Request $request): RedirectResponse
+    {
+        $feature = (string)$request->get('feature');
+
+        Feature::forget($feature);
+        Feature::for(null)->forget($feature);
+
+        Session::flash('status', __('controller.admintools.flash.feature_forgotten', ['feature' => $feature]));
+
+        return redirect()->route('admin.tools.features.list');
     }
 }

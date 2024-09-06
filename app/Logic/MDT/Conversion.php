@@ -29,6 +29,7 @@ class Conversion
         Expansion::EXPANSION_BFA          => 'BattleForAzeroth',
         Expansion::EXPANSION_SHADOWLANDS  => 'Shadowlands',
         Expansion::EXPANSION_DRAGONFLIGHT => 'Dragonflight', // DF S1 has MoP/WoD dungeons under here
+        Expansion::EXPANSION_TWW          => 'TheWarWithin',
     ];
 
     public const DUNGEON_NAME_MAPPING = [
@@ -59,110 +60,122 @@ class Conversion
 //            Dungeon::DUNGEON_WAILING_CAVERNS             => 'WailingCaverns',
 //            Dungeon::DUNGEON_ZUL_FARRAK                  => 'ZulFarrak',
 //        ],
-        Expansion::EXPANSION_WOTLK   => [
-            Dungeon::DUNGEON_AHN_KAHET_THE_OLD_KINGDOM => 'AhnKahetTheOldKingdom',
-            Dungeon::DUNGEON_AZJOL_NERUB               => 'AzjolNerub',
-            Dungeon::DUNGEON_DRAK_THARON_KEEP          => 'DrakTharonKeep',
-            Dungeon::DUNGEON_GUNDRAK                   => 'Gundrak',
-            Dungeon::DUNGEON_HALLS_OF_LIGHTNING        => 'HallsOfLightning',
-            Dungeon::DUNGEON_HALLS_OF_STONE            => 'HallsOfStone',
-            Dungeon::RAID_NAXXRAMAS                    => 'Naxxramas',
-            Dungeon::RAID_ULDUAR                       => 'Ulduar',
-            Dungeon::DUNGEON_THE_CULLING_OF_STRATHOLME => 'TheCullingOfStratholme',
-            Dungeon::DUNGEON_THE_NEXUS                 => 'TheNexus',
-            Dungeon::DUNGEON_THE_OCULUS                => 'TheOculus',
-            Dungeon::DUNGEON_THE_VIOLET_HOLD           => 'TheVioletHold',
-            Dungeon::DUNGEON_UTGARDE_KEEP              => 'UtgardeKeep',
-            Dungeon::DUNGEON_UTGARDE_PINNACLE          => 'UtgardePinnacle',
-        ],
+// Never actually got merged into main
+//        Expansion::EXPANSION_WOTLK => [
+//            Dungeon::DUNGEON_AHN_KAHET_THE_OLD_KINGDOM => 'AhnKahetTheOldKingdom',
+//            Dungeon::DUNGEON_AZJOL_NERUB               => 'AzjolNerub',
+//            Dungeon::DUNGEON_DRAK_THARON_KEEP          => 'DrakTharonKeep',
+//            Dungeon::DUNGEON_GUNDRAK                   => 'Gundrak',
+//            Dungeon::DUNGEON_HALLS_OF_LIGHTNING        => 'HallsOfLightning',
+//            Dungeon::DUNGEON_HALLS_OF_STONE            => 'HallsOfStone',
+//            Dungeon::RAID_NAXXRAMAS                    => 'Naxxramas',
+//            Dungeon::RAID_ULDUAR                       => 'Ulduar',
+//            Dungeon::DUNGEON_THE_CULLING_OF_STRATHOLME => 'TheCullingOfStratholme',
+//            Dungeon::DUNGEON_THE_NEXUS                 => 'TheNexus',
+//            Dungeon::DUNGEON_THE_OCULUS                => 'TheOculus',
+//            Dungeon::DUNGEON_THE_VIOLET_HOLD           => 'TheVioletHold',
+//            Dungeon::DUNGEON_UTGARDE_KEEP              => 'UtgardeKeep',
+//            Dungeon::DUNGEON_UTGARDE_PINNACLE          => 'UtgardePinnacle',
+//        ],
 
-        Expansion::EXPANSION_CATACLYSM => [
-            //            Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
-        ],
+Expansion::EXPANSION_CATACLYSM => [
+    //            Dungeon::DUNGEON_THE_VORTEX_PINNACLE => 'TheVortexPinnacle',
+],
 
-        Expansion::EXPANSION_MOP => [
-            //            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
-        ],
+Expansion::EXPANSION_MOP => [
+    //            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
+],
 
-        Expansion::EXPANSION_WOD => [
-            //            Dungeon::DUNGEON_GRIMRAIL_DEPOT            => 'GrimrailDepot',
-            //            Dungeon::DUNGEON_IRON_DOCKS                => 'IronDocks',
-            //            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS  => 'ShadowmoonBurialGrounds',
-        ],
+Expansion::EXPANSION_WOD => [
+    //            Dungeon::DUNGEON_GRIMRAIL_DEPOT            => 'GrimrailDepot',
+    //            Dungeon::DUNGEON_IRON_DOCKS                => 'IronDocks',
+    //            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS  => 'ShadowmoonBurialGrounds',
+],
 
-        Expansion::EXPANSION_LEGION => [
-            Dungeon::DUNGEON_ARCWAY                      => 'TheArcway',
-            //            Dungeon::DUNGEON_BLACK_ROOK_HOLD             => 'BlackRookHold',
-            Dungeon::DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT  => 'CathedralOfEternalNight',
-            Dungeon::DUNGEON_COURT_OF_STARS              => 'CourtOfStars',
-            Dungeon::DUNGEON_DARKHEART_THICKET           => 'DarkheartThicket',
-            Dungeon::DUNGEON_EYE_OF_AZSHARA              => 'EyeOfAzshara',
-            Dungeon::DUNGEON_HALLS_OF_VALOR              => 'HallsofValor',
-            Dungeon::DUNGEON_LOWER_KARAZHAN              => 'ReturntoKarazhanLower',
-            Dungeon::DUNGEON_MAW_OF_SOULS                => 'MawOfSouls',
-            Dungeon::DUNGEON_NELTHARIONS_LAIR            => 'NeltharionsLair',
-            Dungeon::DUNGEON_UPPER_KARAZHAN              => 'ReturntoKarazhanUpper',
-            Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE => 'SeatoftheTriumvirate',
-            Dungeon::DUNGEON_VAULT_OF_THE_WARDENS        => 'VaultoftheWardens',
-        ],
+Expansion::EXPANSION_LEGION => [
+    Dungeon::DUNGEON_ARCWAY                      => 'TheArcway',
+    //            Dungeon::DUNGEON_BLACK_ROOK_HOLD             => 'BlackRookHold',
+    Dungeon::DUNGEON_CATHEDRAL_OF_ETERNAL_NIGHT  => 'CathedralOfEternalNight',
+    Dungeon::DUNGEON_COURT_OF_STARS              => 'CourtOfStars',
+    Dungeon::DUNGEON_DARKHEART_THICKET           => 'DarkheartThicket',
+    Dungeon::DUNGEON_EYE_OF_AZSHARA              => 'EyeOfAzshara',
+    Dungeon::DUNGEON_HALLS_OF_VALOR              => 'HallsofValor',
+    Dungeon::DUNGEON_LOWER_KARAZHAN              => 'ReturntoKarazhanLower',
+    Dungeon::DUNGEON_MAW_OF_SOULS                => 'MawOfSouls',
+    Dungeon::DUNGEON_NELTHARIONS_LAIR            => 'NeltharionsLair',
+    Dungeon::DUNGEON_UPPER_KARAZHAN              => 'ReturntoKarazhanUpper',
+    Dungeon::DUNGEON_THE_SEAT_OF_THE_TRIUMVIRATE => 'SeatoftheTriumvirate',
+    Dungeon::DUNGEON_VAULT_OF_THE_WARDENS        => 'VaultoftheWardens',
+],
 
-        Expansion::EXPANSION_BFA => [
-            Dungeon::DUNGEON_ATAL_DAZAR           => 'AtalDazar',
-            Dungeon::DUNGEON_FREEHOLD             => 'Freehold',
-            Dungeon::DUNGEON_KINGS_REST           => 'KingsRest',
-            Dungeon::DUNGEON_SHRINE_OF_THE_STORM  => 'ShrineoftheStorm',
-            Dungeon::DUNGEON_SIEGE_OF_BORALUS     => 'SiegeofBoralus',
-            Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS => 'TempleofSethraliss',
-            Dungeon::DUNGEON_THE_MOTHERLODE       => 'TheMotherlode',
-            Dungeon::DUNGEON_THE_UNDERROT         => 'TheUnderrot',
-            Dungeon::DUNGEON_TOL_DAGOR            => 'TolDagor',
-            //            Dungeon::DUNGEON_WAYCREST_MANOR       => 'WaycrestManor',
-            Dungeon::DUNGEON_MECHAGON_JUNKYARD    => 'MechagonIsland',
-            Dungeon::DUNGEON_MECHAGON_WORKSHOP    => 'MechagonCity',
-        ],
+Expansion::EXPANSION_BFA => [
+    Dungeon::DUNGEON_ATAL_DAZAR           => 'AtalDazar',
+    Dungeon::DUNGEON_FREEHOLD             => 'Freehold',
+    Dungeon::DUNGEON_KINGS_REST           => 'KingsRest',
+    Dungeon::DUNGEON_SHRINE_OF_THE_STORM  => 'ShrineoftheStorm',
+    Dungeon::DUNGEON_SIEGE_OF_BORALUS     => 'SiegeofBoralus',
+    Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS => 'TempleofSethraliss',
+    Dungeon::DUNGEON_THE_MOTHERLODE       => 'TheMotherlode',
+    Dungeon::DUNGEON_THE_UNDERROT         => 'TheUnderrot',
+    Dungeon::DUNGEON_TOL_DAGOR            => 'TolDagor',
+    //            Dungeon::DUNGEON_WAYCREST_MANOR       => 'WaycrestManor',
+    Dungeon::DUNGEON_MECHAGON_JUNKYARD    => 'MechagonIsland',
+    Dungeon::DUNGEON_MECHAGON_WORKSHOP    => 'MechagonCity',
+],
 
-        Expansion::EXPANSION_SHADOWLANDS => [
-            // WoD
-            Dungeon::DUNGEON_GRIMRAIL_DEPOT             => 'GrimrailDepot',
-            Dungeon::DUNGEON_IRON_DOCKS                 => 'IronDocks',
-            // SL
-            Dungeon::DUNGEON_DE_OTHER_SIDE              => 'DeOtherSide',
-            Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
-            Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE      => 'MistsOfTirnaScithe',
-            Dungeon::DUNGEON_PLAGUEFALL                 => 'Plaguefall',
-            Dungeon::DUNGEON_SANGUINE_DEPTHS            => 'SanguineDepths',
-            Dungeon::DUNGEON_SPIRES_OF_ASCENSION        => 'SpiresOfAscension',
-            Dungeon::DUNGEON_THE_NECROTIC_WAKE          => 'TheNecroticWake',
-            Dungeon::DUNGEON_THEATER_OF_PAIN            => 'TheaterOfPain',
-            Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER => 'TazaveshLower',
-            Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   => 'TazaveshUpper',
-        ],
+Expansion::EXPANSION_SHADOWLANDS => [
+    // WoD
+    Dungeon::DUNGEON_GRIMRAIL_DEPOT             => 'GrimrailDepot',
+    Dungeon::DUNGEON_IRON_DOCKS                 => 'IronDocks',
+    // SL
+    Dungeon::DUNGEON_DE_OTHER_SIDE              => 'DeOtherSide',
+    Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
+    Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE      => 'MistsOfTirnaScithe',
+    Dungeon::DUNGEON_PLAGUEFALL                 => 'Plaguefall',
+    Dungeon::DUNGEON_SANGUINE_DEPTHS            => 'SanguineDepths',
+    Dungeon::DUNGEON_SPIRES_OF_ASCENSION        => 'SpiresOfAscension',
+    Dungeon::DUNGEON_THE_NECROTIC_WAKE          => 'TheNecroticWake',
+    Dungeon::DUNGEON_THEATER_OF_PAIN            => 'TheaterOfPain',
+    Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER => 'TazaveshLower',
+    Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   => 'TazaveshUpper',
+],
 
-        Expansion::EXPANSION_DRAGONFLIGHT => [
-            // Cata
-            Dungeon::DUNGEON_THE_VORTEX_PINNACLE                  => 'TheVortexPinnacle',
-            // MoP
-            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT           => 'TempleOfTheJadeSerpent',
-            Dungeon::DUNGEON_THRONE_OF_THE_TIDES                  => 'ThroneOfTides',
-            // WoD
-            Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS            => 'ShadowmoonBurialGrounds',
-            Dungeon::DUNGEON_THE_EVERBLOOM                        => 'Everbloom',
-            // Legion
-            Dungeon::DUNGEON_BLACK_ROOK_HOLD                      => 'BlackrookHold',
-            // BFA
-            Dungeon::DUNGEON_WAYCREST_MANOR                       => 'WaycrestManor',
-            // DF
-            Dungeon::DUNGEON_ALGETH_AR_ACADEMY                    => 'AlgetharAcademy',
-            Dungeon::DUNGEON_BRACKENHIDE_HOLLOW                   => 'BrackenhideHollow',
-            Dungeon::DUNGEON_HALLS_OF_INFUSION                    => 'HallsOfInfusion',
-            Dungeon::DUNGEON_NELTHARUS                            => 'Neltharus',
-            Dungeon::DUNGEON_RUBY_LIFE_POOLS                      => 'RubyLifePools',
-            Dungeon::DUNGEON_THE_AZURE_VAULT                      => 'TheAzureVault',
-            Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE                 => 'TheNokhudOffensive',
-            Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR                => 'UldamanLegacyOfTyr',
-            Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL => 'DawnOfTheInfiniteLower',
-            Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE  => 'DawnOfTheInfiniteUpper',
-        ],
+Expansion::EXPANSION_DRAGONFLIGHT => [
+    // Cata
+    Dungeon::DUNGEON_THE_VORTEX_PINNACLE                  => 'TheVortexPinnacle',
+    // MoP
+    Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT           => 'TempleOfTheJadeSerpent',
+    Dungeon::DUNGEON_THRONE_OF_THE_TIDES                  => 'ThroneOfTides',
+    // WoD
+    Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS            => 'ShadowmoonBurialGrounds',
+    Dungeon::DUNGEON_THE_EVERBLOOM                        => 'Everbloom',
+    // Legion
+    Dungeon::DUNGEON_BLACK_ROOK_HOLD                      => 'BlackrookHold',
+    // BFA
+    Dungeon::DUNGEON_WAYCREST_MANOR                       => 'WaycrestManor',
+    // DF
+    Dungeon::DUNGEON_ALGETH_AR_ACADEMY                    => 'AlgetharAcademy',
+    Dungeon::DUNGEON_BRACKENHIDE_HOLLOW                   => 'BrackenhideHollow',
+    Dungeon::DUNGEON_HALLS_OF_INFUSION                    => 'HallsOfInfusion',
+    Dungeon::DUNGEON_NELTHARUS                            => 'Neltharus',
+    Dungeon::DUNGEON_RUBY_LIFE_POOLS                      => 'RubyLifePools',
+    Dungeon::DUNGEON_THE_AZURE_VAULT                      => 'TheAzureVault',
+    Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE                 => 'TheNokhudOffensive',
+    Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR                => 'UldamanLegacyOfTyr',
+    Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL => 'DawnOfTheInfiniteLower',
+    Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE  => 'DawnOfTheInfiniteUpper',
+],
+
+Expansion::EXPANSION_TWW => [
+    // Cata
+    Dungeon::DUNGEON_GRIM_BATOL              => 'GrimBatol',
+
+    // TWW
+    Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES => 'AraKara',
+    Dungeon::DUNGEON_CITY_OF_THREADS         => 'CityOfThreads',
+    Dungeon::DUNGEON_THE_DAWNBREAKER         => 'TheDawnbreaker',
+    Dungeon::DUNGEON_THE_STONEVAULT          => 'TheStonevault',
+],
     ];
 
     /**
@@ -186,13 +199,22 @@ class Conversion
         return $result;
     }
 
+    /**
+     * @param string $dungeonKey
+     * @return bool True if MDT an expansion name for this dungeon, false if it has not.
+     */
+    public static function hasMDTExpansionName(string $dungeonKey): bool
+    {
+        return is_string(self::getMDTExpansionName($dungeonKey));
+    }
+
     public static function getMDTExpansionName(string $dungeonKey): ?string
     {
         return self::EXPANSION_NAME_MAPPING[self::getExpansionName($dungeonKey)] ?? null;
     }
 
     /**
-     * @param  $dungeonKey  string
+     * @param string $dungeonKey
      * @return bool True if MDT has a dungeon name, false if it has not.
      */
     public static function hasMDTDungeonName(string $dungeonKey): bool
@@ -201,7 +223,7 @@ class Conversion
     }
 
     /**
-     * @param  $dungeonKey  string
+     * @param string $dungeonKey
      * @return string|null Gets the MDT version of a dungeon name.
      */
     public static function getMDTDungeonName(string $dungeonKey): ?string
@@ -219,7 +241,7 @@ class Conversion
     /**
      * Converts a MDT Dungeon ID to a Keystone.guru ID.
      *
-     * @param  $mdtDungeonId  int
+     * @param int $mdtDungeonId
      *
      * @throws Exception An exception if the found dungeon ID was incorrect/not supported.
      */
@@ -280,7 +302,7 @@ class Conversion
             return null;
         }
 
-        $affixGroup = $season->affixgroups->get(($season->start_affix_group_index + ($mdtWeek - 1)) % $season->affixgroups->count());
+        $affixGroup = $season->affixGroups->get(($season->start_affix_group_index + ($mdtWeek - 1)) % $season->affixGroups->count());
         // $affixGroup = $season->affixgroups->get(($season->start_affix_group_index - ($mdtWeek - 1)));
         if ($affixGroup === null) {
             logger()->error('Unable to find affix group for mdtWeek - returning current affix group instead', [

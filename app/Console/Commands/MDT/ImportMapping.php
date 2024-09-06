@@ -16,7 +16,7 @@ class ImportMapping extends Command
      *
      * @var string
      */
-    protected $signature = 'mdt:importmapping {dungeon} {--force=}';
+    protected $signature = 'mdt:importmapping {dungeon} {--force}';
 
     /**
      * The console command description.
@@ -24,14 +24,6 @@ class ImportMapping extends Command
      * @var string
      */
     protected $description = 'Imports the current mapping of all dungeons to MDT';
-
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.

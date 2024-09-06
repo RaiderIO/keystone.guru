@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Floor;
 
+use App\Models\Laratrust\Role;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -12,7 +13,7 @@ class FloorFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->hasRole('admin');
+        return Auth::user()->hasRole(Role::ROLE_ADMIN);
     }
 
     /**
@@ -24,6 +25,7 @@ class FloorFormRequest extends FormRequest
             'active'                             => ['nullable', 'bool'],
             'default'                            => ['nullable', 'bool'],
             'facade'                             => ['nullable', 'bool'],
+            'map_name'                           => ['required', 'string'],
             'name'                               => ['required', 'string'],
             'index'                              => ['required', 'integer'],
             'mdt_sub_level'                      => ['nullable', 'integer'],
@@ -33,6 +35,7 @@ class FloorFormRequest extends FormRequest
             'enemy_engagement_max_range'         => ['nullable', 'integer'],
             'enemy_engagement_max_range_patrols' => ['nullable', 'integer'],
             'percentage_display_zoom'            => ['nullable', 'integer'],
+            'zoom_max'                           => ['nullable', 'integer'],
         ];
     }
 }

@@ -11,6 +11,15 @@ class AdminEnemyPatrol extends EnemyPatrol {
         this.connectedEnemiesLayer = null;
 
         getState().register('floorid:changed', this, this.redrawConnectionsToEnemies.bind(this));
+        this.map.register('map:mapstatechanged', this, this._mapStateChangedEvent.bind(this));
+    }
+
+    /**
+     * Called when enemy selection for this enemy has changed (started/finished)
+     * @private
+     */
+    _mapStateChangedEvent() {
+        this.redrawConnectionsToEnemies();
     }
 
     /**
@@ -19,7 +28,7 @@ class AdminEnemyPatrol extends EnemyPatrol {
      * @private
      */
     _getVisibleEnemiesLatLngs() {
-        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPatrol', this);
 
         let result = [];
         for (let index in this.enemies) {
@@ -148,5 +157,6 @@ class AdminEnemyPatrol extends EnemyPatrol {
         super.cleanup();
 
         getState().unregister('floorid:changed', this);
+        this.map.unregister('map:mapstatechanged', this);
     }
 }

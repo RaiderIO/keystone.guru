@@ -4,6 +4,7 @@ use App\Providers\ControllerServiceProvider;
 use App\Providers\HelperServiceProvider;
 use App\Providers\KeystoneGuruServiceProvider;
 use App\Providers\LoggingServiceProvider;
+use App\Providers\RepositoryServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -188,6 +189,7 @@ return [
          */
         HelperServiceProvider::class,
         LoggingServiceProvider::class,
+        RepositoryServiceProvider::class,
         KeystoneGuruServiceProvider::class,
         ControllerServiceProvider::class,
     ])->toArray(),

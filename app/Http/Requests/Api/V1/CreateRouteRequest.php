@@ -5,7 +5,6 @@ namespace App\Http\Requests\Api\V1;
 use App\Models\Affix;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
-use App\Models\Spell;
 use App\Rules\CreateRouteNpcChronologicalRule;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use Illuminate\Validation\Rule;
@@ -34,10 +33,8 @@ class CreateRouteRequest extends APIFormRequest
             'challengeMode.start'           => ['required', $dateFormat],
             'challengeMode.end'             => ['required', $dateFormat],
             'challengeMode.durationMs'      => ['required', 'int'],
-            // @TODO Make non-optional when it's actually being sent
             'challengeMode.success'         => ['nullable', 'bool'],
-            'challengeMode.mapId'           => ['required', Rule::exists(Dungeon::class, 'map_id')],
-            'challengeMode.challengeModeId' => ['nullable', Rule::exists(Dungeon::class, 'challenge_mode_id')],
+            'challengeMode.challengeModeId' => ['required', Rule::exists(Dungeon::class, 'challenge_mode_id')],
             'challengeMode.level'           => ['required', 'int'],
             'challengeMode.affixes'         => ['required', 'array'],
             'challengeMode.affixes.*'       => ['required', Rule::exists(Affix::class, 'affix_id')],
@@ -50,7 +47,7 @@ class CreateRouteRequest extends APIFormRequest
             'npcs.*.coord.y'                => ['required', 'numeric'],
             'npcs.*.coord.uiMapId'          => ['required', Rule::exists(Floor::class, 'ui_map_id')],
             'spells'                        => 'nullable|array',
-            'spells.*.spellId'              => Rule::exists(Spell::class, 'id'),
+            'spells.*.spellId'              => 'integer',
             'spells.*.playerUid'            => 'string|max:32',
             'spells.*.castAt'               => $dateFormat,
             'spells.*.coord.x'              => 'numeric',

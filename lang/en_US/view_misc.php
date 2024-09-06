@@ -17,6 +17,7 @@ return [
         '2'                                 => '+2',
         '7'                                 => '+7',
         '14'                                => '+14',
+        'season_start'                      => ':season start',
         'seasonal'                          => 'Seasonal',
         'previous'                          => 'Previous',
         'next'                              => 'Next',

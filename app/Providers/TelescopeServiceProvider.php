@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Laratrust\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Telescope\IncomingEntry;
@@ -57,6 +58,6 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      */
     protected function gate(): void
     {
-        Gate::define('viewTelescope', static fn(?User $user) => $user !== null && $user->hasRole('admin'));
+        Gate::define('viewTelescope', static fn(?User $user) => $user !== null && $user->hasRole(Role::ROLE_ADMIN));
     }
 }

@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Events\Model\ModelDeletedEvent;
-use App\Http\Controllers\Traits\PublicKeyDungeonRoute;
 use App\Http\Requests\MapIcon\MapIconFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Team;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -52,7 +52,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         /** @var User|null $user */
         $user = Auth::user();
 
-        $isUserAdmin = $user?->hasRole('admin');
+        $isUserAdmin = $user?->hasRole(Role::ROLE_ADMIN);
         // Must be an admin to use this endpoint like this!
         if ($dungeonRoute === null) {
             if (!$isUserAdmin) {
@@ -93,7 +93,10 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
                 ]);
 
                 $mapIcon->setRelation('floor', $latLng->getFloor());
+                // Ensure the dungeon is loaded (required for the base class)
+                $mapIcon->load(['floor.dungeon']);
             }
+
             // Set the mapping version if it was placed in the context of a dungeon, or reset it to null if not in context
             // of a dungeon
             $mapIcon->update(array_merge($updateAttributes, [
@@ -119,7 +122,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     {
         $dungeonRoute = $mapIcon->dungeonRoute;
 
-        $isAdmin = Auth::check() && Auth::user()->hasRole('admin');
+        $isAdmin = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
         // Must be an admin to use this endpoint like this!
         if (!$isAdmin && ($dungeonRoute === null || $mapIcon->dungeon_route_id === null)) {
             return response(null, StatusCode::FORBIDDEN);
@@ -174,7 +177,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
      *
      * @throws Exception
      */
-    public function adminDelete(Request $request, MapIcon $mapIcon)
+    public function adminDelete(Request $request, MappingVersion $mappingVersion, MapIcon $mapIcon)
     {
         return $this->delete($request, null, $mapIcon);
     }

@@ -6,9 +6,12 @@
         "npc_type_id": 3,
         "npc_class_id": 1,
         "display_id": 4959,
+        "encounter_id": null,
         "name": "Shiprat",
         "base_health": 5,
         "health_percentage": null,
+        "level": 1,
+        "mdt_scale": 0.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -17,7 +20,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -27,9 +31,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 80382,
+        "encounter_id": 2095,
         "name": "Skycap'n Kragg",
         "base_health": 6916035,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -38,7 +45,34 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 181089
+            },
+            {
+                "spell_id": 255952
+            },
+            {
+                "spell_id": 255966
+            },
+            {
+                "spell_id": 256060
+            },
+            {
+                "spell_id": 256106
+            },
+            {
+                "spell_id": 258773
+            },
+            {
+                "spell_id": 263274
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -48,9 +82,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 80532,
+        "encounter_id": 2093,
         "name": "Captain Jolly",
         "base_health": 4347222,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -59,7 +96,19 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257821
+            },
+            {
+                "spell_id": 281329
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -69,9 +118,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81060,
+        "encounter_id": 2093,
         "name": "Captain Raoul",
         "base_health": 5335227,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -80,7 +132,25 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 256589
+            },
+            {
+                "spell_id": 256594
+            },
+            {
+                "spell_id": 257821
+            },
+            {
+                "spell_id": 258338
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -90,9 +160,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 80346,
+        "encounter_id": 2093,
         "name": "Captain Eudora",
         "base_health": 4940025,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -101,7 +174,25 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 256979
+            },
+            {
+                "spell_id": 257821
+            },
+            {
+                "spell_id": 258352
+            },
+            {
+                "spell_id": 258381
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -111,9 +202,12 @@
         "npc_type_id": 8,
         "npc_class_id": 2,
         "display_id": 81254,
+        "encounter_id": null,
         "name": "Irontide Crackshot",
         "base_health": 889545,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -122,7 +216,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 258672
+            },
+            {
+                "spell_id": 258673
+            },
+            {
+                "spell_id": 268440
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8921,
@@ -196,9 +329,12 @@
         "npc_type_id": 8,
         "npc_class_id": 3,
         "display_id": 79077,
+        "encounter_id": null,
         "name": "Irontide Stormcaller",
         "base_health": 711637,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -207,7 +343,52 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257736
+            },
+            {
+                "spell_id": 257737
+            },
+            {
+                "spell_id": 259092
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8945,
@@ -281,9 +462,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81253,
+        "encounter_id": null,
         "name": "Irontide Corsair",
         "base_health": 988383,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -292,7 +476,37 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 412346
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8922,
@@ -366,9 +580,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 55657,
+        "encounter_id": 2094,
         "name": "Trothak",
         "base_health": 6916035,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -377,7 +594,34 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 256358
+            },
+            {
+                "spell_id": 256363
+            },
+            {
+                "spell_id": 256405
+            },
+            {
+                "spell_id": 256489
+            },
+            {
+                "spell_id": 256494
+            },
+            {
+                "spell_id": 256546
+            },
+            {
+                "spell_id": 256706
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -387,9 +631,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 80841,
+        "encounter_id": 2095,
         "name": "Harlan Sweete",
         "base_health": 9880050,
         "health_percentage": null,
+        "level": 72,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -398,7 +645,43 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257305
+            },
+            {
+                "spell_id": 257308
+            },
+            {
+                "spell_id": 257316
+            },
+            {
+                "spell_id": 257402
+            },
+            {
+                "spell_id": 257458
+            },
+            {
+                "spell_id": 413131
+            },
+            {
+                "spell_id": 413136
+            },
+            {
+                "spell_id": 413145
+            },
+            {
+                "spell_id": 413146
+            },
+            {
+                "spell_id": 413147
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -408,9 +691,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81286,
+        "encounter_id": null,
         "name": "Irontide Officer",
         "base_health": 1581412,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -419,7 +705,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257899
+            },
+            {
+                "spell_id": 257908
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8947,
@@ -493,9 +806,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81279,
+        "encounter_id": null,
         "name": "Irontide Oarsman",
         "base_health": 1383736,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -504,7 +820,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 258777
+            },
+            {
+                "spell_id": 258779
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8927,
@@ -578,9 +921,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 78623,
+        "encounter_id": null,
         "name": "Freehold Deckhand",
         "base_health": 197676,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 0.6,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -589,7 +935,33 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 8950,
@@ -663,9 +1035,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 79066,
+        "encounter_id": null,
         "name": "Freehold Barhand",
         "base_health": 148258,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 0.6,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -674,7 +1049,27 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 8952,
@@ -748,9 +1143,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 30221,
+        "encounter_id": null,
         "name": "Irontide Mastiff",
         "base_health": 790706,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -759,7 +1157,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257476
+            },
+            {
+                "spell_id": 257478
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8920,
@@ -833,9 +1270,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 80322,
+        "encounter_id": null,
         "name": "Bilge Rat Swabby",
         "base_health": 889545,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 0.6,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -844,7 +1284,43 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 274507
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8949,
@@ -918,9 +1394,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81424,
+        "encounter_id": null,
         "name": "Bilge Rat Buccaneer",
         "base_health": 988383,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -929,7 +1408,49 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257756
+            },
+            {
+                "spell_id": 257757
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8934,
@@ -1003,9 +1524,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 80380,
+        "encounter_id": null,
         "name": "Blacktooth Scrapper",
         "base_health": 1087222,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1014,7 +1538,40 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257739
+            },
+            {
+                "spell_id": 257741
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8932,
@@ -1088,9 +1645,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81207,
+        "encounter_id": null,
         "name": "Blacktooth Knuckleduster",
         "base_health": 1186059,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1099,7 +1659,42 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 8936,
@@ -1173,9 +1768,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 80389,
+        "encounter_id": null,
         "name": "Blacktooth Brute",
         "base_health": 988383,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1184,7 +1782,40 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257747
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8928,
@@ -1258,9 +1889,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 87973,
+        "encounter_id": null,
         "name": "Bilge Rat Padfoot",
         "base_health": 790706,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1269,7 +1903,37 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257774
+            },
+            {
+                "spell_id": 257775
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8931,
@@ -1343,9 +2007,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 80339,
+        "encounter_id": null,
         "name": "Cutwater Duelist",
         "base_health": 889545,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1354,7 +2021,40 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 274400
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8926,
@@ -1428,9 +2128,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 88571,
+        "encounter_id": null,
         "name": "Freehold Pack Mule",
         "base_health": 197676,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 0.6,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -1439,7 +2142,15 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 8924,
@@ -1513,9 +2224,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 80335,
+        "encounter_id": null,
         "name": "Cutwater Knife Juggler",
         "base_health": 790706,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1524,7 +2238,43 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 272402
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8937,
@@ -1598,9 +2348,12 @@
         "npc_type_id": 8,
         "npc_class_id": 3,
         "display_id": 80475,
+        "encounter_id": null,
         "name": "Bilge Rat Brinescale",
         "base_health": 632566,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1609,7 +2362,49 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257784
+            },
+            {
+                "spell_id": 281420
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8935,
@@ -1683,9 +2478,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 80343,
+        "encounter_id": null,
         "name": "Cutwater Harpooner",
         "base_health": 988383,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1694,7 +2492,43 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 272412
+            },
+            {
+                "spell_id": 272413
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8941,
@@ -1768,9 +2602,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81224,
+        "encounter_id": null,
         "name": "Irontide Enforcer",
         "base_health": 1581412,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1779,7 +2616,19 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257426
+            },
+            {
+                "spell_id": 257732
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8919,
@@ -1853,9 +2702,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 80792,
+        "encounter_id": null,
         "name": "Ludwig Von Tortollan",
         "base_health": 3261664,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1864,7 +2716,16 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257904
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8943,
@@ -1938,9 +2799,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81255,
+        "encounter_id": null,
         "name": "Irontide Bonesaw",
         "base_health": 711637,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1949,7 +2813,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257397
+            },
+            {
+                "spell_id": 258321
+            },
+            {
+                "spell_id": 258323
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8923,
@@ -2023,9 +2926,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 79069,
+        "encounter_id": null,
         "name": "Irontide Buccaneer",
         "base_health": 1087222,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2034,7 +2940,46 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257870
+            },
+            {
+                "spell_id": 257871
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8933,
@@ -2108,9 +3053,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81507,
+        "encounter_id": null,
         "name": "Irontide Ravager",
         "base_health": 988383,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2119,7 +3067,37 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257899
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8946,
@@ -2193,9 +3171,12 @@
         "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 81400,
+        "encounter_id": null,
         "name": "Soggy Shiprat",
         "base_health": 148258,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 0.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2210,7 +3191,34 @@
                 "whitelist_npc_id": 130024
             }
         ],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 257476
+            },
+            {
+                "spell_id": 274555
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8930,
@@ -2284,9 +3292,12 @@
         "npc_type_id": 7,
         "npc_class_id": 1,
         "display_id": 68059,
+        "encounter_id": null,
         "name": "Irontide Crusher",
         "base_health": 1976766,
         "health_percentage": null,
+        "level": 71,
+        "mdt_scale": 1.4,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -2301,7 +3312,22 @@
                 "whitelist_npc_id": 130400
             }
         ],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 258181
+            },
+            {
+                "spell_id": 258199
+            },
+            {
+                "spell_id": 276061
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8942,
@@ -2375,9 +3401,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 87975,
+        "encounter_id": null,
         "name": "Vermin Trapper",
         "base_health": 1581412,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2386,7 +3415,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 274383
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8929,
@@ -2460,9 +3516,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 78623,
+        "encounter_id": null,
         "name": "Freehold Deckhand",
         "base_health": 197676,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 0.6,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -2471,7 +3530,33 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 8961,
@@ -2531,9 +3616,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 80087,
+        "encounter_id": null,
         "name": "Freehold Shipmate",
         "base_health": 296515,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 0.6,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -2542,7 +3630,33 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 8951,
@@ -2610,270 +3724,18 @@
         ]
     },
     {
-        "id": 155432,
-        "dungeon_id": 15,
-        "classification_id": 0,
-        "npc_type_id": 8,
-        "npc_class_id": 1,
-        "display_id": 39391,
-        "name": "Enchanted Emissary",
-        "base_health": 15369884,
-        "health_percentage": null,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "runs_away_in_fear": 0,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 8956,
-                "mapping_version_id": 186,
-                "npc_id": 155432,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 8814,
-                "mapping_version_id": 157,
-                "npc_id": 155432,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 8598,
-                "mapping_version_id": 149,
-                "npc_id": 155432,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 8282,
-                "mapping_version_id": 141,
-                "npc_id": 155432,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 7895,
-                "mapping_version_id": 135,
-                "npc_id": 155432,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 7331,
-                "mapping_version_id": 125,
-                "npc_id": 155432,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 7005,
-                "mapping_version_id": 120,
-                "npc_id": 155432,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 6211,
-                "mapping_version_id": 105,
-                "npc_id": 155432,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 958,
-                "mapping_version_id": 15,
-                "npc_id": 155432,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
-        "id": 155433,
-        "dungeon_id": 15,
-        "classification_id": 0,
-        "npc_type_id": 8,
-        "npc_class_id": 1,
-        "display_id": 39391,
-        "name": "Void-Touched Emissary",
-        "base_health": 999042,
-        "health_percentage": null,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 1,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "runs_away_in_fear": 0,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 8955,
-                "mapping_version_id": 186,
-                "npc_id": 155433,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 8813,
-                "mapping_version_id": 157,
-                "npc_id": 155433,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 8597,
-                "mapping_version_id": 149,
-                "npc_id": 155433,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 8283,
-                "mapping_version_id": 141,
-                "npc_id": 155433,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 7896,
-                "mapping_version_id": 135,
-                "npc_id": 155433,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 7332,
-                "mapping_version_id": 125,
-                "npc_id": 155433,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 7006,
-                "mapping_version_id": 120,
-                "npc_id": 155433,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 6212,
-                "mapping_version_id": 105,
-                "npc_id": 155433,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 959,
-                "mapping_version_id": 15,
-                "npc_id": 155433,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
-        "id": 155434,
-        "dungeon_id": 15,
-        "classification_id": 0,
-        "npc_type_id": 8,
-        "npc_class_id": 1,
-        "display_id": 39391,
-        "name": "Emissary of the Tides",
-        "base_health": 614795,
-        "health_percentage": null,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "runs_away_in_fear": 0,
-        "npcbolsteringwhitelists": [],
-        "npcspells": [],
-        "npc_enemy_forces": [
-            {
-                "id": 8954,
-                "mapping_version_id": 186,
-                "npc_id": 155434,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 8812,
-                "mapping_version_id": 157,
-                "npc_id": 155434,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 8596,
-                "mapping_version_id": 149,
-                "npc_id": 155434,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 8284,
-                "mapping_version_id": 141,
-                "npc_id": 155434,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 7897,
-                "mapping_version_id": 135,
-                "npc_id": 155434,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 7333,
-                "mapping_version_id": 125,
-                "npc_id": 155434,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 7007,
-                "mapping_version_id": 120,
-                "npc_id": 155434,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 6213,
-                "mapping_version_id": 105,
-                "npc_id": 155434,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 960,
-                "mapping_version_id": 15,
-                "npc_id": 155434,
-                "enemy_forces": 4,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
         "id": 129547000,
         "dungeon_id": 15,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 81207,
+        "encounter_id": null,
         "name": "Blacktooth Knuckleduster",
         "base_health": 858478,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2882,7 +3744,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     }
 ]

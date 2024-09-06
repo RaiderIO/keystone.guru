@@ -3,8 +3,9 @@
 return [
     'explore' => [
         'list' => [
-            'title'  => 'Hodor',
-            'header' => 'Hodor',
+            'title'             => 'Hodor',
+            'header'            => 'Hodor',
+            'heatmap_available' => 'Hodor',
         ],
     ],
 ];

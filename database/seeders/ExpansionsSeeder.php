@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Expansion;
 use App\Models\File;
-use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 
 class ExpansionsSeeder extends Seeder implements TableSeederInterface
 {
@@ -14,8 +14,6 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding known Expansions');
-
         $expansions = [
             'expansions.legion.name'                 => new Expansion([
                 'active'      => 1,
@@ -67,6 +65,21 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
                 'shortname'   => Expansion::EXPANSION_DRAGONFLIGHT,
                 'color'       => '#b0a497',
                 'released_at' => Carbon::make('2022-11-29 00:00:00'),
+            ]), 'expansions.tww.name'                => new Expansion([
+                'active'      => 1,
+                'shortname'   => Expansion::EXPANSION_TWW,
+                'color'       => '#8B0000',
+                'released_at' => Carbon::make('2024-08-26 00:00:00'),
+            ]), 'expansions.midnight.name'           => new Expansion([
+                'active'      => 0,
+                'shortname'   => Expansion::EXPANSION_MIDNIGHT,
+                'color'       => '#4B0082',
+                'released_at' => Carbon::make('2028-08-26 00:00:00'),
+            ]), 'expansions.the_last_titan.name'     => new Expansion([
+                'active'      => 0,
+                'shortname'   => Expansion::EXPANSION_TLT,
+                'color'       => '#6D6E5C',
+                'released_at' => Carbon::make('2029-08-26 00:00:00'),
             ]),
         ];
 
@@ -92,5 +105,11 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
     public static function getAffectedModelClasses(): array
     {
         return [Expansion::class];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

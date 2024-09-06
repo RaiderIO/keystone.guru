@@ -29,7 +29,7 @@
     @endauth
     <div id="create-temporary" class="tab-pane fade {{ Auth::check() ? '' : 'show active'}} mt-3" role="tabpanel"
          aria-labelledby="create_temporary_route_tab">
-        @include('common.forms.createtemporaryroute')
+        @include('common.forms.createroutetemporary')
     </div>
     <div id="import" class="tab-pane fade mt-3" role="tabpanel" aria-labelledby="create_route_import_mdt_tab">
         @include('common.forms.mdtimport')

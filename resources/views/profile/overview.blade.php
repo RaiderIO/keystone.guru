@@ -4,7 +4,7 @@
 /**
  * @var $newRouteStyle string
  * @var $currentUserGameVersion \App\Models\GameVersion\GameVersion
- * @var $dungeonRoutes \Illuminate\Support\Collection|\App\Models\DungeonRoute\DungeonRoute[]
+ * @var $dungeonRoutes \Illuminate\Support\Collection<\App\Models\DungeonRoute\DungeonRoute>
  */
 ?>
 

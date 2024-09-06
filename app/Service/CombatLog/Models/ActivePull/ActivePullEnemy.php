@@ -4,14 +4,20 @@ namespace App\Service\CombatLog\Models\ActivePull;
 
 use App\Logic\Structs\IngameXY;
 use App\Models\Enemy;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class ActivePullEnemy
 {
     private ?Enemy $resolvedEnemy = null;
 
-    public function __construct(private readonly string $uniqueId, private readonly int $npcId, private readonly float $x, private readonly float $y, private readonly Carbon $engagedAt, private readonly ?Carbon $diedAt)
-    {
+    public function __construct(
+        private readonly string  $uniqueId,
+        private readonly int     $npcId,
+        private readonly float   $x,
+        private readonly float   $y,
+        private readonly Carbon  $engagedAt,
+        private readonly ?Carbon $diedAt
+    ) {
     }
 
     public function getUniqueId(): string

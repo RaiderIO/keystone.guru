@@ -2,11 +2,15 @@
 
 namespace App\Service\Season;
 
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
+use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionService;
+use App\Service\Season\Dtos\WeeklyAffixGroup;
 use App\Traits\UserCurrentTime;
 use Exception;
 use Illuminate\Support\Carbon;
@@ -23,20 +27,21 @@ class SeasonService implements SeasonServiceInterface
 {
     use UserCurrentTime;
 
-    /** @var Collection|Season[] */
+    /** @var Collection<Season> */
     private Collection $seasonCache;
 
     private ?Season $firstSeasonCache = null;
 
     public function __construct(
-        private ExpansionService $expansionService
+        private readonly ExpansionService          $expansionService,
+        private readonly SeasonRepositoryInterface $seasonRepository
     ) {
         $this->seasonCache      = collect();
         $this->firstSeasonCache = null;
     }
 
     /**
-     * @return Collection|Season[]
+     * @return Collection<Season>
      */
     public function getSeasons(?Expansion $expansion = null, ?GameServerRegion $region = null): Collection
     {
@@ -85,8 +90,9 @@ class SeasonService implements SeasonServiceInterface
     /**
      * Get the season that was active at a specific date.
      */
-    public function getSeasonAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): ?Season
+    public function getSeasonAt(Carbon $date, ?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
     {
+        $region    ??= GameServerRegion::getUserOrDefaultRegion();
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
         /** @var Season $season */
@@ -95,7 +101,6 @@ class SeasonService implements SeasonServiceInterface
         )
             ->where('expansion_id', $expansion->id)
             ->orderBy('start', 'desc')
-            ->limit(1)
             ->first();
 
         return $season;
@@ -110,7 +115,7 @@ class SeasonService implements SeasonServiceInterface
         $region    ??= GameServerRegion::getUserOrDefaultRegion();
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
-        return $this->getSeasonAt(Carbon::now(), $region, $expansion);
+        return $this->getSeasonAt(Carbon::now(), $expansion, $region);
     }
 
     public function getNextSeasonOfExpansion(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
@@ -121,16 +126,39 @@ class SeasonService implements SeasonServiceInterface
         return $expansion->nextSeason($region);
     }
 
+    public function getMostRecentSeasonForDungeon(Dungeon $dungeon): ?Season
+    {
+        if (!$dungeon->gameVersion->has_seasons) {
+            return null;
+        }
+
+        return $this->seasonRepository->getMostRecentSeasonForDungeon($dungeon);
+    }
+
+    public function getUpcomingSeasonForDungeon(Dungeon $dungeon): ?Season
+    {
+        if (!$dungeon->gameVersion->has_seasons) {
+            return null;
+        }
+
+        return $this->seasonRepository->getUpcomingSeasonForDungeon($dungeon);
+    }
+
     /**
-     * Get the index in the list of affix groups that we're currently at. Each season has 12 affix groups per iteration.
+     * Get the index in the list of affix groups that we're currently at.
      * We can calculate where exactly we are in the current iteration, we just don't know the affix group that represents
      * that index, that's up to the current season.
      *
      * @throws Exception
      */
-    public function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): int
+    public function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): ?int
     {
-        $season      = $this->getSeasonAt($date, $region, $expansion);
+        $season = $this->getSeasonAt($date, $expansion, $region);
+        // There's no season active at the given time!
+        if ($season === null) {
+            return null;
+        }
+
         $seasonStart = $season->start($region);
 
         if ($seasonStart->gt($date)) {
@@ -188,7 +216,7 @@ class SeasonService implements SeasonServiceInterface
         $simulatedTime        = $firstSeasonStart->copy();
         $totalWeeksToSimulate = $weeksSinceBeginning + 1;
         for ($i = 0; $i < $totalWeeksToSimulate; $i++) {
-            if ($nextSeason !== null && $nextSeason->affixgroups->isNotEmpty()) {
+            if ($nextSeason !== null && $nextSeason->affixGroups->isNotEmpty()) {
                 // If we should switch to the next season...
                 if ($simulatedTime->gte($nextSeason->start())) {
                     // Move to the next season
@@ -202,7 +230,8 @@ class SeasonService implements SeasonServiceInterface
                 // Append to the list of when we have which affix groups
                 $affixGroups->push([
                     'date_start' => $simulatedTime->copy(),
-                    'affixgroup' => $currentSeason->affixgroups[$i % $currentSeason->affix_group_count],
+                    // $currentSeason->start_affix_group_index
+                    'affixgroup' => $currentSeason->affixGroups[$i % $currentSeason->affix_group_count],
                 ]);
             }
 
@@ -212,5 +241,40 @@ class SeasonService implements SeasonServiceInterface
 
         return $affixGroups;
         //        }, config('keystoneguru.cache.displayed_affix_groups.ttl'));
+    }
+
+    /**
+     * @param GameServerRegion $region
+     * @return Collection<WeeklyAffixGroup>
+     * @throws Exception
+     */
+    public function getWeeklyAffixGroupsSinceStart(Season $season, GameServerRegion $region): Collection
+    {
+        $result = collect();
+
+        $currentDate = $season->start($region)->copy();
+        $now         = Carbon::now();
+
+        $week = 1;
+        while ($currentDate->lt($now)) {
+            $affixGroup = $season->getAffixGroupAt($currentDate, $region);
+
+            if ($affixGroup !== null) {
+                $result->push(
+                    new WeeklyAffixGroup(
+                        $affixGroup,
+                        $week,
+                        $currentDate->copy()
+                    )
+                );
+            } else {
+                break;
+            }
+
+            $currentDate->addWeek();
+            $week++;
+        }
+
+        return $result;
     }
 }

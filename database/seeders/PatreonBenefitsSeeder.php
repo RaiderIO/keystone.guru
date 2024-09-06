@@ -12,8 +12,6 @@ class PatreonBenefitsSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding Patreon Benefits');
-
         $patreonBenefitAttributes = [];
         foreach (PatreonBenefit::ALL as $patreonBenefitKey => $id) {
             $patreonBenefitAttributes[] = [
@@ -29,5 +27,11 @@ class PatreonBenefitsSeeder extends Seeder implements TableSeederInterface
     public static function getAffectedModelClasses(): array
     {
         return [PatreonBenefit::class];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

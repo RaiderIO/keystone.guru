@@ -2,17 +2,12 @@
 
 namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use Database\Seeders\DatabaseSeeder;
 
 class NpcNpcEnemyForcesRelationParser implements RelationParserInterface
 {
-    public function canParseRootModel(string $modelClassName): bool
-    {
-        return false;
-    }
-
     public function canParseModel(string $modelClassName): bool
     {
         return $modelClassName === Npc::class;

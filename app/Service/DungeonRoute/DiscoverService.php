@@ -34,9 +34,9 @@ class DiscoverService extends BaseDiscoverService
         $this->ensureExpansion();
 
         // Grab affixes from either the set season, the current season of the expansion, or otherwise empty
-        $currentSeasonAffixGroups = $this->season?->affixgroups ??
+        $currentSeasonAffixGroups = $this->season?->affixGroups ??
             // This can cause issues when we're in between seasons between different regions, but a minor issue
-            optional($this->expansionService->getCurrentSeason($this->expansion, GameServerRegion::getUserOrDefaultRegion()))->affixgroups ??
+            optional($this->expansionService->getCurrentSeason($this->expansion, GameServerRegion::getUserOrDefaultRegion()))->affixGroups ??
             collect();
 
         return DungeonRoute::query()
@@ -155,7 +155,7 @@ class DiscoverService extends BaseDiscoverService
             $this->getCacheKey('grouped_by_dungeon:popular'), function () {
                 $result = collect();
 
-                /** @var Collection|Dungeon[] $activeDungeons */
+                /** @var Collection<Dungeon> $activeDungeons */
                 $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeons())->active()->get();
                 foreach ($activeDungeons as $dungeon) {
                     // Limit the amount of results of our queries
@@ -196,7 +196,7 @@ class DiscoverService extends BaseDiscoverService
             function () use ($affixGroup) {
                 $result = collect();
 
-                /** @var Collection|Dungeon[] $activeDungeons */
+                /** @var Collection<Dungeon> $activeDungeons */
                 $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeons())->active()->get();
                 foreach ($activeDungeons as $dungeon) {
                     // Limit the amount of results of our queries

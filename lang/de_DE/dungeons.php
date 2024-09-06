@@ -380,6 +380,12 @@ return [
         ],
     ],
     'cata'         => [
+        'grim_batol'          => [
+            'name'   => '',
+            'floors' => [
+                'grim_batol' => '',
+            ],
+        ],
         'the_vortex_pinnacle' => [
             'name'   => '',
             'floors' => [
@@ -765,8 +771,9 @@ return [
         'halls_of_infusion'                    => [
             'name'   => '',
             'floors' => [
-                'infusers_rotunda' => '',
-                'infusion_chamber' => '',
+                'infusers_rotunda'  => '',
+                'infusion_chamber'  => '',
+                'halls_of_infusion' => '',
             ],
         ],
         'neltharus'                            => [
@@ -774,6 +781,7 @@ return [
             'floors' => [
                 'the_burning_cauldron' => '',
                 'chamber_of_flames'    => '',
+                'neltharus'            => '',
             ],
         ],
         'ruby_life_pools'                      => [
@@ -781,6 +789,7 @@ return [
             'floors' => [
                 'infusion_chambers' => '',
                 'ruby_overlook'     => '',
+                'ruby_life_pools'   => '',
             ],
         ],
         'the_azure_vault'                      => [
@@ -791,6 +800,7 @@ return [
                 'mausoleum_of_legends'    => '',
                 'the_infinity_seal'       => '',
                 'sindragosas_lament'      => '',
+                'the_azure_vault'         => '',
             ],
         ],
         'the_nokhud_offensive'                 => [
@@ -802,8 +812,9 @@ return [
         'uldaman_legacy_of_tyr'                => [
             'name'   => '',
             'floors' => [
-                'hall_of_the_keepers' => '',
-                'the_vault_of_tyr'    => '',
+                'hall_of_the_keepers'   => '',
+                'the_vault_of_tyr'      => '',
+                'uldaman_legacy_of_tyr' => '',
             ],
         ],
         'dawn_of_the_infinite_galakronds_fall' => [
@@ -828,6 +839,66 @@ return [
                 'infinite_conflux'       => '',
                 'twisting_approach'      => '',
                 'immemorial_battlefield' => '',
+            ],
+        ],
+    ],
+    'tww'          => [
+        'ara_kara_city_of_echoes'    => [
+            'name'   => '',
+            'floors' => [
+                'echoing_overlook'        => '',
+                'the_undercache'          => '',
+                'ara_kara_city_of_echoes' => '',
+            ],
+        ],
+        'cinderbrew_meadery'         => [
+            'name'   => '',
+            'floors' => [
+                'cinderbrew_meadery' => '',
+            ],
+        ],
+        'city_of_threads'            => [
+            'name'   => '',
+            'floors' => [
+                'city_of_threads'    => '',
+                'the_transformatory' => '',
+            ],
+        ],
+        'darkflame_cleft'            => [
+            'name'   => '',
+            'floors' => [
+                'darkflame_cleft' => '',
+            ],
+        ],
+        'priory_of_the_sacred_flame' => [
+            'name'   => '',
+            'floors' => [
+                'sanctified_grounds'         => '',
+                'priory_of_the_sacred_flame' => '',
+            ],
+        ],
+        'the_dawnbreaker'            => [
+            'name'   => '',
+            'floors' => [
+                'the_dawnbreaker' => '',
+            ],
+        ],
+        'the_rookery'                => [
+            'name'   => '',
+            'floors' => [
+                'the_rookery_landing' => '',
+                'storms_roost'        => '',
+                'storm_rookery'       => '',
+                'stormrider_barracks' => '',
+                'crashing_storm_hall' => '',
+                'abandoned_mines'     => '',
+                'the_rookery'         => '',
+            ],
+        ],
+        'the_stonevault'             => [
+            'name'   => '',
+            'floors' => [
+                'the_stonevault' => '',
             ],
         ],
     ],

@@ -2,7 +2,7 @@
 
 namespace App\Logic\SimulationCraft;
 
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 
 interface RaidEventPullEnemyInterface

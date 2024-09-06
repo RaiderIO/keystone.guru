@@ -3,16 +3,16 @@
 /** @var $seasonService \App\Service\Season\SeasonService */
 /** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $searchTags */
 /** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $autocompletetags */
-/** @var $allRouteAttributes \Illuminate\Support\Collection|\App\Models\RouteAttribute[] */
+/** @var $allRouteAttributes \Illuminate\Support\Collection<\App\Models\RouteAttribute> */
 /** This is the template for the Affix Selection when using it in a dropdown */
 
 /** @var \App\Models\DungeonRoute\DungeonRoute $model */
 if (!isset($affixgroups)) {
-    $affixgroups = $seasonService->getCurrentSeason()->affixgroups()->with('affixes')->get();
+    $affixgroups = $seasonService->getCurrentSeason()->affixGroups()->with('affixes')->get();
 }
 
 /** @var App\Models\Team|null $team */
-$team ??= null;
+$team      ??= null;
 $favorites ??= false;
 
 /** @var string $view */

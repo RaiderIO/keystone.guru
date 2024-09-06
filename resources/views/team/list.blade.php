@@ -1,7 +1,15 @@
 <?php
-/** @var \Illuminate\Support\Collection|\App\Models\Team[] $models */
 
-setcookie('viewed_teams', true);
+use App\Models\Team;
+use App\Service\Cookies\CookieServiceInterface;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection<Team> $models
+ */
+
+$cookieService = resolve(CookieServiceInterface::class);
+$cookieService->setCookie('viewed_teams', true)
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_team.list.title')])
 
@@ -28,7 +36,7 @@ setcookie('viewed_teams', true);
             <tr data-teamid="{{ $team->public_key }}">
                 <td class="clickable">
                     @isset($team->iconfile)
-                        <img class="mr-1" src="{{ $team->iconfile->getURL() }}"
+                        <img alt="Icon" class="mr-1" src="{{ $team->iconfile->getURL() }}"
                              style="max-width: 48px"/>
                     @endisset
                     {{ $team->name }}

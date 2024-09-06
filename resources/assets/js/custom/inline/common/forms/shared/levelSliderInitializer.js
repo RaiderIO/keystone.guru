@@ -1,13 +1,21 @@
 class LevelSliderInitializer {
     constructor(options) {
         // Level
-        (new LevelHandler(options.levelMin, options.levelMax)
-            .apply(options.levelSelector, {
-                from: options.levelFrom,
-                to: options.levelTo,
-                onFinish: function (data) {
-                    Cookies.set('route_key_level', $(options.levelSelector).val());
-                }
-            }));
+        this.levelHandler = (new LevelHandler(options.levelMin, options.levelMax));
+
+
+        this.levelHandler.apply(options.levelSelector, {
+            min: options.keyLevelMinDefault,
+            max: options.keyLevelMaxDefault,
+            from: options.levelFrom,
+            to: options.levelTo,
+            onFinish: function (data) {
+                Cookies.set('route_key_level', $(options.levelSelector).val());
+            }
+        });
+    }
+
+    update(min, max) {
+        this.levelHandler.update(min, max);
     }
 }

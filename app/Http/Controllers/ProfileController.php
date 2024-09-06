@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Events\UserColorChangedEvent;
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
 use App\Models\LiveSession;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
-use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use App\Models\User;
+use App\Service\EchoServer\EchoServerHttpApiServiceInterface;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -247,7 +248,7 @@ class ProfileController extends Controller
     {
         /** @var User $user */
         $user = Auth::getUser();
-        if ($user->hasRole('admin')) {
+        if ($user->hasRole(Role::ROLE_ADMIN)) {
             throw new Exception(__('controller.profile.flash.admins_cannot_delete_themselves'));
         }
 

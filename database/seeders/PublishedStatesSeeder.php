@@ -12,8 +12,6 @@ class PublishedStatesSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding Published States');
-
         $publishedStateAttributes = [];
         foreach (PublishedState::ALL as $publishedStateName => $id) {
             $publishedStateAttributes[] = [
@@ -28,5 +26,11 @@ class PublishedStatesSeeder extends Seeder implements TableSeederInterface
     public static function getAffectedModelClasses(): array
     {
         return [PublishedState::class];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

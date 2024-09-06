@@ -13,8 +13,6 @@ class FactionsSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding known factions');
-
         $factions = [
             new Faction([
                 'id'           => Faction::ALL[Faction::FACTION_UNSPECIFIED],
@@ -60,5 +58,11 @@ class FactionsSeeder extends Seeder implements TableSeederInterface
     public static function getAffectedModelClasses(): array
     {
         return [Faction::class];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

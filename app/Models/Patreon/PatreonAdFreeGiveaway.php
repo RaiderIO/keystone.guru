@@ -3,10 +3,10 @@
 namespace App\Models\Patreon;
 
 use App\Models\User;
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int    $id

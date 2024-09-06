@@ -101,7 +101,7 @@ class AjaxKillZoneController extends Controller
                 }
 
                 KillZoneSpell::insert($spellsAttributes);
-                $killZone->load(['spells:id']);
+                $killZone->load(['spells:id,icon_name']);
             }
 
             if ($recalculateEnemyForces) {

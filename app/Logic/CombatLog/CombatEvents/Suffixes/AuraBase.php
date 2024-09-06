@@ -6,17 +6,20 @@ use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 
 abstract class AuraBase extends Suffix
 {
+    public const AURA_TYPE_BUFF   = 'BUFF';
+    public const AURA_TYPE_DEBUFF = 'DEBUFF';
+
     /** @var string ex. BUFF */
     private string $auraType;
 
-    private int $amount;
+    private ?int $amount = null;
 
     public function getAuraType(): string
     {
         return $this->auraType;
     }
 
-    public function getAmount(): int
+    public function getAmount(): ?int
     {
         return $this->amount;
     }

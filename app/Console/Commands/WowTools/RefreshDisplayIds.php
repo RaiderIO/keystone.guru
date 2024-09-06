@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\WowTools;
 
-use App\Models\Npc;
+use App\Models\Npc\Npc;
 use App\Service\WowTools\WowToolsServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -24,19 +24,11 @@ class RefreshDisplayIds extends Command
     protected $description = 'Updates the display ID of all NPCs that do not have them yet.';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(WowToolsServiceInterface $wowToolsService): void
     {
-        /** @var Collection|Npc[] $npcsToRefresh */
+        /** @var Collection<Npc> $npcsToRefresh */
         $npcsToRefresh = Npc::whereNull('display_id')->get();
 
         $this->info(sprintf('Refreshing display_ids for %d npcs..', $npcsToRefresh->count()));

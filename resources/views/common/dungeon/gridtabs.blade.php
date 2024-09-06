@@ -1,12 +1,13 @@
 <?php
 /**
- * @var \App\Models\GameVersion\GameVersion                    $currentUserGameVersion
- * @var \App\Models\Season|null                                $nextSeason
- * @var \App\Models\Season                                     $currentSeason
- * @var \Illuminate\Support\Collection|\App\Models\Expansion[] $activeExpansions
- * @var string                                                 $id
- * @var string                                                 $tabsId
- * @var bool                                                   $selectable
+ * @var \App\Models\GameVersion\GameVersion                   $currentUserGameVersion
+ * @var \App\Models\Season|null                               $nextSeason
+ * @var \App\Models\Season                                    $currentSeason
+ * @var \Illuminate\Support\Collection<\App\Models\Expansion> $activeExpansions
+ * @var string                                                $id
+ * @var string                                                $tabsId
+ * @var bool                                                  $selectable
+ * @var callable|null                                         $subtextFn
  */
 $selectedSeasonId = $currentUserGameVersion->has_seasons ? ($nextSeason ?? $currentSeason)->id : null;
 $selectable       ??= true;
@@ -14,9 +15,10 @@ $route            ??= null;
 $routeParams      ??= [];
 $linkMapFn        = static fn(\App\Models\Dungeon $dungeon) => [
     'dungeon' => $dungeon->key,
-    'link'    => route($route, array_merge($routeParams, ['dungeon' => $dungeon]))
+    'link'    => route($route, array_merge($routeParams, ['dungeon' => $dungeon])),
 ];
-
+$subtextFn        ??= null;
+$showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $currentSeason->expansion_id;
 ?>
 <div id="{{ $id }}">
     <ul id="{{ $tabsId }}" class="nav nav-tabs" role="tablist">
@@ -31,7 +33,7 @@ $linkMapFn        = static fn(\App\Models\Dungeon $dungeon) => [
                        aria-selected="{{ $selectedSeasonId === $nextSeason->id ? 'true' : 'false' }}"
                        data-toggle="tab"
                        data-season="{{ $nextSeason->id }}"
-                    >{{ $nextSeason->name }}</a>
+                    >{{ $showFullExpansionName ? $nextSeason->name_long : $nextSeason->name }}</a>
                 </li>
             @endif
             <li class="nav-item">
@@ -82,6 +84,7 @@ $linkMapFn        = static fn(\App\Models\Dungeon $dungeon) => [
                         'selectable' => true,
                         'route' => $route,
                         'links' => $route === null ? collect() : $nextSeason->dungeons->map($linkMapFn),
+                        'subtextFn' => $subtextFn,
                     ])
                 </div>
             @endif
@@ -95,6 +98,7 @@ $linkMapFn        = static fn(\App\Models\Dungeon $dungeon) => [
                     'selectable' => true,
                     'route' => $route,
                     'links' => $route === null ? collect() : $currentSeason->dungeons->map($linkMapFn),
+                    'subtextFn' => $subtextFn,
                 ])
             </div>
         @endif
@@ -114,6 +118,7 @@ $linkMapFn        = static fn(\App\Models\Dungeon $dungeon) => [
                         'selectable' => true,
                         'route' => $route,
                         'links' => $route === null ? collect() : $expansion->dungeons()->active()->get()->map($linkMapFn),
+                        'subtextFn' => $subtextFn,
                     ])
                 </div>
                 @php($index++)

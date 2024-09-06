@@ -6,7 +6,11 @@ use App;
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeCombatLogEvent;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Service\CombatLog\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Service\CombatLog\Builders\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
@@ -27,16 +31,26 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
     private readonly ResultEventDungeonRouteBuilderLoggingInterface $log;
 
     public function __construct(
-        CoordinatesServiceInterface $coordinatesService,
-        DungeonRoute                $dungeonRoute,
-        /** @var Collection|BaseResultEvent[] */
-        private readonly Collection $resultEvents
+        CoordinatesServiceInterface      $coordinatesService,
+        DungeonRouteRepositoryInterface  $dungeonRouteRepository,
+        KillZoneRepositoryInterface      $killZoneRepository,
+        KillZoneEnemyRepositoryInterface $killZoneEnemyRepository,
+        KillZoneSpellRepositoryInterface $killZoneSpellRepository,
+        DungeonRoute                     $dungeonRoute,
+        /** @var Collection<BaseResultEvent> */
+        private readonly Collection      $resultEvents
     ) {
-        parent::__construct($coordinatesService, $dungeonRoute);
+        $this->log = App::make(ResultEventDungeonRouteBuilderLoggingInterface::class);
 
-        /** @var ResultEventDungeonRouteBuilderLoggingInterface $log */
-        $log       = App::make(ResultEventDungeonRouteBuilderLoggingInterface::class);
-        $this->log = $log;
+        parent::__construct(
+            $coordinatesService,
+            $dungeonRouteRepository,
+            $killZoneRepository,
+            $killZoneEnemyRepository,
+            $killZoneSpellRepository,
+            $dungeonRoute,
+            $this->log
+        );
     }
 
     public function build(): DungeonRoute

@@ -16,7 +16,7 @@ return new class extends Migration {
         DungeonRoute::with(['dungeon' => function (BelongsTo $query) {
             $query->without('gameVersion');
         }])->chunk(100, function (Collection $dungeonRoutes) use ($output) {
-            /** @var Collection|DungeonRoute[] $dungeonRoutes */
+            /** @var Collection<DungeonRoute> $dungeonRoutes */
             foreach ($dungeonRoutes as $dungeonRoute) {
                 if (empty($dungeonRoute->title) || empty($dungeonRoute->getTitleSlug())) {
                     $oldTitle = $dungeonRoute->title;

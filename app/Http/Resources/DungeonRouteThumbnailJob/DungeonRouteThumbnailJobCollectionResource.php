@@ -3,10 +3,8 @@
 namespace App\Http\Resources\DungeonRouteThumbnailJob;
 
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use JsonSerializable;
 
 /**
  * Class DungeonRouteThumbnailJobCollectionResource

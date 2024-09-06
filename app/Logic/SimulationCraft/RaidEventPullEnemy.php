@@ -3,8 +3,8 @@
 namespace App\Logic\SimulationCraft;
 
 use App\Models\Enemy;
-use App\Models\Npc;
-use App\Models\NpcClassification;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcClassification;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use Illuminate\Support\Str;
 

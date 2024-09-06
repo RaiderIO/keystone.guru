@@ -58,5 +58,95 @@
         "lng": 127.22,
         "size": 325,
         "rotation": 0
+    },
+    {
+        "id": 287,
+        "mapping_version_id": 323,
+        "floor_id": 280,
+        "target_floor_id": 145,
+        "lat": -125.04,
+        "lng": 329.2,
+        "size": 335,
+        "rotation": 0
+    },
+    {
+        "id": 288,
+        "mapping_version_id": 323,
+        "floor_id": 280,
+        "target_floor_id": 145,
+        "lat": -88.28,
+        "lng": 297.2,
+        "size": 350,
+        "rotation": 0
+    },
+    {
+        "id": 289,
+        "mapping_version_id": 323,
+        "floor_id": 280,
+        "target_floor_id": 144,
+        "lat": -143.73,
+        "lng": 127.22,
+        "size": 325,
+        "rotation": 0
+    },
+    {
+        "id": 306,
+        "mapping_version_id": 353,
+        "floor_id": 280,
+        "target_floor_id": 145,
+        "lat": -125.04,
+        "lng": 329.2,
+        "size": 335,
+        "rotation": 0
+    },
+    {
+        "id": 307,
+        "mapping_version_id": 353,
+        "floor_id": 280,
+        "target_floor_id": 145,
+        "lat": -88.28,
+        "lng": 297.2,
+        "size": 350,
+        "rotation": 0
+    },
+    {
+        "id": 308,
+        "mapping_version_id": 353,
+        "floor_id": 280,
+        "target_floor_id": 144,
+        "lat": -143.73,
+        "lng": 127.22,
+        "size": 325,
+        "rotation": 0
+    },
+    {
+        "id": 309,
+        "mapping_version_id": 354,
+        "floor_id": 280,
+        "target_floor_id": 145,
+        "lat": -125.04,
+        "lng": 329.2,
+        "size": 335,
+        "rotation": 0
+    },
+    {
+        "id": 310,
+        "mapping_version_id": 354,
+        "floor_id": 280,
+        "target_floor_id": 145,
+        "lat": -88.28,
+        "lng": 297.2,
+        "size": 350,
+        "rotation": 0
+    },
+    {
+        "id": 311,
+        "mapping_version_id": 354,
+        "floor_id": 280,
+        "target_floor_id": 144,
+        "lat": -143.73,
+        "lng": 127.22,
+        "size": 325,
+        "rotation": 0
     }
 ]

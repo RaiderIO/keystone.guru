@@ -24,12 +24,12 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
 
     public function importMappingVersionFromMDTEnd(): void
     {
-        $this->end(__METHOD__, get_defined_vars());
+        $this->end(__METHOD__);
     }
 
     public function importDungeonStart(): void
     {
-        $this->start(__METHOD__, get_defined_vars());
+        $this->start(__METHOD__);
     }
 
     public function importDungeonTotalCounts(int $mdtDungeonID, int $normal, int $teeming): void
@@ -39,27 +39,97 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
 
     public function importDungeonOK(): void
     {
-        $this->debug(__METHOD__, get_defined_vars());
+        $this->debug(__METHOD__);
     }
 
     public function importDungeonFailed(): void
     {
-        $this->error(__METHOD__, get_defined_vars());
+        $this->error(__METHOD__);
     }
 
     public function importDungeonEnd(): void
     {
-        $this->end(__METHOD__, get_defined_vars());
+        $this->end(__METHOD__);
     }
 
-    public function importNpcsStart(): void
+    public function importNpcsDataFromMDTStart(string $key): void
     {
         $this->start(__METHOD__, get_defined_vars());
     }
 
-    public function importNpcsSaveNewNpc(int $npcId): void
+    public function importNpcsDataFromMDTNpcNotMarkedForAllDungeons(int $npcId): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function importNpcsDataFromMDTSaveNpcException(Exception $exception): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
+        int $npcCharacteristicsDeleted,
+        int $npcCharacteristicsInserted,
+        int $npcSpellsDeleted,
+        int $npcSpellsInserted
+    ): void {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function importNpcsDataFromMDTEnd(): void
+    {
+        $this->end(__METHOD__);
+    }
+
+    public function importSpellDataFromMDTStart(string $key): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
+
+    public function importSpellDataFromMDTSpellInExcludeList(): void
+    {
+        $this->debug(__METHOD__);
+    }
+
+
+    public function importSpellDataFromMDTResult(int $spellCount, int $spellDungeonCount): void
     {
         $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function importSpellDataFromMDTFailed(): void
+    {
+        $this->error(__METHOD__);
+    }
+
+    public function importSpellDataFromMDTEnd(): void
+    {
+        $this->end(__METHOD__);
+    }
+
+    public function importNpcsStart(): void
+    {
+        $this->start(__METHOD__);
+    }
+
+    public function importNpcsDataFromMDTUnableToFindCharacteristicForNpc(int $id, string $characteristicName): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function importNpcsDataFromMDTSpellInExcludeList(): void
+    {
+        $this->debug(__METHOD__);
+    }
+
+    public function importNpcsDataFromMDTSaveNewNpc(int $npcId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function importNpcsUnableToFindNpc(int $npcId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
     }
 
     public function importNpcsUpdateExistingNpc(int $npcId): void
@@ -67,19 +137,14 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function importNpcsSaveNpcException(Exception $exception): void
-    {
-        $this->error(__METHOD__, get_defined_vars());
-    }
-
     public function importNpcsEnd(): void
     {
-        $this->end(__METHOD__, get_defined_vars());
+        $this->end(__METHOD__);
     }
 
     public function importEnemiesStart(): void
     {
-        $this->start(__METHOD__, get_defined_vars());
+        $this->start(__METHOD__);
     }
 
     public function importEnemiesSkipIgnoredByNpcEnemy(string $uniqueKey): void
@@ -114,12 +179,12 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
 
     public function importEnemiesEnd(): void
     {
-        $this->end(__METHOD__, get_defined_vars());
+        $this->end(__METHOD__);
     }
 
     public function importEnemyPacksStart(): void
     {
-        $this->start(__METHOD__, get_defined_vars());
+        $this->start(__METHOD__);
     }
 
     public function importEnemyPacksSaveNewEnemyPackOK(int $enemyPackId, int $count): void
@@ -139,17 +204,17 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
 
     public function importEnemyPacksCoupleEnemyToPackEnd(): void
     {
-        $this->end(__METHOD__, get_defined_vars());
+        $this->end(__METHOD__);
     }
 
     public function importEnemyPacksEnd(): void
     {
-        $this->end(__METHOD__, get_defined_vars());
+        $this->end(__METHOD__);
     }
 
     public function importEnemyPatrolsStart(): void
     {
-        $this->start(__METHOD__, get_defined_vars());
+        $this->start(__METHOD__);
     }
 
     public function importEnemyPatrolsEnemyHasPatrol(string $uniqueKey): void
@@ -184,12 +249,12 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
 
     public function importEnemyPatrolsEnd(): void
     {
-        $this->end(__METHOD__, get_defined_vars());
+        $this->end(__METHOD__);
     }
 
     public function importDungeonFloorSwitchMarkersStart(): void
     {
-        $this->start(__METHOD__, get_defined_vars());
+        $this->start(__METHOD__);
     }
 
     public function importDungeonFloorSwitchMarkersImportFromMDT(): void
@@ -202,8 +267,13 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function importDungeonFloorSwitchMarkersHaveExistingFloorSwitchMarkers(int $count): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
     public function importDungeonFloorSwitchMarkersEnd(): void
     {
-        $this->end(__METHOD__, get_defined_vars());
+        $this->end(__METHOD__);
     }
 }

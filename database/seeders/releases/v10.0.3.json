@@ -1,0 +1,23 @@
+{
+    "id": 237,
+    "release_changelog_id": 244,
+    "version": "v10.0.3",
+    "title": "Improved logging for importing MDT strings",
+    "silent": 1,
+    "spotlight": 0,
+    "created_at": "2024-05-16T15:04:23+00:00",
+    "updated_at": "2024-05-16T15:04:23+00:00",
+    "changelog": {
+        "id": 244,
+        "release_id": 237,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 244,
+                "release_changelog_category_id": 6,
+                "ticket_id": 2379,
+                "change": "Improved logging for importing MDT strings so I can debug issues that crop up."
+            }
+        ]
+    }
+}

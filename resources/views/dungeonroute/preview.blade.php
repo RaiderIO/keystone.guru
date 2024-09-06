@@ -1,3 +1,16 @@
+<?php
+
+use App\Models\DungeonRoute\DungeonRoute;
+
+/**
+ * @var DungeonRoute $dungeonroute
+ * @var int          $floorId
+ * @var float        $defaultZoom
+ * @var string       $mapFacadeStyle
+ * @var array        $parameters
+ */
+?>
+
 @extends('layouts.map', [
     'showAds' => false,
     'custom' => true,
@@ -7,18 +20,6 @@
     'title' => $dungeonroute->title,
     'analytics' => false,
 ])
-<?php
-/**
- * @var \App\Models\DungeonRoute\DungeonRoute $dungeonroute
- * @var int                                   $floorId
- * @var float                                 $defaultZoom
- * @var string                                $mapFacadeStyle
- */
-
-/** @var \App\Models\Dungeon $dungeon */
-$dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
-$dungeon->load('floors');
-?>
 @section('scripts')
     @parent
 
@@ -34,6 +35,7 @@ $dungeon->load('floors');
 @endsection
 @section('content')
     @include('common.maps.map', [
+        'dungeon' => $dungeonroute->dungeon,
         'mappingVersion' => $dungeonroute->mappingVersion,
         'dungeonroute' => $dungeonroute,
         'showAds' => false,
@@ -45,6 +47,7 @@ $dungeon->load('floors');
         'floorId' => $floorId,
         'showAttribution' => false,
         'zoomToContents' => false,
+        'parameters' => $parameters,
         'hiddenMapObjectGroups' => [
             'enemypatrol',
             'enemypack',

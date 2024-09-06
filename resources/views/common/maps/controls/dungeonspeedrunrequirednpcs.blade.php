@@ -1,8 +1,8 @@
 <?php
-    /**
-     * @var $showAllEnabled bool
-     * @var $edit bool
-     */
+/**
+ * @var bool $showAllEnabled
+ * @var bool $edit
+ */
 ?>
 <div id="edit_route_dungeon_speedrun_scroll_container" class="{{ $edit ? 'edit' : '' }}" data-simplebar>
     <div id="edit_route_dungeon_speedrun_required_npcs_container"></div>

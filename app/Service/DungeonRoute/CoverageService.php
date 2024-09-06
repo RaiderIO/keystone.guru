@@ -15,7 +15,7 @@ class CoverageService implements CoverageServiceInterface
     public function getForUser(User $user, Season $season): Collection
     {
         return DungeonRoute::with(['affixes'])
-            ->selectRaw('dungeon_routes.*, IF(dungeon_routes.enemy_forces >= mapping_versions.enemy_forces_required, 0, 1) as has_enemy_forces')
+            ->selectRaw('dungeon_routes.*, IF(dungeon_routes.enemy_forces < mapping_versions.enemy_forces_required, 0, 1) as has_enemy_forces')
             ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')
             ->join('dungeon_route_affix_groups', 'dungeon_route_affix_groups.dungeon_route_id', 'dungeon_routes.id')
             ->join('affix_groups', 'affix_groups.id', 'dungeon_route_affix_groups.affix_group_id')

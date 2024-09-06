@@ -26,14 +26,6 @@ class Encode extends Command
     protected $description = 'Encodes an MDT string from a json string';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(): void

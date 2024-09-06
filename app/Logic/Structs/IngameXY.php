@@ -13,9 +13,9 @@ class IngameXY implements Arrayable
     {
     }
 
-    public function getX(): float
+    public function getX(?int $precision = null): float
     {
-        return $this->x;
+        return $precision === null ? $this->x : round($this->x, $precision);
     }
 
     public function setX(float $x): IngameXY
@@ -25,9 +25,9 @@ class IngameXY implements Arrayable
         return $this;
     }
 
-    public function getY(): float
+    public function getY(?int $precision = null): float
     {
-        return $this->y;
+        return $precision === null ? $this->y : round($this->y, $precision);
     }
 
     public function setY(float $y): IngameXY
@@ -55,6 +55,11 @@ class IngameXY implements Arrayable
             'x' => $this->getX(),
             'y' => $this->getY(),
         ];
+    }
+
+    public function toArrayWithFloor(): array
+    {
+        return ['x' => $this->x, 'y' => $this->y, 'floor_id' => optional($this->floor)->id];
     }
 
     public function __clone()

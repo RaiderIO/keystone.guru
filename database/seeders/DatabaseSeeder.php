@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
     public const TEMP_TABLE_SUFFIX = '_temp';
 
     private const SEEDERS = [
+        // Combatlog
+        CombatLogSeeder::class,
+
         // Seeders which don't depend on anything else
         ExpansionsSeeder::class,
         GameServerRegionsSeeder::class,
@@ -34,6 +37,7 @@ class DatabaseSeeder extends Seeder
         MapIconTypesSeeder::class,
         TagCategorySeeder::class,
         PublishedStatesSeeder::class,
+        CharacteristicsSeeder::class,
 
         // Depends on ExpansionsSeeder, SeasonsSeeder
         AffixSeeder::class,
@@ -74,10 +78,26 @@ class DatabaseSeeder extends Seeder
         // 3. Cleanup: Remove existing table, rename temporary table
 
         foreach (self::SEEDERS as $seederClass) {
+            /** @var TableSeederInterface $seederClass */
+            $affectedEnvironments = $seederClass::getAffectedEnvironments();
+            if ($affectedEnvironments !== null && !in_array(app()->environment(), $affectedEnvironments)) {
+                $this->command->info(
+                    sprintf(
+                        'Skipping %s because it is not meant for this environment (%s vs %s).',
+                        $seederClass,
+                        app()->environment(),
+                        implode(', ', $affectedEnvironments)
+                    )
+                );
+
+                continue;
+            }
+
+            $affectedModelClasses = [];
+
             try {
                 $prepareFailed = false;
 
-                /** @var TableSeederInterface $seederClass */
                 $affectedModelClasses = $seederClass::getAffectedModelClasses();
                 foreach ($affectedModelClasses as $affectedModel) {
                     $prepareFailed = !$prepareFailed && !$this->prepareTempTableForModel($affectedModel);
@@ -105,6 +125,8 @@ class DatabaseSeeder extends Seeder
                 }
             } catch (Exception $e) {
                 $this->command->error($e->getMessage());
+
+                throw $e;
             } finally {
                 $cleanupFailed = false;
                 foreach ($affectedModelClasses as $affectedModelClass) {
@@ -130,7 +152,9 @@ class DatabaseSeeder extends Seeder
 
         DB::table('files')->where('model_class', $className)->delete();
 
-        return DB::statement(sprintf('CREATE TABLE %s LIKE %s;', $tableNameNew, $tableNameOld));
+        return DB::connection($instance->getConnectionName())->statement(
+            sprintf('CREATE TABLE %s LIKE %s;', $tableNameNew, $tableNameOld)
+        );
     }
 
     /**
@@ -141,15 +165,19 @@ class DatabaseSeeder extends Seeder
         /** @var Model $instance */
         $instance = new $className();
 
-        $tableNameOld = $instance->getTable();
-        $tableNameNew = sprintf('%s%s', $tableNameOld, self::TEMP_TABLE_SUFFIX);
+        $tableNameOriginal = $instance->getTable();
+        $tableNameNewData  = sprintf('%s%s', $tableNameOriginal, self::TEMP_TABLE_SUFFIX);
 
-        // Remove contents from old table, replace it with contents from new table
-        //        DB::transaction(function () use ($tableNameOld, $tableNameNew, $className) {
-        DB::table($tableNameOld)->truncate();
-
-        return DB::statement(sprintf('INSERT INTO %s SELECT * FROM %s;', $tableNameOld, $tableNameNew));
-        //        });
+        // Rename tables in one statement to prevent any downtime
+        return DB::connection($instance->getConnectionName())->statement(
+            sprintf(
+                'RENAME TABLE %s TO temp_table, %s TO %s, temp_table TO %s;',
+                $tableNameOriginal,
+                $tableNameNewData,
+                $tableNameOriginal,
+                $tableNameNewData,
+            )
+        );
     }
 
     private function cleanupTempTableForModel(string $className): bool
@@ -159,7 +187,9 @@ class DatabaseSeeder extends Seeder
 
         $tableNameNew = sprintf('%s%s', $instance->getTable(), self::TEMP_TABLE_SUFFIX);
 
-        return DB::statement(sprintf('DROP TABLE %s;', $tableNameNew));
+        return DB::connection($instance->getConnectionName())->statement(
+            sprintf('DROP TABLE %s;', $tableNameNew)
+        );
     }
 
     public static function getTempTableName(string $className): string

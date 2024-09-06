@@ -11,23 +11,19 @@ use Illuminate\Support\Collection;
 
 abstract class BaseCombatLogFilter implements CombatLogParserInterface
 {
-    /** @var Collection|BaseResultEvent[] */
+    /** @var Collection<BaseResultEvent> */
     protected Collection $resultEvents;
 
-    /** @var Collection|CombatLogParserInterface[] */
+    /** @var Collection<CombatLogParserInterface> */
     private readonly Collection $filters;
 
     public function __construct()
     {
         $this->resultEvents = collect();
         $this->filters      = collect();
-
     }
 
-    /**
-     * @return void
-     */
-    protected function addFilter(CombatLogParserInterface $combatLogParser)
+    protected function addFilter(CombatLogParserInterface $combatLogParser): void
     {
         $this->filters->push($combatLogParser);
     }
@@ -44,7 +40,7 @@ abstract class BaseCombatLogFilter implements CombatLogParserInterface
     }
 
     /**
-     * @return Collection|BaseResultEvent[]
+     * @return Collection<BaseResultEvent>
      */
     public function getResultEvents(): Collection
     {

@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Traits\GeneratesPublicKey;
-use App\Models\User;
 use Carbon\CarbonInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
@@ -16,14 +15,14 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                          $id
- * @property int                          $dungeon_route_id
- * @property int                          $user_id
- * @property string                       $public_key
- * @property User                         $user
- * @property DungeonRoute                 $dungeonroute
- * @property Collection|OverpulledEnemy[] $overpulledenemies
- * @property Carbon                       $expires_at
+ * @property int                         $id
+ * @property int                         $dungeon_route_id
+ * @property int                         $user_id
+ * @property string                      $public_key
+ * @property User                        $user
+ * @property DungeonRoute                $dungeonroute
+ * @property Collection<OverpulledEnemy> $overpulledenemies
+ * @property Carbon                      $expires_at
  *
  * @mixin Eloquent
  */
@@ -71,7 +70,7 @@ class LiveSession extends Model
     }
 
     /**
-     * @return Collection|Enemy[]
+     * @return Collection<Enemy>
      */
     public function getEnemies(): Collection
     {

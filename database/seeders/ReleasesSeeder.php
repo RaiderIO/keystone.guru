@@ -16,7 +16,6 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding releases');
         $rootDir         = database_path('seeders/releases/');
         $rootDirIterator = new FilesystemIterator($rootDir);
 
@@ -49,28 +48,20 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
             }
 
             // Save the release last!
-            /** @var array{created_at: \Carbon\Carbon, updated_at: \Carbon\Carbon} $releaseAttribute */
+            /** @var array{created_at: Carbon, updated_at: Carbon} $releaseAttribute */
             $releaseAttribute = array_filter($modelsData, function ($value) {
                 return !is_array($value);
             });
 
-            $releaseAttribute['created_at'] = Carbon::createFromFormat(Release::$SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['created_at'])->toDateTimeString();
-            $releaseAttribute['updated_at'] = Carbon::createFromFormat(Release::$SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['updated_at'])->toDateTimeString();
+            $releaseAttribute['created_at'] = Carbon::createFromFormat(Release::SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['created_at'])->toDateTimeString();
+            $releaseAttribute['updated_at'] = Carbon::createFromFormat(Release::SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['updated_at'])->toDateTimeString();
 
             $releaseAttributes[] = $releaseAttribute;
         }
 
-        $this->command->info(sprintf('Inserting %d releases..', count($releaseAttributes)));
-
-        $result = Release::from(DatabaseSeeder::getTempTableName(Release::class))->insert($releaseAttributes) &&
-            ReleaseChangelog::from(DatabaseSeeder::getTempTableName(ReleaseChangelog::class))->insert($releaseChangeLogAttributes) &&
-            ReleaseChangelogChange::from(DatabaseSeeder::getTempTableName(ReleaseChangelogChange::class))->insert($releaseChangeLogChangesAttributes);
-
-        if ($result) {
-            $this->command->info(sprintf('Inserting %d releases OK', count($releaseAttributes)));
-        } else {
-            $this->command->warn(sprintf('Inserting %d releases FAILED', count($releaseAttributes)));
-        }
+        Release::from(DatabaseSeeder::getTempTableName(Release::class))->insert($releaseAttributes) &&
+        ReleaseChangelog::from(DatabaseSeeder::getTempTableName(ReleaseChangelog::class))->insert($releaseChangeLogAttributes) &&
+        ReleaseChangelogChange::from(DatabaseSeeder::getTempTableName(ReleaseChangelogChange::class))->insert($releaseChangeLogChangesAttributes);
     }
 
     public static function getAffectedModelClasses(): array
@@ -80,5 +71,11 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
             ReleaseChangelog::class,
             ReleaseChangelogChange::class,
         ];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

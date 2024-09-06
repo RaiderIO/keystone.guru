@@ -125,6 +125,11 @@ let scripts = [
     // Include in proper order
     'resources/assets/js/custom/signalable.js',
 
+    // Map plugins
+    'resources/assets/js/custom/mapplugins/mapplugin.js',
+    'resources/assets/js/custom/mapplugins/patherplugin.js',
+    'resources/assets/js/custom/mapplugins/heatplugin.js',
+
     // Map object groups
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/polygonmapobjectgroup.js',
@@ -235,6 +240,7 @@ let scripts = [
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyclass.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyforces.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyportrait.js',
+    'resources/assets/js/custom/enemyvisuals/enemyvisualmainenemyskippable.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainmdt.js',
     'resources/assets/js/custom/enemyvisuals/enemyvisualmainnpctype.js',
 

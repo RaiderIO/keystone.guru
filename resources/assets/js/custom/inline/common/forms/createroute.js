@@ -1,10 +1,3 @@
-class CommonFormsCreateroute extends InlineCode {
-    /**
-     *
-     */
-    activate() {
-        super.activate();
+class CommonFormsCreateroute extends CommonFormsCreatebase {
 
-        new LevelSliderInitializer(this.options);
-    }
 }

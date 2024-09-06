@@ -5,8 +5,8 @@ namespace App\Service\Patreon;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
-use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
 use App\Models\User;
+use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
 
 class PatreonService implements PatreonServiceInterface
 {

@@ -1,5 +1,5 @@
 <?php
-/** @var $teams \Illuminate\Support\Collection|\App\Models\Team[] */
+/** @var $teams \Illuminate\Support\Collection<\App\Models\Team> */
 
 $id         ??= 'team_id_select';
 $name       ??= 'team_id';

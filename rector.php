@@ -18,7 +18,7 @@ return RectorConfig::configure()
         __DIR__ . '/tests',
     ])
     // uncomment to reach your current PHP version
-    //    ->withPhpSets(false, true)
-    //    ->withSets([\RectorLaravel\Set\LaravelSetList::LARAVEL_90])
+    ->withPhpSets(false, true)
+    ->withSets([\RectorLaravel\Set\LaravelSetList::LARAVEL_90])
     ->withRules([AddVoidReturnTypeWhereNoReturnRector::class])
     ->withSkip([RemoveUselessParamTagRector::class]);

@@ -22,14 +22,6 @@ class SyncAdsTxt extends Command
     protected $description = "Syncs our ads.txt with our Ad Provider's version of ads.txt";
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(AdProviderServiceInterface $nitroPayService): int

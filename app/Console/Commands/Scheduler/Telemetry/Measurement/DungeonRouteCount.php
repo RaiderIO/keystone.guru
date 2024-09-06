@@ -14,7 +14,7 @@ class DungeonRouteCount extends Measurement
      */
     public function getPoints(): array
     {
-        /** @var PublishedState[]|Collection $publishedStates */
+        /** @var Collection<PublishedState> $publishedStates */
         $publishedStates = PublishedState::all();
 
         // Get a count of routes by published state

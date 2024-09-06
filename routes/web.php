@@ -19,6 +19,7 @@ use App\Http\Controllers\Ajax\AjaxEchoController;
 use App\Http\Controllers\Ajax\AjaxEnemyController;
 use App\Http\Controllers\Ajax\AjaxEnemyPackController;
 use App\Http\Controllers\Ajax\AjaxEnemyPatrolController;
+use App\Http\Controllers\Ajax\AjaxHeatmapController;
 use App\Http\Controllers\Ajax\AjaxKillZoneController;
 use App\Http\Controllers\Ajax\AjaxLiveSessionController;
 use App\Http\Controllers\Ajax\AjaxMapIconController;
@@ -31,6 +32,7 @@ use App\Http\Controllers\Ajax\AjaxPathController;
 use App\Http\Controllers\Ajax\AjaxPridefulEnemyController;
 use App\Http\Controllers\Ajax\AjaxProfileController;
 use App\Http\Controllers\Ajax\AjaxSiteController;
+use App\Http\Controllers\Ajax\AjaxSpellController;
 use App\Http\Controllers\Ajax\AjaxTagController;
 use App\Http\Controllers\Ajax\AjaxTeamController;
 use App\Http\Controllers\Ajax\AjaxUserController;
@@ -94,9 +96,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::get('login/discord', (new DiscordLoginController())->redirectToProvider(...))->name('login.discord');
     Route::get('login/discord/callback', (new DiscordLoginController())->handleProviderCallback(...))->name('login.discord.callback');
     Route::get('new', (new DungeonRouteController())->create(...))->name('dungeonroute.new');
-    Route::post('new', (new DungeonRouteController())->savenew(...))->name('dungeonroute.savenew');
+    Route::post('new', (new DungeonRouteController())->saveNew(...))->name('dungeonroute.savenew');
     Route::get('new/temporary', (new DungeonRouteController())->createTemporary(...))->name('dungeonroute.temporary.new');
-    Route::post('new/temporary', (new DungeonRouteController())->savenewtemporary(...))->name('dungeonroute.temporary.savenew');
+    Route::post('new/temporary', (new DungeonRouteController())->saveNewTemporary(...))->name('dungeonroute.temporary.savenew');
     Route::post('new/mdtimport', (new MDTImportController())->import(...))->name('dungeonroute.new.mdtimport');
     Route::get('patreon-link', (new PatreonController())->link(...))->name('patreon.link');
     Route::get('patreon-oauth', (new PatreonController())->oauth_redirect(...))->name('patreon.oauth.redirect');
@@ -149,7 +151,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('upgrade', (new DungeonRouteController())->upgrade(...))->name('dungeonroute.upgrade');
             // Edit your own dungeon routes
             Route::get('edit', (new DungeonRouteController())->edit(...))->name('dungeonroute.edit');
-            Route::get('edit/{floorindex}', (new DungeonRouteController())->editfloor(...))->name('dungeonroute.edit.floor');
+            Route::get('edit/{floorIndex}', (new DungeonRouteController())->editFloor(...))->name('dungeonroute.edit.floor');
             // Submit a patch for your own dungeon route
             Route::patch('edit', (new DungeonRouteController())->update(...))->name('dungeonroute.update');
             Route::middleware(['auth', 'role:user|admin'])->group(static function () {
@@ -168,7 +170,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::prefix('{dungeonroute}')->group(static function () {
         // Edit your own dungeon routes
         Route::get('edit', (new DungeonRouteLegacyController())->edit(...));
-        Route::get('edit/{floorindex}', (new DungeonRouteLegacyController())->editfloor(...));
+        Route::get('edit/{floorIndex}', (new DungeonRouteLegacyController())->editfloor(...));
         Route::middleware(['auth', 'role:user|admin'])->group(static function () {
             // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
             Route::get('live/{livesession}', (new LiveSessionLegacyController())->view(...));
@@ -278,8 +280,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             });
             Route::get('spells', (new SpellController())->get(...))->name('admin.spells');
             Route::prefix('user')->group(static function () {
-                Route::post('{user}/makeadmin', (new UserController())->makeadmin(...))->name('admin.user.makeadmin');
-                Route::post('{user}/makeuser', (new UserController())->makeuser(...))->name('admin.user.makeuser');
+                Route::post('{user}/make/{role}', (new UserController())->makeRole(...))->name('admin.user.make.role');
                 Route::delete('{user}/delete', (new UserController())->delete(...))->name('admin.user.delete');
                 Route::get('{user}/grantAllBenefits', (new UserController())->grantAllBenefits(...))->name('admin.user.grantallbenefits');
             });
@@ -288,17 +289,22 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::prefix('tools')->group(static function () {
                 Route::get('/', (new AdminToolsController())->index(...))->name('admin.tools');
                 Route::get('/combatlog', (new AdminToolsController())->combatlog(...))->name('admin.combatlog');
-                Route::get('/npcimport', (new AdminToolsController())->npcimport(...))->name('admin.tools.npcimport');
-                Route::post('/npcimport', (new AdminToolsController())->npcimportsubmit(...))->name('admin.tools.npcimport.submit');
+                Route::get('/npc/import', (new AdminToolsController())->npcimport(...))->name('admin.tools.npc.import');
+                Route::post('/npc/import', (new AdminToolsController())->npcimportsubmit(...))->name('admin.tools.npc.import.submit');
+                Route::get('/npc/manage-spell-visibility/{dungeon?}', (new AdminToolsController())->manageSpellVisibility(...))->name('admin.tools.npc.managespellvisibility');
+                Route::post('/npc/manage-spell-visibility/submit', (new AdminToolsController())->manageSpellVisibilitySubmit(...))->name('admin.tools.npc.managespellvisibility.submit');
+
                 // Dungeonroute
                 Route::get('/dungeonroute', (new AdminToolsController())->dungeonroute(...))->name('admin.tools.dungeonroute.view');
                 Route::post('/dungeonroute', (new AdminToolsController())->dungeonroutesubmit(...))->name('admin.tools.dungeonroute.view.submit');
                 Route::get('/dungeonroute/mappingversions', (new AdminToolsController())->dungeonrouteMappingVersions(...))->name('admin.tools.dungeonroute.mappingversionusage');
+
                 // Import enemy forces
                 Route::get('enemyforces/import', (new AdminToolsController())->enemyforcesimport(...))->name('admin.tools.enemyforces.import.view');
                 Route::post('enemyforces/import', (new AdminToolsController())->enemyforcesimportsubmit(...))->name('admin.tools.enemyforces.import.submit');
                 Route::get('enemyforces/recalculate', (new AdminToolsController())->enemyforcesrecalculate(...))->name('admin.tools.enemyforces.recalculate.view');
                 Route::post('enemyforces/recalculate', (new AdminToolsController())->enemyforcesrecalculatesubmit(...))->name('admin.tools.enemyforces.recalculate.submit');
+
                 // Thumbnails
                 Route::get('thumbnails/regenerate', (new AdminToolsController())->thumbnailsregenerate(...))->name('admin.tools.thumbnails.regenerate.view');
                 Route::post('thumbnails/regenerate', (new AdminToolsController())->thumbnailsregeneratesubmit(...))->name('admin.tools.thumbnails.regenerate.submit');
@@ -306,22 +312,34 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     // View string contents
                     Route::get('string', (new AdminToolsController())->mdtview(...))->name('admin.tools.mdt.string.view');
                     Route::post('string', (new AdminToolsController())->mdtviewsubmit(...))->name('admin.tools.mdt.string.submit');
+
                     // View string contents as a dungeonroute
                     Route::get('string/dungeonroute', (new AdminToolsController())->mdtviewasdungeonroute(...))->name('admin.tools.mdt.string.viewasdungeonroute');
                     Route::post('string/dungeonroute', (new AdminToolsController())->mdtviewasdungeonroutesubmit(...))->name('admin.tools.mdt.string.viewasdungeonroute.submit');
+
                     // View dungeonroute as string
                     Route::get('dungeonroute/string', (new AdminToolsController())->mdtviewasstring(...))->name('admin.tools.mdt.dungeonroute.viewasstring');
                     Route::post('dungeonroute/string', (new AdminToolsController())->mdtviewasstringsubmit(...))->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
+
                     // View mapping hash
                     Route::get('dungeonmappinghash', (new AdminToolsController())->mdtdungeonmappinghash(...))->name('admin.tools.mdt.dungeonmappinghash');
                     Route::post('dungeonmappinghash', (new AdminToolsController())->mdtdungeonmappinghashsubmit(...))->name('admin.tools.mdt.dungeonmappinghash.submit');
+
                     // Convert Mapping Version to MDT Mapping
                     Route::get('dungeonmappingversiontomdtmapping', (new AdminToolsController())->dungeonmappingversiontomdtmapping(...))->name('admin.tools.mdt.dungeonmappingversiontomdtmapping');
                     Route::post('dungeonmappingversiontomdtmapping', (new AdminToolsController())->dungeonmappingversiontomdtmappingsubmit(...))->name('admin.tools.mdt.dungeonmappingversiontomdtmapping.submit');
                 });
+
                 // Wow.tools
                 Route::get('wowtools/importingamecoordinates', (new AdminToolsController())->importingamecoordinates(...))->name('admin.tools.wowtools.import_ingame_coordinates');
                 Route::post('wowtools/importingamecoordinates', (new AdminToolsController())->importingamecoordinatessubmit(...))->name('admin.tools.wowtools.import_ingame_coordinates.submit');
+
+                // Feature management
+                Route::get('features', (new AdminToolsController())->listFeatures(...))->name('admin.tools.features.list');
+                Route::post('features/toggle', (new AdminToolsController())->toggleFeature(...))->name('admin.tools.features.toggle');
+                Route::post('features/forget', (new AdminToolsController())->forgetFeature(...))->name('admin.tools.features.forget');
+
+
                 // Exception thrower
                 Route::get('exception', (new AdminToolsController())->exceptionselect(...))->name('admin.tools.exception.select');
                 Route::post('exception', (new AdminToolsController())->exceptionselectsubmit(...))->name('admin.tools.exception.select.submit');
@@ -346,6 +364,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::put('/{tag}/all', (new AjaxTagController())->updateAll(...))->name('ajax.tag.updateall');
             Route::delete('/{tag}/all', (new AjaxTagController())->deleteAll(...))->name('ajax.tag.deleteall');
         });
+        Route::prefix('heatmap')->group(static function () {
+            Route::post('/data', (new AjaxHeatmapController())->getData(...))->name('ajax.heatmap.data');
+        });
+
         Route::get('/{publickey}/data', (new AjaxDungeonRouteController())->data(...));
 
         Route::post('userreport/dungeonroute/{dungeonroute}', (new AjaxUserReportController())->dungeonrouteStore(...))->name('ajax.userreport.dungeonroute');
@@ -365,12 +387,15 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::post('/', (new AjaxMetricController())->store(...))->name('ajax.metric.store');
             Route::post('/route/{dungeonRoute}', (new AjaxMetricController())->storeDungeonRoute(...))->name('ajax.metric.dungeonroute.store');
         });
+
         // Must be an admin to perform these actions
         Route::middleware(['auth', 'role:admin'])->group(static function () {
             Route::prefix('admin')->group(static function () {
                 Route::get('/user', (new AjaxUserController())->get(...));
                 Route::get('/npc', (new AjaxNpcController())->get(...));
                 Route::post('/thumbnail/{dungeonroute}/refresh', (new AjaxDungeonRouteController())->refreshThumbnail(...));
+
+                Route::put('/spell/{spell}', (new AjaxSpellController())->update(...));
 
                 Route::prefix('mappingVersion/{mappingVersion}')->group(static function () {
                     Route::patch('/', (new AjaxMappingVersionController())->store(...));
@@ -414,6 +439,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::prefix('dungeonRoute')->group(static function () {
             Route::post('/data', (new AjaxDungeonRouteController())->getDungeonRoutesData(...));
         });
+
         // May be performed without being logged in (sandbox functionality)
         Route::prefix('{dungeonRoute}')->group(static function () {
             Route::post('/brushline', (new AjaxBrushlineController())->store(...))->name('ajax.dungeonroute.brushline.create');
@@ -445,6 +471,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
             Route::post('/simulate', (new AjaxDungeonRouteController())->simulate(...))->name('api.dungeonroute.simulate');
         });
+
         // Must be logged in to perform these actions
         Route::middleware(['auth', 'role:user|admin'])->group(static function () {
             Route::prefix('{dungeonRoute}')->group(static function () {
@@ -497,21 +524,21 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::prefix('{title?}')->group(static function () {
             Route::get('/', (new DungeonRouteController())->view(...))->name('dungeonroute.view');
             Route::get('present/', (new DungeonRouteController())->present(...))->name('dungeonroute.present');
-            Route::get('present/{floorindex}', (new DungeonRouteController())->presentFloor(...))->name('dungeonroute.present.floor');
+            Route::get('present/{floorIndex}', (new DungeonRouteController())->presentFloor(...))->name('dungeonroute.present.floor');
             Route::get('embed/', (new DungeonRouteController())->embed(...))->name('dungeonroute.embed');
-            Route::get('embed/{floorindex}', (new DungeonRouteController())->embed(...))->name('dungeonroute.embed.floor');
-            Route::get('{floorindex}', (new DungeonRouteController())->viewfloor(...))->name('dungeonroute.view.floor');
+            Route::get('embed/{floorIndex}', (new DungeonRouteController())->embed(...))->name('dungeonroute.embed.floor');
+            Route::get('{floorIndex}', (new DungeonRouteController())->viewFloor(...))->name('dungeonroute.view.floor');
             // Preview of a route for image capturing library
-            Route::get('preview/{floorindex}', (new DungeonRouteController())->preview(...))->name('dungeonroute.preview');
+            Route::get('preview/{floorIndex}', (new DungeonRouteController())->preview(...))->name('dungeonroute.preview');
         });
     });
     Route::prefix('{dungeonroute}')->group(static function () {
         Route::get('/', (new DungeonRouteLegacyController())->viewold(...))->name('dungeonroute.viewold');
         Route::get('embed/', (new DungeonRouteLegacyController())->embedold(...));
-        Route::get('embed/{floorindex}', (new DungeonRouteLegacyController())->embedold(...));
-        Route::get('{floorindex}', (new DungeonRouteLegacyController())->viewfloorold(...));
+        Route::get('embed/{floorIndex}', (new DungeonRouteLegacyController())->embedold(...));
+        Route::get('{floorIndex}', (new DungeonRouteLegacyController())->viewfloorold(...));
         // Preview of a route for image capturing library
-        Route::get('preview/{floorindex}', (new DungeonRouteLegacyController())->previewold(...));
+        Route::get('preview/{floorIndex}', (new DungeonRouteLegacyController())->previewold(...));
     });
 });
 

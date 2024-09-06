@@ -21,6 +21,11 @@ abstract class BaseCombatLogCommand extends Command
                     continue;
                 }
 
+                if (!str_ends_with($filePath, '.zip') && !str_ends_with($filePath, '.txt')) {
+                    $this->comment(sprintf('Skipping file %s (not a .zip or .txt)', $filePath));
+                    continue;
+                }
+
                 if (($result = $callback($filePath)) !== 0) {
                     break;
                 }

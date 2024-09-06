@@ -22,7 +22,7 @@ class TimewalkingEventService implements TimewalkingEventServiceInterface
     {
         $result = null;
 
-        /** @var Collection|TimewalkingEvent[] $timewalkingEvents */
+        /** @var Collection<TimewalkingEvent> $timewalkingEvents */
         $timewalkingEvents = TimewalkingEvent::all();
 
         foreach ($timewalkingEvents as $timewalkingEvent) {
@@ -67,7 +67,7 @@ class TimewalkingEventService implements TimewalkingEventServiceInterface
 
                 if ($diffInWeeks < $timewalkingEvent->start_duration_weeks ||
                     $diffInWeeks % $timewalkingEvent->week_interval === 0) {
-                    $affixGroups = $this->seasonService->getCurrentSeason($expansion)->affixgroups;
+                    $affixGroups = $this->seasonService->getCurrentSeason($expansion)->affixGroups;
                     $result      = $affixGroups->get(($diffInWeeks % $timewalkingEvent->week_interval) % $affixGroups->count());
                 }
             }

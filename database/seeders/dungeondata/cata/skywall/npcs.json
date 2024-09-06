@@ -6,9 +6,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 34265,
+        "encounter_id": null,
         "name": "Altairus",
         "base_health": 8892045,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -17,7 +20,40 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 88282
+            },
+            {
+                "spell_id": 88286
+            },
+            {
+                "spell_id": 88308
+            },
+            {
+                "spell_id": 181089
+            },
+            {
+                "spell_id": 413271
+            },
+            {
+                "spell_id": 413295
+            },
+            {
+                "spell_id": 413296
+            },
+            {
+                "spell_id": 413319
+            },
+            {
+                "spell_id": 413331
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -27,9 +63,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 35388,
+        "encounter_id": null,
         "name": "Asaad",
         "base_health": 7904040,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -38,7 +77,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 86911
+            },
+            {
+                "spell_id": 86930
+            },
+            {
+                "spell_id": 87553
+            },
+            {
+                "spell_id": 87618
+            },
+            {
+                "spell_id": 87622
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -48,9 +108,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 35181,
+        "encounter_id": null,
         "name": "Grand Vizier Ertan",
         "base_health": 6916035,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -59,7 +122,28 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 86292
+            },
+            {
+                "spell_id": 86295
+            },
+            {
+                "spell_id": 86310
+            },
+            {
+                "spell_id": 86331
+            },
+            {
+                "spell_id": 413151
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -69,9 +153,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 37224,
+        "encounter_id": null,
         "name": "Gust Soldier",
         "base_health": 988383,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -80,7 +167,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 410873
+            },
+            {
+                "spell_id": 410997
+            },
+            {
+                "spell_id": 410998
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8855,
@@ -140,9 +254,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 1126,
+        "encounter_id": null,
         "name": "Howling Gale",
         "base_health": 6649664,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -151,7 +268,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -161,9 +279,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 13629,
+        "encounter_id": null,
         "name": "Lurking Tempest",
         "base_health": 2372119,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -172,7 +293,15 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 85467
+            },
+            {
+                "spell_id": 411001
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -182,9 +311,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 36060,
+        "encounter_id": null,
         "name": "Wild Vortex",
         "base_health": 889545,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -193,7 +325,31 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 410760
+            },
+            {
+                "spell_id": 410870
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8852,
@@ -253,9 +409,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 33828,
+        "encounter_id": null,
         "name": "Armored Mistral",
         "base_health": 1779089,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -264,7 +423,19 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 410999
+            },
+            {
+                "spell_id": 411000
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8856,
@@ -324,9 +495,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 36061,
+        "encounter_id": null,
         "name": "Cloud Prince",
         "base_health": 1581412,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -335,7 +509,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 411002
+            },
+            {
+                "spell_id": 411003
+            },
+            {
+                "spell_id": 411004
+            },
+            {
+                "spell_id": 411005
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8853,
@@ -395,9 +587,12 @@
         "npc_type_id": 5,
         "npc_class_id": 1,
         "display_id": 34771,
+        "encounter_id": null,
         "name": "Young Storm Dragon",
         "base_health": 2372119,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -406,7 +601,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 88194
+            },
+            {
+                "spell_id": 411012
+            },
+            {
+                "spell_id": 411910
+            },
+            {
+                "spell_id": 411911
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8849,
@@ -466,9 +679,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 19673,
+        "encounter_id": null,
         "name": "Empyrean Assassin",
         "base_health": 988383,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -477,7 +693,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 88186
+            },
+            {
+                "spell_id": 411073
+            },
+            {
+                "spell_id": 411083
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8850,
@@ -537,9 +780,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 35383,
+        "encounter_id": null,
         "name": "Turbulent Squall",
         "base_health": 889205,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -548,7 +794,25 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 88170
+            },
+            {
+                "spell_id": 411743
+            },
+            {
+                "spell_id": 411744
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8848,
@@ -608,9 +872,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 34745,
+        "encounter_id": null,
         "name": "Servant of Asaad",
         "base_health": 1186059,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -619,7 +886,34 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 87771
+            },
+            {
+                "spell_id": 411770
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8846,
@@ -679,9 +973,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 34735,
+        "encounter_id": null,
         "name": "Executor of the Caliph",
         "base_health": 1581412,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -690,7 +987,19 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 87761
+            },
+            {
+                "spell_id": 413387
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8845,
@@ -750,9 +1059,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 34790,
+        "encounter_id": null,
         "name": "Minister of Air",
         "base_health": 2174442,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -761,7 +1073,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 87762
+            },
+            {
+                "spell_id": 88963
+            },
+            {
+                "spell_id": 413385
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8844,
@@ -821,9 +1148,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 37225,
+        "encounter_id": null,
         "name": "Skyfall Star",
         "base_health": 98839,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -832,7 +1162,22 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 411019
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8843,
@@ -892,9 +1237,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 34736,
+        "encounter_id": null,
         "name": "Temple Adept",
         "base_health": 790706,
         "health_percentage": null,
+        "level": 70,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -903,7 +1251,31 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 87779
+            },
+            {
+                "spell_id": 87780
+            },
+            {
+                "spell_id": 88959
+            }
+        ],
         "npc_enemy_forces": [
             {
                 "id": 8842,
@@ -963,9 +1335,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 21130,
+        "encounter_id": null,
         "name": "Whipping Wind",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -974,7 +1349,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -984,9 +1360,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 35119,
+        "encounter_id": null,
         "name": "Itesh",
         "base_health": 12345,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
@@ -995,7 +1374,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1005,9 +1385,12 @@
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 37713,
+        "encounter_id": null,
         "name": "Skyfall Star",
         "base_health": 142018,
         "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1016,7 +1399,8 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npcspells": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 8323,

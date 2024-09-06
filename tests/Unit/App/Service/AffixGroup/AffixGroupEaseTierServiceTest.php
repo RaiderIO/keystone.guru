@@ -4,8 +4,8 @@ namespace Tests\Unit\App\Service\AffixGroup;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\ServiceFixtures;
 use Tests\TestCases\PublicTestCase;
-use Tests\Unit\Fixtures\ServiceFixtures;
 
 final class AffixGroupEaseTierServiceTest extends PublicTestCase
 {
@@ -14,7 +14,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     public function getTiersHash_GivenNormalResponse_ShouldGenerateExpectedHash(): void
     {
         // Arrange
-        $response = $this->getResponse();
+        $response                  = $this->getResponse();
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock($this);
 
         // Act
@@ -29,7 +29,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     public function getTiersHash_GivenUnsortedDungeonNamesResponse_ShouldGenerateSameHash(): void
     {
         // Arrange
-        $response = $this->getResponse('response_unsorted_dungeon_names');
+        $response                  = $this->getResponse('response_unsorted_dungeon_names');
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock($this);
 
         // Act
@@ -44,7 +44,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     public function getTiersHash_GivenNormalResponseWithDungeonNameMapping_ShouldGenerateDifferentHash(): void
     {
         // Arrange
-        $response = $this->getResponse();
+        $response                  = $this->getResponse();
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock($this);
 
         // Act
@@ -59,7 +59,7 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     public function getTiersHash_GivenDifferentTiersResponse_ShouldGenerateDifferentHash(): void
     {
         // Arrange
-        $response = $this->getResponse('response_different_tiers');
+        $response                  = $this->getResponse('response_different_tiers');
         $affixGroupEaseTierService = ServiceFixtures::getAffixGroupEaseTierServiceMock($this);
 
         // Act

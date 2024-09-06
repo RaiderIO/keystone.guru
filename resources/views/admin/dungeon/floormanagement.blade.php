@@ -32,9 +32,11 @@ $mappingVersionsSelect = $dungeon->mappingVersions
 <table id="admin_dungeon_floor_table" class="tablesorter default_table table-striped">
     <thead>
     <tr>
+        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_active') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_facade') }}</th>
         <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_id') }}</th>
         <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_index') }}</th>
-        <th width="40%">{{ __('view_admin.dungeon.edit.floor_management.table_header_name') }}</th>
+        <th width="20%">{{ __('view_admin.dungeon.edit.floor_management.table_header_name') }}</th>
         <th width="40%">{{ __('view_admin.dungeon.edit.floor_management.table_header_actions') }}</th>
     </tr>
     </thead>
@@ -42,6 +44,12 @@ $mappingVersionsSelect = $dungeon->mappingVersions
     <tbody>
     @foreach ($dungeon->floors as $floor)
         <tr>
+            <td>
+                <i class="fas {{ $floor->active ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }}"></i>
+            </td>
+            <td>
+                <i class="fas {{ $floor->facade ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }}"></i>
+            </td>
             <td>{{ $floor->id }}</td>
             <td>{{ $floor->index }}</td>
             <td>{{ __($floor->name) }}</td>
@@ -55,11 +63,11 @@ $mappingVersionsSelect = $dungeon->mappingVersions
                                 <i class="fas fa-edit"></i>&nbsp;{{ __('view_admin.dungeon.edit.floor_management.floor_edit_edit') }}
                             </a>
                         </div>
-                        <div class="col">
+                        <div class="col pr-0">
                             {!! Form::select('mapping_version', $mappingVersionsSelect, null, ['class' => 'form-control selectpicker']) !!}
                         </div>
-                        <div class="col-auto">
-                            {!! Form::submit('Edit mapping', ['class' => 'form-control']) !!}
+                        <div class="col-auto pl-1">
+                            {!! Form::submit(__('view_admin.dungeon.edit.floor_management.floor_edit_edit_mapping'), ['class' => 'form-control']) !!}
                         </div>
                     </div>
                 </form>

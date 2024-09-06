@@ -6,8 +6,8 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
-use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class ExpansionService implements ExpansionServiceInterface
@@ -98,7 +98,7 @@ class ExpansionService implements ExpansionServiceInterface
     {
         $currentSeason = $this->getCurrentSeason($expansion, $gameServerRegion);
 
-        return $currentSeason !== null ? $currentSeason->affixgroups()
+        return $currentSeason !== null ? $currentSeason->affixGroups()
             ->with(['affixes:affixes.id,affixes.key,affixes.name,affixes.description'])
             ->get() : collect();
     }

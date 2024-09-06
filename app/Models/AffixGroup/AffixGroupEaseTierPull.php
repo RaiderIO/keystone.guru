@@ -3,21 +3,23 @@
 namespace App\Models\AffixGroup;
 
 use App\Models\CacheModel;
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                             $id
- * @property int                             $affix_group_id
- * @property string                          $tiers_hash
- * @property Carbon                          $last_updated_at
- * @property Carbon                          $created_at
- * @property Carbon                          $updated_at
- * @property AffixGroup                      $affixGroup
- * @property Collection|AffixGroupEaseTier[] $affixGroupEaseTiers
+ * @property int                            $id
+ * @property int                            $affix_group_id
+ * @property string                         $tiers_hash
+ *
+ * @property Carbon                         $last_updated_at
+ * @property Carbon                         $created_at
+ * @property Carbon                         $updated_at
+ *
+ * @property AffixGroup                     $affixGroup
+ * @property Collection<AffixGroupEaseTier> $affixGroupEaseTiers
  *
  * @mixin Eloquent
  **/
@@ -29,6 +31,10 @@ class AffixGroupEaseTierPull extends CacheModel
         'affix_group_id',
         'tiers_hash',
         'last_updated_at',
+    ];
+
+    protected $casts = [
+        'last_updated_at' => 'date',
     ];
 
     public function affixGroup(): BelongsTo

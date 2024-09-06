@@ -24,121 +24,122 @@
 }
 
 .affix_icon_beguiling {
-    background-position: 0 3.33%;
+    background-position: 0 calc(100% / 30 * 1);
 }
 
 .affix_icon_bolstering {
-    background-position: 0 6.66%;
+    background-position: 0 calc(100% / 30 * 2);
 }
 
 .affix_icon_bursting {
-    background-position: 0 10%;
+    background-position: 0 calc(100% / 30 * 3);
 }
 
 .affix_icon_encrypted {
-    background-position: 0 13.33%;
+    background-position: 0 calc(100% / 30 * 4);
 }
 
 .affix_icon_explosive {
-    background-position: 0 16.66%;
+    background-position: 0 calc(100% / 30 * 5);
 }
 
 .affix_icon_fortified {
-    background-position: 0 20%;
+    background-position: 0 calc(100% / 30 * 6);
 }
 
 .affix_icon_grievous {
-    background-position: 0 23.33%;
+    background-position: 0 calc(100% / 30 * 7);
 }
 
 .affix_icon_infernal {
-    background-position: 0 26.66%;
+    background-position: 0 calc(100% / 30 * 8);
 }
 
 .affix_icon_infested {
-    background-position: 0 30%;
+    background-position: 0 calc(100% / 30 * 9);
 }
 
 .affix_icon_inspiring {
-    background-position: 0 33.33%;
+    background-position: 0 calc(100% / 30 * 10);
 }
 
 .affix_icon_necrotic {
-    background-position: 0 36.66%;
+    background-position: 0 calc(100% / 30 * 11);
 }
 
 .affix_icon_prideful {
-    background-position: 0 40%;
+    background-position: 0 calc(100% / 30 * 12);
 }
 
 .affix_icon_quaking {
-    background-position: 0 43.33%;
+    background-position: 0 calc(100% / 30 * 13);
 }
 
 .affix_icon_raging {
-    background-position: 0 46.66%;
+    background-position: 0 calc(100% / 30 * 14);
 }
 
 .affix_icon_reaping {
-    background-position: 0 50%;
+    background-position: 0 calc(100% / 30 * 15);
 }
 
 .affix_icon_relentless {
-    background-position: 0 53.33%;
+    background-position: 0 calc(100% / 30 * 16);
 }
 
 .affix_icon_sanguine {
-    background-position: 0 56.66%;
+    background-position: 0 calc(100% / 30 * 17);
 }
 
 .affix_icon_shrouded {
-    background-position: 0 60%;
+    background-position: 0 calc(100% / 30 * 18);
 }
 
 .affix_icon_skittish {
-    background-position: 0 63.33%;
+    background-position: 0 calc(100% / 30 * 19);
 }
 
 .affix_icon_spiteful {
-    background-position: 0 66.66%;
+    background-position: 0 calc(100% / 30 * 20);
 }
 
 .affix_icon_storming {
-    background-position: 0 70%;
+    background-position: 0 calc(100% / 30 * 21);
 }
 
 .affix_icon_thundering {
-    background-position: 0 73.33%;
+    background-position: 0 calc(100% / 30 * 22);
 }
 
 .affix_icon_teeming {
-    background-position: 0 76.66%;
+    background-position: 0 calc(100% / 30 * 23);
 }
 
 .affix_icon_tormented {
-    background-position: 0 80%;
+    background-position: 0 calc(100% / 30 * 24);
 }
 
 .affix_icon_tyrannical {
-    background-position: 0 83.33%;
+    background-position: 0 calc(100% / 30 * 25);
 }
 
 .affix_icon_unknown {
-    background-position: 0 86.66%;
+    background-position: 0 calc(100% / 30 * 26);
 }
 
 .affix_icon_volcanic {
-    background-position: 0 90%;
+    background-position: 0 calc(100% / 30 * 27);
 }
 
 .affix_icon_afflicted {
-    background-position: 0 93.33%;
+    background-position: 0 calc(100% / 30 * 28);
 }
 
 .affix_icon_entangling {
-    background-position: 0 96.66%;
+    background-position: 0 calc(100% / 30 * 29);
 }
 
 .affix_icon_incorporeal {
     background-position: 0 100%;
 }
+

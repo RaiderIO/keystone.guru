@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property string           $model_class
- * @property Collection|Tag[] $tags
+ * @property string          $model_class
+ * @property Collection<Tag> $tags
  *
  * @mixin Model
  */

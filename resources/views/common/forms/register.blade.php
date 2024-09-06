@@ -1,5 +1,5 @@
 <?php
-/** @var $allRegions \Illuminate\Support\Collection|\App\Models\GameServerRegion[] */
+/** @var $allRegions \Illuminate\Support\Collection<\App\Models\GameServerRegion> */
 
 $modal      ??= false;
 $modalClass = $modal ? 'modal-' : '';

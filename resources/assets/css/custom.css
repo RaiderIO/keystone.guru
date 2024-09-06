@@ -137,6 +137,7 @@ ul.light-slider {
     cursor: pointer;
 }
 
+.data_container .select_icon.class_icon.selectable.selected,
 .discover .select_icon.class_icon.selectable.selected,
 .discover .grid_dungeon.selectable.selected {
     border: 0.125rem solid red;
@@ -149,7 +150,8 @@ ul.light-slider {
 
 /** Prevents the title from jumping when it gets selected */
 .discover .grid_dungeon.selectable.selected h5 {
-    padding-right: 0.25rem !important
+    width: calc(100% - 0.75rem); /* 0.375 x2 for the padding */
+    top: calc(15% - 0.125rem); /* 0.125 for the red border, but just one side since it's the top */
 }
 
 
@@ -164,10 +166,16 @@ ul.light-slider {
 
 .discover .card-img-caption .card-text {
     text-align: center;
-    width: 100%;
-    margin: 6% 0;
+    width: calc(100% - 1rem); /* overcome the padding - this makes it fit exactly */
+    top: 15%;
     position: absolute;
     z-index: 1;
+}
+
+.discover .card-img-caption .card-text.subtext {
+    top: unset;
+    bottom: 5%;
+    text-align: unset;
 }
 
 .discover .card_dungeonroute.horizontal .description {

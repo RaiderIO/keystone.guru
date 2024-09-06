@@ -3,11 +3,11 @@
 namespace App\Models\CombatLog;
 
 use App\Models\Floor\Floor;
-use App\Models\Npc;
-use Carbon\Carbon;
+use App\Models\Npc\Npc;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
 /**
  * @var int         $id

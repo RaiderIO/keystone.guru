@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'taunt'           => 'Hodor',
+    'incapacitate'    => 'Hodor',
+    'subjugate_demon' => 'Hodor',
+    'control_undead'  => 'Hodor',
+    'silence'         => 'Hodor',
+    'knock'           => 'Hodor',
+    'grip'            => 'Hodor',
+    'shackle_undead'  => 'Hodor',
+    'mind_control'    => 'Hodor',
+    'polymorph'       => 'Hodor',
+    'root'            => 'Hodor',
+    'fear'            => 'Hodor',
+    'banish'          => 'Hodor',
+    'disorient'       => 'Hodor',
+    'repentance'      => 'Hodor',
+    'imprison'        => 'Hodor',
+    'sap'             => 'Hodor',
+    'stun'            => 'Hodor',
+    'slow'            => 'Hodor',
+    'sleep_walk'      => 'Hodor',
+    'scare_beast'     => 'Hodor',
+    'hibernate'       => 'Hodor',
+    'turn_evil'       => 'Hodor',
+    'mind_soothe'     => 'Hodor',
+];

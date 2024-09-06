@@ -16,6 +16,7 @@ return [
             'game_version_id'                    => 'Game version ID',
             'zone_id'                            => 'Zone ID',
             'map_id'                             => 'Map ID',
+            'instance_id'                        => 'Instance ID',
             'challenge_mode_id'                  => 'Challenge mode ID',
             'mdt_id'                             => 'MDT ID',
             'dungeon_name'                       => 'Dungeon name',
@@ -24,14 +25,16 @@ return [
             'submit'                             => 'Submit',
 
             'floor_management' => [
-                'title'                => 'Floor management',
-                'add_floor'            => 'Add floor',
-                'table_header_id'      => 'Id',
-                'table_header_index'   => 'Index',
-                'table_header_name'    => 'Name',
-                'table_header_actions' => 'Actions',
-                'floor_edit_edit'      => 'Edit',
-                'floor_edit_mapping'   => 'Mapping',
+                'title'                   => 'Floor management',
+                'add_floor'               => 'Add floor',
+                'table_header_active'     => 'Active',
+                'table_header_facade'     => 'Facade',
+                'table_header_id'         => 'Id',
+                'table_header_index'      => 'Index',
+                'table_header_name'       => 'Name',
+                'table_header_actions'    => 'Actions',
+                'floor_edit_edit'         => 'Edit',
+                'floor_edit_edit_mapping' => 'Edit mapping',
             ],
 
             'mapping_versions' => [
@@ -117,12 +120,14 @@ return [
             'index'                              => 'Index',
             'mdt_sub_level'                      => 'MDT sub level',
             'ui_map_id'                          => 'UI Map ID',
-            'floor_name'                         => 'Floor name',
+            'map_name'                           => 'Map name',
+            'name'                               => 'Floor name',
             'min_enemy_size'                     => 'Minimum enemy size (default: %d)',
             'max_enemy_size'                     => 'Maximum enemy size (default: %d)',
             'enemy_engagement_max_range'         => 'Enemy engagement max range (default: %d)',
             'enemy_engagement_max_range_patrols' => 'Enemy engagement max range for patrols (default: %d)',
             'percentage_display_zoom'            => 'Map zoom level at which percentages are displayed (higher is more zoomed in)',
+            'zoom_max'                           => 'Max zoom level on the map (default: %d)',
             'default'                            => 'Default',
             'default_title'                      => 'If marked as default, this floor is opened first when editing routes for this dungeon (only one should be marked as default)',
             'facade'                             => 'Facade',
@@ -130,6 +135,7 @@ return [
             'connected_floors'                   => 'Connected floors',
             'connected_floors_title'             => 'A connected floor is any other floor that we may reach from this floor',
             'connected'                          => 'Connected',
+            'floor_name'                         => 'Name',
             'direction'                          => 'Direction',
             'floor_direction'                    => [
                 'none'  => 'None',
@@ -180,6 +186,7 @@ return [
             'scaled_type_fortified'                => ':affix (trash only)',
             'scaled_type_tyrannical'               => ':affix (bosses only)',
             'health_percentage'                    => 'Health percentage',
+            'level'                                => 'Level',
             'enemy_forces'                         => 'Enemy forces (-1 for unknown)',
             'enemy_forces_teeming'                 => 'Enemy forces teeming (-1 for same as normal)',
             'dangerous'                            => 'Dangerous',
@@ -337,6 +344,21 @@ return [
                 'submit'                    => 'Submit',
             ],
         ],
+        'features'     => [
+            'list' => [
+                'title'        => 'Feature management',
+                'header'       => 'Feature management',
+                'table_header' => [
+                    'enabled' => 'Enabled',
+                    'feature' => 'Feature',
+                    'actions' => 'Actions',
+                ],
+                'actions'      => [
+                    'toggle' => 'Toggle',
+                    'forget' => 'Forget',
+                ],
+            ],
+        ],
         'mdt'          => [
             'diff'                              => [
                 'title'                 => 'MDT Diff',
@@ -381,18 +403,26 @@ return [
                 'submit' => 'Submit',
             ],
         ],
-        'npcimport'    => [
-            'title'                   => 'Mass import NPCs',
-            'header'                  => 'Mass import NPCs',
-            'paste_npc_import_string' => 'Paste the NPC import string',
-            'submit'                  => 'Submit',
+        'npc'          => [
+            'import'                => [
+                'title'                   => 'Mass import NPCs',
+                'header'                  => 'Mass import NPCs',
+                'paste_npc_import_string' => 'Paste the NPC import string',
+                'submit'                  => 'Submit',
+            ],
+            'managespellvisibility' => [
+                'title'  => 'Manage NPC Spell Visibility',
+                'header' => 'Manage NPC Spell Visibility',
+                'submit' => 'Submit',
+            ],
         ],
         'list'         => [
-            'title'            => 'Admin tools',
-            'header'           => 'Admin tools',
-            'header_tools'     => 'Tools',
-            'subheader_import' => 'Import',
-            'mass_import_npcs' => 'Mass import NPCs',
+            'title'                   => 'Admin tools',
+            'header'                  => 'Admin tools',
+            'header_tools'            => 'Tools',
+            'subheader_npcs'          => 'NPCs',
+            'mass_import_npcs'        => 'Mass import NPCs',
+            'manage_spell_visibility' => 'Manage NPC spell visibility',
 
             'subheader_dungeonroute'                  => 'Dungeonroute',
             'view_dungeonroute_details'               => 'View Dungeonroute details',
@@ -418,6 +448,9 @@ return [
 
             'subheader_mapping'  => 'Mapping',
             'force_sync_mapping' => 'Force sync mapping',
+
+            'subheader_features' => 'Features',
+            'manage_features'    => 'Manage features',
 
             'subheader_actions'   => 'Actions',
             'export_dungeon_data' => 'Export dungeon data',

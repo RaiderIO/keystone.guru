@@ -1,18 +1,24 @@
 <?php
+
+use App\Models\Dungeon;
+use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
+use Illuminate\Support\Collection;
+
 /**
- * @var $dungeon             \App\Models\Dungeon
- * @var $floor               \App\Models\Floor\Floor
- * @var $availableKeysSelect \Illuminate\Support\Collection
+ * @var Dungeon    $dungeon
+ * @var Floor      $floor
+ * @var Collection $availableKeysSelect
  */
 
-$gameVersionsSelect = \App\Models\GameVersion\GameVersion::all()
-    ->mapWithKeys(static fn(\App\Models\GameVersion\GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
+$gameVersionsSelect = GameVersion::all()
+    ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 ?>
 
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$dungeon ?? null],
     'showAds' => false,
-    'title' => isset($dungeon) ? __('view_admin.dungeon.edit.title_edit') : __('view_admin.dungeon.edit.title_new')
+    'title' => isset($dungeon) ? __('view_admin.dungeon.edit.title_edit') : __('view_admin.dungeon.edit.title_new'),
     ])
 
 @section('header-title')
@@ -91,11 +97,17 @@ $gameVersionsSelect = \App\Models\GameVersion\GameVersion::all()
             @include('common.forms.form-error', ['key' => 'map_id'])
         </div>
 
-            <div class="form-group{{ $errors->has('challenge_mode_id') ? ' has-error' : '' }}">
-                {!! Form::label('challenge_mode_id', __('view_admin.dungeon.edit.challenge_mode_id')) !!}
-                {!! Form::number('challenge_mode_id', null, ['class' => 'form-control']) !!}
-                @include('common.forms.form-error', ['key' => 'challenge_mode_id'])
-            </div>
+        <div class="form-group{{ $errors->has('instance_id') ? ' has-error' : '' }}">
+            {!! Form::label('instance_id', __('view_admin.dungeon.edit.instance_id')) !!}
+            {!! Form::number('instance_id', null, ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'instance_id'])
+        </div>
+
+        <div class="form-group{{ $errors->has('challenge_mode_id') ? ' has-error' : '' }}">
+            {!! Form::label('challenge_mode_id', __('view_admin.dungeon.edit.challenge_mode_id')) !!}
+            {!! Form::number('challenge_mode_id', null, ['class' => 'form-control']) !!}
+            @include('common.forms.form-error', ['key' => 'challenge_mode_id'])
+        </div>
 
         <div class="form-group{{ $errors->has('mdt_id') ? ' has-error' : '' }}">
             {!! Form::label('mdt_id', __('view_admin.dungeon.edit.mdt_id')) !!}

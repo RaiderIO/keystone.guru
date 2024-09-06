@@ -9,6 +9,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
+use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Release;
 use App\Models\Season;
@@ -24,6 +25,8 @@ use App\Service\AffixGroup\ArchonApiServiceInterface;
 use App\Service\Cache\CacheService;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
+use App\Service\ChallengeModeRunData\ChallengeModeRunDataService;
+use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\CombatLogMappingVersionService;
@@ -36,10 +39,16 @@ use App\Service\CombatLog\CreateRouteDungeonRouteService;
 use App\Service\CombatLog\CreateRouteDungeonRouteServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteService;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
+use App\Service\CombatLogEvent\CombatLogEventService;
+use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Service\Cookies\CookieService;
+use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Discord\DiscordApiService;
 use App\Service\Discord\DiscordApiServiceInterface;
+use App\Service\Dungeon\DungeonService;
+use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\DungeonRoute\CoverageService;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DevDiscoverService;
@@ -76,6 +85,8 @@ use App\Service\Patreon\PatreonApiService;
 use App\Service\Patreon\PatreonApiServiceInterface;
 use App\Service\Patreon\PatreonService;
 use App\Service\Patreon\PatreonServiceInterface;
+use App\Service\RaiderIO\RaiderIOApiServiceInterface;
+use App\Service\RaiderIO\RaiderIOKeystoneGuruApiService;
 use App\Service\ReadOnlyMode\ReadOnlyModeService;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use App\Service\Reddit\RedditApiService;
@@ -123,13 +134,18 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(MDTMappingImportServiceInterface::class, MDTMappingImportService::class);
         $this->app->bind(MetricServiceInterface::class, MetricService::class);
         $this->app->bind(CombatLogServiceInterface::class, CombatLogService::class);
-        $this->app->bind(CombatLogDataExtractionServiceInterface::class, CombatLogDataExtractionService::class);
         $this->app->bind(CombatLogSplitServiceInterface::class, CombatLogSplitService::class);
         $this->app->bind(CombatLogMappingVersionServiceInterface::class, CombatLogMappingVersionService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
-        $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);
         $this->app->bind(StructuredLoggingServiceInterface::class, StructuredLoggingService::class);
         $this->app->bind(SpellServiceInterface::class, SpellService::class);
+        $this->app->bind(ChallengeModeRunDataServiceInterface::class, ChallengeModeRunDataService::class);
+        $this->app->bind(CombatLogEventServiceInterface::class, CombatLogEventService::class);
+        $this->app->bind(DungeonServiceInterface::class, DungeonService::class);
+        $this->app->bind(CookieServiceInterface::class, CookieService::class);
+
+        // Depends on CookieService
+        $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);
 
         // Depends on CoordinatesService
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
@@ -158,7 +174,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         // Depends on SeasonService
         $this->app->bind(AffixGroupEaseTierServiceInterface::class, AffixGroupEaseTierService::class);
 
-        // Depends on CacheService, CoordinatesService, OverpulledEnemyService
+        // Depends on CacheService, CoordinatesService, OverpulledEnemyService, SeasonService
         $this->app->bind(MapContextServiceInterface::class, MapContextService::class);
 
         // Depends on SeasonService, CacheService, CoordinatesService
@@ -181,6 +197,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
+//        $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOApiService::class);
+        $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
+
+        // Depends on CombatLogService, SeasonService, WowheadService
+        $this->app->bind(CombatLogDataExtractionServiceInterface::class, CombatLogDataExtractionService::class);
     }
 
     /**
@@ -231,7 +252,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             /** @var User|null $user */
             $user = Auth::getUser();
             if ($isUserAdmin === null) {
-                $isUserAdmin = optional($user)->hasRole('admin');
+                $isUserAdmin = optional($user)->hasRole(Role::ROLE_ADMIN);
             }
             if ($adFree === null) {
                 $adFree = optional($user)->hasPatreonBenefit(PatreonBenefit::AD_FREE) ||
@@ -330,7 +351,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allRegions', $globalViewVariables['allRegions']);
         });
 
-        view()->composer(['common.forms.createroute', 'common.forms.createtemporaryroute'], static function (View $view) {
+        view()->composer(['common.forms.createroute', 'common.forms.createroutetemporary'], static function (View $view) use ($viewService, &$userOrDefaultRegion) {
+            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
+
             $routeKeyLevelDefault = '10;15';
             $routeKeyLevel        = $_COOKIE['route_key_level'] ?? $routeKeyLevelDefault;
             $explode              = explode(';', $routeKeyLevel);
@@ -339,8 +363,16 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 $explode       = explode(';', $routeKeyLevel);
             }
 
-            $view->with('routeKeyLevelFrom', $explode[0]);
-            $view->with('routeKeyLevelTo', $explode[1]);
+            $view->with('routeKeyLevelFrom', (int)$explode[0]);
+            $view->with('routeKeyLevelTo', (int)$explode[1]);
+            $view->with('currentSeason', $regionViewVariables['currentSeason']
+                ->load(['seasonDungeons' => static function ($query) {
+                    $query->without(['season', 'dungeon']);
+                }])
+                ->makeHidden(['affixGroups', 'expansion', 'dungeons'])
+                ->makeVisible(['seasonDungeons'])
+            );
+            $view->with('nextSeason', $regionViewVariables['nextSeason']?->without(['affixGroups', 'expansion', 'dungeons'])->with(['seasonDungeons']));
         });
 
         // Displaying a release
@@ -430,11 +462,18 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('nextSeason', $regionViewVariables['nextSeason']);
             $view->with('selectedSeason', $selectedSeason);
             $view->with('currentAffixGroup', $selectedSeason->getCurrentAffixGroup());
-            $view->with('affixgroups', $selectedSeason->affixgroups);
+            $view->with('affixgroups', $selectedSeason->affixGroups);
             $view->with('dungeons', $selectedSeason->dungeons);
         });
 
         // Maps
+        view()->composer('common.maps.controls.heatmapsearch', static function (View $view) use ($viewService, &$userOrDefaultRegion) {
+            $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+            $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
+            $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
+            $view->with('allAffixGroupsByActiveExpansion', $regionViewVariables['allAffixGroupsByActiveExpansion']);
+            $view->with('featuredAffixesByActiveExpansion', $regionViewVariables['featuredAffixesByActiveExpansion']);
+        });
         view()->composer('common.maps.controls.pulls', static function (View $view) {
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
         });

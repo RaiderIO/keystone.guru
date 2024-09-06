@@ -2,8 +2,6 @@
 
 namespace App\Service\CombatLog\Builders;
 
-use App;
-use App\Jobs\RefreshEnemyForces;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -12,14 +10,18 @@ use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
-use App\Models\KillZone\KillZoneSpell;
-use App\Service\CombatLog\Logging\DungeonRouteBuilderLoggingInterface;
+use App\Models\Npc\NpcClassification;
+use App\Models\Spell\Spell;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullCollection;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\CombatLog\Models\ClosestEnemy;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Collection;
 
@@ -50,34 +52,38 @@ abstract class DungeonRouteBuilder
 
     protected ?Floor $currentFloor;
 
-    /** @var Collection|Enemy[] */
+    /** @var Collection<Enemy> */
     protected Collection $availableEnemies;
 
     protected ActivePullCollection $activePullCollection;
 
-    /** @var Collection|int */
+    /** @var Collection<int> */
     protected Collection $validNpcIds;
+
+    /** @var Collection<int> */
+    protected Collection $validSpellIds;
 
     private int $killZoneIndex = 1;
 
-    private readonly DungeonRouteBuilderLoggingInterface $log;
+    /** @var Collection<KillZone> */
+    protected Collection $killZones;
 
     public function __construct(
-        protected CoordinatesServiceInterface $coordinatesService,
-        protected DungeonRoute                $dungeonRoute
+        protected CoordinatesServiceInterface                $coordinatesService,
+        protected DungeonRouteRepositoryInterface            $dungeonRouteRepository,
+        protected KillZoneRepositoryInterface                $killZoneRepository,
+        protected KillZoneEnemyRepositoryInterface           $killZoneEnemyRepository,
+        protected KillZoneSpellRepositoryInterface           $killZoneSpellRepository,
+        protected DungeonRoute                               $dungeonRoute,
+        private readonly DungeonRouteBuilderLoggingInterface $log
     ) {
-        /** @var DungeonRouteBuilderLoggingInterface $log */
-        $log       = App::make(DungeonRouteBuilderLoggingInterface::class);
-        $this->log = $log;
-
         $this->currentFloor     = null;
         $this->availableEnemies = $this->dungeonRoute->mappingVersion->enemies()->with([
             'floor',
             'floor.dungeon',
             'enemyPack',
             'enemyPatrol',
-        ])
-            ->get()
+        ])->get()
             ->each(static function (Enemy $enemy) {
                 // Ensure that the kill priority is 0 if it wasn't set
                 $enemy->kill_priority ??= 0;
@@ -86,8 +92,15 @@ abstract class DungeonRouteBuilder
             ->keyBy('id');
 
         // #1818 Filter out any NPC ids that are invalid
-        $this->validNpcIds          = $this->dungeonRoute->dungeon->getInUseNpcIds();
+        $this->validNpcIds = $this->dungeonRoute->dungeon->getInUseNpcIds();
+
+        $this->validSpellIds        = Spell::all('id')->pluck(['id']);
         $this->activePullCollection = new ActivePullCollection();
+
+        // This allows me to set the killZones in buildFinished, so that existing relations are still preserved
+        // If you don't Laravel probably starts resolving relations, and it will lose relations that were set
+        // manually, which sucks when the repositories in these classes are actually Stubs
+        $this->killZones = collect();
     }
 
     /**
@@ -100,9 +113,11 @@ abstract class DungeonRouteBuilder
      */
     protected function buildFinished(): void
     {
+        $this->dungeonRoute->setRelation('killZones', $this->killZones);
+
         // Direct update doesn't work.. no clue why
         $enemyForces = $this->dungeonRoute->getEnemyForces();
-        DungeonRoute::find($this->dungeonRoute->id)->update(['enemy_forces' => $enemyForces]);
+        $this->dungeonRouteRepository->find($this->dungeonRoute->id)->update(['enemy_forces' => $enemyForces]);
         $this->dungeonRoute->enemy_forces = $enemyForces;
     }
 
@@ -111,10 +126,10 @@ abstract class DungeonRouteBuilder
         try {
             $this->log->createPullStart($this->killZoneIndex);
 
-            /** @var Collection|ActivePullEnemy[] $killedEnemies */
+            /** @var Collection<ActivePullEnemy> $killedEnemies */
             $killedEnemies = $activePull->getEnemiesKilled();
 
-            $killZone = KillZone::create([
+            $killZone = $this->killZoneRepository->create([
                 'dungeon_route_id' => $this->dungeonRoute->id,
                 'color'            => randomHexColorNoMapColors(),
                 'index'            => $this->killZoneIndex,
@@ -143,8 +158,6 @@ abstract class DungeonRouteBuilder
                             'mdt_id'       => $enemy->mdt_id,
                         ]);
 
-                        $killZone->killZoneEnemies->push($enemy);
-
                         $this->log->createPullEnemyAttachedToKillZone(
                             $killedEnemy->getNpcId(),
                             $killedEnemy->getX(),
@@ -156,8 +169,12 @@ abstract class DungeonRouteBuilder
                 }
             }
 
+            $killZone->setRelation('killZoneEnemies', $killZoneEnemiesAttributes->map(function (array $attributes) {
+                return new KillZoneEnemy($attributes);
+            }));
+
             if ($killZoneEnemiesAttributes->isNotEmpty()) {
-                KillZoneEnemy::insert($killZoneEnemiesAttributes->toArray());
+                $this->killZoneEnemyRepository->insert($killZoneEnemiesAttributes->toArray());
                 $this->killZoneIndex++;
                 $enemyCount = $killZoneEnemiesAttributes->count();
                 $this->log->createPullInsertedEnemies($enemyCount);
@@ -172,16 +189,15 @@ abstract class DungeonRouteBuilder
                 }
 
                 if ($killZoneSpellsAttributes->isNotEmpty()) {
-                    KillZoneSpell::insert($killZoneSpellsAttributes->toArray());
+                    $this->killZoneSpellRepository->insert($killZoneSpellsAttributes->toArray());
                     $spellCount = $killZoneSpellsAttributes->count();
                     $this->log->createPullSpellsAttachedToKillZone($spellCount);
                 }
 
-                // Write the killzone back to the dungeon route
-                $this->dungeonRoute->setRelation('killZones', $this->dungeonRoute->killZones->push($killZone));
+                $this->killZones->push($killZone);
             } else {
                 // No enemies were inserted for this pull, so it's worthless. Delete it
-                $killZone->delete();
+                $this->killZoneRepository->delete($killZone);
                 $this->log->createPullNoEnemiesPullDeleted();
             }
         } finally {
@@ -227,7 +243,7 @@ abstract class DungeonRouteBuilder
             // Find the closest Enemy with the same NPC ID that is not killed yet
             $closestEnemy = new ClosestEnemy();
 
-            /** @var Collection|Enemy[] $filteredEnemies */
+            /** @var Collection<Enemy> $filteredEnemies */
             $filteredEnemies = $this->availableEnemies->filter(function (Enemy $availableEnemy) use ($npcId) {
                 if ($availableEnemy->npc_id !== $npcId) {
                     return false;
@@ -320,13 +336,9 @@ abstract class DungeonRouteBuilder
     ): void {
         // Build a list of potential enemies which will always take precedence since they're in a group that we have aggroed.
         // Therefore, these enemies should be in combat with us regardless
-        /** @var Collection|Enemy[] $preferredEnemiesInEngagedGroups */
+        /** @var Collection<Enemy> $preferredEnemiesInEngagedGroups */
         $preferredEnemiesInEngagedGroups = $filteredEnemies->filter(static function (Enemy $availableEnemy) use ($preferredGroups) {
-            if ($availableEnemy->enemy_pack_id === null) {
-                return false;
-            }
-
-            return $preferredGroups->has($availableEnemy->enemyPack->group);
+            return $availableEnemy->enemy_pack_id !== null && $preferredGroups->has($availableEnemy->enemyPack->group);
         });
 
         if ($preferredEnemiesInEngagedGroups->isNotEmpty()) {
@@ -349,7 +361,7 @@ abstract class DungeonRouteBuilder
         ?LatLng         $previousPullLatLng,
         ClosestEnemy    $closestEnemy
     ): void {
-        /** @var Collection|Enemy[] $preferredEnemiesOnCurrentFloor */
+        /** @var Collection<Enemy> $preferredEnemiesOnCurrentFloor */
         $preferredEnemiesOnCurrentFloor = $filteredEnemies->filter(fn(Enemy $availableEnemy) => $availableEnemy->floor_id == $this->currentFloor->id);
 
         if ($preferredEnemiesOnCurrentFloor->isNotEmpty()) {
@@ -393,21 +405,20 @@ abstract class DungeonRouteBuilder
         }
 
         if ($closestEnemy->getEnemy() === null) {
-            $this->log->findUnkilledEnemyForNpcAtIngameLocationClosestEnemy(
-                null,
+            $this->log->findClosestEnemyInAllFilteredEnemiesEnemyIsNull(
                 $closestEnemy->getDistanceBetweenEnemies(),
                 $closestEnemy->getDistanceBetweenLastPullAndEnemy()
             );
         } else if ($closestEnemy->getDistanceBetweenEnemies() >
             ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
-            if ($closestEnemy->getEnemy()->npc->classification_id >= App\Models\NpcClassification::ALL[App\Models\NpcClassification::NPC_CLASSIFICATION_BOSS]) {
-                $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyIsBossIgnoringTooFarAwayCheck();
+            if ($closestEnemy->getEnemy()->npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+                $this->log->findClosestEnemyInAllFilteredEnemiesEnemyIsBossIgnoringTooFarAwayCheck();
             } else {
-                $this->log->findUnkilledEnemyForNpcAtIngameLocationEnemyTooFarAway(
+                $this->log->findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(
                     $closestEnemy->getEnemy()->id,
                     $closestEnemy->getDistanceBetweenEnemies(),
                     $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
-                    $this->currentFloor->enemy_engagement_max_range
+                    $this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default')
                 );
 
                 $closestEnemy->setEnemy(null);
@@ -430,7 +441,7 @@ abstract class DungeonRouteBuilder
         $enemiesByKillPriority = $enemies->groupBy(static fn(Enemy $enemy) => $enemy->kill_priority ?? 0)->sortKeysDesc();
 
         foreach ($enemiesByKillPriority as $killPriority => $availableEnemies) {
-            /** @var Collection|Enemy[] $availableEnemies */
+            /** @var Collection<Enemy> $availableEnemies */
             $this->log->findClosestEnemyAndDistanceFromListPriority($killPriority, $availableEnemies->count());
 
             // For each group of enemies
@@ -504,7 +515,7 @@ abstract class DungeonRouteBuilder
 
         // $this->log->findClosestEnemyAndDistanceDistanceBetweenEnemies($enemyXY->toArray(), $targetIngameXY->toArray(), $distanceBetweenEnemies, $closestEnemy->getDistanceBetweenEnemies());
 
-        if ($distanceBetweenEnemies < $this->currentFloor->enemy_engagement_max_range) {
+        if ($distanceBetweenEnemies < ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
             // Calculate the location of the latLng
             /** @var IngameXY|null $previousPullIngameXY */
             $previousPullIngameXY = $previousPullLatLng === null || $previousPullLatLng->getFloor() === null ?

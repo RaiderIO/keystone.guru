@@ -47,7 +47,9 @@ $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $
     </td>
     <?php
     $affixIndex = 0;
-    for ($i = 0; $i < 4; ++$i) {
+    for ($i = 0;
+         $i < 4;
+         ++$i) {
         $affix      = $affixGroup->affixes->get($i);
         $lastColumn = $i === 3;
         $class      = $currentWeekClass . $topBorderClass . $bottomBorderClass;

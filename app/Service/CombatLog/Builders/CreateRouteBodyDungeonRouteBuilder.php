@@ -3,24 +3,23 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Models\AffixGroup\AffixGroup;
-use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\DungeonRoute\DungeonRouteAffixGroup;
-use App\Models\Faction;
 use App\Models\Floor\Floor;
-use App\Models\PublishedState;
+use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Service\CombatLog\Builders\Logging\CreateRouteBodyDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
-use App\Service\CombatLog\Logging\CreateRouteBodyDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
 use App\Service\CombatLog\Models\CreateRoute\CreateRouteNpc;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
-use Auth;
-use Carbon\Carbon;
-use Exception;
+use Illuminate\Support\Carbon;
 
 /**
  * @author Wouter
@@ -29,19 +28,39 @@ use Exception;
  */
 class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
 {
-    private readonly CreateRouteBodyDungeonRouteBuilderLoggingInterface $log;
+    private CreateRouteBodyDungeonRouteBuilderLoggingInterface $log;
 
+    /**
+     * @throws DungeonNotSupportedException
+     */
     public function __construct(
-        private readonly SeasonServiceInterface $seasonService,
-        CoordinatesServiceInterface             $coordinatesService,
-        private readonly CreateRouteBody        $createRouteBody
+        private readonly SeasonServiceInterface   $seasonService,
+        CoordinatesServiceInterface               $coordinatesService,
+        DungeonRouteRepositoryInterface           $dungeonRouteRepository,
+        DungeonRouteAffixGroupRepositoryInterface $dungeonRouteAffixGroupRepository,
+        AffixGroupRepositoryInterface             $affixGroupRepository,
+        KillZoneRepositoryInterface               $killZoneRepository,
+        KillZoneEnemyRepositoryInterface          $killZoneEnemyRepository,
+        KillZoneSpellRepositoryInterface          $killZoneSpellRepository,
+        protected readonly CreateRouteBody        $createRouteBody
     ) {
-        $dungeonRoute = $this->initDungeonRoute();
+        $log = App::make(CreateRouteBodyDungeonRouteBuilderLoggingInterface::class);
 
-        parent::__construct($coordinatesService, $dungeonRoute);
+        parent::__construct($coordinatesService,
+            $dungeonRouteRepository,
+            $killZoneRepository,
+            $killZoneEnemyRepository,
+            $killZoneSpellRepository,
+            $this->createRouteBody->createDungeonRoute(
+                $this->seasonService,
+                $dungeonRouteRepository,
+                $affixGroupRepository,
+                $dungeonRouteAffixGroupRepository
+            ),
+            $log
+        );
 
         /** @var CreateRouteBodyDungeonRouteBuilderLoggingInterface $log */
-        $log       = App::make(CreateRouteBodyDungeonRouteBuilderLoggingInterface::class);
         $this->log = $log;
     }
 
@@ -52,63 +71,6 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         $this->buildFinished();
 
         return $this->dungeonRoute;
-    }
-
-    /**
-     * @throws DungeonNotSupportedException
-     */
-    private function initDungeonRoute(): DungeonRoute
-    {
-        try {
-            if ($this->createRouteBody->challengeMode->challengeModeId !== null) {
-                $dungeon = Dungeon::where('challenge_mode_id', $this->createRouteBody->challengeMode->challengeModeId)->firstOrFail();
-            } else {
-                $dungeon = Dungeon::where('map_id', $this->createRouteBody->challengeMode->mapId)->firstOrFail();
-            }
-        } catch (Exception) {
-            throw new DungeonNotSupportedException(
-                sprintf('Dungeon with instance ID %d not found', $this->createRouteBody->challengeMode->mapId)
-            );
-        }
-
-        $currentMappingVersion = $dungeon->currentMappingVersion;
-
-        $dungeonRoute = DungeonRoute::create([
-            'public_key'         => DungeonRoute::generateRandomPublicKey(),
-            'author_id'          => Auth::id() ?? -1,
-            'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $currentMappingVersion->id,
-            'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
-            'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
-            'title'              => __($dungeon->name),
-            'level_min'          => $this->createRouteBody->challengeMode->level,
-            'level_max'          => $this->createRouteBody->challengeMode->level,
-            'expires_at'         => $this->createRouteBody->settings->temporary ? Carbon::now()->addHours(
-                config('keystoneguru.sandbox_dungeon_route_expires_hours')
-            )->toDateTimeString() : null,
-        ]);
-
-        $dungeonRoute->setRelation('dungeon', $dungeon);
-        $dungeonRoute->setRelation('mappingVersion', $currentMappingVersion);
-
-        // Find the correct affix groups that match the affix combination the dungeon was started with
-        $currentSeasonForDungeon = $dungeon->getActiveSeason($this->seasonService);
-        if ($currentSeasonForDungeon !== null) {
-            $affixIds            = collect($this->createRouteBody->challengeMode->affixes);
-            $eligibleAffixGroups = AffixGroup::where('season_id', $currentSeasonForDungeon->id)->get();
-            foreach ($eligibleAffixGroups as $eligibleAffixGroup) {
-                // If the affix group's affixes are all in $affixIds
-                if ($affixIds->diff($eligibleAffixGroup->affixes->pluck('affix_id'))->isEmpty()) {
-                    // Couple the affix group to the newly created dungeon route
-                    DungeonRouteAffixGroup::create([
-                        'dungeon_route_id' => $dungeonRoute->id,
-                        'affix_group_id'   => $eligibleAffixGroup->id,
-                    ]);
-                }
-            }
-        }
-
-        return $dungeonRoute;
     }
 
     private function buildKillZones(): void
@@ -156,6 +118,7 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
             $realUiMapId = Floor::UI_MAP_ID_MAPPING[$event['npc']->coord->uiMapId] ?? $event['npc']->coord->uiMapId;
             if ($this->currentFloor === null || $realUiMapId !== $this->currentFloor->ui_map_id) {
                 $this->currentFloor = Floor::findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id);
+                $this->log->buildKillZonesNewCurrentFloor($this->currentFloor->id, $this->currentFloor->ui_map_id);
             }
 
             $uniqueUid = $event['npc']->getUniqueId();
@@ -253,9 +216,20 @@ class CreateRouteBodyDungeonRouteBuilder extends DungeonRouteBuilder
         foreach ($this->createRouteBody->spells as $spell) {
             if ($lastDiedAt !== null) {
                 if ($spell->getCastAt()->between($firstEngagedAt, $lastDiedAt)) {
+                    if ($this->validSpellIds->search($spell->spellId) === false) {
+                        $this->log->determineSpellsCastBetweenInvalidSpellIdBetween($spell->spellId);
+
+                        continue;
+                    }
                     $activePull->addSpell($spell->spellId);
                 }
             } else if ($spell->getCastAt()->isAfter($firstEngagedAt)) {
+                if ($this->validSpellIds->search($spell->spellId) === false) {
+                    $this->log->determineSpellsCastBetweenInvalidSpellIdAfter($spell->spellId);
+
+                    continue;
+                }
+
                 $activePull->addSpell($spell->spellId);
             }
         }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
+use App\Models\Laratrust\Role;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -14,10 +14,7 @@ class ProfileFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        /** @var User $user */
-        $user = Auth::user();
-
-        return $user->hasRole('user') || $user->hasRole('admin');
+        return Auth::user()?->hasRole(Role::ROLE_ALL) ?? false;
     }
 
     /**

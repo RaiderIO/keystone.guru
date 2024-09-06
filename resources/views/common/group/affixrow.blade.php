@@ -37,7 +37,7 @@ $cssClasses ??= '';
     </div>
         <?php ++$count;
     }
-     ?>
+    ?>
     <span class="col col-md-auto text-right pl-0">
         <span class="check" style="visibility: hidden;">
             <i class="fas fa-check"></i>

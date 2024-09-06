@@ -17,6 +17,10 @@ return [
         'guardian'    => 'Страж',
         'restoration' => 'Исцеление',
     ],
+    'evoker'       => [
+        'devastation'  => '',
+        'preservation' => '',
+    ],
     'hunter'       => [
         'beast_mastery' => 'Повелитель зверей',
         'marksman'      => 'Стрельба',

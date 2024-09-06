@@ -12,8 +12,6 @@ class RouteAttributesSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding route attributes');
-
         $routeAttributeAttributes = [
             [
                 'key'      => RouteAttribute::ROUTE_ATTRIBUTE_ROGUE_SHROUD_SKIP,
@@ -44,5 +42,11 @@ class RouteAttributesSeeder extends Seeder implements TableSeederInterface
     public static function getAffectedModelClasses(): array
     {
         return [RouteAttribute::class];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

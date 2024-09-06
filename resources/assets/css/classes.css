@@ -14,58 +14,58 @@
 }
 
 .class_icon_demonhunter {
-    background-position: 0 8.33333%;
+    background-position: 0 calc((100% / 12) * 1);
     background-size: 100%;
 }
 
 .class_icon_druid {
-    background-position: 0 16.66666%;
+    background-position: 0 calc((100% / 12) * 2);
     background-size: 100%;
 }
 
 .class_icon_evoker {
-    background-position: 0 25%;
+    background-position: 0 calc((100% / 12) * 3);
     background-size: 100%;
 }
 
 
 .class_icon_hunter {
-    background-position: 0 33.3333%;
+    background-position: 0 calc((100% / 12) * 4);
     background-size: 100%;
 }
 
 .class_icon_mage {
-    background-position: 0 41.6666%;
+    background-position: 0 calc((100% / 12) * 5);
     background-size: 100%;
 }
 
 .class_icon_monk {
-    background-position: 0 50%;
+    background-position: 0 calc((100% / 12) * 6);
     background-size: 100%;
 }
 
 .class_icon_paladin {
-    background-position: 0 58.3333%;
+    background-position: 0 calc((100% / 12) * 7);
     background-size: 100%;
 }
 
 .class_icon_priest {
-    background-position: 0 66.6666%;
+    background-position: 0 calc((100% / 12) * 8);
     background-size: 100%;
 }
 
 .class_icon_rogue {
-    background-position: 0 75%;
+    background-position: 0 calc((100% / 12) * 9);
     background-size: 100%;
 }
 
 .class_icon_shaman {
-    background-position: 0 83.3333%;
+    background-position: 0 calc((100% / 12) * 10);
     background-size: 100%;
 }
 
 .class_icon_warlock {
-    background-position: 0 91.66663%;
+    background-position: 0 calc((100% / 12) * 11);
     background-size: 100%;
 }
 

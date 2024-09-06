@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Mapping;
 
-use App\Console\Commands\Traits\ExecutesShellCommands;
 use App\Service\Mapping\MappingService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;

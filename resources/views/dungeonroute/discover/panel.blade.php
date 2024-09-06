@@ -60,7 +60,7 @@ $cache            ??= true;
     @endif
 
     @if($loadMore)
-        @include('common.dungeonroute.search.loadmore', [
+        @include('common.search.loadmore', [
             'category' => $category,
             'expansion' => $expansion,
             'dungeon' => $dungeon,

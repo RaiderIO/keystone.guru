@@ -2,11 +2,15 @@
 
 namespace App\Logic\CombatLog;
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 abstract class BaseEvent
 {
-    public function __construct(private readonly int $combatLogVersion, private readonly Carbon $timestamp, private readonly string $eventName, private readonly string $rawEvent)
+    public function __construct(
+        private readonly int    $combatLogVersion,
+        private readonly Carbon $timestamp,
+        private readonly string $eventName,
+        private readonly string $rawEvent)
     {
     }
 

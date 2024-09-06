@@ -15,7 +15,7 @@ return new class extends Migration {
     {
         $output = new ConsoleOutput();
         DungeonRoute::chunk(100, function (Collection $dungeonRoutes) use ($output) {
-            /** @var Collection|DungeonRoute[] $dungeonRoutes */
+            /** @var Collection<DungeonRoute> $dungeonRoutes */
             foreach ($dungeonRoutes as $dungeonRoute) {
                 if (empty($dungeonRoute->title) || empty($dungeonRoute->getTitleSlug())) {
                     $oldTitle = $dungeonRoute->title;

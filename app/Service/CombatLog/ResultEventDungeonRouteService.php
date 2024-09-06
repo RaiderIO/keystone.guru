@@ -11,6 +11,10 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
 use App\Service\CombatLog\Builders\ResultEventDungeonRouteBuilder;
 use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
@@ -23,19 +27,27 @@ use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
-use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceInterface
 {
-    public function __construct(protected CombatLogService $combatLogService, protected SeasonServiceInterface $seasonService, protected CoordinatesServiceInterface $coordinatesService, private readonly CombatLogDungeonRouteServiceLoggingInterface $log)
+    public function __construct(
+        protected CombatLogService                                    $combatLogService,
+        protected SeasonServiceInterface                              $seasonService,
+        protected CoordinatesServiceInterface                         $coordinatesService,
+        protected DungeonRouteRepositoryInterface                     $dungeonRouteRepository,
+        protected KillZoneRepositoryInterface                         $killZoneRepository,
+        protected KillZoneEnemyRepositoryInterface                    $killZoneEnemyRepository,
+        protected KillZoneSpellRepositoryInterface                    $killZoneSpellRepository,
+        private readonly CombatLogDungeonRouteServiceLoggingInterface $log)
     {
     }
 
     /**
-     * @return Collection|DungeonRoute[]
+     * @return Collection<DungeonRoute>
      *
      * @throws InvalidArgumentException If combat log does not exist
      * @throws AdvancedLogNotEnabledException
@@ -95,7 +107,15 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
             // Store found enemy positions in the database for analyzing
             $this->saveChallengeModeRun($resultEvents, $dungeonRoute);
 
-            $dungeonRoute = (new ResultEventDungeonRouteBuilder($this->coordinatesService, $dungeonRoute, $resultEvents))->build();
+            $dungeonRoute = (new ResultEventDungeonRouteBuilder(
+                $this->coordinatesService,
+                $this->dungeonRouteRepository,
+                $this->killZoneRepository,
+                $this->killZoneEnemyRepository,
+                $this->killZoneSpellRepository,
+                $dungeonRoute,
+                $resultEvents
+            ))->build();
 
             if (config('app.debug')) {
                 $this->generateMapIconsFromEvents(
@@ -114,7 +134,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
     }
 
     /**
-     * @param Collection|BaseResultEvent[] $resultEvents
+     * @param Collection<BaseResultEvent> $resultEvents
      */
     private function saveChallengeModeRun(Collection $resultEvents, DungeonRoute $dungeonRoute): void
     {
@@ -200,7 +220,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
     }
 
     /**
-     * @param Collection|BaseResultEvent[] $resultEvents
+     * @param Collection<BaseResultEvent> $resultEvents
      */
     private function generateMapIconsFromEvents(
         MappingVersion $mappingVersion,

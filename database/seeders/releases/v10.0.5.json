@@ -1,0 +1,23 @@
+{
+    "id": 239,
+    "release_changelog_id": 246,
+    "version": "v10.0.5",
+    "title": "Fixed search page not working before switching tabs",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-05-25T18:29:18+00:00",
+    "updated_at": "2024-05-25T18:29:18+00:00",
+    "changelog": {
+        "id": 246,
+        "release_id": 239,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 246,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2388,
+                "change": "Fixed search page not working before switching tabs, fixed the dungeon text moving around when selecting one and finally the dungeons listed in the URL now get restored properly."
+            }
+        ]
+    }
+}

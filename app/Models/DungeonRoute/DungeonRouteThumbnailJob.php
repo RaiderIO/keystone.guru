@@ -4,10 +4,10 @@ namespace App\Models\DungeonRoute;
 
 use App\Models\Floor\Floor;
 use App\Service\DungeonRoute\ThumbnailService;
-use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int          $id
@@ -20,8 +20,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null     $image_height
  * @property float        $zoom_level
  * @property int          $quality
+ *
  * @property DungeonRoute $dungeonRoute
  * @property Floor        $floor
+ *
  * @property Carbon       $created_at
  * @property Carbon       $updated_at
  *

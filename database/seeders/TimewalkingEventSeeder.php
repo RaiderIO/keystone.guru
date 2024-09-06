@@ -16,8 +16,6 @@ class TimewalkingEventSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding known timewalking events');
-
         $timewalkingEventsAttributes = [
             TimewalkingEvent::TIMEWALKING_EVENT_LEGION => [
                 'expansion_id'         => Expansion::where('shortname', Expansion::EXPANSION_LEGION)->first()->id,
@@ -51,5 +49,11 @@ class TimewalkingEventSeeder extends Seeder implements TableSeederInterface
     public static function getAffectedModelClasses(): array
     {
         return [TimewalkingEvent::class];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

@@ -1,0 +1,41 @@
+{
+    "id": 240,
+    "release_changelog_id": 247,
+    "version": "v10.1",
+    "title": "Key min\/max can now be set per season. Fixed mapping for Uldaman: Legacy of Tyr.",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-06-05T20:36:27+00:00",
+    "updated_at": "2024-06-05T20:36:27+00:00",
+    "changelog": {
+        "id": 247,
+        "release_id": 240,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 247,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2345,
+                "change": "Key min\/max is no longer fixed to 2 and 30 respectively, but is now adjustable per season. The current season is set to 2 and 24."
+            },
+            {
+                "release_changelog_id": 247,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2399,
+                "change": "Updated Brackenhide Hollow mapping."
+            },
+            {
+                "release_changelog_id": 247,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2399,
+                "change": "Uldaman: Legacy of Tyr corrected mapping for Earthen Weavers (thanks \/u\/omicron!)"
+            },
+            {
+                "release_changelog_id": 247,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2396,
+                "change": "Route overview had warnings (too little\/too much enemy forces) and success (just enough enemy forces) mixed up, this was corrected (thanks \/u\/omicron!)"
+            }
+        ]
+    }
+}

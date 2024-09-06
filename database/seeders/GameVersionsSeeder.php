@@ -12,8 +12,6 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding known game versions');
-
         $gameVersionAttributes = [];
 
         foreach (GameVersion::ALL as $key => $id) {
@@ -23,6 +21,7 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
                 'name'        => sprintf('gameversions.%s.name', $key),
                 'description' => sprintf('gameversions.%s.description', $key),
                 'has_seasons' => $key === GameVersion::GAME_VERSION_RETAIL,
+                'active'      => $key !== GameVersion::GAME_VERSION_BETA,
             ];
         }
 
@@ -32,5 +31,11 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
     public static function getAffectedModelClasses(): array
     {
         return [GameVersion::class];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

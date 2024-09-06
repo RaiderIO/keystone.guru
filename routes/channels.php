@@ -18,6 +18,7 @@
 // https://laravel.com/docs/8.x/broadcasting#presence-channels
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
 use App\Models\LiveSession;
 use App\Models\User;
 
@@ -69,7 +70,7 @@ Broadcast::channel(sprintf('%s-route-compare.{dungeonRouteA}-{dungeonRouteB}', c
 
 Broadcast::channel(sprintf('%s-mapping-version-edit.{dungeon}', config('app.type')), static function (User $user, Dungeon $dungeon) {
     $result = false;
-    if ($user->hasRole('admin')) {
+    if ($user->hasRole(Role::ROLE_ADMIN)) {
         $result = [
             'public_key' => $user->public_key,
             'name'       => $user->name,

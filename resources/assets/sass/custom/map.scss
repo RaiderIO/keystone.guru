@@ -59,7 +59,7 @@
   top: 0;
 }
 
-#pulls_sidebar.route_sidebar:not(.embed), {
+.route_sidebar.right:not(.embed), {
   top: 86px;
 }
 
@@ -67,7 +67,7 @@
   top: 70px;
 }
 
-#pulls_sidebar.route_sidebar.mobile:not(.embed), {
+.route_sidebar.right.mobile:not(.embed), {
   top: 70px;
 }
 

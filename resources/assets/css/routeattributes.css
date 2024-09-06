@@ -12,17 +12,17 @@
 }
 
 .route_attribute_invisibility_potion {
-    background-position: 0 25%;
+    background-position: 0 calc((100% / 4) * 1);
     background-size: 100%;
 }
 
 .route_attribute_mage_slow_fall_skip {
-    background-position: 0 50%;
+    background-position: 0 calc((100% / 4) * 2);
     background-size: 100%;
 }
 
 .route_attribute_rogue_shroud_skip {
-    background-position: 0 75%;
+    background-position: 0 calc((100% / 4) * 3);
     background-size: 100%;
 }
 

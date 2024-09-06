@@ -10,7 +10,7 @@ use App\Models\Enemy;
 use App\Models\EnemyActiveAura;
 use App\Models\Mapping\MappingVersion;
 use App\Models\RaidMarker;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
@@ -46,6 +46,9 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             $previousEnemy = optional(Enemy::with(['floor'])->find($enemy->id));
             $previousFloor = $previousEnemy->floor;
         }
+
+        // -1 is a special value that means 'default' in the database
+        $validated['kill_priority'] = (int)$validated['kill_priority'] === -1 ? null : (int)$validated['kill_priority'];
 
         return $this->storeModel($mappingVersion, $validated, Enemy::class, $enemy, static function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
             $activeAuras = $request->get('active_auras', []);
@@ -115,8 +118,9 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
      * @throws Throwable
      */
     public function delete(
-        Request $request,
-        Enemy   $enemy
+        Request        $request,
+        MappingVersion $mappingVersion,
+        Enemy          $enemy
     ): Response {
         return DB::transaction(function () use ($enemy) {
             try {

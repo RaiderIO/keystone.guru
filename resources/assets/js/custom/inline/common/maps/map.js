@@ -182,8 +182,12 @@ class CommonMapsMap extends InlineCode {
             });
         }
 
+        let center = this.options.parameters.hasOwnProperty('lat') && this.options.parameters.hasOwnProperty('lng') ?
+            new L.LatLng(this.options.parameters.lat, this.options.parameters.lng) : null;
+        let zoom = this.options.parameters.hasOwnProperty('z') ? this.options.parameters.z : null;
+
         // Refresh the map; draw the layers on it
-        this._dungeonMap.refreshLeafletMap();
+        this._dungeonMap.refreshLeafletMap(true, center, zoom);
     }
 
     /**
@@ -494,6 +498,7 @@ class CommonMapsMap extends InlineCode {
         }
 
         let hiddenMapObjectGroups = [];
+        let currentlyUnavailableMapObjectGroups = [];
         // Build a list of elements to hide from the UI
         for (let index in MAP_OBJECT_GROUP_NAMES) {
             let mapObjectGroupName = MAP_OBJECT_GROUP_NAMES[index];
@@ -512,15 +517,16 @@ class CommonMapsMap extends InlineCode {
                 } else {
                     group.setVisibility(true);
                 }
-
+            } else {
+                currentlyUnavailableMapObjectGroups.push(mapObjectGroupName);
             }
         }
 
-        console.log(`_mapObjectGroupVisibilityChanged`, hiddenMapObjectGroups, cookieHiddenMapObjectGroups);
-
         // If cookieHiddenMapObjectGroups contained any map object groups that are currently unavailable, we must still
         // add them to our current list as to not lose our setting for it
-        hiddenMapObjectGroups = hiddenMapObjectGroups.concat(cookieHiddenMapObjectGroups);
+        hiddenMapObjectGroups = hiddenMapObjectGroups.concat(
+            cookieHiddenMapObjectGroups.filter(element => currentlyUnavailableMapObjectGroups.includes(element))
+        );
 
         // Update our cookie so that we know upon page refresh
         Cookies.set('hidden_map_object_groups', JSON.stringify(hiddenMapObjectGroups), cookieDefaultAttributes);
@@ -545,7 +551,7 @@ class CommonMapsMap extends InlineCode {
 
                 // Inject the warnings, if there are any
                 if (json.warnings.length > 0) {
-                    (new MdtStringWarnings(json.warnings))
+                    (new MdtStringNoticesWarnings(json.warnings))
                         .render($('#mdt_export_result_warnings'));
                 }
 

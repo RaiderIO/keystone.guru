@@ -39,7 +39,7 @@ class DungeonRouteLegacyController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $floorIndex,
+            'floorIndex'   => $floorIndex,
         ]);
     }
 
@@ -49,7 +49,7 @@ class DungeonRouteLegacyController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $floorIndex,
+            'floorIndex'   => $floorIndex,
         ], $request->all()));
     }
 
@@ -59,7 +59,7 @@ class DungeonRouteLegacyController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $floorIndex,
+            'floorIndex'   => $floorIndex,
         ]);
     }
 
@@ -69,7 +69,7 @@ class DungeonRouteLegacyController extends Controller
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
-            'floorindex'   => $floorIndex,
+            'floorIndex'   => $floorIndex,
         ]);
     }
 

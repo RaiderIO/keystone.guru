@@ -10,7 +10,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\KillZone\KillZone;
 use App\Models\MapIcon;
 use App\Models\Mapping\MappingVersion;
-use App\Models\NpcClassification;
+use App\Models\Npc\NpcClassification;
 use App\Models\Path;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -62,7 +62,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                     2 => $mdtCoordinates['y'],
                     3 => $latLng->getFloor()->mdt_sub_level ?? $latLng->getFloor()->index,
                     4 => true,
-                    5 => $mapIcon->comment ?? __($mapIcon->mapicontype?->name) ?? '',
+                    5 => strip_tags($mapIcon->comment ?? __($mapIcon->mapicontype?->name) ?? ''),
                 ],
             ];
         }
@@ -130,6 +130,11 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             $floor  = $killZone->getDominantFloor();
             $latLng = $killZone->getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(self::KILL_ZONE_DESCRIPTION_DISTANCE);
 
+            // Maybe the pull had no enemies
+            if ($latLng === null) {
+                continue;
+            }
+
             if ($this->dungeonRoute->mappingVersion->facade_enabled) {
                 $latLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this->dungeonRoute->mappingVersion,
@@ -146,7 +151,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                     2 => $mdtCoordinates['y'],
                     3 => $floor->mdt_sub_level ?? $floor->index,
                     4 => true,
-                    5 => $killZone->description,
+                    5 => strip_tags($killZone->description), // MDT does not support HTML tags - get rid of them.
                 ],
             ];
         }
@@ -167,7 +172,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
         // Lua is 1 based, not 0 based
         $pullIndex = 1;
-        /** @var Collection|KillZone[] $killZones */
+        /** @var Collection<KillZone> $killZones */
         $killZones = $this->dungeonRoute->killZones()->get();
         foreach ($killZones as $killZone) {
             $pull = [];

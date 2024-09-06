@@ -2,12 +2,11 @@
 
 namespace Tests\Unit\App\Logging;
 
-use Monolog\Level;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
+use Tests\Fixtures\LoggingFixtures;
 use Tests\TestCases\PublicTestCase;
-use Tests\Unit\Fixtures\LoggingFixtures;
 
 class StructuredLoggingTest extends PublicTestCase
 {

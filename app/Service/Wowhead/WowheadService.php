@@ -3,10 +3,12 @@
 namespace App\Service\Wowhead;
 
 use App\Models\GameVersion\GameVersion;
-use App\Models\Npc;
-use App\Models\Spell;
+use App\Models\Npc\Npc;
+use App\Models\Spell\Spell;
 use App\Service\Traits\Curl;
+use App\Service\Wowhead\Dtos\SpellDataResult;
 use App\Service\Wowhead\Logging\WowheadServiceLoggingInterface;
+use Carbon\CarbonInterval;
 use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
@@ -20,7 +22,17 @@ class WowheadService implements WowheadServiceInterface
 {
     use Curl;
 
-    private const HEALTH_IDENTIFYING_TOKEN = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
+    private const IDENTIFYING_TOKEN_HEALTH     = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
+    private const IDENTIFYING_TOKEN_DISPLAY_ID = 'linksButton.dataset.displayId =';
+
+
+    private const IDENTIFYING_TOKEN_SPELL_NAME        = '<meta property="og:title" content=';
+    private const IDENTIFYING_TOKEN_SPELL_ICON_NAME   = 'WH.Gatherer.addData(29,';
+    private const IDENTIFYING_TOKEN_SPELL_MECHANIC    = '<th>Mechanic</th>';
+    private const IDENTIFYING_TOKEN_SPELL_SCHOOL      = '<th>School</th>';
+    private const IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE = '<th>Dispel type</th>';
+    private const IDENTIFYING_TOKEN_SPELL_CAST_TIME   = '<th>Cast time</th>';
+    private const IDENTIFYING_TOKEN_SPELL_DURATION    = '<th>Duration</th>';
 
     public function __construct(
         private readonly WowheadServiceLoggingInterface $log
@@ -29,21 +41,15 @@ class WowheadService implements WowheadServiceInterface
 
     public function getNpcHealth(GameVersion $gameVersion, Npc $npc): ?int
     {
-        $response = $this->curlGet(
-            sprintf('https://wowhead.com/%snpc=%s/%s',
-                $gameVersion->key === GameVersion::GAME_VERSION_RETAIL ? '' : $gameVersion->key . '/',
-                $npc->id,
-                Str::slug($npc->name)
-            )
-        );
+        $response = $this->getNpcPageHtml($gameVersion, $npc);
 
         // Hacky shit to scrape it
-        $health = 0;
+        $health = null;
         $lines  = explode(PHP_EOL, $response);
         foreach ($lines as $line) {
             $line = trim($line);
 
-            if (!str_contains($line, self::HEALTH_IDENTIFYING_TOKEN)) {
+            if (!str_contains($line, self::IDENTIFYING_TOKEN_HEALTH)) {
                 continue;
             }
 
@@ -71,7 +77,8 @@ class WowheadService implements WowheadServiceInterface
                         }
                     }
                 }
-            } catch (ChildNotFoundException|StrictException|LogicalException|ContentLengthException|CircularException|NotLoadedException) {
+            } catch (ChildNotFoundException|StrictException|LogicalException|ContentLengthException|CircularException|NotLoadedException $ex) {
+                $this->log->getNpcHealthHtmlParsingException($ex);
             }
         }
 
@@ -85,12 +92,11 @@ class WowheadService implements WowheadServiceInterface
         $this->log->downloadMissingSpellIconsStart();
         try {
             $targetFolder = resource_path('assets/images/spells');
-            Spell::each(function (Spell $spell) use (&$result, $targetFolder) {
+            Spell::whereNot('icon_name', '')->each(function (Spell $spell) use (&$result, $targetFolder) {
                 $targetFile = sprintf('%s/%s.jpg', $targetFolder, $spell->icon_name);
 
                 // Not missing = we continue
                 if (file_exists($targetFile)) {
-                    $this->log->downloadMissingSpellIconsFileExists($targetFile);
 
                     return true;
                 }
@@ -124,9 +130,191 @@ class WowheadService implements WowheadServiceInterface
         return $result;
     }
 
+    public function getNpcDisplayId(GameVersion $gameVersion, Npc $npc): ?int
+    {
+        $response = $this->getNpcPageHtml($gameVersion, $npc);
+
+        dump($response);
+
+        // Hacky shit to scrape it
+        $displayId = null;
+        $lines     = explode(PHP_EOL, $response);
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            if (!str_contains($line, self::IDENTIFYING_TOKEN_DISPLAY_ID)) {
+                continue;
+            }
+
+            $displayId = (int)str_replace([self::IDENTIFYING_TOKEN_DISPLAY_ID], '', $line);
+            break;
+        }
+
+        return $displayId;
+    }
+
+    public function getSpellData(int $spellId): ?SpellDataResult
+    {
+        $response = $this->getSpellPageHtml($spellId);
+
+        // More hacky shit to scrape data we need
+        $spellId       = 0;
+        $mechanic      = null;
+        $cooldownGroup = sprintf('spells.cooldown_group.%s', Spell::COOLDOWN_GROUP_UNKNOWN); // I can't find info on this on Wowhead?
+        $dispelType    = '';
+        $iconName      = '';
+        $name          = '';
+        $schoolsMask   = 0;
+        $aura          = false;
+        $castTime      = null;
+        $duration      = null;
+
+        // When set to true, the next line will contain the school.
+        $mechanicFound = $schoolFound = $dispelTypeFound = $castTimeFound = $durationFound = false;
+        $mechanicSet   = $schoolSet = $dispelTypeSet = $castTimeSet = $durationSet = false;
+
+        $lines = explode(PHP_EOL, $response);
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            // Spell icon name
+            if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_ICON_NAME)) {
+                // WH.Gatherer.addData(29, 3, {"135988":{"name":"spell_ice_lament","icon":"spell_ice_lament"}});
+                if (preg_match('/{.*}/', $line, $matches)) {
+                    $jsonString = $matches[0];
+                    $json       = json_decode($jsonString, true);
+
+                    if (!is_array($json)) {
+                        $this->log->getSpellDataIconNameNotFound($line, $json);
+                        continue;
+                    }
+
+                    // I don't know the number of the first array key - convert it to 0 always
+                    $json     = array_values($json);
+                    $iconName = $json[0]['icon'];
+                }
+            } // Mechanic
+            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_MECHANIC)) {
+                $mechanicFound = true;
+            } // Triggered on the next line
+            else if ($mechanicFound) {
+                $mechanic = str_replace(['<td>', '</td>'], '', $line);
+                if (str_contains($mechanic, 'n/a')) {
+                    $mechanic = null;
+                } else {
+                    $mechanic = sprintf('spells.mechanic.%s', Str::slug($mechanic));
+                }
+                $mechanicFound = false;
+                $mechanicSet   = true;
+            } // Spell name
+            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_NAME)) {
+                $name = html_entity_decode(str_replace([self::IDENTIFYING_TOKEN_SPELL_NAME, '"', '>'], '', $line));
+            } // Spell school
+            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_SCHOOL)) {
+                $schoolFound = true;
+            } // Triggered on the next line
+            else if ($schoolFound) {
+                $schoolsStr = str_replace(['<td>', '</td>'], '', $line);
+                $schools    = explode(', ', $schoolsStr);
+
+                foreach ($schools as $school) {
+                    if (isset(Spell::ALL_SCHOOLS[$school])) {
+                        $schoolsMask |= Spell::ALL_SCHOOLS[$school];
+                    } else {
+                        $this->log->getSpellDataSpellSchoolNotFound($schoolsStr, $school);
+                    }
+                }
+                $schoolFound = false;
+                $schoolSet   = true;
+            } // Spell dispel type
+            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE)) {
+                $dispelTypeFound = true;
+            } // Triggered on the next line
+            else if ($dispelTypeFound) {
+                $dispelType = str_replace(['<td>', '</td>'], '', $line);
+                if (str_contains($dispelType, 'n/a')) {
+                    $dispelType = Spell::DISPEL_TYPE_NOT_AVAILABLE;
+                } else if (!in_array($dispelType, Spell::ALL_DISPEL_TYPES)) {
+                    $this->log->getSpellDataSpellDispelTypeNotFound($dispelType);
+
+                    $dispelType = Spell::DISPEL_TYPE_UNKNOWN;
+                }
+                $dispelTypeFound = false;
+                $dispelTypeSet   = true;
+            } // Cast time
+            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_CAST_TIME)) {
+                $castTimeFound = true;
+            } // Triggered on the next line
+            else if ($castTimeFound) {
+                $castTime = str_replace(['<td>', '</td>'], '', $line);
+                if (str_contains($castTime, 'n/a')) {
+                    $castTime = null;
+                } else if (str_contains($castTime, 'Instant')) {
+                    $castTime = 0;
+                } else {
+                    $castTime = CarbonInterval::fromString($castTime)->totalMilliseconds;
+                }
+                $castTimeFound = false;
+                $castTimeSet   = true;
+            } // Duration
+            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_DURATION)) {
+                $durationFound = true;
+            } // Triggered on the next line
+            else if ($durationFound) {
+                /** @noinspection HtmlDeprecatedAttribute */
+                $duration = str_replace(['<td width="100%">', '</td>'], '', $line);
+                if (str_contains($duration, 'n/a')) {
+                    $duration = null;
+                } else {
+                    $duration = CarbonInterval::fromString($duration)->totalMilliseconds;
+                }
+                $durationFound = false;
+                $durationSet   = true;
+            }
+        }
+
+        if (!$mechanicSet || !$schoolSet || !$dispelTypeSet || !$castTimeSet || !$durationSet) {
+            $this->log->getSpellDataDataNotSet($mechanicSet, $schoolSet, $dispelTypeSet, $castTimeSet, $durationSet);
+        }
+
+        return new SpellDataResult(
+            $spellId,
+            $mechanic,
+            $cooldownGroup,
+            $dispelType,
+            $iconName,
+            $name,
+            $schoolsMask,
+            $aura,
+            $castTime,
+            $duration
+        );
+    }
+
+
     public function sleep(int $seconds = 1): void
     {
         sleep($seconds);
+    }
+
+    public function getNpcPageHtml(GameVersion $gameVersion, Npc $npc): string
+    {
+        return $this->curlGet(
+            sprintf('https://wowhead.com/%snpc=%s/%s',
+                $gameVersion->key === GameVersion::GAME_VERSION_RETAIL ? '' : $gameVersion->key . '/',
+                $npc->id,
+                Str::slug($npc->name)
+            )
+        );
+    }
+
+    public function getSpellPageHtml(int $spellId): string
+    {
+        return $this->curlGet(
+            sprintf('https://wowhead.com/spell=%s',
+                $spellId
+            )
+        );
     }
 
     private function getStringBetween(string $string, string $start, string $end): string

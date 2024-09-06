@@ -23,17 +23,9 @@ class CreateMissingFloors extends Command
      */
     protected $description = 'Checks the database for dungeons without floors, and if found, looks into the translation files for floors to add and adds them.';
 
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function handle(): int
     {
-        /** @var Collection|Dungeon[] $dungeons */
+        /** @var Collection<Dungeon> $dungeons */
         $dungeons = Dungeon::all()->keyBy('key');
 
         foreach ($dungeons as $dungeon) {

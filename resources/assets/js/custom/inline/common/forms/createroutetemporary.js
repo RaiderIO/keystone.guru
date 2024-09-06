@@ -1,0 +1,3 @@
+class CommonFormsCreateroutetemporary extends CommonFormsCreatebase {
+
+}

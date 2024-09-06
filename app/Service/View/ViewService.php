@@ -16,15 +16,14 @@ use App\Models\PublishedState;
 use App\Models\Release;
 use App\Models\ReleaseChangelogCategory;
 use App\Models\RouteAttribute;
-use App\Models\Spell;
+use App\Models\Spell\Spell;
+use App\Models\User;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
-use App\Models\User;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\App;
 
 class ViewService implements ViewServiceInterface
 {
@@ -71,7 +70,7 @@ class ViewService implements ViewServiceInterface
             $allRegions    = GameServerRegion::all();
             $allExpansions = Expansion::with(['dungeons'])->orderBy('released_at', 'desc')->get();
 
-            /** @var Collection|Expansion[] $activeExpansions */
+            /** @var Collection<Expansion> $activeExpansions */
             $activeExpansions = Expansion::active()->with('dungeons')->orderBy('released_at', 'desc')->get();
 
             // Spells
@@ -121,14 +120,14 @@ class ViewService implements ViewServiceInterface
                 'characterClassSpecializations'   => CharacterClassSpecialization::all(),
                 'characterClasses'                => CharacterClass::with('specializations')->get(),
                 // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
-                'characterRacesClasses'           => CharacterRace::with(['classes:character_classes.id'])->get(),
+                'characterRacesClasses'           => CharacterRace::with(['classes:character_classes.id'])->orderBy('faction_id')->get(),
                 'allAffixes'                      => Affix::all(),
                 'allRouteAttributes'              => RouteAttribute::all(),
                 'allPublishedStates'              => PublishedState::all(),
                 'selectableSpellsByCategory'      => $selectableSpellsByCategory,
 
                 // Misc
-                'allGameVersions'                 => GameVersion::all(),
+                'allGameVersions'                 => GameVersion::active()->get(),
                 'activeExpansions'                => $activeExpansions, // Show most recent expansions first
                 'allExpansions'                   => $allExpansions,
                 'dungeonsByExpansionIdDesc'       => $allDungeonsByExpansionId,
@@ -162,13 +161,13 @@ class ViewService implements ViewServiceInterface
 
                 $allExpansions = Expansion::with(['dungeons'])->orderBy('released_at', 'desc')->get();
 
-                /** @var Collection|ExpansionData[] $expansionsData */
+                /** @var Collection<ExpansionData> $expansionsData */
                 $expansionsData = collect();
                 foreach ($allExpansions as $expansion) {
                     $expansionsData->put($expansion->shortname, $this->expansionService->getData($expansion, $gameServerRegion));
                 }
 
-                /** @var Collection|Expansion[] $activeExpansions */
+                /** @var Collection<Expansion> $activeExpansions */
                 $activeExpansions = Expansion::active()->with('dungeons')->orderBy('released_at', 'desc')->get();
 
                 // Build a list of all valid affix groups we may select across all currently active seasons

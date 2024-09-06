@@ -23,7 +23,7 @@ class ImportStringObjects
     }
 
     /**
-     * @return Collection|ImportWarning[]
+     * @return Collection<ImportWarning>
      */
     public function getWarnings(): Collection
     {
@@ -31,7 +31,7 @@ class ImportStringObjects
     }
 
     /**
-     * @return Collection|ImportError[]
+     * @return Collection<ImportError>
      */
     public function getErrors(): Collection
     {

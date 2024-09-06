@@ -1,0 +1,293 @@
+PUT _index_template/combat_log_events-template
+{
+  "index_patterns": [
+    "combat_log_events-*"
+  ],
+  "template": {
+    "settings": {
+      "index": {
+        "codec": "best_compression",
+        "refresh_interval": "1s",
+        "number_of_shards": "2",
+        "translog": {
+          "durability": "async"
+        },
+        "number_of_replicas": "1",
+        "plugins.index_state_management.rollover_alias":"combat_log_events"
+      }
+    },
+    "mappings": {
+      "dynamic": false,
+      "properties": {
+        "@timestamp": {
+          "format": "epoch_second",
+          "type": "date"
+        },
+        "run_id": {
+          "type": "keyword"
+        },
+        "challenge_mode_id": {
+          "type": "integer"
+        },
+        "level": {
+          "type": "integer"
+        },
+        "affix_id": {
+          "type": "integer"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "start": {
+          "format": "epoch_second",
+          "type": "date"
+        },
+        "end": {
+          "format": "epoch_second",
+          "type": "date"
+        },
+        "duration_ms": {
+          "type": "integer"
+        },
+        "ui_map_id": {
+          "type": "integer"
+        },
+        "pos_x": {
+          "type": "float"
+        },
+        "pos_y": {
+          "type": "float"
+        },
+        "pos_enemy_x": {
+          "type": "float"
+        },
+        "pos_enemy_y": {
+          "type": "float"
+        },
+        "event_type": {
+          "type": "keyword"
+        },
+        "characters": {
+          "type": "nested",
+          "dynamic": false,
+          "properties": {
+            "id": {
+              "type": "keyword"
+            },
+            "class_id": {
+              "type": "integer"
+            },
+            "race_id": {
+              "type": "integer"
+            }
+          }
+        },
+        "context": {
+          "type": "nested",
+          "dynamic": true,
+          "properties": {
+            "spell_id": {
+              "type": "integer"
+            },
+            "npc_id": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+PUT _plugins/_ism/policies/combat_log_events-ILM-policy
+{
+  "policy": {
+    "description": "Policy for Combat Log Events",
+    "default_state": "hot",
+    "states": [
+      {
+        "name": "hot",
+        "actions": [
+          {
+            "retry": {
+              "count": 3,
+              "backoff": "exponential",
+              "delay": "1m"
+            },
+            "rollover": {
+              "min_size": "50gb"
+            }
+          },
+          {
+            "retry": {
+              "count": 3,
+              "backoff": "exponential",
+              "delay": "1m"
+            },
+            "index_priority": {
+              "priority": 100
+            }
+          }
+        ],
+        "transitions": [
+          {
+            "state_name": "warm"
+          }
+        ]
+      },
+      {
+        "name": "warm",
+        "actions": [
+          {
+            "retry": {
+              "count": 3,
+              "backoff": "exponential",
+              "delay": "1m"
+            },
+            "replica_count": {
+              "number_of_replicas": 1
+            }
+          },
+          {
+            "retry": {
+              "count": 3,
+              "backoff": "exponential",
+              "delay": "1m"
+            },
+            "shrink": {
+              "num_new_shards": 1,
+              "target_index_name_template": {
+                "source": "{{ctx.index}}-shrink",
+                "lang": "mustache"
+              },
+              "force_unsafe": false
+            }
+          }
+        ],
+        "transitions": []
+      }
+    ],
+    "ism_template": [
+      {
+        "index_patterns": [
+          "combat_log_events-*"
+        ],
+        "priority": 2
+      }
+    ]
+  }
+}
+
+PUT /combat_log_events-000001
+{
+  "aliases": {
+    "combat_log_events": {
+      "is_write_index": true
+    }
+  },
+  "settings": {
+    "index": {
+      "codec": "best_compression",
+      "refresh_interval": "1s",
+      "number_of_shards": "2",
+      "translog": {
+        "durability": "async"
+      },
+      "number_of_replicas": "1"
+    }
+  },
+  "mappings": {
+    "dynamic": false,
+    "properties": {
+      "@timestamp": {
+        "format": "epoch_second",
+        "type": "date"
+      },
+      "run_id": {
+        "type": "keyword"
+      },
+      "challenge_mode_id": {
+        "type": "integer"
+      },
+      "key_level": {
+        "type": "integer"
+      },
+      "affix_id": {
+        "type": "integer"
+      },
+      "success": {
+        "type": "boolean"
+      },
+      "start": {
+        "format": "epoch_second",
+        "type": "date"
+      },
+      "end": {
+        "format": "epoch_second",
+        "type": "date"
+      },
+      "duration_ms": {
+        "type": "integer"
+      },
+      "ui_map_id": {
+        "type": "integer"
+      },
+      "pos_x": {
+        "type": "float"
+      },
+      "pos_y": {
+        "type": "float"
+      },
+      "pos_enemy_x": {
+        "type": "float"
+      },
+      "pos_enemy_y": {
+        "type": "float"
+      },
+      "event_type": {
+        "type": "keyword"
+      },
+      "characters": {
+        "type": "nested",
+        "dynamic": false,
+        "properties": {
+          "id": {
+            "type": "keyword"
+          },
+          "class_id": {
+            "type": "integer"
+          },
+          "race_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "context": {
+        "type": "nested",
+        "dynamic": true,
+        "properties": {
+          "spell_id": {
+            "type": "integer"
+          },
+          "npc_id": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }
+}
+
+POST /_aliases
+{
+  "actions": [
+    {
+      "add": {
+        "index": "combat_log_events-000001",
+        "alias": "combat_log_events",
+        "is_write_index": true
+      }
+    }
+  ]
+}

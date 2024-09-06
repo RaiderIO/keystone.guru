@@ -26,14 +26,6 @@ class RefreshAffixGroupEaseTiers extends Command
     protected $description = 'Refreshes the affix group ease tiers from Archon.gg';
 
     /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      */
     public function handle(

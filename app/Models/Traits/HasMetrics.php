@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property Collection|Metric[]            $metrics
- * @property Collection|MetricAggregation[] $metricAggregations
+ * @property Collection<Metric>            $metrics
+ * @property Collection<MetricAggregation> $metricAggregations
  *
  * @mixin Eloquent
  */

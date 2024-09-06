@@ -11,14 +11,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                             $id
- * @property int                             $season_id
- * @property int                             $expansion_id
- * @property int|null                        $seasonal_index
- * @property bool                            $confirmed
- * @property Season                          $season
- * @property Expansion                       $expansion
- * @property Collection|AffixGroupEaseTier[] $easetiers
+ * @property int                            $id
+ * @property int                            $season_id
+ * @property int                            $expansion_id
+ * @property int|null                       $seasonal_index
+ * @property bool                           $confirmed
+ * @property Season                         $season
+ * @property Expansion                      $expansion
+ * @property Collection<AffixGroupEaseTier> $easetiers
  *
  * @mixin Eloquent
  */

@@ -16,8 +16,8 @@ use App\Models\MountableArea;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\SeederModel;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,47 +28,51 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 /**
- * @property int                                     $id
- * @property int                                     $dungeon_id
- * @property int                                     $index
- * @property int|null                                $mdt_sub_level
- * @property int|null                                $ui_map_id
- * @property string                                  $name
- * @property bool                                    $default
- * @property bool                                    $facade
- * @property int                                     $min_enemy_size
- * @property int                                     $max_enemy_size
- * @property int                                     $enemy_engagement_max_range When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
- * @property int                                     $enemy_engagement_max_range_patrols The max range after which we're considering patrols
- * @property float                                   $ingame_min_x
- * @property float                                   $ingame_min_y
- * @property float                                   $ingame_max_x
- * @property float                                   $ingame_max_y
- * @property int|null                                $percentage_display_zoom
- * @property bool                                    $active
- * @property Dungeon                                 $dungeon
- * @property FloorUnion|null                         $floorUnion
- * @property Collection|Enemy[]                      $enemies
- * @property Collection|EnemyPack[]                  $enemypacks
- * @property Collection|EnemyPatrol[]                $enemypatrols
- * @property Collection|MapIcon[]                    $mapIcons
- * @property Collection|DungeonFloorSwitchMarker[]   $dungeonFloorSwitchMarkers
- * @property Collection|MountableArea[]              $mountableareas
- * @property Collection|FloorUnion[]                 $floorUnions
- * @property Collection|FloorUnionArea[]             $floorUnionAreas
- * @property Collection|Enemy[]                      $enemiesForExport
- * @property Collection|EnemyPack[]                  $enemyPacksForExport
- * @property Collection|EnemyPatrol[]                $enemyPatrolsForExport
- * @property Collection|MapIcon[]                    $mapIconsForExport
- * @property Collection|DungeonFloorSwitchMarker[]   $dungeonFloorSwitchMarkersForExport
- * @property Collection|MountableArea[]              $mountableAreasForExport
- * @property Collection|FloorUnion[]                 $floorUnionsForExport
- * @property Collection|FloorUnionArea[]             $floorUnionAreasForExport
- * @property Collection|FloorCoupling[]              $floorcouplings
- * @property Collection|DungeonSpeedrunRequiredNpc[] $dungeonspeedrunrequirednpcs
- * @property Collection|Floor[]                      $connectedFloors
- * @property Collection|Floor[]                      $directConnectedFloors
- * @property Collection|Floor[]                      $reverseConnectedFloors
+ * @property int                                    $id
+ * @property int                                    $dungeon_id
+ * @property int                                    $index
+ * @property int|null                               $mdt_sub_level
+ * @property int|null                               $ui_map_id
+ * @property string|null                            $map_name The map name that Blizzard gives to this floor
+ * @property string                                 $name
+ * @property bool                                   $default
+ * @property bool                                   $facade
+ * @property int                                    $min_enemy_size
+ * @property int                                    $max_enemy_size
+ * @property int|null                               $enemy_engagement_max_range When generating dungeon routes, this is the maximum range from engagement of an enemy where we consider enemies in the mapping to match up
+ * @property int|null                               $enemy_engagement_max_range_patrols The max range after which we're considering patrols
+ * @property float                                  $ingame_min_x
+ * @property float                                  $ingame_min_y
+ * @property float                                  $ingame_max_x
+ * @property float                                  $ingame_max_y
+ * @property int|null                               $percentage_display_zoom
+ * @property int|null                               $zoom_max
+ * @property bool                                   $active
+ *
+ * @property Dungeon                                $dungeon
+ * @property FloorUnion|null                        $floorUnion
+ *
+ * @property Collection<Enemy>                      $enemies
+ * @property Collection<EnemyPack>                  $enemypacks
+ * @property Collection<EnemyPatrol>                $enemypatrols
+ * @property Collection<MapIcon>                    $mapIcons
+ * @property Collection<DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkers
+ * @property Collection<MountableArea>              $mountableareas
+ * @property Collection<FloorUnion>                 $floorUnions
+ * @property Collection<FloorUnionArea>             $floorUnionAreas
+ * @property Collection<Enemy>                      $enemiesForExport
+ * @property Collection<EnemyPack>                  $enemyPacksForExport
+ * @property Collection<EnemyPatrol>                $enemyPatrolsForExport
+ * @property Collection<MapIcon>                    $mapIconsForExport
+ * @property Collection<DungeonFloorSwitchMarker>   $dungeonFloorSwitchMarkersForExport
+ * @property Collection<MountableArea>              $mountableAreasForExport
+ * @property Collection<FloorUnion>                 $floorUnionsForExport
+ * @property Collection<FloorUnionArea>             $floorUnionAreasForExport
+ * @property Collection<FloorCoupling>              $floorcouplings
+ * @property Collection<DungeonSpeedrunRequiredNpc> $dungeonspeedrunrequirednpcs
+ * @property Collection<Floor>                      $connectedFloors
+ * @property Collection<Floor>                      $directConnectedFloors
+ * @property Collection<Floor>                      $reverseConnectedFloors
  *
  * @method static Builder active()
  * @method static Builder indexOrFacade(MappingVersion $mappingVersion, int $floorIndex)
@@ -104,16 +108,21 @@ class Floor extends CacheModel implements MappingModelInterface
         'dungeon_id',
         'index',
         'mdt_sub_level',
+        'ui_map_id',
+        'map_name',
         'name',
         'default',
         'facade',
-        'ui_map_id',
+        'min_enemy_size',
+        'max_enemy_size',
         'enemy_engagement_max_range',
         'enemy_engagement_max_range_patrols',
         'ingame_min_x',
         'ingame_min_y',
         'ingame_max_x',
         'ingame_max_y',
+        'percentage_display_zoom',
+        'zoom_max',
         'active',
     ];
 
@@ -226,7 +235,7 @@ class Floor extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @return Collection|Floor[] A list of all connected floors, regardless of direction
+     * @return Collection<Floor> A list of all connected floors, regardless of direction
      */
     public function connectedFloors(): Collection
     {
@@ -301,7 +310,7 @@ class Floor extends CacheModel implements MappingModelInterface
     {
         $result = null;
 
-        /** @var Collection|DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers */
+        /** @var Collection<DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $this->dungeonFloorSwitchMarkers()
             ->where('target_floor_id', $targetFloorId)->get();
 

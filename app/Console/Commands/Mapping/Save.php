@@ -3,24 +3,30 @@
 namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
+use App\Models\CombatLog\CombatLogNpcSpellAssignment;
+use App\Models\CombatLog\CombatLogSpellUpdate;
+use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingCommitLog;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Npc;
-use App\Models\Spell;
+use App\Models\Npc\Npc;
+use App\Models\Spell\Spell;
 use App\Traits\SavesArrayToJsonFile;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class Save extends Command
 {
     use ExecutesShellCommands;
     use SavesArrayToJsonFile;
+
+    private const PROGRESS_BAR_FORMAT = ' %current%/%max% [%bar%] %percent:3s%% %message%';
 
     /**
      * The name and signature of the console command.
@@ -38,6 +44,7 @@ class Save extends Command
 
     /**
      * Execute the console command.
+     * @throws \Exception
      */
     public function handle(): int
     {
@@ -45,12 +52,14 @@ class Save extends Command
         $this->call('modelCache:clear');
 
         $dungeonDataDir = database_path('seeders/dungeondata/');
+        $combatLogDir   = database_path('seeders/combatlogs/');
 
         $this->saveMappingVersions($dungeonDataDir);
         $this->saveMappingCommitLogs($dungeonDataDir);
         $this->saveDungeons($dungeonDataDir);
         $this->saveNpcs($dungeonDataDir);
         $this->saveSpells($dungeonDataDir);
+        $this->saveCombatlogData($combatLogDir);
         $this->saveDungeonData($dungeonDataDir);
 
         $mappingBackupDir = config('keystoneguru.mapping_backup_dir');
@@ -62,7 +71,7 @@ class Save extends Command
             $tmpZippedFilePath = '/tmp';
             $zippedFileName    = 'mapping.gz';
             $this->info(sprintf('Creating archive of mapping to %s/%s', $tmpZippedFilePath, $zippedFileName));
-            $this->shell(sprintf('tar -zcf %s/%s %s', $tmpZippedFilePath, $zippedFileName, $dungeonDataDir));
+            $this->shell(sprintf('tar -zcf %s/%s -C %s .', $tmpZippedFilePath, $zippedFileName, $dungeonDataDir));
 
             $this->info(sprintf('Saving backup of mapping to %s/%s', $targetDir, $zippedFileName));
             $this->shell([
@@ -75,6 +84,9 @@ class Save extends Command
         return 0;
     }
 
+    /**
+     * @throws \Exception
+     */
     private function saveMappingVersions(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
@@ -91,6 +103,9 @@ class Save extends Command
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     private function saveMappingCommitLogs(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
@@ -107,6 +122,9 @@ class Save extends Command
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     private function saveDungeons(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
@@ -122,6 +140,7 @@ class Save extends Command
                 'id',
                 'expansion_id',
                 'zone_id',
+                'instance_id',
                 'mdt_id',
                 'key',
                 'name',
@@ -136,7 +155,8 @@ class Save extends Command
     }
 
     /**
-     * @param  $dungeonDataDir  string
+     * @param string $dungeonDataDir
+     * @throws \Exception
      */
     private function saveNpcs(string $dungeonDataDir): void
     {
@@ -144,7 +164,13 @@ class Save extends Command
         $this->info('Saving global NPCs');
 
         // Save all NPCs which aren't directly tied to a dungeon
-        $npcs = Npc::without(['spells', 'enemyForces'])->with(['npcspells', 'npcEnemyForces'])->where('dungeon_id', -1)->get()->values();
+        /** @var Collection<Npc> $npcs */
+        $npcs = Npc::without(['characteristics', 'spells', 'enemyForces'])
+            ->with(['npcCharacteristics', 'npcSpells', 'npcEnemyForces'])
+            ->where('dungeon_id', -1)
+            ->get()
+            ->values();
+
         $npcs->makeHidden(['type', 'class']);
         foreach ($npcs as $item) {
             $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
@@ -154,36 +180,60 @@ class Save extends Command
     }
 
     /**
-     * @param  $dungeonDataDir  string
+     * @param string $dungeonDataDir
+     * @throws \Exception
      */
     private function saveSpells(string $dungeonDataDir): void
     {
         // Save all spells
         $this->info('Saving Spells');
 
-        $spells = Spell::all();
+        $spells = Spell::with('spellDungeons')->get();
         foreach ($spells as $spell) {
-            $spell->makeHidden(['icon_url']);
+            $spell->makeHidden(['icon_url'])->makeVisible(['spellDungeons']);
         }
 
         $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');
     }
 
     /**
-     * @param  $dungeonDataDir  string
+     * @param string $combatlogDir
+     * @return void
+     * @throws \Exception
+     */
+    private function saveCombatlogData(string $combatlogDir): void
+    {
+        // Save all spells
+        $this->info('Saving Combatlog data');
+
+        $this->saveDataToJsonFile(CombatLogNpcSpellAssignment::all()->toArray(), $combatlogDir, 'combat_log_npc_spell_assignments.json');
+        $this->saveDataToJsonFile(CombatLogSpellUpdate::all()->toArray(), $combatlogDir, 'combat_log_spell_updates.json');
+        $this->saveDataToJsonFile(ParsedCombatLog::all()->toArray(), $combatlogDir, 'parsed_combat_logs.json');
+    }
+
+    /**
+     * @param string $dungeonDataDir
+     * @throws \Exception
      */
     private function saveDungeonData(string $dungeonDataDir): void
     {
-        foreach (Dungeon::with(['dungeonRoutesForExport'])->get() as $dungeon) {
-            /** @var $dungeon Dungeon */
-            $this->info(sprintf('- Saving dungeon %s', __($dungeon->name)));
+        // Save all spells
+        $this->info('Saving Dungeon data');
+        $dungeons = Dungeon::with(['dungeonRoutesForExport'])->get();
+        /** @var Dungeon $lastDungeon */
+        $lastDungeon = $dungeons->last();
+
+        $this->withProgressBar($dungeons, function (Dungeon $dungeon, ProgressBar $progressBar) use ($dungeonDataDir, $lastDungeon) {
+            $progressBar->setFormat(self::PROGRESS_BAR_FORMAT);
+            $progressBar->maxSecondsBetweenRedraws(0.1);
+            $progressBar->setMessage(__($dungeon->name));
+
 
             $rootDirPath = sprintf('%s%s/%s', $dungeonDataDir, $dungeon->expansion->shortname, $dungeon->key);
 
             $this->saveDungeonDungeonRoutes($dungeon, $rootDirPath);
             $this->saveDungeonNpcs($dungeon, $rootDirPath);
 
-            /** @var Dungeon $dungeon */
             $floors = $dungeon->floors()->with([
                 'enemyPacksForExport',
                 'enemyPatrolsForExport',
@@ -197,9 +247,17 @@ class Save extends Command
             foreach ($floors as $floor) {
                 $this->saveFloor($floor, $rootDirPath);
             }
-        }
+
+            if ($dungeon->id === $lastDungeon->id) {
+                $progressBar->setMessage('Completed!');
+            }
+        });
+        $this->output->writeln('');
     }
 
+    /**
+     * @throws \Exception
+     */
     private function saveDungeonDungeonRoutes(Dungeon $dungeon, string $rootDirPath): void
     {
         // Demo routes, load it in a specific way to make it easier to import it back in again
@@ -212,7 +270,8 @@ class Save extends Command
             // for each and every re-import
             $demoRoute->setHidden(['id', 'updated_at', 'thumbnail_refresh_queued_at', 'thumbnail_updated_at', 'unlisted',
                                    'published_at', 'faction', 'specializations', 'classes', 'races', 'affixes',
-                                   'expires_at', 'views', 'views_embed', 'popularity', 'pageviews', 'dungeon', 'mappingVersion']);
+                                   'expires_at', 'views', 'views_embed', 'popularity', 'pageviews', 'dungeon', 'mappingVersion',
+                                   'season']);
             $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
                               'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killZones', 'enemyRaidMarkers',
                               'pridefulEnemies', 'mapicons']);
@@ -289,17 +348,20 @@ class Save extends Command
             }
         }
 
-        if ($dungeon->dungeonRoutesForExport->isNotEmpty()) {
-            $this->info(sprintf('-- Saving %s dungeonroutes', $dungeon->dungeonRoutesForExport->count()));
-        }
+//        if ($dungeon->dungeonRoutesForExport->isNotEmpty()) {
+//            $this->info(sprintf('-- Saving %s dungeonroutes', $dungeon->dungeonRoutesForExport->count()));
+//        }
 
         $this->saveDataToJsonFile($dungeon->dungeonRoutesForExport->toArray(), $rootDirPath, 'dungeonroutes.json');
     }
 
+    /**
+     * @throws \Exception
+     */
     private function saveDungeonNpcs(Dungeon $dungeon, string $rootDirPath): void
     {
-        $npcs = Npc::without(['spells', 'enemyForces'])
-            ->with(['npcspells', 'npcEnemyForces'])
+        $npcs = Npc::without(['characteristics', 'spells', 'enemyForces'])
+            ->with(['npcCharacteristics', 'npcSpells', 'npcEnemyForces'])
             ->where('dungeon_id', $dungeon->id)
             ->get()
             ->makeHidden(['type', 'class'])
@@ -310,18 +372,21 @@ class Save extends Command
         }
 
         // Save NPC data in the root of the dungeon folder
-        if ($npcs->count() > 0) {
-            $this->info(sprintf('-- Saving %s npcs', $npcs->count()));
-        }
+//        if ($npcs->count() > 0) {
+//            $this->info(sprintf('-- Saving %s npcs', $npcs->count()));
+//        }
 
         $this->saveDataToJsonFile($npcs, $rootDirPath, 'npcs.json');
     }
 
+    /**
+     * @throws \Exception
+     */
     private function saveFloor(Floor $floor, string $rootDirPath): void
     {
-        $this->info(sprintf('-- Saving floor %s', __($floor->name)));
+//        $this->info(sprintf('-- Saving floor %s', __($floor->name)));
         // Only export NPC->id, no need to store the full npc in the enemy
-        $enemies      = $floor->enemiesForExport()->without(['npc', 'type'])->get()->values();
+        $enemies      = $floor->enemiesForExport()->without(['npc', 'type'])->get()->makeVisible(['mdt_scale'])->values();
         $enemyPacks   = $floor->enemyPacksForExport->values();
         $enemyPatrols = $floor->enemyPatrolsForExport->values();
         /** @var \Illuminate\Database\Eloquent\Collection $dungeonFloorSwitchMarkers */
@@ -357,9 +422,9 @@ class Save extends Command
 
         foreach ($result as $category => $categoryData) {
             // Save enemies, packs, patrols, markers on a per-floor basis
-            if ($categoryData->count() > 0) {
-                $this->info(sprintf('--- Saving %s %s', $categoryData->count(), $category));
-            }
+//            if ($categoryData->count() > 0) {
+//                $this->info(sprintf('--- Saving %s %s', $categoryData->count(), $category));
+//            }
 
             $this->saveDataToJsonFile($categoryData, sprintf('%s/%s', $rootDirPath, $floor->index), sprintf('%s.json', $category));
         }

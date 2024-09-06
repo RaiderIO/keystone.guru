@@ -5,13 +5,14 @@ namespace App\Service\MDT;
 use Illuminate\Support\Facades\Artisan;
 use Lua;
 
-class MDTBaseService
+abstract class MDTBaseService
 {
     /**
      * Gets a Lua instance and load all the required files in it.
      */
     protected function getLua(): Lua
     {
+        /** @phpstan-ignore-next-line */
         $lua = new Lua();
 
         // Load libraries (yeah can do this with ->library function as well)

@@ -1,19 +1,30 @@
 @inject('seasonService', 'App\Service\Season\SeasonService')
 <?php
-/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
-/** @var $defaultSelected array */
-/** @var $dungeonSelector string|null */
-/** @var $affixes \Illuminate\Support\Collection */
-/** @var $expansionsData \Illuminate\Support\Collection|\App\Service\Expansion\ExpansionData[] */
-/** @var $allAffixGroups \Illuminate\Support\Collection|\App\Models\AffixGroup\AffixGroup[] */
-/** @var $allExpansions \Illuminate\Support\Collection */
-/** @var $currentAffixes \Illuminate\Support\Collection|\App\Models\AffixGroup\AffixGroup[] */
-/** @var $dungeonExpansions array */
-/** @var $currentSeason \Illuminate\Support\Collection|\App\Models\Season */
-/** @var $nextSeason \Illuminate\Support\Collection|\App\Models\Season|null */
+
+use App\Models\Affix;
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Expansion;
+use App\Models\Season;
+use App\Service\Expansion\ExpansionData;
+use Illuminate\Support\Collection;
+
 /** This is the display of affixes when selecting them when creating a new route */
 
-/** @var \Illuminate\Support\Collection|\App\Models\AffixGroup\AffixGroup[] $affixGroups */
+/**
+ * @var DungeonRoute              $dungeonroute
+ * @var array                     $defaultSelected
+ * @var string|null               $dungeonSelector
+ * @var Collection<Affix>         $affixes
+ * @var Collection<ExpansionData> $expansionsData
+ * @var Collection<AffixGroup>    $allAffixGroups
+ * @var Collection<Expansion>     $allExpansions
+ * @var Collection<AffixGroup>    $currentAffixes
+ * @var array                     $dungeonExpansions
+ * @var Season                    $currentSeason
+ * @var Season|null               $nextSeason
+ * @var Collection<AffixGroup>    $affixGroups
+ */
 // If route was set, initialize with the affixes of the current route so that the user may adjust its selection
 if (isset($dungeonroute)) {
     $defaultSelected     = $dungeonroute->affixgroups->pluck(['affix_group_id'])->toArray();
@@ -28,8 +39,8 @@ $names           ??= true;
 $id              ??= 'route_select_affixes';
 
 $allAffixGroupsWithSeasons = $allAffixGroups
-    ->merge($currentSeason->affixgroups)
-    ->merge($nextSeason?->affixgroups ?? collect());
+    ->merge($currentSeason->affixGroups)
+    ->merge($nextSeason?->affixGroups ?? collect());
 ?>
 
 @include('common.general.inline', ['path' => 'common/group/affixes', 'options' => [
@@ -52,7 +63,7 @@ $allAffixGroupsWithSeasons = $allAffixGroups
     {!! Form::select($id . '[]', $allAffixGroupsWithSeasons->pluck('id', 'id'), null, ['id' => $id, 'class' => 'form-control affixselect d-none', 'multiple' => 'multiple']) !!}
     <div id="{{ $id }}_list_custom" class="affix_list col-lg-12">
         @if($nextSeason !== null)
-            @foreach($nextSeason->affixgroups as $affixGroup)
+            @foreach($nextSeason->affixGroups as $affixGroup)
                 @include('common.group.affixrow', ['affixGroup' => $affixGroup, 'season' => $nextSeason, 'expansionKey' => $nextSeason->expansion->shortname])
             @endforeach
         @endif

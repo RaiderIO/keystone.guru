@@ -1,0 +1,824 @@
+[
+    {
+        "id": 210264,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 118076,
+        "encounter_id": null,
+        "name": "Bee Wrangler",
+        "base_health": 5545770,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 441119
+            },
+            {
+                "spell_id": 441344
+            },
+            {
+                "spell_id": 441353
+            },
+            {
+                "spell_id": 456891
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 210265,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 121054,
+        "encounter_id": null,
+        "name": "Worker Bee",
+        "base_health": 5545770,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 441410
+            },
+            {
+                "spell_id": 441413
+            },
+            {
+                "spell_id": 443487
+            },
+            {
+                "spell_id": 443491
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 210267,
+        "dungeon_id": 109,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 117177,
+        "encounter_id": null,
+        "name": "I'pa",
+        "base_health": 38820390,
+        "health_percentage": 100,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 439031
+            },
+            {
+                "spell_id": 439325
+            },
+            {
+                "spell_id": 439365
+            },
+            {
+                "spell_id": 439645
+            },
+            {
+                "spell_id": 439991
+            },
+            {
+                "spell_id": 440147
+            },
+            {
+                "spell_id": 442108
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 210269,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 118999,
+        "encounter_id": null,
+        "name": "Hired Muscle",
+        "base_health": 8873232,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 434756
+            },
+            {
+                "spell_id": 434758
+            },
+            {
+                "spell_id": 463218
+            },
+            {
+                "spell_id": 463220
+            },
+            {
+                "spell_id": 463227
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 210270,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 117828,
+        "encounter_id": null,
+        "name": "Brew Drop",
+        "base_health": 1885562,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 441179
+            },
+            {
+                "spell_id": 449702
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 210271,
+        "dungeon_id": 109,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 116429,
+        "encounter_id": null,
+        "name": "Brew Master Aldryr",
+        "base_health": 38820390,
+        "health_percentage": 100,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 432182
+            },
+            {
+                "spell_id": 432196
+            },
+            {
+                "spell_id": 432229
+            },
+            {
+                "spell_id": 442525
+            },
+            {
+                "spell_id": 442611
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 214661,
+        "dungeon_id": 109,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 118000,
+        "encounter_id": null,
+        "name": "Goldie Baronbottom",
+        "base_health": 44366160,
+        "health_percentage": 100,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 435788
+            },
+            {
+                "spell_id": 436592
+            },
+            {
+                "spell_id": 436624
+            },
+            {
+                "spell_id": 436640
+            },
+            {
+                "spell_id": 436644
+            },
+            {
+                "spell_id": 442484
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 214668,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 119026,
+        "encounter_id": null,
+        "name": "Venture Co. Patron",
+        "base_health": 4991193,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 434773
+            },
+            {
+                "spell_id": 441408
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 214673,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 119436,
+        "encounter_id": null,
+        "name": "Flavor Scientist",
+        "base_health": 5545770,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 441627
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 214697,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 121036,
+        "encounter_id": null,
+        "name": "Chef Chewie",
+        "base_health": 16637310,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 434743
+            },
+            {
+                "spell_id": 434745
+            },
+            {
+                "spell_id": 435000
+            },
+            {
+                "spell_id": 463206
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 214920,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 121037,
+        "encounter_id": null,
+        "name": "Tasting Room Attendant",
+        "base_health": 4991193,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 215819,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 119017,
+        "encounter_id": null,
+        "name": "Thirsty Patron",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 217126,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 119018,
+        "encounter_id": null,
+        "name": "Over-Indulged Patron",
+        "base_health": 1109154,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 218002,
+        "dungeon_id": 109,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 120557,
+        "encounter_id": null,
+        "name": "Benk Buzzbee",
+        "base_health": 38820390,
+        "health_percentage": 100,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 218671,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 119013,
+        "encounter_id": null,
+        "name": "Venture Co. Pyromaniac",
+        "base_health": 4991193,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 437721
+            },
+            {
+                "spell_id": 437733
+            },
+            {
+                "spell_id": 437956
+            },
+            {
+                "spell_id": 441408
+            },
+            {
+                "spell_id": 453909
+            },
+            {
+                "spell_id": 453989
+            },
+            {
+                "spell_id": 454318
+            },
+            {
+                "spell_id": 454319
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 218865,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 121060,
+        "encounter_id": null,
+        "name": "Bee-let",
+        "base_health": 1109154,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 441397
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 218876,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 74917,
+        "encounter_id": null,
+        "name": "Rat",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 218877,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 12191,
+        "encounter_id": null,
+        "name": "Cockroach",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 219588,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 121109,
+        "encounter_id": null,
+        "name": "Yes Man",
+        "base_health": 5545770,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 439403
+            },
+            {
+                "spell_id": 439468
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 220060,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 118003,
+        "encounter_id": null,
+        "name": "Taste Tester",
+        "base_health": 5545770,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 441214
+            },
+            {
+                "spell_id": 441242
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 220141,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 118378,
+        "encounter_id": null,
+        "name": "Royal Jelly Purveyor",
+        "base_health": 5545770,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 440687
+            },
+            {
+                "spell_id": 440887
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 220946,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 108585,
+        "encounter_id": null,
+        "name": "Venture Co. Honey Harvester",
+        "base_health": 8873232,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 442589
+            },
+            {
+                "spell_id": 442995
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 222964,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 119436,
+        "encounter_id": null,
+        "name": "Flavor Scientist",
+        "base_health": 5545770,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 441627
+            },
+            {
+                "spell_id": 447046
+            },
+            {
+                "spell_id": 447060
+            },
+            {
+                "spell_id": 447135
+            },
+            {
+                "spell_id": 447136
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 223423,
+        "dungeon_id": 109,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 121087,
+        "encounter_id": null,
+        "name": "Careless Hopgoblin",
+        "base_health": 8873232,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 448619
+            },
+            {
+                "spell_id": 448920
+            },
+            {
+                "spell_id": 448935
+            },
+            {
+                "spell_id": 448977
+            },
+            {
+                "spell_id": 449090
+            },
+            {
+                "spell_id": 449106
+            }
+        ],
+        "npc_enemy_forces": []
+    }
+]

@@ -2,7 +2,7 @@
 
 namespace App\Logic\CombatLog\SpecialEvents;
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 interface SpecialEventBuilderInterface
 {

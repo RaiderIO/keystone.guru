@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\NpcClass;
+use App\Models\Npc\NpcClass;
 use Illuminate\Database\Seeder;
 
 class NpcClassesSeeder extends Seeder implements TableSeederInterface
@@ -12,11 +12,10 @@ class NpcClassesSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding known Npc classes');
-
         $npcClassAttributes = [];
-        foreach (NpcClass::ALL as $key) {
+        foreach (NpcClass::ALL as $key => $id) {
             $npcClassAttributes[] = [
+                'id'   => $id,
                 'key'  => $key,
                 'name' => sprintf('npcclasses.%s', $key),
             ];
@@ -30,5 +29,11 @@ class NpcClassesSeeder extends Seeder implements TableSeederInterface
         return [
             NpcClass::class,
         ];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

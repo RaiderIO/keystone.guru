@@ -56,7 +56,7 @@ final class GenericDataTest extends PublicTestCase
         // Act
         /** @var AdvancedCombatLogEvent $parseEventResult */
         $parseEventResult = $combatLogEntry->parseEvent();
-        $genericData = $parseEventResult->getGenericData();
+        $genericData      = $parseEventResult->getGenericData();
 
         // Assert
         Assert::assertEquals($expectedSourceGuid, $genericData->getSourceGuid());

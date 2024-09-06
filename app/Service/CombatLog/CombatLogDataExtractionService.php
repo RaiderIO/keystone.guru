@@ -2,47 +2,67 @@
 
 namespace App\Service\CombatLog;
 
-use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
+use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatLogEntry;
-use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
-use App\Logic\CombatLog\SpecialEvents\MapChange;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
-use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
-use App\Models\Floor\Floor;
-use App\Models\Npc;
+use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
+use App\Service\CombatLog\DataExtractors\DataExtractorInterface;
+use App\Service\CombatLog\DataExtractors\FloorDataExtractor;
+use App\Service\CombatLog\DataExtractors\NpcUpdateDataExtractor;
+use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
+use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
+use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLoggingInterface;
-use App\Service\CombatLog\Models\ExtractedDataResult;
 use App\Service\Season\SeasonServiceInterface;
+use App\Service\Wowhead\WowheadServiceInterface;
+use Illuminate\Support\Collection;
 
 class CombatLogDataExtractionService implements CombatLogDataExtractionServiceInterface
 {
-    public function __construct(private readonly CombatLogServiceInterface $combatLogService, private readonly SeasonServiceInterface $seasonService, private readonly CombatLogDataExtractionServiceLoggingInterface $log)
-    {
+    /**
+     * @var int[] Additional NPC IDs that are summoned but do not have a SUMMON combat log event.
+     */
+    public const SUMMONED_NPC_IDS = [
+        // Storm, Earth and Fire talent (Monk)
+        69791, // Fire Spirit
+        69792, // Earth Spirit
+    ];
+
+    /** @var Collection<DataExtractorInterface> */
+    private Collection $dataExtractors;
+
+    public function __construct(
+        private readonly CombatLogServiceInterface                      $combatLogService,
+        private readonly SeasonServiceInterface                         $seasonService,
+        private readonly WowheadServiceInterface                        $wowheadService,
+        private readonly CombatLogDataExtractionServiceLoggingInterface $log
+    ) {
+        $this->dataExtractors = collect([
+            new CreateMissingNpcDataExtractor(),
+            new NpcUpdateDataExtractor(),
+            new FloorDataExtractor(),
+            new SpellDataExtractor($this->wowheadService),
+        ]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function extractData(string $filePath): ExtractedDataResult
     {
         $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
 
-        /** @var Dungeon|null $dungeon */
-        $dungeon = null;
-        /** @var Floor|null $currentFloor */
-        $currentFloor    = null;
-        $checkedNpcIds   = collect();
-        $currentKeyLevel = 1;
-        /** @var AffixGroup|null $currentKeyAffixGroup */
-        $currentKeyAffixGroup = null;
+        $currentDungeon = null;
 
         $result = new ExtractedDataResult();
 
-        $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr) use (&$result, &$dungeon, &$currentFloor, &$checkedNpcIds, &$currentKeyLevel, &$currentKeyAffixGroup) {
-            $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => $rawEvent, 'lineNr' => $lineNr]);
+        foreach ($this->dataExtractors as $dataExtractor) {
+            $dataExtractor->beforeExtract($result, $filePath);
+        }
+
+        $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
+        use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds) {
+            $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => trim($rawEvent), 'lineNr' => $lineNr]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
             $parsedEvent    = $combatLogEntry->parseEvent([], $combatLogVersion);
@@ -53,107 +73,77 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                 return $parsedEvent;
             }
 
-            // One way or another, enforce we extract the dungeon from the combat log
-            if ($parsedEvent instanceof ChallengeModeStart) {
-                $dungeon = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeID())->firstOrFail();
+            // Override the current data if we can, otherwise default back to whatever we parsed before
+            $currentDungeon = $this->extractDungeon($currentDungeon, $parsedEvent) ?? $currentDungeon;
 
-                $currentKeyLevel = $parsedEvent->getKeystoneLevel();
+            if ($currentDungeon === null) {
+                $this->log->extractDataDungeonNotSet();
 
-                // Find the correct affix groups that match the affix combination the dungeon was started with
-                $currentSeasonForDungeon = $dungeon->getActiveSeason($this->seasonService);
-                if ($currentSeasonForDungeon !== null) {
-                    $affixGroups = AffixGroup::findMatchingAffixGroupsForAffixIds(
-                        $currentSeasonForDungeon,
-                        collect($parsedEvent->getAffixIDs())
-                    );
-
-                    /** @var AffixGroup|null $currentKeyAffixGroup */
-                    $currentKeyAffixGroup = $affixGroups->first();
-                }
-
-                $this->log->extractDataSetChallengeMode(__($dungeon->name, [], 'en_US'), $currentKeyLevel, $currentKeyAffixGroup->getTextAttribute());
-            } else if ($parsedEvent instanceof ZoneChange) {
-                if ($currentKeyLevel !== 1) {
-                    $this->log->extractDataSetZoneFailedChallengeModeActive();
-                } else {
-                    $dungeon = Dungeon::where('map_id', $parsedEvent->getZoneId())->firstOrFail();
-
-                    $this->log->extractDataSetZone(__($dungeon->name, [], 'en_US'));
-                }
+                return $parsedEvent;
             }
 
-            // Ensure we know the floor
-            if ($parsedEvent instanceof MapChange) {
-                $previousFloor = $currentFloor;
-
-                $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID(), $dungeon->id);
-
-                $newIngameMinX = round($parsedEvent->getXMin(), 2);
-                $newIngameMinY = round($parsedEvent->getYMin(), 2);
-                $newIngameMaxX = round($parsedEvent->getXMax(), 2);
-                $newIngameMaxY = round($parsedEvent->getYMax(), 2);
-
-                // Ensure we have the correct bounds for a floor while we're at it
-                if ($newIngameMinX !== $currentFloor->ingame_min_x || $newIngameMinY !== $currentFloor->ingame_min_y ||
-                    $newIngameMaxX !== $currentFloor->ingame_max_x || $newIngameMaxY !== $currentFloor->ingame_max_y) {
-                    $currentFloor->update([
-                        'ingame_min_x' => $newIngameMinX,
-                        'ingame_min_y' => $newIngameMinY,
-                        'ingame_max_x' => $newIngameMaxX,
-                        'ingame_max_y' => $newIngameMaxY,
-                    ]);
-                    $result->updatedFloor();
-                }
-
-                if ($previousFloor !== null && $previousFloor !== $currentFloor) {
-                    $assignedFloor = $previousFloor->ensureConnectionToFloor($currentFloor);
-                    $assignedFloor = $currentFloor->ensureConnectionToFloor($previousFloor) || $assignedFloor;
-
-                    if ($assignedFloor) {
-                        $result->updatedFloorConnection();
-
-                        $this->log->extractDataAddedNewFloorConnection(
-                            $previousFloor->id,
-                            $currentFloor->id
-                        );
-                    }
-                }
-            }
-
-            if ($parsedEvent instanceof AdvancedCombatLogEvent) {
-                $guid = $parsedEvent->getAdvancedData()->getInfoGuid();
-
-                if ($guid instanceof Creature && $checkedNpcIds->search($guid->getId()) === false) {
-                    $npc = Npc::find($guid->getId());
-
-                    if ($npc === null) {
-                        $this->log->extractDataNpcNotFound($guid->getId());
-                    } else {
-                        // Calculate the base health based on the current key level + current max hp
-                        $newBaseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
-                                $currentKeyLevel,
-                                $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_FORTIFIED) ?? false,
-                                $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_TYRANNICAL) ?? false,
-                                $currentKeyAffixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false,
-                            ));
-
-                        if ($npc->base_health !== $newBaseHealth) {
-                            $npc->update([
-                                'base_health' => $newBaseHealth,
-                            ]);
-
-                            $result->updatedNpc();
-
-                            $this->log->extractDataUpdatedNpc($newBaseHealth);
-                        }
-
-                        $checkedNpcIds->push($npc->id);
-                    }
-                }
+            foreach ($this->dataExtractors as $dataExtractor) {
+                $dataExtractor->extractData($result, $currentDungeon, $parsedEvent);
             }
 
             return $parsedEvent;
         });
+
+        // Remove the lineNr context since we stopped parsing lines, don't let the last line linger in the context
+        $this->log->removeContext('lineNr');
+
+        foreach ($this->dataExtractors as $dataExtractor) {
+            $dataExtractor->afterExtract($result, $filePath);
+        }
+
+        return $result;
+    }
+
+    private function extractDungeon(?DataExtractionCurrentDungeon $currentDungeon, BaseEvent $parsedEvent): ?DataExtractionCurrentDungeon
+    {
+        $result = null;
+
+        // One way or another, enforce we extract the dungeon from the combat log
+        if ($parsedEvent instanceof ChallengeModeStart) {
+            $dungeon = Dungeon::where('challenge_mode_id', $parsedEvent->getChallengeModeID())->firstOrFail();
+
+            $currentKeyLevel      = $parsedEvent->getKeystoneLevel();
+            $currentKeyAffixGroup = null;
+
+            // Find the correct affix groups that match the affix combination the dungeon was started with
+            $currentSeasonForDungeon = $dungeon->getActiveSeason($this->seasonService);
+            if ($currentSeasonForDungeon !== null) {
+                $affixGroups = AffixGroup::findMatchingAffixGroupsForAffixIds(
+                    $currentSeasonForDungeon,
+                    collect($parsedEvent->getAffixIDs())
+                );
+
+                /** @var AffixGroup|null $currentKeyAffixGroup */
+                $currentKeyAffixGroup = $affixGroups->first();
+            }
+
+            $result = new DataExtractionCurrentDungeon($dungeon, $currentKeyLevel, $currentKeyAffixGroup);
+
+            $this->log->extractDataSetChallengeMode(
+                __($dungeon->name, [], 'en_US'),
+                $currentKeyLevel,
+                optional($currentKeyAffixGroup)->getTextAttribute()
+            );
+        } else if ($parsedEvent instanceof ZoneChange) {
+            if ($currentDungeon?->keyLevel !== null) {
+                $this->log->extractDataSetZoneFailedChallengeModeActive();
+            } else {
+                $dungeon = Dungeon::firstWhere('map_id', $parsedEvent->getZoneId());
+
+                if ($dungeon === null) {
+                    $this->log->extractDataZoneChangeDungeonNotFound($parsedEvent->getZoneId(), $parsedEvent->getZoneName());
+                } else {
+                    $result = new DataExtractionCurrentDungeon($dungeon);
+
+                    $this->log->extractDataZoneChangeSetZone(__($dungeon->name, [], 'en_US'));
+                }
+            }
+        }
 
         return $result;
     }

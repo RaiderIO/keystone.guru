@@ -8,6 +8,7 @@
         "floor_id": 210,
         "mdt_id": 42,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -20,7 +21,7 @@
         "dungeon_difficulty": null,
         "lat": -107.8850524165,
         "lng": 203.09667030882,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38366,
@@ -31,6 +32,7 @@
         "floor_id": 210,
         "mdt_id": 10,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -43,7 +45,7 @@
         "dungeon_difficulty": null,
         "lat": -106.41718733615,
         "lng": 204.08823698552,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38367,
@@ -54,6 +56,7 @@
         "floor_id": 210,
         "mdt_id": 17,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -66,7 +69,7 @@
         "dungeon_difficulty": null,
         "lat": -108.22279128455,
         "lng": 205.26166305271,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38368,
@@ -77,6 +80,7 @@
         "floor_id": 210,
         "mdt_id": 11,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -89,7 +93,7 @@
         "dungeon_difficulty": null,
         "lat": -111.15625,
         "lng": 199.5,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38369,
@@ -100,6 +104,7 @@
         "floor_id": 210,
         "mdt_id": 3,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -112,7 +117,7 @@
         "dungeon_difficulty": null,
         "lat": -112.34375,
         "lng": 201.9375,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38370,
@@ -123,6 +128,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -135,7 +141,7 @@
         "dungeon_difficulty": null,
         "lat": -112.8125,
         "lng": 200.1875,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38371,
@@ -146,6 +152,7 @@
         "floor_id": 210,
         "mdt_id": 45,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -169,6 +176,7 @@
         "floor_id": 210,
         "mdt_id": 12,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -192,6 +200,7 @@
         "floor_id": 210,
         "mdt_id": 4,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -215,6 +224,7 @@
         "floor_id": 210,
         "mdt_id": 7,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -238,6 +248,7 @@
         "floor_id": 210,
         "mdt_id": 46,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -261,6 +272,7 @@
         "floor_id": 210,
         "mdt_id": 4,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -284,6 +296,7 @@
         "floor_id": 210,
         "mdt_id": 9,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -307,6 +320,7 @@
         "floor_id": 210,
         "mdt_id": 12,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -330,6 +344,7 @@
         "floor_id": 210,
         "mdt_id": 28,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -353,6 +368,7 @@
         "floor_id": 210,
         "mdt_id": 13,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -376,6 +392,7 @@
         "floor_id": 210,
         "mdt_id": 26,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -399,6 +416,7 @@
         "floor_id": 210,
         "mdt_id": 9,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -422,6 +440,7 @@
         "floor_id": 210,
         "mdt_id": 8,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -445,6 +464,7 @@
         "floor_id": 210,
         "mdt_id": 7,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -468,6 +488,7 @@
         "floor_id": 210,
         "mdt_id": 8,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -491,6 +512,7 @@
         "floor_id": 210,
         "mdt_id": 5,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -514,6 +536,7 @@
         "floor_id": 210,
         "mdt_id": 8,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -537,6 +560,7 @@
         "floor_id": 210,
         "mdt_id": 5,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -560,6 +584,7 @@
         "floor_id": 210,
         "mdt_id": 9,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -583,6 +608,7 @@
         "floor_id": 210,
         "mdt_id": 6,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -606,6 +632,7 @@
         "floor_id": 210,
         "mdt_id": 8,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -629,6 +656,7 @@
         "floor_id": 210,
         "mdt_id": 6,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -652,6 +680,7 @@
         "floor_id": 210,
         "mdt_id": 10,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -675,6 +704,7 @@
         "floor_id": 210,
         "mdt_id": 18,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -698,6 +728,7 @@
         "floor_id": 210,
         "mdt_id": 11,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -721,6 +752,7 @@
         "floor_id": 210,
         "mdt_id": 5,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -744,6 +776,7 @@
         "floor_id": 210,
         "mdt_id": 4,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -767,6 +800,7 @@
         "floor_id": 210,
         "mdt_id": 14,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -790,6 +824,7 @@
         "floor_id": 210,
         "mdt_id": 3,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -813,6 +848,7 @@
         "floor_id": 210,
         "mdt_id": 6,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -836,6 +872,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -859,6 +896,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -871,7 +909,7 @@
         "dungeon_difficulty": null,
         "lat": -154.33280674395,
         "lng": 139.96548189694,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38507,
@@ -882,6 +920,7 @@
         "floor_id": 210,
         "mdt_id": 3,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -894,7 +933,7 @@
         "dungeon_difficulty": null,
         "lat": -153.75258868859,
         "lng": 145.02723493216,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38508,
@@ -905,6 +944,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -917,7 +957,7 @@
         "dungeon_difficulty": null,
         "lat": -151.50532622043,
         "lng": 143.7368992568,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38509,
@@ -928,6 +968,7 @@
         "floor_id": 210,
         "mdt_id": 3,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -940,7 +981,7 @@
         "dungeon_difficulty": null,
         "lat": -143.83692192157,
         "lng": 136.93882204098,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38510,
@@ -951,6 +992,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -963,7 +1005,7 @@
         "dungeon_difficulty": null,
         "lat": -141.02243135451,
         "lng": 138.18585786146,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38511,
@@ -974,6 +1016,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -986,7 +1029,7 @@
         "dungeon_difficulty": null,
         "lat": -141.61130938085,
         "lng": 134.37547063221,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38512,
@@ -997,6 +1040,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1020,6 +1064,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1043,6 +1088,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1066,6 +1112,7 @@
         "floor_id": 210,
         "mdt_id": 4,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1089,6 +1136,7 @@
         "floor_id": 210,
         "mdt_id": 3,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1112,6 +1160,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1135,6 +1184,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1158,6 +1208,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1170,7 +1221,7 @@
         "dungeon_difficulty": null,
         "lat": -105.1875,
         "lng": 207.28125,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38612,
@@ -1181,6 +1232,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1193,7 +1245,7 @@
         "dungeon_difficulty": null,
         "lat": -104.5,
         "lng": 208.59375,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38613,
@@ -1204,6 +1256,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1216,7 +1269,7 @@
         "dungeon_difficulty": null,
         "lat": -103.84375,
         "lng": 209.84375,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38614,
@@ -1227,6 +1280,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1239,7 +1293,7 @@
         "dungeon_difficulty": null,
         "lat": -110.6875,
         "lng": 201.1875,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38615,
@@ -1250,6 +1304,7 @@
         "floor_id": 210,
         "mdt_id": 23,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1262,7 +1317,7 @@
         "dungeon_difficulty": null,
         "lat": -101.93193909782,
         "lng": 258.57177301813,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38616,
@@ -1273,6 +1328,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1285,7 +1341,7 @@
         "dungeon_difficulty": null,
         "lat": -99.989927246983,
         "lng": 258.57177301813,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38617,
@@ -1296,6 +1352,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1308,7 +1365,7 @@
         "dungeon_difficulty": null,
         "lat": -96.484832686928,
         "lng": 257.34025330784,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38618,
@@ -1319,6 +1376,7 @@
         "floor_id": 210,
         "mdt_id": 10,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1331,7 +1389,7 @@
         "dungeon_difficulty": null,
         "lat": -96.532198829631,
         "lng": 255.16141074348,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38619,
@@ -1342,6 +1400,7 @@
         "floor_id": 210,
         "mdt_id": 7,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1354,7 +1413,7 @@
         "dungeon_difficulty": null,
         "lat": -130.68318771882,
         "lng": 258.24021001921,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38620,
@@ -1365,6 +1424,7 @@
         "floor_id": 210,
         "mdt_id": 21,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1377,7 +1437,7 @@
         "dungeon_difficulty": null,
         "lat": -130.82528614693,
         "lng": 255.96663516944,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38621,
@@ -1388,6 +1448,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1400,7 +1461,7 @@
         "dungeon_difficulty": null,
         "lat": -133.2409594248,
         "lng": 256.10873359755,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38622,
@@ -1411,6 +1472,7 @@
         "floor_id": 210,
         "mdt_id": 16,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1423,7 +1485,7 @@
         "dungeon_difficulty": null,
         "lat": -133.09886099669,
         "lng": 258.47704073273,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38623,
@@ -1434,6 +1496,7 @@
         "floor_id": 210,
         "mdt_id": 8,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1446,7 +1509,7 @@
         "dungeon_difficulty": null,
         "lat": -153.84523150081,
         "lng": 258.90333601706,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38624,
@@ -1457,6 +1520,7 @@
         "floor_id": 210,
         "mdt_id": 11,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1469,7 +1533,7 @@
         "dungeon_difficulty": null,
         "lat": -156.16617249327,
         "lng": 259.04543444517,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38625,
@@ -1480,6 +1544,7 @@
         "floor_id": 210,
         "mdt_id": 17,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1492,7 +1557,7 @@
         "dungeon_difficulty": null,
         "lat": -158.48711348574,
         "lng": 258.85596987435,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38626,
@@ -1503,6 +1568,7 @@
         "floor_id": 210,
         "mdt_id": 18,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1515,7 +1581,7 @@
         "dungeon_difficulty": null,
         "lat": -162.22903875932,
         "lng": 255.44560759971,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38627,
@@ -1526,6 +1592,7 @@
         "floor_id": 210,
         "mdt_id": 19,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1538,7 +1605,7 @@
         "dungeon_difficulty": null,
         "lat": -159.67126705333,
         "lng": 253.88252489049,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38628,
@@ -1549,6 +1616,7 @@
         "floor_id": 210,
         "mdt_id": 4,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1561,7 +1629,7 @@
         "dungeon_difficulty": null,
         "lat": -144.1875,
         "lng": 223.125,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38629,
@@ -1572,6 +1640,7 @@
         "floor_id": 210,
         "mdt_id": 3,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1584,7 +1653,7 @@
         "dungeon_difficulty": null,
         "lat": -141.76686511143,
         "lng": 164.26578289556,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38630,
@@ -1595,6 +1664,7 @@
         "floor_id": 210,
         "mdt_id": 5,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1607,7 +1677,7 @@
         "dungeon_difficulty": null,
         "lat": -143.66151081956,
         "lng": 161.51854661876,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 38631,
@@ -1618,6 +1688,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1630,7 +1701,7 @@
         "dungeon_difficulty": null,
         "lat": -141.53003439791,
         "lng": 159.05550719818,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 40874,
@@ -1641,6 +1712,7 @@
         "floor_id": 210,
         "mdt_id": 42,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1653,7 +1725,7 @@
         "dungeon_difficulty": null,
         "lat": -107.8850524165,
         "lng": 203.09667030882,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 40875,
@@ -1664,6 +1736,7 @@
         "floor_id": 210,
         "mdt_id": 10,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1676,7 +1749,7 @@
         "dungeon_difficulty": null,
         "lat": -106.41718733615,
         "lng": 204.08823698552,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 40876,
@@ -1687,6 +1760,7 @@
         "floor_id": 210,
         "mdt_id": 17,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1699,7 +1773,7 @@
         "dungeon_difficulty": null,
         "lat": -108.22279128455,
         "lng": 205.26166305271,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 40877,
@@ -1710,6 +1784,7 @@
         "floor_id": 210,
         "mdt_id": 11,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1722,7 +1797,7 @@
         "dungeon_difficulty": null,
         "lat": -111.15625,
         "lng": 199.5,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 40878,
@@ -1733,6 +1808,7 @@
         "floor_id": 210,
         "mdt_id": 3,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1745,7 +1821,7 @@
         "dungeon_difficulty": null,
         "lat": -112.34375,
         "lng": 201.9375,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 40879,
@@ -1756,6 +1832,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1768,7 +1845,7 @@
         "dungeon_difficulty": null,
         "lat": -112.8125,
         "lng": 200.1875,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 40880,
@@ -1779,6 +1856,7 @@
         "floor_id": 210,
         "mdt_id": 45,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1802,6 +1880,7 @@
         "floor_id": 210,
         "mdt_id": 12,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1825,6 +1904,7 @@
         "floor_id": 210,
         "mdt_id": 4,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1848,6 +1928,7 @@
         "floor_id": 210,
         "mdt_id": 7,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1871,6 +1952,7 @@
         "floor_id": 210,
         "mdt_id": 46,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1894,6 +1976,7 @@
         "floor_id": 210,
         "mdt_id": 4,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1917,6 +2000,7 @@
         "floor_id": 210,
         "mdt_id": 9,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1940,6 +2024,7 @@
         "floor_id": 210,
         "mdt_id": 12,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1963,6 +2048,7 @@
         "floor_id": 210,
         "mdt_id": 28,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -1986,6 +2072,7 @@
         "floor_id": 210,
         "mdt_id": 13,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2009,6 +2096,7 @@
         "floor_id": 210,
         "mdt_id": 26,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2032,6 +2120,7 @@
         "floor_id": 210,
         "mdt_id": 9,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2055,6 +2144,7 @@
         "floor_id": 210,
         "mdt_id": 8,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2078,6 +2168,7 @@
         "floor_id": 210,
         "mdt_id": 7,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2101,6 +2192,7 @@
         "floor_id": 210,
         "mdt_id": 8,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2124,6 +2216,7 @@
         "floor_id": 210,
         "mdt_id": 5,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2147,6 +2240,7 @@
         "floor_id": 210,
         "mdt_id": 8,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2170,6 +2264,7 @@
         "floor_id": 210,
         "mdt_id": 5,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2193,6 +2288,7 @@
         "floor_id": 210,
         "mdt_id": 9,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2216,6 +2312,7 @@
         "floor_id": 210,
         "mdt_id": 6,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2239,6 +2336,7 @@
         "floor_id": 210,
         "mdt_id": 8,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2262,6 +2360,7 @@
         "floor_id": 210,
         "mdt_id": 6,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2285,6 +2384,7 @@
         "floor_id": 210,
         "mdt_id": 10,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2308,6 +2408,7 @@
         "floor_id": 210,
         "mdt_id": 18,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2331,6 +2432,7 @@
         "floor_id": 210,
         "mdt_id": 11,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2354,6 +2456,7 @@
         "floor_id": 210,
         "mdt_id": 5,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2377,6 +2480,7 @@
         "floor_id": 210,
         "mdt_id": 4,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2400,6 +2504,7 @@
         "floor_id": 210,
         "mdt_id": 14,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2423,6 +2528,7 @@
         "floor_id": 210,
         "mdt_id": 3,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2446,6 +2552,7 @@
         "floor_id": 210,
         "mdt_id": 6,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2469,6 +2576,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2492,6 +2600,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2504,7 +2613,7 @@
         "dungeon_difficulty": null,
         "lat": -154.33280674395,
         "lng": 139.96548189694,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41016,
@@ -2515,6 +2624,7 @@
         "floor_id": 210,
         "mdt_id": 3,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2527,7 +2637,7 @@
         "dungeon_difficulty": null,
         "lat": -153.75258868859,
         "lng": 145.02723493216,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41017,
@@ -2538,6 +2648,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2550,7 +2661,7 @@
         "dungeon_difficulty": null,
         "lat": -151.50532622043,
         "lng": 143.7368992568,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41018,
@@ -2561,6 +2672,7 @@
         "floor_id": 210,
         "mdt_id": 3,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2573,7 +2685,7 @@
         "dungeon_difficulty": null,
         "lat": -143.83692192157,
         "lng": 136.93882204098,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41019,
@@ -2584,6 +2696,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2596,7 +2709,7 @@
         "dungeon_difficulty": null,
         "lat": -141.02243135451,
         "lng": 138.18585786146,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41020,
@@ -2607,6 +2720,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2619,7 +2733,7 @@
         "dungeon_difficulty": null,
         "lat": -141.61130938085,
         "lng": 134.37547063221,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41021,
@@ -2630,6 +2744,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2653,6 +2768,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2676,6 +2792,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2699,6 +2816,7 @@
         "floor_id": 210,
         "mdt_id": 4,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2722,6 +2840,7 @@
         "floor_id": 210,
         "mdt_id": 3,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2745,6 +2864,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2768,6 +2888,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2791,6 +2912,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2803,7 +2925,7 @@
         "dungeon_difficulty": null,
         "lat": -105.1875,
         "lng": 207.28125,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41121,
@@ -2814,6 +2936,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2826,7 +2949,7 @@
         "dungeon_difficulty": null,
         "lat": -104.5,
         "lng": 208.59375,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41122,
@@ -2837,6 +2960,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2849,7 +2973,7 @@
         "dungeon_difficulty": null,
         "lat": -103.84375,
         "lng": 209.84375,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41123,
@@ -2860,6 +2984,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2872,7 +2997,7 @@
         "dungeon_difficulty": null,
         "lat": -110.6875,
         "lng": 201.1875,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41124,
@@ -2883,6 +3008,7 @@
         "floor_id": 210,
         "mdt_id": 23,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2895,7 +3021,7 @@
         "dungeon_difficulty": null,
         "lat": -101.93193909782,
         "lng": 258.57177301813,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41125,
@@ -2906,6 +3032,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2918,7 +3045,7 @@
         "dungeon_difficulty": null,
         "lat": -99.989927246983,
         "lng": 258.57177301813,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41126,
@@ -2929,6 +3056,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2941,7 +3069,7 @@
         "dungeon_difficulty": null,
         "lat": -96.484832686928,
         "lng": 257.34025330784,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41127,
@@ -2952,6 +3080,7 @@
         "floor_id": 210,
         "mdt_id": 10,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2964,7 +3093,7 @@
         "dungeon_difficulty": null,
         "lat": -96.532198829631,
         "lng": 255.16141074348,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41128,
@@ -2975,6 +3104,7 @@
         "floor_id": 210,
         "mdt_id": 7,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -2987,7 +3117,7 @@
         "dungeon_difficulty": null,
         "lat": -130.68318771882,
         "lng": 258.24021001921,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41129,
@@ -2998,6 +3128,7 @@
         "floor_id": 210,
         "mdt_id": 21,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -3010,7 +3141,7 @@
         "dungeon_difficulty": null,
         "lat": -130.82528614693,
         "lng": 255.96663516944,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41130,
@@ -3021,6 +3152,7 @@
         "floor_id": 210,
         "mdt_id": 1,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -3033,7 +3165,7 @@
         "dungeon_difficulty": null,
         "lat": -133.2409594248,
         "lng": 256.10873359755,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41131,
@@ -3044,6 +3176,7 @@
         "floor_id": 210,
         "mdt_id": 16,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -3056,7 +3189,7 @@
         "dungeon_difficulty": null,
         "lat": -133.09886099669,
         "lng": 258.47704073273,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41132,
@@ -3067,6 +3200,7 @@
         "floor_id": 210,
         "mdt_id": 8,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -3079,7 +3213,7 @@
         "dungeon_difficulty": null,
         "lat": -153.84523150081,
         "lng": 258.90333601706,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41133,
@@ -3090,6 +3224,7 @@
         "floor_id": 210,
         "mdt_id": 11,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -3102,7 +3237,7 @@
         "dungeon_difficulty": null,
         "lat": -156.16617249327,
         "lng": 259.04543444517,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41134,
@@ -3113,6 +3248,7 @@
         "floor_id": 210,
         "mdt_id": 17,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -3125,7 +3261,7 @@
         "dungeon_difficulty": null,
         "lat": -158.48711348574,
         "lng": 258.85596987435,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41135,
@@ -3136,6 +3272,7 @@
         "floor_id": 210,
         "mdt_id": 18,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -3148,7 +3285,7 @@
         "dungeon_difficulty": null,
         "lat": -162.22903875932,
         "lng": 255.44560759971,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41136,
@@ -3159,6 +3296,7 @@
         "floor_id": 210,
         "mdt_id": 19,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -3171,7 +3309,7 @@
         "dungeon_difficulty": null,
         "lat": -159.67126705333,
         "lng": 253.88252489049,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41137,
@@ -3182,6 +3320,7 @@
         "floor_id": 210,
         "mdt_id": 4,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -3194,7 +3333,7 @@
         "dungeon_difficulty": null,
         "lat": -144.1875,
         "lng": 223.125,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41138,
@@ -3205,6 +3344,7 @@
         "floor_id": 210,
         "mdt_id": 3,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -3217,7 +3357,7 @@
         "dungeon_difficulty": null,
         "lat": -141.76686511143,
         "lng": 164.26578289556,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41139,
@@ -3228,6 +3368,7 @@
         "floor_id": 210,
         "mdt_id": 5,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -3240,7 +3381,7 @@
         "dungeon_difficulty": null,
         "lat": -143.66151081956,
         "lng": 161.51854661876,
-        "kill_priority": -1
+        "kill_priority": null
     },
     {
         "id": 41140,
@@ -3251,6 +3392,7 @@
         "floor_id": 210,
         "mdt_id": 2,
         "mdt_npc_id": null,
+        "mdt_scale": null,
         "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
@@ -3263,6 +3405,6 @@
         "dungeon_difficulty": null,
         "lat": -141.53003439791,
         "lng": 159.05550719818,
-        "kill_priority": -1
+        "kill_priority": null
     }
 ]

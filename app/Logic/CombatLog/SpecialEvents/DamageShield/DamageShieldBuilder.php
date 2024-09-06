@@ -7,7 +7,7 @@ use App\Logic\CombatLog\SpecialEvents\DamageShield\Versions\DamageShieldV20;
 use App\Logic\CombatLog\SpecialEvents\DamageShield\Versions\DamageShieldV9;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEventBuilderInterface;
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 
 class DamageShieldBuilder implements SpecialEventBuilderInterface
 {
