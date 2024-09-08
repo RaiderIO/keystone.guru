@@ -1286,5 +1286,131 @@
         "extracted_data": 1,
         "created_at": "2024-09-06T21:35:29+00:00",
         "updated_at": "2024-09-06T21:35:29+00:00"
+    },
+    {
+        "id": 185,
+        "combat_log_path": "tmp\/WoWCombatLog-090524_174645_dornogal.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T10:59:34+00:00",
+        "updated_at": "2024-09-08T10:59:34+00:00"
+    },
+    {
+        "id": 186,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_ara-kara-city-of-echoes-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T10:59:38+00:00",
+        "updated_at": "2024-09-08T10:59:38+00:00"
+    },
+    {
+        "id": 187,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T10:59:42+00:00",
+        "updated_at": "2024-09-08T10:59:42+00:00"
+    },
+    {
+        "id": 188,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_cinderbrew-meadery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T10:59:49+00:00",
+        "updated_at": "2024-09-08T10:59:49+00:00"
+    },
+    {
+        "id": 189,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T10:59:49+00:00",
+        "updated_at": "2024-09-08T10:59:49+00:00"
+    },
+    {
+        "id": 190,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_dornogal-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T10:59:49+00:00",
+        "updated_at": "2024-09-08T10:59:49+00:00"
+    },
+    {
+        "id": 191,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_dornogal-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T10:59:49+00:00",
+        "updated_at": "2024-09-08T10:59:49+00:00"
+    },
+    {
+        "id": 192,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_dornogal-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T10:59:49+00:00",
+        "updated_at": "2024-09-08T10:59:49+00:00"
+    },
+    {
+        "id": 193,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_dornogal-4.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T10:59:49+00:00",
+        "updated_at": "2024-09-08T10:59:49+00:00"
+    },
+    {
+        "id": 194,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_dornogal.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T10:59:49+00:00",
+        "updated_at": "2024-09-08T10:59:49+00:00"
+    },
+    {
+        "id": 195,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T10:59:55+00:00",
+        "updated_at": "2024-09-08T10:59:55+00:00"
+    },
+    {
+        "id": 196,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_the-rookery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T10:59:59+00:00",
+        "updated_at": "2024-09-08T10:59:59+00:00"
+    },
+    {
+        "id": 197,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_the-rookery-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T10:59:59+00:00",
+        "updated_at": "2024-09-08T10:59:59+00:00"
+    },
+    {
+        "id": 198,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T11:00:04+00:00",
+        "updated_at": "2024-09-08T11:00:04+00:00"
+    },
+    {
+        "id": 199,
+        "combat_log_path": "tmp\/WoWCombatLog-090724_194443_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T11:00:10+00:00",
+        "updated_at": "2024-09-08T11:00:10+00:00"
+    },
+    {
+        "id": 200,
+        "combat_log_path": "tmp\/WoWCombatLog-090724_194443_darkmoon-island-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T11:00:10+00:00",
+        "updated_at": "2024-09-08T11:00:10+00:00"
+    },
+    {
+        "id": 201,
+        "combat_log_path": "tmp\/WoWCombatLog-090724_194443_darkmoon-island.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T11:00:10+00:00",
+        "updated_at": "2024-09-08T11:00:10+00:00"
+    },
+    {
+        "id": 202,
+        "combat_log_path": "tmp\/WoWCombatLog-090724_194443_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-08T11:00:12+00:00",
+        "updated_at": "2024-09-08T11:00:12+00:00"
     }
 ]
