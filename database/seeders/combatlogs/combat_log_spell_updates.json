@@ -11268,5 +11268,455 @@
         "raw_event": "9\/2\/2024 01:02:11.4852  SPELL_MISSED,Creature-0-3103-2649-20375-221760-0001D4F0FD,\"Risen Mage\",0xa48,0x0,Player-2073-06ADA78D,\"Voidzey-Stormscale-EU\",0x512,0x0,444743,\"Fireball Volley\",0x4,MISS,nil\r\n",
         "created_at": "2024-09-04T21:09:12+00:00",
         "updated_at": "2024-09-04T21:09:12+00:00"
+    },
+    {
+        "id": 1128,
+        "spell_id": 23768,
+        "before": null,
+        "after": "{\"id\": 23768, \"aura\": false, \"name\": \"Sayge&apos;s Dark Fortune of Damage\", \"duration\": 7200000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_misc_orb_02\", \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:33:26.124144Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_ara-kara-city-of-echoes-2.zip",
+        "raw_event": "9\/3\/2024 00:18:41.4592  SPELL_AURA_APPLIED,Creature-0-4233-974-20188-14822-00005585F6,\"Sayge\",0xa28,0x0,Player-3674-0918D9F2,\"Eluvi\u00ebl-TwistingNether-EU\",0x548,0x0,23768,\"Sayge's Dark Fortune of Damage\",0x20,BUFF\r\n",
+        "created_at": "2024-09-06T21:33:26+00:00",
+        "updated_at": "2024-09-06T21:33:26+00:00"
+    },
+    {
+        "id": 1129,
+        "spell_id": 23768,
+        "before": "{\"id\": 23768, \"aura\": 0, \"name\": \"Sayge&apos;s Dark Fortune of Damage\", \"duration\": 7200000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_misc_orb_02\", \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:33:26.124144Z\"}",
+        "after": "{\"id\": 23768, \"aura\": 0, \"name\": \"Sayge&apos;s Dark Fortune of Damage\", \"debuff\": 0, \"duration\": 7200000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_misc_orb_02\", \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:33:26.124144Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_ara-kara-city-of-echoes-2.zip",
+        "raw_event": "9\/3\/2024 00:18:41.4592  SPELL_AURA_APPLIED,Creature-0-4233-974-20188-14822-00005585F6,\"Sayge\",0xa28,0x0,Player-3674-0918D9F2,\"Eluvi\u00ebl-TwistingNether-EU\",0x548,0x0,23768,\"Sayge's Dark Fortune of Damage\",0x20,BUFF\r\n",
+        "created_at": "2024-09-06T21:33:26+00:00",
+        "updated_at": "2024-09-06T21:33:26+00:00"
+    },
+    {
+        "id": 1130,
+        "spell_id": 432119,
+        "before": "{\"id\": 432119, \"aura\": 0, \"name\": \"Faded\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_priest_auspiciousspirits\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 32}",
+        "after": "{\"id\": 432119, \"aura\": 0, \"name\": \"Faded\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_priest_auspiciousspirits\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 96}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_ara-kara-city-of-echoes-3.zip",
+        "raw_event": "9\/3\/2024 01:37:09.8752  SPELL_MISSED,Creature-0-1463-2660-3919-215407-00005649CC,\"Ki'katal the Harvester\",0x10a48,0x0,Player-3674-05AE01FE,\"Aibo-TwistingNether-EU\",0x512,0x0,432119,\"Faded\",0x20,MISS,nil\r\n",
+        "created_at": "2024-09-06T21:33:29+00:00",
+        "updated_at": "2024-09-06T21:33:29+00:00"
+    },
+    {
+        "id": 1131,
+        "spell_id": 432117,
+        "before": "{\"id\": 432117, \"aura\": 0, \"name\": \"Cosmic Singularity\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_cosmicvoid_orb\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "after": "{\"id\": 432117, \"aura\": 0, \"name\": \"Cosmic Singularity\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_cosmicvoid_orb\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 97}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_ara-kara-city-of-echoes-3.zip",
+        "raw_event": "9\/3\/2024 01:37:09.8762  SPELL_MISSED,Creature-0-1463-2660-3919-215407-00005649CC,\"Ki'katal the Harvester\",0x10a48,0x0,Player-3674-05AE01FE,\"Aibo-TwistingNether-EU\",0x512,0x0,432117,\"Cosmic Singularity\",0x20,MISS,nil\r\n",
+        "created_at": "2024-09-06T21:33:29+00:00",
+        "updated_at": "2024-09-06T21:33:29+00:00"
+    },
+    {
+        "id": 1132,
+        "spell_id": 453583,
+        "before": "{\"id\": 453583, \"aura\": 0, \"name\": \"Charge\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_warrior_charge\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 0}",
+        "after": "{\"id\": 453583, \"aura\": 0, \"name\": \"Charge\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_warrior_charge\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 32}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_ara-kara-city-of-echoes-4.zip",
+        "raw_event": "9\/3\/2024 02:10:54.5152  SPELL_MISSED,Creature-0-1463-2660-6053-216337-000DD65330,\"Bloodworker\",0xa48,0x0,Player-3674-0B64D9DB,\"Lexadrin-TwistingNether-EU\",0x512,0x0,453583,\"Charge\",0x1,IMMUNE,nil\r\n",
+        "created_at": "2024-09-06T21:33:30+00:00",
+        "updated_at": "2024-09-06T21:33:30+00:00"
+    },
+    {
+        "id": 1133,
+        "spell_id": 443500,
+        "before": "{\"id\": 443500, \"aura\": 0, \"name\": \"Earthshatter\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_nature_earthquake\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 1}",
+        "after": "{\"id\": 443500, \"aura\": 0, \"name\": \"Earthshatter\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_nature_earthquake\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_city-of-threads.zip",
+        "raw_event": "9\/2\/2024 20:57:54.6612  SPELL_MISSED,Creature-0-3103-2669-30643-220197-0000560A85,\"Royal Swarmguard\",0xa48,0x0,Player-3674-0AEF376F,\"Mulatos-TwistingNether-EU\",0x511,0x0,443500,\"Earthshatter\",0x8,IMMUNE,nil\r\n",
+        "created_at": "2024-09-06T21:33:47+00:00",
+        "updated_at": "2024-09-06T21:33:47+00:00"
+    },
+    {
+        "id": 1134,
+        "spell_id": 434122,
+        "before": "{\"id\": 434122, \"aura\": 0, \"name\": \"Void Bolt\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"ability_warlock_coil3\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-07 00:00:00\", \"miss_types_mask\": 0}",
+        "after": "{\"id\": 434122, \"aura\": 0, \"name\": \"Void Bolt\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"ability_warlock_coil3\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-07 00:00:00\", \"miss_types_mask\": 1}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_city-of-threads.zip",
+        "raw_event": "9\/2\/2024 21:08:14.3862  SPELL_MISSED,Creature-0-3103-2669-30643-216326-0000560D18,\"Ascended Neophyte\",0xa48,0x0,Player-3674-0B21BDD3,\"Phecter-TwistingNether-EU\",0x512,0x0,434122,\"Void Bolt\",0x20,ABSORB,nil,208321,232262,nil\r\n",
+        "created_at": "2024-09-06T21:33:49+00:00",
+        "updated_at": "2024-09-06T21:33:49+00:00"
+    },
+    {
+        "id": 1135,
+        "spell_id": 439324,
+        "before": "{\"id\": 439324, \"aura\": 0, \"name\": \"Umbral Weave\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_misc_web_02\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 65}",
+        "after": "{\"id\": 439324, \"aura\": 0, \"name\": \"Umbral Weave\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_misc_web_02\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 97}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_city-of-threads.zip",
+        "raw_event": "9\/2\/2024 21:11:41.8062  SPELL_MISSED,Creature-0-3103-2669-30643-216658-0000560A83,\"Izo, the Grand Splicer\",0x10a48,0x0,Player-3674-0AEF376F,\"Mulatos-TwistingNether-EU\",0x511,0x0,439324,\"Umbral Weave\",0x20,IMMUNE,nil\r\n",
+        "created_at": "2024-09-06T21:33:50+00:00",
+        "updated_at": "2024-09-06T21:33:50+00:00"
+    },
+    {
+        "id": 1136,
+        "spell_id": 427601,
+        "before": "{\"id\": 427601, \"aura\": 0, \"name\": \"Burst of Light\", \"debuff\": 0, \"category\": \"spells.category.priest\", \"duration\": null, \"mechanic\": null, \"cast_time\": 4000, \"icon_name\": \"spell_fire_ragnaros_supernova\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 2, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-29 00:00:00\", \"miss_types_mask\": 0}",
+        "after": "{\"id\": 427601, \"aura\": 0, \"name\": \"Burst of Light\", \"debuff\": 0, \"category\": \"spells.category.priest\", \"duration\": null, \"mechanic\": null, \"cast_time\": 4000, \"icon_name\": \"spell_fire_ragnaros_supernova\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 2, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-29 00:00:00\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-1.zip",
+        "raw_event": "9\/2\/2024 23:01:28.1142  SPELL_MISSED,Creature-0-4256-2649-9489-206710-0000D6240A,\"Lightspawn\",0x10a48,0x0,Player-3674-0B0B010A,\"Lexlyssra-TwistingNether-EU\",0x512,0x0,427601,\"Burst of Light\",0x2,MISS,nil\r\n",
+        "created_at": "2024-09-06T21:33:59+00:00",
+        "updated_at": "2024-09-06T21:33:59+00:00"
+    },
+    {
+        "id": 1137,
+        "spell_id": 444743,
+        "before": "{\"id\": 444743, \"aura\": 0, \"name\": \"Fireball Volley\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 2500, \"icon_name\": \"spell_fire_fireball02\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 65}",
+        "after": "{\"id\": 444743, \"aura\": 0, \"name\": \"Fireball Volley\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 2500, \"icon_name\": \"spell_fire_fireball02\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 97}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-2.zip",
+        "raw_event": "9\/2\/2024 23:44:42.4102  SPELL_MISSED,Creature-0-3890-2649-18748-221760-0000D62FA9,\"Risen Mage\",0xa48,0x0,Player-3674-0874AB73,\"Gumpen-TwistingNether-EU\",0x512,0x0,444743,\"Fireball Volley\",0x4,IMMUNE,nil\r\n",
+        "created_at": "2024-09-06T21:34:03+00:00",
+        "updated_at": "2024-09-06T21:34:03+00:00"
+    },
+    {
+        "id": 1138,
+        "spell_id": 424430,
+        "before": "{\"id\": 424430, \"aura\": 0, \"name\": \"Consecration\", \"debuff\": 1, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_holy_innerfire\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 2, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 289}",
+        "after": "{\"id\": 424430, \"aura\": 0, \"name\": \"Consecration\", \"debuff\": 1, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_holy_innerfire\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 2, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 353}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-2.zip",
+        "raw_event": "9\/2\/2024 23:44:42.9572  SPELL_MISSED,Creature-0-3890-2649-18748-206704-0004562FA9,\"Ardent Paladin\",0xa48,0x0,Player-3674-0874AB73,\"Gumpen-TwistingNether-EU\",0x512,0x0,424430,\"Consecration\",0x2,MISS,nil\r\n",
+        "created_at": "2024-09-06T21:34:03+00:00",
+        "updated_at": "2024-09-06T21:34:03+00:00"
+    },
+    {
+        "id": 1139,
+        "spell_id": 245102,
+        "before": null,
+        "after": "{\"id\": 245102, \"aura\": false, \"name\": \"Number One Fan\", \"duration\": 86400000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"achievement_legionpvp2tier5\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:07.774253Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-2.zip",
+        "raw_event": "9\/2\/2024 23:47:42.0072  SPELL_AURA_APPLIED,Creature-0-4233-974-20188-121527-000055F64C,\"Devlynn Styx\",0xa28,0x0,Player-3674-05B1F6FA,\"Sanamon-TwistingNether-EU\",0x518,0x0,245102,\"Number One Fan\",0x1,DEBUFF\r\n",
+        "created_at": "2024-09-06T21:34:07+00:00",
+        "updated_at": "2024-09-06T21:34:07+00:00"
+    },
+    {
+        "id": 1140,
+        "spell_id": 245102,
+        "before": "{\"id\": 245102, \"aura\": 0, \"name\": \"Number One Fan\", \"duration\": 86400000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"achievement_legionpvp2tier5\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:07.774253Z\"}",
+        "after": "{\"id\": 245102, \"aura\": 0, \"name\": \"Number One Fan\", \"debuff\": 1, \"duration\": 86400000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"achievement_legionpvp2tier5\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:07.774253Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-2.zip",
+        "raw_event": "9\/2\/2024 23:47:42.0072  SPELL_AURA_APPLIED,Creature-0-4233-974-20188-121527-000055F64C,\"Devlynn Styx\",0xa28,0x0,Player-3674-05B1F6FA,\"Sanamon-TwistingNether-EU\",0x518,0x0,245102,\"Number One Fan\",0x1,DEBUFF\r\n",
+        "created_at": "2024-09-06T21:34:07+00:00",
+        "updated_at": "2024-09-06T21:34:07+00:00"
+    },
+    {
+        "id": 1141,
+        "spell_id": 246585,
+        "before": null,
+        "after": "{\"id\": 246585, \"aura\": false, \"name\": \"Drummer\", \"duration\": 86400000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_misc_drum_06\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:10.999890Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-2.zip",
+        "raw_event": "9\/2\/2024 23:47:42.0082  SPELL_AURA_APPLIED,Creature-0-4233-974-20188-121527-000055F64C,\"Devlynn Styx\",0xa28,0x0,Player-3674-05B1F6FA,\"Sanamon-TwistingNether-EU\",0x518,0x0,246585,\"Drummer\",0x1,BUFF\r\n",
+        "created_at": "2024-09-06T21:34:11+00:00",
+        "updated_at": "2024-09-06T21:34:11+00:00"
+    },
+    {
+        "id": 1142,
+        "spell_id": 246585,
+        "before": "{\"id\": 246585, \"aura\": 0, \"name\": \"Drummer\", \"duration\": 86400000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_misc_drum_06\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:10.999890Z\"}",
+        "after": "{\"id\": 246585, \"aura\": 0, \"name\": \"Drummer\", \"debuff\": 0, \"duration\": 86400000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_misc_drum_06\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:10.999890Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-2.zip",
+        "raw_event": "9\/2\/2024 23:47:42.0082  SPELL_AURA_APPLIED,Creature-0-4233-974-20188-121527-000055F64C,\"Devlynn Styx\",0xa28,0x0,Player-3674-05B1F6FA,\"Sanamon-TwistingNether-EU\",0x518,0x0,246585,\"Drummer\",0x1,BUFF\r\n",
+        "created_at": "2024-09-06T21:34:11+00:00",
+        "updated_at": "2024-09-06T21:34:11+00:00"
+    },
+    {
+        "id": 1143,
+        "spell_id": 176458,
+        "before": null,
+        "after": "{\"id\": 176458, \"aura\": false, \"name\": \"Song of the Anvil\", \"duration\": 14400000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_blacksmith_anvil\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:14.107264Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-2.zip",
+        "raw_event": "9\/2\/2024 23:47:42.0492  SPELL_AURA_APPLIED,Creature-0-1465-1330-29371-88402-0000552795,\"Blacksmithing Follower - Horde\",0xa28,0x0,Player-3674-0B0A03EA,\"Lyblac-TwistingNether-EU\",0x518,0x0,176458,\"Song of the Anvil\",0x1,BUFF\r\n",
+        "created_at": "2024-09-06T21:34:14+00:00",
+        "updated_at": "2024-09-06T21:34:14+00:00"
+    },
+    {
+        "id": 1144,
+        "spell_id": 176458,
+        "before": "{\"id\": 176458, \"aura\": 0, \"name\": \"Song of the Anvil\", \"duration\": 14400000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_blacksmith_anvil\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:14.107264Z\"}",
+        "after": "{\"id\": 176458, \"aura\": 0, \"name\": \"Song of the Anvil\", \"debuff\": 0, \"duration\": 14400000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_blacksmith_anvil\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:14.107264Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-2.zip",
+        "raw_event": "9\/2\/2024 23:47:42.0492  SPELL_AURA_APPLIED,Creature-0-1465-1330-29371-88402-0000552795,\"Blacksmithing Follower - Horde\",0xa28,0x0,Player-3674-0B0A03EA,\"Lyblac-TwistingNether-EU\",0x518,0x0,176458,\"Song of the Anvil\",0x1,BUFF\r\n",
+        "created_at": "2024-09-06T21:34:14+00:00",
+        "updated_at": "2024-09-06T21:34:14+00:00"
+    },
+    {
+        "id": 1145,
+        "spell_id": 447272,
+        "before": "{\"id\": 447272, \"aura\": 0, \"name\": \"Hurl Spear\", \"debuff\": 1, \"category\": null, \"duration\": 8000, \"mechanic\": \"spells.mechanic.bleeding\", \"cast_time\": 0, \"icon_name\": \"inv_spear_01\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 1}",
+        "after": "{\"id\": 447272, \"aura\": 0, \"name\": \"Hurl Spear\", \"debuff\": 1, \"category\": null, \"duration\": 8000, \"mechanic\": \"spells.mechanic.bleeding\", \"cast_time\": 0, \"icon_name\": \"inv_spear_01\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 9}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-3.zip",
+        "raw_event": "9\/3\/2024 00:38:49.6592  SPELL_MISSED,Creature-0-4241-2649-4972-207946-0000563D78,\"Captain Dailcry\",0x10a48,0x0,Player-3674-0AFDA9EE,\"Fredl\u00f8s-TwistingNether-EU\",0x512,0x0,447272,\"Hurl Spear\",0x1,DODGE,nil\r\n",
+        "created_at": "2024-09-06T21:34:15+00:00",
+        "updated_at": "2024-09-06T21:34:15+00:00"
+    },
+    {
+        "id": 1146,
+        "spell_id": 423665,
+        "before": "{\"id\": 423665, \"aura\": 1, \"name\": \"Embrace the Light\", \"debuff\": 0, \"category\": null, \"duration\": 5000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_priest_holywordlife\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 2, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 1}",
+        "after": "{\"id\": 423665, \"aura\": 1, \"name\": \"Embrace the Light\", \"debuff\": 0, \"category\": null, \"duration\": 5000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_priest_holywordlife\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 2, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-3.zip",
+        "raw_event": "9\/3\/2024 00:44:44.5792  SPELL_MISSED,Creature-0-4241-2649-4972-207940-0000563D79,\"Prioress Murrpray\",0x10a48,0x0,Player-3674-0AFDA9EE,\"Fredl\u00f8s-TwistingNether-EU\",0x512,0x0,423665,\"Embrace the Light\",0x2,IMMUNE,nil\r\n",
+        "created_at": "2024-09-06T21:34:17+00:00",
+        "updated_at": "2024-09-06T21:34:17+00:00"
+    },
+    {
+        "id": 1147,
+        "spell_id": 423665,
+        "before": "{\"id\": 423665, \"aura\": 1, \"name\": \"Embrace the Light\", \"debuff\": 0, \"category\": null, \"duration\": 5000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_priest_holywordlife\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 2, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 33}",
+        "after": "{\"id\": 423665, \"aura\": 1, \"name\": \"Embrace the Light\", \"debuff\": 0, \"category\": null, \"duration\": 5000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_priest_holywordlife\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 2, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 97}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-3.zip",
+        "raw_event": "9\/3\/2024 00:44:45.5802  SPELL_MISSED,Creature-0-4241-2649-4972-207940-0000563D79,\"Prioress Murrpray\",0x10a48,0x0,Player-3674-0AFDA9EE,\"Fredl\u00f8s-TwistingNether-EU\",0x512,0x0,423665,\"Embrace the Light\",0x2,MISS,nil\r\n",
+        "created_at": "2024-09-06T21:34:17+00:00",
+        "updated_at": "2024-09-06T21:34:17+00:00"
+    },
+    {
+        "id": 1148,
+        "spell_id": 290539,
+        "before": null,
+        "after": "{\"id\": 290539, \"aura\": false, \"name\": \"Blood Plague\", \"duration\": 24000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_deathknight_bloodplague\", \"dispel_type\": \"Disease\", \"schools_mask\": 32, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:20.370788Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-3.zip",
+        "raw_event": "9\/3\/2024 00:45:34.3772  SPELL_AURA_APPLIED,Creature-0-4243-2177-27867-149753-0000563D9C,\"Taga Stoneaxe\",0xa28,0x0,Player-3674-0B12F771,\"P\u00e1per-TwistingNether-EU\",0x518,0x0,290539,\"Blood Plague\",0x20,DEBUFF\r\n",
+        "created_at": "2024-09-06T21:34:20+00:00",
+        "updated_at": "2024-09-06T21:34:20+00:00"
+    },
+    {
+        "id": 1149,
+        "spell_id": 290539,
+        "before": "{\"id\": 290539, \"aura\": 0, \"name\": \"Blood Plague\", \"duration\": 24000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_deathknight_bloodplague\", \"dispel_type\": \"Disease\", \"schools_mask\": 32, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:20.370788Z\"}",
+        "after": "{\"id\": 290539, \"aura\": 0, \"name\": \"Blood Plague\", \"debuff\": 1, \"duration\": 24000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_deathknight_bloodplague\", \"dispel_type\": \"Disease\", \"schools_mask\": 32, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:20.370788Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-3.zip",
+        "raw_event": "9\/3\/2024 00:45:34.3772  SPELL_AURA_APPLIED,Creature-0-4243-2177-27867-149753-0000563D9C,\"Taga Stoneaxe\",0xa28,0x0,Player-3674-0B12F771,\"P\u00e1per-TwistingNether-EU\",0x518,0x0,290539,\"Blood Plague\",0x20,DEBUFF\r\n",
+        "created_at": "2024-09-06T21:34:20+00:00",
+        "updated_at": "2024-09-06T21:34:20+00:00"
+    },
+    {
+        "id": 1150,
+        "spell_id": 443461,
+        "before": null,
+        "after": "{\"id\": 443461, \"aura\": false, \"name\": \"Barrel of Fireworks\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_misc_missilesmall_purple\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:26.550302Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-4.zip",
+        "raw_event": "9\/3\/2024 01:15:30.0322  SPELL_AURA_APPLIED,Creature-0-3772-2552-1710-221183-00005646F9,\"Barrel of Fireworks\",0xa28,0x0,Creature-0-3772-2552-1710-221183-00005646F9,\"Barrel of Fireworks\",0xa28,0x0,443461,\"Barrel of Fireworks\",0x1,BUFF\r\n",
+        "created_at": "2024-09-06T21:34:26+00:00",
+        "updated_at": "2024-09-06T21:34:26+00:00"
+    },
+    {
+        "id": 1151,
+        "spell_id": 443461,
+        "before": "{\"id\": 443461, \"aura\": 0, \"name\": \"Barrel of Fireworks\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_misc_missilesmall_purple\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:26.550302Z\"}",
+        "after": "{\"id\": 443461, \"aura\": 1, \"name\": \"Barrel of Fireworks\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_misc_missilesmall_purple\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:26.550302Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-4.zip",
+        "raw_event": "9\/3\/2024 01:15:30.0322  SPELL_AURA_APPLIED,Creature-0-3772-2552-1710-221183-00005646F9,\"Barrel of Fireworks\",0xa28,0x0,Creature-0-3772-2552-1710-221183-00005646F9,\"Barrel of Fireworks\",0xa28,0x0,443461,\"Barrel of Fireworks\",0x1,BUFF\r\n",
+        "created_at": "2024-09-06T21:34:26+00:00",
+        "updated_at": "2024-09-06T21:34:26+00:00"
+    },
+    {
+        "id": 1152,
+        "spell_id": 424432,
+        "before": "{\"id\": 424432, \"aura\": 0, \"name\": \"Holy Radiance\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_paladin_gaurdedbythelight\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 2, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 1}",
+        "after": "{\"id\": 424432, \"aura\": 0, \"name\": \"Holy Radiance\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_paladin_gaurdedbythelight\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 2, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame.zip",
+        "raw_event": "9\/2\/2024 22:28:03.6842  SPELL_MISSED,Creature-0-3103-2649-6132-211290-0000561F32,\"Elaena Emberlanz\",0xa48,0x0,Player-3674-0AEF376F,\"Mulatos-TwistingNether-EU\",0x511,0x0,424432,\"Holy Radiance\",0x2,IMMUNE,nil\r\n",
+        "created_at": "2024-09-06T21:34:27+00:00",
+        "updated_at": "2024-09-06T21:34:27+00:00"
+    },
+    {
+        "id": 1153,
+        "spell_id": 430179,
+        "before": "{\"id\": 430179, \"aura\": 0, \"name\": \"Seeping Corruption\", \"debuff\": 1, \"category\": null, \"duration\": 8000, \"mechanic\": null, \"cast_time\": 1500, \"icon_name\": \"inv_enchant_voidsphere\", \"selectable\": 0, \"dispel_type\": \"Curse\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 32}",
+        "after": "{\"id\": 430179, \"aura\": 0, \"name\": \"Seeping Corruption\", \"debuff\": 1, \"category\": null, \"duration\": 8000, \"mechanic\": null, \"cast_time\": 1500, \"icon_name\": \"inv_enchant_voidsphere\", \"selectable\": 0, \"dispel_type\": \"Curse\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 96}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-3.zip",
+        "raw_event": "9\/2\/2024 23:53:00.3692  SPELL_MISSED,Creature-0-4240-2648-4315-214439-0001D63344,\"Corrupted Oracle\",0xa48,0x0,Player-1092-0AEC3361,\"Anitamaksvin-Drak'thul-EU\",0x512,0x0,430179,\"Seeping Corruption\",0x20,MISS,nil\r\n",
+        "created_at": "2024-09-06T21:34:34+00:00",
+        "updated_at": "2024-09-06T21:34:34+00:00"
+    },
+    {
+        "id": 1154,
+        "spell_id": 283700,
+        "before": null,
+        "after": "{\"id\": 283700, \"aura\": false, \"name\": \"Rake\", \"duration\": 15000, \"mechanic\": \"spells.mechanic.bleeding\", \"cast_time\": 0, \"icon_name\": \"ability_druid_disembowel\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:44.223284Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-4.zip",
+        "raw_event": "9\/3\/2024 00:34:12.3412  SPELL_AURA_APPLIED,Creature-0-3772-2177-6643-144554-0000563AEE,\"Kellara the Cunning\",0xa28,0x0,Player-3674-0AB5D235,\"Navm-TwistingNether-EU\",0x518,0x0,283700,\"Rake\",0x1,DEBUFF\r\n",
+        "created_at": "2024-09-06T21:34:44+00:00",
+        "updated_at": "2024-09-06T21:34:44+00:00"
+    },
+    {
+        "id": 1155,
+        "spell_id": 283700,
+        "before": "{\"id\": 283700, \"aura\": 0, \"name\": \"Rake\", \"duration\": 15000, \"mechanic\": \"spells.mechanic.bleeding\", \"cast_time\": 0, \"icon_name\": \"ability_druid_disembowel\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:44.223284Z\"}",
+        "after": "{\"id\": 283700, \"aura\": 0, \"name\": \"Rake\", \"debuff\": 1, \"duration\": 15000, \"mechanic\": \"spells.mechanic.bleeding\", \"cast_time\": 0, \"icon_name\": \"ability_druid_disembowel\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:44.223284Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-4.zip",
+        "raw_event": "9\/3\/2024 00:34:12.3412  SPELL_AURA_APPLIED,Creature-0-3772-2177-6643-144554-0000563AEE,\"Kellara the Cunning\",0xa28,0x0,Player-3674-0AB5D235,\"Navm-TwistingNether-EU\",0x518,0x0,283700,\"Rake\",0x1,DEBUFF\r\n",
+        "created_at": "2024-09-06T21:34:44+00:00",
+        "updated_at": "2024-09-06T21:34:44+00:00"
+    },
+    {
+        "id": 1156,
+        "spell_id": 388231,
+        "before": null,
+        "after": "{\"id\": 388231, \"aura\": false, \"name\": \"Wear and Tear\", \"duration\": 300000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_misc_coinbag06\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:47.210475Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-4.zip",
+        "raw_event": "9\/3\/2024 00:34:12.4032  SPELL_AURA_APPLIED,Creature-0-3889-2552-10858-196394-0000563CD5,\"Tuskarr Training Dummy\",0xa28,0x0,Creature-0-3889-2552-10858-196394-0000563CD5,\"Tuskarr Training Dummy\",0xa28,0x0,388231,\"Wear and Tear\",0x1,BUFF\r\n",
+        "created_at": "2024-09-06T21:34:47+00:00",
+        "updated_at": "2024-09-06T21:34:47+00:00"
+    },
+    {
+        "id": 1157,
+        "spell_id": 388231,
+        "before": "{\"id\": 388231, \"aura\": 0, \"name\": \"Wear and Tear\", \"duration\": 300000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_misc_coinbag06\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:47.210475Z\"}",
+        "after": "{\"id\": 388231, \"aura\": 1, \"name\": \"Wear and Tear\", \"debuff\": 0, \"duration\": 300000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_misc_coinbag06\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:47.210475Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-4.zip",
+        "raw_event": "9\/3\/2024 00:34:12.4032  SPELL_AURA_APPLIED,Creature-0-3889-2552-10858-196394-0000563CD5,\"Tuskarr Training Dummy\",0xa28,0x0,Creature-0-3889-2552-10858-196394-0000563CD5,\"Tuskarr Training Dummy\",0xa28,0x0,388231,\"Wear and Tear\",0x1,BUFF\r\n",
+        "created_at": "2024-09-06T21:34:47+00:00",
+        "updated_at": "2024-09-06T21:34:47+00:00"
+    },
+    {
+        "id": 1158,
+        "spell_id": 424030,
+        "before": null,
+        "after": "{\"id\": 424030, \"aura\": false, \"name\": \"Implosion\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_priest_void-blast\", \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:54.590861Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-6.zip",
+        "raw_event": "9\/3\/2024 02:03:18.0452  SPELL_MISSED,Creature-0-4240-2648-14387-214419-0000D651D1,\"Void Cursed Crusher\",0xa48,0x0,Player-3674-0AEF376F,\"Mulatos-TwistingNether-EU\",0x511,0x0,424030,\"Implosion\",0x20,IMMUNE,nil\r\n",
+        "created_at": "2024-09-06T21:34:54+00:00",
+        "updated_at": "2024-09-06T21:34:54+00:00"
+    },
+    {
+        "id": 1159,
+        "spell_id": 424030,
+        "before": "{\"id\": 424030, \"aura\": 0, \"name\": \"Implosion\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_priest_void-blast\", \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:54.590861Z\"}",
+        "after": "{\"id\": 424030, \"aura\": 0, \"name\": \"Implosion\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_priest_void-blast\", \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:34:54.590861Z\", \"miss_types_mask\": 32}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-6.zip",
+        "raw_event": "9\/3\/2024 02:03:18.0452  SPELL_MISSED,Creature-0-4240-2648-14387-214419-0000D651D1,\"Void Cursed Crusher\",0xa48,0x0,Player-3674-0AEF376F,\"Mulatos-TwistingNether-EU\",0x511,0x0,424030,\"Implosion\",0x20,IMMUNE,nil\r\n",
+        "created_at": "2024-09-06T21:34:54+00:00",
+        "updated_at": "2024-09-06T21:34:54+00:00"
+    },
+    {
+        "id": 1160,
+        "spell_id": 430238,
+        "before": "{\"id\": 430238, \"aura\": 0, \"name\": \"Void Bolt\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"inv_cosmicvoid_nova\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 65}",
+        "after": "{\"id\": 430238, \"aura\": 0, \"name\": \"Void Bolt\", \"debuff\": 0, \"category\": null, \"duration\": null, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"inv_cosmicvoid_nova\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-28 00:00:00\", \"miss_types_mask\": 97}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-8.zip",
+        "raw_event": "9\/3\/2024 02:30:39.9312  SPELL_MISSED,Creature-0-4240-2648-15447-207202-000656586B,\"Void Fragment\",0xa48,0x0,Player-3674-0AEF376F,\"Mulatos-TwistingNether-EU\",0x511,0x0,430238,\"Void Bolt\",0x20,IMMUNE,nil\r\n",
+        "created_at": "2024-09-06T21:34:57+00:00",
+        "updated_at": "2024-09-06T21:34:57+00:00"
+    },
+    {
+        "id": 1161,
+        "spell_id": 423538,
+        "before": "{\"id\": 423538, \"aura\": 0, \"name\": \"Unstable Crash\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_priest_void-blast\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 32}",
+        "after": "{\"id\": 423538, \"aura\": 0, \"name\": \"Unstable Crash\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_priest_void-blast\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-1.zip",
+        "raw_event": "9\/2\/2024 23:13:00.6822  SPELL_MISSED,Creature-0-1471-2652-6490-210156-0000562883,\"Skarmorak\",0xa48,0x0,Player-3674-06797BB0,\"Oezt-TwistingNether-EU\",0x512,0x0,423538,\"Unstable Crash\",0x20,ABSORB,nil,264203,321691,nil\r\n",
+        "created_at": "2024-09-06T21:35:04+00:00",
+        "updated_at": "2024-09-06T21:35:04+00:00"
+    },
+    {
+        "id": 1162,
+        "spell_id": 464876,
+        "before": "{\"id\": 464876, \"aura\": 0, \"name\": \"Concussive Smash\", \"debuff\": 1, \"category\": null, \"duration\": 6000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_ingot_titansteel_red\", \"selectable\": 0, \"dispel_type\": \"Magic\", \"schools_mask\": 8, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-07 00:00:00\", \"miss_types_mask\": 33}",
+        "after": "{\"id\": 464876, \"aura\": 0, \"name\": \"Concussive Smash\", \"debuff\": 1, \"category\": null, \"duration\": 6000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_ingot_titansteel_red\", \"selectable\": 0, \"dispel_type\": \"Magic\", \"schools_mask\": 8, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-08-07 00:00:00\", \"miss_types_mask\": 97}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-3.zip",
+        "raw_event": "9\/3\/2024 00:52:26.5812  SPELL_MISSED,Creature-0-3110-2652-111-212764-000356406B,\"Engine Speaker\",0xa48,0x0,Player-3674-099550E2,\"Baff-TwistingNether-EU\",0x512,0x0,464876,\"Concussive Smash\",0x8,MISS,nil\r\n",
+        "created_at": "2024-09-06T21:35:09+00:00",
+        "updated_at": "2024-09-06T21:35:09+00:00"
+    },
+    {
+        "id": 1163,
+        "spell_id": 457543,
+        "before": null,
+        "after": "{\"id\": 457543, \"aura\": false, \"name\": \"Alleria&apos;s Aid\", \"duration\": 30000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_hunter_markedfordeath\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:35:13.583894Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-5.zip",
+        "raw_event": "9\/3\/2024 01:16:35.7802  SPELL_AURA_REMOVED,Creature-0-3895-2601-18923-224798-0000564725,\"Void Elf Riftwalker\",0xa28,0x0,Player-3674-05ABA5AB,\"Dehsetwar-TwistingNether-EU\",0x512,0x0,457543,\"Alleria's Aid\",0x1,BUFF\r\n",
+        "created_at": "2024-09-06T21:35:13+00:00",
+        "updated_at": "2024-09-06T21:35:13+00:00"
+    },
+    {
+        "id": 1164,
+        "spell_id": 457543,
+        "before": "{\"id\": 457543, \"aura\": 0, \"name\": \"Alleria&apos;s Aid\", \"duration\": 30000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_hunter_markedfordeath\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:35:13.583894Z\"}",
+        "after": "{\"id\": 457543, \"aura\": 0, \"name\": \"Alleria&apos;s Aid\", \"debuff\": 0, \"duration\": 30000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_hunter_markedfordeath\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-06T21:35:13.583894Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-5.zip",
+        "raw_event": "9\/3\/2024 01:16:35.7802  SPELL_AURA_REMOVED,Creature-0-3895-2601-18923-224798-0000564725,\"Void Elf Riftwalker\",0xa28,0x0,Player-3674-05ABA5AB,\"Dehsetwar-TwistingNether-EU\",0x512,0x0,457543,\"Alleria's Aid\",0x1,BUFF\r\n",
+        "created_at": "2024-09-06T21:35:13+00:00",
+        "updated_at": "2024-09-06T21:35:13+00:00"
+    },
+    {
+        "id": 1165,
+        "spell_id": 426283,
+        "before": "{\"id\": 426283, \"aura\": 0, \"name\": \"Arcing Void\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_priest_voidsear\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 35}",
+        "after": "{\"id\": 426283, \"aura\": 0, \"name\": \"Arcing Void\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_priest_voidsear\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 99}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-5.zip",
+        "raw_event": "9\/3\/2024 01:22:39.3682  SPELL_MISSED,Creature-0-3110-2652-5413-212389-0000D64737,\"Cursedheart Invader\",0xa48,0x0,Player-3674-0AF38DDE,\"Zugzugwarrio-TwistingNether-EU\",0x511,0x0,426283,\"Arcing Void\",0x20,MISS,nil\r\n",
+        "created_at": "2024-09-06T21:35:15+00:00",
+        "updated_at": "2024-09-06T21:35:15+00:00"
+    },
+    {
+        "id": 1166,
+        "spell_id": 449070,
+        "before": "{\"id\": 449070, \"aura\": 0, \"name\": \"Crystal Salvo\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_enchanting_wod_crystalshard2\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 1}",
+        "after": "{\"id\": 449070, \"aura\": 0, \"name\": \"Crystal Salvo\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_enchanting_wod_crystalshard2\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-8.zip",
+        "raw_event": "9\/3\/2024 02:43:48.5542  SPELL_MISSED,Creature-0-3110-2652-16715-212400-0001565B0A,\"Void Touched Elemental\",0xa48,0x0,Player-3674-0AEF376F,\"Mulatos-TwistingNether-EU\",0x511,0x0,449070,\"Crystal Salvo\",0x20,IMMUNE,nil\r\n",
+        "created_at": "2024-09-06T21:35:19+00:00",
+        "updated_at": "2024-09-06T21:35:19+00:00"
+    },
+    {
+        "id": 1167,
+        "spell_id": 422233,
+        "before": "{\"id\": 422233, \"aura\": 0, \"name\": \"Crystalline Smash\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_misc_gem_ebondraenite_01\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 1}",
+        "after": "{\"id\": 422233, \"aura\": 0, \"name\": \"Crystalline Smash\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_misc_gem_ebondraenite_01\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-8.zip",
+        "raw_event": "9\/3\/2024 02:43:51.5942  SPELL_MISSED,Creature-0-3110-2652-16715-210156-0000565B0A,\"Skarmorak\",0x10a48,0x0,Player-3674-0AEF376F,\"Mulatos-TwistingNether-EU\",0x511,0x0,422233,\"Crystalline Smash\",0x1,IMMUNE,nil\r\n",
+        "created_at": "2024-09-06T21:35:19+00:00",
+        "updated_at": "2024-09-06T21:35:19+00:00"
+    },
+    {
+        "id": 1168,
+        "spell_id": 426345,
+        "before": "{\"id\": 426345, \"aura\": 0, \"name\": \"Crystal Salvo\", \"debuff\": null, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_enchanting_wod_crystalshard2\", \"selectable\": 0, \"dispel_type\": \"Magic\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 0}",
+        "after": "{\"id\": 426345, \"aura\": 0, \"name\": \"Crystal Salvo\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_enchanting_wod_crystalshard2\", \"selectable\": 0, \"dispel_type\": \"Magic\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 32}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-8.zip",
+        "raw_event": "9\/3\/2024 02:43:53.8772  SPELL_MISSED,Creature-0-3110-2652-16715-212400-0000D65B0A,\"Void Touched Elemental\",0xa48,0x0,Player-3674-0AEF376F,\"Mulatos-TwistingNether-EU\",0x511,0x0,426345,\"Crystal Salvo\",0x20,IMMUNE,nil\r\n",
+        "created_at": "2024-09-06T21:35:19+00:00",
+        "updated_at": "2024-09-06T21:35:19+00:00"
+    },
+    {
+        "id": 1169,
+        "spell_id": 429999,
+        "before": "{\"id\": 429999, \"aura\": 0, \"name\": \"Flaming Scrap\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_shaman_lavasurge\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 32}",
+        "after": "{\"id\": 429999, \"aura\": 0, \"name\": \"Flaming Scrap\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_shaman_lavasurge\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-8.zip",
+        "raw_event": "9\/3\/2024 02:46:50.4422  SPELL_PERIODIC_MISSED,Creature-0-3110-2652-16715-214049-0001565B0A,\"Vent Stalker\",0xa48,0x0,Player-3674-0AEF376F,\"Mulatos-TwistingNether-EU\",0x511,0x0,429999,\"Flaming Scrap\",0x4,ABSORB,nil,397258,574953,nil\r\n",
+        "created_at": "2024-09-06T21:35:20+00:00",
+        "updated_at": "2024-09-06T21:35:20+00:00"
+    },
+    {
+        "id": 1170,
+        "spell_id": 429110,
+        "before": "{\"id\": 429110, \"aura\": 0, \"name\": \"Alloy Bolt\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"item_holyspark\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 1}",
+        "after": "{\"id\": 429110, \"aura\": 0, \"name\": \"Alloy Bolt\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"item_holyspark\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-stonevault-8.zip",
+        "raw_event": "9\/3\/2024 02:48:10.1752  SPELL_MISSED,Creature-0-3110-2652-16715-224962-0000D65B0A,\"Cursedforge Mender\",0xa48,0x0,Player-3674-0B64D9DB,\"Lexadrin-TwistingNether-EU\",0x512,0x0,429110,\"Alloy Bolt\",0x8,IMMUNE,nil\r\n",
+        "created_at": "2024-09-06T21:35:21+00:00",
+        "updated_at": "2024-09-06T21:35:21+00:00"
+    },
+    {
+        "id": 1171,
+        "spell_id": 438825,
+        "before": "{\"id\": 438825, \"aura\": 0, \"name\": \"Poisonous Cloud\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_creature_poison_06\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 32}",
+        "after": "{\"id\": 438825, \"aura\": 0, \"name\": \"Poisonous Cloud\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_creature_poison_06\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_ara-kara-city-of-echoes-3.zip",
+        "raw_event": "9\/4\/2024 19:03:19.4442  SPELL_PERIODIC_MISSED,Creature-0-4253-2660-4335-217533-00005891DF,\"Atik\",0x10a48,0x0,Player-3674-0B473904,\"Hedw\u00edg-TwistingNether-EU\",0x512,0x0,438825,\"Poisonous Cloud\",0x8,ABSORB,nil,83784,350384,nil\r\n",
+        "created_at": "2024-09-06T21:35:28+00:00",
+        "updated_at": "2024-09-06T21:35:28+00:00"
+    },
+    {
+        "id": 1172,
+        "spell_id": 438623,
+        "before": "{\"id\": 438623, \"aura\": 0, \"name\": \"Toxic Rupture\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"trade_engineering\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 1}",
+        "after": "{\"id\": 438623, \"aura\": 0, \"name\": \"Toxic Rupture\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"trade_engineering\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_ara-kara-city-of-echoes.zip",
+        "raw_event": "9\/4\/2024 18:40:48.5042  SPELL_MISSED,Creature-0-4251-2660-11080-214840-0002588D56,\"Engorged Crawler\",0x10a48,0x0,Player-3674-0AEF376F,\"Mulatos-TwistingNether-EU\",0x511,0x0,438623,\"Toxic Rupture\",0x8,IMMUNE,nil\r\n",
+        "created_at": "2024-09-06T21:35:28+00:00",
+        "updated_at": "2024-09-06T21:35:28+00:00"
     }
 ]
