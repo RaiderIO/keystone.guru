@@ -18069,6 +18069,9 @@
             },
             {
                 "dungeon_id": 22
+            },
+            {
+                "dungeon_id": 18
             }
         ]
     },
@@ -24982,7 +24985,11 @@
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": null,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 18
+            }
+        ]
     },
     {
         "id": 257028,
@@ -25024,7 +25031,11 @@
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": null,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 18
+            }
+        ]
     },
     {
         "id": 257063,
@@ -28599,7 +28610,11 @@
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": null,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 18
+            }
+        ]
     },
     {
         "id": 260926,
@@ -28641,7 +28656,11 @@
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": null,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 18
+            }
+        ]
     },
     {
         "id": 261264,
@@ -28729,7 +28748,11 @@
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": null,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 18
+            }
+        ]
     },
     {
         "id": 261438,
@@ -35984,7 +36007,11 @@
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": null,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 18
+            }
+        ]
     },
     {
         "id": 270277,
@@ -38267,7 +38294,11 @@
         "selectable": false,
         "hidden_on_map": true,
         "fetched_data_at": null,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 18
+            }
+        ]
     },
     {
         "id": 273995,
@@ -39118,6 +39149,9 @@
             },
             {
                 "dungeon_id": 22
+            },
+            {
+                "dungeon_id": 18
             }
         ]
     },
@@ -39196,6 +39230,9 @@
             },
             {
                 "dungeon_id": 22
+            },
+            {
+                "dungeon_id": 18
             }
         ]
     },
@@ -45434,7 +45471,11 @@
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": null,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 34
+            }
+        ]
     },
     {
         "id": 320358,
@@ -49698,7 +49739,11 @@
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": null,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 34
+            }
+        ]
     },
     {
         "id": 324391,
@@ -53128,7 +53173,11 @@
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": null,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 34
+            }
+        ]
     },
     {
         "id": 328687,
@@ -80710,7 +80759,11 @@
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": null,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 116
+            }
+        ]
     },
     {
         "id": 391634,
@@ -98478,6 +98531,9 @@
         "spell_dungeons": [
             {
                 "dungeon_id": 108
+            },
+            {
+                "dungeon_id": 109
             }
         ]
     },
@@ -99904,7 +99960,11 @@
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": null,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 113
+            }
+        ]
     },
     {
         "id": 438957,
@@ -104686,7 +104746,11 @@
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": null,
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 110
+            }
+        ]
     },
     {
         "id": 450077,
@@ -107563,7 +107627,11 @@
         "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": "2024-08-28T00:00:00+00:00",
-        "spell_dungeons": []
+        "spell_dungeons": [
+            {
+                "dungeon_id": 115
+            }
+        ]
     },
     {
         "id": 457465,

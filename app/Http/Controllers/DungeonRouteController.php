@@ -62,11 +62,11 @@ class DungeonRouteController extends Controller
             ->first();
 
         return redirect()->route('dungeonroute.view.floor', [
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
-            'floorIndex'   => $defaultFloor?->index ?? '1',
-        ]);
+                'dungeon'      => $dungeonroute->dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => $dungeonroute->getTitleSlug(),
+                'floorIndex'   => $defaultFloor?->index ?? '1',
+            ] + $request->validated());
     }
 
     /**
@@ -90,10 +90,10 @@ class DungeonRouteController extends Controller
 
         if (!isset($title) || $dungeonroute->getTitleSlug() !== $title) {
             return redirect()->route('dungeonroute.view', [
-                'dungeon'      => $dungeon,
-                'dungeonroute' => $dungeonroute,
-                'title'        => $dungeonroute->getTitleSlug(),
-            ]);
+                    'dungeon'      => $dungeon,
+                    'dungeonroute' => $dungeonroute,
+                    'title'        => $dungeonroute->getTitleSlug(),
+                ] + $request->validated());
         }
 
         $currentReport = null;
@@ -121,19 +121,19 @@ class DungeonRouteController extends Controller
                 ->first();
 
             return redirect()->route('dungeonroute.view.floor', [
-                'dungeon'      => $dungeonroute->dungeon,
-                'dungeonroute' => $dungeonroute,
-                'title'        => $dungeonroute->getTitleSlug(),
-                'floorIndex'   => $defaultFloor?->index ?? '1',
-            ]);
-        } else {
-            if ($floor->index !== (int)$floorIndex) {
-                return redirect()->route('dungeonroute.view.floor', [
                     'dungeon'      => $dungeonroute->dungeon,
                     'dungeonroute' => $dungeonroute,
                     'title'        => $dungeonroute->getTitleSlug(),
-                    'floorIndex'   => $floor->index,
-                ]);
+                    'floorIndex'   => $defaultFloor?->index ?? '1',
+                ] + $request->validated());
+        } else {
+            if ($floor->index !== (int)$floorIndex) {
+                return redirect()->route('dungeonroute.view.floor', [
+                        'dungeon'      => $dungeonroute->dungeon,
+                        'dungeonroute' => $dungeonroute,
+                        'title'        => $dungeonroute->getTitleSlug(),
+                        'floorIndex'   => $floor->index,
+                    ] + $request->validated());
             }
 
             return view('dungeonroute.view', [
@@ -164,11 +164,11 @@ class DungeonRouteController extends Controller
             ->first();
 
         return redirect()->route('dungeonroute.present.floor', [
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
-            'floorIndex'   => $defaultFloor?->index ?? '1',
-        ]);
+                'dungeon'      => $dungeonroute->dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => $dungeonroute->getTitleSlug(),
+                'floorIndex'   => $defaultFloor?->index ?? '1',
+            ] + $request->validated());
     }
 
     /**
@@ -201,10 +201,10 @@ class DungeonRouteController extends Controller
 
         if (!isset($title) || $dungeonroute->getTitleSlug() !== $title) {
             return redirect()->route('dungeonroute.present', [
-                'dungeon'      => $dungeon,
-                'dungeonroute' => $dungeonroute,
-                'title'        => $dungeonroute->getTitleSlug(),
-            ]);
+                    'dungeon'      => $dungeon,
+                    'dungeonroute' => $dungeonroute,
+                    'title'        => $dungeonroute->getTitleSlug(),
+                ] + $request->validated());
         }
 
         $dungeonroute->trackPageView(DungeonRoute::PAGE_VIEW_SOURCE_PRESENT_ROUTE);
@@ -221,19 +221,19 @@ class DungeonRouteController extends Controller
                 ->first();
 
             return redirect()->route('dungeonroute.present.floor', [
-                'dungeon'      => $dungeonroute->dungeon,
-                'dungeonroute' => $dungeonroute,
-                'title'        => $dungeonroute->getTitleSlug(),
-                'floorIndex'   => $defaultFloor?->index ?? '1',
-            ]);
-        } else {
-            if ($floor->index !== (int)$floorIndex) {
-                return redirect()->route('dungeonroute.present.floor', [
                     'dungeon'      => $dungeonroute->dungeon,
                     'dungeonroute' => $dungeonroute,
                     'title'        => $dungeonroute->getTitleSlug(),
-                    'floorIndex'   => $floor->index,
-                ]);
+                    'floorIndex'   => $defaultFloor?->index ?? '1',
+                ] + $request->validated());
+        } else {
+            if ($floor->index !== (int)$floorIndex) {
+                return redirect()->route('dungeonroute.present.floor', [
+                        'dungeon'      => $dungeonroute->dungeon,
+                        'dungeonroute' => $dungeonroute,
+                        'title'        => $dungeonroute->getTitleSlug(),
+                        'floorIndex'   => $floor->index,
+                    ] + $request->validated());
             }
 
             return view('dungeonroute.present', [
@@ -271,12 +271,11 @@ class DungeonRouteController extends Controller
         $titleSlug = $dungeonroute->getTitleSlug();
         if (!isset($title) || $titleSlug !== $title) {
             return redirect()->route('dungeonroute.preview', [
-                'dungeon'      => $dungeon,
-                'dungeonroute' => $dungeonroute,
-                'title'        => $titleSlug,
-                'floorIndex'   => $floorIndex,
-                'z'            => $zoomLevel,
-            ]);
+                    'dungeon'      => $dungeon,
+                    'dungeonroute' => $dungeonroute,
+                    'title'        => $titleSlug,
+                    'floorIndex'   => $floorIndex,
+                ] + $request->validated());
         }
 
         /** @var FLoor $floor */
@@ -313,10 +312,10 @@ class DungeonRouteController extends Controller
         $dungeonroute->migrateToSeasonalType($expansionService, $seasonalType);
 
         return redirect()->route('dungeonroute.edit', [
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $title,
-        ]);
+                'dungeon'      => $dungeonroute->dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => $title,
+            ] + $request->validated());
     }
 
     /**
@@ -413,11 +412,11 @@ class DungeonRouteController extends Controller
             ->first();
 
         return redirect()->route('dungeonroute.edit.floor', [
-            'dungeon'      => $dungeonroute->dungeon,
-            'dungeonroute' => $dungeonroute,
-            'title'        => $dungeonroute->getTitleSlug(),
-            'floorIndex'   => $defaultFloor?->index ?? '1',
-        ]);
+                'dungeon'      => $dungeonroute->dungeon,
+                'dungeonroute' => $dungeonroute,
+                'title'        => $dungeonroute->getTitleSlug(),
+                'floorIndex'   => $defaultFloor?->index ?? '1',
+            ] + $request->validated());
     }
 
     /**
@@ -443,11 +442,11 @@ class DungeonRouteController extends Controller
         $titleSlug = $dungeonroute->getTitleSlug();
         if (!isset($title) || $titleSlug !== $title) {
             return redirect()->route('dungeonroute.edit.floor', [
-                'dungeon'      => $dungeon,
-                'dungeonroute' => $dungeonroute,
-                'title'        => $titleSlug,
-                'floorIndex'   => $floorIndex,
-            ]);
+                    'dungeon'      => $dungeon,
+                    'dungeonroute' => $dungeonroute,
+                    'title'        => $titleSlug,
+                    'floorIndex'   => $floorIndex,
+                ] + $request->validated());
         }
 
         /** @var Floor $floor */
@@ -462,19 +461,19 @@ class DungeonRouteController extends Controller
                 ->first();
 
             return redirect()->route('dungeonroute.edit.floor', [
-                'dungeon'      => $dungeonroute->dungeon,
-                'dungeonroute' => $dungeonroute,
-                'title'        => $dungeonroute->getTitleSlug(),
-                'floorIndex'   => $defaultFloor?->index ?? '1',
-            ]);
-        } else {
-            if ($floor->index !== (int)$floorIndex) {
-                return redirect()->route('dungeonroute.edit.floor', [
                     'dungeon'      => $dungeonroute->dungeon,
                     'dungeonroute' => $dungeonroute,
                     'title'        => $dungeonroute->getTitleSlug(),
-                    'floorIndex'   => $floor->index,
-                ]);
+                    'floorIndex'   => $defaultFloor?->index ?? '1',
+                ] + $request->validated());
+        } else {
+            if ($floor->index !== (int)$floorIndex) {
+                return redirect()->route('dungeonroute.edit.floor', [
+                        'dungeon'      => $dungeonroute->dungeon,
+                        'dungeonroute' => $dungeonroute,
+                        'title'        => $dungeonroute->getTitleSlug(),
+                        'floorIndex'   => $floor->index,
+                    ] + $request->validated());
             }
 
             $userOrDefaultRegion = GameServerRegion::getUserOrDefaultRegion();
