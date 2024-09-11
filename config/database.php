@@ -201,9 +201,12 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix'  => env('REDIS_PREFIX', Str::slug(
-                sprintf('%s-%s-cache:', env('APP_NAME', 'laravel'), config('app.type'))
-            )),
+            'prefix'  => env('REDIS_PREFIX',
+                sprintf('%s-%s-cache:',
+                    Str::slug(env('APP_NAME', 'laravel')),
+                    Str::slug(config('app.type'))
+                )
+            ),
         ],
 
         'default' => [
