@@ -20,6 +20,12 @@
             },
             {
                 "release_changelog_id": 252,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2466,
+                "change": "Updated mapping to the latest version."
+            },
+            {
+                "release_changelog_id": 252,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2459,
                 "change": "Changing dungeons that is not part of the current season when trying to create a route no longer causes a crash - causing affixes not to be selectable anymore."
