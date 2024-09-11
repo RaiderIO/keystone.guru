@@ -44,6 +44,23 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
         try {
             $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
             $result         = $splitter->splitCombatLog($targetFilePath);
+
+            // If we extracted the file somewhere, move it to where we originally found the file
+            if ($targetFilePath !== $filePath) {
+                $newResult = collect();
+                foreach ($result as $originalCombatLogPath) {
+                    // Move file to the correct location
+                    $targetCombatLogPath = sprintf('%s/%s', dirname($filePath), basename($originalCombatLogPath));
+                    if (rename($originalCombatLogPath, $targetCombatLogPath)) {
+                        $newResult->push($targetCombatLogPath);
+                        $this->log->splitCombatLogUsingSplitterMovingFile($originalCombatLogPath, $targetCombatLogPath);
+                    } else {
+                        $this->log->splitCombatLogUsingSplitterMovingFileFailed($originalCombatLogPath, $targetCombatLogPath);
+                    }
+                }
+
+                $result = $newResult;
+            }
         } finally {
             $this->log->splitCombatLogUsingSplitterEnd();
         }

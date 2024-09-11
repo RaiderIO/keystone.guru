@@ -38,8 +38,11 @@ if (!isset($dungeons)) {
 
     // Build a list of seasons that we use to make selections of
     $seasons = [];
+    $showLongName = false;
     if ($nextSeason !== null) {
         $seasons[] = $nextSeason;
+
+        $showLongName = $nextSeason->expansion_id !== $currentSeason->expansion_id;
     }
 
     $seasons[] = $currentSeason;
@@ -48,7 +51,8 @@ if (!isset($dungeons)) {
     if ($allowSeasonSelection) {
         $dungeonsSelect[__('view_common.dungeon.select.seasons')] = [];
         foreach ($seasons as $season) {
-            $dungeonsSelect[__('view_common.dungeon.select.seasons')][sprintf('season-%d', $season->id)] = $season->name;
+            $dungeonsSelect[__('view_common.dungeon.select.seasons')][sprintf('season-%d', $season->id)] =
+                $showLongName && $season->id === $nextSeason->id ? $season->name_long : $season->name;
         }
     }
 
@@ -72,7 +76,7 @@ if (!isset($dungeons)) {
 
     if ($showSeasons) {
         foreach ($seasons as $season) {
-            $dungeonsSelect[__($season->name)] = $season->dungeons
+            $dungeonsSelect[$showLongName && $season->id === $nextSeason->id ? $season->name_long : $season->name] = $season->dungeons
                 ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => __($dungeon->name)])
                 ->toArray();
         }

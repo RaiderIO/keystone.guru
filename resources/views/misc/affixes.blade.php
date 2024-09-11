@@ -10,6 +10,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
+use App\Models\Timewalking\TimewalkingEvent;
 use App\Service\Season\SeasonService;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
 use Illuminate\Support\Carbon;
@@ -76,7 +77,7 @@ $now    = Carbon::now();
                         $timewalkingEvent = $timewalkingEventService->getActiveTimewalkingEventAt($startDate);
 
                     if($previousAffixGroupSeasonId !== null && $previousAffixGroupSeasonId !== $affixGroup->season_id) {
-                        $newSeason = Season::find($affixGroup->season_id);
+                        $newSeason = Season::findOrFail($affixGroup->season_id);
                         ?>
                     <tr class="table_row text-center bg-dark">
                         <td colspan="5">
@@ -93,7 +94,7 @@ $now    = Carbon::now();
                             'isFirst' => $isFirst,
                             'isLast' => $isLast,
                             'startDate' => $startDate,
-                            'showBottomBorder' => !($timewalkingEvent instanceof \App\Models\Timewalking\TimewalkingEvent),
+                            'showBottomBorder' => !($timewalkingEvent instanceof TimewalkingEvent),
                             'isOdd' => $affixGroupIndex % 2 == 0
                             ])
                         <?php

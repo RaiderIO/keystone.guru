@@ -10,6 +10,10 @@ interface ChallengeModeSplitterLoggingInterface extends CombatLogSplitterLogging
 
     public function parseCombatLogEventTooBigTimestampGap(float $seconds, string $previousTimestamp, string $timestamp): void;
 
+    public function parseCombatLogEventZoneChangeMismatch(int $zoneId, string $zoneName, int $dungeonZoneId, string $dungeonName): void;
+
+    public function parseCombatLogEventZoneChangeMismatchResolved(): void;
+
     public function parseCombatLogEventChallengeModeStartEvent(): void;
 
     public function parseCombatLogEventCombatLogVersionEvent(): void;

@@ -154,7 +154,7 @@ class CacheService implements CacheServiceInterface
         // keystoneguru-live-cache:p79vfrAn4QazxHVtLb5s4LssQ5bi6ZaWGNTMOblt
         $prefix            = config('database.redis.options.prefix');
         $keyWhitelistRegex = [
-            sprintf('/%s[a-z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
+            sprintf('/%s[a-zA-Z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
         ];
 
         try {

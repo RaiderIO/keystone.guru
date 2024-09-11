@@ -118,8 +118,9 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
      * @throws Throwable
      */
     public function delete(
-        Request $request,
-        Enemy   $enemy
+        Request        $request,
+        MappingVersion $mappingVersion,
+        Enemy          $enemy
     ): Response {
         return DB::transaction(function () use ($enemy) {
             try {

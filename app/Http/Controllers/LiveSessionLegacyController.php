@@ -26,7 +26,7 @@ class LiveSessionLegacyController extends Controller
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
             'livesession'  => $livesession,
-            'floorindex'   => $floorIndex,
+            'floorIndex'   => $floorIndex,
         ]);
     }
 }

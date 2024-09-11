@@ -110,7 +110,6 @@ class MapIcon extends Icon {
     }
 
     /**
-     *
      * @returns {{permanent}}
      */
     getTooltipOptions() {

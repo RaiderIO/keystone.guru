@@ -830,6 +830,7 @@ html, body, #map, #app, .wrapper {
 .enemy_icon_npc_mdt,
 .enemy_icon_npc_enemy_forces,
 .enemy_icon_npc_enemy_portrait,
+.enemy_icon_npc_enemy_skippable,
 .enemy_icon_npc_class,
 .enemy_icon_npc_type {
     border: black 2px solid;
@@ -873,6 +874,14 @@ html, body, #map, #app, .wrapper {
     background-color: #15c415 !important;
 }
 
+.enemy_icon_npc_enemy_skippable .skippable {
+    background-color: #15c415 !important;
+}
+.enemy_icon_npc_enemy_skippable .not_skippable {
+    background-color: #dc3c3c !important;
+}
+
+.enemy_icon_npc_enemy_skippable_inner,
 .enemy_icon_npc_enemy_forces_inner {
     display: flex;
     width: 100%;

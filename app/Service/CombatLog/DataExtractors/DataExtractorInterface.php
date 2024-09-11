@@ -8,9 +8,9 @@ use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 
 interface DataExtractorInterface
 {
-    public function beforeExtract(ExtractedDataResult $result): void;
+    public function beforeExtract(ExtractedDataResult $result, string $combatLogFilePath): void;
 
     public function extractData(ExtractedDataResult $result, DataExtractionCurrentDungeon $currentDungeon, BaseEvent $parsedEvent): void;
 
-    public function afterExtract(ExtractedDataResult $result): void;
+    public function afterExtract(ExtractedDataResult $result, string $combatLogFilePath): void;
 }

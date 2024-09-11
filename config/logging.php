@@ -55,7 +55,7 @@ return [
     'channels' => [
         'stack' => [
             'driver'            => 'stack',
-            'channels'          => ['daily', 'discord', 'rollbar'],
+            'channels'          => ['daily', 'discord', /*'rollbar'*/],
             'ignore_exceptions' => false,
         ],
 

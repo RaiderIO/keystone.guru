@@ -2,6 +2,7 @@
 
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
@@ -10,8 +11,8 @@ use Illuminate\Support\Collection;
  * @var Collection $availableKeysSelect
  */
 
-$gameVersionsSelect = \App\Models\GameVersion\GameVersion::all()
-    ->mapWithKeys(static fn(\App\Models\GameVersion\GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
+$gameVersionsSelect = GameVersion::all()
+    ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 ?>
 
 @extends('layouts.sitepage', [

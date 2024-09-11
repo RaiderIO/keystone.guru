@@ -16,9 +16,10 @@ use Illuminate\Support\Collection;
  * @property string                                   $key
  * @property string                                   $name
  * @property string                                   $color
+ *
  * @property Collection<CharacterClassSpecialization> $specializations
- * @property Collection<DungeonRoutePlayerClass>      $dungeonrouteplayerclasses
- * @property Collection<DungeonRoutePlayerRace>       $dungeonrouteplayerraces
+ * @property Collection<DungeonRoutePlayerClass>      $dungeonRoutePlayerClasses
+ * @property Collection<DungeonRoutePlayerRace>       $dungeonRoutePlayerRaces
  *
  * @mixin Eloquent
  */
@@ -74,12 +75,12 @@ class CharacterClass extends CacheModel
         return $this->belongsToMany(CharacterRace::class, 'character_race_class_couplings');
     }
 
-    public function dungeonrouteplayerclasses(): BelongsToMany
+    public function dungeonRoutePlayerClasses(): BelongsToMany
     {
         return $this->belongsToMany(DungeonRoutePlayerClass::class, 'dungeon_route_player_classes');
     }
 
-    public function dungeonrouteplayerraces(): BelongsToMany
+    public function dungeonRoutePlayerRaces(): BelongsToMany
     {
         return $this->belongsToMany(DungeonRoutePlayerRace::class, 'dungeon_route_player_races');
     }

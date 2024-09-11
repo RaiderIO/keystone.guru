@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class EmbedFormRequest extends FormRequest
+class DungeonRouteEmbedUrlFormRequest extends DungeonRouteBaseUrlFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,7 +19,7 @@ class EmbedFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        return array_merge(parent::rules(), [
             'style'                 => ['nullable', Rule::in(['compact', 'regular'])],
             'pullsDefaultState'     => 'nullable|integer',
             'pullsHideOnMove'       => 'nullable|bool',
@@ -32,6 +31,6 @@ class EmbedFormRequest extends FormRequest
             'showAffixes'           => 'nullable|bool',
             'showTitle'             => 'nullable|bool',
             'showPresenterButton'   => 'nullable|bool',
-        ];
+        ]);
     }
 }

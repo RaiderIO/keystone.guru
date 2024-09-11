@@ -8,6 +8,7 @@ use App\Models\Floor\Floor;
  * @var Floor        $floor
  * @var int          $keyLevelMin
  * @var int          $keyLevelMax
+ * @var array        $parameters
  */
 
 $dungeon = $dungeonroute->dungeon->load(['expansion', 'floors']);
@@ -47,6 +48,7 @@ $sandbox = $dungeonroute->isSandbox();
             'edit' => true,
             'sandboxMode' => $sandbox,
             'floorId' => $floor->id,
+            'parameters' => $parameters,
             'show' => [
                 'header' => true,
                 'controls' => [

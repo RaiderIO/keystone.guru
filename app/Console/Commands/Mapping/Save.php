@@ -3,6 +3,9 @@
 namespace App\Console\Commands\Mapping;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
+use App\Models\CombatLog\CombatLogNpcSpellAssignment;
+use App\Models\CombatLog\CombatLogSpellUpdate;
+use App\Models\CombatLog\ParsedCombatLog;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -41,6 +44,7 @@ class Save extends Command
 
     /**
      * Execute the console command.
+     * @throws \Exception
      */
     public function handle(): int
     {
@@ -48,12 +52,14 @@ class Save extends Command
         $this->call('modelCache:clear');
 
         $dungeonDataDir = database_path('seeders/dungeondata/');
+        $combatLogDir   = database_path('seeders/combatlogs/');
 
         $this->saveMappingVersions($dungeonDataDir);
         $this->saveMappingCommitLogs($dungeonDataDir);
         $this->saveDungeons($dungeonDataDir);
         $this->saveNpcs($dungeonDataDir);
         $this->saveSpells($dungeonDataDir);
+        $this->saveCombatlogData($combatLogDir);
         $this->saveDungeonData($dungeonDataDir);
 
         $mappingBackupDir = config('keystoneguru.mapping_backup_dir');
@@ -78,6 +84,9 @@ class Save extends Command
         return 0;
     }
 
+    /**
+     * @throws \Exception
+     */
     private function saveMappingVersions(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
@@ -94,6 +103,9 @@ class Save extends Command
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     private function saveMappingCommitLogs(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
@@ -110,6 +122,9 @@ class Save extends Command
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     private function saveDungeons(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
@@ -140,7 +155,8 @@ class Save extends Command
     }
 
     /**
-     * @param  $dungeonDataDir  string
+     * @param string $dungeonDataDir
+     * @throws \Exception
      */
     private function saveNpcs(string $dungeonDataDir): void
     {
@@ -164,7 +180,8 @@ class Save extends Command
     }
 
     /**
-     * @param  $dungeonDataDir  string
+     * @param string $dungeonDataDir
+     * @throws \Exception
      */
     private function saveSpells(string $dungeonDataDir): void
     {
@@ -180,7 +197,23 @@ class Save extends Command
     }
 
     /**
-     * @param  $dungeonDataDir  string
+     * @param string $combatlogDir
+     * @return void
+     * @throws \Exception
+     */
+    private function saveCombatlogData(string $combatlogDir): void
+    {
+        // Save all spells
+        $this->info('Saving Combatlog data');
+
+        $this->saveDataToJsonFile(CombatLogNpcSpellAssignment::all()->toArray(), $combatlogDir, 'combat_log_npc_spell_assignments.json');
+        $this->saveDataToJsonFile(CombatLogSpellUpdate::all()->toArray(), $combatlogDir, 'combat_log_spell_updates.json');
+        $this->saveDataToJsonFile(ParsedCombatLog::all()->toArray(), $combatlogDir, 'parsed_combat_logs.json');
+    }
+
+    /**
+     * @param string $dungeonDataDir
+     * @throws \Exception
      */
     private function saveDungeonData(string $dungeonDataDir): void
     {
@@ -222,6 +255,9 @@ class Save extends Command
         $this->output->writeln('');
     }
 
+    /**
+     * @throws \Exception
+     */
     private function saveDungeonDungeonRoutes(Dungeon $dungeon, string $rootDirPath): void
     {
         // Demo routes, load it in a specific way to make it easier to import it back in again
@@ -319,6 +355,9 @@ class Save extends Command
         $this->saveDataToJsonFile($dungeon->dungeonRoutesForExport->toArray(), $rootDirPath, 'dungeonroutes.json');
     }
 
+    /**
+     * @throws \Exception
+     */
     private function saveDungeonNpcs(Dungeon $dungeon, string $rootDirPath): void
     {
         $npcs = Npc::without(['characteristics', 'spells', 'enemyForces'])
@@ -340,6 +379,9 @@ class Save extends Command
         $this->saveDataToJsonFile($npcs, $rootDirPath, 'npcs.json');
     }
 
+    /**
+     * @throws \Exception
+     */
     private function saveFloor(Floor $floor, string $rootDirPath): void
     {
 //        $this->info(sprintf('-- Saving floor %s', __($floor->name)));

@@ -2,18 +2,16 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
-use App\Models\Affix;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class MigrateToSeasonalTypeRequest extends FormRequest
+class DungeonRouteBaseUrlFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true; // Auth::user()->hasRole(["user", "admin"]);
+        return true;
     }
 
     /**
@@ -22,7 +20,9 @@ class MigrateToSeasonalTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'seasonal_type' => Rule::in(Affix::SEASONAL_AFFIXES),
+            'lat' => 'numeric',
+            'lng' => 'numeric',
+            'z'   => 'numeric',
         ];
     }
 }

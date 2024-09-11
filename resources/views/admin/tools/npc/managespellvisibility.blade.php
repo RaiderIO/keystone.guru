@@ -1,12 +1,14 @@
 <?php
 
+use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 /**
- * @var Collection<Npc> $npcs
+ * @var Collection<Npc>   $npcs
  * @var Collection<Spell> $spells
+ * @var Dungeon|null      $dungeon
  */
 ?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.npc.managespellvisibility.title')])
@@ -45,6 +47,23 @@ use Illuminate\Support\Collection;
 @endsection
 
 @section('content')
+
+    {{ Form::open(['route' => ['admin.tools.npc.managespellvisibility.submit']]) }}
+        @include('common.dungeon.select', [
+            'id' => 'spell_visibility_dungeon_select',
+            'activeOnly' => false,
+            'ignoreGameVersion' => true,
+            'selected' => isset($dungeon) ? optional($dungeon)->id : null,
+        ])
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">
+                {{ __('view_admin.tools.npc.managespellvisibility.submit') }}
+            </button>
+        </div>
+
+    {{ Form::close() }}
+
     {{ $npcs->links() }}
 
     @foreach($npcs as $npc)
@@ -74,7 +93,9 @@ use Illuminate\Support\Collection;
                         </div>
                         <div class="col">
                             <div class="form-element" style="line-height: 2.5">
-                                <a href="https://www.wowhead.com/spell={{$npcSpell->spell_id}}">
+                                <a href="https://www.wowhead.com/spell={{$npcSpell->spell_id}}"
+                                   data-wh-icon-size="medium"
+                                >
                                     <img src="{{$spell->icon_url}}" width="32px" alt="{{ __($spell->name) }}"/>
                                     {{ __($spell->name) }}
                                 </a>

@@ -19,8 +19,6 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding known races');
-
         $factionAllianceId = Faction::ALL[Faction::FACTION_ALLIANCE];
         $factionHordeId    = Faction::ALL[Faction::FACTION_HORDE];
 
@@ -59,6 +57,9 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
 
             'races.mechagnome' => new CharacterRace(['key' => 'mechagnome', 'faction_id' => $factionAllianceId]),
             'races.vulpera'    => new CharacterRace(['key' => 'vulpera', 'faction_id' => $factionHordeId]),
+
+            'races.earthenalliance' => new CharacterRace(['key' => 'earthenalliance', 'faction_id' => $factionAllianceId]),
+            'races.earthenhorde'    => new CharacterRace(['key' => 'earthenhorde', 'faction_id' => $factionHordeId]),
         ];
 
         foreach ($races as $name => $race) {
@@ -66,8 +67,6 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
             $race->name = $name;
             $race->setTable(DatabaseSeeder::getTempTableName(CharacterRace::class))->save();
         }
-
-        $this->command->info('Adding known classes');
 
         $classColors = [
             CharacterClass::CHARACTER_CLASS_WARRIOR      => '#C79C6E',
@@ -112,41 +111,43 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
             $classes[$class->name] = $class;
         }
 
-        $this->command->info('Adding known race/class combinations');
         // In order of the way $classes is structured
         // @formatter:off
         $raceClassMatrix = [
-            'races.human' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
-            'races.dwarf' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
-            'races.night_elf' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x', ' '],
-            'races.gnome' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
-            'races.draenei' => ['x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', 'x', 'x', ' ', ' ', ' '],
-            'races.worgen' => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', ' ', ' '],
-            'races.void_elf' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
+            'races.human'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' '],
+            'races.dwarf'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
+            'races.night_elf'           => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x', ' '],
+            'races.gnome'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
+            'races.draenei'             => ['x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', 'x', 'x', ' ', ' ', ' '],
+            'races.worgen'              => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', ' ', ' '],
+            'races.void_elf'            => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
             'races.lightforged_draenei' => ['x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', 'x', ' ', ' ', ' '],
-            'races.dark_iron_dwarf' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
+            'races.dark_iron_dwarf'     => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
 
-            'races.pandarenalliance' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
-            'races.pandarenhorde' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
+            'races.pandarenalliance'    => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
+            'races.pandarenhorde'       => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
 
-            'races.dracthyralliance' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', 'x'],
-            'races.dracthyrhorde' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', 'x'],
+            'races.dracthyralliance'    => [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x'],
+            'races.dracthyrhorde'       => [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x'],
 
-            'races.orc' => ['x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
-            'races.undead' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
-            'races.tauren' => ['x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', 'x', 'x', ' ', ' '],
-            'races.troll' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' '],
-            'races.blood_elf' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' '],
-            'races.goblin' => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
-            'races.nightborne' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
+            'races.earthenalliance'     => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
+            'races.earthenhorde'        => ['x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' '],
+
+            'races.orc'                 => ['x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'races.undead'              => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
+            'races.tauren'              => ['x', 'x', 'x', ' ', 'x', 'x', ' ', ' ', 'x', 'x', 'x', ' ', ' '],
+            'races.troll'               => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' '],
+            'races.blood_elf'           => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' '],
+            'races.goblin'              => ['x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'races.nightborne'          => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
             'races.highmountain_tauren' => ['x', 'x', 'x', ' ', ' ', 'x', ' ', ' ', 'x', ' ', 'x', ' ', ' '],
-            'races.maghar_orc' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
+            'races.maghar_orc'          => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', ' ', ' ', ' '],
 
-            'races.kul_tiran_human' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' ', ' '],
-            'races.zandalari_troll' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' '],
+            'races.kul_tiran_human'     => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', ' ', 'x', ' ', ' '],
+            'races.zandalari_troll'     => ['x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', ' ', ' '],
 
-            'races.mechagnome' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
-            'races.vulpera' => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
+            'races.mechagnome'          => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '],
+            'races.vulpera'             => ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '],
         ];
         // @formatter:on
 
@@ -173,7 +174,6 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
 
         CharacterRaceClassCoupling::from(DatabaseSeeder::getTempTableName(CharacterRaceClassCoupling::class))->insert($raceClassCouplingAttributes);
 
-        $this->command->info('Adding known class/specialization combinations');
         // @formatter:off
         $classSpecializationMatrix = [
             'classes.death_knight' => [
@@ -194,6 +194,7 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
             'classes.evoker' => [
                 new CharacterClassSpecialization(['key' => 'devastation', 'name' => 'specializations.evoker.devastation']),
                 new CharacterClassSpecialization(['key' => 'preservation', 'name' => 'specializations.evoker.preservation']),
+                new CharacterClassSpecialization(['key' => 'augmentation', 'name' => 'specializations.evoker.augmentation']),
             ],
             'classes.hunter' => [
                 new CharacterClassSpecialization(['key' => 'beast_mastery', 'name' => 'specializations.hunter.beast_mastery']),
@@ -275,5 +276,11 @@ class CharacterInfoSeeder extends Seeder implements TableSeederInterface
             CharacterClassSpecialization::class,
             CharacterRaceClassCoupling::class,
         ];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

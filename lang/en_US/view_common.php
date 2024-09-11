@@ -183,10 +183,10 @@ return [
     ],
     'general'      => [
         'linkpreview' => [
-            'title_suffix'               => ' | Keystone.guru',
-            'description_suffix'         => ' Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one place to manage and share your M+ routes.',
-            'twitter_title_suffix'       => ' | Keystone.guru',
-            'twitter_description_suffix' => ' Keystone.guru is the one place to find, manage and share your M+ routes.',
+            'title'               => ':title | Keystone.guru',
+            'description'         => ':description Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one place to manage and share your M+ routes.',
+            'twitter_title'       => ':title | Keystone.guru',
+            'twitter_description' => ':description Keystone.guru is the one place to find, manage and share your M+ routes.',
         ],
     ],
     'group'        => [
@@ -276,6 +276,7 @@ return [
                     'enemy_forces'            => 'Enemy forces',
                     'enemy_visual_type'       => 'Visuals',
                     'enemy_visual_type_title' => 'Visuals',
+                    'enemy_skippable'         => 'Skippable',
                 ],
                 'floor_switch'             => [
                     'switch_floors' => 'Floors',
@@ -469,6 +470,7 @@ return [
             'link'                             => 'Link',
             'short_link'                       => 'Short link',
             'copy_shareable_link_to_clipboard' => 'Copy shareable link to clipboard',
+            'include_location_in_link'         => 'Include current zoom and location in link',
             'embed'                            => 'Embed',
             'copy_embed_code_to_clipboard'     => 'Copy embed code to clipboard',
             'mdt_string'                       => 'MDT String',

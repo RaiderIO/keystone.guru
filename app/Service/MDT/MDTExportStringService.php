@@ -130,6 +130,11 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             $floor  = $killZone->getDominantFloor();
             $latLng = $killZone->getEnemiesBoundingBoxNorthEdgeMiddleCoordinate(self::KILL_ZONE_DESCRIPTION_DISTANCE);
 
+            // Maybe the pull had no enemies
+            if ($latLng === null) {
+                continue;
+            }
+
             if ($this->dungeonRoute->mappingVersion->facade_enabled) {
                 $latLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this->dungeonRoute->mappingVersion,

@@ -48,13 +48,13 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
             }
 
             // Save the release last!
-            /** @var array{created_at: \Carbon\Carbon, updated_at: \Carbon\Carbon} $releaseAttribute */
+            /** @var array{created_at: Carbon, updated_at: Carbon} $releaseAttribute */
             $releaseAttribute = array_filter($modelsData, function ($value) {
                 return !is_array($value);
             });
 
-            $releaseAttribute['created_at'] = Carbon::createFromFormat(Release::$SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['created_at'])->toDateTimeString();
-            $releaseAttribute['updated_at'] = Carbon::createFromFormat(Release::$SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['updated_at'])->toDateTimeString();
+            $releaseAttribute['created_at'] = Carbon::createFromFormat(Release::SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['created_at'])->toDateTimeString();
+            $releaseAttribute['updated_at'] = Carbon::createFromFormat(Release::SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['updated_at'])->toDateTimeString();
 
             $releaseAttributes[] = $releaseAttribute;
         }
@@ -71,5 +71,11 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
             ReleaseChangelog::class,
             ReleaseChangelogChange::class,
         ];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

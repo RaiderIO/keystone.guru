@@ -12,8 +12,6 @@ class ReleaseChangelogCategorySeeder extends Seeder implements TableSeederInterf
      */
     public function run(): void
     {
-        $this->command->info('Adding known release changelog categories');
-
         $releaseChangelogCategoryAttributes = [];
         foreach (ReleaseChangelogCategory::ALL as $key => $id) {
             $releaseChangelogCategoryAttributes[] = [
@@ -28,5 +26,11 @@ class ReleaseChangelogCategorySeeder extends Seeder implements TableSeederInterf
     public static function getAffectedModelClasses(): array
     {
         return [ReleaseChangelogCategory::class];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

@@ -120,7 +120,7 @@ class ViewService implements ViewServiceInterface
                 'characterClassSpecializations'   => CharacterClassSpecialization::all(),
                 'characterClasses'                => CharacterClass::with('specializations')->get(),
                 // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
-                'characterRacesClasses'           => CharacterRace::with(['classes:character_classes.id'])->get(),
+                'characterRacesClasses'           => CharacterRace::with(['classes:character_classes.id'])->orderBy('faction_id')->get(),
                 'allAffixes'                      => Affix::all(),
                 'allRouteAttributes'              => RouteAttribute::all(),
                 'allPublishedStates'              => PublishedState::all(),

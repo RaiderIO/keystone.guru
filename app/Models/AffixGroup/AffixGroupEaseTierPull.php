@@ -13,9 +13,11 @@ use Illuminate\Support\Collection;
  * @property int                            $id
  * @property int                            $affix_group_id
  * @property string                         $tiers_hash
+ *
  * @property Carbon                         $last_updated_at
  * @property Carbon                         $created_at
  * @property Carbon                         $updated_at
+ *
  * @property AffixGroup                     $affixGroup
  * @property Collection<AffixGroupEaseTier> $affixGroupEaseTiers
  *

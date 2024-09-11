@@ -1,5 +1,11 @@
 /**
- * @property [currentExpansionKey: string, dungeonroute: string] options
+ * @typedef {Object} OptionsType
+ * @property {string} currentExpansionKey - The current expansion key.
+ * @property {string} dungeonroute - The dungeon route.
+ */
+
+/**
+ * @property {OptionsType} options
  */
 class CommonGroupAffixes extends InlineCode {
     /**
@@ -65,15 +71,15 @@ class CommonGroupAffixes extends InlineCode {
                     if (seasonForSelectedDungeon.id === this.options.currentSeason.id) {
                         let currentAffix = this.options.currentAffixes[this.currentSelectionExpansionKey];
                         if (currentAffix !== null) {
-                            this.currentSelection = [currentAffix];
+                            this.currentSelection = [currentAffix.id];
                         } else {
-                            this.currentSelection = [seasonForSelectedDungeon.affixgroups[0].id];
+                            this.currentSelection = [seasonForSelectedDungeon.affix_groups[0].id];
                         }
                     }
 
                     // Try to select the affix based on the currently active expansion + season
                     if (this._hasNextSeason() && seasonForSelectedDungeon.id === this.options.nextSeason.id) {
-                        this.currentSelection = [seasonForSelectedDungeon.affixgroups[0].id];
+                        this.currentSelection = [seasonForSelectedDungeon.affix_groups[0].id];
                     }
                 }
 
@@ -81,13 +87,13 @@ class CommonGroupAffixes extends InlineCode {
                 $affixListRows.filter(`.season.season-${seasonForSelectedDungeon.id}`).show();
             }
                 // If the expansion changed we need to change the default selection, OR if we initialize, that means we need to trigger the
-            // 'show affixgroups' jquery code
+            // 'show affix_groups' jquery code
             else if (initialize || (this.currentSelectionExpansionKey !== expansionKeyOfDungeonAtRelease && !this.hasDungeonRoute)) {
                 // Don't override the default selection at the start
                 if (!initialize) {
                     let currentAffix = this.options.currentAffixes[this.currentSelectionExpansionKey];
                     if (currentAffix !== null) {
-                        this.currentSelection = [currentAffix];
+                        this.currentSelection = [currentAffix.id];
                     } else {
                         let firstAffixGroupForExpansion = this._getFirstAffixGroupForExpansion(this.currentSelectionExpansionKey);
                         if (firstAffixGroupForExpansion !== null) {

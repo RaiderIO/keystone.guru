@@ -106,9 +106,9 @@ class ThumbnailService implements ThumbnailServiceInterface
                 'dungeon'      => $dungeonRoute->dungeon,
                 'dungeonroute' => $dungeonRoute->public_key,
                 'title'        => $dungeonRoute->getTitleSlug(),
-                'floorindex'   => $floorIndex,
+                'floorIndex'   => $floorIndex,
                 'secret'       => config('keystoneguru.thumbnail.preview_secret'),
-                'zoomLevel'    => $zoomLevel,
+                'z'            => $zoomLevel,
             ]),
             // Second argument; where to save the resulting image
             $tmpFile,

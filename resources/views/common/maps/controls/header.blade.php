@@ -264,7 +264,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
 
     @if($showShare)
         @component('common.general.modal', ['id' => 'share_modal'])
-            @include('common.modal.share', ['show' => $show['share'], 'dungeonroute' => $dungeonroute])
+            @include('common.modal.share', ['show' => $show['share'], 'dungeonroute' => $dungeonroute, 'modalId' => 'share_modal'])
         @endcomponent
     @endif
 

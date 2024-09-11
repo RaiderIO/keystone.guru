@@ -27,4 +27,10 @@ class RaidMarkersSeeder extends Seeder implements TableSeederInterface
     {
         return [RaidMarker::class];
     }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
+    }
 }

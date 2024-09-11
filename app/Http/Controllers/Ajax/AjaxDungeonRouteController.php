@@ -13,9 +13,9 @@ use App\Http\Controllers\Traits\ListsEnemyPatrols;
 use App\Http\Controllers\Traits\ListsMapIcons;
 use App\Http\Controllers\Traits\ListsPaths;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteDataFormRequest;
-use App\Http\Requests\DungeonRoute\AjaxDungeonRouteFormRequest;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSubmitFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSearchFormRequest;
-use App\Http\Requests\DungeonRoute\AjaxSimulateFormRequest;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSimulateFormRequest;
 use App\Http\Requests\PublishFormRequest;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\AuthorNameColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonColumnHandler;
@@ -226,14 +226,12 @@ class AjaxDungeonRouteController extends Controller
         // May be modified/adjusted later on
         $selectRaw = 'dungeon_routes.*, mapping_versions.enemy_forces_required_teeming, mapping_versions.enemy_forces_required';
         $season    = null;
-        $expansion = null;
+        $expansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
 
         if ($request->has('expansion')) {
             $expansion = Expansion::where('shortname', $request->get('expansion'))->first();
         } else if ($request->has('season')) {
             $season = Season::find($request->get('season'));
-        } else {
-            $expansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
         }
 
         $query = DungeonRoute::with(['faction', 'specializations', 'classes', 'races', 'author', 'affixes',
@@ -342,7 +340,10 @@ class AjaxDungeonRouteController extends Controller
             $userRegion = GameServerRegion::getUserOrDefaultRegion();
 
             return view('common.dungeonroute.cardlist', [
-                'currentAffixGroup' => $season?->getCurrentAffixGroupInRegion($userRegion) ?? $expansionService->getCurrentAffixGroup($expansion, $userRegion),
+                'currentAffixGroup' =>
+                    $season?->getCurrentAffixGroupInRegion($userRegion) ??
+                        $expansionService->getCurrentAffixGroup($expansion, $userRegion) ??
+                        null,
                 'dungeonroutes'     => $result,
                 'showAffixes'       => true,
                 'showDungeonImage'  => true,
@@ -442,11 +443,11 @@ class AjaxDungeonRouteController extends Controller
      * @throws AuthorizationException
      */
     public function store(
-        AjaxDungeonRouteFormRequest $request,
-        SeasonService               $seasonService,
-        ExpansionServiceInterface   $expansionService,
-        ThumbnailServiceInterface   $thumbnailService,
-        ?DungeonRoute               $dungeonRoute = null
+        AjaxDungeonRouteSubmitFormRequest $request,
+        SeasonService                     $seasonService,
+        ExpansionServiceInterface         $expansionService,
+        ThumbnailServiceInterface         $thumbnailService,
+        ?DungeonRoute                     $dungeonRoute = null
     ): DungeonRoute {
         $this->authorize('edit', $dungeonRoute);
 
@@ -741,7 +742,7 @@ class AjaxDungeonRouteController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function simulate(AjaxSimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonRoute): array
+    public function simulate(AjaxDungeonRouteSimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonRoute): array
     {
         $this->authorize('view', $dungeonRoute);
 

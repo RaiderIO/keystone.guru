@@ -2,7 +2,7 @@
 // @TODO: temporary solution for ensuring default values for certain cookies are set
 let cookieDefaultAttributes = undefined;
 $(function () {
-    let state = getState();
+    let state = typeof getState === 'function' && getState();
 
     // If we're not in a map context, don't do anything
     if(!state) {

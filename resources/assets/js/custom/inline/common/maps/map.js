@@ -182,8 +182,12 @@ class CommonMapsMap extends InlineCode {
             });
         }
 
+        let center = this.options.parameters.hasOwnProperty('lat') && this.options.parameters.hasOwnProperty('lng') ?
+            new L.LatLng(this.options.parameters.lat, this.options.parameters.lng) : null;
+        let zoom = this.options.parameters.hasOwnProperty('z') ? this.options.parameters.z : null;
+
         // Refresh the map; draw the layers on it
-        this._dungeonMap.refreshLeafletMap();
+        this._dungeonMap.refreshLeafletMap(true, center, zoom);
     }
 
     /**

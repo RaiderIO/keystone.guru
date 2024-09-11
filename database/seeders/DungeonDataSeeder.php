@@ -96,8 +96,6 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
         // Just a base class
         $this->rollback();
 
-        $this->command->info('Starting import of dungeon data for all dungeons');
-
         $this->importDungeonMapping();
         $this->flushModels();
         $this->importDungeonRoutes();
@@ -471,5 +469,11 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             Floor::class,
             FloorCoupling::class,
         ];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

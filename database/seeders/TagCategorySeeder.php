@@ -13,8 +13,6 @@ class TagCategorySeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $this->command->info('Adding Tag Categories');
-
         $tagCategories = [
             TagCategory::DUNGEON_ROUTE_PERSONAL => DungeonRoute::class,
             TagCategory::DUNGEON_ROUTE_TEAM     => DungeonRoute::class,
@@ -34,5 +32,11 @@ class TagCategorySeeder extends Seeder implements TableSeederInterface
     public static function getAffectedModelClasses(): array
     {
         return [TagCategory::class];
+    }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
     }
 }

@@ -413,6 +413,7 @@ return [
             'managespellvisibility' => [
                 'title'  => 'Manage NPC Spell Visibility',
                 'header' => 'Manage NPC Spell Visibility',
+                'submit' => 'Submit',
             ],
         ],
         'list'         => [

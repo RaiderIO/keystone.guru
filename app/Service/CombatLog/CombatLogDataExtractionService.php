@@ -22,6 +22,15 @@ use Illuminate\Support\Collection;
 
 class CombatLogDataExtractionService implements CombatLogDataExtractionServiceInterface
 {
+    /**
+     * @var int[] Additional NPC IDs that are summoned but do not have a SUMMON combat log event.
+     */
+    public const SUMMONED_NPC_IDS = [
+        // Storm, Earth and Fire talent (Monk)
+        69791, // Fire Spirit
+        69792, // Earth Spirit
+    ];
+
     /** @var Collection<DataExtractorInterface> */
     private Collection $dataExtractors;
 
@@ -48,7 +57,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         $result = new ExtractedDataResult();
 
         foreach ($this->dataExtractors as $dataExtractor) {
-            $dataExtractor->beforeExtract($result);
+            $dataExtractor->beforeExtract($result, $filePath);
         }
 
         $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
@@ -84,7 +93,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         $this->log->removeContext('lineNr');
 
         foreach ($this->dataExtractors as $dataExtractor) {
-            $dataExtractor->afterExtract($result);
+            $dataExtractor->afterExtract($result, $filePath);
         }
 
         return $result;

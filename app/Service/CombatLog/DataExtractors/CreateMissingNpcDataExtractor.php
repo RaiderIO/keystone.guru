@@ -13,6 +13,7 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClass;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcType;
+use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\DataExtractors\Logging\CreateMissingNpcDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
@@ -27,14 +28,14 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
 
     public function __construct()
     {
-        $this->checkedNpcIds = collect();
+        $this->checkedNpcIds = collect(CombatLogDataExtractionService::SUMMONED_NPC_IDS);
         $log                 = App::make(CreateMissingNpcDataExtractorLoggingInterface::class);
         /** @var CreateMissingNpcDataExtractorLoggingInterface $log */
 
         $this->log = $log;
     }
 
-    public function beforeExtract(ExtractedDataResult $result): void
+    public function beforeExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
 
     }
@@ -146,7 +147,7 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
         }
     }
 
-    public function afterExtract(ExtractedDataResult $result): void
+    public function afterExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
 
     }

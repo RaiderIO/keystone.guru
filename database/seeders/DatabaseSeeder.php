@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
     public const TEMP_TABLE_SUFFIX = '_temp';
 
     private const SEEDERS = [
+        // Combatlog
+        CombatLogSeeder::class,
+
         // Seeders which don't depend on anything else
         ExpansionsSeeder::class,
         GameServerRegionsSeeder::class,
@@ -75,10 +78,26 @@ class DatabaseSeeder extends Seeder
         // 3. Cleanup: Remove existing table, rename temporary table
 
         foreach (self::SEEDERS as $seederClass) {
+            /** @var TableSeederInterface $seederClass */
+            $affectedEnvironments = $seederClass::getAffectedEnvironments();
+            if ($affectedEnvironments !== null && !in_array(app()->environment(), $affectedEnvironments)) {
+                $this->command->info(
+                    sprintf(
+                        'Skipping %s because it is not meant for this environment (%s vs %s).',
+                        $seederClass,
+                        app()->environment(),
+                        implode(', ', $affectedEnvironments)
+                    )
+                );
+
+                continue;
+            }
+
+            $affectedModelClasses = [];
+
             try {
                 $prepareFailed = false;
 
-                /** @var TableSeederInterface $seederClass */
                 $affectedModelClasses = $seederClass::getAffectedModelClasses();
                 foreach ($affectedModelClasses as $affectedModel) {
                     $prepareFailed = !$prepareFailed && !$this->prepareTempTableForModel($affectedModel);
@@ -133,7 +152,9 @@ class DatabaseSeeder extends Seeder
 
         DB::table('files')->where('model_class', $className)->delete();
 
-        return DB::statement(sprintf('CREATE TABLE %s LIKE %s;', $tableNameNew, $tableNameOld));
+        return DB::connection($instance->getConnectionName())->statement(
+            sprintf('CREATE TABLE %s LIKE %s;', $tableNameNew, $tableNameOld)
+        );
     }
 
     /**
@@ -148,7 +169,7 @@ class DatabaseSeeder extends Seeder
         $tableNameNewData  = sprintf('%s%s', $tableNameOriginal, self::TEMP_TABLE_SUFFIX);
 
         // Rename tables in one statement to prevent any downtime
-        return DB::statement(
+        return DB::connection($instance->getConnectionName())->statement(
             sprintf(
                 'RENAME TABLE %s TO temp_table, %s TO %s, temp_table TO %s;',
                 $tableNameOriginal,
@@ -166,7 +187,9 @@ class DatabaseSeeder extends Seeder
 
         $tableNameNew = sprintf('%s%s', $instance->getTable(), self::TEMP_TABLE_SUFFIX);
 
-        return DB::statement(sprintf('DROP TABLE %s;', $tableNameNew));
+        return DB::connection($instance->getConnectionName())->statement(
+            sprintf('DROP TABLE %s;', $tableNameNew)
+        );
     }
 
     public static function getTempTableName(string $className): string

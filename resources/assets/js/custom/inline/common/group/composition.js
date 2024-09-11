@@ -173,10 +173,9 @@ class CommonGroupComposition extends InlineCode {
     /**
      * Triggered whenever the user has changed the faction.
      *
-     * @param changeEvent
      * @private
      */
-    _factionChanged(changeEvent) {
+    _factionChanged() {
         // console.log('>> _factionChanged');
         let newFactionId = parseInt($('#faction_id').val());
 
@@ -406,7 +405,7 @@ class CommonGroupComposition extends InlineCode {
 
             self._addIconOptionToSelect($specializationSelect, self.options.specializations, function (item) {
                 let classDetails = self._findClassById(item.character_class_id);
-                return 'spec_icon_' + classDetails.key + '-' + item.key;
+                return `spec_icon_${classDetails.key.replace(/_/g, '').toLowerCase()}-${item.key}`;
             });
         });
     }
@@ -504,7 +503,7 @@ class CommonGroupComposition extends InlineCode {
                 currentCssPrefix = cssPrefix(obj);
             } else {
                 // We make something up
-                currentCssPrefix = cssPrefix + obj.key.replace(/ /g, '').toLowerCase();
+                currentCssPrefix = cssPrefix + obj.key.replace(/_/g, '').toLowerCase();
             }
 
             let data = {

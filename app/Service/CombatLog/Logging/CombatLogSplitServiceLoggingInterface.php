@@ -9,5 +9,9 @@ interface CombatLogSplitServiceLoggingInterface
 
     public function splitCombatLogUsingSplitterNoChallengeModesFound(): void;
 
+    public function splitCombatLogUsingSplitterMovingFile(string $originalCombatLogPath, string $targetCombatLogPath): void;
+
+    public function splitCombatLogUsingSplitterMovingFileFailed(string $originalCombatLogPath, string $targetCombatLogPath): void;
+
     public function splitCombatLogUsingSplitterEnd(): void;
 }

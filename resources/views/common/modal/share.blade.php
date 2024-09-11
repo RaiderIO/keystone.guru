@@ -1,14 +1,43 @@
 <?php
-/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute|null */
+
+use App\Models\DungeonRoute\DungeonRoute;
+
+/**
+ * @var DungeonRoute|null $dungeonroute
+ * @var int|null          $modalId
+ */
+
 
 $show          ??= [];
 $showLink      = $show['link'] ?? true;
 $showEmbed     = $show['embed'] ?? true;
 $showMdtExport = $show['mdt-export'] ?? true;
 $showPublish   = $show['publish'] ?? true;
+$modalId       = $modalId ?? null;
+
+$shareLink      = route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]);
+$shareLinkShort = route('dungeonroute.viewold', ['dungeonroute' => $dungeonroute]);
 ?>
 
-@include('common.general.inline', ['path' => 'common/dungeonroute/share'])
+@include('common.general.inline', ['path' => 'common/dungeonroute/share', 'options' => [
+    'shareLink' => $shareLink,
+    'mapShareableLinkSelector' => '#map_shareable_link',
+    'mapShareableLinkCopyToClipboardSelector' => '#map_shareable_link_copy_to_clipboard',
+
+    'shareShortLink' => $shareLinkShort,
+    'mapShareableShortLinkSelector' => '#map_shareable_short_link',
+    'mapShareableShortLinkCopyToClipboardSelector' => '#map_shareable_short_link_copy_to_clipboard',
+
+    'mapIncludeLocationCheckboxSelector' => '#map_include_location_checkbox',
+
+    'mapEmbeddableLinkSelector' => '#map_embeddable_link',
+    'mapEmbeddableLinkCopyToClipboardSelector' => '#map_embeddable_link_copy_to_clipboard',
+
+    'mdtExportResultSelector' => '#mdt_export_result',
+    'copyMdtStringToClipboardSelector' => '.copy_mdt_string_to_clipboard',
+
+    'modalSelector' => $modalId !== null ? sprintf('#%s', $modalId) : null,
+]])
 
 <!-- Shareable link -->
 <h3 class="card-title">{{ __('view_common.modal.share.share') }}</h3>
@@ -42,7 +71,7 @@ $showPublish   = $show['publish'] ?? true;
         <div class="row">
             <div class="col input-group">
                 {!! Form::text('map_shareable_link',
-                    route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]),
+                    $shareLink,
                 ['id' => 'map_shareable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                 <div class="input-group-append">
                     <button id="map_shareable_link_copy_to_clipboard" class="btn btn-info"
@@ -60,7 +89,7 @@ $showPublish   = $show['publish'] ?? true;
         </label>
         <div class="row">
             <div class="col input-group">
-                {!! Form::text('map_shareable_short_link', route('dungeonroute.viewold', ['dungeonroute' => $dungeonroute]),
+                {!! Form::text('map_shareable_short_link', $shareLinkShort,
                 ['id' => 'map_shareable_short_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                 <div class="input-group-append">
                     <button id="map_shareable_short_link_copy_to_clipboard" class="btn btn-info"
@@ -72,21 +101,31 @@ $showPublish   = $show['publish'] ?? true;
             </div>
         </div>
     </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-auto">
+                {!! Form::checkbox('map_include_location', 1, 0, ['id' => 'map_include_location_checkbox', 'class' => 'form-control', 'style' => 'width: 23px; height: 23px;']) !!}
+            </div>
+            <div class="col pl-0">
+                {!! Form::label('map_include_location', __('view_common.modal.share.include_location_in_link')) !!}
+            </div>
+        </div>
+    </div>
 @endif
 @if($showEmbed)
     <div class="form-group">
-        <label for="map_embedable_link">
+        <label for="map_embeddable_link">
             {{ __('view_common.modal.share.embed') }}
         </label>
         <div class="row">
             <div class="col input-group">
-                {!! Form::text('map_embedable_link',
+                {!! Form::text('map_embeddable_link',
                 sprintf('<iframe src="%s" style="width: 800px; height: 600px; border: none;"></iframe>',
                     route('dungeonroute.embed', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()])
                 ),
-                ['id' => 'map_embedable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
+                ['id' => 'map_embeddable_link', 'class' => 'form-control', 'readonly' => 'readonly']) !!}
                 <div class="input-group-append">
-                    <button id="map_embedable_link_copy_to_clipboard" class="btn btn-info"
+                    <button id="map_embeddable_link_copy_to_clipboard" class="btn btn-info"
                             data-toggle="tooltip"
                             title="{{ __('view_common.modal.share.copy_embed_code_to_clipboard') }}">
                         <i class="far fa-copy"></i>

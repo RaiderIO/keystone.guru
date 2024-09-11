@@ -108,4 +108,10 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
     {
         return [];
     }
+
+    public static function getAffectedEnvironments(): ?array
+    {
+        // All environments
+        return null;
+    }
 }
