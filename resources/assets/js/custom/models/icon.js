@@ -190,6 +190,8 @@ class Icon extends VersionableMapObject {
                     this.map.getMapState() instanceof DeleteMapState && this.isDeletable()
                 )
             );
+
+            this.bindTooltip();
         }
         // // @TODO Refresh the layer; required as a workaround since in mapiconmapobjectgroup we don't know the map_icon_type upon init,
         // // thus we don't know if this will be editable or not. In the sync this will get called and the edit state is known
@@ -269,7 +271,8 @@ class Icon extends VersionableMapObject {
 
         this.unbindTooltip();
 
-        if (this.comment !== null && this.comment.length > 0 || (this.map_icon_type !== null && this.map_icon_type.name.length > 0)) {
+        if ((this.comment !== null && this.comment.length > 0) ||
+            (this.map_icon_type !== null && this.map_icon_type.name.length > 0)) {
             let text = lang.get(this.getDisplayText());
 
             text = c.map.sanitizeText(text);
