@@ -833,6 +833,31 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 213200,
+        "dungeon_id": 111,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 115351,
+        "encounter_id": null,
+        "name": "Workmaster Nast",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 213913,
         "dungeon_id": 111,
         "classification_id": 2,
@@ -859,6 +884,31 @@
                 "spell_id": 428563
             }
         ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 218191,
+        "dungeon_id": 111,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 114927,
+        "encounter_id": null,
+        "name": "Moss-Draped Ramolith",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
