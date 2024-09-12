@@ -7,8 +7,6 @@ interface ZoneChangeSplitterLoggingInterface extends CombatLogSplitterLoggingInt
 
     public function parseCombatLogEventTimestampNotSet(): void;
 
-    public function parseCombatLogEventTooBigTimestampGap(int $seconds, string $previousTimestamp, string $timestamp): void;
-
     public function parseCombatLogEventZoneChangeEvent(): void;
 
     public function parseCombatLogEventCombatLogVersionEvent(): void;
