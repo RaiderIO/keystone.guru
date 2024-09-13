@@ -232,6 +232,7 @@ return [
     'sidebar_collapse'                                                     => 'Collapse the sidebar',
     'copied_to_clipboard'                                                  => 'Copied to clipboard',
     'sidebar_enemy_health_label'                                           => 'Health',
+    'sidebar_enemy_npc_id_label'                                           => 'Npc ID',
     'sidebar_enemy_bursting_label'                                         => 'Bursts',
     'sidebar_enemy_sanguine_label'                                         => 'Sanguine',
     'sidebar_enemy_bolstering_label'                                       => 'Bolsters',

@@ -24,6 +24,9 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 {
     /** @var float[] The percentage (between 0 and 1) when certain enemies are considered defeated */
     private const DEFEATED_PERCENTAGE = [
+        // Grim Batol: Valiona is defeated at 50%
+        40320 => 0.51,
+
         // Uldaman: Lost Dwarves, they kinda stop fighting when they reach below 10%
         184580 => 0.1,
         184581 => 0.1,
@@ -152,7 +155,7 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
             // Check if this combat event is relevant and if it has a new NPC that we're interested in
             $newEnemyGuid = $this->hasAdvancedDataNewGuid($combatLogEvent->getAdvancedData());
             if ($newEnemyGuid !== null) {
-                // If it does we want to keep this event
+                // If it does, we want to keep this event
                 $this->accurateEnemySightings->put($newEnemyGuid, $combatLogEvent);
                 $this->log->parseUnitAddedToCurrentPull($lineNr, $newEnemyGuid);
 
@@ -172,14 +175,21 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
         $sourceGuid = $combatLogEvent->getGenericData()->getSourceGuid();
 
-        // If it IS a pet we want to accept the event
-        if ($sourceGuid instanceof Creature && $sourceGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET) {
+        // If it IS a pet/vehicle we want to accept the event. Vehicles in case players mount up on a creature and
+        // blast enemies from above, for example. Grim Batol is one such example.
+        $whitelistedUnitTypes = [
+            Creature::CREATURE_UNIT_TYPE_PET,
+            Creature::CREATURE_UNIT_TYPE_VEHICLE,
+        ];
+
+        if ($sourceGuid instanceof Creature &&
+            !in_array($sourceGuid->getUnitType(), $whitelistedUnitTypes)) {
             // Ignore creature-on-creature events, such as an enemy empowering another. But make an exception if
             // the target was a pet - creatures attacking a pet should still register
             $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
             // If dest is null it may be a self buff - ignore these (we may not be in combat with them)
             if ($destGuid === null ||
-                ($destGuid instanceof Creature && $destGuid->getUnitType() !== Creature::CREATURE_UNIT_TYPE_PET)) {
+                ($destGuid instanceof Creature && !in_array($destGuid->getUnitType(), $whitelistedUnitTypes))) {
                 return false;
             }
         }
