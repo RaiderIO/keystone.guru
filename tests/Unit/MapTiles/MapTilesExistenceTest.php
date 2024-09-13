@@ -22,8 +22,7 @@ final class MapTilesExistenceTest extends PublicTestCase
 
         // Act & Assert
         foreach ($dungeons as $dungeon) {
-            if (in_array($dungeon->key, ['vaultofarchavon', // Missing tiles - need fix
-                                         'prioryofthesacredflame', 'therookery', // Missing MDT floor (but it's already created since I expect it to come)
+            if (in_array($dungeon->key, ['prioryofthesacredflame', 'therookery', // Missing MDT floor (but it's already created since I expect it to come)
                                          'auchindoun', 'bloodmaul_slag_mines', // Prematurely created - no tiles exist for these yet
             ])) {
                 continue;
