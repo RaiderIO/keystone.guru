@@ -1,10 +1,11 @@
 <?php
 
-namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\DF;
 
 use App\Models\Dungeon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\APICombatLogControllerCorrectEventsTestBase;
 
 #[Group('Controller')]
 #[Group('API')]
@@ -20,6 +21,6 @@ class APICombatLogControllerCorrectEventsAlgetharAcademyTest extends APICombatLo
     #[Test]
     public function create_givenAlgetharAcademyBunten16Json_shouldReturnCorrectedJsonData(): void
     {
-        $this->executeTest('df_s4_algethar_academy_bunten_16');
+        $this->executeTest('DF/df_s4_algethar_academy_bunten_16');
     }
 }

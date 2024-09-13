@@ -7,6 +7,8 @@ use Tests\Feature\Controller\Api\V1\APICombatLogController\APICombatLogControlle
 
 abstract class APICombatLogControllerCreateRouteTestBase extends APICombatLogControllerTestBase
 {
+    protected const FIXTURES_ROOT_DIR = '../../';
+
     protected function validateResponseStaticData(array $response): void
     {
         // AffixGroups

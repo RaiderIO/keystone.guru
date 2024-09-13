@@ -1,10 +1,11 @@
 <?php
 
-namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\DF;
 
 use App\Models\Dungeon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\APICombatLogControllerCorrectEventsTestBase;
 
 #[Group('Controller')]
 #[Group('API')]
@@ -20,12 +21,12 @@ class APICombatLogControllerCorrectEventsTheNokhudOffensiveTest extends APIComba
     #[Test]
     public function create_givenTheNokhudOffensive14Json_shouldReturnCorrectedJsonData(): void
     {
-        $this->executeTest('df_s4_the_nokhud_offensive_14');
+        $this->executeTest('DF/df_s4_the_nokhud_offensive_14');
     }
 
     #[Test]
     public function create_givenTheNokhudOffensive8Json_shouldReturnCorrectedJsonData(): void
     {
-        $this->executeTest('df_s4_the_nokhud_offensive_8');
+        $this->executeTest('DF/df_s4_the_nokhud_offensive_8');
     }
 }

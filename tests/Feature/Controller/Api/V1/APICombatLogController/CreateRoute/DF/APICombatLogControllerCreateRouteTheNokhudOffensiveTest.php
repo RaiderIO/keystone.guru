@@ -1,11 +1,12 @@
 <?php
 
-namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CreateRoute;
+namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CreateRoute\DF;
 
 use App\Models\Affix;
 use App\Models\Dungeon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Feature\Controller\Api\V1\APICombatLogController\CreateRoute\APICombatLogControllerCreateRouteTestBase;
 
 #[Group('Controller')]
 #[Group('API')]
@@ -24,7 +25,7 @@ class APICombatLogControllerCreateRouteTheNokhudOffensiveTest extends APICombatL
     public function create_givenTheNokhudOffensive14Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('df_s4_the_nokhud_offensive_14', '../');
+        $postBody = $this->getJsonData('DF/df_s4_the_nokhud_offensive_14', self::FIXTURES_ROOT_DIR);
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
@@ -41,11 +42,10 @@ class APICombatLogControllerCreateRouteTheNokhudOffensiveTest extends APICombatL
     }
 
     #[Test]
-    #[Group('NokhudOffensive2')]
     public function create_givenTheNokhudOffensive8Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('df_s4_the_nokhud_offensive_8', '../');
+        $postBody = $this->getJsonData('DF/df_s4_the_nokhud_offensive_8', self::FIXTURES_ROOT_DIR);
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
