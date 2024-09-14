@@ -21,7 +21,7 @@ class APICombatLogControllerCreateRouteGrimBatolTest extends APICombatLogControl
     }
 
     #[Test]
-    public function create_givenTwwS1GrimBatol2Json_shouldReturnValidDungeonRoute(): void
+    public function create_givenTwwS1GrimBaytol2Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
         $postBody = $this->getJsonData('Cata/tww_s1_grim_batol_2', self::FIXTURES_ROOT_DIR);
@@ -33,11 +33,11 @@ class APICombatLogControllerCreateRouteGrimBatolTest extends APICombatLogControl
         $response->assertCreated();
 
         $responseArr = json_decode($response->content(), true);
-        dump($responseArr);
 
-//        $this->validateResponseStaticData($responseArr);
-//        $this->validateDungeon($responseArr);
-//        $this->validatePulls($responseArr, 13, 450);
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($responseArr, 27, 640);
+        // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 
@@ -54,11 +54,11 @@ class APICombatLogControllerCreateRouteGrimBatolTest extends APICombatLogControl
         $response->assertCreated();
 
         $responseArr = json_decode($response->content(), true);
-        dump($responseArr);
 
-//        $this->validateResponseStaticData($responseArr);
-//        $this->validateDungeon($responseArr);
-//        $this->validatePulls($responseArr, 13, 450);
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($responseArr, 20, 645);
+        // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 }
