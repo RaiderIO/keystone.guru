@@ -15,7 +15,31 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 class EncounterEndV9 extends SpecialEvent implements EncounterEndInterface
 {
 
-    private int $success;
+    private int    $encounterId;
+    private string $encounterName;
+    private int    $difficultyId;
+    private int    $groupSize;
+    private int    $success;
+
+    public function getEncounterId(): int
+    {
+        return $this->encounterId;
+    }
+
+    public function getEncounterName(): string
+    {
+        return $this->encounterName;
+    }
+
+    public function getDifficultyId(): int
+    {
+        return $this->difficultyId;
+    }
+
+    public function getGroupSize(): int
+    {
+        return $this->groupSize;
+    }
 
     public function getSuccess(): int
     {
@@ -31,7 +55,11 @@ class EncounterEndV9 extends SpecialEvent implements EncounterEndInterface
     {
         parent::setParameters($parameters);
 
-        $this->success     = $parameters[4];
+        $this->encounterId   = $parameters[0];
+        $this->encounterName = $parameters[1];
+        $this->difficultyId  = $parameters[2];
+        $this->groupSize     = $parameters[3];
+        $this->success       = $parameters[4];
 
         return $this;
     }

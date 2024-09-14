@@ -6,32 +6,47 @@ use App\Logging\RollbarStructuredLogging;
 
 class BaseCombatFilterLogging extends RollbarStructuredLogging implements BaseCombatFilterLoggingInterface
 {
+    public function parseEncounterEndBossFoundAndKilled(int $lineNr, string $bossGuid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function parseEncounterEndNpcNotInCombat(int $lineNr, int $npcId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function parseEncounterEndNoNpc(int $lineNr): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
     public function parseUnitDied(int $lineNr, string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function parseUnitDiedEnemyWasNotPartOfCurrentPull(int $lineNr, string $guid): void
+    public function parseEnemyWasNotPartOfCurrentPull(int $lineNr, string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function parseUnitDiedEnemyWasAlreadyKilled(int $lineNr, string $guid): void
+    public function parseEnemyWasAlreadyKilled(int $lineNr, string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function parseUnitDiedEnemyWasSummoned(int $lineNr, string $guid): void
+    public function parseEnemyWasSummoned(int $lineNr, string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function parseUnitDiedInvalidNpcId(int $lineNr, string $guid): void
+    public function parseInvalidNpcId(int $lineNr, string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function parseUnitDiedEnemyWasNotEngaged(int $lineNr, string $guid): void
+    public function parseEnemyWasNotEngaged(int $lineNr, string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }

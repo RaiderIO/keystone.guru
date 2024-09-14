@@ -184,7 +184,7 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 87990,
-        "encounter_id": 2140,
+        "encounter_id": 2100,
         "name": "Viqgoth",
         "base_health": 454915546,
         "health_percentage": null,
