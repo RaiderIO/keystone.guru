@@ -3019,6 +3019,25 @@
         "spell_dungeons": []
     },
     {
+        "id": 51714,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_deathknight_frozenruneweapon",
+        "name": "Razorice",
+        "schools_mask": 16,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 20000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-09-14T00:00:00+00:00",
+        "spell_dungeons": []
+    },
+    {
         "id": 52042,
         "category": null,
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -68447,6 +68466,25 @@
         ]
     },
     {
+        "id": 374557,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_bosskilrogg_deaththroes",
+        "name": "Brittle",
+        "schools_mask": 1,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 5000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-09-14T00:00:00+00:00",
+        "spell_dungeons": []
+    },
+    {
         "id": 374563,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -70967,6 +71005,25 @@
                 "dungeon_id": 68
             }
         ]
+    },
+    {
+        "id": 376974,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_mage_deepfreeze",
+        "name": "Everfrost",
+        "schools_mask": 16,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 8000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-09-14T00:00:00+00:00",
+        "spell_dungeons": []
     },
     {
         "id": 376997,
@@ -81038,7 +81095,7 @@
         "schools_mask": 1,
         "miss_types_mask": 0,
         "aura": false,
-        "debuff": null,
+        "debuff": false,
         "cast_time": null,
         "duration": null,
         "selectable": false,
@@ -94991,7 +95048,7 @@
         "icon_name": "inv_10_blacksmithing_craftedbar_blackdragonsearedalloy",
         "name": "Molten Metal",
         "schools_mask": 4,
-        "miss_types_mask": 1,
+        "miss_types_mask": 257,
         "aura": false,
         "debuff": true,
         "cast_time": null,
@@ -106592,7 +106649,7 @@
         "icon_name": "spell_fire_twilightpyroblast",
         "name": "Twilight Flame",
         "schools_mask": 32,
-        "miss_types_mask": 0,
+        "miss_types_mask": 1,
         "aura": false,
         "debuff": true,
         "cast_time": null,
@@ -106996,6 +107053,25 @@
                 "dungeon_id": 110
             }
         ]
+    },
+    {
+        "id": 452229,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "inv_raid_mercurialegg_red",
+        "name": "Spidersting",
+        "schools_mask": 8,
+        "miss_types_mask": 1,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": 8000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-09-14T00:00:00+00:00",
+        "spell_dungeons": []
     },
     {
         "id": 452450,
@@ -109042,7 +109118,7 @@
         "icon_name": "spell_shadow_shadowfury",
         "name": "Shadow Gale",
         "schools_mask": 32,
-        "miss_types_mask": 32,
+        "miss_types_mask": 33,
         "aura": false,
         "debuff": true,
         "cast_time": null,

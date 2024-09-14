@@ -14608,5 +14608,125 @@
         "raw_event": "9\/11\/2024 21:00:51.2502  SPELL_PERIODIC_MISSED,Creature-0-3893-2652-2057-214049-0001E1E452,\"Vent Stalker\",0xa48,0x0,Player-3674-0B695661,\"Weewooweewoo-TwistingNether-EU\",0x512,0x0,428819,\"Exhaust Vents\",0x4,ABSORB,nil,3085505,3603908,nil\r\n",
         "created_at": "2024-09-12T16:42:01+00:00",
         "updated_at": "2024-09-12T16:42:01+00:00"
+    },
+    {
+        "id": 1462,
+        "spell_id": 451613,
+        "before": "{\"id\": 451613, \"aura\": 0, \"name\": \"Twilight Flame\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_fire_twilightpyroblast\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 0}",
+        "after": "{\"id\": 451613, \"aura\": 0, \"name\": \"Twilight Flame\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_fire_twilightpyroblast\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 1}",
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_grim-batol-1.zip",
+        "raw_event": "9\/14\/2024 09:57:25.1272  SPELL_MISSED,Creature-0-3895-670-2280-224609-0000E5417C,\"Twilight Destroyer\",0xa48,0x0,Player-1403-080701A8,\"Bcc-Draenor-EU\",0x512,0x0,451613,\"Twilight Flame\",0x20,ABSORB,nil,589447,900977,nil\r\n",
+        "created_at": "2024-09-14T12:55:34+00:00",
+        "updated_at": "2024-09-14T12:55:34+00:00"
+    },
+    {
+        "id": 1463,
+        "spell_id": 391568,
+        "before": "{\"id\": 391568, \"aura\": 0, \"name\": \"Insidious Chill\", \"debuff\": null, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_racial_wardoftheloafrost\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 0}",
+        "after": "{\"id\": 391568, \"aura\": 0, \"name\": \"Insidious Chill\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_racial_wardoftheloafrost\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 0}",
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_grim-batol-4.zip",
+        "raw_event": "9\/14\/2024 10:16:01.1962  SPELL_AURA_REFRESH,Creature-0-3895-670-2280-39392-000065417C,\"Faceless Corruptor\",0xa48,0x0,Player-1403-0AC9DAE5,\"Thrasos-Draenor-EU\",0x512,0x20,391568,\"Insidious Chill\",0x1,DEBUFF\r\n",
+        "created_at": "2024-09-14T12:55:54+00:00",
+        "updated_at": "2024-09-14T12:55:54+00:00"
+    },
+    {
+        "id": 1464,
+        "spell_id": 51714,
+        "before": null,
+        "after": "{\"id\": 51714, \"aura\": false, \"name\": \"Razorice\", \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_deathknight_frozenruneweapon\", \"dispel_type\": \"N\/A\", \"schools_mask\": 16, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-14T12:55:55.703878Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_grim-batol-4.zip",
+        "raw_event": "9\/14\/2024 10:16:01.1962  SPELL_AURA_REFRESH,Creature-0-3895-670-2280-39392-000065417C,\"Faceless Corruptor\",0xa48,0x0,Player-1403-0AC9DAE5,\"Thrasos-Draenor-EU\",0x512,0x20,51714,\"Razorice\",0x10,DEBUFF\r\n",
+        "created_at": "2024-09-14T12:55:55+00:00",
+        "updated_at": "2024-09-14T12:55:55+00:00"
+    },
+    {
+        "id": 1465,
+        "spell_id": 51714,
+        "before": "{\"id\": 51714, \"aura\": 0, \"name\": \"Razorice\", \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_deathknight_frozenruneweapon\", \"dispel_type\": \"N\/A\", \"schools_mask\": 16, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-14T12:55:55.703878Z\"}",
+        "after": "{\"id\": 51714, \"aura\": 0, \"name\": \"Razorice\", \"debuff\": 0, \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_deathknight_frozenruneweapon\", \"dispel_type\": \"N\/A\", \"schools_mask\": 16, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-14T12:55:55.703878Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_grim-batol-4.zip",
+        "raw_event": "9\/14\/2024 10:16:01.1962  SPELL_AURA_REFRESH,Creature-0-3895-670-2280-39392-000065417C,\"Faceless Corruptor\",0xa48,0x0,Player-1403-0AC9DAE5,\"Thrasos-Draenor-EU\",0x512,0x20,51714,\"Razorice\",0x10,DEBUFF\r\n",
+        "created_at": "2024-09-14T12:55:55+00:00",
+        "updated_at": "2024-09-14T12:55:55+00:00"
+    },
+    {
+        "id": 1466,
+        "spell_id": 376974,
+        "before": null,
+        "after": "{\"id\": 376974, \"aura\": false, \"name\": \"Everfrost\", \"duration\": 8000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_mage_deepfreeze\", \"dispel_type\": \"N\/A\", \"schools_mask\": 16, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-14T12:55:56.249472Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_grim-batol-4.zip",
+        "raw_event": "9\/14\/2024 10:16:01.1962  SPELL_AURA_REFRESH,Creature-0-3895-670-2280-39392-000065417C,\"Faceless Corruptor\",0xa48,0x0,Player-1403-0AC9DAE5,\"Thrasos-Draenor-EU\",0x512,0x20,376974,\"Everfrost\",0x10,DEBUFF\r\n",
+        "created_at": "2024-09-14T12:55:56+00:00",
+        "updated_at": "2024-09-14T12:55:56+00:00"
+    },
+    {
+        "id": 1467,
+        "spell_id": 376974,
+        "before": "{\"id\": 376974, \"aura\": 0, \"name\": \"Everfrost\", \"duration\": 8000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_mage_deepfreeze\", \"dispel_type\": \"N\/A\", \"schools_mask\": 16, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-14T12:55:56.249472Z\"}",
+        "after": "{\"id\": 376974, \"aura\": 0, \"name\": \"Everfrost\", \"debuff\": 0, \"duration\": 8000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_mage_deepfreeze\", \"dispel_type\": \"N\/A\", \"schools_mask\": 16, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-14T12:55:56.249472Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_grim-batol-4.zip",
+        "raw_event": "9\/14\/2024 10:16:01.1962  SPELL_AURA_REFRESH,Creature-0-3895-670-2280-39392-000065417C,\"Faceless Corruptor\",0xa48,0x0,Player-1403-0AC9DAE5,\"Thrasos-Draenor-EU\",0x512,0x20,376974,\"Everfrost\",0x10,DEBUFF\r\n",
+        "created_at": "2024-09-14T12:55:56+00:00",
+        "updated_at": "2024-09-14T12:55:56+00:00"
+    },
+    {
+        "id": 1468,
+        "spell_id": 452229,
+        "before": null,
+        "after": "{\"id\": 452229, \"aura\": false, \"name\": \"Spidersting\", \"duration\": 8000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_raid_mercurialegg_red\", \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-14T12:55:57.000543Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_grim-batol-4.zip",
+        "raw_event": "9\/14\/2024 10:16:01.5682  SPELL_PERIODIC_MISSED,Creature-0-3895-670-2280-39392-000065417C,\"Faceless Corruptor\",0xa48,0x0,Player-1403-0AC9DAE5,\"Thrasos-Draenor-EU\",0x512,0x20,452229,\"Spidersting\",0x8,ABSORB,nil,5668,8082,nil\r\n",
+        "created_at": "2024-09-14T12:55:57+00:00",
+        "updated_at": "2024-09-14T12:55:57+00:00"
+    },
+    {
+        "id": 1469,
+        "spell_id": 452229,
+        "before": "{\"id\": 452229, \"aura\": 0, \"name\": \"Spidersting\", \"duration\": 8000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_raid_mercurialegg_red\", \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-14T12:55:57.000543Z\"}",
+        "after": "{\"id\": 452229, \"aura\": 0, \"name\": \"Spidersting\", \"debuff\": 0, \"duration\": 8000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_raid_mercurialegg_red\", \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-14T12:55:57.000543Z\", \"miss_types_mask\": 1}",
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_grim-batol-4.zip",
+        "raw_event": "9\/14\/2024 10:16:01.5682  SPELL_PERIODIC_MISSED,Creature-0-3895-670-2280-39392-000065417C,\"Faceless Corruptor\",0xa48,0x0,Player-1403-0AC9DAE5,\"Thrasos-Draenor-EU\",0x512,0x20,452229,\"Spidersting\",0x8,ABSORB,nil,5668,8082,nil\r\n",
+        "created_at": "2024-09-14T12:55:57+00:00",
+        "updated_at": "2024-09-14T12:55:57+00:00"
+    },
+    {
+        "id": 1470,
+        "spell_id": 374557,
+        "before": null,
+        "after": "{\"id\": 374557, \"aura\": false, \"name\": \"Brittle\", \"duration\": 5000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_bosskilrogg_deaththroes\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-14T12:55:58.211805Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_grim-batol-4.zip",
+        "raw_event": "9\/14\/2024 10:16:04.1992  SPELL_AURA_REMOVED,Creature-0-3895-670-2280-39392-000065417C,\"Faceless Corruptor\",0xa48,0x0,Player-1403-0AC9DAE5,\"Thrasos-Draenor-EU\",0x512,0x20,374557,\"Brittle\",0x1,DEBUFF\r\n",
+        "created_at": "2024-09-14T12:55:58+00:00",
+        "updated_at": "2024-09-14T12:55:58+00:00"
+    },
+    {
+        "id": 1471,
+        "spell_id": 374557,
+        "before": "{\"id\": 374557, \"aura\": 0, \"name\": \"Brittle\", \"duration\": 5000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_bosskilrogg_deaththroes\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-14T12:55:58.211805Z\"}",
+        "after": "{\"id\": 374557, \"aura\": 0, \"name\": \"Brittle\", \"debuff\": 0, \"duration\": 5000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_bosskilrogg_deaththroes\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-14T12:55:58.211805Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_grim-batol-4.zip",
+        "raw_event": "9\/14\/2024 10:16:04.1992  SPELL_AURA_REMOVED,Creature-0-3895-670-2280-39392-000065417C,\"Faceless Corruptor\",0xa48,0x0,Player-1403-0AC9DAE5,\"Thrasos-Draenor-EU\",0x512,0x20,374557,\"Brittle\",0x1,DEBUFF\r\n",
+        "created_at": "2024-09-14T12:55:58+00:00",
+        "updated_at": "2024-09-14T12:55:58+00:00"
+    },
+    {
+        "id": 1472,
+        "spell_id": 461513,
+        "before": "{\"id\": 461513, \"aura\": 0, \"name\": \"Shadow Gale\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_shadow_shadowfury\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 32}",
+        "after": "{\"id\": 461513, \"aura\": 0, \"name\": \"Shadow Gale\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_shadow_shadowfury\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_grim-batol-4.zip",
+        "raw_event": "9\/14\/2024 10:19:11.9202  SPELL_PERIODIC_MISSED,Creature-0-3895-670-2280-40484-000065417E,\"Erudax\",0x10a48,0x0,Player-1403-0AC9DAE5,\"Thrasos-Draenor-EU\",0x512,0x20,461513,\"Shadow Gale\",0x20,ABSORB,nil,674681,900977,nil\r\n",
+        "created_at": "2024-09-14T12:55:59+00:00",
+        "updated_at": "2024-09-14T12:55:59+00:00"
+    },
+    {
+        "id": 1473,
+        "spell_id": 428161,
+        "before": "{\"id\": 428161, \"aura\": 0, \"name\": \"Molten Metal\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_10_blacksmithing_craftedbar_blackdragonsearedalloy\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 1}",
+        "after": "{\"id\": 428161, \"aura\": 0, \"name\": \"Molten Metal\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_10_blacksmithing_craftedbar_blackdragonsearedalloy\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 257}",
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_the-stonevault-1.zip",
+        "raw_event": "9\/14\/2024 12:27:50.6462  SPELL_MISSED,Creature-0-3774-2652-8510-213217-00006561AE,\"Speaker Brokk\",0x10a48,0x0,Player-1313-048A8299,\"Vonat-Wildhammer-EU\",0x512,0x0,428161,\"Molten Metal\",0x4,REFLECT,nil\r\n",
+        "created_at": "2024-09-14T12:56:07+00:00",
+        "updated_at": "2024-09-14T12:56:07+00:00"
     }
 ]
