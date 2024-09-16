@@ -32,11 +32,10 @@ class APICombatLogControllerCreateRouteMistsOfTirnaScitheTest extends APICombatL
         $response->assertCreated();
 
         $responseArr = json_decode($response->content(), true);
-        dump($responseArr);
 
-//        $this->validateResponseStaticData($responseArr);
-//        $this->validateDungeon($responseArr);
-//        $this->validatePulls($responseArr, 13, 450);
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($responseArr, 19, 289);
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 
@@ -53,11 +52,10 @@ class APICombatLogControllerCreateRouteMistsOfTirnaScitheTest extends APICombatL
         $response->assertCreated();
 
         $responseArr = json_decode($response->content(), true);
-        dump($responseArr);
 
-//        $this->validateResponseStaticData($responseArr);
-//        $this->validateDungeon($responseArr);
-//        $this->validatePulls($responseArr, 13, 450);
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($responseArr, 19, 270);
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 }

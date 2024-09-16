@@ -86,7 +86,7 @@ class FloorUnionArea extends CacheModel implements ConvertsVerticesInterface, Ma
         $clone->exists             = false;
         $clone->id                 = null;
         $clone->mapping_version_id = $mappingVersion->id;
-        $clone->floor_union_id     = $newParent?->id;
+        $clone->floor_union_id     = $newParent?->id ?? 0;
         $clone->save();
 
         return $clone;
