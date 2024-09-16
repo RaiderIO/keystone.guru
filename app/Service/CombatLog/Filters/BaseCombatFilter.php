@@ -52,6 +52,9 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
         // DOTI: Galakrond's Fall: Iridikron gets zapped at 85%
         198933 => 0.85,
+
+        // City of Threads: Xeph'itik is defeated at 50%
+        219984 => 0.51,
     ];
 
     /** @var array Some enemies are summoned that we DO want to track in the route */
