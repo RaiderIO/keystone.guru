@@ -32,11 +32,11 @@ class APICombatLogControllerCreateRouteCityOfThreadsTest extends APICombatLogCon
         $response->assertCreated();
 
         $responseArr = json_decode($response->content(), true);
-        dump($responseArr);
 
-//        $this->validateResponseStaticData($responseArr);
-//        $this->validateDungeon($responseArr);
-//        $this->validatePulls($responseArr, 13, 450);
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($responseArr, 29, 740);
+        // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 }

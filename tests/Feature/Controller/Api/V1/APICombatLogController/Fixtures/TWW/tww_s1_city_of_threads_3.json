@@ -1,6 +1,6 @@
 {
     "metadata": {
-        "runId": "1ae24ec6-494b-4fe1-8352-3ab796e2da2f"
+        "runId": "5d9ff9fa-19d7-408d-a05a-7522542f2310"
     },
     "settings": {
         "temporary": true,
@@ -422,6 +422,17 @@
             "coord": {
                 "x": 1124.64,
                 "y": -1867.58,
+                "uiMapId": 2343
+            }
+        },
+        {
+            "npcId": 219984,
+            "spawnUid": "00007F1D8D",
+            "engagedAt": "2024-06-28T22:31:37.445+00:00",
+            "diedAt": "2024-06-28T22:31:50.031+00:00",
+            "coord": {
+                "x": 1236.63,
+                "y": -1979.75,
                 "uiMapId": 2343
             }
         },

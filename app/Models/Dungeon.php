@@ -465,6 +465,10 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     206063,
                     // Iridikron's Creation
                     204918,
+
+                    // City of Threads:
+                    // Eye of the Queen gives 0 enemy forces but is in the mapping regardless
+                    220003
                 ]);
             })
             ->get();
