@@ -56,6 +56,15 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             new Affix(['key' => Affix::AFFIX_AFFLICTED, 'name' => 'affixes.afflicted.name', 'icon_file_id' => -1, 'affix_id' => 135, 'description' => 'affixes.afflicted.description']),
             new Affix(['key' => Affix::AFFIX_ENTANGLING, 'name' => 'affixes.entangling.name', 'icon_file_id' => -1, 'affix_id' => 134, 'description' => 'affixes.entangling.description']),
             new Affix(['key' => Affix::AFFIX_INCORPOREAL, 'name' => 'affixes.incorporeal.name', 'icon_file_id' => -1, 'affix_id' => 136, 'description' => 'affixes.incorporeal.description']),
+
+            new Affix(['key' => Affix::AFFIX_XAL_ATATHS_BARGAIN_ASCENDANT, 'name' => 'affixes.xal_ataths_bargain_ascendant.name', 'icon_file_id' => -1, 'affix_id' => 148, 'description' => 'affixes.xal_ataths_bargain_ascendant.description']),
+            new Affix(['key' => Affix::AFFIX_XAL_ATATHS_BARGAIN_DEVOUR, 'name' => 'affixes.xal_ataths_bargain_devour.name', 'icon_file_id' => -1, 'affix_id' => 160, 'description' => 'affixes.xal_ataths_bargain_devour.description']),
+            new Affix(['key' => Affix::AFFIX_XAL_ATATHS_BARGAIN_VOIDBOUND, 'name' => 'affixes.xal_ataths_bargain_voidbound.name', 'icon_file_id' => -1, 'affix_id' => 158, 'description' => 'affixes.xal_ataths_bargain_voidbound.description']),
+            new Affix(['key' => Affix::AFFIX_XAL_ATATHS_BARGAIN_OBLIVION, 'name' => 'affixes.xal_ataths_bargain_oblivion.name', 'icon_file_id' => -1, 'affix_id' => 159, 'description' => 'affixes.xal_ataths_bargain_oblivion.description']),
+            new Affix(['key' => Affix::AFFIX_XAL_ATATHS_BARGAIN_FRENZIED, 'name' => 'affixes.xal_ataths_bargain_frenzied.name', 'icon_file_id' => -1, 'affix_id' => 153, 'description' => 'affixes.xal_ataths_bargain_frenzied.description']),
+            new Affix(['key' => Affix::AFFIX_XAL_ATATHS_GUILE, 'name' => 'affixes.xal_ataths_guile.name', 'icon_file_id' => -1, 'affix_id' => 147, 'description' => 'affixes.xal_ataths_guile.description']),
+            new Affix(['key' => Affix::AFFIX_CHALLENGERS_PERIL, 'name' => 'affixes.challengers_peril.name', 'icon_file_id' => -1, 'affix_id' => 152, 'description' => 'affixes.challengers_peril.description']),
+
         ]);
 
         foreach ($affixes as $affix) {
