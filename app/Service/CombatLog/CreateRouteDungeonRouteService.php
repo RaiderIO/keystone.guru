@@ -347,9 +347,9 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                 )
             );
 
-            /** @var Npc $npc */
+            /** @var Npc|null $npc */
             $npc     = $npcs->get($createRouteBodyNpc->npcId);
-            $comment = json_encode(['name' => __($npc->name, [], 'en_US')] + $createRouteBodyNpc->toArray());
+            $comment = json_encode(['name' => __($npc?->name ?? 'Npc not found', [], 'en_US')] + $createRouteBodyNpc->toArray());
 
             $hasResolvedEnemy = $createRouteBodyNpc->getResolvedEnemy() !== null;
 
