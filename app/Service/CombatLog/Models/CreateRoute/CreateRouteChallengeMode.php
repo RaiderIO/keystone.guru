@@ -2,7 +2,9 @@
 
 namespace App\Service\CombatLog\Models\CreateRoute;
 
-class CreateRouteChallengeMode
+use Illuminate\Contracts\Support\Arrayable;
+
+class CreateRouteChallengeMode implements Arrayable
 {
     public function __construct(
         public string $start,
@@ -13,6 +15,19 @@ class CreateRouteChallengeMode
         public int    $level,
         public array  $affixes)
     {
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'start'           => $this->start,
+            'end'             => $this->end,
+            'success'         => $this->success,
+            'durationMs'      => $this->durationMs,
+            'challengeModeId' => $this->challengeModeId,
+            'level'           => $this->level,
+            'affixes'         => $this->affixes,
+        ];
     }
 
     public static function createFromArray(array $body): CreateRouteChallengeMode

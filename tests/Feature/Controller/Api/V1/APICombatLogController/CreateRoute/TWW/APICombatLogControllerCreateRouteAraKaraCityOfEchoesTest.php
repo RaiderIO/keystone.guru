@@ -32,14 +32,17 @@ class APICombatLogControllerCreateRouteAraKaraCityOfEchoesTest extends APICombat
         $response->assertCreated();
 
         $responseArr = json_decode($response->content(), true);
-        dump($responseArr);
 
-//        $this->validateResponseStaticData($responseArr);
-//        $this->validateDungeon($responseArr);
-//        $this->validatePulls($responseArr, 13, 450);
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($responseArr, 22, 501);
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 
+    /**
+     * This test was actually for a partially completed run. Group couldn't get past Avanoxx.
+     * @return void
+     */
     #[Test]
     public function create_givenTwwS1AraKaraCityOfEchoes6Json_shouldReturnValidDungeonRoute(): void
     {
@@ -53,11 +56,10 @@ class APICombatLogControllerCreateRouteAraKaraCityOfEchoesTest extends APICombat
         $response->assertCreated();
 
         $responseArr = json_decode($response->content(), true);
-        dump($responseArr);
 
-//        $this->validateResponseStaticData($responseArr);
-//        $this->validateDungeon($responseArr);
-//        $this->validatePulls($responseArr, 13, 450);
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($responseArr, 14, 242);
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
 }

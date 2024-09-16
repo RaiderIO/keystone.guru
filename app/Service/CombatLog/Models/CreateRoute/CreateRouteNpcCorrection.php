@@ -42,6 +42,13 @@ class CreateRouteNpcCorrection extends CreateRouteNpc
         );
     }
 
+    public function toArray(): array
+    {
+        return array_merge(parent::toArray(), [
+            'coordEnemy' => $this->coordEnemy->toArray(),
+        ]);
+    }
+
     public static function createFromArray(array $body): CreateRouteNpcCorrection
     {
         return new CreateRouteNpcCorrection(

@@ -473,9 +473,9 @@ class Dungeon extends CacheModel implements MappingModelInterface
     /**
      * @return Collection<int>
      */
-    public function getInUseNpcIds(): Collection
+    public function getInUseNpcIds(?Collection $inUseNpcs = null): Collection
     {
-        return $this->getInUseNpcs()
+        return ($inUseNpcs ?? $this->getInUseNpcs())
             ->pluck('id')
             // Brackenhide Hollow:  Odd exception to make Brackenhide Gnolls show up. They aren't in the MDT mapping, so
             // they don't get npc_enemy_forces pushed. But we do need them to show up for us since they convert
