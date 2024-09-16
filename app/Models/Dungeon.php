@@ -418,10 +418,26 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     // Burning Geodes are in the mapping but give 0 enemy forces.
                     // They're in the mapping because they're dangerous af
                     101437,
+
+                    // Necrotic Wake:
+                    // Brittlebone Warrior is in the mapping but gives 0 enemy forces.
+                    163122,
+                    // Brittlebone Mage
+                    163126,
+                    // Brittlebone Crossbowman
+                    166079,
+                    // Spare Parts
+                    166264,
+                    // Goregrind Bits
+                    163622,
+                    // Rotspew Leftovers
+                    163623,
+
                     // Halls of Infusion:
                     // Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
                     // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
                     190407,
+
                     // Brackenhide Hollow:
                     // Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
                     194273,
@@ -433,6 +449,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     194469,
                     // Gutstabbers give 0 enemy forces but are in the mapping regardless
                     197857,
+
                     // Nokhud Offensive:
                     // War Ohuna gives 0 enemy forces but is in the mapping regardless
                     192803,
@@ -442,6 +459,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     194895,
                     // Primal Gust gives 0 enemy forces but is in the mapping regardless
                     195579,
+
                     // Dawn of the Infinite:
                     // Temporal Deviation gives 0 enemy forces but is in the mapping regardless
                     206063,

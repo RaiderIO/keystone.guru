@@ -33,6 +33,12 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         // Siege of Boralus: Viq'Goth flails around, disappears in the deep at 1 hp and leaves a chest
         128652 => 0.01,
 
+        // Mists of Tirna Scithe: Tirnenn Villager is defeated at like 20%?
+        164929 => 0.20,
+        // Mistveil Defenders just despawn when defeated
+        163058 => 0.01,
+        171772 => 0.01,
+
         // Uldaman: Lost Dwarves, they kinda stop fighting when they reach below 10%
         184580 => 0.1,
         184581 => 0.1,

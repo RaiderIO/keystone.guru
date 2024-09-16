@@ -1574,14 +1574,14 @@
                 "enemy_forces_teeming": null
             },
             {
-                "id": 16476,
+                "id": 16465,
                 "mapping_version_id": 376,
                 "npc_id": 166304,
                 "enemy_forces": 4,
                 "enemy_forces_teeming": null
             },
             {
-                "id": 16465,
+                "id": 16476,
                 "mapping_version_id": 376,
                 "npc_id": 166304,
                 "enemy_forces": 4,
@@ -2151,9 +2151,9 @@
         "display_id": 95256,
         "encounter_id": null,
         "name": "Mistveil Defender",
-        "base_health": 145222,
+        "base_health": 28060883,
         "health_percentage": null,
-        "level": null,
+        "level": 80,
         "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
@@ -2191,6 +2191,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16661,
+                "mapping_version_id": 383,
+                "npc_id": 171772,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1647,
                 "mapping_version_id": 30,
