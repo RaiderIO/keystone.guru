@@ -9,11 +9,6 @@ class ZoneChangeSplitterLogging extends CombatLogSplitterLogging implements Zone
         $this->info(__METHOD__);
     }
 
-    public function parseCombatLogEventTooBigTimestampGap(int $seconds, string $previousTimestamp, string $timestamp): void
-    {
-        $this->info(__METHOD__, get_defined_vars());
-    }
-
     public function parseCombatLogEventZoneChangeEvent(): void
     {
         $this->debug(__METHOD__);

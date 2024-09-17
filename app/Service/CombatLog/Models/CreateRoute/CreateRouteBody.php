@@ -13,6 +13,7 @@ use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\Season\SeasonServiceInterface;
 use Auth;
 use Exception;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -20,7 +21,7 @@ use Illuminate\Support\Collection;
  * @property Collection<CreateRouteNpc>   $npcs
  * @property Collection<CreateRouteSpell> $spells
  */
-class CreateRouteBody
+class CreateRouteBody implements Arrayable
 {
     //    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s.vP';
@@ -92,6 +93,17 @@ class CreateRouteBody
         }
 
         return $dungeonRoute;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'metadata'      => $this->metadata->toArray(),
+            'settings'      => $this->settings->toArray(),
+            'challengeMode' => $this->challengeMode->toArray(),
+            'npcs'          => $this->npcs->map(fn(CreateRouteNpc $npc) => $npc->toArray())->toArray(),
+            'spells'        => $this->spells->map(fn(CreateRouteSpell $spell) => $spell->toArray())->toArray(),
+        ];
     }
 
     public static function createFromArray(array $body): CreateRouteBody

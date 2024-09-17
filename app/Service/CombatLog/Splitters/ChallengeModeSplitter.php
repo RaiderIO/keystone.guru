@@ -185,8 +185,8 @@ class ChallengeModeSplitter extends CombatLogSplitter
             $this->currentDungeon              = Dungeon::firstWhere('challenge_mode_id', $parsedEvent->getChallengeModeID());
 
             $this->rawEvents->push($this->lastCombatLogVersionEvent->getRawEvent());
-            $this->rawEvents->push($this->lastZoneChangeEvent->getRawEvent());
             $this->rawEvents->push($this->lastMapChangeEvent->getRawEvent());
+            $this->rawEvents->push($this->lastZoneChangeEvent->getRawEvent());
             $this->rawEvents->push($rawEvent);
         }
 

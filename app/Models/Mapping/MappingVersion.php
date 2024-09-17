@@ -513,6 +513,7 @@ class MappingVersion extends Model
                 FloorUnionArea::class           => collect(),
                 NpcEnemyForces::class           => collect(),
             ]);
+
             // Take the giant list of models and re-save them one by one for the new version of the mapping
             foreach ($previousMapping as $model) {
                 /** @var CloneForNewMappingVersionNoRelations $model */

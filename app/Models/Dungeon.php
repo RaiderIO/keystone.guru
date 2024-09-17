@@ -418,10 +418,26 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     // Burning Geodes are in the mapping but give 0 enemy forces.
                     // They're in the mapping because they're dangerous af
                     101437,
+
+                    // Necrotic Wake:
+                    // Brittlebone Warrior is in the mapping but gives 0 enemy forces.
+                    163122,
+                    // Brittlebone Mage
+                    163126,
+                    // Brittlebone Crossbowman
+                    166079,
+                    // Spare Parts
+                    166264,
+                    // Goregrind Bits
+                    163622,
+                    // Rotspew Leftovers
+                    163623,
+
                     // Halls of Infusion:
                     // Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
                     // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
                     190407,
+
                     // Brackenhide Hollow:
                     // Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
                     194273,
@@ -433,6 +449,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     194469,
                     // Gutstabbers give 0 enemy forces but are in the mapping regardless
                     197857,
+
                     // Nokhud Offensive:
                     // War Ohuna gives 0 enemy forces but is in the mapping regardless
                     192803,
@@ -442,11 +459,16 @@ class Dungeon extends CacheModel implements MappingModelInterface
                     194895,
                     // Primal Gust gives 0 enemy forces but is in the mapping regardless
                     195579,
+
                     // Dawn of the Infinite:
                     // Temporal Deviation gives 0 enemy forces but is in the mapping regardless
                     206063,
                     // Iridikron's Creation
                     204918,
+
+                    // City of Threads:
+                    // Eye of the Queen gives 0 enemy forces but is in the mapping regardless
+                    220003
                 ]);
             })
             ->get();
@@ -455,9 +477,9 @@ class Dungeon extends CacheModel implements MappingModelInterface
     /**
      * @return Collection<int>
      */
-    public function getInUseNpcIds(): Collection
+    public function getInUseNpcIds(?Collection $inUseNpcs = null): Collection
     {
-        return $this->getInUseNpcs()
+        return ($inUseNpcs ?? $this->getInUseNpcs())
             ->pluck('id')
             // Brackenhide Hollow:  Odd exception to make Brackenhide Gnolls show up. They aren't in the MDT mapping, so
             // they don't get npc_enemy_forces pushed. But we do need them to show up for us since they convert

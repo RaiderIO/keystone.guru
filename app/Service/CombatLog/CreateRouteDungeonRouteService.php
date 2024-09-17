@@ -15,6 +15,7 @@ use App\Models\Floor\Floor;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\Npc;
 use App\Models\Polyline;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
@@ -326,40 +327,40 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
         $polylineAttributes  = [];
         $brushlineAttributes = [];
 
-        $validNpcIds   = $dungeonRoute->dungeon->getInUseNpcIds();
+        $npcs          = $dungeonRoute->dungeon->getInUseNpcs()->keyBy('id');
+        $validNpcIds   = $dungeonRoute->dungeon->getInUseNpcIds($npcs);
         $previousFloor = null;
-        foreach ($createRouteBody->npcs as $npc) {
-            // Ignore NPCs that are not in the whitelist
-            if ($validNpcIds->search($npc->npcId) === false) {
-                continue;
-            }
-
-            $currentFloor = $npc->getResolvedEnemy()?->floor ?? $previousFloor;
+        foreach ($createRouteBody->npcs as $createRouteBodyNpc) {
+            $currentFloor = $createRouteBodyNpc->getResolvedEnemy()?->floor ?? $previousFloor;
 
             if ($currentFloor === null) {
-                $this->log->generateMapIconsUnableToFindFloor($npc->getUniqueId());
+                $this->log->generateMapIconsUnableToFindFloor($createRouteBodyNpc->getUniqueId());
 
                 continue;
             }
 
             $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
                 new IngameXY(
-                    $npc->coord->x,
-                    $npc->coord->y,
+                    $createRouteBodyNpc->coord->x,
+                    $createRouteBodyNpc->coord->y,
                     $currentFloor
                 )
             );
 
-            $comment = json_encode($npc);
+            /** @var Npc|null $npc */
+            $npc     = $npcs->get($createRouteBodyNpc->npcId);
+            $comment = json_encode(['name' => __($npc?->name ?? 'Npc not found', [], 'en_US')] + $createRouteBodyNpc->toArray());
 
-            $hasResolvedEnemy = $npc->getResolvedEnemy() !== null;
+            $hasResolvedEnemy = $createRouteBodyNpc->getResolvedEnemy() !== null;
 
             $mapIconAttributes[] = array_merge([
                 'mapping_version_id' => $mappingVersion->id,
                 'floor_id'           => $currentFloor->id,
                 'dungeon_route_id'   => $dungeonRoute?->id ?? null,
                 'team_id'            => null,
-                'map_icon_type_id'   => MapIconType::ALL[$hasResolvedEnemy ? MapIconType::MAP_ICON_TYPE_DOT_YELLOW : MapIconType::MAP_ICON_TYPE_NEONBUTTON_RED],
+                'map_icon_type_id'   => MapIconType::ALL[$hasResolvedEnemy && $validNpcIds->search($createRouteBodyNpc->npcId) !== false ?
+                    MapIconType::MAP_ICON_TYPE_DOT_YELLOW :
+                    MapIconType::MAP_ICON_TYPE_NEONBUTTON_RED],
                 'comment'            => $comment,
                 'permanent_tooltip'  => 0,
             ], $latLng->toArray());
@@ -379,7 +380,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
                     'weight'        => 2,
                     'vertices_json' => json_encode([
                         $latLng->toArray(),
-                        $npc->getResolvedEnemy()->getLatLng()->toArray(),
+                        $createRouteBodyNpc->getResolvedEnemy()->getLatLng()->toArray(),
                     ]),
                 ];
             }

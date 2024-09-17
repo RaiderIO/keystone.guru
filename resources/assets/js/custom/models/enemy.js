@@ -476,9 +476,17 @@ class Enemy extends VersionableMapObject {
             });
 
             if (mapContext.getGameVersion().key === GAME_VERSION_RETAIL) {
-                result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
-                result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
-                result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
+                // Defined in sitescripts
+                if( isUserAdmin ) {
+                    result.info.push({key: lang.get('messages.sidebar_enemy_npc_id_label'), value: this.npc.id});
+                }
+
+                // These affixes have been removed
+                // result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
+                // result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
+                // result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
+
+
                 // Required means that you MUST kill this enemy, otherwise you cannot complete the dungeon
                 // result.info.push({
                 //     key: lang.get('messages.sidebar_enemy_skippable_label'),

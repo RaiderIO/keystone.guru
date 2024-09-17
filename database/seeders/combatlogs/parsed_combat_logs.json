@@ -1412,5 +1412,1104 @@
         "extracted_data": 1,
         "created_at": "2024-09-08T11:00:12+00:00",
         "updated_at": "2024-09-08T11:00:12+00:00"
+    },
+    {
+        "id": 203,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_150301_ara-kara-city-of-echoes-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T15:11:51+00:00",
+        "updated_at": "2024-09-12T15:11:51+00:00"
+    },
+    {
+        "id": 204,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_150301_cinderbrew-meadery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T15:11:59+00:00",
+        "updated_at": "2024-09-12T15:11:59+00:00"
+    },
+    {
+        "id": 205,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_150301_mists-of-tirna-scithe-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T15:12:06+00:00",
+        "updated_at": "2024-09-12T15:12:06+00:00"
+    },
+    {
+        "id": 206,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_150301_mists-of-tirna-scithe.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T15:12:22+00:00",
+        "updated_at": "2024-09-12T15:12:22+00:00"
+    },
+    {
+        "id": 207,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_150301_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T15:12:31+00:00",
+        "updated_at": "2024-09-12T15:12:31+00:00"
+    },
+    {
+        "id": 208,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_150301_the-stonevault-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T15:12:32+00:00",
+        "updated_at": "2024-09-12T15:12:32+00:00"
+    },
+    {
+        "id": 209,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_150301_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T15:12:55+00:00",
+        "updated_at": "2024-09-12T15:12:55+00:00"
+    },
+    {
+        "id": 210,
+        "combat_log_path": "tmp\/WoWCombatLog-091224_141814_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T15:13:02+00:00",
+        "updated_at": "2024-09-12T15:13:02+00:00"
+    },
+    {
+        "id": 211,
+        "combat_log_path": "tmp\/WoWCombatLog-082624_221341_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:26:27+00:00",
+        "updated_at": "2024-09-12T16:26:27+00:00"
+    },
+    {
+        "id": 212,
+        "combat_log_path": "tmp\/WoWCombatLog-082624_221341_priory-of-the-sacred-flame-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:26:31+00:00",
+        "updated_at": "2024-09-12T16:26:31+00:00"
+    },
+    {
+        "id": 213,
+        "combat_log_path": "tmp\/WoWCombatLog-082624_221341_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:26:34+00:00",
+        "updated_at": "2024-09-12T16:26:34+00:00"
+    },
+    {
+        "id": 214,
+        "combat_log_path": "tmp\/WoWCombatLog-082624_221341_the-rookery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:26:37+00:00",
+        "updated_at": "2024-09-12T16:26:37+00:00"
+    },
+    {
+        "id": 215,
+        "combat_log_path": "tmp\/WoWCombatLog-082624_221341_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:26:39+00:00",
+        "updated_at": "2024-09-12T16:26:39+00:00"
+    },
+    {
+        "id": 216,
+        "combat_log_path": "tmp\/WoWCombatLog-082624_221341_the-stonevault-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:26:42+00:00",
+        "updated_at": "2024-09-12T16:26:42+00:00"
+    },
+    {
+        "id": 217,
+        "combat_log_path": "tmp\/WoWCombatLog-082624_221341_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:26:45+00:00",
+        "updated_at": "2024-09-12T16:26:45+00:00"
+    },
+    {
+        "id": 218,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_173137_cinderbrew-meadery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:26:53+00:00",
+        "updated_at": "2024-09-12T16:26:53+00:00"
+    },
+    {
+        "id": 219,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_173137_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:27:01+00:00",
+        "updated_at": "2024-09-12T16:27:01+00:00"
+    },
+    {
+        "id": 220,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_173137_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:27:06+00:00",
+        "updated_at": "2024-09-12T16:27:06+00:00"
+    },
+    {
+        "id": 221,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_173137_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:27:09+00:00",
+        "updated_at": "2024-09-12T16:27:09+00:00"
+    },
+    {
+        "id": 222,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_190644_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:27:13+00:00",
+        "updated_at": "2024-09-12T16:27:13+00:00"
+    },
+    {
+        "id": 223,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_190644_cinderbrew-meadery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:27:24+00:00",
+        "updated_at": "2024-09-12T16:27:24+00:00"
+    },
+    {
+        "id": 224,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_190644_cinderbrew-meadery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:27:35+00:00",
+        "updated_at": "2024-09-12T16:27:35+00:00"
+    },
+    {
+        "id": 225,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_190644_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:27:42+00:00",
+        "updated_at": "2024-09-12T16:27:42+00:00"
+    },
+    {
+        "id": 226,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_190644_priory-of-the-sacred-flame-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:27:43+00:00",
+        "updated_at": "2024-09-12T16:27:43+00:00"
+    },
+    {
+        "id": 227,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_190644_priory-of-the-sacred-flame-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:27:53+00:00",
+        "updated_at": "2024-09-12T16:27:53+00:00"
+    },
+    {
+        "id": 228,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_190644_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:28:01+00:00",
+        "updated_at": "2024-09-12T16:28:01+00:00"
+    },
+    {
+        "id": 229,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_190644_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:28:08+00:00",
+        "updated_at": "2024-09-12T16:28:08+00:00"
+    },
+    {
+        "id": 230,
+        "combat_log_path": "tmp\/WoWCombatLog-082724_193920_priory-of-the-sacred-flame-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:28:09+00:00",
+        "updated_at": "2024-09-12T16:28:09+00:00"
+    },
+    {
+        "id": 231,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_140858_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:28:18+00:00",
+        "updated_at": "2024-09-12T16:28:18+00:00"
+    },
+    {
+        "id": 232,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_140858_the-stonevault-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:28:26+00:00",
+        "updated_at": "2024-09-12T16:28:26+00:00"
+    },
+    {
+        "id": 233,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_140858_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:28:33+00:00",
+        "updated_at": "2024-09-12T16:28:33+00:00"
+    },
+    {
+        "id": 234,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_the-rookery-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:28:38+00:00",
+        "updated_at": "2024-09-12T16:28:38+00:00"
+    },
+    {
+        "id": 235,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_the-rookery-4.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:28:42+00:00",
+        "updated_at": "2024-09-12T16:28:42+00:00"
+    },
+    {
+        "id": 236,
+        "combat_log_path": "tmp\/WoWCombatLog-082924_221936_the-stonevault-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:28:49+00:00",
+        "updated_at": "2024-09-12T16:28:49+00:00"
+    },
+    {
+        "id": 237,
+        "combat_log_path": "tmp\/WoWCombatLog-083024_201959_ara-kara-city-of-echoes-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:28:56+00:00",
+        "updated_at": "2024-09-12T16:28:56+00:00"
+    },
+    {
+        "id": 238,
+        "combat_log_path": "tmp\/WoWCombatLog-083024_201959_cinderbrew-meadery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:29:05+00:00",
+        "updated_at": "2024-09-12T16:29:05+00:00"
+    },
+    {
+        "id": 239,
+        "combat_log_path": "tmp\/WoWCombatLog-090124_220903_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:29:11+00:00",
+        "updated_at": "2024-09-12T16:29:11+00:00"
+    },
+    {
+        "id": 240,
+        "combat_log_path": "tmp\/WoWCombatLog-090124_220903_priory-of-the-sacred-flame-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:29:17+00:00",
+        "updated_at": "2024-09-12T16:29:17+00:00"
+    },
+    {
+        "id": 241,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_priory-of-the-sacred-flame-5.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:29:22+00:00",
+        "updated_at": "2024-09-12T16:29:22+00:00"
+    },
+    {
+        "id": 242,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-10.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:29:26+00:00",
+        "updated_at": "2024-09-12T16:29:26+00:00"
+    },
+    {
+        "id": 243,
+        "combat_log_path": "tmp\/WoWCombatLog-090224_193440_the-rookery-12.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:29:31+00:00",
+        "updated_at": "2024-09-12T16:29:31+00:00"
+    },
+    {
+        "id": 244,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_132659_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:29:35+00:00",
+        "updated_at": "2024-09-12T16:29:35+00:00"
+    },
+    {
+        "id": 245,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_132659_cinderbrew-meadery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:29:45+00:00",
+        "updated_at": "2024-09-12T16:29:45+00:00"
+    },
+    {
+        "id": 246,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_132659_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:29:50+00:00",
+        "updated_at": "2024-09-12T16:29:50+00:00"
+    },
+    {
+        "id": 247,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_132659_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:29:55+00:00",
+        "updated_at": "2024-09-12T16:29:55+00:00"
+    },
+    {
+        "id": 248,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_132659_priory-of-the-sacred-flame-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:30:02+00:00",
+        "updated_at": "2024-09-12T16:30:02+00:00"
+    },
+    {
+        "id": 249,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_132659_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:30:09+00:00",
+        "updated_at": "2024-09-12T16:30:09+00:00"
+    },
+    {
+        "id": 250,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_132659_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:30:13+00:00",
+        "updated_at": "2024-09-12T16:30:13+00:00"
+    },
+    {
+        "id": 251,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_132659_the-rookery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:30:16+00:00",
+        "updated_at": "2024-09-12T16:30:16+00:00"
+    },
+    {
+        "id": 252,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_132659_the-stonevault-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:30:20+00:00",
+        "updated_at": "2024-09-12T16:30:20+00:00"
+    },
+    {
+        "id": 253,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_132659_the-stonevault-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:30:26+00:00",
+        "updated_at": "2024-09-12T16:30:26+00:00"
+    },
+    {
+        "id": 254,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_132659_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:30:31+00:00",
+        "updated_at": "2024-09-12T16:30:31+00:00"
+    },
+    {
+        "id": 255,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_204226_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:30:35+00:00",
+        "updated_at": "2024-09-12T16:30:35+00:00"
+    },
+    {
+        "id": 256,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_213158_ara-kara-city-of-echoes-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:30:39+00:00",
+        "updated_at": "2024-09-12T16:30:39+00:00"
+    },
+    {
+        "id": 257,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_213158_ara-kara-city-of-echoes-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:30:43+00:00",
+        "updated_at": "2024-09-12T16:30:43+00:00"
+    },
+    {
+        "id": 258,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_213158_ara-kara-city-of-echoes-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:30:49+00:00",
+        "updated_at": "2024-09-12T16:30:49+00:00"
+    },
+    {
+        "id": 259,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_213158_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:30:54+00:00",
+        "updated_at": "2024-09-12T16:30:54+00:00"
+    },
+    {
+        "id": 260,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_213158_priory-of-the-sacred-flame-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:31:01+00:00",
+        "updated_at": "2024-09-12T16:31:01+00:00"
+    },
+    {
+        "id": 261,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_213158_priory-of-the-sacred-flame-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:31:06+00:00",
+        "updated_at": "2024-09-12T16:31:06+00:00"
+    },
+    {
+        "id": 262,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_213158_priory-of-the-sacred-flame-4.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:31:17+00:00",
+        "updated_at": "2024-09-12T16:31:17+00:00"
+    },
+    {
+        "id": 263,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_213158_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:31:23+00:00",
+        "updated_at": "2024-09-12T16:31:23+00:00"
+    },
+    {
+        "id": 264,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_213158_the-rookery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:31:30+00:00",
+        "updated_at": "2024-09-12T16:31:30+00:00"
+    },
+    {
+        "id": 265,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_213158_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:31:34+00:00",
+        "updated_at": "2024-09-12T16:31:34+00:00"
+    },
+    {
+        "id": 266,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_213158_the-stonevault-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:31:39+00:00",
+        "updated_at": "2024-09-12T16:31:39+00:00"
+    },
+    {
+        "id": 267,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_213158_the-stonevault-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:31:46+00:00",
+        "updated_at": "2024-09-12T16:31:46+00:00"
+    },
+    {
+        "id": 268,
+        "combat_log_path": "tmp\/WoWCombatLog-090324_213158_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:32:03+00:00",
+        "updated_at": "2024-09-12T16:32:03+00:00"
+    },
+    {
+        "id": 269,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_ara-kara-city-of-echoes-4.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:32:05+00:00",
+        "updated_at": "2024-09-12T16:32:05+00:00"
+    },
+    {
+        "id": 270,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_priory-of-the-sacred-flame-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:32:13+00:00",
+        "updated_at": "2024-09-12T16:32:13+00:00"
+    },
+    {
+        "id": 271,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:32:19+00:00",
+        "updated_at": "2024-09-12T16:32:19+00:00"
+    },
+    {
+        "id": 272,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_124752_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:32:20+00:00",
+        "updated_at": "2024-09-12T16:32:20+00:00"
+    },
+    {
+        "id": 273,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_204134_ara-kara-city-of-echoes-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:32:26+00:00",
+        "updated_at": "2024-09-12T16:32:26+00:00"
+    },
+    {
+        "id": 274,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_204134_ara-kara-city-of-echoes-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:32:29+00:00",
+        "updated_at": "2024-09-12T16:32:29+00:00"
+    },
+    {
+        "id": 275,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_204134_cinderbrew-meadery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:32:32+00:00",
+        "updated_at": "2024-09-12T16:32:32+00:00"
+    },
+    {
+        "id": 276,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_204134_city-of-threads-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:32:38+00:00",
+        "updated_at": "2024-09-12T16:32:38+00:00"
+    },
+    {
+        "id": 277,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_204134_city-of-threads-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:32:44+00:00",
+        "updated_at": "2024-09-12T16:32:44+00:00"
+    },
+    {
+        "id": 278,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_204134_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:32:51+00:00",
+        "updated_at": "2024-09-12T16:32:51+00:00"
+    },
+    {
+        "id": 279,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_204134_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:33:00+00:00",
+        "updated_at": "2024-09-12T16:33:00+00:00"
+    },
+    {
+        "id": 280,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_204134_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:33:06+00:00",
+        "updated_at": "2024-09-12T16:33:06+00:00"
+    },
+    {
+        "id": 281,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_204134_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:33:12+00:00",
+        "updated_at": "2024-09-12T16:33:12+00:00"
+    },
+    {
+        "id": 282,
+        "combat_log_path": "tmp\/WoWCombatLog-090424_204134_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:33:19+00:00",
+        "updated_at": "2024-09-12T16:33:19+00:00"
+    },
+    {
+        "id": 283,
+        "combat_log_path": "tmp\/WoWCombatLog-090524_165529_ara-kara-city-of-echoes-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:33:25+00:00",
+        "updated_at": "2024-09-12T16:33:25+00:00"
+    },
+    {
+        "id": 284,
+        "combat_log_path": "tmp\/WoWCombatLog-090524_165529_ara-kara-city-of-echoes-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:33:30+00:00",
+        "updated_at": "2024-09-12T16:33:30+00:00"
+    },
+    {
+        "id": 285,
+        "combat_log_path": "tmp\/WoWCombatLog-090524_165529_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:33:34+00:00",
+        "updated_at": "2024-09-12T16:33:34+00:00"
+    },
+    {
+        "id": 286,
+        "combat_log_path": "tmp\/WoWCombatLog-090524_165529_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:33:40+00:00",
+        "updated_at": "2024-09-12T16:33:40+00:00"
+    },
+    {
+        "id": 287,
+        "combat_log_path": "tmp\/WoWCombatLog-090524_165529_the-rookery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:33:43+00:00",
+        "updated_at": "2024-09-12T16:33:43+00:00"
+    },
+    {
+        "id": 288,
+        "combat_log_path": "tmp\/WoWCombatLog-090524_165529_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:33:47+00:00",
+        "updated_at": "2024-09-12T16:33:47+00:00"
+    },
+    {
+        "id": 289,
+        "combat_log_path": "tmp\/WoWCombatLog-090524_165529_the-stonevault-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:33:52+00:00",
+        "updated_at": "2024-09-12T16:33:52+00:00"
+    },
+    {
+        "id": 290,
+        "combat_log_path": "tmp\/WoWCombatLog-090524_165529_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:33:58+00:00",
+        "updated_at": "2024-09-12T16:33:58+00:00"
+    },
+    {
+        "id": 291,
+        "combat_log_path": "tmp\/WoWCombatLog-090524_174645_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:34:04+00:00",
+        "updated_at": "2024-09-12T16:34:04+00:00"
+    },
+    {
+        "id": 292,
+        "combat_log_path": "tmp\/WoWCombatLog-090524_211525_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:34:09+00:00",
+        "updated_at": "2024-09-12T16:34:09+00:00"
+    },
+    {
+        "id": 293,
+        "combat_log_path": "tmp\/WoWCombatLog-090524_211525_cinderbrew-meadery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:34:19+00:00",
+        "updated_at": "2024-09-12T16:34:19+00:00"
+    },
+    {
+        "id": 294,
+        "combat_log_path": "tmp\/WoWCombatLog-090524_211525_priory-of-the-sacred-flame-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:34:28+00:00",
+        "updated_at": "2024-09-12T16:34:28+00:00"
+    },
+    {
+        "id": 295,
+        "combat_log_path": "tmp\/WoWCombatLog-090524_211525_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:34:36+00:00",
+        "updated_at": "2024-09-12T16:34:36+00:00"
+    },
+    {
+        "id": 296,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_150133_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:34:43+00:00",
+        "updated_at": "2024-09-12T16:34:43+00:00"
+    },
+    {
+        "id": 297,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_150133_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:34:48+00:00",
+        "updated_at": "2024-09-12T16:34:48+00:00"
+    },
+    {
+        "id": 298,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_150133_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:34:54+00:00",
+        "updated_at": "2024-09-12T16:34:54+00:00"
+    },
+    {
+        "id": 299,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_150133_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:35:00+00:00",
+        "updated_at": "2024-09-12T16:35:00+00:00"
+    },
+    {
+        "id": 300,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_ara-kara-city-of-echoes-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:35:07+00:00",
+        "updated_at": "2024-09-12T16:35:07+00:00"
+    },
+    {
+        "id": 301,
+        "combat_log_path": "tmp\/WoWCombatLog-090624_211258_city-of-threads-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:35:13+00:00",
+        "updated_at": "2024-09-12T16:35:13+00:00"
+    },
+    {
+        "id": 302,
+        "combat_log_path": "tmp\/WoWCombatLog-090724_173535_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:35:17+00:00",
+        "updated_at": "2024-09-12T16:35:17+00:00"
+    },
+    {
+        "id": 303,
+        "combat_log_path": "tmp\/WoWCombatLog-090724_173535_cinderbrew-meadery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:35:24+00:00",
+        "updated_at": "2024-09-12T16:35:24+00:00"
+    },
+    {
+        "id": 304,
+        "combat_log_path": "tmp\/WoWCombatLog-090724_173535_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:35:29+00:00",
+        "updated_at": "2024-09-12T16:35:29+00:00"
+    },
+    {
+        "id": 305,
+        "combat_log_path": "tmp\/WoWCombatLog-090724_173535_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:35:33+00:00",
+        "updated_at": "2024-09-12T16:35:33+00:00"
+    },
+    {
+        "id": 306,
+        "combat_log_path": "tmp\/WoWCombatLog-090724_173535_the-stonevault-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:35:37+00:00",
+        "updated_at": "2024-09-12T16:35:37+00:00"
+    },
+    {
+        "id": 307,
+        "combat_log_path": "tmp\/WoWCombatLog-090724_173535_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:35:45+00:00",
+        "updated_at": "2024-09-12T16:35:45+00:00"
+    },
+    {
+        "id": 308,
+        "combat_log_path": "tmp\/WoWCombatLog-090724_194443_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:35:51+00:00",
+        "updated_at": "2024-09-12T16:35:51+00:00"
+    },
+    {
+        "id": 309,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_024237_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:35:58+00:00",
+        "updated_at": "2024-09-12T16:35:58+00:00"
+    },
+    {
+        "id": 310,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_024237_city-of-threads-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:36:07+00:00",
+        "updated_at": "2024-09-12T16:36:07+00:00"
+    },
+    {
+        "id": 311,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_024237_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:36:16+00:00",
+        "updated_at": "2024-09-12T16:36:16+00:00"
+    },
+    {
+        "id": 312,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_130946_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:36:23+00:00",
+        "updated_at": "2024-09-12T16:36:23+00:00"
+    },
+    {
+        "id": 313,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_130946_cinderbrew-meadery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:36:31+00:00",
+        "updated_at": "2024-09-12T16:36:31+00:00"
+    },
+    {
+        "id": 314,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_130946_cinderbrew-meadery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:36:39+00:00",
+        "updated_at": "2024-09-12T16:36:39+00:00"
+    },
+    {
+        "id": 315,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_130946_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:36:44+00:00",
+        "updated_at": "2024-09-12T16:36:44+00:00"
+    },
+    {
+        "id": 316,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_130946_darkflame-cleft-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:36:49+00:00",
+        "updated_at": "2024-09-12T16:36:49+00:00"
+    },
+    {
+        "id": 317,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_130946_darkflame-cleft-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:36:53+00:00",
+        "updated_at": "2024-09-12T16:36:53+00:00"
+    },
+    {
+        "id": 318,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_130946_darkflame-cleft-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:36:58+00:00",
+        "updated_at": "2024-09-12T16:36:58+00:00"
+    },
+    {
+        "id": 319,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_130946_darkflame-cleft-4.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:37:02+00:00",
+        "updated_at": "2024-09-12T16:37:02+00:00"
+    },
+    {
+        "id": 320,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_130946_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:37:07+00:00",
+        "updated_at": "2024-09-12T16:37:07+00:00"
+    },
+    {
+        "id": 321,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_130946_the-rookery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:37:11+00:00",
+        "updated_at": "2024-09-12T16:37:11+00:00"
+    },
+    {
+        "id": 322,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_130946_the-rookery-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:37:16+00:00",
+        "updated_at": "2024-09-12T16:37:16+00:00"
+    },
+    {
+        "id": 323,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_130946_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:37:21+00:00",
+        "updated_at": "2024-09-12T16:37:21+00:00"
+    },
+    {
+        "id": 324,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_171553_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:37:26+00:00",
+        "updated_at": "2024-09-12T16:37:26+00:00"
+    },
+    {
+        "id": 325,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_171553_priory-of-the-sacred-flame-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:37:33+00:00",
+        "updated_at": "2024-09-12T16:37:33+00:00"
+    },
+    {
+        "id": 326,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_171553_priory-of-the-sacred-flame-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:37:41+00:00",
+        "updated_at": "2024-09-12T16:37:41+00:00"
+    },
+    {
+        "id": 327,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_171553_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:37:45+00:00",
+        "updated_at": "2024-09-12T16:37:45+00:00"
+    },
+    {
+        "id": 328,
+        "combat_log_path": "tmp\/WoWCombatLog-090824_171553_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:37:49+00:00",
+        "updated_at": "2024-09-12T16:37:49+00:00"
+    },
+    {
+        "id": 329,
+        "combat_log_path": "tmp\/WoWCombatLog-091024_203738_ara-kara-city-of-echoes-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:37:56+00:00",
+        "updated_at": "2024-09-12T16:37:56+00:00"
+    },
+    {
+        "id": 330,
+        "combat_log_path": "tmp\/WoWCombatLog-091024_203738_ara-kara-city-of-echoes-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:38:00+00:00",
+        "updated_at": "2024-09-12T16:38:00+00:00"
+    },
+    {
+        "id": 331,
+        "combat_log_path": "tmp\/WoWCombatLog-091024_203738_cinderbrew-meadery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:38:10+00:00",
+        "updated_at": "2024-09-12T16:38:10+00:00"
+    },
+    {
+        "id": 332,
+        "combat_log_path": "tmp\/WoWCombatLog-091024_203738_cinderbrew-meadery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:38:20+00:00",
+        "updated_at": "2024-09-12T16:38:20+00:00"
+    },
+    {
+        "id": 333,
+        "combat_log_path": "tmp\/WoWCombatLog-091024_203738_city-of-threads-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:38:27+00:00",
+        "updated_at": "2024-09-12T16:38:27+00:00"
+    },
+    {
+        "id": 334,
+        "combat_log_path": "tmp\/WoWCombatLog-091024_203738_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:38:33+00:00",
+        "updated_at": "2024-09-12T16:38:33+00:00"
+    },
+    {
+        "id": 335,
+        "combat_log_path": "tmp\/WoWCombatLog-091024_203738_darkflame-cleft-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:38:39+00:00",
+        "updated_at": "2024-09-12T16:38:39+00:00"
+    },
+    {
+        "id": 336,
+        "combat_log_path": "tmp\/WoWCombatLog-091024_203738_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:38:45+00:00",
+        "updated_at": "2024-09-12T16:38:45+00:00"
+    },
+    {
+        "id": 337,
+        "combat_log_path": "tmp\/WoWCombatLog-091024_203738_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:38:50+00:00",
+        "updated_at": "2024-09-12T16:38:50+00:00"
+    },
+    {
+        "id": 338,
+        "combat_log_path": "tmp\/WoWCombatLog-091024_203738_the-rookery-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:38:58+00:00",
+        "updated_at": "2024-09-12T16:38:58+00:00"
+    },
+    {
+        "id": 339,
+        "combat_log_path": "tmp\/WoWCombatLog-091024_203738_the-rookery-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:39:04+00:00",
+        "updated_at": "2024-09-12T16:39:04+00:00"
+    },
+    {
+        "id": 340,
+        "combat_log_path": "tmp\/WoWCombatLog-091024_203738_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:39:11+00:00",
+        "updated_at": "2024-09-12T16:39:11+00:00"
+    },
+    {
+        "id": 341,
+        "combat_log_path": "tmp\/WoWCombatLog-091024_203738_the-stonevault-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:39:19+00:00",
+        "updated_at": "2024-09-12T16:39:19+00:00"
+    },
+    {
+        "id": 342,
+        "combat_log_path": "tmp\/WoWCombatLog-091024_203738_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:39:26+00:00",
+        "updated_at": "2024-09-12T16:39:26+00:00"
+    },
+    {
+        "id": 343,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_144507_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:39:37+00:00",
+        "updated_at": "2024-09-12T16:39:37+00:00"
+    },
+    {
+        "id": 344,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_144507_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:39:49+00:00",
+        "updated_at": "2024-09-12T16:39:49+00:00"
+    },
+    {
+        "id": 345,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_144507_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:40:05+00:00",
+        "updated_at": "2024-09-12T16:40:05+00:00"
+    },
+    {
+        "id": 346,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_204125_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:40:19+00:00",
+        "updated_at": "2024-09-12T16:40:19+00:00"
+    },
+    {
+        "id": 347,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_204125_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:40:32+00:00",
+        "updated_at": "2024-09-12T16:40:32+00:00"
+    },
+    {
+        "id": 348,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_204125_grim-batol.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:40:48+00:00",
+        "updated_at": "2024-09-12T16:40:48+00:00"
+    },
+    {
+        "id": 349,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_204125_mists-of-tirna-scithe.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:40:59+00:00",
+        "updated_at": "2024-09-12T16:40:59+00:00"
+    },
+    {
+        "id": 350,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_204125_siege-of-boralus-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:40:59+00:00",
+        "updated_at": "2024-09-12T16:40:59+00:00"
+    },
+    {
+        "id": 351,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_204125_siege-of-boralus-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:41:15+00:00",
+        "updated_at": "2024-09-12T16:41:15+00:00"
+    },
+    {
+        "id": 352,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_204125_siege-of-boralus.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:41:23+00:00",
+        "updated_at": "2024-09-12T16:41:23+00:00"
+    },
+    {
+        "id": 353,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_204125_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:41:33+00:00",
+        "updated_at": "2024-09-12T16:41:33+00:00"
+    },
+    {
+        "id": 354,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_204125_the-necrotic-wake.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:41:49+00:00",
+        "updated_at": "2024-09-12T16:41:49+00:00"
+    },
+    {
+        "id": 355,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_204125_the-stonevault-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:41:52+00:00",
+        "updated_at": "2024-09-12T16:41:52+00:00"
+    },
+    {
+        "id": 356,
+        "combat_log_path": "tmp\/WoWCombatLog-091124_204125_the-stonevault-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-12T16:42:05+00:00",
+        "updated_at": "2024-09-12T16:42:05+00:00"
+    },
+    {
+        "id": 357,
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_grim-batol-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-14T12:55:35+00:00",
+        "updated_at": "2024-09-14T12:55:35+00:00"
+    },
+    {
+        "id": 358,
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_grim-batol-4.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-14T12:56:00+00:00",
+        "updated_at": "2024-09-14T12:56:00+00:00"
+    },
+    {
+        "id": 359,
+        "combat_log_path": "tmp\/WoWCombatLog-091424_095542_the-stonevault-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-14T12:56:10+00:00",
+        "updated_at": "2024-09-14T12:56:10+00:00"
     }
 ]
