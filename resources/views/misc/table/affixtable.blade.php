@@ -36,7 +36,7 @@ $now = Carbon::now();
     $firstAffixGroup->load('affixGroupCouplings');
     ?>
     <tr class="table_row text-center bg-dark">
-        <td colspan="{{ $firstAffixGroup->affixGroupCouplings->count() + 1 }}">
+        <td colspan="10">
             <h5 class="py-2 m-0">
                 @if ($isNewSeason)
                     {{ __('view_misc.affixes.header_season_start', ['season' => $season->name_long]) }}

@@ -239,6 +239,7 @@ class Season extends CacheModel
      * @return AffixGroup|null The affix group that is active at that point in time for your passed timezone.
      *
      * @throws Exception
+     * @TODO Move to SeasonService
      */
     public function getAffixGroupAt(Carbon $date, GameServerRegion $region): ?AffixGroup
     {

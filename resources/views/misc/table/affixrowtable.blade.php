@@ -53,11 +53,12 @@ $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $
         </div>
     </td>
     <?php
-    $affixIndex = 0;
     foreach ($affixGroup->affixes as $i => $affix){
         $isSeasonalAffix = $affix->id === $season->seasonal_affix_id;
+        $lastColumn      = $i === count($affixGroup->affixes) - 1;
         $class           = $currentWeekClass . $topBorderClass . $bottomBorderClass;
-        $class           .= $isSeasonalAffix ? 'last_column ' : '';
+        $class           .= $lastColumn ? 'last_column ' : '';
+        $class           .= $isSeasonalAffix ? 'seasonal ' : '';
         $class           .= $isFirst ? 'first_row ' : '';
         $class           .= $isLast ? 'last_row ' : '';
         ?>
@@ -66,10 +67,10 @@ $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $
             <div class="affix_row">
                 <div class="row no-gutters">
                     <div
-                            class="col-auto select_icon class_icon affix_icon_{{ \Str::slug($affix->key, '_') }}"
-                            data-toggle="tooltip"
-                            title="{{ __($affix->description) }}"
-                            style="height: 24px;">
+                        class="col-auto select_icon class_icon affix_icon_{{ \Str::slug($affix->key, '_') }}"
+                        data-toggle="tooltip"
+                        title="{{ __($affix->description) }}"
+                        style="height: 24px;">
                     </div>
                     <div class="col d-lg-block d-none pl-1">
                         @if($isSeasonalAffix && $affixGroup->seasonal_index !== null)
