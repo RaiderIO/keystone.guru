@@ -177,6 +177,7 @@ class SeasonService implements SeasonServiceInterface
      * @param  $iterationOffset  int An optional offset to display affixes in the past or future.
      *
      * @throws Exception
+     * @return Collection<array{ date_start: string, affix_group: AffixGroup}>
      *
      * @todo This can be further improved with some mathy things, but for now it's quick enough
      */
@@ -228,10 +229,11 @@ class SeasonService implements SeasonServiceInterface
             // Keep this affix group (or not)
             if (($totalWeeksToSimulate - $i) <= $affixesToDisplay) {
                 // Append to the list of when we have which affix groups
+                // Don't use a key because date_start is a Carbon instance and that doesn't work as a key
                 $affixGroups->push([
                     'date_start' => $simulatedTime->copy(),
                     // $currentSeason->start_affix_group_index
-                    'affixgroup' => $currentSeason->affixGroups[$i % $currentSeason->affix_group_count],
+                    'affix_group' => $currentSeason->affixGroups[$i % $currentSeason->affix_group_count],
                 ]);
             }
 

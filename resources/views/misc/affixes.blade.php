@@ -9,11 +9,9 @@
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
-use App\Models\Season;
-use App\Models\Timewalking\TimewalkingEvent;
 use App\Service\Season\SeasonService;
 use App\Service\TimewalkingEvent\TimewalkingEventService;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * @var TimewalkingEventService $timewalkingEventService
@@ -22,10 +20,22 @@ use Illuminate\Support\Carbon;
  * @var AffixGroup              $nextAffixGroup
  * @var int                     $offset
  * @var Expansion               $expansion
+ * @var GameServerRegion        $userOrDefaultRegion
  */
 
-$region = GameServerRegion::getUserOrDefaultRegion();
-$now    = Carbon::now();
+$affixGroupsBySeason = collect();
+
+foreach ($seasonService->getDisplayedAffixGroups($offset) as $affixGroupArr) {
+    $affixGroup = $affixGroupArr['affix_group'];
+
+    if (!$affixGroupsBySeason->has($affixGroup->season_id)) {
+        $affixGroupsBySeason->put($affixGroup->season_id, collect());
+    }
+
+    /** @var Collection<AffixGroup> $currentSeasonAffixGroups */
+    $currentSeasonAffixGroups = $affixGroupsBySeason->get($affixGroup->season_id);
+    $currentSeasonAffixGroups->push($affixGroupArr);
+}
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
@@ -36,94 +46,20 @@ $now    = Carbon::now();
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title text-center">
-                    {{ sprintf(__('view_misc.affixes.header'), __($region->name)) }}
+                    {{ sprintf(__('view_misc.affixes.header'), __($userOrDefaultRegion->name)) }}
                 </h5>
-
-                <table class="affixes_overview_table bg-secondary" width="100%">
-                    <thead>
-                    <tr>
-                        <th width="20%">
-                            {{ sprintf(__('view_misc.affixes.start_date'), $seasonService->getUserTimezone()) }}
-                        </th>
-                        <th width="20%">
-                            {{ __('view_misc.affixes.2') }}
-                        </th>
-                        <th width="20%">
-                            {{ __('view_misc.affixes.7') }}
-                        </th>
-                        <th width="20%">
-                            {{ __('view_misc.affixes.14') }}
-                        </th>
-                        <th width="20%">
-                            {{ __('view_misc.affixes.seasonal') }}
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    $affixGroups                = $seasonService->getDisplayedAffixGroups($offset);
-                    $affixGroupIndex            = 0;
-                    $previousAffixGroupSeasonId = null;
-                    // @formatter:off
-                    foreach($affixGroups as $index => $arr){
-                        /** @var Carbon $startDate */
-                        $startDate = $arr['date_start'];
-                        /** @var AffixGroup $affixGroup */
-                        $affixGroup = $arr['affixgroup'];
-                        $isCurrentWeek = $affixGroup->id === $currentAffixGroup->id && $startDate->diffInWeeks($now) <= 1;
-                        $isFirst = $affixGroupIndex === 0;
-                        $isLast = $affixGroups->count() - 1 === $affixGroupIndex;
-
-                        $timewalkingEvent = $timewalkingEventService->getActiveTimewalkingEventAt($startDate);
-
-                    if($previousAffixGroupSeasonId !== null && $previousAffixGroupSeasonId !== $affixGroup->season_id) {
-                        $newSeason = Season::findOrFail($affixGroup->season_id);
-                        ?>
-                    <tr class="table_row text-center bg-dark">
-                        <td colspan="5">
-                            <h5 class="py-2 m-0">
-                                {{ __('view_misc.affixes.season_start', ['season' => $newSeason->name_long]) }}
-                            </h5>
-                        </td>
-                    </tr>
-                    <?php }?>
-                        @include('misc.table.affixrowtable', [
-                            'timewalkingEvent' => null,
-                            'affixGroup' => $affixGroup,
-                            'isCurrentWeek' => $isCurrentWeek,
-                            'isFirst' => $isFirst,
-                            'isLast' => $isLast,
-                            'startDate' => $startDate,
-                            'showBottomBorder' => !($timewalkingEvent instanceof TimewalkingEvent),
-                            'isOdd' => $affixGroupIndex % 2 == 0
-                            ])
-                        <?php
-                        if ($timewalkingEvent !== null) {
-                            $timewalkingEventAffixGroup = $timewalkingEventService->getAffixGroupAt($timewalkingEvent->expansion, $startDate);
-                            if( $timewalkingEventAffixGroup !== null ) { ?>
-                                @include('misc.table.affixrowtable', [
-                                    'timewalkingEvent' => $timewalkingEvent,
-                                    'affixGroup' => $timewalkingEventAffixGroup,
-                                    'isCurrentWeek' => $isCurrentWeek,
-                                    'isFirst' => $isFirst,
-                                    'isLast' => $isLast,
-                                    'showTopBorder' => false,
-                                    'isOdd' => $affixGroupIndex % 2 == 0
-                                    ])
-                                <?php
-                            }
-                        }
-
-                        $previousAffixGroupSeasonId = $affixGroup->season_id;
-
-                        ++$affixGroupIndex;
-                    }
-
-                    // @formatter:on
-
-                    ?>
-                    </tbody>
-                </table>
+                @foreach ($affixGroupsBySeason as $seasonId => $affixGroups)
+                    @include('misc.table.affixtable', [
+                        'timewalkingEventService' => $timewalkingEventService,
+                        'seasonService' => $seasonService,
+                        'currentAffixGroup' => $currentAffixGroup,
+                        'nextAffixGroup' => $nextAffixGroup,
+                        'offset' => $offset,
+                        'expansion' => $expansion,
+                        'affixGroups' => $affixGroups,
+                        'isNewSeason' => $loop->index !== 0
+                    ])
+                @endforeach
                 <div class="row mt-2">
                     <div class="col">
 

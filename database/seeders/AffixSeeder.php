@@ -58,12 +58,12 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             new Affix(['key' => Affix::AFFIX_ENTANGLING, 'name' => 'affixes.entangling.name', 'icon_file_id' => -1, 'affix_id' => 134, 'description' => 'affixes.entangling.description']),
             new Affix(['key' => Affix::AFFIX_INCORPOREAL, 'name' => 'affixes.incorporeal.name', 'icon_file_id' => -1, 'affix_id' => 136, 'description' => 'affixes.incorporeal.description']),
 
-            new Affix(['key' => Affix::AFFIX_XAL_ATATHS_BARGAIN_ASCENDANT, 'name' => 'affixes.xal_ataths_bargain_ascendant.name', 'icon_file_id' => -1, 'affix_id' => 148, 'description' => 'affixes.xal_ataths_bargain_ascendant.description']),
-            new Affix(['key' => Affix::AFFIX_XAL_ATATHS_BARGAIN_DEVOUR, 'name' => 'affixes.xal_ataths_bargain_devour.name', 'icon_file_id' => -1, 'affix_id' => 160, 'description' => 'affixes.xal_ataths_bargain_devour.description']),
-            new Affix(['key' => Affix::AFFIX_XAL_ATATHS_BARGAIN_VOIDBOUND, 'name' => 'affixes.xal_ataths_bargain_voidbound.name', 'icon_file_id' => -1, 'affix_id' => 158, 'description' => 'affixes.xal_ataths_bargain_voidbound.description']),
-            new Affix(['key' => Affix::AFFIX_XAL_ATATHS_BARGAIN_OBLIVION, 'name' => 'affixes.xal_ataths_bargain_oblivion.name', 'icon_file_id' => -1, 'affix_id' => 159, 'description' => 'affixes.xal_ataths_bargain_oblivion.description']),
-            new Affix(['key' => Affix::AFFIX_XAL_ATATHS_BARGAIN_FRENZIED, 'name' => 'affixes.xal_ataths_bargain_frenzied.name', 'icon_file_id' => -1, 'affix_id' => 153, 'description' => 'affixes.xal_ataths_bargain_frenzied.description']),
-            new Affix(['key' => Affix::AFFIX_XAL_ATATHS_GUILE, 'name' => 'affixes.xal_ataths_guile.name', 'icon_file_id' => -1, 'affix_id' => 147, 'description' => 'affixes.xal_ataths_guile.description']),
+            new Affix(['key' => Affix::AFFIX_XALATATHS_BARGAIN_ASCENDANT, 'name' => 'affixes.xalataths_bargain_ascendant.name', 'icon_file_id' => -1, 'affix_id' => 148, 'description' => 'affixes.xalataths_bargain_ascendant.description']),
+            new Affix(['key' => Affix::AFFIX_XALATATHS_BARGAIN_DEVOUR, 'name' => 'affixes.xalataths_bargain_devour.name', 'icon_file_id' => -1, 'affix_id' => 160, 'description' => 'affixes.xalataths_bargain_devour.description']),
+            new Affix(['key' => Affix::AFFIX_XALATATHS_BARGAIN_VOIDBOUND, 'name' => 'affixes.xalataths_bargain_voidbound.name', 'icon_file_id' => -1, 'affix_id' => 158, 'description' => 'affixes.xalataths_bargain_voidbound.description']),
+            new Affix(['key' => Affix::AFFIX_XALATATHS_BARGAIN_OBLIVION, 'name' => 'affixes.xalataths_bargain_oblivion.name', 'icon_file_id' => -1, 'affix_id' => 159, 'description' => 'affixes.xalataths_bargain_oblivion.description']),
+            new Affix(['key' => Affix::AFFIX_XALATATHS_BARGAIN_FRENZIED, 'name' => 'affixes.xalataths_bargain_frenzied.name', 'icon_file_id' => -1, 'affix_id' => 153, 'description' => 'affixes.xalataths_bargain_frenzied.description']),
+            new Affix(['key' => Affix::AFFIX_XALATATHS_GUILE, 'name' => 'affixes.xalataths_guile.name', 'icon_file_id' => -1, 'affix_id' => 147, 'description' => 'affixes.xalataths_guile.description']),
             new Affix(['key' => Affix::AFFIX_CHALLENGERS_PERIL, 'name' => 'affixes.challengers_peril.name', 'icon_file_id' => -1, 'affix_id' => 152, 'description' => 'affixes.challengers_peril.description']),
 
         ]);
@@ -265,10 +265,10 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             // New season: remember to rearrange the affixes! $season->start_affix_group_index is not taken into account when calculating
             // affixes overview. You need to offset the affixes yourself by this number. Fiddle around with it - the current week needs to match
             // the affix overview page's current week!
-            array_merge($season14, ['affixes' => [Affix::AFFIX_XAL_ATATHS_BARGAIN_ASCENDANT, Affix::AFFIX_FORTIFIED, Affix::AFFIX_CHALLENGERS_PERIL, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XAL_ATATHS_GUILE], 'confirmed' => false]),
-            array_merge($season14, ['affixes' => [Affix::AFFIX_XAL_ATATHS_BARGAIN_VOIDBOUND, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_CHALLENGERS_PERIL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XAL_ATATHS_GUILE], 'confirmed' => false]),
-            array_merge($season14, ['affixes' => [Affix::AFFIX_XAL_ATATHS_BARGAIN_OBLIVION, Affix::AFFIX_FORTIFIED, Affix::AFFIX_CHALLENGERS_PERIL, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XAL_ATATHS_GUILE], 'confirmed' => false]),
-            array_merge($season14, ['affixes' => [Affix::AFFIX_XAL_ATATHS_BARGAIN_DEVOUR, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_CHALLENGERS_PERIL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XAL_ATATHS_GUILE], 'confirmed' => false]),
+            array_merge($season14, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_FORTIFIED, Affix::AFFIX_CHALLENGERS_PERIL, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE], 'confirmed' => false]),
+            array_merge($season14, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_CHALLENGERS_PERIL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE], 'confirmed' => false]),
+            array_merge($season14, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_FORTIFIED, Affix::AFFIX_CHALLENGERS_PERIL, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE], 'confirmed' => false]),
+            array_merge($season14, ['affixes' => [Affix::AFFIX_XALATATHS_BARGAIN_ASCENDANT, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_CHALLENGERS_PERIL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]]),
         ];
 
         $affixGroupAttributes          = [];
