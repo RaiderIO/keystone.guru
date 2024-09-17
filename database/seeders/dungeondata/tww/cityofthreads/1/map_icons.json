@@ -37,5 +37,57 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 388,
+        "floor_id": 286,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 47,
+        "lat": -43.589509342725584,
+        "lng": 182.8056167008879,
+        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 388,
+        "floor_id": 286,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 47,
+        "lat": -38.352010158134526,
+        "lng": 235.01165696019876,
+        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 388,
+        "floor_id": 286,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 47,
+        "lat": -78.81591514876544,
+        "lng": 213.89270863523484,
+        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 388,
+        "floor_id": 286,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 47,
+        "lat": -55.5850719913051,
+        "lng": 212.28766856253756,
+        "comment": "Queen Ansurek Shadecaster: Requires Rogue, Priest, or Engineer (25). Grants Stolen Power: Power stolen from the shadecaster increases damage done by 15%, healing done by 15%, and movement speed by 50%.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]
