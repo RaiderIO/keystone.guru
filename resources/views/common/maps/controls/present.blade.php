@@ -1,7 +1,15 @@
 <?php
-/** @var boolean $isAdmin */
-/** @var \Illuminate\Support\Collection $floors */
-/** @var \App\Models\DungeonRoute\DungeonRoute|null $dungeonroute */
+
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Floor\Floor;
+use Illuminate\Support\Collection;
+
+/**
+ * @var boolean           $isAdmin
+ * @var Collection<Floor> $floors
+ * @var DungeonRoute|null $dungeonroute
+ */
 ?>
 <nav class="route_sidebar left row no-gutters map_fade_out top presenter {{ $isMobile ? 'mobile' : '' }}">
     <div class="col pt-4 pl-4">
@@ -10,12 +18,12 @@
 
             @if($dungeonroute->affixes->isNotEmpty())
                     <?php
-                    /** @var \App\Models\AffixGroup\AffixGroup $affixGroup */
+                    /** @var AffixGroup $affixGroup */
                     $affixGroup = $dungeonroute->affixes->first()
                     ?>
 
                 @foreach($affixGroup->affixes as $affix)
-                    <img src="{{ url(sprintf('/images/affixes/%s.jpg', strtolower($affix->key))) }}"
+                    <img src="{{ url(sprintf('/images/affixes/%s.jpg', \Str::slug($affix->key, '_'))) }}"
                          alt="{{ __($affix->name) }}" style="border-radius: 4px;"/>
                 @endforeach
             @endif

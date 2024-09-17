@@ -47,7 +47,7 @@ $id ??= 'affixes';
                         let affix = affixGroup.affixes[j];
 
                         affixes.push({
-                            class: affix.key.toLowerCase(),
+                            class: _.kebabCase(affix.key).replaceAll('-', '_'),
                             name: affix.name
                         });
                     }

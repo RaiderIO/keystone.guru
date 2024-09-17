@@ -10,6 +10,7 @@ use App\Models\File;
 use App\SeederHelpers\Traits\FindsAffixes;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
+use Str;
 
 class AffixSeeder extends Seeder implements TableSeederInterface
 {
@@ -71,7 +72,7 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             /** @var Affix $affix */
             $affix->setTable(DatabaseSeeder::getTempTableName(Affix::class))->save();
 
-            $iconName          = strtolower(str_replace(' ', '', $affix->key));
+            $iconName          = Str::slug($affix->key, '_');
             $icon              = new File();
             $icon->model_id    = $affix->id;
             $icon->model_class = get_class($affix);
@@ -94,20 +95,20 @@ class AffixSeeder extends Seeder implements TableSeederInterface
         $dragonflight = $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT);
         $tww          = $expansions->get(Expansion::EXPANSION_TWW);
 
-        $season1  = ['season_id' => 1, 'expansion_id' => $bfa];
-        $season2  = ['season_id' => 2, 'expansion_id' => $bfa];
-        $season3  = ['season_id' => 3, 'expansion_id' => $bfa];
-        $season4  = ['season_id' => 4, 'expansion_id' => $bfa];
-        $season5  = ['season_id' => 5, 'expansion_id' => $shadowlands];
-        $season6  = ['season_id' => 6, 'expansion_id' => $shadowlands];
-        $season7  = ['season_id' => 7, 'expansion_id' => $legion];
-        $season8  = ['season_id' => 8, 'expansion_id' => $shadowlands];
-        $season9  = ['season_id' => 9, 'expansion_id' => $shadowlands];
-        $season10 = ['season_id' => 10, 'expansion_id' => $dragonflight];
-        $season11 = ['season_id' => 11, 'expansion_id' => $dragonflight];
-        $season12 = ['season_id' => 12, 'expansion_id' => $dragonflight];
-        $season13 = ['season_id' => 13, 'expansion_id' => $dragonflight];
-        $season14 = ['season_id' => 14, 'expansion_id' => $tww];
+        $season1  = ['season_id' => 1, 'expansion_id' => $bfa, 'key_levels' => [2, 4, 7, 10]];
+        $season2  = ['season_id' => 2, 'expansion_id' => $bfa, 'key_levels' => [2, 4, 7, 10]];
+        $season3  = ['season_id' => 3, 'expansion_id' => $bfa, 'key_levels' => [2, 4, 7, 10]];
+        $season4  = ['season_id' => 4, 'expansion_id' => $bfa, 'key_levels' => [2, 4, 7, 10]];
+        $season5  = ['season_id' => 5, 'expansion_id' => $shadowlands, 'key_levels' => [2, 4, 7, 10]];
+        $season6  = ['season_id' => 6, 'expansion_id' => $shadowlands, 'key_levels' => [2, 4, 7, 10]];
+        $season7  = ['season_id' => 7, 'expansion_id' => $legion, 'key_levels' => [2, 4, 7, 10]];
+        $season8  = ['season_id' => 8, 'expansion_id' => $shadowlands, 'key_levels' => [2, 4, 7, 10]];
+        $season9  = ['season_id' => 9, 'expansion_id' => $shadowlands, 'key_levels' => [2, 4, 7, 10]];
+        $season10 = ['season_id' => 10, 'expansion_id' => $dragonflight, 'key_levels' => [2, 4, 7, 10]];
+        $season11 = ['season_id' => 11, 'expansion_id' => $dragonflight, 'key_levels' => [2, 7, 14]];
+        $season12 = ['season_id' => 12, 'expansion_id' => $dragonflight, 'key_levels' => [2, 7, 14]];
+        $season13 = ['season_id' => 13, 'expansion_id' => $dragonflight, 'key_levels' => [2, 7, 14]];
+        $season14 = ['season_id' => 14, 'expansion_id' => $tww, 'key_levels' => [2, 4, 7, 10, 12]];
 
         $groups = [
             array_merge($season1, ['seasonal_index' => 0, 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SANGUINE, Affix::AFFIX_NECROTIC, Affix::AFFIX_INFESTED]]),
@@ -264,22 +265,19 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             // New season: remember to rearrange the affixes! $season->start_affix_group_index is not taken into account when calculating
             // affixes overview. You need to offset the affixes yourself by this number. Fiddle around with it - the current week needs to match
             // the affix overview page's current week!
-            array_merge($season14, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
-            array_merge($season14, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
-            array_merge($season14, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
-            array_merge($season14, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
-            array_merge($season14, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
-            array_merge($season14, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
-            array_merge($season14, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
-            array_merge($season14, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
-            array_merge($season14, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
-            array_merge($season14, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN, Affix::AFFIX_UNKNOWN], 'confirmed' => false]),
+            array_merge($season14, ['affixes' => [Affix::AFFIX_XAL_ATATHS_BARGAIN_ASCENDANT, Affix::AFFIX_FORTIFIED, Affix::AFFIX_CHALLENGERS_PERIL, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XAL_ATATHS_GUILE], 'confirmed' => false]),
+            array_merge($season14, ['affixes' => [Affix::AFFIX_XAL_ATATHS_BARGAIN_VOIDBOUND, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_CHALLENGERS_PERIL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XAL_ATATHS_GUILE], 'confirmed' => false]),
+            array_merge($season14, ['affixes' => [Affix::AFFIX_XAL_ATATHS_BARGAIN_OBLIVION, Affix::AFFIX_FORTIFIED, Affix::AFFIX_CHALLENGERS_PERIL, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XAL_ATATHS_GUILE], 'confirmed' => false]),
+            array_merge($season14, ['affixes' => [Affix::AFFIX_XAL_ATATHS_BARGAIN_DEVOUR, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_CHALLENGERS_PERIL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XAL_ATATHS_GUILE], 'confirmed' => false]),
         ];
 
         $affixGroupAttributes          = [];
         $affixGroupCouplingsAttributes = [];
         $affixGroupId                  = 1;
         foreach ($groups as $groupArr) {
+            $keyLevels = $groupArr['key_levels'];
+            unset($groupArr['key_levels']);
+
             $affixGroupAttributes[] = [
                 'season_id'      => $groupArr['season_id'],
                 'expansion_id'   => $groupArr['expansion_id'],
@@ -287,13 +285,16 @@ class AffixSeeder extends Seeder implements TableSeederInterface
                 'confirmed'      => $groupArr['confirmed'] ?? true,
             ];
 
+            $i = 0;
             foreach ($groupArr['affixes'] as $affixName) {
                 $affix = $this->findAffix($affixes, $affixName);
 
                 $affixGroupCouplingsAttributes[] = [
-                    'affix_id'       => $affix->id,
+                    'affix_id'       => $affix?->id,
                     'affix_group_id' => $affixGroupId,
+                    'key_level'      => $keyLevels[$i],
                 ];
+                $i++;
             }
 
             $affixGroupId++;

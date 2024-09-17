@@ -15,11 +15,12 @@ trait FindsAffixes
      * Finds an affix by name in a list of affixes.
      *
      * @param Collection<Affix> $affixes
-     * @return bool|Affix
+     * @param string            $affixName
+     * @return Affix|null
      */
-    private function findAffix(Collection $affixes, string $affixName)
+    private function findAffix(Collection $affixes, string $affixName): ?Affix
     {
-        $result = false;
+        $result = null;
 
         foreach ($affixes as $affix) {
             if ($affix->key === $affixName) {
@@ -28,7 +29,7 @@ trait FindsAffixes
             }
         }
 
-        if (!$result) {
+        if ($result === null) {
             $this->command->error(sprintf('Unable to find affix %s', $affixName));
         }
 
