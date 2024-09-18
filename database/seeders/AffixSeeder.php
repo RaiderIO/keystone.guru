@@ -7,6 +7,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupCoupling;
 use App\Models\Expansion;
 use App\Models\File;
+use App\Models\Season;
 use App\SeederHelpers\Traits\FindsAffixes;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
@@ -21,6 +22,8 @@ class AffixSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
+        // @formatter:off
+
         $affixes = collect([
             new Affix(['key' => Affix::AFFIX_BOLSTERING, 'name' => 'affixes.bolstering.name', 'icon_file_id' => -1, 'affix_id' => 7, 'description' => 'affixes.bolstering.description']),
             new Affix(['key' => Affix::AFFIX_BURSTING, 'name' => 'affixes.bursting.name', 'icon_file_id' => -1, 'affix_id' => 11, 'description' => 'affixes.bursting.description']),
@@ -95,20 +98,20 @@ class AffixSeeder extends Seeder implements TableSeederInterface
         $dragonflight = $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT);
         $tww          = $expansions->get(Expansion::EXPANSION_TWW);
 
-        $season1  = ['season_id' => 1, 'expansion_id' => $bfa, 'key_levels' => [2, 4, 7, 10]];
-        $season2  = ['season_id' => 2, 'expansion_id' => $bfa, 'key_levels' => [2, 4, 7, 10]];
-        $season3  = ['season_id' => 3, 'expansion_id' => $bfa, 'key_levels' => [2, 4, 7, 10]];
-        $season4  = ['season_id' => 4, 'expansion_id' => $bfa, 'key_levels' => [2, 4, 7, 10]];
-        $season5  = ['season_id' => 5, 'expansion_id' => $shadowlands, 'key_levels' => [2, 4, 7, 10]];
-        $season6  = ['season_id' => 6, 'expansion_id' => $shadowlands, 'key_levels' => [2, 4, 7, 10]];
-        $season7  = ['season_id' => 7, 'expansion_id' => $legion, 'key_levels' => [2, 4, 7, 10]];
-        $season8  = ['season_id' => 8, 'expansion_id' => $shadowlands, 'key_levels' => [2, 4, 7, 10]];
-        $season9  = ['season_id' => 9, 'expansion_id' => $shadowlands, 'key_levels' => [2, 4, 7, 10]];
-        $season10 = ['season_id' => 10, 'expansion_id' => $dragonflight, 'key_levels' => [2, 4, 7, 10]];
-        $season11 = ['season_id' => 11, 'expansion_id' => $dragonflight, 'key_levels' => [2, 7, 14]];
-        $season12 = ['season_id' => 12, 'expansion_id' => $dragonflight, 'key_levels' => [2, 7, 14]];
-        $season13 = ['season_id' => 13, 'expansion_id' => $dragonflight, 'key_levels' => [2, 7, 14]];
-        $season14 = ['season_id' => 14, 'expansion_id' => $tww, 'key_levels' => [2, 4, 7, 10, 12]];
+        $season1  = ['season_id' => Season::SEASON_BFA_S1, 'expansion_id' => $bfa, 'key_levels' => [2, 4, 7, 10]];
+        $season2  = ['season_id' => Season::SEASON_BFA_S2, 'expansion_id' => $bfa, 'key_levels' => [2, 4, 7, 10]];
+        $season3  = ['season_id' => Season::SEASON_BFA_S3, 'expansion_id' => $bfa, 'key_levels' => [2, 4, 7, 10]];
+        $season4  = ['season_id' => Season::SEASON_BFA_S4, 'expansion_id' => $bfa, 'key_levels' => [2, 4, 7, 10]];
+        $season5  = ['season_id' => Season::SEASON_SL_S1, 'expansion_id' => $shadowlands, 'key_levels' => [2, 4, 7, 10]];
+        $season6  = ['season_id' => Season::SEASON_SL_S2, 'expansion_id' => $shadowlands, 'key_levels' => [2, 4, 7, 10]];
+        $season7  = ['season_id' => Season::SEASON_LEGION_TW_S1, 'expansion_id' => $legion, 'key_levels' => [2, 4, 7, 10]];
+        $season8  = ['season_id' => Season::SEASON_SL_S3, 'expansion_id' => $shadowlands, 'key_levels' => [2, 4, 7, 10]];
+        $season9  = ['season_id' => Season::SEASON_SL_S4, 'expansion_id' => $shadowlands, 'key_levels' => [2, 4, 7, 10]];
+        $season10 = ['season_id' => Season::SEASON_DF_S1, 'expansion_id' => $dragonflight, 'key_levels' => [2, 4, 7, 10]];
+        $season11 = ['season_id' => Season::SEASON_DF_S2, 'expansion_id' => $dragonflight, 'key_levels' => [2, 7, 14]];
+        $season12 = ['season_id' => Season::SEASON_DF_S3, 'expansion_id' => $dragonflight, 'key_levels' => [2, 7, 14]];
+        $season13 = ['season_id' => Season::SEASON_DF_S4, 'expansion_id' => $dragonflight, 'key_levels' => [2, 7, 14]];
+        $season14 = ['season_id' => Season::SEASON_TWW_S1, 'expansion_id' => $tww, 'key_levels' => [2, 4, 7, 10, 12]];
 
         $groups = [
             array_merge($season1, ['seasonal_index' => 0, 'affixes' => [Affix::AFFIX_FORTIFIED, Affix::AFFIX_SANGUINE, Affix::AFFIX_NECROTIC, Affix::AFFIX_INFESTED]]),
@@ -270,6 +273,7 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             array_merge($season14, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_FORTIFIED, Affix::AFFIX_CHALLENGERS_PERIL, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE], 'confirmed' => false]),
             array_merge($season14, ['affixes' => [Affix::AFFIX_XALATATHS_BARGAIN_ASCENDANT, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_CHALLENGERS_PERIL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]]),
         ];
+        // @formatter:on
 
         $affixGroupAttributes          = [];
         $affixGroupCouplingsAttributes = [];

@@ -27,10 +27,10 @@ use Illuminate\Support\Collection;
  */
 // If route was set, initialize with the affixes of the current route so that the user may adjust its selection
 if (isset($dungeonroute)) {
-    $defaultSelected     = $dungeonroute->affixgroups->pluck(['affix_group_id'])->toArray();
+    $defaultSelected     = $dungeonroute->affixGroups->pluck(['affix_group_id'])->toArray();
     $defaultExpansionKey = $dungeonroute->dungeon->expansion->shortname;
 } // Fill it by default with the current week's affix group for the current user
-else if (empty($defaultSelected)) {
+elseif (empty($defaultSelected)) {
     $defaultSelected = $currentAffixes->pluck(['id'])->values();
 }
 

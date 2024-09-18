@@ -253,7 +253,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
             'objects'    => $this->extractObjects($warnings),
             // M+ level
             'difficulty' => $this->dungeonRoute->level_min,
-            'week'       => $this->dungeonRoute->affixgroups->isEmpty() ? 1 :
+            'week'       => $this->dungeonRoute->affixGroups->isEmpty() ? 1 :
                 Conversion::convertAffixGroupToWeek($this->dungeonRoute->affixes->first()),
             'value'      => [
                 'currentDungeonIdx' => $this->dungeonRoute->dungeon->mdt_id,
@@ -334,7 +334,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
      */
     public function setDungeonRoute(DungeonRoute $dungeonRoute): self
     {
-        $this->dungeonRoute = $dungeonRoute->load(['affixgroups', 'dungeon']);
+        $this->dungeonRoute = $dungeonRoute->load(['affixGroups', 'dungeon']);
 
         return $this;
     }

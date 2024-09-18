@@ -44,6 +44,38 @@ class Season extends CacheModel
     use HasStart;
     use SeederModel;
 
+    const SEASON_BFA_S1       = 1;
+    const SEASON_BFA_S2       = 2;
+    const SEASON_BFA_S3       = 3;
+    const SEASON_BFA_S4       = 4;
+    const SEASON_SL_S1        = 5;
+    const SEASON_SL_S2        = 6;
+    const SEASON_LEGION_TW_S1 = 7;
+    const SEASON_SL_S3        = 8;
+    const SEASON_SL_S4        = 9;
+    const SEASON_DF_S1        = 10;
+    const SEASON_DF_S2        = 11;
+    const SEASON_DF_S3        = 12;
+    const SEASON_DF_S4        = 13;
+    const SEASON_TWW_S1       = 14;
+
+    const ALL_SEASONS = [
+        self::SEASON_BFA_S1,
+        self::SEASON_BFA_S2,
+        self::SEASON_BFA_S3,
+        self::SEASON_BFA_S4,
+        self::SEASON_SL_S1,
+        self::SEASON_SL_S2,
+        self::SEASON_LEGION_TW_S1,
+        self::SEASON_SL_S3,
+        self::SEASON_SL_S4,
+        self::SEASON_DF_S1,
+        self::SEASON_DF_S2,
+        self::SEASON_DF_S3,
+        self::SEASON_DF_S4,
+        self::SEASON_TWW_S1,
+    ];
+
     protected $fillable = [
         'expansion_id',
         'seasonal_affix_id',
