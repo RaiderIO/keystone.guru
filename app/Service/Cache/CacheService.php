@@ -157,11 +157,11 @@ class CacheService implements CacheServiceInterface
             sprintf('/%s[a-zA-Z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
         ];
 
+        $deletedKeysCountTotal = $deletedKeysCount = 0;
         try {
             $this->log->clearIdleKeysStart($seconds);
-            $i                = 0;
-            $nextKey          = 0;
-            $deletedKeysCount = 0;
+            $i       = 0;
+            $nextKey = 0;
 
             do {
                 $result = Redis::command('SCAN', [$nextKey]);
@@ -205,12 +205,13 @@ class CacheService implements CacheServiceInterface
 
                 $i++;
                 if ($i % 1000 === 0) {
+                    $deletedKeysCountTotal += $deletedKeysCount;
                     $this->log->clearIdleKeysProgress($i, $deletedKeysCount);
                     $deletedKeysCount = 0;
                 }
             } while ($nextKey > 0);
         } finally {
-            $this->log->clearIdleKeysEnd();
+            $this->log->clearIdleKeysEnd($deletedKeysCountTotal);
         }
 
         return $deletedKeysCount;

@@ -49,7 +49,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
     ob_start();
     ?>
 <div
-    class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute horizontal {{ $showDungeonImage ? 'dungeon_image' : '' }}">
+        class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute horizontal {{ $showDungeonImage ? 'dungeon_image' : '' }}">
     <div class="col-xl-auto">
         <div class="{{ $owlClass }} light-slider-container">
             <ul class="light-slider {{ $owlClass }}">
@@ -72,7 +72,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
         <div class="d-flex flex-column h-100 bg-card"
              @if($showDungeonImage)
                  style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
-            @endif
+                @endif
         >
             <div class="row no-gutters p-2 header">
                 <div class="col">
@@ -96,7 +96,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                             ?>
                         @foreach($dungeonroute->affixes as $affixgroup)
                             <div
-                                class="row no-gutters {{ isset($currentAffixGroup) && $currentAffixGroup->id === $affixgroup->id ? 'current' : '' }}">
+                                    class="row no-gutters {{ isset($currentAffixGroup) && $currentAffixGroup->id === $affixgroup->id ? 'current' : '' }}">
                                 @include('common.affixgroup.affixgroup', [
                                     'affixgroup' => $affixgroup,
                                     'showText' => false,
@@ -214,12 +214,13 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
 };
 
 // Temp fix due to cached cards containing translations - and I don't want to show Russian translations to others at this time
-$cache = false;
+$cache = true;
 
 if ($cache) {
+    $currentUserLocale = Auth::check() ? Auth::user()->locale : 'en_US';
 // Echo the result of this function
     echo $cacheService->remember(
-        sprintf('view:dungeonroute_card_%d_%d_%d', (int)$showAffixes, (int)$showDungeonImage, $dungeonroute->id),
+        sprintf('view:dungeonroute_card:horizontal:%s:%d_%d_%d', $currentUserLocale, (int)$showAffixes, (int)$showDungeonImage, $dungeonroute->id),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );

@@ -34,9 +34,6 @@ class RefreshOutdatedThumbnails extends Command
      */
     public function handle(ThumbnailServiceInterface $thumbnailService): int
     {
-        // TEMP: reduce load on the server
-        return 0;
-
         Log::channel('scheduler')->debug('>> Finding thumbnails');
 
         /** @var Collection<DungeonRoute> $routes */

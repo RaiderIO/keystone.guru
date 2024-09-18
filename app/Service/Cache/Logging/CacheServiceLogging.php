@@ -28,8 +28,8 @@ class CacheServiceLogging extends RollbarStructuredLogging implements CacheServi
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function clearIdleKeysEnd(): void
+    public function clearIdleKeysEnd(int $deletedKeysCount): void
     {
-        $this->end(__METHOD__);
+        $this->end(__METHOD__, get_defined_vars());
     }
 }

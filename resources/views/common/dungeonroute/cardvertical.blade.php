@@ -228,12 +228,13 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
 };
 
 // Temp fix due to cached cards containing translations - and I don't want to show Russian translations to others at this time
-$cache = false;
+$cache = true;
 
 if ($cache) {
+    $currentUserLocale     = Auth::check() ? Auth::user()->locale : 'en_US';
 // Echo the result of this function
     echo $cacheService->remember(
-        sprintf('view:dungeonroute_card_%d_%d_%d', (int)$showAffixes, (int)$showDungeonImage, $dungeonroute->id),
+        sprintf('view:dungeonroute_card:vertical:%s:%d_%d_%d', $currentUserLocale, (int)$showAffixes, (int)$showDungeonImage, $dungeonroute->id),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );
