@@ -33,9 +33,7 @@ class DungeonColumnHandler extends DatatablesColumnHandler
                     if ($explode[0] === 'season') {
                         $seasonId = $explode[1];
                         // Joins need to be added to the main builder
-                        $this->getDtHandler()->getBuilder()
-                            ->join('season_dungeons', 'season_dungeons.season_id', '=', DB::raw($seasonId));
-                        $subBuilder->whereColumn('dungeon_routes.dungeon_id', '=', 'season_dungeons.dungeon_id');
+                        $subBuilder->where('dungeon_routes.season_id', $seasonId);
                     } else if ($explode[0] === 'expansion') {
                         $subBuilder->where('dungeons.expansion_id', $explode[1]);
                     } else {

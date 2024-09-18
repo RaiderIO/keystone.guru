@@ -238,9 +238,12 @@ class AjaxDungeonRouteController extends Controller
                                      'ratings', 'routeattributes', 'dungeon', 'dungeon.activeFloors', 'mappingVersion'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
-            ->when($expansion !== null, static fn(Builder $builder) => $builder->where('dungeons.expansion_id', $expansion->id))
-            ->when($season !== null, static fn(Builder $builder) => $builder->join('season_dungeons', 'season_dungeons.dungeon_id', '=', 'dungeon_routes.dungeon_id')
-                ->where('season_dungeons.season_id', $season->id))
+            ->when($expansion !== null, static fn(Builder $builder) =>
+                $builder->where('dungeons.expansion_id', $expansion->id)
+            )
+            ->when($season !== null, static fn(Builder $builder) =>
+                $builder->where('season_id', $season->id)
+            )
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
             ->where(static function ($query) {
