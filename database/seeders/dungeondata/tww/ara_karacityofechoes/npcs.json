@@ -8,7 +8,7 @@
         "display_id": 119793,
         "encounter_id": 2583,
         "name": "Avanoxx",
-        "base_health": 109123283,
+        "base_health": 119348010,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -74,7 +74,7 @@
         "display_id": 117840,
         "encounter_id": null,
         "name": "Engorged Crawler",
-        "base_health": 20000092,
+        "base_health": 21880469,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -158,6 +158,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16739,
+                "mapping_version_id": 391,
+                "npc_id": 214840,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16528,
                 "mapping_version_id": 380,
                 "npc_id": 214840,
@@ -214,7 +221,7 @@
         "display_id": 115723,
         "encounter_id": 2584,
         "name": "Anubzekt",
-        "base_health": 127310497,
+        "base_health": 139239345,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.8,
@@ -283,7 +290,7 @@
         "display_id": 117473,
         "encounter_id": 2585,
         "name": "Kikatal The Harvester",
-        "base_health": 145497711,
+        "base_health": 159130680,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.8,
@@ -372,7 +379,7 @@
         "display_id": 116588,
         "encounter_id": null,
         "name": "Trilling Attendant",
-        "base_health": 14545521,
+        "base_health": 15913068,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.4,
@@ -450,6 +457,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16738,
+                "mapping_version_id": 391,
+                "npc_id": 216293,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16527,
                 "mapping_version_id": 380,
                 "npc_id": 216293,
@@ -481,7 +495,7 @@
         "display_id": 119391,
         "encounter_id": null,
         "name": "Bloodstained Assistant",
-        "base_health": 16363712,
+        "base_health": 17902202,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -553,6 +567,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16744,
+                "mapping_version_id": 391,
+                "npc_id": 216333,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16533,
                 "mapping_version_id": 380,
                 "npc_id": 216333,
@@ -584,7 +605,7 @@
         "display_id": 120876,
         "encounter_id": null,
         "name": "Starved Crawler",
-        "base_health": 4654567,
+        "base_health": 5092182,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -656,6 +677,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16736,
+                "mapping_version_id": 391,
+                "npc_id": 216336,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16525,
                 "mapping_version_id": 380,
                 "npc_id": 216336,
@@ -687,7 +715,7 @@
         "display_id": 120862,
         "encounter_id": null,
         "name": "Bloodworker",
-        "base_health": 3636380,
+        "base_health": 3978267,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 0.8,
@@ -762,6 +790,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16743,
+                "mapping_version_id": 391,
+                "npc_id": 216337,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16532,
                 "mapping_version_id": 380,
                 "npc_id": 216337,
@@ -793,7 +828,7 @@
         "display_id": 120855,
         "encounter_id": null,
         "name": "Hulking Bloodguard",
-        "base_health": 29091043,
+        "base_health": 31826136,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -835,6 +870,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16746,
+                "mapping_version_id": 391,
+                "npc_id": 216338,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16535,
                 "mapping_version_id": 380,
                 "npc_id": 216338,
@@ -866,7 +908,7 @@
         "display_id": 116485,
         "encounter_id": null,
         "name": "Sentry Stagshell",
-        "base_health": 7272761,
+        "base_health": 7956534,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -938,6 +980,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16747,
+                "mapping_version_id": 391,
+                "npc_id": 216340,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16536,
                 "mapping_version_id": 380,
                 "npc_id": 216340,
@@ -969,7 +1018,7 @@
         "display_id": 120841,
         "encounter_id": null,
         "name": "Jabbing Flyer",
-        "base_health": 4363657,
+        "base_health": 4773921,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -1041,6 +1090,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16737,
+                "mapping_version_id": 391,
+                "npc_id": 216341,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16526,
                 "mapping_version_id": 380,
                 "npc_id": 216341,
@@ -1072,7 +1128,7 @@
         "display_id": 120860,
         "encounter_id": null,
         "name": "Reinforced Drone",
-        "base_health": 14545521,
+        "base_health": 15913068,
         "health_percentage": 100,
         "level": 80,
         "mdt_scale": 0.8,
@@ -1147,6 +1203,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16751,
+                "mapping_version_id": 391,
+                "npc_id": 216363,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16540,
                 "mapping_version_id": 380,
                 "npc_id": 216363,
@@ -1178,7 +1241,7 @@
         "display_id": 115772,
         "encounter_id": null,
         "name": "Blood Overseer",
-        "base_health": 32727423,
+        "base_health": 35804403,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.3,
@@ -1220,6 +1283,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16748,
+                "mapping_version_id": 391,
+                "npc_id": 216364,
+                "enemy_forces": 14,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16537,
                 "mapping_version_id": 380,
                 "npc_id": 216364,
@@ -1251,7 +1321,7 @@
         "display_id": 116349,
         "encounter_id": null,
         "name": "Winged Carrier",
-        "base_health": 12727332,
+        "base_health": 13923935,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1326,6 +1396,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16749,
+                "mapping_version_id": 391,
+                "npc_id": 216365,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16538,
                 "mapping_version_id": 380,
                 "npc_id": 216365,
@@ -1386,7 +1463,7 @@
         "display_id": 120861,
         "encounter_id": null,
         "name": "Nerubian Hauler",
-        "base_health": 58182085,
+        "base_health": 63652272,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -1415,6 +1492,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16750,
+                "mapping_version_id": 391,
+                "npc_id": 217039,
+                "enemy_forces": 35,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16539,
                 "mapping_version_id": 380,
@@ -1447,7 +1531,7 @@
         "display_id": 117119,
         "encounter_id": null,
         "name": "Ixin",
-        "base_health": 29091043,
+        "base_health": 31826136,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2.5,
@@ -1486,6 +1570,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16742,
+                "mapping_version_id": 391,
+                "npc_id": 217531,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16531,
                 "mapping_version_id": 380,
                 "npc_id": 217531,
@@ -1517,7 +1608,7 @@
         "display_id": 117119,
         "encounter_id": null,
         "name": "Atik",
-        "base_health": 29091043,
+        "base_health": 31826136,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2.5,
@@ -1565,6 +1656,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16740,
+                "mapping_version_id": 391,
+                "npc_id": 217533,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16529,
                 "mapping_version_id": 380,
                 "npc_id": 217533,
@@ -1596,7 +1694,7 @@
         "display_id": 117119,
         "encounter_id": null,
         "name": "Nakt",
-        "base_health": 29091043,
+        "base_health": 31826136,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2.5,
@@ -1640,6 +1738,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16741,
+                "mapping_version_id": 391,
+                "npc_id": 218324,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16530,
                 "mapping_version_id": 380,
@@ -1726,7 +1831,7 @@
         "display_id": 117870,
         "encounter_id": null,
         "name": "Bloodstained Webmage",
-        "base_health": 5237917,
+        "base_health": 7160880,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.1,
@@ -1807,7 +1912,7 @@
         "display_id": 117870,
         "encounter_id": null,
         "name": "Bloodstained Webmage",
-        "base_health": 16363712,
+        "base_health": 17902202,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -1881,6 +1986,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16745,
+                "mapping_version_id": 391,
+                "npc_id": 223253,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16534,
                 "mapping_version_id": 380,
