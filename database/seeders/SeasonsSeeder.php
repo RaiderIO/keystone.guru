@@ -234,7 +234,7 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'start'                   => '2024-09-09 00:00:00',
                 'presets'                 => 0,
                 'affix_group_count'       => 4,
-                'start_affix_group_index' => 3,
+                'start_affix_group_index' => 2,
                 'key_level_min'           => 2,
                 'key_level_max'           => 22,
                 'dungeons'                => Dungeon::select('dungeons.*')
