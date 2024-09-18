@@ -124,7 +124,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                                     @if($seasonalAffix !== null)
                                         <div class="col ml-1">
                                             <img class="select_icon"
-                                                 src="{{ url(sprintf('/images/affixes/%s.jpg', strtolower($seasonalAffix))) }}"
+                                                 src="{{ url(sprintf('/images/affixes/%s.jpg', Str::slug($seasonalAffix, '_'))) }}"
                                                  alt="Dominant affix"/>
                                         </div>
                                     @endif
