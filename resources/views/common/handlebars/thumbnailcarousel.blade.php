@@ -9,9 +9,10 @@
         let items = [];
 
         if (row.has_thumbnail) {
+            let facadeEnabled = row.dungeon.floors[row.dungeon.floors.length - 1].facade;
             for (let index in row.dungeon.floors) {
                 let floor = row.dungeon.floors[index];
-                if (!floor.active || ((row.dungeon.facade_enabled && !floor.facade) || (!row.dungeon.facade_enabled && floor.facade))) {
+                if (!floor.active || ((facadeEnabled && !floor.facade) || (!facadeEnabled && floor.facade))) {
                     continue;
                 }
 
