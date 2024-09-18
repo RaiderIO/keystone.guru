@@ -2511,5 +2511,47 @@
         "extracted_data": 1,
         "created_at": "2024-09-14T12:56:10+00:00",
         "updated_at": "2024-09-14T12:56:10+00:00"
+    },
+    {
+        "id": 360,
+        "combat_log_path": "tmp\/WoWCombatLog-091624_212239_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-18T08:27:30+00:00",
+        "updated_at": "2024-09-18T08:27:30+00:00"
+    },
+    {
+        "id": 361,
+        "combat_log_path": "tmp\/WoWCombatLog-091624_212239_mists-of-tirna-scithe-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-18T08:27:43+00:00",
+        "updated_at": "2024-09-18T08:27:43+00:00"
+    },
+    {
+        "id": 362,
+        "combat_log_path": "tmp\/WoWCombatLog-091624_212239_siege-of-boralus-2.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-18T08:27:59+00:00",
+        "updated_at": "2024-09-18T08:27:59+00:00"
+    },
+    {
+        "id": 363,
+        "combat_log_path": "tmp\/WoWCombatLog-091624_212239_siege-of-boralus.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-18T08:28:07+00:00",
+        "updated_at": "2024-09-18T08:28:07+00:00"
+    },
+    {
+        "id": 364,
+        "combat_log_path": "tmp\/WoWCombatLog-091724_223438_grim-batol-1.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-18T08:28:27+00:00",
+        "updated_at": "2024-09-18T08:28:27+00:00"
+    },
+    {
+        "id": 365,
+        "combat_log_path": "tmp\/WoWCombatLog-091724_223438_mists-of-tirna-scithe-3.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-18T08:28:39+00:00",
+        "updated_at": "2024-09-18T08:28:39+00:00"
     }
 ]
