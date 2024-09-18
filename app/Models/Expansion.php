@@ -59,31 +59,19 @@ class Expansion extends CacheModel
 //        'updated_at'  => 'date',
 //    ];
 
-    public const EXPANSION_CLASSIC = 'classic';
-
-    public const EXPANSION_TBC = 'tbc';
-
-    public const EXPANSION_WOTLK = 'wotlk';
-
-    public const EXPANSION_CATACLYSM = 'cata';
-
-    public const EXPANSION_MOP = 'mop';
-
-    public const EXPANSION_WOD = 'wod';
-
-    public const EXPANSION_LEGION = 'legion';
-
-    public const EXPANSION_BFA = 'bfa';
-
-    public const EXPANSION_SHADOWLANDS = 'shadowlands';
-
+    public const EXPANSION_CLASSIC      = 'classic';
+    public const EXPANSION_TBC          = 'tbc';
+    public const EXPANSION_WOTLK        = 'wotlk';
+    public const EXPANSION_CATACLYSM    = 'cata';
+    public const EXPANSION_MOP          = 'mop';
+    public const EXPANSION_WOD          = 'wod';
+    public const EXPANSION_LEGION       = 'legion';
+    public const EXPANSION_BFA          = 'bfa';
+    public const EXPANSION_SHADOWLANDS  = 'shadowlands';
     public const EXPANSION_DRAGONFLIGHT = 'dragonflight';
-
-    public const EXPANSION_TWW = 'tww';
-
-    public const EXPANSION_MIDNIGHT = 'midnight';
-
-    public const EXPANSION_TLT = 'tlt';
+    public const EXPANSION_TWW          = 'tww';
+    public const EXPANSION_MIDNIGHT     = 'midnight';
+    public const EXPANSION_TLT          = 'tlt';
 
     public const ALL = [
         self::EXPANSION_CLASSIC      => 'Classic',

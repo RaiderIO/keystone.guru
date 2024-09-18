@@ -126,27 +126,27 @@ return [
         'name'        => 'Incorporeal',
         'description' => 'While in combat, incorporeal beings periodically appear and attempt to weaken players.',
     ],
-    'xal_ataths_bargain_ascendant' => [
+    'xalataths_bargain_ascendant' => [
         'name'        => 'Xal\'atath\'s Bargain: Ascendant',
         'description' => 'While in combat, Xal\'atath rains down orbs of cosmic energy that empower enemies or players.',
     ],
-    'xal_ataths_bargain_devour'    => [
+    'xalataths_bargain_devour'    => [
         'name'        => 'Xal\'atath\'s Bargain: Devour',
         'description' => 'While in combat, Xal\'atath tears open rifts that devour the essence of players.',
     ],
-    'xal_ataths_bargain_voidbound' => [
+    'xalataths_bargain_voidbound' => [
         'name'        => 'Xal\'atath\'s Bargain: Voidbound',
         'description' => 'While in combat, Xal\'atath summons a Void Emissary that empowers nearby enemies.',
     ],
-    'xal_ataths_bargain_oblivion'  => [
+    'xalataths_bargain_oblivion'  => [
         'name'        => 'Xal\'atath\'s Bargain: Oblivion',
         'description' => 'While in combat, Xal\'atath manifests crystals from the void that can be absorbed by enemies or players.',
     ],
-    'xal_ataths_bargain_frenzied'  => [
+    'xalataths_bargain_frenzied'  => [
         'name'        => 'Xal\'atath\'s Bargain: Frenzied',
         'description' => 'Non-boss enemies become frenzied at 30% health remaining, increasing their Haste by 40%, but increasing their damage taken by 20%.',
     ],
-    'xal_ataths_guile'             => [
+    'xalataths_guile'             => [
         'name'        => 'Xal\'atath\'s Guile',
         'description' => 'Xal\'atath betrays players, revoking her bargains and increasing the health and damage of enemies by 20%',
     ],

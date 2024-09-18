@@ -23,7 +23,7 @@ class APICombatLogControllerCreateRouteTheNecroticWakeTest extends APICombatLogC
     public function create_givenTwwS1TheNecroticWake2Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('SL/tww_s1_the_necrotic_wake_7', self::FIXTURES_ROOT_DIR);
+        $postBody = $this->getJsonData('SL/tww_s1_the_necrotic_wake_2', self::FIXTURES_ROOT_DIR);
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
@@ -35,7 +35,7 @@ class APICombatLogControllerCreateRouteTheNecroticWakeTest extends APICombatLogC
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 23, 333);
+        $this->validatePulls($responseArr, 23, 341);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }

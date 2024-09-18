@@ -8,7 +8,7 @@
         "display_id": 120054,
         "encounter_id": 2572,
         "name": "E.D.N.A",
-        "base_health": 150911928,
+        "base_health": 159130680,
         "health_percentage": 100,
         "level": 80,
         "mdt_scale": 1.5,
@@ -68,7 +68,7 @@
         "display_id": 117402,
         "encounter_id": null,
         "name": "Earth Infused Golem",
-        "base_health": 29114839,
+        "base_health": 31826136,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -95,6 +95,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16706,
+                "mapping_version_id": 389,
+                "npc_id": 210109,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16495,
                 "mapping_version_id": 378,
                 "npc_id": 210109,
@@ -119,7 +126,7 @@
         "display_id": 118714,
         "encounter_id": 2579,
         "name": "Skarmorak",
-        "base_health": 132047937,
+        "base_health": 139239345,
         "health_percentage": 100,
         "level": 80,
         "mdt_scale": 2,
@@ -191,7 +198,7 @@
         "display_id": 118702,
         "encounter_id": null,
         "name": "Cursedheart Invader",
-        "base_health": 18196774,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -269,6 +276,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16705,
+                "mapping_version_id": 389,
+                "npc_id": 212389,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16494,
                 "mapping_version_id": 378,
                 "npc_id": 212389,
@@ -293,7 +307,7 @@
         "display_id": 109870,
         "encounter_id": null,
         "name": "Void Touched Elemental",
-        "base_health": 20016452,
+        "base_health": 21880469,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -356,6 +370,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16713,
+                "mapping_version_id": 389,
+                "npc_id": 212400,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16502,
                 "mapping_version_id": 378,
                 "npc_id": 212400,
@@ -380,7 +401,7 @@
         "display_id": 118702,
         "encounter_id": null,
         "name": "Cursedheart Invader",
-        "base_health": 18196774,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -458,6 +479,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16721,
+                "mapping_version_id": 389,
+                "npc_id": 212403,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16510,
                 "mapping_version_id": 378,
                 "npc_id": 212403,
@@ -482,7 +510,7 @@
         "display_id": 114686,
         "encounter_id": null,
         "name": "Aspiring Forgehand",
-        "base_health": 10918065,
+        "base_health": 11934801,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -557,6 +585,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16714,
+                "mapping_version_id": 389,
+                "npc_id": 212405,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16503,
                 "mapping_version_id": 378,
                 "npc_id": 212405,
@@ -581,7 +616,7 @@
         "display_id": 118731,
         "encounter_id": null,
         "name": "Ghastly Voidsoul",
-        "base_health": 16377097,
+        "base_health": 17902202,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -653,6 +688,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16707,
+                "mapping_version_id": 389,
+                "npc_id": 212453,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16496,
                 "mapping_version_id": 378,
                 "npc_id": 212453,
@@ -677,7 +719,7 @@
         "display_id": 117641,
         "encounter_id": null,
         "name": "Engine Speaker",
-        "base_health": 20016452,
+        "base_health": 21880469,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -755,6 +797,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16710,
+                "mapping_version_id": 389,
+                "npc_id": 212764,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16499,
                 "mapping_version_id": 378,
                 "npc_id": 212764,
@@ -779,7 +828,7 @@
         "display_id": 117973,
         "encounter_id": null,
         "name": "Void Bound Despoiler",
-        "base_health": 29114839,
+        "base_health": 31826136,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.3,
@@ -812,6 +861,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16709,
+                "mapping_version_id": 389,
+                "npc_id": 212765,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16498,
                 "mapping_version_id": 378,
                 "npc_id": 212765,
@@ -836,7 +892,7 @@
         "display_id": 119856,
         "encounter_id": 2582,
         "name": "Void Speaker Eirich",
-        "base_health": 150911928,
+        "base_health": 159130680,
         "health_percentage": 100,
         "level": 80,
         "mdt_scale": 2,
@@ -922,7 +978,7 @@
         "display_id": 116916,
         "encounter_id": 2590,
         "name": "Speaker Dorlita",
-        "base_health": 101865552,
+        "base_health": 107413209,
         "health_percentage": 100,
         "level": 80,
         "mdt_scale": 2,
@@ -979,7 +1035,7 @@
         "display_id": 115818,
         "encounter_id": 2590,
         "name": "Speaker Brokk",
-        "base_health": 84887960,
+        "base_health": 89511008,
         "health_percentage": 100,
         "level": 80,
         "mdt_scale": 2,
@@ -1057,7 +1113,7 @@
         "display_id": 115974,
         "encounter_id": null,
         "name": "Forgebound Mender",
-        "base_health": 16377097,
+        "base_health": 17902202,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1132,6 +1188,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16715,
+                "mapping_version_id": 389,
+                "npc_id": 213338,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16504,
                 "mapping_version_id": 378,
                 "npc_id": 213338,
@@ -1156,7 +1219,7 @@
         "display_id": 116911,
         "encounter_id": null,
         "name": "Forge Loader",
-        "base_health": 32754194,
+        "base_health": 35804403,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.4,
@@ -1191,6 +1254,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16716,
+                "mapping_version_id": 389,
+                "npc_id": 213343,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16505,
                 "mapping_version_id": 378,
@@ -1264,7 +1334,7 @@
         "display_id": 117855,
         "encounter_id": null,
         "name": "Rock Smasher",
-        "base_health": 36393549,
+        "base_health": 39782670,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1299,6 +1369,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16719,
+                "mapping_version_id": 389,
+                "npc_id": 213954,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16508,
                 "mapping_version_id": 378,
@@ -1372,7 +1449,7 @@
         "display_id": 115945,
         "encounter_id": null,
         "name": "Cursedforge Stoneshaper",
-        "base_health": 17286936,
+        "base_health": 18896768,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1447,6 +1524,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16718,
+                "mapping_version_id": 389,
+                "npc_id": 214066,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16507,
                 "mapping_version_id": 378,
                 "npc_id": 214066,
@@ -1471,7 +1555,7 @@
         "display_id": 115944,
         "encounter_id": null,
         "name": "Cursedforge Honor Guard",
-        "base_health": 29114839,
+        "base_health": 31826136,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1504,6 +1588,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16717,
+                "mapping_version_id": 389,
+                "npc_id": 214264,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16506,
                 "mapping_version_id": 378,
                 "npc_id": 214264,
@@ -1528,7 +1619,7 @@
         "display_id": 118692,
         "encounter_id": null,
         "name": "Turned Speaker",
-        "base_health": 19106613,
+        "base_health": 20885902,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1588,6 +1679,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16712,
+                "mapping_version_id": 389,
+                "npc_id": 214350,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16501,
                 "mapping_version_id": 378,
                 "npc_id": 214350,
@@ -1612,7 +1710,7 @@
         "display_id": 37518,
         "encounter_id": 2579,
         "name": "Crystal Shard",
-        "base_health": 1160861,
+        "base_health": 1591307,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1648,7 +1746,7 @@
         "display_id": 118365,
         "encounter_id": null,
         "name": "Void Bound Howler",
-        "base_health": 17286936,
+        "base_health": 18896768,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1720,6 +1818,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16711,
+                "mapping_version_id": 389,
+                "npc_id": 221979,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16500,
                 "mapping_version_id": 378,
                 "npc_id": 221979,
@@ -1769,7 +1874,7 @@
         "display_id": 118231,
         "encounter_id": null,
         "name": "Repurposed Loaderbot",
-        "base_health": 19106613,
+        "base_health": 20885902,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1826,6 +1931,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16708,
+                "mapping_version_id": 389,
+                "npc_id": 222923,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16497,
                 "mapping_version_id": 378,
                 "npc_id": 222923,
@@ -1850,7 +1962,7 @@
         "display_id": 120170,
         "encounter_id": null,
         "name": "Cursedforge Mender",
-        "base_health": 16377097,
+        "base_health": 17902202,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1924,6 +2036,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16720,
+                "mapping_version_id": 389,
+                "npc_id": 224962,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16509,
                 "mapping_version_id": 378,

@@ -26,7 +26,7 @@
                 "source": {
                     "url": "https://github.com/RaiderIO/keystone.guru.deployer.git",
                     "type": "git",
-                    "reference": "ee6fb332c8ee82e2b2ce1615a2c237a17eeaf1b1"
+                    "reference": "0d13601c89c632e1ab182876f23ab11f32f84994"
                 }
             }
         },
@@ -34,11 +34,11 @@
             "type": "package",
             "package": {
                 "name": "nnoggie/mythicdungeontools",
-                "version": "5.0.9",
+                "version": "5.0.10",
                 "source": {
                     "url": "https://github.com/Wotuu/MythicDungeonTools.git",
                     "type": "git",
-                    "reference": "3dd6c8776c0a568d0b3daf64372afb1fbeddf194"
+                    "reference": "21196a18c45ad1d1127506089e6f42669a07d75d"
                 }
             }
         },
@@ -84,7 +84,7 @@
         "laravel/ui": "^4.2",
         "laravelcollective/html": "^6.4",
         "marvinlabs/laravel-discord-logger": "^1.3",
-        "nnoggie/mythicdungeontools": "5.0.9",
+        "nnoggie/mythicdungeontools": "5.0.10",
         "paquettg/php-html-parser": "^3.1",
         "patreon/patreon": "^1.0.0",
         "phlak/semver": "^4.1",

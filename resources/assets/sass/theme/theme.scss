@@ -16,7 +16,7 @@
 }
 
 body {
-  font-family: Salesforce Sans,Arial,sans-serif;
+  font-family: Salesforce Sans, Arial, sans-serif;
   background-color: var($--theme-darker) !important;
 }
 
@@ -722,18 +722,18 @@ body {
 
 
   .affixes_overview_table {
-    .last_column {
+    .seasonal.last_column {
       border-left: var($--theme-affix-page-seasonal-color) 3px solid;
       border-right: var($--theme-affix-page-seasonal-color) 3px solid;
       /* bb to make semi-transparent to let row offsets shine through */
       background-color: var($--theme-affix-page-seasonal-background-color);
     }
 
-    .last_column.first_row {
+    .seasonal.last_column.first_row {
       border-top: var($--theme-affix-page-seasonal-color) 3px solid;
     }
 
-    .last_column.last_row {
+    .seasonal.last_column.last_row {
       border-bottom: var($--theme-affix-page-seasonal-color) 3px solid;
     }
 

@@ -19,7 +19,7 @@ $cssClasses ??= '';
         ?>
     <div class="col col-md pr-0 affix_row">
         <div class="row no-gutters">
-            <div class="col-auto select_icon class_icon affix_icon_{{ strtolower($affix->key) }}"
+            <div class="col-auto select_icon class_icon affix_icon_{{ \Str::slug($affix->key, '_') }}"
                  data-toggle="tooltip"
                  title="{{ __($affix->description) }}"
                  style="height: 24px;">

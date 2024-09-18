@@ -120,7 +120,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection                              $playerclasses
  * @property Collection                              $playerraces
  * @property Collection<AffixGroup>                  $affixes
- * @property Collection<DungeonRouteAffixGroup>      $affixgroups
+ * @property Collection<DungeonRouteAffixGroup>      $affixGroups
  * @property Collection<DungeonRouteRating>          $ratings
  * @property Collection<DungeonRouteFavorite>        $favorites
  * @property Collection<LiveSession>                 $livesessions
@@ -325,7 +325,7 @@ class DungeonRoute extends Model
         return $this->hasMany(DungeonRoutePlayerRace::class);
     }
 
-    public function affixgroups(): HasMany
+    public function affixGroups(): HasMany
     {
         return $this->hasMany(DungeonRouteAffixGroup::class);
     }
@@ -1030,7 +1030,7 @@ class DungeonRoute extends Model
         $this->cloneRelationsInto($dungeonroute, [
             $this->playerraces,
             $this->playerclasses,
-            $this->affixgroups,
+            $this->affixGroups,
             $this->paths,
             $this->brushlines,
             $this->killZones,
@@ -1465,7 +1465,7 @@ class DungeonRoute extends Model
             ]);
 
             // Make sure the relation should be reloaded
-            $this->unsetRelation('affixgroups');
+            $this->unsetRelation('affixGroups');
         }
     }
 
