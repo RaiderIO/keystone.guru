@@ -29,7 +29,7 @@ use Illuminate\Support\Collection;
  * @property Carbon                $updated_at
  *
  * @property Collection<Dungeon>   $dungeons
- * @property TimewalkingEvent|null $timewalkingevent
+ * @property TimewalkingEvent|null $timewalkingEvent
  *
  * @method static Builder active()
  *
@@ -45,7 +45,7 @@ class Expansion extends CacheModel
 
     public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];
 
-    public $with = ['timewalkingevent'];
+    public $with = ['timewalkingEvent'];
 
     protected $dates = [
         // 'released_at',
@@ -111,7 +111,7 @@ class Expansion extends CacheModel
         return $this->hasMany(Season::class);
     }
 
-    public function timewalkingevent(): HasOne
+    public function timewalkingEvent(): HasOne
     {
         return $this->hasOne(TimewalkingEvent::class);
     }
@@ -183,7 +183,7 @@ class Expansion extends CacheModel
 
     public function hasTimewalkingEvent(): bool
     {
-        return $this->timewalkingevent instanceof TimewalkingEvent;
+        return $this->timewalkingEvent instanceof TimewalkingEvent;
     }
 
     public function hasDungeonForGameVersion(GameVersion $gameVersion): bool
