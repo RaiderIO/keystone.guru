@@ -4073,7 +4073,7 @@
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
-        "display_id": null,
+        "display_id": 82843,
         "encounter_id": null,
         "name": "Ashvane Sniper",
         "base_health": 0,
