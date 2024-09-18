@@ -84,7 +84,7 @@
         "display_id": 84821,
         "encounter_id": 2654,
         "name": "Chopper Redhook",
-        "base_health": 101901082,
+        "base_health": 111391476,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 0.8,
@@ -99,6 +99,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -141,7 +144,7 @@
         "display_id": 67541,
         "encounter_id": 2134,
         "name": "Hadal Darkfathom",
-        "base_health": 145572975,
+        "base_health": 159130680,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -156,6 +159,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -184,9 +190,9 @@
         "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 87990,
-        "encounter_id": 2100,
+        "encounter_id": 2140,
         "name": "Viqgoth",
-        "base_health": 454915546,
+        "base_health": 497283375,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -243,7 +249,7 @@
         "display_id": 82843,
         "encounter_id": null,
         "name": "Ashvane Sniper",
-        "base_health": 18221353,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -318,6 +324,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16818,
+                "mapping_version_id": 394,
+                "npc_id": 128967,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16647,
                 "mapping_version_id": 385,
                 "npc_id": 128967,
@@ -349,7 +362,7 @@
         "display_id": 84067,
         "encounter_id": null,
         "name": "Ashvane Commander",
-        "base_health": 29154165,
+        "base_health": 31826136,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -364,6 +377,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -384,6 +400,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16804,
+                "mapping_version_id": 394,
+                "npc_id": 128969,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16633,
                 "mapping_version_id": 385,
@@ -416,7 +439,7 @@
         "display_id": 88579,
         "encounter_id": 2173,
         "name": "Dread Captain Lockwood",
-        "base_health": 89163448,
+        "base_health": 97467542,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.6,
@@ -431,6 +454,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -473,7 +499,7 @@
         "display_id": 81424,
         "encounter_id": null,
         "name": "Bilge Rat Buccaneer",
-        "base_health": 18221353,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -545,6 +571,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16810,
+                "mapping_version_id": 394,
+                "npc_id": 129366,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16639,
                 "mapping_version_id": 385,
                 "npc_id": 129366,
@@ -576,7 +609,7 @@
         "display_id": 80475,
         "encounter_id": null,
         "name": "Bilge Rat Tempest",
-        "base_health": 14577080,
+        "base_health": 15913070,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -651,6 +684,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16812,
+                "mapping_version_id": 394,
+                "npc_id": 129367,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16641,
                 "mapping_version_id": 385,
                 "npc_id": 129367,
@@ -682,7 +722,7 @@
         "display_id": 84134,
         "encounter_id": null,
         "name": "Irontide Raider",
-        "base_health": 29154165,
+        "base_health": 31826136,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -697,6 +737,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -714,6 +757,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16799,
+                "mapping_version_id": 394,
+                "npc_id": 129369,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16628,
                 "mapping_version_id": 385,
@@ -746,7 +796,7 @@
         "display_id": 79077,
         "encounter_id": null,
         "name": "Irontide Waveshaper",
-        "base_health": 14577080,
+        "base_health": 15913070,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.1,
@@ -821,6 +871,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16798,
+                "mapping_version_id": 394,
+                "npc_id": 129370,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16627,
                 "mapping_version_id": 385,
                 "npc_id": 129370,
@@ -852,7 +909,7 @@
         "display_id": 86085,
         "encounter_id": null,
         "name": "Riptide Shredder",
-        "base_health": 18221353,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -930,6 +987,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16800,
+                "mapping_version_id": 394,
+                "npc_id": 129371,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16629,
                 "mapping_version_id": 385,
                 "npc_id": 129371,
@@ -961,7 +1025,7 @@
         "display_id": 84136,
         "encounter_id": null,
         "name": "Blacktar Bomber",
-        "base_health": 18221353,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.1,
@@ -1038,6 +1102,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16796,
+                "mapping_version_id": 394,
+                "npc_id": 129372,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16625,
                 "mapping_version_id": 385,
@@ -1126,7 +1197,7 @@
         "display_id": 86006,
         "encounter_id": null,
         "name": "Scrimshaw Enforcer",
-        "base_health": 18221353,
+        "base_health": 31826136,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.1,
@@ -1194,9 +1265,19 @@
         "npc_spells": [
             {
                 "spell_id": 256627
+            },
+            {
+                "spell_id": 257732
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16797,
+                "mapping_version_id": 394,
+                "npc_id": 129374,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16626,
                 "mapping_version_id": 385,
@@ -1246,8 +1327,19 @@
                 "characteristic_id": 1
             }
         ],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 256969
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 16801,
+                "mapping_version_id": 394,
+                "npc_id": 129640,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16630,
                 "mapping_version_id": 385,
@@ -1280,7 +1372,7 @@
         "display_id": 81286,
         "encounter_id": null,
         "name": "Irontide Cleaver",
-        "base_health": 15184460,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1295,6 +1387,12 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -1319,7 +1417,7 @@
         "display_id": 85144,
         "encounter_id": null,
         "name": "Irontide Powdershot",
-        "base_health": 3036892,
+        "base_health": 3978267,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1553,7 +1651,7 @@
         "display_id": 83892,
         "encounter_id": null,
         "name": "Scrimshaw Gutter",
-        "base_health": 3644271,
+        "base_health": 3978267,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 0.9,
@@ -1625,6 +1723,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16795,
+                "mapping_version_id": 394,
+                "npc_id": 133990,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16624,
                 "mapping_version_id": 385,
                 "npc_id": 133990,
@@ -1656,7 +1761,7 @@
         "display_id": 52277,
         "encounter_id": null,
         "name": "Bilge Rat Pillager",
-        "base_health": 18221353,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1728,6 +1833,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16809,
+                "mapping_version_id": 394,
+                "npc_id": 135241,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16638,
                 "mapping_version_id": 385,
                 "npc_id": 135241,
@@ -1759,7 +1871,7 @@
         "display_id": 68059,
         "encounter_id": null,
         "name": "Bilge Rat Demolisher",
-        "base_health": 36442707,
+        "base_health": 39782670,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -1776,6 +1888,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
@@ -1788,6 +1903,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16811,
+                "mapping_version_id": 394,
+                "npc_id": 135245,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16640,
                 "mapping_version_id": 385,
@@ -1820,7 +1942,7 @@
         "display_id": 79068,
         "encounter_id": null,
         "name": "Irontide Curseblade",
-        "base_health": 3644271,
+        "base_health": 3978267,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1887,10 +2009,20 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 257069
+            },
+            {
                 "spell_id": 257168
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16802,
+                "mapping_version_id": 394,
+                "npc_id": 135258,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16631,
                 "mapping_version_id": 385,
@@ -1923,7 +2055,7 @@
         "display_id": 86436,
         "encounter_id": null,
         "name": "Ashvane Spotter",
-        "base_health": 18221353,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.1,
@@ -2004,6 +2136,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16806,
+                "mapping_version_id": 394,
+                "npc_id": 135263,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16635,
                 "mapping_version_id": 385,
                 "npc_id": 135263,
@@ -2042,7 +2181,7 @@
         "display_id": 84385,
         "encounter_id": 2173,
         "name": "Ashvane Deckhand",
-        "base_health": 6998701,
+        "base_health": 9945668,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -2123,7 +2262,7 @@
         "display_id": 82852,
         "encounter_id": 2173,
         "name": "Ashvane Cannoneer",
-        "base_health": 13997402,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -2138,6 +2277,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -2168,7 +2310,7 @@
         "display_id": 88448,
         "encounter_id": 2140,
         "name": "Gripping Terror",
-        "base_health": 21835946,
+        "base_health": 23869602,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.1,
@@ -2183,6 +2325,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [],
@@ -2197,7 +2342,7 @@
         "display_id": 80319,
         "encounter_id": null,
         "name": "Bilge Rat Cutthroat",
-        "base_health": 14577083,
+        "base_health": 15913068,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -2269,6 +2414,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16813,
+                "mapping_version_id": 394,
+                "npc_id": 137511,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16642,
                 "mapping_version_id": 385,
                 "npc_id": 137511,
@@ -2300,7 +2452,7 @@
         "display_id": 79889,
         "encounter_id": null,
         "name": "Ashvane Invader",
-        "base_health": 18221353,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -2378,6 +2530,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16814,
+                "mapping_version_id": 394,
+                "npc_id": 137516,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16643,
                 "mapping_version_id": 385,
                 "npc_id": 137516,
@@ -2409,7 +2568,7 @@
         "display_id": 82852,
         "encounter_id": null,
         "name": "Ashvane Destroyer",
-        "base_health": 18221353,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -2481,6 +2640,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16815,
+                "mapping_version_id": 394,
+                "npc_id": 137517,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16644,
                 "mapping_version_id": 385,
                 "npc_id": 137517,
@@ -2512,7 +2678,7 @@
         "display_id": 85144,
         "encounter_id": null,
         "name": "Irontide Powdershot",
-        "base_health": 3644271,
+        "base_health": 3978267,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -2584,6 +2750,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16803,
+                "mapping_version_id": 394,
+                "npc_id": 137521,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16632,
                 "mapping_version_id": 385,
                 "npc_id": 137521,
@@ -2615,7 +2788,7 @@
         "display_id": 86691,
         "encounter_id": 2140,
         "name": "Demolishing Terror",
-        "base_health": 33593764,
+        "base_health": 47739204,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.1,
@@ -2630,6 +2803,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -2709,10 +2885,10 @@
         "display_id": 83892,
         "encounter_id": null,
         "name": "Scrimshaw Gutter",
-        "base_health": 100714,
+        "base_health": 3978267,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 0.5,
+        "level": 80,
+        "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2721,13 +2897,72 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 6
+            },
+            {
+                "characteristic_id": 7
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 15
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 17
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 256616
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16820,
+                "mapping_version_id": 394,
+                "npc_id": 138002,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1104,
                 "mapping_version_id": 18,
@@ -2814,7 +3049,7 @@
         "display_id": 79068,
         "encounter_id": null,
         "name": "Irontide Curseblade",
-        "base_health": 3644271,
+        "base_health": 3978267,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -2886,6 +3121,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16819,
+                "mapping_version_id": 394,
+                "npc_id": 138247,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16648,
                 "mapping_version_id": 385,
                 "npc_id": 138247,
@@ -2917,7 +3159,7 @@
         "display_id": 85144,
         "encounter_id": null,
         "name": "Irontide Powdershot",
-        "base_health": 3644271,
+        "base_health": 3978267,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -2989,6 +3231,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16817,
+                "mapping_version_id": 394,
+                "npc_id": 138254,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16646,
                 "mapping_version_id": 385,
                 "npc_id": 138254,
@@ -3020,7 +3269,7 @@
         "display_id": 86436,
         "encounter_id": null,
         "name": "Ashvane Spotter",
-        "base_health": 18221353,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -3035,6 +3284,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -3058,6 +3310,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16805,
+                "mapping_version_id": 394,
+                "npc_id": 138255,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16634,
                 "mapping_version_id": 385,
@@ -3090,7 +3349,7 @@
         "display_id": 84385,
         "encounter_id": null,
         "name": "Ashvane Deckhand",
-        "base_health": 9110677,
+        "base_health": 9945668,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -3162,6 +3421,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16807,
+                "mapping_version_id": 394,
+                "npc_id": 138464,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16636,
                 "mapping_version_id": 385,
                 "npc_id": 138464,
@@ -3193,7 +3459,7 @@
         "display_id": 88542,
         "encounter_id": null,
         "name": "Ashvane Cannoneer",
-        "base_health": 18221353,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -3210,6 +3476,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
@@ -3222,6 +3491,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16808,
+                "mapping_version_id": 394,
+                "npc_id": 138465,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16637,
                 "mapping_version_id": 385,
@@ -3850,7 +4126,7 @@
         "display_id": 79077,
         "encounter_id": null,
         "name": "Irontide Waveshaper",
-        "base_health": 14577080,
+        "base_health": 15913070,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -3924,6 +4200,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16816,
+                "mapping_version_id": 394,
+                "npc_id": 144071,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16645,
                 "mapping_version_id": 385,
