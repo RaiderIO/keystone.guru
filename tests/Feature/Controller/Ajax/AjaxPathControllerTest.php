@@ -17,7 +17,10 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
     {
         // Arrange
         /** @var Floor $randomFloor */
-        $randomFloor = $this->dungeonRoute->dungeon->floors->random();
+        $randomFloor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->get()
+            ->random();
 
         $polyline = PolylineFixtures::createPolyline($randomFloor);
 
@@ -82,7 +85,10 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
     {
         // Arrange
         /** @var Floor $randomFloor */
-        $randomFloor = $this->dungeonRoute->dungeon->floors->random();
+        $randomFloor = $this->dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->get()
+            ->random();
 
         $polyline = PolylineFixtures::createPolyline($randomFloor, collect());
 
