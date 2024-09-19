@@ -1,0 +1,35 @@
+{
+    "id": 248,
+    "release_changelog_id": 255,
+    "version": "v11.3.1",
+    "title": "Performance optimizations and bugfixes",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-09-19T15:26:17+00:00",
+    "updated_at": "2024-09-19T15:26:17+00:00",
+    "changelog": {
+        "id": 255,
+        "release_id": 248,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 255,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2495,
+                "change": "Various performance optimizations. This is still ongoing."
+            },
+            {
+                "release_changelog_id": 255,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2493,
+                "change": "Rotue season filter no longer just looks for any routes that are for a dungeon part of the current season, but for actual routes created during the selected season. BFA routes for Siege of Boralus, for example, will no longer show up with this filter."
+            },
+            {
+                "release_changelog_id": 255,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2494,
+                "change": "Dungeons that have support for combined floors now show a thumbnail again."
+            }
+        ]
+    }
+}
