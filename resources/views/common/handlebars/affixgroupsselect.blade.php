@@ -47,7 +47,7 @@ $id ??= 'affixes';
                         let affix = affixGroup.affixes[j];
 
                         affixes.push({
-                            class: _.kebabCase(affix.key).replaceAll('-', '_'),
+                            class: affix.image_name,
                             name: affix.name
                         });
                     }

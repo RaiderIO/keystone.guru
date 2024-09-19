@@ -67,7 +67,7 @@ $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $
             <div class="affix_row">
                 <div class="row no-gutters">
                     <div
-                        class="col-auto select_icon class_icon affix_icon_{{ \Str::slug($affix->key, '_') }}"
+                        class="col-auto select_icon class_icon affix_icon_{{ $affix->image_name }}"
                         data-toggle="tooltip"
                         title="{{ __($affix->description) }}"
                         style="height: 24px;">
