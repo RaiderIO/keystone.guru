@@ -22,7 +22,7 @@
                 "release_changelog_id": 255,
                 "release_changelog_category_id": 5,
                 "ticket_id": 2493,
-                "change": "Rotue season filter no longer just looks for any routes that are for a dungeon part of the current season, but for actual routes created during the selected season. BFA routes for Siege of Boralus, for example, will no longer show up with this filter."
+                "change": "Route season filter no longer just looks for any routes that are for a dungeon part of the current season, but for actual routes created during the selected season. BFA routes for Siege of Boralus, for example, will no longer show up with this filter."
             },
             {
                 "release_changelog_id": 255,
