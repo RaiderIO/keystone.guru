@@ -248,13 +248,15 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     {
         //        $lua = $this->_getLua();
 
+        $affixes = $this->dungeonRoute->affixes;
+
         $mdtObject = [
             //
             'objects'    => $this->extractObjects($warnings),
             // M+ level
             'difficulty' => $this->dungeonRoute->level_min,
-            'week'       => $this->dungeonRoute->affixGroups->isEmpty() ? 1 :
-                Conversion::convertAffixGroupToWeek($this->dungeonRoute->affixes->first()),
+            'week'       => $this->dungeonRoute->affixGroups->isEmpty() || $affixes->isEmpty() ? 1 :
+                Conversion::convertAffixGroupToWeek($affixes->first()),
             'value'      => [
                 'currentDungeonIdx' => $this->dungeonRoute->dungeon->mdt_id,
                 'selection'         => [],

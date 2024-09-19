@@ -13,5 +13,5 @@ interface CacheServiceLoggingInterface
 
     public function clearIdleKeysProgress(int $index, int $deletedKeysCount): void;
 
-    public function clearIdleKeysEnd(): void;
+    public function clearIdleKeysEnd(int $deletedKeysCount): void;
 }
