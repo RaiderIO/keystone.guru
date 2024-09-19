@@ -242,7 +242,7 @@ class AjaxDungeonRouteController extends Controller
                 $builder->where('dungeons.expansion_id', $expansion->id)
             )
             ->when($season !== null, static fn(Builder $builder) =>
-                $builder->where('season_id', $season->id)
+                $builder->where('dungeon_routes.season_id', $season->id)
             )
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live

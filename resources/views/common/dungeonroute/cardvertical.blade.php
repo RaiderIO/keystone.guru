@@ -231,10 +231,11 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
 $cache = true;
 
 if ($cache) {
-    $currentUserLocale     = Auth::check() ? Auth::user()->locale : 'en_US';
+    $currentUserLocale = Auth::check() ? Auth::user()->locale : 'en_US';
+    $isAdmin           = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
 // Echo the result of this function
     echo $cacheService->remember(
-        sprintf('view:dungeonroute_card:vertical:%s:%d_%d_%d', $currentUserLocale, (int)$showAffixes, (int)$showDungeonImage, $dungeonroute->id),
+        sprintf('view:dungeonroute_card:vertical:%s:%d_%d_%d_%d', $currentUserLocale, (int)$showAffixes, (int)$showDungeonImage, (int)$isAdmin, $dungeonroute->id),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );

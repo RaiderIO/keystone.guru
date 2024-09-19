@@ -289,9 +289,13 @@ return [
     ],
 
     'view' => [
-        'common.dungeonroute.card' => [
-            'cache' => [
-                'ttl' => '1 hour',
+        'common' => [
+            'dungeonroute' => [
+                'card' => [
+                    'cache' => [
+                        'ttl' => '1 hour',
+                    ],
+                ],
             ],
         ],
     ],
