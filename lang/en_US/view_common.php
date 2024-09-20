@@ -492,9 +492,9 @@ return [
                 'mastery' => 'Mastery',
                 'vers'    => 'Versatility',
             ],
-            'affix'                                   => 'Affix',
-            'affix_title'                             => 'Select Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%.',
-            'affixes'                                 => [
+            'affixes'                                 => 'Affixes',
+            'affixes_title'                           => 'Select Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%. You can select both at once.',
+            'affixes_map'                             => [
                 'fortified'  => 'Fortified',
                 'tyrannical' => 'Tyrannical',
             ],

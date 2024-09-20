@@ -1,8 +1,14 @@
 <?php
-/** @var String[] $shroudedBountyTypes */
-/** @var String[] $affixes */
-/** @var bool $isShrouded */
-/** @var bool $isThundering */
+
+use App\Models\Season;
+
+/**
+ * @var Season   $season
+ * @var String[] $shroudedBountyTypes
+ * @var String[] $affixes
+ * @var bool     $isShrouded
+ * @var bool     $isThundering
+ */
 ?>
 
     <!-- General settings -->
@@ -14,7 +20,7 @@
     </label>
     <div class="row">
         <div class="col">
-            {!! Form::text('simulate_key_level', '15', ['id' => 'simulate_key_level', 'class' => 'form-control']) !!}
+            {!! Form::text('simulate_key_level', (int)($season->key_level_min + $season->key_level_max) / 2, ['id' => 'simulate_key_level', 'class' => 'form-control']) !!}
         </div>
     </div>
 </div>
@@ -39,13 +45,17 @@
 <div class="form-group row">
     <div class="col">
         <label for="simulate_affix">
-            {{ __('view_common.modal.simulate.affix') }}
+            {{ __('view_common.modal.simulate.affixes') }}
             <i class="fas fa-info-circle" data-toggle="tooltip"
                title="{{ __('view_common.modal.simulate.affix_title') }}"></i>
         </label>
         <div class="row">
             <div class="col">
-                {!! Form::select('simulate_affix', $affixes, null, ['id' => 'simulate_affix', 'class' => 'form-control selectpicker']) !!}
+                {!! Form::select('simulate_affix', $affixes, null, [
+                        'id' => 'simulate_affix',
+                        'class' => 'form-control selectpicker',
+                        'multiple' => 'multiple',
+                        ]) !!}
             </div>
         </div>
     </div>

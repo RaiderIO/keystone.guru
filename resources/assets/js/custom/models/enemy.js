@@ -451,14 +451,16 @@ class Enemy extends VersionableMapObject {
             let scaledHealth = this.npc.base_health * ((this.npc.health_percentage ?? 100) / 100);
             let hasFortified = false;
             let hasTyrannical = false;
+            let hasXalatathsGuile = false;
 
             let mapContext = getState().getMapContext();
             let keyLevelLabel = '';
             if (mapContext instanceof MapContextDungeonRoute && mapContext.getGameVersion() === GAME_VERSION_RETAIL) {
                 hasFortified = mapContext.hasAffix(AFFIX_FORTIFIED) && [NPC_CLASSIFICATION_ID_NORMAL, NPC_CLASSIFICATION_ID_ELITE].includes(this.npc.classification_id);
                 hasTyrannical = mapContext.hasAffix(AFFIX_TYRANNICAL) && [NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(this.npc.classification_id);
+                hasXalatathsGuile = mapContext.hasAffix(AFFIX_XALATATHS_GUILE);
 
-                scaledHealth = c.map.enemy.calculateHealthForKey(scaledHealth, mapContext.getLevelMin(), hasFortified, hasTyrannical);
+                scaledHealth = c.map.enemy.calculateHealthForKey(scaledHealth, mapContext.getLevelMin(), hasFortified, hasTyrannical, hasXalatathsGuile);
                 keyLevelLabel = ` (+${mapContext.getLevelMin()})`;
             } else {
                 scaledHealth = Math.round(scaledHealth);
@@ -477,7 +479,7 @@ class Enemy extends VersionableMapObject {
 
             if (mapContext.getGameVersion().key === GAME_VERSION_RETAIL) {
                 // Defined in sitescripts
-                if( isUserAdmin ) {
+                if (isUserAdmin) {
                     result.info.push({key: lang.get('messages.sidebar_enemy_npc_id_label'), value: this.npc.id});
                 }
 

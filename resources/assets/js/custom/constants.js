@@ -146,6 +146,13 @@ const AFFIX_SHROUDED = 'Shrouded';
 const AFFIX_AFFLICTED = 'Afflicted';
 const AFFIX_ENTANGLING = 'Entangling';
 const AFFIX_INCORPOREAL = 'Incorporeal';
+const AFFIX_XALATATHS_BARGAIN_ASCENDANT = 'Xal\'atath\'s Bargain: Ascendant';
+const AFFIX_XALATATHS_BARGAIN_DEVOUR = 'Xal\'atath\'s Bargain: Devour';
+const AFFIX_XALATATHS_BARGAIN_VOIDBOUND = 'Xal\'atath\'s Bargain: Voidbound';
+const AFFIX_XALATATHS_BARGAIN_OBLIVION = 'Xal\'atath\'s Bargain: Oblivion';
+const AFFIX_XALATATHS_BARGAIN_FRENZIED = 'Xal\'atath\'s Bargain: Frenzied';
+const AFFIX_XALATATHS_GUILE = 'Xal\'atath\'s Guile';
+const AFFIX_CHALLENGERS_PERIL = 'Challenger\'s Peril';
 
 // Dungeon Speedrun Required Npcs
 const DUNGEON_DIFFICULTY_10_MAN = 1;
@@ -265,10 +272,11 @@ let c = {
         animated_polylines: 'animated-polylines'
     },
     gameData: {
-        scalingFactor: 1.08,
+        scalingFactor: 1.10,
         scalingFactorPast10: 1.10,
         fortifiedScalingFactor: 1.2,
         tyrannicalScalingFactor: 1.3,
+        guileScalingFactor: 1.3,
     },
     map: {
         settings: {
@@ -370,26 +378,30 @@ let c = {
                 // Return the correct size
                 return Math.ceil(result);
             },
-            getKeyScalingFactor(keyLevel, fortified, tyrannical) {
+            getKeyScalingFactor(keyLevel, fortified, tyrannical, guile) {
                 let keyLevelFactor = 1;
                 // 2 because we start counting up at key level 3 (+2 = 0)
-                for (let i = 2; i < keyLevel; i++) {
+                for (let i = 1; i < keyLevel; i++) {
                     keyLevelFactor *= (i < 10 ? c.gameData.scalingFactor : c.gameData.scalingFactorPast10);
                 }
 
                 if (fortified) {
                     keyLevelFactor *= c.gameData.fortifiedScalingFactor;
-                } else if (tyrannical) {
+                }
+                if (tyrannical) {
                     keyLevelFactor *= c.gameData.tyrannicalScalingFactor;
+                }
+                if (keyLevel >= 12 && guile) {
+                    keyLevelFactor *= c.gameData.guileScalingFactor;
                 }
 
                 return Math.round(keyLevelFactor * 100) / 100;
             },
-            calculateBaseHealthForKey(scaledHealth, keyLevel, fortified = false, tyrannical = false) {
-                return Math.round(scaledHealth / c.map.enemy.getKeyScalingFactor(keyLevel, fortified, tyrannical));
+            calculateBaseHealthForKey(scaledHealth, keyLevel, fortified = false, tyrannical = false, guile = false) {
+                return Math.round(scaledHealth / c.map.enemy.getKeyScalingFactor(keyLevel, fortified, tyrannical, guile));
             },
-            calculateHealthForKey(baseHealth, keyLevel, fortified = false, tyrannical = false) {
-                return Math.round(baseHealth * c.map.enemy.getKeyScalingFactor(keyLevel, fortified, tyrannical));
+            calculateHealthForKey(baseHealth, keyLevel, fortified = false, tyrannical = false, guile = false) {
+                return Math.round(baseHealth * c.map.enemy.getKeyScalingFactor(keyLevel, fortified, tyrannical, guile));
             }
         },
         adminenemy: {

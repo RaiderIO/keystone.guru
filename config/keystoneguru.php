@@ -32,8 +32,15 @@ return [
             'default_max' => 30,
         ],
 
-        'scaling_factor'         => 1.08,
+        'scaling_factor'         => 1.10,
         'scaling_factor_past_10' => 1.10,
+
+        'affix_scaling_factor' => [
+            'fortified'       => 1.2,
+            'tyrannical'      => 1.3,
+            'thundering'      => 1.05,
+            'xalataths_guile' => 1.2,
+        ],
     ],
 
     'cache' => [
