@@ -5,7 +5,7 @@ $(function () {
     let state = typeof getState === 'function' && getState();
 
     // If we're not in a map context, don't do anything
-    if(!state) {
+    if (!state) {
         return;
     }
 
@@ -143,6 +143,7 @@ const AFFIX_UNKNOWN = 'Unknown';
 const AFFIX_INFERNAL = 'Infernal';
 const AFFIX_ENCRYPTED = 'Encrypted';
 const AFFIX_SHROUDED = 'Shrouded';
+const AFFIX_THUNDERING = 'Thundering';
 const AFFIX_AFFLICTED = 'Afflicted';
 const AFFIX_ENTANGLING = 'Entangling';
 const AFFIX_INCORPOREAL = 'Incorporeal';
@@ -201,6 +202,9 @@ const EXPANSION_LEGION = 'legion';
 const EXPANSION_BFA = 'bfa';
 const EXPANSION_SHADOWLANDS = 'shadowlands';
 const EXPANSION_DRAGONFLIGHT = 'dragonflight';
+const EXPANSION_TWW = 'tww';
+const EXPANSION_MIDNIGHT = 'midnight';
+const EXPANSION_THE_LAST_TITAN = 'tlt';
 
 // Map icons
 const MAP_ICON_TYPE_SPELL_BLOODLUST = 'spell_bloodlust';
@@ -276,6 +280,7 @@ let c = {
         scalingFactorPast10: 1.10,
         fortifiedScalingFactor: 1.2,
         tyrannicalScalingFactor: 1.3,
+        thunderingScalingFactor: 1.05,
         guileScalingFactor: 1.3,
     },
     map: {
@@ -378,30 +383,33 @@ let c = {
                 // Return the correct size
                 return Math.ceil(result);
             },
-            getKeyScalingFactor(keyLevel, fortified, tyrannical, guile) {
+            getKeyScalingFactor(keyLevel, affixes = []) {
                 let keyLevelFactor = 1;
                 // 2 because we start counting up at key level 3 (+2 = 0)
                 for (let i = 1; i < keyLevel; i++) {
                     keyLevelFactor *= (i < 10 ? c.gameData.scalingFactor : c.gameData.scalingFactorPast10);
                 }
 
-                if (fortified) {
+                if (affixes.includes(AFFIX_FORTIFIED)) {
                     keyLevelFactor *= c.gameData.fortifiedScalingFactor;
                 }
-                if (tyrannical) {
+                if (affixes.includes(AFFIX_TYRANNICAL)) {
                     keyLevelFactor *= c.gameData.tyrannicalScalingFactor;
                 }
-                if (keyLevel >= 12 && guile) {
+                if (affixes.includes(AFFIX_THUNDERING)) {
+                    keyLevelFactor *= c.gameData.thunderingScalingFactor;
+                }
+                if (keyLevel >= 12 && affixes.includes(AFFIX_XALATATHS_GUILE)) {
                     keyLevelFactor *= c.gameData.guileScalingFactor;
                 }
 
                 return Math.round(keyLevelFactor * 100) / 100;
             },
-            calculateBaseHealthForKey(scaledHealth, keyLevel, fortified = false, tyrannical = false, guile = false) {
-                return Math.round(scaledHealth / c.map.enemy.getKeyScalingFactor(keyLevel, fortified, tyrannical, guile));
+            calculateBaseHealthForKey(scaledHealth, keyLevel, affixes = []) {
+                return Math.round(scaledHealth / c.map.enemy.getKeyScalingFactor(keyLevel, affixes));
             },
-            calculateHealthForKey(baseHealth, keyLevel, fortified = false, tyrannical = false, guile = false) {
-                return Math.round(baseHealth * c.map.enemy.getKeyScalingFactor(keyLevel, fortified, tyrannical, guile));
+            calculateHealthForKey(baseHealth, keyLevel, affixes = []) {
+                return Math.round(baseHealth * c.map.enemy.getKeyScalingFactor(keyLevel, affixes));
             }
         },
         adminenemy: {
