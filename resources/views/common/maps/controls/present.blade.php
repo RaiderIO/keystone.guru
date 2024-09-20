@@ -23,7 +23,7 @@ use Illuminate\Support\Collection;
                     ?>
 
                 @foreach($affixGroup->affixes as $affix)
-                    <img src="{{ url(sprintf('/images/affixes/%s.jpg', \Str::slug($affix->key, '_'))) }}"
+                    <img src="{{ url($affix->image_url) }}"
                          alt="{{ __($affix->name) }}" style="border-radius: 4px;"/>
                 @endforeach
             @endif

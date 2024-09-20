@@ -10,7 +10,7 @@ $dungeon  ??= null;
 
 <div class="row no-gutters mt-2 ">
     <div
-        class="col-auto select_icon class_icon affix_icon_{{ \Str::slug($affix->key, '_') }} {{ $showText ? '' : 'mx-1' }} m-auto"
+        class="col-auto select_icon class_icon affix_icon_{{ $affix->image_name }} {{ $showText ? '' : 'mx-1' }} m-auto"
         data-toggle="tooltip"
         title="{{ __($affix->description) }}"
         style="height: 24px;">
