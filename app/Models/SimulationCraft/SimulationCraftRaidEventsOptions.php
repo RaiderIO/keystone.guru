@@ -3,6 +3,7 @@
 namespace App\Models\SimulationCraft;
 
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSimulateFormRequest;
+use App\Models\Affix;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Traits\GeneratesPublicKey;
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int          $user_id
  * @property int          $key_level
  * @property string       $shrouded_bounty_type
- * @property string       $affix
+ * @property string       $affix Comma separated list of affixes
  * @property int|null     $thundering_clear_seconds
  * @property bool         $bloodlust Override to say yes/no to Bloodlust/Heroism being available.
  * @property bool         $arcane_intellect
@@ -68,15 +69,11 @@ class SimulationCraftRaidEventsOptions extends Model
 
     protected $with = ['dungeonroute'];
 
-    public const SHROUDED_BOUNTY_TYPE_NONE = 'none';
-
-    public const SHROUDED_BOUNTY_TYPE_CRIT = 'crit';
-
-    public const SHROUDED_BOUNTY_TYPE_HASTE = 'haste';
-
+    public const SHROUDED_BOUNTY_TYPE_NONE    = 'none';
+    public const SHROUDED_BOUNTY_TYPE_CRIT    = 'crit';
+    public const SHROUDED_BOUNTY_TYPE_HASTE   = 'haste';
     public const SHROUDED_BOUNTY_TYPE_MASTERY = 'mastery';
-
-    public const SHROUDED_BOUNTY_TYPE_VERS = 'vers';
+    public const SHROUDED_BOUNTY_TYPE_VERS    = 'vers';
 
     public const ALL_SHROUDED_BOUNTY_TYPES = [
         self::SHROUDED_BOUNTY_TYPE_NONE,
@@ -86,8 +83,7 @@ class SimulationCraftRaidEventsOptions extends Model
         self::SHROUDED_BOUNTY_TYPE_VERS,
     ];
 
-    public const AFFIX_FORTIFIED = 'fortified';
-
+    public const AFFIX_FORTIFIED  = 'fortified';
     public const AFFIX_TYRANNICAL = 'tyrannical';
 
     public const ALL_AFFIXES = [
@@ -110,6 +106,28 @@ class SimulationCraftRaidEventsOptions extends Model
         return $this->thundering_clear_seconds !== null;
     }
 
+    public function hasAffix(string $affix): bool
+    {
+        return in_array($affix, explode(',', $this->affix));
+    }
+
+    public function getAffixes(): array
+    {
+        $affixes        = [];
+        $optionsAffixes = explode(',', $this->affix);
+        if (in_array(SimulationCraftRaidEventsOptions::AFFIX_FORTIFIED, $optionsAffixes)) {
+            $affixes[] = Affix::AFFIX_FORTIFIED;
+        }
+        if (in_array(SimulationCraftRaidEventsOptions::AFFIX_TYRANNICAL, $optionsAffixes)) {
+            $affixes[] = Affix::AFFIX_TYRANNICAL;
+        }
+        if ($this->isThunderingAffixActive()) {
+            $affixes[] = Affix::AFFIX_THUNDERING;
+        }
+
+        return $affixes;
+    }
+
     public static function fromRequest(AjaxDungeonRouteSimulateFormRequest $request, DungeonRoute $dungeonRoute): SimulationCraftRaidEventsOptions
     {
         $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ADVANCED_SIMULATION);
@@ -119,11 +137,15 @@ class SimulationCraftRaidEventsOptions extends Model
         $bloodLustPerPull = implode(',', $validated['simulate_bloodlust_per_pull'] ?? []);
         unset($validated['simulate_bloodlust_per_pull']);
 
+        $affixesCsv = implode(',', $validated['affix'] ?? []);
+        unset($validated['affix']);
+
         $result               = SimulationCraftRaidEventsOptions::create(array_merge($validated, [
             'public_key'                     => self::generateRandomPublicKey(),
             'user_id'                        => Auth::id(),
             'dungeon_route_id'               => $dungeonRoute->id,
             'thundering_clear_seconds'       => empty($validated['thundering_clear_seconds']) ? null : $validated['thundering_clear_seconds'],
+            'affix'                          => $affixesCsv,
             'simulate_bloodlust_per_pull'    => $bloodLustPerPull,
             // Set the ranged pull compensation, if the user is allowed to set it. Otherwise, reduce the value to 0
             'ranged_pull_compensation_yards' => $hasAdvancedSimulation ? (int)$request->get('ranged_pull_compensation_yards') : 0,

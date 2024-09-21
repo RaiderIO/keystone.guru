@@ -236,7 +236,7 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'affix_group_count'       => 4,
                 'start_affix_group_index' => 2,
                 'key_level_min'           => 2,
-                'key_level_max'           => 22,
+                'key_level_max'           => 18,
                 'dungeons'                => Dungeon::select('dungeons.*')
                     ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
                     ->whereIn('dungeons.key', [

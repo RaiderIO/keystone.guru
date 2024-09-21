@@ -8,6 +8,7 @@ use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
+use Str;
 
 /**
  * @property int                    $id The ID of this Affix.
@@ -16,6 +17,9 @@ use Illuminate\Support\Collection;
  * @property string                 $key The identifying key of the Affix.
  * @property string                 $name The name of the Affix.
  * @property string                 $description The description of this Affix.
+ *
+ * @property string                 $image_name The name of the image of this Affix (appended).
+ * @property string                 $image_url The URL to the image of this Affix (appended).
  *
  * @property Collection<AffixGroup> $affixGroups
  *
@@ -31,6 +35,8 @@ class Affix extends CacheModel
     public $timestamps = false;
 
     protected $fillable = ['id', 'icon_file_id', 'affix_id', 'key', 'name', 'description'];
+
+    protected $appends = ['image_name', 'image_url'];
 
     public const AFFIX_BOLSTERING                  = 'Bolstering';
     public const AFFIX_BURSTING                    = 'Bursting';
@@ -138,6 +144,16 @@ class Affix extends CacheModel
         Enemy::SEASONAL_TYPE_TORMENTED          => Affix::AFFIX_TORMENTED,
         Enemy::SEASONAL_TYPE_PRIDEFUL           => Affix::AFFIX_PRIDEFUL,
     ];
+
+    public function getImageNameAttribute(): string
+    {
+        return Str::slug($this->key, '_');
+    }
+
+    public function getImageUrlAttribute(): string
+    {
+        return sprintf('images/affixes/%s.jpg', $this->getImageNameAttribute());
+    }
 
     public function affixGroups(): BelongsToMany
     {

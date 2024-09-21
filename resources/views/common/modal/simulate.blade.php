@@ -1,14 +1,22 @@
 <?php
-/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute|null */
-/** @var bool $isThundering */
+
+use App\Models\DungeonRoute\DungeonRoute;
+
+/**
+ * @var DungeonRoute|null $dungeonroute
+ * @var bool              $isThundering
+ */
 ?>
 
 @include('common.general.inline', [
     'path' => 'common/dungeonroute/simulate',
     'options' => [
         'dependencies' => ['common/maps/map'],
-        'isThundering' => $isThundering
-    ]
+        'isThundering' => $isThundering,
+        'keyLevelSelector' => '#simulate_key_level',
+        'keyLevelMin' => $dungeonroute->season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
+        'keyLevelMax' => $dungeonroute->season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+    ],
 ])
 
 <h3 class="card-title">{{ __('view_common.modal.simulate.title') }}</h3>
@@ -17,7 +25,10 @@
     {{ __('view_common.modal.simulate.intro') }}
 @endcomponent
 
-@include('common.modal.simulateoptions.default', ['isThundering' => $isThundering])
+@include('common.modal.simulateoptions.default', [
+    'season' => $dungeonroute->season,
+    'isThundering' => $isThundering
+])
 
 @include('common.modal.simulateoptions.advanced')
 

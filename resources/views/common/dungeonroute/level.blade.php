@@ -3,10 +3,10 @@
 use App\Models\Season;
 
 /**
- * @var int      $levelMin
- * @var int      $levelMax
- * @var int|null $minAnchorKeyLevelWidth
- * @var Season   $season
+ * @var int         $levelMin
+ * @var int         $levelMax
+ * @var int|null    $minAnchorKeyLevelWidth
+ * @var Season|null $season
  */
 $min                    = $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min');
 $max                    = $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max');

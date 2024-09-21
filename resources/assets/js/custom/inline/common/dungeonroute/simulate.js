@@ -1,3 +1,14 @@
+/**
+ * @typedef {Object} SimulateOptions
+ * @property {boolean} isThundering
+ * @property {String} keyLevelSelector
+ * @property {Number} keyLevelMin
+ * @property {Number} keyLevelMax
+ */
+
+/**
+ * @property {DungeonMapOptions} options
+ */
 class CommonDungeonrouteSimulate extends InlineCode {
     /**
      *
@@ -30,7 +41,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
      */
     _getData() {
         return {
-            key_level: $('#simulate_key_level').val(),
+            key_level: $(this.options.keyLevelSelector).val(),
             shrouded_bounty_type: $('#simulate_shrouded_bounty_type').val(),
             affix: $('#simulate_affix').val(),
             thundering_clear_seconds: $('#simulate_thundering_clear_seconds').val(),
@@ -140,13 +151,13 @@ class CommonDungeonrouteSimulate extends InlineCode {
 
         let self = this;
 
-        let $keyLevelSlider = $('#simulate_key_level')
+        let $keyLevelSlider = $(this.options.keyLevelSelector)
             .ionRangeSlider({
                 grid: true,
                 grid_snap: true,
                 type: 'single',
-                min: 2,
-                max: 40
+                min: this.options.keyLevelMin,
+                max: this.options.keyLevelMax
             });
 
         if (this.options.isThundering) {

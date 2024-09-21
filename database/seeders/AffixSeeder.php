@@ -75,7 +75,7 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             /** @var Affix $affix */
             $affix->setTable(DatabaseSeeder::getTempTableName(Affix::class))->save();
 
-            $iconName          = Str::slug($affix->key, '_');
+            $iconName          = $affix->image_url;
             $icon              = new File();
             $icon->model_id    = $affix->id;
             $icon->model_class = get_class($affix);

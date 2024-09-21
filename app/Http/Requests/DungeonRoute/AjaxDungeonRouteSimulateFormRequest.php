@@ -26,7 +26,8 @@ class AjaxDungeonRouteSimulateFormRequest extends FormRequest
             'shrouded_bounty_type'           => ['required', Rule::in(
                 SimulationCraftRaidEventsOptions::ALL_SHROUDED_BOUNTY_TYPES
             )],
-            'affix'                          => ['required', Rule::in(
+            'affix'                          => 'array',
+            'affix.*'                        => ['required', Rule::in(
                 SimulationCraftRaidEventsOptions::ALL_AFFIXES
             )],
             'thundering_clear_seconds'       => 'required|int|max:15',

@@ -293,7 +293,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      */
     public function scopeFactionSelectionRequired(Builder $query): Builder
     {
-        return $query->whereIn('key', [self::DUNGEON_SIEGE_OF_BORALUS, self::DUNGEON_THE_NEXUS]);
+        return $query->whereIn('key', [/*self::DUNGEON_SIEGE_OF_BORALUS,*/self::DUNGEON_THE_NEXUS]);
     }
 
     /**
@@ -317,9 +317,9 @@ class Dungeon extends CacheModel implements MappingModelInterface
         $result = null;
 
         foreach ($this->floors as $floor) {
-            foreach ($floor->mapIcons as $mapicon) {
-                if ($mapicon->map_icon_type_id === MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START]) {
-                    $result = $mapicon;
+            foreach ($floor->mapIcons($this->currentMappingVersion)->get() as $mapIcon) {
+                if ($mapIcon->map_icon_type_id === MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START]) {
+                    $result = $mapIcon;
                     break;
                 }
             }

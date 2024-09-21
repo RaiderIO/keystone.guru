@@ -5,6 +5,7 @@ namespace App\Service\CombatLog\DataExtractors;
 use App;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\SpecialEvents\MapChange;
+use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Service\CombatLog\DataExtractors\Logging\FloorDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class FloorDataExtractor implements DataExtractorInterface
 {
 //    private ?Floor $previousFloor = null;
-    private ?Floor $currentFloor  = null;
+    private ?Floor $currentFloor = null;
 
     private FloorDataExtractorLoggingInterface $log;
 
@@ -35,6 +36,11 @@ class FloorDataExtractor implements DataExtractorInterface
     {
         if (!($parsedEvent instanceof MapChange)) {
             // Don't log anything because that'd just spam the hell out of it
+            return;
+        }
+
+        // Blizzard's floor coordinates are not accurate for The Necrotic Wake
+        if ($currentDungeon->dungeon->key === Dungeon::DUNGEON_THE_NECROTIC_WAKE) {
             return;
         }
 
@@ -90,7 +96,7 @@ class FloorDataExtractor implements DataExtractorInterface
 
     public function afterExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
-        $this->currentFloor  = null;
+        $this->currentFloor = null;
 //        $this->previousFloor = null;
     }
 }

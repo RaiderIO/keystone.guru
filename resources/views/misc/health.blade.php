@@ -1,7 +1,12 @@
 <?php
-$fortified               = \App\Models\Npc\Npc::find(15929);
+
+
+use App\Models\Npc\Npc;
+use App\Models\Affix;
+
+$fortified               = Npc::find(15929);
 $fortified->base_health  = 100000;
-$tyrannical              = \App\Models\Npc\Npc::find(15928);
+$tyrannical              = Npc::find(15928);
 $tyrannical->base_health = 100000;
 
 ?>
@@ -24,13 +29,13 @@ $tyrannical->base_health = 100000;
                 Forti health
             </th>
             <th>
-                Forti + Thundering health
+                Forti + Guile health
             </th>
             <th>
                 Tyrannical health
             </th>
             <th>
-                Tyrannical + Thundering health
+                Tyrannical + Guile health
             </th>
         </tr>
         </thead>
@@ -41,19 +46,19 @@ $tyrannical->base_health = 100000;
                     {{ $i }}
                 </td>
                 <td>
-                    {{ $fortified->getScalingFactor($i, false, false, false) }}
+                    {{ $fortified->getScalingFactor($i) }}
                 </td>
                 <td>
-                    {{ $fortified->calculateHealthForKey($i, true, false, false) }}
+                    {{ $fortified->calculateHealthForKey($i, [Affix::AFFIX_FORTIFIED]) }}
                 </td>
                 <td>
-                    {{ $fortified->calculateHealthForKey($i, true, false, true) }}
+                    {{ $fortified->calculateHealthForKey($i, [Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]) }}
                 </td>
                 <td>
-                    {{ $tyrannical->calculateHealthForKey($i, true, false, false) }}
+                    {{ $tyrannical->calculateHealthForKey($i, [Affix::AFFIX_TYRANNICAL]) }}
                 </td>
                 <td>
-                    {{ $tyrannical->calculateHealthForKey($i, true, false, true) }}
+                    {{ $tyrannical->calculateHealthForKey($i, [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE]) }}
                 </td>
             </tr>
         @endfor
