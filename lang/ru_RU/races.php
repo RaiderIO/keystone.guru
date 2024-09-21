@@ -28,5 +28,7 @@ return [
     'zandalari_troll'     => 'Зандалары',
     'mechagnome'          => 'Механогномы',
     'vulpera'             => 'Вульперы',
+    'earthenalliance'     => '',
+    'earthenhorde'        => '',
 
 ];

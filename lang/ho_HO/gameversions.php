@@ -13,4 +13,8 @@ return [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
+    'beta'    => [
+        'name'        => 'Hodor',
+        'description' => 'Hodor',
+    ],
 ];

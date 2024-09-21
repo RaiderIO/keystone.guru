@@ -56,10 +56,10 @@ use App\Models\Season;
         <div class="row">
             <div class="col">
                 {!! Form::select('simulate_affix', $affixes, null, [
-                        'id' => 'simulate_affix',
-                        'class' => 'form-control selectpicker',
-                        'multiple' => 'multiple',
-                        ]) !!}
+                    'id' => 'simulate_affix',
+                    'class' => 'form-control selectpicker',
+                    'multiple' => 'multiple',
+                ]) !!}
             </div>
         </div>
     </div>

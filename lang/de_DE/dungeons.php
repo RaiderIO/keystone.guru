@@ -199,6 +199,53 @@ return [
                 'zul_farrak' => '',
             ],
         ],
+        'zulgurub'                    => [
+            'name'   => '',
+            'floors' => [
+                'zul_gurub' => '',
+            ],
+        ],
+        'onyxias_lair_classic'        => [
+            'name'   => '',
+            'floors' => [
+                'onyxias_lair' => '',
+            ],
+        ],
+        'moltencore'                  => [
+            'name'   => '',
+            'floors' => [
+                'molten_core' => '',
+            ],
+        ],
+        'blackwinglair'                  => [
+            'name'   => '',
+            'floors' => [
+                'blackwinglair' => '',
+            ],
+        ],
+        'ruinsofahnqiraj'                  => [
+            'name'   => '',
+            'floors' => [
+                'ruinsofahnqiraj' => '',
+            ],
+        ],
+        'templeofahnqiraj'                  => [
+            'name'   => '',
+            'floors' => [
+                'templeofahnqiraj' => '',
+            ],
+        ],
+        'naxxramas_classic'           => [
+            'name'   => '',
+            'floors' => [
+                'the_construct_quarter' => '',
+                'the_arachnid_quarter'  => '',
+                'the_military_quarter'  => '',
+                'the_plague_quarter'    => '',
+                'the_lower_necropolis'  => '',
+                'the_upper_necropolis'  => '',
+            ],
+        ],
     ],
     'wotlk'        => [
         'ahn_kahet_the_old_kingdom'                => [
