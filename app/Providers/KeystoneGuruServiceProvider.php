@@ -513,7 +513,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             }
             $affixes = [];
             foreach (SimulationCraftRaidEventsOptions::ALL_AFFIXES as $affix) {
-                $affixes[$affix] = __(sprintf('view_common.modal.simulate.affixes.%s', $affix));
+                $affixes[$affix] = __(sprintf('view_common.modal.simulate.affixes_map.%s', $affix));
             }
             /** @var Season $currentSeason */
             $currentSeason     = $regionViewVariables['currentSeason'];

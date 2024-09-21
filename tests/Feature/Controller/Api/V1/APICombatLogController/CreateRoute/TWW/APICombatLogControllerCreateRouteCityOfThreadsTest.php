@@ -23,7 +23,7 @@ class APICombatLogControllerCreateRouteCityOfThreadsTest extends APICombatLogCon
     public function create_givenTwwS1CityOfThreads3Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('TWW/tww_s1_city_of_threads_3', self::FIXTURES_ROOT_DIR);
+        $postBody = $this->getJsonData('TWW/tww_s1_city_of_threads_11', self::FIXTURES_ROOT_DIR);
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
@@ -35,7 +35,8 @@ class APICombatLogControllerCreateRouteCityOfThreadsTest extends APICombatLogCon
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 29, 740);
+        // Lacking 8 enemy forces due to missing Xeph'itik
+        $this->validatePulls($responseArr, 17, 734);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models\Npc;
 
+use App\Models\Affix;
 use App\Models\CacheModel;
 use App\Models\Characteristic;
 use App\Models\Dungeon;
@@ -258,32 +259,40 @@ class Npc extends CacheModel implements MappingModelInterface
         return in_array($this->classification_id, [NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS], NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]]);
     }
 
-    public function getScalingFactor(int $keyLevel, bool $fortified, bool $tyrannical, bool $thundering): float
+    public function getScalingFactor(int $keyLevel, array $affixes = []): float
     {
         $keyLevelFactor = 1;
-        // 2 because we start counting up at key level 3 (+2 = 0)
-        for ($i = 2; $i < $keyLevel; $i++) {
+        for ($i = 1; $i < $keyLevel; $i++) {
             $keyLevelFactor *= ($i < 10 ? config('keystoneguru.keystone.scaling_factor') : config('keystoneguru.keystone.scaling_factor_past_10'));
         }
 
-        if ($fortified && $this->isAffectedByFortified()) {
-            $keyLevelFactor *= 1.2;
-        } else if ($tyrannical && $this->isAffectedByTyrannical()) {
-            $keyLevelFactor *= 1.3;
+        if (in_array(Affix::AFFIX_FORTIFIED, $affixes) && $this->isAffectedByFortified()) {
+            $keyLevelFactor *= config('keystoneguru.keystone.affix_scaling_factor.fortified');
         }
 
-        if ($thundering) {
-            $keyLevelFactor *= 1.05;
+        if (in_array(Affix::AFFIX_TYRANNICAL, $affixes) && $this->isAffectedByTyrannical()) {
+            $keyLevelFactor *= config('keystoneguru.keystone.affix_scaling_factor.tyrannical');
+        }
+
+        if ($keyLevel >= 10 && in_array(Affix::AFFIX_THUNDERING, $affixes)) {
+            $keyLevelFactor *= config('keystoneguru.keystone.affix_scaling_factor.thundering');
+        }
+
+        if ($keyLevel >= 12 && in_array(Affix::AFFIX_XALATATHS_GUILE, $affixes)) {
+            $keyLevelFactor *= config('keystoneguru.keystone.affix_scaling_factor.xalataths_guile');
         }
 
         return round($keyLevelFactor * 100) / 100;
     }
 
-    public function calculateHealthForKey(int $keyLevel, bool $fortified, bool $tyrannical, bool $thundering): float
+    /**
+     * @param int   $keyLevel
+     * @param array $affixes A list of Affix:: constants
+     * @return float
+     */
+    public function calculateHealthForKey(int $keyLevel, array $affixes = []): float
     {
-        $thundering = $thundering && $keyLevel >= 10;
-
-        return round($this->base_health * (($this->health_percentage ?? 100) / 100) * $this->getScalingFactor($keyLevel, $fortified, $tyrannical, $thundering));
+        return round($this->base_health * (($this->health_percentage ?? 100) / 100) * $this->getScalingFactor($keyLevel, $affixes));
     }
 
     /**
