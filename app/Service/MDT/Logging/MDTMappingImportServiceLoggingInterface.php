@@ -69,6 +69,8 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemiesSkipTeemingEnemy(string $uniqueKey): void;
 
+    public function importEnemiesDistanceTooLargeNotTransferringExistingEnemyLatLng(string $mdtUniqueKey, float $distance): void;
+
     public function importEnemiesRecoverPropertiesFromExistingEnemy(string $uniqueKey, array $updatedFields): void;
 
     public function importEnemiesCannotRecoverPropertiesFromExistingEnemy(string $uniqueKey): void;

@@ -19,5 +19,9 @@ interface CoordinatesServiceInterface
 
     public function intersection(LatLng $latLngA1, LatLng $latLngA2, LatLng $latLngB1, LatLng $latLngB2): ?LatLng;
 
+    public function distance(LatLng $latLngA, LatLng $latLngB): float;
+
+    public function distanceIngameXY(IngameXY $ingameXYA, IngameXY $ingameXYB): float;
+
     public function polygonContainsPoint(LatLng $latLng, array $polygon): bool;
 }

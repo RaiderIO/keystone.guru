@@ -238,6 +238,16 @@ class CoordinatesService implements CoordinatesServiceInterface
         }
     }
 
+    public function distance(LatLng $latLngA, LatLng $latLngB): float
+    {
+        return $this->distanceBetweenPoints($latLngA->getLng(), $latLngB->getLng(), $latLngA->getLat(), $latLngB->getLat());
+    }
+
+    public function distanceIngameXY(IngameXY $ingameXYA, IngameXY $ingameXYB): float
+    {
+        return $this->distanceBetweenPoints($ingameXYA->getX(), $ingameXYB->getX(), $ingameXYA->getY(), $ingameXYB->getY());
+    }
+
     public function polygonContainsPoint(LatLng $latLng, array $polygon): bool
     {
         if ($polygon[0] != $polygon[count($polygon) - 1]) {
