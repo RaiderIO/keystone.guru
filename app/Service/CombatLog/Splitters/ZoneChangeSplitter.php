@@ -54,6 +54,8 @@ class ZoneChangeSplitter extends CombatLogSplitter
         $this->validDungeonMapIds = $this->dungeonRepository->getAllMapIds()->mapWithKeys(function (int $mapId) {
             return [$mapId => $mapId];
         });
+        // Nerub-ar Palace
+        $this->validDungeonMapIds->put(2657, 2657);
     }
 
     public function splitCombatLog(string $filePath): Collection
