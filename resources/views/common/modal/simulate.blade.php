@@ -14,8 +14,8 @@ use App\Models\DungeonRoute\DungeonRoute;
         'dependencies' => ['common/maps/map'],
         'isThundering' => $isThundering,
         'keyLevelSelector' => '#simulate_key_level',
-        'keyLevelMin' => $dungeonroute->season->key_level_min,
-        'keyLevelMax' => $dungeonroute->season->key_level_max,
+        'keyLevelMin' => $dungeonroute->season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
+        'keyLevelMax' => $dungeonroute->season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
     ],
 ])
 
