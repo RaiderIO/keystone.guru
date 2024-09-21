@@ -221,7 +221,7 @@ if ($cache) {
     $isAdmin           = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
 // Echo the result of this function
     echo $cacheService->remember(
-        sprintf('view:dungeonroute_card:horizontal:%s:%d_%d_%d_%d', $currentUserLocale, (int)$showAffixes, (int)$showDungeonImage, (int) $isAdmin, $dungeonroute->id),
+        DungeonRoute::getCardCacheKey($dungeonroute->id, 'horizontal', $currentUserLocale, $showAffixes, $showDungeonImage, $isAdmin),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );
