@@ -16598,5 +16598,25 @@
         "raw_event": "9\/20\/2024 22:30:45.0462  SPELL_MISSED,Creature-0-4241-2286-18826-164578-00016DDAD4,\"Stitchflesh's Creation\",0xa48,0x0,Player-3674-09F65B8F,\"Garshank-TwistingNether-EU\",0x512,0x0,320376,\"Mutilate\",0x1,MISS,nil\r\n",
         "created_at": "2024-09-21T08:19:17+00:00",
         "updated_at": "2024-09-21T08:19:17+00:00"
+    },
+    {
+        "id": 1661,
+        "spell_id": 432448,
+        "before": "{\"id\": 432448, \"aura\": 0, \"name\": \"Stygian Seed\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_shadow_mindtwisting\", \"selectable\": 0, \"dispel_type\": \"Magic\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "after": "{\"id\": 432448, \"aura\": 0, \"name\": \"Stygian Seed\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_shadow_mindtwisting\", \"selectable\": 0, \"dispel_type\": \"Magic\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 289}",
+        "combat_log_path": "tmp\/WoWCombatLog-092124_104115_5_the-dawnbreaker.zip",
+        "raw_event": "9\/21\/2024 12:23:59.6741  SPELL_MISSED,Creature-0-1465-2662-27274-214761-00006EACA9,\"Nightfall Ritualist\",0xa48,0x0,Player-1084-0A5FCDAB,\"Judoon-Dentarg-EU\",0x512,0x0,432448,\"Stygian Seed\",0x20,REFLECT,nil\r\n",
+        "created_at": "2024-09-21T20:40:32+00:00",
+        "updated_at": "2024-09-21T20:40:32+00:00"
+    },
+    {
+        "id": 1662,
+        "spell_id": 429545,
+        "before": "{\"id\": 429545, \"aura\": 0, \"name\": \"Censoring Gear\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_10_engineering_manufacturedparts_gear_uprez\", \"selectable\": 0, \"dispel_type\": \"Magic\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 97}",
+        "after": "{\"id\": 429545, \"aura\": 0, \"name\": \"Censoring Gear\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_10_engineering_manufacturedparts_gear_uprez\", \"selectable\": 0, \"dispel_type\": \"Magic\", \"schools_mask\": 32, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 353}",
+        "combat_log_path": "tmp\/WoWCombatLog-092124_104115_5_the-stonevault.zip",
+        "raw_event": "9\/21\/2024 10:50:16.3731  SPELL_MISSED,Creature-0-4244-2652-11326-214350-0001EE94FD,\"Turned Speaker\",0xa48,0x0,Player-1084-0A2CAD7D,\"Krabix-TarrenMill-EU\",0x511,0x0,429545,\"Censoring Gear\",0x20,REFLECT,nil\r\n",
+        "created_at": "2024-09-21T20:40:47+00:00",
+        "updated_at": "2024-09-21T20:40:47+00:00"
     }
 ]

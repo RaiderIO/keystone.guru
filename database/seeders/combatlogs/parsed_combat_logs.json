@@ -3085,5 +3085,26 @@
         "extracted_data": 1,
         "created_at": "2024-09-21T08:19:21+00:00",
         "updated_at": "2024-09-21T08:19:21+00:00"
+    },
+    {
+        "id": 442,
+        "combat_log_path": "tmp\/WoWCombatLog-092124_104115_4_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-21T20:40:31+00:00",
+        "updated_at": "2024-09-21T20:40:31+00:00"
+    },
+    {
+        "id": 443,
+        "combat_log_path": "tmp\/WoWCombatLog-092124_104115_5_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-21T20:40:44+00:00",
+        "updated_at": "2024-09-21T20:40:44+00:00"
+    },
+    {
+        "id": 444,
+        "combat_log_path": "tmp\/WoWCombatLog-092124_104115_5_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-21T20:40:55+00:00",
+        "updated_at": "2024-09-21T20:40:55+00:00"
     }
 ]
