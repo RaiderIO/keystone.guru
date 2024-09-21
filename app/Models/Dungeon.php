@@ -293,7 +293,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      */
     public function scopeFactionSelectionRequired(Builder $query): Builder
     {
-        return $query->whereIn('key', [self::DUNGEON_SIEGE_OF_BORALUS, self::DUNGEON_THE_NEXUS]);
+        return $query->whereIn('key', [/*self::DUNGEON_SIEGE_OF_BORALUS,*/self::DUNGEON_THE_NEXUS]);
     }
 
     /**
