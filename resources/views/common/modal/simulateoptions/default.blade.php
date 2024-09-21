@@ -3,11 +3,11 @@
 use App\Models\Season;
 
 /**
- * @var Season   $season
- * @var String[] $shroudedBountyTypes
- * @var String[] $affixes
- * @var bool     $isShrouded
- * @var bool     $isThundering
+ * @var Season|null $season
+ * @var String[]    $shroudedBountyTypes
+ * @var String[]    $affixes
+ * @var bool        $isShrouded
+ * @var bool        $isThundering
  */
 ?>
 
@@ -20,7 +20,11 @@ use App\Models\Season;
     </label>
     <div class="row">
         <div class="col">
-            {!! Form::text('simulate_key_level', (int)($season->key_level_min + $season->key_level_max) / 2, ['id' => 'simulate_key_level', 'class' => 'form-control']) !!}
+            {!!
+                Form::text('simulate_key_level',
+                $season === null ? 2 : (int)($season->key_level_min + $season->key_level_max) / 2,
+                ['id' => 'simulate_key_level', 'class' => 'form-control'])
+            !!}
         </div>
     </div>
 </div>
