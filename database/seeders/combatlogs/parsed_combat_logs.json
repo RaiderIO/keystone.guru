@@ -3239,5 +3239,26 @@
         "extracted_data": 1,
         "created_at": "2024-09-23T10:09:53+00:00",
         "updated_at": "2024-09-23T10:09:53+00:00"
+    },
+    {
+        "id": 464,
+        "combat_log_path": "tmp\/WoWCombatLog-091924_165521_2_mists-of-tirna-scithe.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T18:58:04+00:00",
+        "updated_at": "2024-09-23T18:58:04+00:00"
+    },
+    {
+        "id": 465,
+        "combat_log_path": "tmp\/WoWCombatLog-091924_165521_5_siege-of-boralus.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T18:58:27+00:00",
+        "updated_at": "2024-09-23T18:58:27+00:00"
+    },
+    {
+        "id": 466,
+        "combat_log_path": "tmp\/WoWCombatLog-092024_190125_2_siege-of-boralus.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T18:58:41+00:00",
+        "updated_at": "2024-09-23T18:58:41+00:00"
     }
 ]

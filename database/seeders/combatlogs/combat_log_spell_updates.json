@@ -16918,5 +16918,55 @@
         "raw_event": "9\/23\/2024 00:21:29.9362  SPELL_MISSED,Creature-0-4256-670-4547-40484-00007097C2,\"Erudax\",0x10a48,0x0,Player-3674-0AEF376F,\"Mulatos-TwistingNether-EU\",0x511,0x0,450100,\"Crush\",0x21,IMMUNE,nil\r\n",
         "created_at": "2024-09-23T10:09:52+00:00",
         "updated_at": "2024-09-23T10:09:52+00:00"
+    },
+    {
+        "id": 1693,
+        "spell_id": 321828,
+        "before": "{\"id\": 321828, \"aura\": 0, \"name\": \"Patty Cake\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": 5000, \"mechanic\": null, \"cast_time\": 2500, \"icon_name\": \"inv_misc_surgeonglove_01\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 4}",
+        "after": "{\"id\": 321828, \"aura\": 0, \"name\": \"Patty Cake\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": 5000, \"mechanic\": null, \"cast_time\": 2500, \"icon_name\": \"inv_misc_surgeonglove_01\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 36}",
+        "combat_log_path": "tmp\/WoWCombatLog-091924_165521_2_mists-of-tirna-scithe.zip",
+        "raw_event": "9\/19\/2024 17:05:44.4233  SPELL_MISSED,Creature-0-3889-2290-18965-164501-00006C2D73,\"Mistcaller\",0x10a48,0x0,Player-1403-0A675E00,\"Nekytoll-Draenor-EU\",0x511,0x0,321828,\"Patty Cake\",0x8,IMMUNE,nil\r\n",
+        "created_at": "2024-09-23T18:57:59+00:00",
+        "updated_at": "2024-09-23T18:57:59+00:00"
+    },
+    {
+        "id": 1694,
+        "spell_id": 256709,
+        "before": "{\"id\": 256709, \"aura\": 0, \"name\": \"Singing Steel\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_dualwield\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 201}",
+        "after": "{\"id\": 256709, \"aura\": 0, \"name\": \"Singing Steel\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_dualwield\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 233}",
+        "combat_log_path": "tmp\/WoWCombatLog-091924_165521_5_siege-of-boralus.zip",
+        "raw_event": "9\/19\/2024 17:22:15.1733  SPELL_MISSED,Creature-0-3768-1822-17690-129371-0001EC32E9,\"Riptide Shredder\",0xa48,0x0,Player-1403-0A675E00,\"Nekytoll-Draenor-EU\",0x511,0x0,256709,\"Singing Steel\",0x1,IMMUNE,nil\r\n",
+        "created_at": "2024-09-23T18:58:06+00:00",
+        "updated_at": "2024-09-23T18:58:06+00:00"
+    },
+    {
+        "id": 1695,
+        "spell_id": 272711,
+        "before": "{\"id\": 272711, \"aura\": 0, \"name\": \"Crushing Slam\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_nature_earthquake\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "after": "{\"id\": 272711, \"aura\": 0, \"name\": \"Crushing Slam\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_nature_earthquake\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 37}",
+        "combat_log_path": "tmp\/WoWCombatLog-091924_165521_5_siege-of-boralus.zip",
+        "raw_event": "9\/19\/2024 17:35:35.7983  SPELL_MISSED,Creature-0-3768-1822-17690-135245-0000EC32E9,\"Bilge Rat Demolisher\",0x10a48,0x0,Player-1092-0AE29E08,\"Zevhunt-BurningBlade-EU\",0x512,0x0,272711,\"Crushing Slam\",0x1,DEFLECT,nil\r\n",
+        "created_at": "2024-09-23T18:58:15+00:00",
+        "updated_at": "2024-09-23T18:58:15+00:00"
+    },
+    {
+        "id": 1696,
+        "spell_id": 257883,
+        "before": "{\"id\": 257883, \"aura\": 0, \"name\": \"Break Water\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_frost_summonwaterelemental\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 16, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "after": "{\"id\": 257883, \"aura\": 0, \"name\": \"Break Water\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_frost_summonwaterelemental\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 16, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 37}",
+        "combat_log_path": "tmp\/WoWCombatLog-091924_165521_5_siege-of-boralus.zip",
+        "raw_event": "9\/19\/2024 17:43:03.4683  SPELL_MISSED,Creature-0-3768-1822-17690-128651-00006C32E9,\"Hadal Darkfathom\",0x10a48,0x0,Player-1092-0AE29E08,\"Zevhunt-BurningBlade-EU\",0x512,0x0,257883,\"Break Water\",0x10,DEFLECT,nil\r\n",
+        "created_at": "2024-09-23T18:58:20+00:00",
+        "updated_at": "2024-09-23T18:58:20+00:00"
+    },
+    {
+        "id": 1697,
+        "spell_id": 272588,
+        "before": "{\"id\": 272588, \"aura\": 0, \"name\": \"Rotting Wounds\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_shadow_plaguecloud\", \"selectable\": 0, \"dispel_type\": \"Disease\", \"schools_mask\": 8, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 169}",
+        "after": "{\"id\": 272588, \"aura\": 0, \"name\": \"Rotting Wounds\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_shadow_plaguecloud\", \"selectable\": 0, \"dispel_type\": \"Disease\", \"schools_mask\": 8, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 233}",
+        "combat_log_path": "tmp\/WoWCombatLog-092024_190125_2_siege-of-boralus.zip",
+        "raw_event": "9\/20\/2024 19:16:21.7173  SPELL_MISSED,Creature-0-4234-1822-31536-137511-00006D9C98,\"Bilge Rat Cutthroat\",0xa48,0x0,Player-1403-0A675E00,\"Nekytoll-Draenor-EU\",0x511,0x80,272588,\"Rotting Wounds\",0x8,MISS,nil\r\n",
+        "created_at": "2024-09-23T18:58:36+00:00",
+        "updated_at": "2024-09-23T18:58:36+00:00"
     }
 ]
