@@ -3106,5 +3106,138 @@
         "extracted_data": 1,
         "created_at": "2024-09-21T20:40:55+00:00",
         "updated_at": "2024-09-21T20:40:55+00:00"
+    },
+    {
+        "id": 445,
+        "combat_log_path": "tmp\/WoWCombatLog-091924_190348_2_the-stonevault.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:01:29+00:00",
+        "updated_at": "2024-09-23T10:01:29+00:00"
+    },
+    {
+        "id": 446,
+        "combat_log_path": "tmp\/WoWCombatLog-091924_190348_4_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:01:40+00:00",
+        "updated_at": "2024-09-23T10:01:40+00:00"
+    },
+    {
+        "id": 447,
+        "combat_log_path": "tmp\/WoWCombatLog-092024_193426_3_siege-of-boralus.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:01:57+00:00",
+        "updated_at": "2024-09-23T10:01:57+00:00"
+    },
+    {
+        "id": 448,
+        "combat_log_path": "tmp\/WoWCombatLog-092024_203534_3_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:02:12+00:00",
+        "updated_at": "2024-09-23T10:02:12+00:00"
+    },
+    {
+        "id": 449,
+        "combat_log_path": "tmp\/WoWCombatLog-092024_203534_6_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:04:44+00:00",
+        "updated_at": "2024-09-23T10:04:44+00:00"
+    },
+    {
+        "id": 450,
+        "combat_log_path": "tmp\/WoWCombatLog-092024_203534_6_the-necrotic-wake.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:05:08+00:00",
+        "updated_at": "2024-09-23T10:05:08+00:00"
+    },
+    {
+        "id": 451,
+        "combat_log_path": "tmp\/WoWCombatLog-092024_203534_8_siege-of-boralus.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:05:11+00:00",
+        "updated_at": "2024-09-23T10:05:11+00:00"
+    },
+    {
+        "id": 452,
+        "combat_log_path": "tmp\/WoWCombatLog-092124_110240_3_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:05:28+00:00",
+        "updated_at": "2024-09-23T10:05:28+00:00"
+    },
+    {
+        "id": 453,
+        "combat_log_path": "tmp\/WoWCombatLog-092124_110240_4_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:05:50+00:00",
+        "updated_at": "2024-09-23T10:05:50+00:00"
+    },
+    {
+        "id": 454,
+        "combat_log_path": "tmp\/WoWCombatLog-092124_190131_6_grim-batol.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:06:24+00:00",
+        "updated_at": "2024-09-23T10:06:24+00:00"
+    },
+    {
+        "id": 455,
+        "combat_log_path": "tmp\/WoWCombatLog-092124_211544_3_mists-of-tirna-scithe.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:06:38+00:00",
+        "updated_at": "2024-09-23T10:06:38+00:00"
+    },
+    {
+        "id": 456,
+        "combat_log_path": "tmp\/WoWCombatLog-092124_211544_3_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:06:50+00:00",
+        "updated_at": "2024-09-23T10:06:50+00:00"
+    },
+    {
+        "id": 457,
+        "combat_log_path": "tmp\/WoWCombatLog-092124_211544_5_grim-batol.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:07:30+00:00",
+        "updated_at": "2024-09-23T10:07:30+00:00"
+    },
+    {
+        "id": 458,
+        "combat_log_path": "tmp\/WoWCombatLog-092224_005836_7_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:07:55+00:00",
+        "updated_at": "2024-09-23T10:07:55+00:00"
+    },
+    {
+        "id": 459,
+        "combat_log_path": "tmp\/WoWCombatLog-092224_092946_3_the-necrotic-wake.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:08:13+00:00",
+        "updated_at": "2024-09-23T10:08:13+00:00"
+    },
+    {
+        "id": 460,
+        "combat_log_path": "tmp\/WoWCombatLog-092224_125641_4_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:08:34+00:00",
+        "updated_at": "2024-09-23T10:08:34+00:00"
+    },
+    {
+        "id": 461,
+        "combat_log_path": "tmp\/WoWCombatLog-092224_125641_4_the-necrotic-wake.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:08:53+00:00",
+        "updated_at": "2024-09-23T10:08:53+00:00"
+    },
+    {
+        "id": 462,
+        "combat_log_path": "tmp\/WoWCombatLog-092224_125641_5_mists-of-tirna-scithe.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:09:17+00:00",
+        "updated_at": "2024-09-23T10:09:17+00:00"
+    },
+    {
+        "id": 463,
+        "combat_log_path": "tmp\/WoWCombatLog-092224_195318_7_grim-batol.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-23T10:09:53+00:00",
+        "updated_at": "2024-09-23T10:09:53+00:00"
     }
 ]

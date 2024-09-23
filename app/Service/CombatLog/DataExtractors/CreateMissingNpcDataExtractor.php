@@ -8,7 +8,6 @@ use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
-use App\Models\Affix;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClass;
 use App\Models\Npc\NpcClassification;
@@ -119,9 +118,7 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
                     // Calculate the base health based on the current key level + current max hp
                     $baseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $createdNpc->getScalingFactor(
                             $currentDungeon->keyLevel,
-                            $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_FORTIFIED) ?? false,
-                            $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_TYRANNICAL) ?? false,
-                            $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false,
+                            $currentDungeon->affixGroup->affixes->pluck('key')->toArray()
                         ));
                 }
 
