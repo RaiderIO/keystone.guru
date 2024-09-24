@@ -998,11 +998,12 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
             // Create a dungeon route
             $titleSlug    = Str::slug($decoded['text']);
+            $season       = $this->seasonService->getMostRecentSeasonForDungeon($dungeon);
             $dungeonRoute = DungeonRoute::create([
                 'author_id'          => $sandbox ? -1 : Auth::id() ?? -1,
                 'dungeon_id'         => $dungeon->id,
                 'mapping_version_id' => $mappingVersion->id,
-                'season_id'          => $this->seasonService->getMostRecentSeasonForDungeon($dungeon)?->id,
+                'season_id'          => $season?->id,
                 // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
                 'faction_id'         => isset($decoded['faction']) ?
                     ((int)$decoded['faction'] === 1 ? Faction::ALL[Faction::FACTION_HORDE] : Faction::ALL[Faction::FACTION_ALLIANCE])
@@ -1011,10 +1012,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 // Needs to be explicit otherwise redirect to edit will not have this value
                 'public_key'         => DungeonRoute::generateRandomPublicKey(),
                 'teeming'            => boolval($decoded['value']['teeming'] ?? false),
-                'title'              => empty($titleSlug) ? __($dungeon->name, [], 'en_US') : $titleSlug,
+                'title'              => empty($titleSlug) ? __($dungeon->name, [], 'en_US') : $decoded['text'],
                 'difficulty'         => 'Casual',
-                'level_min'          => $decoded['difficulty'] ?? 2,
-                'level_max'          => $decoded['difficulty'] ?? 2,
+                'level_min'          => $decoded['difficulty'] ?? $season?->key_level_min ?? 2,
+                'level_max'          => $decoded['difficulty'] ?? $season?->key_level_max ?? 2,
                 'expires_at'         => $sandbox ? Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString() : null,
             ]);
 
