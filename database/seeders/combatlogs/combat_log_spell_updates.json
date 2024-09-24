@@ -16968,5 +16968,95 @@
         "raw_event": "9\/20\/2024 19:16:21.7173  SPELL_MISSED,Creature-0-4234-1822-31536-137511-00006D9C98,\"Bilge Rat Cutthroat\",0xa48,0x0,Player-1403-0A675E00,\"Nekytoll-Draenor-EU\",0x511,0x80,272588,\"Rotting Wounds\",0x8,MISS,nil\r\n",
         "created_at": "2024-09-23T18:58:36+00:00",
         "updated_at": "2024-09-23T18:58:36+00:00"
+    },
+    {
+        "id": 1698,
+        "spell_id": 426793,
+        "before": "{\"id\": 426793, \"aura\": 0, \"name\": \"Shadowy Decay\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_priest_surgeofdarkness\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "after": "{\"id\": 426793, \"aura\": 0, \"name\": \"Shadowy Decay\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_priest_surgeofdarkness\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 37}",
+        "combat_log_path": "tmp\/WoWCombatLog-092324_203552_5_the-dawnbreaker.zip",
+        "raw_event": "9\/23\/2024 23:58:28.0232  SPELL_MISSED,Creature-0-3889-2662-20373-211089-000071E21F,\"Anub'ikkaj\",0x10a48,0x0,Player-1084-0AF6F32B,\"Bowzey-TarrenMill-EU\",0x512,0x0,426793,\"Shadowy Decay\",0x20,DEFLECT,nil\r\n",
+        "created_at": "2024-09-24T08:59:39+00:00",
+        "updated_at": "2024-09-24T08:59:39+00:00"
+    },
+    {
+        "id": 1699,
+        "spell_id": 323957,
+        "before": "{\"id\": 323957, \"aura\": 0, \"name\": \"Animate Dead\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_shadow_nightofthedead\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 0}",
+        "after": "{\"id\": 323957, \"aura\": 0, \"name\": \"Animate Dead\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"spell_shadow_nightofthedead\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 1}",
+        "combat_log_path": "tmp\/WoWCombatLog-092324_203552_5_the-necrotic-wake.zip",
+        "raw_event": "9\/23\/2024 21:54:25.8242  SPELL_MISSED,Creature-0-4244-2286-16656-163618-0000F1C690,\"Zolramus Necromancer\",0xa48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,323957,\"Animate Dead\",0x20,ABSORB,nil,650531,1973138,nil\r\n",
+        "created_at": "2024-09-24T08:59:50+00:00",
+        "updated_at": "2024-09-24T08:59:50+00:00"
+    },
+    {
+        "id": 1700,
+        "spell_id": 333477,
+        "before": "{\"id\": 333477, \"aura\": 0, \"name\": \"Gut Slice\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_gouge\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 129}",
+        "after": "{\"id\": 333477, \"aura\": 0, \"name\": \"Gut Slice\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_gouge\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 137}",
+        "combat_log_path": "tmp\/WoWCombatLog-092324_203552_5_the-necrotic-wake.zip",
+        "raw_event": "9\/23\/2024 22:04:56.5202  SPELL_MISSED,Creature-0-4244-2286-16656-163621-000071C8F0,\"Goregrind\",0x10a48,0x0,Player-1403-0ACAD689,\"Wolfiemonk-Draenor-EU\",0x512,0x0,333477,\"Gut Slice\",0x1,DODGE,nil\r\n",
+        "created_at": "2024-09-24T08:59:58+00:00",
+        "updated_at": "2024-09-24T08:59:58+00:00"
+    },
+    {
+        "id": 1701,
+        "spell_id": 463247,
+        "before": "{\"id\": 463247, \"aura\": 0, \"name\": \"Expel\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_warrior_charge\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 73}",
+        "after": "{\"id\": 463247, \"aura\": 0, \"name\": \"Expel\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"ability_warrior_charge\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 201}",
+        "combat_log_path": "tmp\/WoWCombatLog-092324_203552_6_mists-of-tirna-scithe.zip",
+        "raw_event": "9\/23\/2024 22:30:53.1952  SPELL_MISSED,Creature-0-4237-2290-6228-171772-000071CE75,\"Mistveil Defender\",0x10a48,0x0,Player-1084-0AC5747D,\"Nielya-TarrenMill-EU\",0x512,0x0,463247,\"Expel\",0x1,PARRY,nil\r\n",
+        "created_at": "2024-09-24T09:00:07+00:00",
+        "updated_at": "2024-09-24T09:00:07+00:00"
+    },
+    {
+        "id": 1702,
+        "spell_id": 432132,
+        "before": "{\"id\": 432132, \"aura\": 0, \"name\": \"Erupting Webs\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_misc_web_02\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "after": "{\"id\": 432132, \"aura\": 0, \"name\": \"Erupting Webs\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_misc_web_02\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 37}",
+        "combat_log_path": "tmp\/WoWCombatLog-092324_214842_2_ara-kara-city-of-echoes.zip",
+        "raw_event": "9\/23\/2024 22:55:19.4012  SPELL_MISSED,Creature-0-3767-2660-28558-215407-000071D121,\"Ki'katal the Harvester\",0xa48,0x0,Player-1084-0AF6F32B,\"Bowzey-TarrenMill-EU\",0x512,0x0,432132,\"Erupting Webs\",0x8,DEFLECT,nil\r\n",
+        "created_at": "2024-09-24T09:00:38+00:00",
+        "updated_at": "2024-09-24T09:00:38+00:00"
+    },
+    {
+        "id": 1703,
+        "spell_id": 461487,
+        "before": "{\"id\": 461487, \"aura\": 0, \"name\": \"Cultivated Poisons\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_ability_poison_orb\", \"selectable\": 0, \"dispel_type\": \"Poison\", \"schools_mask\": 8, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 33}",
+        "after": "{\"id\": 461487, \"aura\": 0, \"name\": \"Cultivated Poisons\", \"debuff\": 1, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"inv_ability_poison_orb\", \"selectable\": 0, \"dispel_type\": \"Poison\", \"schools_mask\": 8, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 37}",
+        "combat_log_path": "tmp\/WoWCombatLog-092324_214842_2_ara-kara-city-of-echoes.zip",
+        "raw_event": "9\/23\/2024 22:55:24.0752  SPELL_MISSED,Creature-0-3767-2660-28558-215407-000071D121,\"Ki'katal the Harvester\",0xa48,0x0,Player-1084-0AF6F32B,\"Bowzey-TarrenMill-EU\",0x512,0x0,461487,\"Cultivated Poisons\",0x8,DEFLECT,nil\r\n",
+        "created_at": "2024-09-24T09:00:38+00:00",
+        "updated_at": "2024-09-24T09:00:38+00:00"
+    },
+    {
+        "id": 1704,
+        "spell_id": 442801,
+        "before": null,
+        "after": "{\"id\": 442801, \"aura\": false, \"name\": \"Wildfire Wick\", \"duration\": 11000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_fire_burnout\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-24T09:00:54.686907Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-092324_214842_2_grim-batol.zip",
+        "raw_event": "9\/23\/2024 22:17:45.5132  SPELL_PERIODIC_DAMAGE,Creature-0-3111-670-6439-39392-000071C699,\"Faceless Corruptor\",0xa48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x10511,0x0,442801,\"Wildfire Wick\",0x4,Player-1084-0A59B96F,0000000000000000,1128882,4546740,56803,54618,22479,0,0,2241400,2625000,0,-610.17,-832.01,293,3.0339,601,4802,5726,-1,4,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-09-24T09:00:54+00:00",
+        "updated_at": "2024-09-24T09:00:54+00:00"
+    },
+    {
+        "id": 1705,
+        "spell_id": 442801,
+        "before": "{\"id\": 442801, \"aura\": 0, \"name\": \"Wildfire Wick\", \"duration\": 11000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_fire_burnout\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-24T09:00:54.686907Z\"}",
+        "after": "{\"id\": 442801, \"aura\": 0, \"name\": \"Wildfire Wick\", \"debuff\": 0, \"duration\": 11000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_fire_burnout\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-24T09:00:54.686907Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-092324_214842_2_grim-batol.zip",
+        "raw_event": "9\/23\/2024 22:17:45.5132  SPELL_PERIODIC_DAMAGE,Creature-0-3111-670-6439-39392-000071C699,\"Faceless Corruptor\",0xa48,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x10511,0x0,442801,\"Wildfire Wick\",0x4,Player-1084-0A59B96F,0000000000000000,1128882,4546740,56803,54618,22479,0,0,2241400,2625000,0,-610.17,-832.01,293,3.0339,601,4802,5726,-1,4,0,0,0,nil,nil,nil\r\n",
+        "created_at": "2024-09-24T09:00:54+00:00",
+        "updated_at": "2024-09-24T09:00:54+00:00"
+    },
+    {
+        "id": 1706,
+        "spell_id": 450079,
+        "before": "{\"id\": 450079, \"aura\": 0, \"name\": \"Void Surge\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_priest_cascade_shadow\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 97}",
+        "after": "{\"id\": 450079, \"aura\": 0, \"name\": \"Void Surge\", \"debuff\": 0, \"category\": \"spells.category.unknown\", \"duration\": null, \"mechanic\": null, \"cast_time\": null, \"icon_name\": \"ability_priest_cascade_shadow\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 32, \"hidden_on_map\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": null, \"miss_types_mask\": 101}",
+        "combat_log_path": "tmp\/WoWCombatLog-092324_214842_2_grim-batol.zip",
+        "raw_event": "9\/23\/2024 22:27:00.4162  SPELL_MISSED,Creature-0-3111-670-6439-40484-000071CE76,\"Erudax\",0xa48,0x0,Player-1084-0AF6F32B,\"Bowzey-TarrenMill-EU\",0x512,0x0,450079,\"Void Surge\",0x20,DEFLECT,nil\r\n",
+        "created_at": "2024-09-24T09:01:01+00:00",
+        "updated_at": "2024-09-24T09:01:01+00:00"
     }
 ]

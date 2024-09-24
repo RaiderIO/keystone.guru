@@ -3260,5 +3260,61 @@
         "extracted_data": 1,
         "created_at": "2024-09-23T18:58:41+00:00",
         "updated_at": "2024-09-23T18:58:41+00:00"
+    },
+    {
+        "id": 467,
+        "combat_log_path": "tmp\/WoWCombatLog-092324_203552_2_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-24T08:58:56+00:00",
+        "updated_at": "2024-09-24T08:58:56+00:00"
+    },
+    {
+        "id": 468,
+        "combat_log_path": "tmp\/WoWCombatLog-092324_203552_3_grim-batol.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-24T08:59:12+00:00",
+        "updated_at": "2024-09-24T08:59:12+00:00"
+    },
+    {
+        "id": 469,
+        "combat_log_path": "tmp\/WoWCombatLog-092324_203552_3_siege-of-boralus.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-24T08:59:29+00:00",
+        "updated_at": "2024-09-24T08:59:29+00:00"
+    },
+    {
+        "id": 470,
+        "combat_log_path": "tmp\/WoWCombatLog-092324_203552_5_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-24T08:59:43+00:00",
+        "updated_at": "2024-09-24T08:59:43+00:00"
+    },
+    {
+        "id": 471,
+        "combat_log_path": "tmp\/WoWCombatLog-092324_203552_5_the-necrotic-wake.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-24T09:00:03+00:00",
+        "updated_at": "2024-09-24T09:00:03+00:00"
+    },
+    {
+        "id": 472,
+        "combat_log_path": "tmp\/WoWCombatLog-092324_203552_6_mists-of-tirna-scithe.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-24T09:00:22+00:00",
+        "updated_at": "2024-09-24T09:00:22+00:00"
+    },
+    {
+        "id": 473,
+        "combat_log_path": "tmp\/WoWCombatLog-092324_214842_2_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-24T09:00:38+00:00",
+        "updated_at": "2024-09-24T09:00:38+00:00"
+    },
+    {
+        "id": 474,
+        "combat_log_path": "tmp\/WoWCombatLog-092324_214842_2_grim-batol.zip",
+        "extracted_data": 1,
+        "created_at": "2024-09-24T09:01:01+00:00",
+        "updated_at": "2024-09-24T09:01:01+00:00"
     }
 ]

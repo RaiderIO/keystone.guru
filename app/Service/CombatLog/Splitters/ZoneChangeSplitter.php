@@ -104,13 +104,14 @@ class ZoneChangeSplitter extends CombatLogSplitter
 
         // And it's ended (we don't care for the valid dungeon zone IDs whitelist, if we switched, we switched)
         if ($parsedEvent instanceof ZoneChangeEvent) {
-            // Wrap up an existing zone if we had one
-            if ($this->lastZoneChangeEvent instanceof ZoneChangeEvent) {
+            // Wrap up an existing zone if we had one, and only when we actually change zones!
+            $zoneChanged = $this->lastZoneChangeEvent instanceof ZoneChangeEvent && $this->lastZoneChangeEvent->getZoneId() !== $parsedEvent->getZoneId();
+            if ($zoneChanged) {
                 $this->flushRawEventsToFile();
             }
 
             // If we're going to start a new zone
-            if ($this->validDungeonMapIds->has($parsedEvent->getZoneId())) {
+            if ($this->validDungeonMapIds->has($parsedEvent->getZoneId()) && ($this->lastZoneChangeEvent === null || $zoneChanged)) {
                 $this->log->parseCombatLogEventZoneChangeEvent();
 
                 $this->lastZoneChangeEvent = $parsedEvent;
