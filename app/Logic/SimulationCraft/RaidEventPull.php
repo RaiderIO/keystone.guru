@@ -47,7 +47,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         }
 
         // Do not calculate a delay for an empty pull as it's impossible to determine a location for such a pull
-        $this->delay = $this->raidEventPullEnemies->isEmpty() ? 0 : $this->calculateDelay($killZone, $previousKillLocation);
+        $this->delay = $this->raidEventPullEnemies->isEmpty() ? 0 : (int)round($this->calculateDelay($killZone, $previousKillLocation));
 
         return $this;
     }
@@ -208,7 +208,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             $mountableAreaIntersections = collect();
             foreach ($intersections as $intersection) {
                 $mountableAreaIntersections->push(
-                    new MountableAreaIntersection($mountableArea, new LatLng($intersection['lat'], $intersection['lng'], $latLngA->getFloor()))
+                    new MountableAreaIntersection($mountableArea, new LatLng($intersection->getLat(), $intersection->getLng(), $latLngA->getFloor()))
                 );
             }
 

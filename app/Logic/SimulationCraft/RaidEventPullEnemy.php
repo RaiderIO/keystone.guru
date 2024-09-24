@@ -16,10 +16,10 @@ class RaidEventPullEnemy implements RaidEventOutputInterface, RaidEventPullEnemy
 
     public function calculateHealth(SimulationCraftRaidEventsOptions $options, Npc $npc): int
     {
-        return $npc->calculateHealthForKey(
+        return (int)($npc->calculateHealthForKey(
                 $options->key_level,
                 $options->getAffixes()
-            ) * ($this->options->hp_percent / 100);
+            ) * ($this->options->hp_percent / 100));
     }
 
     /**
