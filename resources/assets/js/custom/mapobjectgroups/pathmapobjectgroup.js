@@ -2,7 +2,6 @@ class PathMapObjectGroup extends PolylineMapObjectGroup {
     constructor(manager, editable) {
         super(manager, MAP_OBJECT_GROUP_PATH, editable);
 
-        this.title = 'Hide/show route';
         this.fa_class = 'fa-route';
     }
 
