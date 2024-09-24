@@ -352,6 +352,7 @@ return [
     'mountablearea_faction_label'                                          => 'Faction',
     'mountablearea_teeming_label'                                          => 'Teeming',
     'mountablearea_speed_label'                                            => 'Speed (yards p/s)',
+    'mountablearea_tooltip_label'                                          => ':speed yards p/s',
     'floorunion_target_floor_id_select_default_label'                      => 'Select floor',
     'floorunion_target_floor_id_label'                                     => 'Target floor',
     'floorunion_size_label'                                                => 'Size',
