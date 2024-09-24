@@ -37503,7 +37503,7 @@
         "icon_name": "inv_musket_02",
         "name": "Iron Volley",
         "schools_mask": 1,
-        "miss_types_mask": 32,
+        "miss_types_mask": 33,
         "aura": false,
         "debuff": true,
         "cast_time": 0,

@@ -17058,5 +17058,15 @@
         "raw_event": "9\/23\/2024 22:27:00.4162  SPELL_MISSED,Creature-0-3111-670-6439-40484-000071CE76,\"Erudax\",0xa48,0x0,Player-1084-0AF6F32B,\"Bowzey-TarrenMill-EU\",0x512,0x0,450079,\"Void Surge\",0x20,DEFLECT,nil\r\n",
         "created_at": "2024-09-24T09:01:01+00:00",
         "updated_at": "2024-09-24T09:01:01+00:00"
+    },
+    {
+        "id": 1707,
+        "spell_id": 272140,
+        "before": "{\"id\": 272140, \"aura\": 0, \"name\": \"Iron Volley\", \"debuff\": 1, \"category\": null, \"duration\": 300000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_musket_02\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-12 00:00:00\", \"miss_types_mask\": 32}",
+        "after": "{\"id\": 272140, \"aura\": 0, \"name\": \"Iron Volley\", \"debuff\": 1, \"category\": null, \"duration\": 300000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"inv_musket_02\", \"selectable\": 0, \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"hidden_on_map\": 0, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-09-12 00:00:00\", \"miss_types_mask\": 33}",
+        "combat_log_path": "tmp\/WoWCombatLog-092324_220231_2_siege-of-boralus.zip",
+        "raw_event": "9\/23\/2024 22:15:22.0482  SPELL_PERIODIC_MISSED,Creature-0-1465-1822-2312-138255-000071CA30,\"Ashvane Spotter\",0x10a48,0x0,Player-1092-0842C043,\"Qineroth-BurningBlade-EU\",0x20512,0x20,272140,\"Iron Volley\",0x1,ABSORB,nil,1141489,2213491,nil\r\n",
+        "created_at": "2024-09-24T10:19:43+00:00",
+        "updated_at": "2024-09-24T10:19:43+00:00"
     }
 ]
