@@ -209,6 +209,11 @@ class Expansion extends CacheModel
         return !in_array($this->shortname, [Expansion::EXPANSION_SHADOWLANDS]);
     }
 
+    public function getWallpaperUrl(): string
+    {
+        return url(sprintf('/images/dungeons/%s/wallpaper.jpg', $this->shortname));
+    }
+
     /**
      * Saves an expansion with the data from a Request.
      *
