@@ -2,6 +2,7 @@
 
 return [
 
-    'name' => '',
-
+    'name'      => '',
+    'name_med' => '',
+    'name_long' => '',
 ];

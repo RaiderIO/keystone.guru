@@ -2,7 +2,6 @@ class FloorUnionMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
         super(manager, [MAP_OBJECT_GROUP_FLOOR_UNION], editable);
 
-        this.title = 'Hide/show floor unions';
         this.fa_class = 'fa-vector-square';
     }
 

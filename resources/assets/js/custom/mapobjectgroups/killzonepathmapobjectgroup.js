@@ -2,7 +2,6 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
     constructor(manager, editable) {
         super(manager, MAP_OBJECT_GROUP_KILLZONE_PATH, editable);
 
-        this.title = 'Hide/show killzone paths';
         this.fa_class = 'fa-route';
     }
 
@@ -47,7 +46,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
      *
      * @private
      */
-    _refresh(killZoneChangedEvent) {
+    _refresh() {
         // Bring all layers we just created to the front
         for (let key in this.objects) {
             this.setLayerToMapObject(null, this.objects[key]);

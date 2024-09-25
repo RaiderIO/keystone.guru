@@ -28,5 +28,7 @@ return [
     'zandalari_troll'     => 'Hodor',
     'mechagnome'          => 'Hodor',
     'vulpera'             => 'Hodor',
+    'earthenalliance'     => 'Hodor',
+    'earthenhorde'        => 'Hodor',
 
 ];

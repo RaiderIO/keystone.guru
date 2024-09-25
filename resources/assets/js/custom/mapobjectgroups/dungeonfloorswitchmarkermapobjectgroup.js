@@ -2,7 +2,6 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
         super(manager, MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER, editable);
 
-        this.title = 'Hide/show floor switch markers';
         this.fa_class = 'fa-door-open';
     }
 
@@ -94,12 +93,9 @@ class DungeonFloorSwitchMarkerMapObjectGroup extends MapObjectGroup {
 
         // If not found, try to find it across all objects we have
         if (result === null) {
-            let path = [];
-
             for (let key in this.objects) {
                 let object = this.objects[key];
                 let onSameFloor = object.floor_id === floorId;
-                let toTargetFloor = object.target_floor_id === targetFloorId;
 
                 // Only consider those objects that originate from our floor
                 if (onSameFloor) {

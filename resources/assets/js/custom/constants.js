@@ -245,6 +245,10 @@ const GAME_VERSION_CLASSIC = 'classic';
 const GAME_VERSION_WOTLK = 'wotlk';
 const GAME_VERSION_RETAIL = 'retail';
 
+// Mountable Areas
+const MOVEMENT_SPEED_DEFAULT = 7;
+const MOVEMENT_SPEED_MOUNTED = 14;
+
 // Leaflet constants
 const LEAFLET_PANE_MAP = 'mapPane';
 const LEAFLET_PANE_TILE = 'tilePane';
@@ -581,7 +585,17 @@ let c = {
             }
         },
         mountablearea: {
-            color: '#eb4934'
+            color: '#eb4934',
+            margin: 2,
+            arcSegments: function (nr) {
+                return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
+            },
+            polygonOptions: {
+                color: '#eb4934',
+                weight: 1,
+                fillOpacity: 0.3,
+                opacity: 1
+            },
         },
         floorunion: {
             polygonOptions: {

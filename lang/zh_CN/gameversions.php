@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'retail'  => [
         'name'        => '',
         'description' => '',
@@ -14,5 +13,8 @@ return [
         'name'        => '',
         'description' => '',
     ],
-
+    'beta'    => [
+        'name'        => '',
+        'description' => '',
+    ],
 ];

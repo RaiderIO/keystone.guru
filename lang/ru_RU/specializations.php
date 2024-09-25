@@ -20,6 +20,7 @@ return [
     'evoker'       => [
         'devastation'  => '',
         'preservation' => '',
+        'augmentation' => '',
     ],
     'hunter'       => [
         'beast_mastery' => 'Повелитель зверей',

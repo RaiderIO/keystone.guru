@@ -192,7 +192,7 @@ trait DungeonConstants
     // The War Within
     public const DUNGEON_ARA_KARA_CITY_OF_ECHOES    = 'ara_karacityofechoes'; // cityofechoes
     public const DUNGEON_CINDERBREW_MEADERY         = 'cinderbrewmeadery';
-    public const DUNGEON_CITY_OF_THREADS            = 'cityofthreads'; // cityofthreadsdungeon
+    public const DUNGEON_CITY_OF_THREADS            = 'cityofthreads'; // nerubardungeon
     public const DUNGEON_DARKFLAME_CLEFT            = 'darkflamecleft';
     public const DUNGEON_PRIORY_OF_THE_SACRED_FLAME = 'prioryofthesacredflame'; // sacredflame
     public const DUNGEON_THE_DAWNBREAKER            = 'thedawnbreaker'; // dawnbreaker (aka harrowfall)

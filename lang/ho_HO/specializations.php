@@ -20,6 +20,7 @@ return [
     'evoker'       => [
         'devastation'  => 'Hodor',
         'preservation' => 'Hodor',
+        'augmentation' => 'Hodor',
     ],
     'hunter'       => [
         'beast_mastery' => 'Hodor',

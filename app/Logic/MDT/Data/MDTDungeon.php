@@ -153,6 +153,7 @@ class MDTDungeon
             }
 
             $floors->load(['dungeon']);
+            $floors = $floors->keyBy('id');
 
             // NPC_ID => list of clones
             $npcClones = [];
@@ -227,11 +228,11 @@ class MDTDungeon
                         $enemy->is_mdt        = true;
                         $enemy->enemy_id      = -1;
 
-                        $enemy->npc = $this->dungeon->npcs->firstWhere('id', $enemy->npc_id);
-
-                        if ($enemy->npc === null) {
-                            $enemy->npc = new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId, 'dungeon_id' => -1, 'base_health' => 76000, 'enemy_forces' => -1]);
-                        }
+                        $enemy->setRelation('floor', $floors->get($floorId));
+                        $enemy->setRelation('npc',
+                            $this->dungeon->npcs->firstWhere('id', $enemy->npc_id) ??
+                            new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId, 'dungeon_id' => -1, 'base_health' => 76000, 'enemy_forces' => -1])
+                        );
 
                         if ($enemy->npc->isEmissary()) {
                             $enemy->seasonal_type = Enemy::SEASONAL_TYPE_BEGUILING;

@@ -13,4 +13,8 @@ return [
         'name'        => '',
         'description' => '',
     ],
+    'beta'    => [
+        'name'        => '',
+        'description' => '',
+    ],
 ];

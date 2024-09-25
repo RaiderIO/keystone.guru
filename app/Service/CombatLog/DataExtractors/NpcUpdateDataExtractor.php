@@ -77,9 +77,7 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
             // Calculate the base health based on the current key level + current max hp
             $newBaseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
                     $currentDungeon->keyLevel,
-                    $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_FORTIFIED) ?? false,
-                    $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_TYRANNICAL) ?? false,
-                    $currentDungeon->affixGroup?->hasAffix(Affix::AFFIX_THUNDERING) ?? false,
+                    $currentDungeon->affixGroup->affixes->pluck('key')->toArray()
                 ));
         }
 

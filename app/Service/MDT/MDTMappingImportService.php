@@ -381,63 +381,77 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         try {
             $this->log->importEnemiesStart();
 
-            $currentEnemies = $currentMappingVersion->enemies->keyBy(static fn(Enemy $enemy) => $enemy->getUniqueKey());
+            $currentEnemies = $currentMappingVersion
+                ->enemies()
+                ->with('floor')
+                ->get()
+                ->keyBy(static fn(Enemy $enemy) => $enemy->getUniqueKey());
 
             $enemies = $mdtDungeon->getClonesAsEnemies($newMappingVersion, $dungeon->floors()->active()->get());
 
-            foreach ($enemies as $enemy) {
-                if (in_array($enemy->npc_id, self::IGNORE_ENEMY_NPC_IDS)) {
-                    $this->log->importEnemiesSkipIgnoredByNpcEnemy($enemy->getUniqueKey());
+            foreach ($enemies as $mdtEnemy) {
+                if (in_array($mdtEnemy->npc_id, self::IGNORE_ENEMY_NPC_IDS)) {
+                    $this->log->importEnemiesSkipIgnoredByNpcEnemy($mdtEnemy->getUniqueKey());
 
                     continue;
                 }
 
                 // Skip teeming enemies for now - this affix was removed ages ago
-                if ($enemy->teeming !== null) {
-                    $this->log->importEnemiesSkipTeemingEnemy($enemy->getUniqueKey());
+                if ($mdtEnemy->teeming !== null) {
+                    $this->log->importEnemiesSkipTeemingEnemy($mdtEnemy->getUniqueKey());
 
                     continue;
                 }
 
-                $enemy->exists = false;
-                $enemy->unsetRelations();
+                $mdtEnemy->exists = false;
+                $mdtEnemy->unsetRelations();
 
                 // Not saved in the database
-                unset($enemy->npc);
-                unset($enemy->id);
-                unset($enemy->mdt_npc_index);
-                unset($enemy->is_mdt);
-                unset($enemy->enemy_id);
+                unset($mdtEnemy->npc);
+                unset($mdtEnemy->id);
+                unset($mdtEnemy->mdt_npc_index);
+                unset($mdtEnemy->is_mdt);
+                unset($mdtEnemy->enemy_id);
 
                 // Is group ID - we handle this later on
-                $enemy->enemy_pack_id      = null;
-                $enemy->mapping_version_id = $newMappingVersion->id;
+                $mdtEnemy->enemy_pack_id      = null;
+                $mdtEnemy->mapping_version_id = $newMappingVersion->id;
 
-                $currentEnemy = $currentEnemies->get($enemy->getUniqueKey());
-                if ($currentEnemy instanceof Enemy) {
+                $existingEnemy = $currentEnemies->get($mdtEnemy->getUniqueKey());
+                if ($existingEnemy instanceof Enemy) {
                     $fields = ['teeming', 'faction', 'required', 'skippable', 'kill_priority'];
                     // We ignore MDT's position - we want to keep agency in the location we place enemies still
                     // since we value VERY MUCH the enemy location being accurate to where they are in-game
                     if (!$forceImport) {
-                        $fields = array_merge($fields, ['floor_id', 'lat', 'lng']);
+                        $fields[] = 'floor_id';
+
+                        if (($distance = $this->coordinatesService->distanceIngameXY(
+                                $this->coordinatesService->calculateIngameLocationForMapLocation($existingEnemy->getLatLng()),
+                                $this->coordinatesService->calculateIngameLocationForMapLocation($mdtEnemy->getLatLng())
+                            )) > 150) {
+                            $this->log->importEnemiesDistanceTooLargeNotTransferringExistingEnemyLatLng($mdtEnemy->getUniqueKey(), $distance);
+                        } else {
+                            // Ok, copy over lat/lng
+                            $fields = array_merge($fields, ['lat', 'lng']);
+                        }
                     }
 
                     $updatedFields = [];
                     foreach ($fields as $field) {
-                        $enemy->$field         = $currentEnemy->$field;
-                        $updatedFields[$field] = $currentEnemy->$field;
+                        $mdtEnemy->$field      = $existingEnemy->$field;
+                        $updatedFields[$field] = $existingEnemy->$field;
                     }
 
-                    $this->log->importEnemiesRecoverPropertiesFromExistingEnemy($enemy->getUniqueKey(), $updatedFields);
+                    $this->log->importEnemiesRecoverPropertiesFromExistingEnemy($mdtEnemy->getUniqueKey(), $updatedFields);
                 } else {
-                    $this->log->importEnemiesCannotRecoverPropertiesFromExistingEnemy($enemy->getUniqueKey());
+                    $this->log->importEnemiesCannotRecoverPropertiesFromExistingEnemy($mdtEnemy->getUniqueKey());
                 }
 
                 try {
-                    if ($enemy->save()) {
-                        $this->log->importEnemiesSaveNewEnemy($enemy->id);
+                    if ($mdtEnemy->save()) {
+                        $this->log->importEnemiesSaveNewEnemy($mdtEnemy->id);
                     } else {
-                        throw new Exception(sprintf('Unable to save enemy %d!', $enemy->id));
+                        throw new Exception(sprintf('Unable to save enemy %d!', $mdtEnemy->id));
                     }
                 } catch (Exception $exception) {
                     $this->log->importEnemiesSaveNewEnemyException($exception);
