@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var Collection<Dungeon>      $dungeons
- * @var Collection<AffixGroup>   $affixgroups
+ * @var Collection<AffixGroup>   $affixGroups
  * @var Collection<DungeonRoute> $dungeonRoutes
  * @var AffixGroup|null          $currentAffixGroup
  * @var Season                   $currentSeason
@@ -18,12 +18,12 @@ use Illuminate\Support\Collection;
 
 if (!function_exists('getDungeonRoutesByDungeonIdAndAffixGroupId')) {
     /**
-     * @return Collection
+     * @return Collection<DungeonRoute>
      */
     function getDungeonRoutesByDungeonIdAndAffixGroupId(Collection $dungeonRoutes, Dungeon $dungeon, AffixGroup $affixGroup): Collection
     {
         if ($dungeonRoutes->has($dungeon->id)) {
-            /** @var Collection $dungeonRoutesList */
+            /** @var Collection<DungeonRoute> $dungeonRoutesList */
             $dungeonRoutesList = $dungeonRoutes->get($dungeon->id);
             $result            = $dungeonRoutesList->filter(
                 static fn(DungeonRoute $dungeonRoute) => $dungeonRoute->affixes->filter(
@@ -74,7 +74,7 @@ $seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static 
                     ) !!}
                 @endif
             </th>
-            @foreach($affixgroups as $affixGroup)
+            @foreach($affixGroups as $affixGroup)
                 <th class="p-1 {{ optional($currentAffixGroup)->id === $affixGroup->id ? 'bg-success' : '' }}">
                     @include('common.affixgroup.affixgroup', [
                         'affixgroup' => $affixGroup,
@@ -92,7 +92,7 @@ $seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static 
                 <td class="p-1">
                     {{ __($dungeon->name) }}
                 </td>
-                @foreach($affixgroups as $affixGroup)
+                @foreach($affixGroups as $affixGroup)
                         <?php
                         /** @var Dungeon $dungeon */
                         /** @var AffixGroup $affixGroup */
@@ -103,9 +103,9 @@ $seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static 
                         )->isNotEmpty();
                         ?>
                     <td
-                            @if($availableDungeonRoutes->isNotEmpty())
-                                class="{{ $hasEnemyForces ? 'covered' : 'covered_warning' }}"
-                            @endif
+                        @if($availableDungeonRoutes->isNotEmpty())
+                            class="{{ $hasEnemyForces ? 'covered' : 'covered_warning' }}"
+                        @endif
                     >
                         @if($availableDungeonRoutes->isNotEmpty())
                             <div class="dungeonroute_coverage_filter_select">

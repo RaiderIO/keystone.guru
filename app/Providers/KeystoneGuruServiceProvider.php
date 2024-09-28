@@ -462,7 +462,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('nextSeason', $regionViewVariables['nextSeason']);
             $view->with('selectedSeason', $selectedSeason);
             $view->with('currentAffixGroup', $selectedSeason->getCurrentAffixGroup());
-            $view->with('affixgroups', $selectedSeason->affixGroups);
+            $view->with('affixGroups', $selectedSeason->affixGroups);
             $view->with('dungeons', $selectedSeason->dungeons);
         });
 
