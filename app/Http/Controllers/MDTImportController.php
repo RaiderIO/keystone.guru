@@ -42,7 +42,7 @@ class MDTImportController extends Controller
                 ->setEncodedString($string)
                 ->getDetails($warnings, $errors);
         } catch (MDTStringParseException $ex) {
-            return abort(StatusCode::INTERNAL_SERVER_ERROR, __('controller.mdtimport.error.mdt_string_parsing_failed'));
+            return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_parsing_failed'));
         } catch (InvalidMDTStringException $ex) {
             return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
         } catch (Exception $ex) {
@@ -92,7 +92,7 @@ class MDTImportController extends Controller
                     $dungeonRoute->save();
                 }
             } catch (MDTStringParseException) {
-                return abort(StatusCode::INTERNAL_SERVER_ERROR, __('controller.mdtimport.error.mdt_string_parsing_failed'));
+                return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_parsing_failed'));
             } catch (InvalidMDTStringException) {
                 return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
             } catch (Exception $ex) {
