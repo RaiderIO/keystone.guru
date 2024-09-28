@@ -39,7 +39,7 @@ use Illuminate\Support\Collection;
                     {{ $mdtImport->id }}
                 </td>
                 <td>{{ $mdtImport->error }}</td>
-                <td>{!! substr($mdtImport->import_string, 0, 75) !!}</td>
+                <td>{{ substr($mdtImport->import_string, 0, 75) }}</td>
                 <td>{{ $mdtImport->created_at->toDateTimeString() }}</td>
                 <td>
                     <button type="button" class="btn btn-info"
