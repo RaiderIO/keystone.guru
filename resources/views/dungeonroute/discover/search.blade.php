@@ -107,7 +107,7 @@ use Illuminate\Support\Collection;
                                         <?php /** @var $affix Affix */ ?>
                                     <div class="col px-xl-1">
                                         <div
-                                            class="select_icon class_icon affix_icon_{{ strtolower($affix->key) }} selectable"
+                                            class="select_icon class_icon affix_icon_{{ $affix->image_name }} selectable"
                                             data-toggle="tooltip" data-id="{{ $affix->id }}"
                                             title="{{ __($affix->description) }}"
                                             style="height: 24px;">

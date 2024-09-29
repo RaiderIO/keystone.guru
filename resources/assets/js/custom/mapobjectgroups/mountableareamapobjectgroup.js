@@ -18,6 +18,10 @@ class MountableAreaMapObjectGroup extends PolygonMapObjectGroup {
     _createMapObject(layer, options = {}) {
         console.assert(this instanceof MountableAreaMapObjectGroup, 'this is not an MountableAreaMapObjectGroup', this);
 
-        return new AdminMountableArea(this.manager.map, layer);
+        if (getState().isMapAdmin()) {
+            return new AdminMountableArea(this.manager.map, layer);
+        } else {
+            return new MountableArea(this.manager.map, layer);
+        }
     }
 }

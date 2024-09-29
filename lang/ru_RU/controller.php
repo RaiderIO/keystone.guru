@@ -119,7 +119,7 @@ return [
         'flash' => [
             'release_updated'  => 'Релиз обновлен',
             'release_created'  => 'Релиз создан',
-            'github_exception' => 'Произошла ошибка связи с Github: %s',
+            'github_exception' => 'Произошла ошибка связи с Github: :message',
         ],
     ],
     'mappingversion'              => [

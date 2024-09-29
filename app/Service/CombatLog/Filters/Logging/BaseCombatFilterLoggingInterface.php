@@ -4,17 +4,23 @@ namespace App\Service\CombatLog\Filters\Logging;
 
 interface BaseCombatFilterLoggingInterface
 {
+    public function parseEncounterEndBossFoundAndKilled(int $lineNr, string $bossGuid): void;
+
+    public function parseEncounterEndNpcNotInCombat(int $lineNr, int $npcId): void;
+
+    public function parseEncounterEndNoNpc(int $lineNr): void;
+
     public function parseUnitDied(int $lineNr, string $guid): void;
 
-    public function parseUnitDiedEnemyWasNotPartOfCurrentPull(int $lineNr, string $guid): void;
+    public function parseEnemyWasNotPartOfCurrentPull(int $lineNr, string $guid): void;
 
-    public function parseUnitDiedEnemyWasAlreadyKilled(int $lineNr, string $guid): void;
+    public function parseEnemyWasAlreadyKilled(int $lineNr, string $guid): void;
 
-    public function parseUnitDiedEnemyWasSummoned(int $lineNr, string $guid): void;
+    public function parseEnemyWasSummoned(int $lineNr, string $guid): void;
 
-    public function parseUnitDiedInvalidNpcId(int $lineNr, string $guid): void;
+    public function parseInvalidNpcId(int $lineNr, string $guid): void;
 
-    public function parseUnitDiedEnemyWasNotEngaged(int $lineNr, string $guid): void;
+    public function parseEnemyWasNotEngaged(int $lineNr, string $guid): void;
 
     public function parseUnitInCurrentPullKilled(int $lineNr, string $guid): void;
 
@@ -31,4 +37,6 @@ interface BaseCombatFilterLoggingInterface
     public function getEnemyEngagedEventUsingFirstSightedEvent(string $guid): void;
 
     public function getEnemyEngagedEventUsingEngagedEvent(string $guid): void;
+
+
 }

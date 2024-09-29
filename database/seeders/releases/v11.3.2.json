@@ -1,0 +1,29 @@
+{
+    "id": 249,
+    "release_changelog_id": 256,
+    "version": "v11.3.2",
+    "title": "City of Threads mapping correction - SimulationCraft string generation corrections",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-09-20T20:45:54+00:00",
+    "updated_at": "2024-09-20T20:45:54+00:00",
+    "changelog": {
+        "id": 256,
+        "release_id": 249,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 256,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2505,
+                "change": "City of Threads: Eye of the Queen now has the correct NPC ID (the one that gives 20 count for each)."
+            },
+            {
+                "release_changelog_id": 256,
+                "release_changelog_category_id": 10,
+                "ticket_id": 2502,
+                "change": "Fixed an issue preventing the feature from working at all. Added support for Tyrannical and Fortified at the same time. Fixed health calculation of enemies. Key level now scaled to the season's key level range."
+            }
+        ]
+    }
+}

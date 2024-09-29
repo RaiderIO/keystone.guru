@@ -170,15 +170,15 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::prefix('{dungeonroute}')->group(static function () {
         // Edit your own dungeon routes
         Route::get('edit', (new DungeonRouteLegacyController())->edit(...));
-        Route::get('edit/{floorIndex}', (new DungeonRouteLegacyController())->editfloor(...));
+        Route::get('edit/{floorIndex}', (new DungeonRouteLegacyController())->editFloor(...));
         Route::middleware(['auth', 'role:user|admin'])->group(static function () {
             // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
             Route::get('live/{livesession}', (new LiveSessionLegacyController())->view(...));
             Route::get('live/{livesession}/{floorIndex}', (new LiveSessionLegacyController())->viewfloor(...));
             // Clone a route
-            Route::get('clone', (new DungeonRouteLegacyController())->cloneold(...));
+            Route::get('clone', (new DungeonRouteLegacyController())->cloneOld(...));
             // Claiming a route that was made by /sandbox functionality
-            Route::get('claim', (new DungeonRouteLegacyController())->claimold(...));
+            Route::get('claim', (new DungeonRouteLegacyController())->claimOld(...));
         });
     });
     Route::middleware(['auth', 'role:user|admin'])->group(static function () {
@@ -320,6 +320,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     // View dungeonroute as string
                     Route::get('dungeonroute/string', (new AdminToolsController())->mdtviewasstring(...))->name('admin.tools.mdt.dungeonroute.viewasstring');
                     Route::post('dungeonroute/string', (new AdminToolsController())->mdtviewasstringsubmit(...))->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
+
+                    // View imported MDT strings
+                    Route::get('string/list', (new AdminToolsController())->mdtImportList(...))->name('admin.tools.mdt.string.list');
 
                     // View mapping hash
                     Route::get('dungeonmappinghash', (new AdminToolsController())->mdtdungeonmappinghash(...))->name('admin.tools.mdt.dungeonmappinghash');
@@ -533,12 +536,12 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         });
     });
     Route::prefix('{dungeonroute}')->group(static function () {
-        Route::get('/', (new DungeonRouteLegacyController())->viewold(...))->name('dungeonroute.viewold');
-        Route::get('embed/', (new DungeonRouteLegacyController())->embedold(...));
-        Route::get('embed/{floorIndex}', (new DungeonRouteLegacyController())->embedold(...));
-        Route::get('{floorIndex}', (new DungeonRouteLegacyController())->viewfloorold(...));
+        Route::get('/', (new DungeonRouteLegacyController())->viewOld(...))->name('dungeonroute.viewold');
+        Route::get('embed/', (new DungeonRouteLegacyController())->embedOld(...));
+        Route::get('embed/{floorIndex}', (new DungeonRouteLegacyController())->embedOld(...));
+        Route::get('{floorIndex}', (new DungeonRouteLegacyController())->viewFloorOld(...));
         // Preview of a route for image capturing library
-        Route::get('preview/{floorIndex}', (new DungeonRouteLegacyController())->previewold(...));
+        Route::get('preview/{floorIndex}', (new DungeonRouteLegacyController())->previewOld(...));
     });
 });
 

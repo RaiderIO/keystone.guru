@@ -1,0 +1,29 @@
+{
+    "id": 246,
+    "release_changelog_id": 253,
+    "version": "v11.2",
+    "title": "Auto-route Creator operational - mapping updates to Mists and City of Threads",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-09-16T21:21:33+00:00",
+    "updated_at": "2024-09-16T21:21:33+00:00",
+    "changelog": {
+        "id": 253,
+        "release_id": 246,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 253,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2434,
+                "change": "Updated mapping for Mists of Tirna Scithe and City of Threads."
+            },
+            {
+                "release_changelog_id": 253,
+                "release_changelog_category_id": 11,
+                "ticket_id": 2434,
+                "change": "Auto-route creator now functional for TWW S1 dungeons!"
+            }
+        ]
+    }
+}

@@ -199,6 +199,53 @@ return [
                 'zul_farrak' => 'Hodor',
             ],
         ],
+        'zulgurub'                    => [
+            'name'   => 'Hodor',
+            'floors' => [
+                'zul_gurub' => 'Hodor',
+            ],
+        ],
+        'onyxias_lair_classic'        => [
+            'name'   => 'Hodor',
+            'floors' => [
+                'onyxias_lair' => 'Hodor',
+            ],
+        ],
+        'moltencore'                  => [
+            'name'   => 'Hodor',
+            'floors' => [
+                'molten_core' => 'Hodor',
+            ],
+        ],
+        'blackwinglair'                  => [
+            'name'   => 'Hodor',
+            'floors' => [
+                'blackwinglair' => 'Hodor',
+            ],
+        ],
+        'ruinsofahnqiraj'                  => [
+            'name'   => 'Hodor',
+            'floors' => [
+                'ruinsofahnqiraj' => 'Hodor',
+            ],
+        ],
+        'templeofahnqiraj'                  => [
+            'name'   => 'Hodor',
+            'floors' => [
+                'templeofahnqiraj' => 'Hodor',
+            ],
+        ],
+        'naxxramas_classic'           => [
+            'name'   => 'Hodor',
+            'floors' => [
+                'the_construct_quarter' => 'Hodor',
+                'the_arachnid_quarter'  => 'Hodor',
+                'the_military_quarter'  => 'Hodor',
+                'the_plague_quarter'    => 'Hodor',
+                'the_lower_necropolis'  => 'Hodor',
+                'the_upper_necropolis'  => 'Hodor',
+            ],
+        ],
     ],
     'wotlk'        => [
         'ahn_kahet_the_old_kingdom'                => [

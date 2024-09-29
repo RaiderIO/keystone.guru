@@ -49,7 +49,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
     ob_start();
     ?>
 <div
-    class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute horizontal {{ $showDungeonImage ? 'dungeon_image' : '' }}">
+        class="row no-gutters m-xl-1 mx-0 my-3 card_dungeonroute horizontal {{ $showDungeonImage ? 'dungeon_image' : '' }}">
     <div class="col-xl-auto">
         <div class="{{ $owlClass }} light-slider-container">
             <ul class="light-slider {{ $owlClass }}">
@@ -72,7 +72,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
         <div class="d-flex flex-column h-100 bg-card"
              @if($showDungeonImage)
                  style="background-image: url('{{ $dungeonroute->dungeon->getImageTransparentUrl() }}'); background-size: cover; background-position-y: center;"
-            @endif
+                @endif
         >
             <div class="row no-gutters p-2 header">
                 <div class="col">
@@ -96,7 +96,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                             ?>
                         @foreach($dungeonroute->affixes as $affixgroup)
                             <div
-                                class="row no-gutters {{ isset($currentAffixGroup) && $currentAffixGroup->id === $affixgroup->id ? 'current' : '' }}">
+                                    class="row no-gutters {{ isset($currentAffixGroup) && $currentAffixGroup->id === $affixgroup->id ? 'current' : '' }}">
                                 @include('common.affixgroup.affixgroup', [
                                     'affixgroup' => $affixgroup,
                                     'showText' => false,
@@ -118,7 +118,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                             @if($seasonalAffix !== null)
                                 <div class="col ml-1">
                                     <img class="select_icon"
-                                         src="{{ url(sprintf('/images/affixes/%s.jpg', strtolower($seasonalAffix))) }}"
+                                         src="{{ url(sprintf('/images/affixes/%s.jpg', Str::slug($seasonalAffix, '_'))) }}"
                                          alt="Dominant affix"/>
                                 </div>
                             @endif
@@ -214,12 +214,14 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
 };
 
 // Temp fix due to cached cards containing translations - and I don't want to show Russian translations to others at this time
-$cache = false;
+$cache = true;
 
 if ($cache) {
+    $currentUserLocale = Auth::check() ? Auth::user()->locale : 'en_US';
+    $isAdmin           = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
 // Echo the result of this function
     echo $cacheService->remember(
-        sprintf('view:dungeonroute_card_%d_%d_%d', (int)$showAffixes, (int)$showDungeonImage, $dungeonroute->id),
+        DungeonRoute::getCardCacheKey($dungeonroute->id, 'horizontal', $currentUserLocale, $showAffixes, $showDungeonImage, $isAdmin),
         $cacheFn,
         config('keystoneguru.view.common.dungeonroute.card.cache.ttl')
     );

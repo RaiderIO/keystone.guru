@@ -16,6 +16,7 @@ use Illuminate\Support\Collection;
  * @property int                            $expansion_id
  * @property int|null                       $seasonal_index
  * @property bool                           $confirmed
+ *
  * @property Season                         $season
  * @property Expansion                      $expansion
  * @property Collection<AffixGroupEaseTier> $easetiers

@@ -13,6 +13,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Models\MDTImport;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
@@ -436,6 +437,15 @@ class AdminToolsController extends Controller
     public function mdtviewasdungeonroute(): View
     {
         return view('admin.tools.mdt.string', ['asDungeonroute' => true]);
+    }
+
+    public function mdtImportList(): View
+    {
+        return view('admin.tools.mdt.list', [
+            'mdtImports' => MDTImport::whereNotNull('error')
+                ->orderByDesc('created_at')
+                ->paginate(50),
+        ]);
     }
 
     /**

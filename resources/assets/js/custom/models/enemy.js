@@ -449,16 +449,25 @@ class Enemy extends VersionableMapObject {
 
         if (this.npc !== null) {
             let scaledHealth = this.npc.base_health * ((this.npc.health_percentage ?? 100) / 100);
-            let hasFortified = false;
-            let hasTyrannical = false;
 
             let mapContext = getState().getMapContext();
             let keyLevelLabel = '';
-            if (mapContext instanceof MapContextDungeonRoute && mapContext.getGameVersion() === GAME_VERSION_RETAIL) {
-                hasFortified = mapContext.hasAffix(AFFIX_FORTIFIED) && [NPC_CLASSIFICATION_ID_NORMAL, NPC_CLASSIFICATION_ID_ELITE].includes(this.npc.classification_id);
-                hasTyrannical = mapContext.hasAffix(AFFIX_TYRANNICAL) && [NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(this.npc.classification_id);
+            let affixes = [];
 
-                scaledHealth = c.map.enemy.calculateHealthForKey(scaledHealth, mapContext.getLevelMin(), hasFortified, hasTyrannical);
+            if (mapContext instanceof MapContextDungeonRoute && mapContext.getGameVersion().key === GAME_VERSION_RETAIL) {
+                // noinspection JSAssignmentUsedAsCondition
+                if ((mapContext.hasAffix(AFFIX_FORTIFIED) && [NPC_CLASSIFICATION_ID_NORMAL, NPC_CLASSIFICATION_ID_ELITE].includes(this.npc.classification_id))) {
+                    affixes.push(AFFIX_FORTIFIED);
+                }
+                // noinspection JSAssignmentUsedAsCondition
+                if ((mapContext.hasAffix(AFFIX_TYRANNICAL) && [NPC_CLASSIFICATION_ID_BOSS, NPC_CLASSIFICATION_ID_FINAL_BOSS].includes(this.npc.classification_id))) {
+                    affixes.push(AFFIX_BOLSTERING);
+                }
+                if (mapContext.hasAffix(AFFIX_XALATATHS_GUILE)) {
+                    affixes.push(AFFIX_XALATATHS_GUILE);
+                }
+
+                scaledHealth = c.map.enemy.calculateHealthForKey(scaledHealth, mapContext.getLevelMin(), affixes);
                 keyLevelLabel = ` (+${mapContext.getLevelMin()})`;
             } else {
                 scaledHealth = Math.round(scaledHealth);
@@ -471,14 +480,26 @@ class Enemy extends VersionableMapObject {
             result.info.push({
                 key: lang.get('messages.sidebar_enemy_health_label') + keyLevelLabel,
                 value: scaledHealth.toLocaleString() + percentageString,
-                warning: (hasFortified ? lang.get('messages.sidebar_enemy_health_fortified_label') :
-                    (hasTyrannical ? lang.get('messages.sidebar_enemy_health_tyrannical_label') : false))
+                info: affixes.length === 0 ? false : lang.get('messages.sidebar_enemy_health_affixes_label', {
+                    affixes: affixes.join(', '),
+                    baseHealth: this.npc.base_health.toLocaleString(),
+                    factor: Math.round(c.map.enemy.getKeyScalingFactor(mapContext.getLevelMin(), affixes) * 100)
+                })
             });
 
             if (mapContext.getGameVersion().key === GAME_VERSION_RETAIL) {
-                result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
-                result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
-                result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
+                // Defined in sitescripts
+                // noinspection JSUnresolvedReference
+                if (isUserAdmin) {
+                    result.info.push({key: lang.get('messages.sidebar_enemy_npc_id_label'), value: this.npc.id});
+                }
+
+                // These affixes have been removed
+                // result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
+                // result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
+                // result.info.push({key: lang.get('messages.sidebar_enemy_sanguine_label'), value: this.npc.sanguine});
+
+
                 // Required means that you MUST kill this enemy, otherwise you cannot complete the dungeon
                 // result.info.push({
                 //     key: lang.get('messages.sidebar_enemy_skippable_label'),

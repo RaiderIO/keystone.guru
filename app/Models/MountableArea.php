@@ -60,7 +60,7 @@ class MountableArea extends CacheModel implements ConvertsVerticesInterface, Map
     }
 
     /**
-     * @return array{array{lat: float, lng: float}}
+     * @return LatLng[]
      */
     public function getIntersections(CoordinatesServiceInterface $coordinatesService, LatLng $latLngA, LatLng $latLngB): array
     {

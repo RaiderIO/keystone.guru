@@ -29,14 +29,26 @@ $changelog = isset($release) ? $release->changelog : new \App\Models\ReleaseChan
         {!! Form::text('title', null, ['class' => 'form-control']) !!}
     </div>
 
-    <div class="form-group{{ $errors->has('silent') ? ' has-error' : '' }}">
-        {!! Form::label('silent', __('view_admin.release.edit.silent')) !!}
-        {!! Form::checkbox('silent', 1, isset($release) ? $release->silent : 0, ['class' => 'form-control left_checkbox']) !!}
-    </div>
+    <div class="row form-group">
+        <div class="col {{ $errors->has('backup_db') ? 'has-error' : '' }}">
+            {!! Form::label('backup_db', __('view_admin.release.edit.backup_db')) !!}
+            {!! Form::checkbox('backup_db', 1, isset($release) ? $release->backup_db : 1, ['class' => 'form-control left_checkbox']) !!}
+        </div>
 
-    <div class="form-group{{ $errors->has('spotlight') ? ' has-error' : '' }}">
-        {!! Form::label('spotlight', __('view_admin.release.edit.spotlight')) !!}
-        {!! Form::checkbox('spotlight', 1, isset($release) ? $release->spotlight : 0, ['class' => 'form-control left_checkbox']) !!}
+        <div class="col {{ $errors->has('silent') ? 'has-error' : '' }}">
+            {!! Form::label('silent', __('view_admin.release.edit.silent')) !!}
+            {!! Form::checkbox('silent', 1, isset($release) ? $release->silent : 0, ['class' => 'form-control left_checkbox']) !!}
+        </div>
+
+        <div class="col {{ $errors->has('spotlight') ? 'has-error' : '' }}">
+            {!! Form::label('spotlight', __('view_admin.release.edit.spotlight')) !!}
+            {!! Form::checkbox('spotlight', 1, isset($release) ? $release->spotlight : 0, ['class' => 'form-control left_checkbox']) !!}
+        </div>
+
+        <div class="col {{ $errors->has('released') ? 'has-error' : '' }}">
+            {!! Form::label('released', __('view_admin.release.edit.released')) !!}
+            {!! Form::checkbox('released', 1, isset($release) ? $release->released : 0, ['class' => 'form-control left_checkbox', 'disabled' => 'disabled']) !!}
+        </div>
     </div>
 
     <h4>{{ __('view_admin.release.edit.changelog') }}</h4>

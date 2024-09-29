@@ -3,14 +3,20 @@
 namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int    $id
- * @property int    $dungeon_route_id
- * @property string $import_string
+ * @property int          $id
+ * @property int|null     $dungeon_route_id
+ * @property string|null  $error
+ * @property string       $import_string
+ *
+ * @property DungeonRoute $dungeonRoute
+ * @property Carbon       $created_at
+ * @property Carbon       $updated_at
  *
  * @mixin Eloquent
  */
@@ -21,13 +27,14 @@ class MDTImport extends Model
 
     protected $fillable = [
         'dungeon_route_id',
+        'error',
         'import_string',
     ];
 
     /**
      * Get the dungeon route that this import created.
      */
-    public function dungeonroute(): BelongsTo
+    public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }

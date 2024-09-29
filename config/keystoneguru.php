@@ -32,8 +32,15 @@ return [
             'default_max' => 30,
         ],
 
-        'scaling_factor'         => 1.08,
+        'scaling_factor'         => 1.10,
         'scaling_factor_past_10' => 1.10,
+
+        'affix_scaling_factor' => [
+            'fortified'       => 1.2,
+            'tyrannical'      => 1.3,
+            'thundering'      => 1.05,
+            'xalataths_guile' => 1.2,
+        ],
     ],
 
     'cache' => [
@@ -173,12 +180,12 @@ return [
         'refresh_min'            => 30,
 
         /**
-         * The amount of days where the thumbnail gets refreshed anyways regardless of other rules.
+         * The amount of days when the thumbnail gets refreshed anyways regardless of other rules.
          */
         'refresh_anyways_days'   => 30,
 
         /**
-         * The amount of hours where a thumbnail refresh must be in the queue for before it is re-queued
+         * The amount of hours when a thumbnail refresh must be in the queue for before it is re-queued
          */
         'refresh_requeue_hours'  => 12,
 
@@ -190,7 +197,7 @@ return [
         /**
          * The maximum amount of thumbnails that will be queued in a single run.
          */
-        'refresh_outdated_count' => 300,
+        'refresh_outdated_count' => 150,
     ],
 
     /**
@@ -289,9 +296,13 @@ return [
     ],
 
     'view' => [
-        'common.dungeonroute.card' => [
-            'cache' => [
-                'ttl' => '1 hour',
+        'common' => [
+            'dungeonroute' => [
+                'card' => [
+                    'cache' => [
+                        'ttl' => '1 hour',
+                    ],
+                ],
             ],
         ],
     ],

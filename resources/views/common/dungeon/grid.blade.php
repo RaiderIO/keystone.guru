@@ -30,6 +30,7 @@ for( $i = 0; $i < $rowCount; ++$i ) { ?>
     for( $j = 0; $j < $colCount; ++$j ) {
         $index = $i * $colCount + $j;
         if( $dungeons->has($index) ){
+            /** @var Dungeon $dungeon */
             $dungeon = $dungeons->get($index);
             $link = $links->where('dungeon', $dungeon->key)->first();
             ?>
@@ -53,7 +54,7 @@ for( $i = 0; $i < $rowCount; ++$i ) { ?>
                         @endisset
 
                         <img class="card-img-top"
-                             src="images/dungeons/{{$dungeon->expansion->shortname}}/{{ $dungeon->key }}.jpg"
+                             src="{{ $dungeon->getImageUrl() }}"
                              style="width: 100%" alt="{{ __($dungeon->name) }}"/>
                         @isset($link)
                     </a>

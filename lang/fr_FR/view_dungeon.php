@@ -3,8 +3,9 @@
 return [
     'explore' => [
         'list' => [
-            'title'  => '',
-            'header' => '',
+            'title'             => '',
+            'header'            => '',
+            'heatmap_available' => '',
         ],
     ],
 ];

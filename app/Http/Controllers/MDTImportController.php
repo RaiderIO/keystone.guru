@@ -34,41 +34,35 @@ class MDTImportController extends Controller
         $validated = $request->validated();
         $string    = $validated['import_string'];
 
-        //        try {
-        $warnings = collect();
-        $errors   = collect();
+        try {
+            $warnings = collect();
+            $errors   = collect();
 
-        return $mdtImportStringService
-            ->setEncodedString($string)
-            ->getDetails($warnings, $errors);
-        //        } catch (MDTStringParseException $ex) {
-        //            return abort(StatusCode::INTERNAL_SERVER_ERROR, __('controller.mdtimport.error.mdt_string_parsing_failed'));
-        //        } catch (InvalidMDTStringException $ex) {
-        //            return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
-        //        } catch (Exception $ex) {
-        //            // Different message based on our deployment settings
-        //            if (config('app.debug')) {
-        //                $message = sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $ex->getMessage());
-        //            } else {
-        //                $message = __('controller.admintools.error.invalid_mdt_string');
-        //            }
-        //
-        //            // We're not interested if the string was 100% not an MDT string - it will never work then
-        //            if (isValidBase64($string)) {
-        //                report($ex);
-        //            }
-        //
-        //            Log::error($ex->getMessage());
-        //
-        //            return abort(StatusCode::BAD_REQUEST, $message);
-        //        } catch (Throwable $error) {
-        //            if ($error->getMessage() === "Class 'Lua' not found") {
-        //                return abort(StatusCode::INTERNAL_SERVER_ERROR, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
-        //            }
-        //            Log::error($error->getMessage());
-        //
-        //            throw $error;
-        //        }
+            return $mdtImportStringService
+                ->setEncodedString($string)
+                ->getDetails($warnings, $errors);
+        } catch (MDTStringParseException $ex) {
+            return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_parsing_failed'));
+        } catch (InvalidMDTStringException $ex) {
+            return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
+        } catch (Exception $ex) {
+            // Different message based on our deployment settings
+            if (config('app.debug')) {
+                $message = sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $ex->getMessage());
+            } else {
+                $message = __('controller.admintools.error.invalid_mdt_string');
+            }
+
+            return abort(StatusCode::BAD_REQUEST, $message);
+        } catch (Throwable $error) {
+            Log::error($error->getMessage());
+
+            if ($error->getMessage() === "Class 'Lua' not found") {
+                return abort(StatusCode::INTERNAL_SERVER_ERROR, __('controller.mdtimport.error.mdt_importer_not_configured_properly'));
+            }
+
+            throw $error;
+        }
     }
 
     /**
@@ -97,14 +91,8 @@ class MDTImportController extends Controller
                     $dungeonRoute->team_id = $validated['team_id'] ?? null;
                     $dungeonRoute->save();
                 }
-
-                // Keep track of the import
-                MDTImport::create([
-                    'dungeon_route_id' => $dungeonRoute->id,
-                    'import_string'    => $string,
-                ]);
             } catch (MDTStringParseException) {
-                return abort(StatusCode::INTERNAL_SERVER_ERROR, __('controller.mdtimport.error.mdt_string_parsing_failed'));
+                return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_parsing_failed'));
             } catch (InvalidMDTStringException) {
                 return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
             } catch (Exception $ex) {

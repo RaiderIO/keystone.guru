@@ -5,7 +5,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
         super(manager, MAP_OBJECT_GROUP_KILLZONE, editable);
 
-        this.title = 'Hide/show killzone';
         this.fa_class = 'fa-bullseye';
     }
 

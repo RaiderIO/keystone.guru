@@ -3,9 +3,10 @@
 namespace App\Service\CombatLog\Models\CreateRoute;
 
 use App\Models\Enemy;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
 
-class CreateRouteNpc
+class CreateRouteNpc implements Arrayable
 {
     private Carbon $engagedAtCarbon;
 
@@ -49,6 +50,17 @@ class CreateRouteNpc
         $this->resolvedEnemy = $enemy;
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'npcId'     => $this->npcId,
+            'spawnUid'  => $this->spawnUid,
+            'engagedAt' => $this->engagedAt,
+            'diedAt'    => $this->diedAt,
+            'coord'     => $this->coord->toArray(),
+        ];
     }
 
     public static function createFromArray(array $body): CreateRouteNpc

@@ -24,6 +24,8 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
         $releaseChangeLogAttributes        = [];
         $releaseAttributes                 = [];
 
+        $existingReleases = Release::all()->keyBy('id');
+
         // Iterate over all saved releases
         foreach ($rootDirIterator as $releaseData) {
             $modelJson = file_get_contents($releaseData);
@@ -56,6 +58,14 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
             $releaseAttribute['created_at'] = Carbon::createFromFormat(Release::SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['created_at'])->toDateTimeString();
             $releaseAttribute['updated_at'] = Carbon::createFromFormat(Release::SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['updated_at'])->toDateTimeString();
 
+            if($existingReleases->has($releaseAttribute['id'])){
+                /** @var Release $existingRelease */
+                $existingRelease = $existingReleases->get($releaseAttribute['id']);
+
+                $releaseAttribute['released'] = $existingRelease->released;
+            } else {
+                $releaseAttributes[] = $releaseAttribute;
+            }
             $releaseAttributes[] = $releaseAttribute;
         }
 

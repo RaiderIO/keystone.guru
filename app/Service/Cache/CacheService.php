@@ -139,12 +139,11 @@ class CacheService implements CacheServiceInterface
             $this->unset(sprintf('dungeon_%d', $dungeon->id));
         }
 
-        // Clear all view caches for dungeonroutes - use a simple query to prevent loading of all kinds of relations
-        $dungeonRouteIds = collect(DB::select('SELECT `id` FROM dungeon_routes'))->pluck('id')->toArray();
-
-        foreach ($dungeonRouteIds as $dungeonRouteId) {
-            DungeonRoute::dropCaches($dungeonRouteId);
-        }
+        // Clear all view caches for dungeonroutes - go through redis to drop all cards
+        $prefix            = config('database.redis.options.prefix');
+        $this->deleteKeysByPattern([
+            sprintf('/%sdungeonroute_card:(?>vertical|horizontal):[a-zA-Z_]+:[01]_[01]_[01]_\d+/', $prefix),
+        ]);
     }
 
     public function clearIdleKeys(?int $seconds = null): int
@@ -153,15 +152,22 @@ class CacheService implements CacheServiceInterface
         // keystoneguru-live-cache:d8123999fdd7267f49290a1f2bb13d3b154b452a:f723072f44f1e4727b7ae26316f3d61dd3fe3d33
         // keystoneguru-live-cache:p79vfrAn4QazxHVtLb5s4LssQ5bi6ZaWGNTMOblt
         $prefix            = config('database.redis.options.prefix');
-        $keyWhitelistRegex = [
-            sprintf('/%s[a-z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
-        ];
 
+        return $this->deleteKeysByPattern([
+            sprintf('/%s[a-zA-Z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
+        ], $seconds);
+    }
+
+    private function deleteKeysByPattern(array $regexes, ?int $idleTimeSeconds = null): int
+    {
+        // Only keys starting with this prefix may be cleaned up by this task, ex.
+        $prefix = config('database.redis.options.prefix');
+
+        $deletedKeysCountTotal = $deletedKeysCount = 0;
         try {
-            $this->log->clearIdleKeysStart($seconds);
-            $i                = 0;
-            $nextKey          = 0;
-            $deletedKeysCount = 0;
+            $this->log->deleteKeysByPatternStart($idleTimeSeconds);
+            $i       = 0;
+            $nextKey = 0;
 
             do {
                 $result = Redis::command('SCAN', [$nextKey]);
@@ -171,14 +177,20 @@ class CacheService implements CacheServiceInterface
                 $toDelete = [];
                 foreach ($result[1] as $redisKey) {
                     $output = [];
-                    foreach ($keyWhitelistRegex as $regex) {
+                    foreach ($regexes as $regex) {
                         $matchResult = preg_match($regex, (string)$redisKey, $output);
                         if ($matchResult === false) {
-                            $this->log->clearIdleKeysRegexError($regex, $redisKey);
+                            $this->log->deleteKeysByPatternRegexError($regex, $redisKey);
                             break;
                         } else if ($matchResult > 0) {
-                            $idleTime = Redis::command('OBJECT', ['idletime', $redisKey]);
-                            if ($idleTime > $seconds) {
+                            // If we only want to delete keys that have a certain idle time, check that first
+                            if ($idleTimeSeconds !== null) {
+                                $keyIdleTimeSeconds = Redis::command('OBJECT', ['idletime', $redisKey]);
+                                if ($keyIdleTimeSeconds > $idleTimeSeconds) {
+                                    $toDelete[] = $redisKey;
+                                }
+                            } else {
+                                // We don't, just delete it
                                 $toDelete[] = $redisKey;
                             }
 
@@ -199,18 +211,19 @@ class CacheService implements CacheServiceInterface
                     $nrOfDeletedKeys  = Redis::command('DEL', $toDeleteWithoutPrefix);
                     $deletedKeysCount += $nrOfDeletedKeys;
                     if ($nrOfDeletedKeys !== $toDeleteCount) {
-                        $this->log->clearIdleKeysFailedToDeleteAllKeys($nrOfDeletedKeys, $toDeleteCount);
+                        $this->log->deleteKeysByPatternFailedToDeleteAllKeys($nrOfDeletedKeys, $toDeleteCount);
                     }
                 }
 
                 $i++;
                 if ($i % 1000 === 0) {
-                    $this->log->clearIdleKeysProgress($i, $deletedKeysCount);
+                    $deletedKeysCountTotal += $deletedKeysCount;
+                    $this->log->deleteKeysByPatternProgress($i, $deletedKeysCount);
                     $deletedKeysCount = 0;
                 }
             } while ($nextKey > 0);
         } finally {
-            $this->log->clearIdleKeysEnd();
+            $this->log->deleteKeysByPatternEnd($deletedKeysCountTotal);
         }
 
         return $deletedKeysCount;

@@ -19,7 +19,7 @@ final class CoordinatesServiceTest extends PublicTestCase
      */
     #[Test]
     #[DataProvider('checkCalculateIngameLocationForMapLocation_GivenLatLng_ShouldReturn_Provider')]
-    #[Group('')]
+    #[Group('CoordinatesService')]
     public function checkCalculateIngameLocationForMapLocation_GivenLatLng_ShouldReturn(LatLng $latLng, IngameXY $expected): void
     {
         // Arrange

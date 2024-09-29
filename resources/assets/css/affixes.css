@@ -13,10 +13,12 @@
 .affix_icon_reaping, .affix_icon_relentless, .affix_icon_sanguine, .affix_icon_shrouded, .affix_icon_skittish,
 .affix_icon_spiteful, .affix_icon_storming, .affix_icon_thundering, .affix_icon_teeming, .affix_icon_tormented,
 .affix_icon_tyrannical, .affix_icon_unknown, .affix_icon_volcanic, .affix_icon_afflicted, .affix_icon_entangling,
-.affix_icon_incorporeal {
+.affix_icon_incorporeal, .affix_icon_xalataths_bargain_ascendant, .affix_icon_xalataths_bargain_devour,
+.affix_icon_xalataths_bargain_voidbound, .affix_icon_xalataths_bargain_oblivion, .affix_icon_xalataths_bargain_frenzied,
+.affix_icon_xalataths_guile, .affix_icon_challengers_peril {
     max-width: 100% !important;
     background-size: 100% !important;
-    background-image: url('/images/affixes/affixes-df-s2.png');
+    background-image: url('/images/affixes/affixes-tww-s1.png');
 }
 
 .affix_icon_awakened {
@@ -24,122 +26,149 @@
 }
 
 .affix_icon_beguiling {
-    background-position: 0 calc(100% / 30 * 1);
+    background-position: 0 calc(100% / 37 * 1);
 }
 
 .affix_icon_bolstering {
-    background-position: 0 calc(100% / 30 * 2);
+    background-position: 0 calc(100% / 37 * 2);
 }
 
 .affix_icon_bursting {
-    background-position: 0 calc(100% / 30 * 3);
+    background-position: 0 calc(100% / 37 * 3);
 }
 
 .affix_icon_encrypted {
-    background-position: 0 calc(100% / 30 * 4);
+    background-position: 0 calc(100% / 37 * 4);
 }
 
 .affix_icon_explosive {
-    background-position: 0 calc(100% / 30 * 5);
+    background-position: 0 calc(100% / 37 * 5);
 }
 
 .affix_icon_fortified {
-    background-position: 0 calc(100% / 30 * 6);
+    background-position: 0 calc(100% / 37 * 6);
 }
 
 .affix_icon_grievous {
-    background-position: 0 calc(100% / 30 * 7);
+    background-position: 0 calc(100% / 37 * 7);
 }
 
 .affix_icon_infernal {
-    background-position: 0 calc(100% / 30 * 8);
+    background-position: 0 calc(100% / 37 * 8);
 }
 
 .affix_icon_infested {
-    background-position: 0 calc(100% / 30 * 9);
+    background-position: 0 calc(100% / 37 * 9);
 }
 
 .affix_icon_inspiring {
-    background-position: 0 calc(100% / 30 * 10);
+    background-position: 0 calc(100% / 37 * 10);
 }
 
 .affix_icon_necrotic {
-    background-position: 0 calc(100% / 30 * 11);
+    background-position: 0 calc(100% / 37 * 11);
 }
 
 .affix_icon_prideful {
-    background-position: 0 calc(100% / 30 * 12);
+    background-position: 0 calc(100% / 37 * 12);
 }
 
 .affix_icon_quaking {
-    background-position: 0 calc(100% / 30 * 13);
+    background-position: 0 calc(100% / 37 * 13);
 }
 
 .affix_icon_raging {
-    background-position: 0 calc(100% / 30 * 14);
+    background-position: 0 calc(100% / 37 * 14);
 }
 
 .affix_icon_reaping {
-    background-position: 0 calc(100% / 30 * 15);
+    background-position: 0 calc(100% / 37 * 15);
 }
 
 .affix_icon_relentless {
-    background-position: 0 calc(100% / 30 * 16);
+    background-position: 0 calc(100% / 37 * 16);
 }
 
 .affix_icon_sanguine {
-    background-position: 0 calc(100% / 30 * 17);
+    background-position: 0 calc(100% / 37 * 17);
 }
 
 .affix_icon_shrouded {
-    background-position: 0 calc(100% / 30 * 18);
+    background-position: 0 calc(100% / 37 * 18);
 }
 
 .affix_icon_skittish {
-    background-position: 0 calc(100% / 30 * 19);
+    background-position: 0 calc(100% / 37 * 19);
 }
 
 .affix_icon_spiteful {
-    background-position: 0 calc(100% / 30 * 20);
+    background-position: 0 calc(100% / 37 * 20);
 }
 
 .affix_icon_storming {
-    background-position: 0 calc(100% / 30 * 21);
+    background-position: 0 calc(100% / 37 * 21);
 }
 
 .affix_icon_thundering {
-    background-position: 0 calc(100% / 30 * 22);
+    background-position: 0 calc(100% / 37 * 22);
 }
 
 .affix_icon_teeming {
-    background-position: 0 calc(100% / 30 * 23);
+    background-position: 0 calc(100% / 37 * 23);
 }
 
 .affix_icon_tormented {
-    background-position: 0 calc(100% / 30 * 24);
+    background-position: 0 calc(100% / 37 * 24);
 }
 
 .affix_icon_tyrannical {
-    background-position: 0 calc(100% / 30 * 25);
+    background-position: 0 calc(100% / 37 * 25);
 }
 
 .affix_icon_unknown {
-    background-position: 0 calc(100% / 30 * 26);
+    background-position: 0 calc(100% / 37 * 26);
 }
 
 .affix_icon_volcanic {
-    background-position: 0 calc(100% / 30 * 27);
+    background-position: 0 calc(100% / 37 * 27);
 }
 
 .affix_icon_afflicted {
-    background-position: 0 calc(100% / 30 * 28);
+    background-position: 0 calc(100% / 37 * 28);
 }
 
 .affix_icon_entangling {
-    background-position: 0 calc(100% / 30 * 29);
+    background-position: 0 calc(100% / 37 * 29);
 }
 
 .affix_icon_incorporeal {
-    background-position: 0 100%;
+    background-position: 0 calc(100% / 37 * 30);
 }
 
+.affix_icon_xalataths_bargain_ascendant {
+    background-position: 0 calc(100% / 37 * 31);
+}
+
+.affix_icon_xalataths_bargain_devour {
+    background-position: 0 calc(100% / 37 * 32);
+}
+
+.affix_icon_xalataths_bargain_voidbound {
+    background-position: 0 calc(100% / 37 * 33);
+}
+
+.affix_icon_xalataths_bargain_oblivion {
+    background-position: 0 calc(100% / 37 * 34);
+}
+
+.affix_icon_xalataths_bargain_frenzied {
+    background-position: 0 calc(100% / 37 * 35);
+}
+
+.affix_icon_xalataths_guile {
+    background-position: 0 calc(100% / 37 * 36);
+}
+
+.affix_icon_challengers_peril {
+    background-position: 0 calc(100% / 37 * 37);
+}

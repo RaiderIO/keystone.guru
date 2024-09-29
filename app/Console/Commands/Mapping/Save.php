@@ -273,7 +273,7 @@ class Save extends Command
                                    'expires_at', 'views', 'views_embed', 'popularity', 'pageviews', 'dungeon', 'mappingVersion',
                                    'season']);
             $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
-                              'routeattributesraw', 'affixgroups', 'brushlines', 'paths', 'killZones', 'enemyRaidMarkers',
+                              'routeattributesraw', 'affixGroups', 'brushlines', 'paths', 'killZones', 'enemyRaidMarkers',
                               'pridefulEnemies', 'mapicons']);
 
             // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
@@ -298,7 +298,7 @@ class Save extends Command
                 $toHide->add($item);
             }
 
-            foreach ($demoRoute->affixgroups as $item) {
+            foreach ($demoRoute->affixGroups as $item) {
                 $toHide->add($item);
             }
 

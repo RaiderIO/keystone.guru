@@ -54,6 +54,8 @@ class ZoneChangeSplitter extends CombatLogSplitter
         $this->validDungeonMapIds = $this->dungeonRepository->getAllMapIds()->mapWithKeys(function (int $mapId) {
             return [$mapId => $mapId];
         });
+        // Nerub-ar Palace
+        $this->validDungeonMapIds->put(2657, 2657);
     }
 
     public function splitCombatLog(string $filePath): Collection
@@ -67,6 +69,11 @@ class ZoneChangeSplitter extends CombatLogSplitter
             $filePath,
             fn($combatLogVersion, $rawEvent, $lineNr) => $this->parseCombatLogEvent($combatLogVersion, $rawEvent, $lineNr)
         );
+
+        // Make sure that everything captured from last zone change and onwards is still saved to disk
+        if ($this->lastZoneChangeEvent !== null) {
+            $this->flushRawEventsToFile();
+        }
 
         // Remove the lineNr context since we stopped parsing lines, don't let the last line linger in the context
         $this->log->removeContext('lineNr');
@@ -89,21 +96,6 @@ class ZoneChangeSplitter extends CombatLogSplitter
 
         // If we have started a challenge mode
         if ($this->lastZoneChangeEvent instanceof ZoneChangeEvent) {
-            // If there's too much of a gap between the last entry and the next one, just ditch the run
-            if ($this->lastTimestamp instanceof Carbon &&
-                ($seconds = $this->lastTimestamp->diffInSeconds($combatLogEntry->getParsedTimestamp())) > self::MAX_TIMESTAMP_GAP_SECONDS) {
-                $this->log->parseCombatLogEventTooBigTimestampGap(
-                    $seconds,
-                    $this->lastTimestamp->toDateTimeString(),
-                    $combatLogEntry->getParsedTimestamp()->toDateTimeString()
-                );
-
-                // Reset variables
-                $this->resetCurrentZone();
-
-                return $parsedEvent;
-            }
-
             // Save ALL events that come through after the challenge mode start event has been given
             $this->rawEvents->push($rawEvent);
             $this->lastTimestamp = $combatLogEntry->getParsedTimestamp();
@@ -112,27 +104,14 @@ class ZoneChangeSplitter extends CombatLogSplitter
 
         // And it's ended (we don't care for the valid dungeon zone IDs whitelist, if we switched, we switched)
         if ($parsedEvent instanceof ZoneChangeEvent) {
-            // Wrap up an existing zone if we had one
-            if ($this->lastZoneChangeEvent instanceof ZoneChangeEvent) {
-                $saveFilePath = $this->generateTargetCombatLogFileName($this->filePath);
-
-                try {
-                    $this->combatLogService->saveCombatLogToFile($this->rawEvents, $saveFilePath);
-
-                    // Add the .txt to a .zip
-                    $compressedTargetFilePath = $this->combatLogService->compressCombatLog($saveFilePath);
-                    $this->result->push($compressedTargetFilePath);
-
-                    // Reset variables
-                    $this->resetCurrentZone();
-                } finally {
-                    // remove the .txt
-                    unlink($saveFilePath);
-                }
+            // Wrap up an existing zone if we had one, and only when we actually change zones!
+            $zoneChanged = $this->lastZoneChangeEvent instanceof ZoneChangeEvent && $this->lastZoneChangeEvent->getZoneId() !== $parsedEvent->getZoneId();
+            if ($zoneChanged) {
+                $this->flushRawEventsToFile();
             }
 
             // If we're going to start a new zone
-            if ($this->validDungeonMapIds->has($parsedEvent->getZoneId())) {
+            if ($this->validDungeonMapIds->has($parsedEvent->getZoneId()) && ($this->lastZoneChangeEvent === null || $zoneChanged)) {
                 $this->log->parseCombatLogEventZoneChangeEvent();
 
                 $this->lastZoneChangeEvent = $parsedEvent;
@@ -168,6 +147,25 @@ class ZoneChangeSplitter extends CombatLogSplitter
 
         $this->lastCombatLogVersion = null;
         $this->result               = collect();
+    }
+
+    private function flushRawEventsToFile(): void
+    {
+        $saveFilePath = $this->generateTargetCombatLogFileName($this->filePath);
+
+        try {
+            $this->combatLogService->saveCombatLogToFile($this->rawEvents, $saveFilePath);
+
+            // Add the .txt to a .zip
+            $compressedTargetFilePath = $this->combatLogService->compressCombatLog($saveFilePath);
+            $this->result->push($compressedTargetFilePath);
+
+            // Reset variables
+            $this->resetCurrentZone();
+        } finally {
+            // remove the .txt
+            unlink($saveFilePath);
+        }
     }
 
     protected function getCombatLogFileName(string $countStr): string

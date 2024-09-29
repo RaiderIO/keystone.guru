@@ -4,7 +4,7 @@ return [
 
     'admintools'                  => [
         'error' => [
-            'mdt_string_parsing_failed'           => 'MDT string parsing failed due to an internal server error.',
+            'mdt_string_parsing_failed'           => 'MDT string parsing failed. Did you really paste an MDT string?',
             'mdt_string_format_not_recognized'    => 'The MDT string format was not recognized.',
             'invalid_mdt_string'                  => 'Invalid MDT string',
             'invalid_mdt_string_exception'        => 'Invalid MDT string: %s',
@@ -119,7 +119,7 @@ return [
         'flash' => [
             'release_updated'  => 'Release updated',
             'release_created'  => 'Release created',
-            'github_exception' => 'An error occurred communicating with Github: %s',
+            'github_exception' => 'An error occurred communicating with Github: :message',
         ],
     ],
     'mappingversion'              => [
@@ -130,7 +130,7 @@ return [
     'mdtimport'                   => [
         'unknown_dungeon' => 'Unknown dungeon',
         'error'           => [
-            'mdt_string_parsing_failed'             => 'MDT string parsing failed due to an internal server error.',
+            'mdt_string_parsing_failed'             => 'MDT string parsing failed. Did you really paste an MDT string?',
             'mdt_string_format_not_recognized'      => 'The MDT string format was not recognized.',
             'invalid_mdt_string_exception'          => 'Invalid MDT string: %s',
             'invalid_mdt_string'                    => 'Invalid MDT string',

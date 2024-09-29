@@ -1,5 +1,12 @@
 <?php
-/** @var $user \App\Models\User */
+
+use App\Models\Patreon\PatreonBenefit;
+use App\Models\Patreon\PatreonUserLink;
+use App\Models\User;
+
+/**
+ * @var User $user
+ */
 ?>
 <div class="tab-pane fade" id="patreon" role="tabpanel" aria-labelledby="patreon-tab">
     <h4>
@@ -10,7 +17,7 @@
         @include('common.thirdparty.patreon.fancylink')
         @php($patreonLink = trim(ob_get_clean()))
 
-        @if($user->patreonUserLink->refresh_token === \App\Models\Patreon\PatreonUserLink::PERMANENT_TOKEN)
+        @if($user->patreonUserLink->refresh_token === PatreonUserLink::PERMANENT_TOKEN)
             <p class="mt-2">
                 <span class="text-info"><i class="fa fa-check-circle"></i></span>
                 {!! __('view_profile.edit.patreon_status_granted_manually', ['patreon' => $patreonLink]) !!}
@@ -35,8 +42,8 @@
                     {{ __('view_profile.edit.patreon_benefit_table.header_benefit') }}
                 </th>
             </tr>
-            @foreach(\App\Models\Patreon\PatreonBenefit::all() as $patreonBenefit)
-                    <?php /** @var $patreonBenefit \App\Models\Patreon\PatreonBenefit */ ?>
+            @foreach(PatreonBenefit::all() as $patreonBenefit)
+                    <?php /** @var PatreonBenefit $patreonBenefit */ ?>
                 <tr>
                     <td class="pl-1">
                         <i class="fas fa-{{ $user->hasPatreonBenefit($patreonBenefit->key) ? 'check-circle text-success' : 'times-circle text-danger' }}"></i>
@@ -55,7 +62,7 @@
                             'client_id' => config('keystoneguru.patreon.oauth.client_id'),
                             'redirect_uri' => route('patreon.link'),
                             'scope' => config('keystoneguru.patreon.oauth.scope'),
-                            'state' => csrf_token()
+                            'state' => csrf_token(),
                             ])
                         }}">
             {{ __('view_profile.edit.link_to_patreon') }}

@@ -33,7 +33,7 @@
         "display_id": 117315,
         "encounter_id": null,
         "name": "Sureki Webmage",
-        "base_health": 36393549,
+        "base_health": 39782670,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.4,
@@ -66,6 +66,20 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16847,
+                "mapping_version_id": 396,
+                "npc_id": 210966,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16726,
+                "mapping_version_id": 390,
+                "npc_id": 210966,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16515,
                 "mapping_version_id": 379,
                 "npc_id": 210966,
@@ -97,7 +111,7 @@
         "display_id": 114311,
         "encounter_id": 2580,
         "name": "Speaker Shadowcrown",
-        "base_health": 126969165,
+        "base_health": 139239345,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -178,10 +192,10 @@
         "display_id": 114315,
         "encounter_id": 2581,
         "name": "Anubikkaj",
-        "base_health": 126969165,
+        "base_health": 208859018,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 2,
+        "mdt_scale": 1.7,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -247,7 +261,7 @@
         "display_id": 115760,
         "encounter_id": null,
         "name": "Ascendant Viscoxria",
-        "base_health": 51860807,
+        "base_health": 56690306,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 3,
@@ -283,6 +297,20 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16853,
+                "mapping_version_id": 396,
+                "npc_id": 211261,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16732,
+                "mapping_version_id": 390,
+                "npc_id": 211261,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16521,
                 "mapping_version_id": 379,
                 "npc_id": 211261,
@@ -314,7 +342,7 @@
         "display_id": 119262,
         "encounter_id": null,
         "name": "Ixkreten The Unbreakable",
-        "base_health": 60049355,
+        "base_health": 65641406,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 3,
@@ -353,6 +381,20 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16855,
+                "mapping_version_id": 396,
+                "npc_id": 211262,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16734,
+                "mapping_version_id": 390,
+                "npc_id": 211262,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16523,
                 "mapping_version_id": 379,
                 "npc_id": 211262,
@@ -384,7 +426,7 @@
         "display_id": 115759,
         "encounter_id": null,
         "name": "Deathscreamer Ikentak",
-        "base_health": 32754194,
+        "base_health": 53706605,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 3,
@@ -426,6 +468,20 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16854,
+                "mapping_version_id": 396,
+                "npc_id": 211263,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16733,
+                "mapping_version_id": 390,
+                "npc_id": 211263,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16522,
                 "mapping_version_id": 379,
                 "npc_id": 211263,
@@ -457,7 +513,7 @@
         "display_id": 117518,
         "encounter_id": null,
         "name": "Manifested Shadow",
-        "base_health": 25475484,
+        "base_health": 27847869,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.4,
@@ -496,6 +552,20 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16850,
+                "mapping_version_id": 396,
+                "npc_id": 211341,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16729,
+                "mapping_version_id": 390,
+                "npc_id": 211341,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16518,
                 "mapping_version_id": 379,
                 "npc_id": 211341,
@@ -519,6 +589,56 @@
         ]
     },
     {
+        "id": 211858,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 114662,
+        "encounter_id": null,
+        "name": "Queensguard Zirix",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 212715,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 114531,
+        "encounter_id": null,
+        "name": "Nerubian Saboteur",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 213885,
         "dungeon_id": 113,
         "classification_id": 2,
@@ -527,7 +647,7 @@
         "display_id": 120116,
         "encounter_id": null,
         "name": "Nightfall Dark Architect",
-        "base_health": 50950968,
+        "base_health": 55695738,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 3,
@@ -569,6 +689,20 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16856,
+                "mapping_version_id": 396,
+                "npc_id": 213885,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16735,
+                "mapping_version_id": 390,
+                "npc_id": 213885,
+                "enemy_forces": 30,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16524,
                 "mapping_version_id": 379,
                 "npc_id": 213885,
@@ -600,7 +734,7 @@
         "display_id": 115523,
         "encounter_id": null,
         "name": "Nightfall Shadowmage",
-        "base_health": 16377097,
+        "base_health": 17902202,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.3,
@@ -675,6 +809,20 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16844,
+                "mapping_version_id": 396,
+                "npc_id": 213892,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16723,
+                "mapping_version_id": 390,
+                "npc_id": 213892,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16512,
                 "mapping_version_id": 379,
                 "npc_id": 213892,
@@ -706,7 +854,7 @@
         "display_id": 115520,
         "encounter_id": null,
         "name": "Nightfall Darkcaster",
-        "base_health": 17286936,
+        "base_health": 18896768,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.3,
@@ -781,6 +929,20 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16848,
+                "mapping_version_id": 396,
+                "npc_id": 213893,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16727,
+                "mapping_version_id": 390,
+                "npc_id": 213893,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16516,
                 "mapping_version_id": 379,
                 "npc_id": 213893,
@@ -812,7 +974,7 @@
         "display_id": 115528,
         "encounter_id": null,
         "name": "Nightfall Curseblade",
-        "base_health": 19106613,
+        "base_health": 20885902,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.3,
@@ -884,6 +1046,20 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16843,
+                "mapping_version_id": 396,
+                "npc_id": 213894,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16722,
+                "mapping_version_id": 390,
+                "npc_id": 213894,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16511,
                 "mapping_version_id": 379,
                 "npc_id": 213894,
@@ -915,7 +1091,7 @@
         "display_id": 115530,
         "encounter_id": null,
         "name": "Nightfall Shadowalker",
-        "base_health": 18196774,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -992,6 +1168,20 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16849,
+                "mapping_version_id": 396,
+                "npc_id": 213895,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16728,
+                "mapping_version_id": 390,
+                "npc_id": 213895,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16517,
                 "mapping_version_id": 379,
@@ -1086,6 +1276,20 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16851,
+                "mapping_version_id": 396,
+                "npc_id": 213932,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16730,
+                "mapping_version_id": 390,
+                "npc_id": 213932,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16519,
                 "mapping_version_id": 379,
                 "npc_id": 213932,
@@ -1117,7 +1321,7 @@
         "display_id": 115534,
         "encounter_id": null,
         "name": "Nightfall Tactician",
-        "base_health": 30934517,
+        "base_health": 33815270,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.3,
@@ -1146,6 +1350,20 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16852,
+                "mapping_version_id": 396,
+                "npc_id": 213934,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16731,
+                "mapping_version_id": 390,
+                "npc_id": 213934,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16520,
                 "mapping_version_id": 379,
@@ -1296,7 +1514,7 @@
         "display_id": 115526,
         "encounter_id": null,
         "name": "Nightfall Ritualist",
-        "base_health": 30934517,
+        "base_health": 33815270,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.4,
@@ -1332,6 +1550,20 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16845,
+                "mapping_version_id": 396,
+                "npc_id": 214761,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16724,
+                "mapping_version_id": 390,
+                "npc_id": 214761,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16513,
                 "mapping_version_id": 379,
                 "npc_id": 214761,
@@ -1363,7 +1595,7 @@
         "display_id": 115535,
         "encounter_id": null,
         "name": "Nightfall Commander",
-        "base_health": 34573871,
+        "base_health": 33815270,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.4,
@@ -1392,6 +1624,20 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16846,
+                "mapping_version_id": 396,
+                "npc_id": 214762,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 16725,
+                "mapping_version_id": 390,
+                "npc_id": 214762,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16514,
                 "mapping_version_id": 379,
@@ -1564,6 +1810,31 @@
                 "spell_id": 431493
             }
         ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 225479,
+        "dungeon_id": 113,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 117315,
+        "encounter_id": null,
+        "name": "Sureki Webmage",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {

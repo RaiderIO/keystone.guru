@@ -39,9 +39,9 @@ ob_start();
             {{ __('view_common.maps.controls.elements.dungeonrouteinfo.affixes') }}
         </div>
     </div>
-    @foreach($dungeonroute->affixes as $affixgroup)
+    @foreach($dungeonroute->affixes as $affixGroup)
         <div class="row no-gutters">
-            @include('common.affixgroup.affixgroup', ['affixgroup' => $affixgroup, 'showText' => false, 'class' => 'w-100', 'cols' => 1])
+            @include('common.affixgroup.affixgroup', ['affixgroup' => $affixGroup, 'showText' => false, 'class' => 'w-100', 'cols' => 1])
         </div>
     @endforeach
 </div>

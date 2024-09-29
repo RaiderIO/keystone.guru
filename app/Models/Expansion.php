@@ -29,7 +29,7 @@ use Illuminate\Support\Collection;
  * @property Carbon                $updated_at
  *
  * @property Collection<Dungeon>   $dungeons
- * @property TimewalkingEvent|null $timewalkingevent
+ * @property TimewalkingEvent|null $timewalkingEvent
  *
  * @method static Builder active()
  *
@@ -45,7 +45,7 @@ class Expansion extends CacheModel
 
     public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];
 
-    public $with = ['timewalkingevent'];
+    public $with = ['timewalkingEvent'];
 
     protected $dates = [
         // 'released_at',
@@ -59,31 +59,19 @@ class Expansion extends CacheModel
 //        'updated_at'  => 'date',
 //    ];
 
-    public const EXPANSION_CLASSIC = 'classic';
-
-    public const EXPANSION_TBC = 'tbc';
-
-    public const EXPANSION_WOTLK = 'wotlk';
-
-    public const EXPANSION_CATACLYSM = 'cata';
-
-    public const EXPANSION_MOP = 'mop';
-
-    public const EXPANSION_WOD = 'wod';
-
-    public const EXPANSION_LEGION = 'legion';
-
-    public const EXPANSION_BFA = 'bfa';
-
-    public const EXPANSION_SHADOWLANDS = 'shadowlands';
-
+    public const EXPANSION_CLASSIC      = 'classic';
+    public const EXPANSION_TBC          = 'tbc';
+    public const EXPANSION_WOTLK        = 'wotlk';
+    public const EXPANSION_CATACLYSM    = 'cata';
+    public const EXPANSION_MOP          = 'mop';
+    public const EXPANSION_WOD          = 'wod';
+    public const EXPANSION_LEGION       = 'legion';
+    public const EXPANSION_BFA          = 'bfa';
+    public const EXPANSION_SHADOWLANDS  = 'shadowlands';
     public const EXPANSION_DRAGONFLIGHT = 'dragonflight';
-
-    public const EXPANSION_TWW = 'tww';
-
-    public const EXPANSION_MIDNIGHT = 'midnight';
-
-    public const EXPANSION_TLT = 'tlt';
+    public const EXPANSION_TWW          = 'tww';
+    public const EXPANSION_MIDNIGHT     = 'midnight';
+    public const EXPANSION_TLT          = 'tlt';
 
     public const ALL = [
         self::EXPANSION_CLASSIC      => 'Classic',
@@ -123,7 +111,7 @@ class Expansion extends CacheModel
         return $this->hasMany(Season::class);
     }
 
-    public function timewalkingevent(): HasOne
+    public function timewalkingEvent(): HasOne
     {
         return $this->hasOne(TimewalkingEvent::class);
     }
@@ -195,7 +183,7 @@ class Expansion extends CacheModel
 
     public function hasTimewalkingEvent(): bool
     {
-        return $this->timewalkingevent instanceof TimewalkingEvent;
+        return $this->timewalkingEvent instanceof TimewalkingEvent;
     }
 
     public function hasDungeonForGameVersion(GameVersion $gameVersion): bool
@@ -219,6 +207,11 @@ class Expansion extends CacheModel
     {
         // So far we only have dungeon wallpapers for Shadowlands :(
         return !in_array($this->shortname, [Expansion::EXPANSION_SHADOWLANDS]);
+    }
+
+    public function getWallpaperUrl(): string
+    {
+        return url(sprintf('/images/dungeons/%s/wallpaper.jpg', $this->shortname));
     }
 
     /**

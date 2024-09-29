@@ -157,6 +157,11 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function importEnemiesDistanceTooLargeNotTransferringExistingEnemyLatLng(string $mdtUniqueKey, float $distance): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
     public function importEnemiesRecoverPropertiesFromExistingEnemy(string $uniqueKey, array $updatedFields): void
     {
         $this->debug(__METHOD__, get_defined_vars());

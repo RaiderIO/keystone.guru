@@ -479,7 +479,7 @@ return [
         ],
         'simulate'           => [
             'intro'                                   => 'To use the simulation feature, generate a SimulationCraft string for your character and paste the
-                generated string of Keystone.guru under your character\'s output string. Then hit Simulate like you usually would! If you use raidbots.com, enable SimC Expert Mode and paste the output in the Footer section.',
+                generated string of Keystone.guru under your character\'s output string. Then hit Simulate like you usually would! If you use raidbots.com, create your character\'s SimC string through either the addon or the site, select Advanced and paste Keystone.guru\'s output below your character\'s SimC string.',
             'title'                                   => 'Simulate route',
             'key_level'                               => 'Key level',
             'key_level_title'                         => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
@@ -492,9 +492,9 @@ return [
                 'mastery' => 'Mastery',
                 'vers'    => 'Versatility',
             ],
-            'affix'                                   => 'Affix',
-            'affix_title'                             => 'Select Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%.',
-            'affixes'                                 => [
+            'affixes'                                 => 'Affixes',
+            'affixes_title'                           => 'Select Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%. You can select both at once.',
+            'affixes_map'                             => [
                 'fortified'  => 'Fortified',
                 'tyrannical' => 'Tyrannical',
             ],

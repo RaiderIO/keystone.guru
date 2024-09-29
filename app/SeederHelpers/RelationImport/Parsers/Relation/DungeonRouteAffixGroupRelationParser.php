@@ -14,7 +14,7 @@ class DungeonRouteAffixGroupRelationParser implements RelationParserInterface
 
     public function canParseRelation(string $name, array $value): bool
     {
-        return $name === 'affixgroups';
+        return $name === 'affix_groups';
     }
 
     public function parseRelation(string $modelClassName, array $modelData, string $name, array $value): array

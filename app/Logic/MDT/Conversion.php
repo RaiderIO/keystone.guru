@@ -13,6 +13,7 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
+use App\Models\Season;
 use App\Service\Season\SeasonService;
 use Exception;
 
@@ -295,18 +296,30 @@ Expansion::EXPANSION_TWW => [
      */
     public static function convertWeekToAffixGroup(SeasonService $seasonService, Dungeon $dungeon, int $mdtWeek): ?AffixGroup
     {
-        $season = $dungeon->getActiveSeason($seasonService);
+        if (!$dungeon->gameVersion->has_seasons) {
+            return null;
+        }
+
+        $season = $seasonService->getUpcomingSeasonForDungeon($dungeon) ??
+            $seasonService->getMostRecentSeasonForDungeon($dungeon);
+
         if ($season === null) {
             logger()->error(sprintf('Unable to find season for dungeon %s', __($dungeon->name)));
 
             return null;
         }
 
-        $affixGroup = $season->affixGroups->get(($season->start_affix_group_index + ($mdtWeek - 1)) % $season->affixGroups->count());
+        // For each season this is different
+        if ($season->id === Season::SEASON_TWW_S1) {
+            $affixGroup = $season->affixGroups->get(($season->start_affix_group_index + $mdtWeek) % $season->affixGroups->count());
+        } else {
+            $affixGroup = $season->affixGroups->get(($season->start_affix_group_index + ($mdtWeek - 1)) % $season->affixGroups->count());
+        }
+
         // $affixGroup = $season->affixgroups->get(($season->start_affix_group_index - ($mdtWeek - 1)));
         if ($affixGroup === null) {
             logger()->error('Unable to find affix group for mdtWeek - returning current affix group instead', [
-                '$mdtWeek' => $mdtWeek,
+                'mdtWeek' => $mdtWeek,
             ]);
 
             $affixGroup = $season->getCurrentAffixGroup();
@@ -317,6 +330,11 @@ Expansion::EXPANSION_TWW => [
 
     public static function convertAffixGroupToWeek(AffixGroup $affixGroup): int
     {
+        // For each season this is different
+        if ($affixGroup->season_id === Season::SEASON_TWW_S1) {
+            return ($affixGroup->id - 2) % $affixGroup->season->affix_group_count;
+        }
+
         // We need to figure out which week it is in the rotation
         return ($affixGroup->id - 1) % $affixGroup->season->affix_group_count;
     }

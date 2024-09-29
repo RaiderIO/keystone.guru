@@ -26,6 +26,7 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
         /** @var KillZone|null $previousKillZone */
         $previousKillZone = null;
         $dungeonStartIcon = $this->options->dungeonroute->dungeon->getDungeonStart();
+        $dungeonStartIcon->load('floor');
 
         foreach ($this->options->dungeonroute->killZones as $killZone) {
             // Skip empty pulls

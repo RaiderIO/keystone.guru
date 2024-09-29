@@ -120,7 +120,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection                              $playerclasses
  * @property Collection                              $playerraces
  * @property Collection<AffixGroup>                  $affixes
- * @property Collection<DungeonRouteAffixGroup>      $affixgroups
+ * @property Collection<DungeonRouteAffixGroup>      $affixGroups
  * @property Collection<DungeonRouteRating>          $ratings
  * @property Collection<DungeonRouteFavorite>        $favorites
  * @property Collection<LiveSession>                 $livesessions
@@ -325,7 +325,7 @@ class DungeonRoute extends Model
         return $this->hasMany(DungeonRoutePlayerRace::class);
     }
 
-    public function affixgroups(): HasMany
+    public function affixGroups(): HasMany
     {
         return $this->hasMany(DungeonRouteAffixGroup::class);
     }
@@ -740,8 +740,8 @@ class DungeonRoute extends Model
      */
     public function saveTemporaryFromRequest(
         DungeonRouteSubmitTemporaryFormRequest $request,
-        SeasonServiceInterface           $seasonService,
-        ExpansionServiceInterface        $expansionService
+        SeasonServiceInterface                 $seasonService,
+        ExpansionServiceInterface              $expansionService
     ): bool {
         $this->author_id  = Auth::id() ?? -1;
         $this->public_key = DungeonRoute::generateRandomPublicKey();
@@ -822,7 +822,8 @@ class DungeonRoute extends Model
         // If it was empty just set Unspecified instead
         $this->faction_id = empty($this->faction_id) ? 1 : $this->faction_id;
 
-        $activeSeason = $seasonService->getMostRecentSeasonForDungeon($this->dungeon);
+        $activeSeason = $seasonService->getUpcomingSeasonForDungeon($this->dungeon) ??
+            $seasonService->getMostRecentSeasonForDungeon($this->dungeon);
         // Can still be null if there are no seasons for this dungeon, like in Classic
         $this->season_id = $activeSeason->id ?? null;
 
@@ -1030,7 +1031,7 @@ class DungeonRoute extends Model
         $this->cloneRelationsInto($dungeonroute, [
             $this->playerraces,
             $this->playerclasses,
-            $this->affixgroups,
+            $this->affixGroups,
             $this->paths,
             $this->brushlines,
             $this->killZones,
@@ -1465,22 +1466,49 @@ class DungeonRoute extends Model
             ]);
 
             // Make sure the relation should be reloaded
-            $this->unsetRelation('affixgroups');
+            $this->unsetRelation('affixGroups');
         }
     }
 
     /**
-     * Drops any caches associated with this dungeon route
+     * Drops any caches associated with this dungeon route.
      */
     public static function dropCaches(int $dungeonRouteId): void
     {
         try {
-            Cache::delete(sprintf('view:dungeonroute_card_0_0_%d', $dungeonRouteId));
-            Cache::delete(sprintf('view:dungeonroute_card_0_1_%d', $dungeonRouteId));
-            Cache::delete(sprintf('view:dungeonroute_card_1_0_%d', $dungeonRouteId));
-            Cache::delete(sprintf('view:dungeonroute_card_1_1_%d', $dungeonRouteId));
+            // This can be better - but it's fine if you're using it to drop caches for 1 route.
+            $orientations = ['vertical', 'horizontal'];
+            $locales      = language()->allowed();
+            $showAffixes  = [0, 1];
+            $showDungeon  = [0, 1];
+            $isAdmin      = [0, 1];
+
+            foreach($orientations as $orientation) {
+                foreach($locales as $code => $name) {
+                    foreach($showAffixes as $showAffix) {
+                        foreach($showDungeon as $showDungeonImage) {
+                            foreach($isAdmin as $admin) {
+                                Cache::delete(self::getCardCacheKey($dungeonRouteId, $orientation, $code, $showAffix, $showDungeonImage, $admin));
+                            }
+                        }
+                    }
+                }
+            }
         } catch (InvalidArgumentException) {
         }
+    }
+
+    public static function getCardCacheKey(int $dungeonRouteId, string $orientation, string $locale, int $showAffixes, int $showDungeonImage, int $isAdmin): string
+    {
+        return sprintf(
+            'view:dungeonroute_card:%s:%s_%d_%d_%d_%d',
+            $orientation,
+            $locale,
+            $showAffixes,
+            $showDungeonImage,
+            $isAdmin,
+            $dungeonRouteId
+        );
     }
 
     protected static function boot()

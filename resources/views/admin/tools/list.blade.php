@@ -28,6 +28,9 @@
         <a href="{{ route('admin.tools.mdt.string.viewasdungeonroute') }}">{{ __('view_admin.tools.list.view_mdt_string_as_dungeonroute') }}</a>
     </div>
     <div class="form-group">
+        <a href="{{ route('admin.tools.mdt.string.list') }}">{{ __('view_admin.tools.list.list_mdt_strings') }}</a>
+    </div>
+    <div class="form-group">
         <a href="{{ route('admin.tools.mdt.dungeonroute.viewasstring') }}">{{ __('view_admin.tools.list.view_dungeonroute_as_mdt_string') }}</a>
     </div>
     <div class="form-group">

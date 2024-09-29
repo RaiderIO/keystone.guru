@@ -216,6 +216,7 @@ let scripts = [
     'resources/assets/js/custom/models/dungeonfloorswitchmarker.js',
     'resources/assets/js/custom/models/brushline.js',
     'resources/assets/js/custom/models/usermouseposition.js',
+    'resources/assets/js/custom/models/mountablearea.js',
 
     'resources/assets/js/custom/input/usermousepositionplayer.js',
 

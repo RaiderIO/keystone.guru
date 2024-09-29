@@ -203,9 +203,9 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                             NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
                             NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]]
                     )) {
-                        $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.export_string.category.pull'), $pullIndex),
-                            sprintf(__('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->getMdtNpcId()),
-                            ['details' => __('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')]
+                        $warnings->push(new ImportWarning(sprintf(__('services.mdt.io.export_string.category.pull'), $pullIndex),
+                            sprintf(__('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->getMdtNpcId()),
+                            ['details' => __('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')]
                         ));
                     }
 
@@ -224,8 +224,8 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
 
             // Do not add an empty pull if the killed enemy in our killzone was removed because it didn't exist in MDT, and that caused the pull to be empty
             if ($killZoneEnemies->count() !== 0 && $enemiesAdded === 0) {
-                $warnings->push(new ImportWarning(sprintf(__('logic.mdt.io.export_string.category.pull'), $pullIndex),
-                    __('logic.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_caused_empty_pull'),
+                $warnings->push(new ImportWarning(sprintf(__('services.mdt.io.export_string.category.pull'), $pullIndex),
+                    __('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_caused_empty_pull'),
                 ));
 
                 continue;
@@ -248,13 +248,15 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     {
         //        $lua = $this->_getLua();
 
+        $affixes = $this->dungeonRoute->affixes;
+
         $mdtObject = [
             //
             'objects'    => $this->extractObjects($warnings),
             // M+ level
             'difficulty' => $this->dungeonRoute->level_min,
-            'week'       => $this->dungeonRoute->affixgroups->isEmpty() ? 1 :
-                Conversion::convertAffixGroupToWeek($this->dungeonRoute->affixes->first()),
+            'week'       => $this->dungeonRoute->affixGroups->isEmpty() || $affixes->isEmpty() ? 1 :
+                Conversion::convertAffixGroupToWeek($affixes->first()),
             'value'      => [
                 'currentDungeonIdx' => $this->dungeonRoute->dungeon->mdt_id,
                 'selection'         => [],
@@ -287,9 +289,9 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                 // If stripping ascii characters worked in changing the title somehow
                 if ($asciiTitle !== $this->dungeonRoute->title) {
                     $warnings->push(
-                        new ImportWarning(__('logic.mdt.io.export_string.category.title'),
-                            __('logic.mdt.io.export_string.route_title_contains_non_ascii_char_bug'),
-                            ['details' => sprintf(__('logic.mdt.io.export_string.route_title_contains_non_ascii_char_bug_details'), $this->dungeonRoute->title, $asciiTitle)]
+                        new ImportWarning(__('services.mdt.io.export_string.category.title'),
+                            __('services.mdt.io.export_string.route_title_contains_non_ascii_char_bug'),
+                            ['details' => sprintf(__('services.mdt.io.export_string.route_title_contains_non_ascii_char_bug_details'), $this->dungeonRoute->title, $asciiTitle)]
                         )
                     );
                     $this->dungeonRoute->title = $asciiTitle;
@@ -302,9 +304,9 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                         $asciiComment = preg_replace('/[[:^print:]]/', '', $mapicon->comment ?? '');
                         if ($asciiComment !== $mapicon->comment) {
                             $warnings->push(
-                                new ImportWarning(__('logic.mdt.io.export_string.category.map_icon'),
-                                    __('logic.mdt.io.export_string.map_icon_contains_non_ascii_char_bug'),
-                                    ['details' => sprintf(__('logic.mdt.io.export_string.map_icon_contains_non_ascii_char_bug_details'), $asciiComment, $mapicon->comment)]
+                                new ImportWarning(__('services.mdt.io.export_string.category.map_icon'),
+                                    __('services.mdt.io.export_string.map_icon_contains_non_ascii_char_bug'),
+                                    ['details' => sprintf(__('services.mdt.io.export_string.map_icon_contains_non_ascii_char_bug_details'), $asciiComment, $mapicon->comment)]
                                 )
                             );
                             $mapicon->comment = $asciiComment;
@@ -334,7 +336,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
      */
     public function setDungeonRoute(DungeonRoute $dungeonRoute): self
     {
-        $this->dungeonRoute = $dungeonRoute->load(['affixgroups', 'dungeon']);
+        $this->dungeonRoute = $dungeonRoute->load(['affixGroups', 'dungeon']);
 
         return $this;
     }

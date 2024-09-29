@@ -2,7 +2,6 @@ class MapIconMapObjectGroup extends MapObjectGroup {
     constructor(manager, editable) {
         super(manager, [MAP_OBJECT_GROUP_MAPICON, MAP_OBJECT_GROUP_MAPICON_AWAKENED_OBELISK], editable);
 
-        this.title = 'Hide/show map icons';
         this.fa_class = 'fa-icons';
 
         // Defined in mapicon.js, need to fix this somehow

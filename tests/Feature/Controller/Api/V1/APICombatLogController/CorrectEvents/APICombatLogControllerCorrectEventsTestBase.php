@@ -16,7 +16,7 @@ abstract class APICombatLogControllerCorrectEventsTestBase extends APICombatLogC
         // Fill function
 
         // Arrange
-        $postBody = $this->getJsonData($fixtureName, '../');
+        $postBody = $this->getJsonData($fixtureName, '../../');
 
         // Act
         $response = $this->post(route('api.v1.combatlog.event.correct'), $postBody);
@@ -27,7 +27,7 @@ abstract class APICombatLogControllerCorrectEventsTestBase extends APICombatLogC
         $responseArr = json_decode($response->content(), true);
 
         $this->assertEqualsCanonicalizing(
-            $this->getJsonData(sprintf('%s_corrected', $fixtureName), '../'),
+            $this->getJsonData(sprintf('%s_corrected', $fixtureName), '../../'),
             $responseArr
         );
     }

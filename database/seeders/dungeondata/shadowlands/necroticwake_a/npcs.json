@@ -8,7 +8,7 @@
         "display_id": 96477,
         "encounter_id": 2392,
         "name": "Surgeon Stitchflesh",
-        "base_health": 78568765,
+        "base_health": 85930569,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.5,
@@ -80,7 +80,7 @@
         "display_id": 95467,
         "encounter_id": 2395,
         "name": "Blightbone",
-        "base_health": 127310497,
+        "base_health": 139239345,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.5,
@@ -148,7 +148,7 @@
         "display_id": 96085,
         "encounter_id": 2396,
         "name": "Nalthor the Rimebinder",
-        "base_health": 121195670,
+        "base_health": 127304544,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.5,
@@ -205,7 +205,7 @@
         "display_id": 95222,
         "encounter_id": null,
         "name": "Patchwerk Soldier",
-        "base_health": 14545521,
+        "base_health": 15913068,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.2,
@@ -274,6 +274,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16774,
+                "mapping_version_id": 393,
+                "npc_id": 162729,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16603,
                 "mapping_version_id": 384,
                 "npc_id": 162729,
@@ -305,7 +312,7 @@
         "display_id": 95227,
         "encounter_id": null,
         "name": "Stitched Vanguard",
-        "base_health": 21818282,
+        "base_health": 23869602,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.2,
@@ -377,6 +384,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16777,
+                "mapping_version_id": 393,
+                "npc_id": 163121,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16606,
                 "mapping_version_id": 384,
                 "npc_id": 163121,
@@ -408,7 +422,7 @@
         "display_id": 96107,
         "encounter_id": null,
         "name": "Brittlebone Warrior",
-        "base_health": 9090951,
+        "base_health": 9945668,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 0.8,
@@ -486,7 +500,7 @@
         "display_id": 96112,
         "encounter_id": null,
         "name": "Brittlebone Mage",
-        "base_health": 5454571,
+        "base_health": 5967401,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 0.9,
@@ -579,7 +593,7 @@
         "display_id": 94992,
         "encounter_id": null,
         "name": "Zolramus Sorcerer",
-        "base_health": 16363712,
+        "base_health": 17902202,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.2,
@@ -660,6 +674,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16780,
+                "mapping_version_id": 393,
+                "npc_id": 163128,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16609,
                 "mapping_version_id": 384,
                 "npc_id": 163128,
@@ -691,7 +712,7 @@
         "display_id": 94926,
         "encounter_id": 2391,
         "name": "Amarth",
-        "base_health": 109123283,
+        "base_health": 119348010,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.5,
@@ -751,7 +772,7 @@
         "display_id": 95233,
         "encounter_id": null,
         "name": "Zolramus Necromancer",
-        "base_health": 25454662,
+        "base_health": 27847869,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.4,
@@ -847,6 +868,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16782,
+                "mapping_version_id": 393,
+                "npc_id": 163618,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16611,
                 "mapping_version_id": 384,
                 "npc_id": 163618,
@@ -878,7 +906,7 @@
         "display_id": 93933,
         "encounter_id": null,
         "name": "Zolramus Bonecarver",
-        "base_health": 18181901,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.2,
@@ -950,6 +978,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16781,
+                "mapping_version_id": 393,
+                "npc_id": 163619,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16610,
                 "mapping_version_id": 384,
                 "npc_id": 163619,
@@ -981,7 +1016,7 @@
         "display_id": 99121,
         "encounter_id": null,
         "name": "Rotspew",
-        "base_health": 43636564,
+        "base_health": 47739204,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.6,
@@ -1014,6 +1049,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16794,
+                "mapping_version_id": 393,
+                "npc_id": 163620,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16623,
                 "mapping_version_id": 384,
                 "npc_id": 163620,
@@ -1045,7 +1087,7 @@
         "display_id": 99122,
         "encounter_id": null,
         "name": "Goregrind",
-        "base_health": 50909324,
+        "base_health": 55695738,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.6,
@@ -1074,6 +1116,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16793,
+                "mapping_version_id": 393,
+                "npc_id": 163621,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16622,
                 "mapping_version_id": 384,
@@ -1106,7 +1155,7 @@
         "display_id": 97800,
         "encounter_id": null,
         "name": "Goregrind Bits",
-        "base_health": 18181901,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1,
@@ -1184,7 +1233,7 @@
         "display_id": 97801,
         "encounter_id": null,
         "name": "Rotspew Leftovers",
-        "base_health": 14545521,
+        "base_health": 15913068,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1,
@@ -1337,7 +1386,7 @@
         "display_id": 96218,
         "encounter_id": null,
         "name": "Stitchflesh's Creation",
-        "base_health": 36363805,
+        "base_health": 47739204,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.5,
@@ -1477,7 +1526,7 @@
         "display_id": 95231,
         "encounter_id": null,
         "name": "Zolramus Gatekeeper",
-        "base_health": 27272853,
+        "base_health": 29837003,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.6,
@@ -1513,6 +1562,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16778,
+                "mapping_version_id": 393,
+                "npc_id": 165137,
+                "enemy_forces": 18,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16607,
                 "mapping_version_id": 384,
                 "npc_id": 165137,
@@ -1544,7 +1600,7 @@
         "display_id": 94761,
         "encounter_id": null,
         "name": "Blight Bag",
-        "base_health": 7272761,
+        "base_health": 7956534,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 0.7,
@@ -1619,6 +1675,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16775,
+                "mapping_version_id": 393,
+                "npc_id": 165138,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16604,
                 "mapping_version_id": 384,
                 "npc_id": 165138,
@@ -1650,7 +1713,7 @@
         "display_id": 94814,
         "encounter_id": null,
         "name": "Skeletal Monstrosity",
-        "base_health": 43636564,
+        "base_health": 47739204,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.6,
@@ -1686,6 +1749,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16786,
+                "mapping_version_id": 393,
+                "npc_id": 165197,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16615,
                 "mapping_version_id": 384,
                 "npc_id": 165197,
@@ -1717,7 +1787,7 @@
         "display_id": 97668,
         "encounter_id": null,
         "name": "Zolramus Bonemender",
-        "base_health": 18181901,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.2,
@@ -1791,6 +1861,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16784,
+                "mapping_version_id": 393,
+                "npc_id": 165222,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16613,
                 "mapping_version_id": 384,
@@ -1950,6 +2027,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16785,
+                "mapping_version_id": 393,
+                "npc_id": 165824,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16614,
                 "mapping_version_id": 384,
                 "npc_id": 165824,
@@ -1981,7 +2065,7 @@
         "display_id": 96480,
         "encounter_id": null,
         "name": "Flesh Crafter",
-        "base_health": 20000092,
+        "base_health": 21880469,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.2,
@@ -2065,6 +2149,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16779,
+                "mapping_version_id": 393,
+                "npc_id": 165872,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16608,
                 "mapping_version_id": 384,
                 "npc_id": 165872,
@@ -2096,7 +2187,7 @@
         "display_id": 95226,
         "encounter_id": null,
         "name": "Loyal Creation",
-        "base_health": 23636473,
+        "base_health": 25858736,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.2,
@@ -2171,6 +2262,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16790,
+                "mapping_version_id": 393,
+                "npc_id": 165911,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16619,
                 "mapping_version_id": 384,
                 "npc_id": 165911,
@@ -2202,7 +2300,7 @@
         "display_id": 96115,
         "encounter_id": null,
         "name": "Skeletal Marauder",
-        "base_health": 36363803,
+        "base_health": 39782670,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.4,
@@ -2231,6 +2329,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16783,
+                "mapping_version_id": 393,
+                "npc_id": 165919,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16612,
                 "mapping_version_id": 384,
@@ -2263,7 +2368,7 @@
         "display_id": 96114,
         "encounter_id": null,
         "name": "Brittlebone Crossbowman",
-        "base_health": 9090951,
+        "base_health": 9945668,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 0.9,
@@ -2344,7 +2449,7 @@
         "display_id": 95577,
         "encounter_id": null,
         "name": "Spare Parts",
-        "base_health": 1818191,
+        "base_health": 1989134,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 0.7,
@@ -2443,7 +2548,7 @@
         "display_id": 98170,
         "encounter_id": null,
         "name": "Corpse Harvester",
-        "base_health": 18181901,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.2,
@@ -2520,6 +2625,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16776,
+                "mapping_version_id": 393,
+                "npc_id": 166302,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16605,
                 "mapping_version_id": 384,
@@ -2652,7 +2764,7 @@
         "display_id": 98227,
         "encounter_id": null,
         "name": "Separation Assistant",
-        "base_health": 36363803,
+        "base_health": 39782670,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 2,
@@ -2693,6 +2805,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16791,
+                "mapping_version_id": 393,
+                "npc_id": 167731,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16620,
                 "mapping_version_id": 384,
@@ -2998,6 +3117,13 @@
         "npc_spells": [],
         "npc_enemy_forces": [
             {
+                "id": 16787,
+                "mapping_version_id": 393,
+                "npc_id": 171500,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16616,
                 "mapping_version_id": 384,
                 "npc_id": 171500,
@@ -3079,7 +3205,7 @@
         "display_id": 98190,
         "encounter_id": null,
         "name": "Kyrian Stitchwerk",
-        "base_health": 32727423,
+        "base_health": 35804403,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.6,
@@ -3105,6 +3231,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16789,
+                "mapping_version_id": 393,
+                "npc_id": 172981,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16618,
                 "mapping_version_id": 384,
@@ -3137,7 +3270,7 @@
         "display_id": 98170,
         "encounter_id": null,
         "name": "Corpse Collector",
-        "base_health": 18181901,
+        "base_health": 19891335,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.2,
@@ -3218,6 +3351,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 16788,
+                "mapping_version_id": 393,
+                "npc_id": 173016,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16617,
                 "mapping_version_id": 384,
                 "npc_id": 173016,
@@ -3249,7 +3389,7 @@
         "display_id": 98226,
         "encounter_id": null,
         "name": "Stitching Assistant",
-        "base_health": 36363803,
+        "base_health": 39782670,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 2,
@@ -3290,6 +3430,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 16792,
+                "mapping_version_id": 393,
+                "npc_id": 173044,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16621,
                 "mapping_version_id": 384,
