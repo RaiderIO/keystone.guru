@@ -1,0 +1,41 @@
+{
+    "id": 251,
+    "release_changelog_id": 258,
+    "version": "v11.3.4",
+    "title": "The Stonevault enemy placement - MDT import\/export affixes",
+    "silent": 0,
+    "spotlight": 0,
+    "created_at": "2024-09-29T07:16:30+00:00",
+    "updated_at": "2024-09-29T07:16:30+00:00",
+    "changelog": {
+        "id": 258,
+        "release_id": 251,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 258,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2518,
+                "change": "Fixed enemy placement to match MDT."
+            },
+            {
+                "release_changelog_id": 258,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2486,
+                "change": "City of Threads map tiles redone."
+            },
+            {
+                "release_changelog_id": 258,
+                "release_changelog_category_id": 6,
+                "ticket_id": 2501,
+                "change": "Created a new system to view and manage failed MDT imports (rather than me getting a ping every time)."
+            },
+            {
+                "release_changelog_id": 258,
+                "release_changelog_category_id": 8,
+                "ticket_id": 2512,
+                "change": "Import and export of MDT strings should now match up affixes with MDT."
+            }
+        ]
+    }
+}
