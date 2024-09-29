@@ -5,6 +5,7 @@ namespace App\Repositories\Database;
 use App\Models\Release;
 use App\Repositories\Interfaces\ReleaseRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class ReleaseRepository extends DatabaseRepository implements ReleaseRepositoryInterface
 {
@@ -15,13 +16,20 @@ class ReleaseRepository extends DatabaseRepository implements ReleaseRepositoryI
 
     public function getLatestUnreleasedRelease(): ?Release
     {
-        return Release::where('released', false)->orderBy('id', 'desc')->first();
+        // If released column exists
+        if (Schema::hasColumn('releases', 'released')) {
+            return Release::where('released', false)->orderBy('id', 'desc')->first();
+        } else {
+            return null;
+        }
     }
 
     public function releaseSuccessful(): void
     {
         // ALL releases are marked as successful!
-        /** @noinspection SqlWithoutWhere */
-        DB::update('UPDATE `releases` SET `released` = 1');
+        if (Schema::hasColumn('releases', 'released')) {
+            /** @noinspection SqlWithoutWhere */
+            DB::update('UPDATE `releases` SET `released` = 1');
+        }
     }
 }
