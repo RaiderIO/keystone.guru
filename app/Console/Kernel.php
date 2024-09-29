@@ -16,6 +16,7 @@ use App\Console\Commands\CombatLog\SplitChallengeMode;
 use App\Console\Commands\CombatLog\SplitZoneChange;
 use App\Console\Commands\CombatLogEvent\SaveToOpensearch;
 use App\Console\Commands\Database\Backup;
+use App\Console\Commands\Database\SeedOne;
 use App\Console\Commands\Discover\Cache as DiscoverCache;
 use App\Console\Commands\Dungeon\CreateMissing;
 use App\Console\Commands\Dungeon\CreateMissingFloors;
@@ -109,6 +110,7 @@ class Kernel extends ConsoleKernel
 
         // Database
         Backup::class,
+        SeedOne::class,
 
         // Discover
         DiscoverCache::class,
