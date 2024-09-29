@@ -50,7 +50,7 @@
                 "source": {
                     "url": "git@github.com:Wotuu/php-html-parser.git",
                     "type": "git",
-                    "reference": "5d1c017c916f6ce8991442f1bead60729919ed8d"
+                    "reference": "33deca445aab2a76f9daa1075a7dc9cf70c0a9f0"
                 }
             }
         }
