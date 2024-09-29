@@ -119,7 +119,7 @@ return [
         'flash' => [
             'release_updated'  => 'Release updated',
             'release_created'  => 'Release created',
-            'github_exception' => 'An error occurred communicating with Github: %s',
+            'github_exception' => 'An error occurred communicating with Github: :message',
         ],
     ],
     'mappingversion'              => [

@@ -52,6 +52,7 @@ use App\Console\Commands\Release\GetBody as ReleaseGetBody;
 use App\Console\Commands\Release\GetCurrent as ReleaseGetCurrent;
 use App\Console\Commands\Release\Report as ReleaseReport;
 use App\Console\Commands\Release\Save as ReleaseSave;
+use App\Console\Commands\Release\Success as ReleaseSuccess;
 use App\Console\Commands\Scheduler\DeleteExpiredDungeonRoutes;
 use App\Console\Commands\Scheduler\RefreshAffixGroupEaseTiers;
 use App\Console\Commands\Scheduler\RefreshOutdatedThumbnails;
@@ -164,11 +165,12 @@ class Kernel extends ConsoleKernel
         DisableReadOnlyMode::class,
 
         // Release
-        ReleaseGetCurrent::class,
+        ReleaseExport::class,
         ReleaseGetBody::class,
+        ReleaseGetCurrent::class,
         ReleaseReport::class,
         ReleaseSave::class,
-        ReleaseExport::class,
+        ReleaseSuccess::class,
 
         // Scheduler
         DeleteExpiredDungeonRoutes::class,

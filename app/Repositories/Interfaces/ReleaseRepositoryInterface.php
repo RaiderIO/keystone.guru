@@ -18,5 +18,7 @@ use Illuminate\Support\Collection;
  */
 interface ReleaseRepositoryInterface extends BaseRepositoryInterface
 {
+    public function getLatestUnreleasedRelease(): ?Release;
 
+    public function releaseSuccessful(): void;
 }

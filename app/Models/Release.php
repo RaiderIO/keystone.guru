@@ -16,8 +16,11 @@ use Throwable;
  * @property int              $release_changelog_id
  * @property string           $version
  * @property string           $title
+ * @property bool             $backup_db
  * @property bool             $silent
  * @property bool             $spotlight
+ * @property bool             $released A per-environment flag to indicate if the release has been released to the public
+ *
  * @property Carbon           $updated_at
  * @property Carbon           $created_at
  *
@@ -34,7 +37,18 @@ class Release extends CacheModel
     use SeederModel;
     use SerializesDates;
 
-    protected $fillable = ['id', 'release_changelog_id', 'version', 'title', 'silent', 'spotlight', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'id',
+        'release_changelog_id',
+        'version',
+        'title',
+        'backup_db',
+        'silent',
+        'spotlight',
+        'released',
+        'created_at',
+        'updated_at',
+    ];
 
     protected $with = ['changelog'];
 
