@@ -321,6 +321,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::get('dungeonroute/string', (new AdminToolsController())->mdtviewasstring(...))->name('admin.tools.mdt.dungeonroute.viewasstring');
                     Route::post('dungeonroute/string', (new AdminToolsController())->mdtviewasstringsubmit(...))->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
 
+                    // View imported MDT strings
+                    Route::get('string/list', (new AdminToolsController())->mdtImportList(...))->name('admin.tools.mdt.string.list');
+
                     // View mapping hash
                     Route::get('dungeonmappinghash', (new AdminToolsController())->mdtdungeonmappinghash(...))->name('admin.tools.mdt.dungeonmappinghash');
                     Route::post('dungeonmappinghash', (new AdminToolsController())->mdtdungeonmappinghashsubmit(...))->name('admin.tools.mdt.dungeonmappinghash.submit');

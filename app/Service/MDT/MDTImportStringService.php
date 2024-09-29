@@ -25,6 +25,7 @@ use App\Models\KillZone\KillZoneSpell;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
+use App\Models\MDTImport;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Path;
 use App\Models\Patreon\PatreonBenefit;
@@ -126,8 +127,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             ];
 
         } catch (Exception) {
-            throw new ImportWarning(__('logic.mdt.io.import_string.category.awakened_obelisks'),
-                __('logic.mdt.io.import_string.unable_to_find_awakened_obelisks')
+            throw new ImportWarning(__('services.mdt.io.import_string.category.awakened_obelisks'),
+                __('services.mdt.io.import_string.unable_to_find_awakened_obelisks')
             );
         }
 
@@ -146,8 +147,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $obeliskMapIcon = $npcIdToMapIconMapping[$npcId];
 
                 if (isset($mdtXy['sublevel'])) {
-                    throw new ImportWarning(__('logic.mdt.io.import_string.category.awakened_obelisks'),
-                        __('logic.mdt.io.import_string.unable_to_find_awakened_obelisk_different_floor',
+                    throw new ImportWarning(__('services.mdt.io.import_string.category.awakened_obelisks'),
+                        __('services.mdt.io.import_string.unable_to_find_awakened_obelisk_different_floor',
                             ['name' => __($obeliskMapIcon->mapicontype->name)])
                     );
                 }
@@ -208,8 +209,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         if (count($importStringPulls->getMdtPulls()) > config('keystoneguru.dungeon_route_limits.kill_zones')) {
             $importStringPulls->getErrors()->push(
                 new ImportError(
-                    __('logic.mdt.io.import_string.category.pulls'),
-                    __('logic.mdt.io.import_string.limit_reached_pulls', ['limit' => config('keystoneguru.dungeon_route_limits.kill_zones')])
+                    __('services.mdt.io.import_string.category.pulls'),
+                    __('services.mdt.io.import_string.limit_reached_pulls', ['limit' => config('keystoneguru.dungeon_route_limits.kill_zones')])
                 )
             );
         }
@@ -285,9 +286,9 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 // Don't throw this warning if we skipped things because they were not part of the seasonal index we're importing
                 // Also don't throw it if the pull is simply empty in MDT, then just import an empty pull for consistency
                 if (!$seasonalIndexSkip && $totalEnemiesMatched === 0) {
-                    throw new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
-                        __('logic.mdt.io.import_string.unable_to_find_enemies_pull_skipped'),
-                        ['details' => __('logic.mdt.io.import_string.unable_to_find_enemies_pull_skipped_details')]
+                    throw new ImportWarning(sprintf(__('services.mdt.io.import_string.category.pull'), $newPullIndex),
+                        __('services.mdt.io.import_string.unable_to_find_enemies_pull_skipped'),
+                        ['details' => __('services.mdt.io.import_string.unable_to_find_enemies_pull_skipped_details')]
                     );
                 }
 
@@ -379,9 +380,9 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             // No matching MDT enemy found - skip to the next enemy
             if ($mdtEnemy === null) {
                 if (!$isEmissary) {
-                    $importStringPulls->getWarnings()->push(new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
-                        sprintf(__('logic.mdt.io.import_string.unable_to_find_mdt_enemy_for_clone_index'), $cloneIndex, $npcIndex),
-                        ['details' => __('logic.mdt.io.import_string.unable_to_find_mdt_enemy_for_clone_index_details')]
+                    $importStringPulls->getWarnings()->push(new ImportWarning(sprintf(__('services.mdt.io.import_string.category.pull'), $newPullIndex),
+                        sprintf(__('services.mdt.io.import_string.unable_to_find_mdt_enemy_for_clone_index'), $cloneIndex, $npcIndex),
+                        ['details' => __('services.mdt.io.import_string.unable_to_find_mdt_enemy_for_clone_index_details')]
                     ));
                 }
 
@@ -411,10 +412,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 // Since an enemy on my side can only be mapped to one MDT enemy I now choose the Infiltrator and we can discard the other one.
                 // The other enemy is marked as shrouded, so if we cannot find a shrouded normal mob we skip it and don't alert
                 if (!$mdtEnemy->teeming && $mdtEnemy->seasonal_type !== Enemy::SEASONAL_TYPE_SHROUDED) {
-                    $importStringPulls->getWarnings()->push(new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
-                        sprintf(__('logic.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy'), $mdtEnemy->mdt_id, $mdtEnemy->npc->name,
+                    $importStringPulls->getWarnings()->push(new ImportWarning(sprintf(__('services.mdt.io.import_string.category.pull'), $newPullIndex),
+                        sprintf(__('services.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy'), $mdtEnemy->mdt_id, $mdtEnemy->npc->name,
                             $mdtEnemy->npc_id),
-                        ['details' => __('logic.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy_details')]
+                        ['details' => __('services.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy_details')]
                     ));
                 }
 
@@ -542,9 +543,9 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         //                                            $kzEnemy->save();
         //                                        }
         //                                    } else {
-        //                                        throw new ImportWarning(sprintf(__('logic.mdt.io.import_string.category.pull'), $newPullIndex),
+        //                                        throw new ImportWarning(sprintf(__('services.mdt.io.import_string.category.pull'), $newPullIndex),
         //                                            sprintf(__('unable_to_find_awakened_enemy_for_final_boss'), $kzEnemy->enemy->npc_id, $kzEnemy->enemy->seasonal_index ?? -1, __($dungeonRoute->dungeon->name)),
-        //                                            ['details' => __('logic.mdt.io.import_string.unable_to_find_awakened_enemy_for_final_boss_details')]
+        //                                            ['details' => __('services.mdt.io.import_string.unable_to_find_awakened_enemy_for_final_boss_details')]
         //                                        );
         //                                    }
         //                                }
@@ -564,8 +565,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         if (count($importStringObjects->getMdtObjects()) > config('keystoneguru.dungeon_route_limits.map_icons')) {
             $importStringObjects->getErrors()->push(
                 new ImportError(
-                    __('logic.mdt.io.import_string.category.notes'),
-                    __('logic.mdt.io.import_string.limit_reached_notes', ['limit' => config('keystoneguru.dungeon_route_limits.map_icons')])
+                    __('services.mdt.io.import_string.category.notes'),
+                    __('services.mdt.io.import_string.limit_reached_notes', ['limit' => config('keystoneguru.dungeon_route_limits.map_icons')])
                 )
             );
 
@@ -628,9 +629,9 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
                 if ($floor === null) {
                     throw new ImportWarning(
-                        sprintf(__('logic.mdt.io.import_string.category.object'), $objectIndex),
-                        sprintf(__('logic.mdt.io.import_string.unable_to_find_floor_for_object'), $mdtSubLevel),
-                        ['details' => __('logic.mdt.io.import_string.unable_to_find_floor_for_object_details') . json_encode($details)]
+                        sprintf(__('services.mdt.io.import_string.category.object'), $objectIndex),
+                        sprintf(__('services.mdt.io.import_string.unable_to_find_floor_for_object'), $mdtSubLevel),
+                        ['details' => __('services.mdt.io.import_string.unable_to_find_floor_for_object_details') . json_encode($details)]
                     );
                 }
 
@@ -764,8 +765,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             if ($importStringObjects->getLines()->count() > config('keystoneguru.dungeon_route_limits.brushlines')) {
                 $importStringObjects->getErrors()->push(
                     new ImportError(
-                        __('logic.mdt.io.import_string.category.brushlines'),
-                        __('logic.mdt.io.import_string.limit_reached_brushlines', ['limit' => config('keystoneguru.dungeon_route_limits.brushlines')])
+                        __('services.mdt.io.import_string.category.brushlines'),
+                        __('services.mdt.io.import_string.limit_reached_brushlines', ['limit' => config('keystoneguru.dungeon_route_limits.brushlines')])
                     )
                 );
             }
@@ -775,8 +776,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             if ($importStringObjects->getPaths()->count() > config('keystoneguru.dungeon_route_limits.paths')) {
                 $importStringObjects->getErrors()->push(
                     new ImportError(
-                        __('logic.mdt.io.import_string.category.paths'),
-                        __('logic.mdt.io.import_string.limit_reached_paths', ['limit' => config('keystoneguru.dungeon_route_limits.paths')])
+                        __('services.mdt.io.import_string.category.paths'),
+                        __('services.mdt.io.import_string.limit_reached_paths', ['limit' => config('keystoneguru.dungeon_route_limits.paths')])
                     )
                 );
             }
@@ -803,8 +804,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
                 $importStringObjects->getWarnings()->push(
                     new ImportWarning(
-                        __('logic.mdt.io.import_string.category.object'),
-                        __('logic.mdt.io.import_string.object_out_of_bounds', ['comment' => (string)$details['4']])
+                        __('services.mdt.io.import_string.category.object'),
+                        __('services.mdt.io.import_string.object_out_of_bounds', ['comment' => (string)$details['4']])
                     )
                 );
 
@@ -978,19 +979,30 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         bool       $save = false,
         bool       $importAsThisWeek = false
     ): DungeonRoute {
+        $error = null;
+
+        // Keep track of the import
+        $mdtImport = MDTImport::create([
+            'dungeon_route_id' => null,
+            'import_string'    => $this->encodedString,
+        ]);
+
         try {
             $this->log->getDungeonRouteStart($sandbox, $save, $importAsThisWeek);
+
             $decoded = $this->decode($this->encodedString);
 
             if ($decoded === null) {
-                throw new MDTStringParseException('Unable to decode MDT import string');
+                $error = __('services.mdt.io.import_string.unable_to_decode_mdt_import_string');
+                throw new MDTStringParseException($error);
             }
 
             // Check if it's valid
             $isValid = $this->getLua()->call('ValidateImportPreset', [$decoded]);
 
             if (!$isValid) {
-                throw new InvalidMDTStringException('Unable to validate MDT import string in Lua');
+                $error = __('services.mdt.io.import_string.unable_to_validate_mdt_import_string');
+                throw new InvalidMDTStringException($error);
             }
 
             $dungeon        = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
@@ -1072,10 +1084,17 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $this->applyPullsToDungeonRoute($importStringPulls, $dungeonRoute);
 
                 $this->applyObjectsToDungeonRoute($importStringObjects, $dungeonRoute);
+
+                // Successfully imported!
+                $mdtImport->update(['dungeon_route_id' => $dungeonRoute->id]);
             }
 
             return $dungeonRoute;
         } finally {
+            if ($error !== null) {
+                $mdtImport->update(['error' => $error]);
+            }
+
             $this->log->getDungeonRouteEnd();
         }
     }

@@ -228,7 +228,7 @@ class LayoutsApp extends InlineCode {
 /**
  * The default function that should be called when an ajax request fails (error handler)
  **/
-function defaultAjaxErrorFn(xhr, textStatus, errorThrown) {
+function defaultAjaxErrorFn(xhr/*, textStatus, errorThrown*/) {
     let message = lang.get('messages.ajax_error_default');
 
     switch (xhr.status) {
@@ -262,7 +262,7 @@ function defaultAjaxErrorFn(xhr, textStatus, errorThrown) {
         }
     }
 
-    showErrorNotification(`${message} (${xhr.status})`);
+    showErrorNotification(`${xhr.status}: ${message}`);
 }
 
 /**

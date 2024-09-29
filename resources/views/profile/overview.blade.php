@@ -1,10 +1,15 @@
 @extends('layouts.sitepage', ['rootClass' => 'col-xl-10 offset-xl-1', 'wide' => true, 'title' => __('view_profile.overview.title')])
 
 <?php
+
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\GameVersion\GameVersion;
+use Illuminate\Support\Collection;
+
 /**
- * @var $newRouteStyle string
- * @var $currentUserGameVersion \App\Models\GameVersion\GameVersion
- * @var $dungeonRoutes \Illuminate\Support\Collection<\App\Models\DungeonRoute\DungeonRoute>
+ * @var string                   $newRouteStyle
+ * @var GameVersion              $currentUserGameVersion
+ * @var Collection<DungeonRoute> $dungeonRoutes
  */
 ?>
 

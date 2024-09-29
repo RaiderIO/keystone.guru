@@ -822,7 +822,8 @@ class DungeonRoute extends Model
         // If it was empty just set Unspecified instead
         $this->faction_id = empty($this->faction_id) ? 1 : $this->faction_id;
 
-        $activeSeason = $seasonService->getMostRecentSeasonForDungeon($this->dungeon);
+        $activeSeason = $seasonService->getUpcomingSeasonForDungeon($this->dungeon) ??
+            $seasonService->getMostRecentSeasonForDungeon($this->dungeon);
         // Can still be null if there are no seasons for this dungeon, like in Classic
         $this->season_id = $activeSeason->id ?? null;
 
