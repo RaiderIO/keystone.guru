@@ -61,8 +61,12 @@ class ViewService implements ViewServiceInterface
                 ->get();
 
             /** @var Release $latestRelease */
-            $latestRelease          = Release::latest()->first();
-            $latestReleaseSpotlight = Release::where('spotlight', true)
+            $latestReleaseBuilder = Release::when(config('app.env') === 'production',
+                static fn($query) => $query->where('released', true)
+            );
+
+            $latestRelease          = $latestReleaseBuilder->latest()->first();
+            $latestReleaseSpotlight = $latestReleaseBuilder->where('spotlight', true)
                 ->whereDate('created_at', '>',
                     Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))
                 )->latest()->first();
@@ -105,7 +109,7 @@ class ViewService implements ViewServiceInterface
                 ),
 
                 // Home
-                'userCount'                       => User::count(),
+                'userCount'                       => (int)(User::count() / 1000) * 1000,
 
                 // OAuth/register
                 'allRegions'                      => $allRegions,

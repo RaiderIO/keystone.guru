@@ -1,7 +1,15 @@
 <?php
-/** @var $releases Illuminate\Pagination\LengthAwarePaginator|\App\Models\Release[] */
-/** @var $categories \Illuminate\Support\Collection<\App\Models\ReleaseChangelogCategory> */
-/** @var $isUserAdmin boolean */
+
+use App\Models\Release;
+use App\Models\ReleaseChangelogCategory;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+
+/**
+ * @var LengthAwarePaginator|Release[]       $releases
+ * @var Collection<ReleaseChangelogCategory> $categories
+ * @var boolean                              $isUserAdmin
+ */
 ?>
 @extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('view_misc.changelog.title')])
 
