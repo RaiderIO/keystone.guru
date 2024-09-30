@@ -321,7 +321,7 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                                 <strong>{{ __('view_home.start_planning_today') }}</strong>
                             </h4>
                             <p class="mbr-text mbr-fonts-style mb-4 display-7">
-                                {{ sprintf(__('view_home.join_other_users'), (int)($userCount / 1000) * 1000) }}
+                                {{ sprintf(__('view_home.join_other_users'), $userCount) }}
                             </p>
                             <div class="mbr-section-btn mt-3">
                                 <a class="display-4 btn btn-accent" href="#" data-toggle="modal"

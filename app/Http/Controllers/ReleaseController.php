@@ -62,6 +62,7 @@ class ReleaseController extends Controller
 
         $release->version   = $request->get('version');
         $release->title     = $request->get('title', '') ?? '';
+        $release->backup_db = $request->get('backup_db', 1);
         $release->silent    = $request->get('silent', 0);
         $release->spotlight = $request->get('spotlight', 0);
 
@@ -79,7 +80,7 @@ class ReleaseController extends Controller
                 Artisan::call(sprintf('make:githubreleaseticket %s', $release->version));
                 Artisan::call(sprintf('make:githubreleasepullrequest %s', $release->version));
             } catch (Exception $exception) {
-                Session::flash('status', sprintf(__('controller.release.flash.github_exception'), $exception->getMessage()));
+                Session::flash('status', __('controller.release.flash.github_exception', ['message' => $exception->getMessage()]));
             }
         } // Something went wrong with saving
         else {

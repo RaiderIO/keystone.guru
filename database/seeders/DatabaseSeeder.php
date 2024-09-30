@@ -64,7 +64,7 @@ class DatabaseSeeder extends Seeder
      *
      * @throws Throwable
      */
-    public function run(CacheServiceInterface $cacheService): void
+    public function run(CacheServiceInterface $cacheService, array $seederClasses = null): void
     {
         self::$running = true;
 
@@ -77,7 +77,7 @@ class DatabaseSeeder extends Seeder
         // 2.1 During applying, seeder can do what it wants, it's all wrapped in a transaction
         // 3. Cleanup: Remove existing table, rename temporary table
 
-        foreach (self::SEEDERS as $seederClass) {
+        foreach ($seederClasses ?? self::SEEDERS as $seederClass) {
             /** @var TableSeederInterface $seederClass */
             $affectedEnvironments = $seederClass::getAffectedEnvironments();
             if ($affectedEnvironments !== null && !in_array(app()->environment(), $affectedEnvironments)) {

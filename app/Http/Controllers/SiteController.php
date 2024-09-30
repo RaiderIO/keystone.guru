@@ -112,7 +112,8 @@ class SiteController extends Controller
      */
     public function changelog(Request $request)
     {
-        $releases = Release::orderBy('created_at', 'DESC')->paginate(5);
+        $releases = Release::where('released', 1)
+            ->orderBy('created_at', 'DESC')->paginate(5);
         if ($releases->isEmpty()) {
             return redirect()->route('misc.changelog');
         } else {

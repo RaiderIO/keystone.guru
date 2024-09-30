@@ -3,6 +3,8 @@
 namespace App\Console\Commands\Database;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
+use App\Repositories\Database\ReleaseRepository;
+use App\Repositories\Interfaces\ReleaseRepositoryInterface;
 use Illuminate\Console\Command;
 
 class Backup extends Command
@@ -19,32 +21,42 @@ class Backup extends Command
     /**
      * @var string
      */
-    protected $signature = 'db:backup';
+    protected $signature = 'db:backup {--release}';
 
     /**
      * Execute the console command.
      */
-    public function handle(): int
-    {
-        // Backup MySql database if the environment asks for it!
-        $backupDir = config('keystoneguru.db_backup_dir');
-        if (!empty($backupDir)) {
-            $this->info('Backing up MySQL database...');
+    public function handle(
+        ReleaseRepositoryInterface $releaseRepository
+    ): int {
+        $release = (bool)$this->option('release');
 
-            $this->shell([
-                sprintf("mysqldump --no-tablespaces -u %s -p'%s' %s | gzip -9 -c > %s/%s.%s.sql.gz",
-                    config('database.connections.migrate.username'),
-                    config('database.connections.migrate.password'),
-                    config('database.connections.migrate.database'),
-                    $backupDir,
-                    config('database.connections.migrate.database'),
-                    now()->format('Y.m.d-h.i')
-                ),
-            ]);
+        // If we're not releasing, or we are releasing and the release asks for a backup. Do a backup by default, though, to be sure.
+        if (!$release || ($releaseRepository->getLatestUnreleasedRelease()?->backup_db ?? true)) {
+            // Backup MySql database if the environment asks for it!
+            $backupDir = config('keystoneguru.db_backup_dir');
 
-            $this->info('Backing up MySQL database OK!');
+            if (!empty($backupDir)) {
+                $this->info('Backing up MySQL database...');
+
+                $this->shell([
+                    sprintf("mysqldump --no-tablespaces --single-transaction -u %s -p'%s' %s | gzip -9 -c > %s/%s.%s.sql.gz",
+                        config('database.connections.migrate.username'),
+                        config('database.connections.migrate.password'),
+                        config('database.connections.migrate.database'),
+                        $backupDir,
+                        config('database.connections.migrate.database'),
+                        now()->format('Y.m.d-h.i')
+                    ),
+                ]);
+
+                $this->info('Backing up MySQL database OK!');
+            } else {
+                $this->info('Unable to back up MySQL database - db_backup_dir was not set in environment');
+            }
         } else {
-            $this->info('Unable to back up MySQL database - db_backup_dir was not set in environment');
+            // $release is true at this point and the latest release backup_db will be false
+            $this->info('Skipping backup of MySQL database - latest release does not ask for it');
         }
 
         return 0;
