@@ -64,7 +64,7 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
 
                 $releaseAttribute['released'] = $existingRelease->released;
             } else {
-                $releaseAttributes[] = $releaseAttribute;
+                $releaseAttribute['released'] = 0;
             }
             $releaseAttributes[] = $releaseAttribute;
         }
