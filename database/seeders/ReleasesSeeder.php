@@ -63,10 +63,10 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
                 $existingRelease = $existingReleases->get($releaseAttribute['id']);
 
                 $releaseAttribute['released'] = $existingRelease->released;
-                $releaseAttribute['backup_db'] = $existingRelease->backup_db;
+                $releaseAttribute['backup_db'] = $existingRelease->backup_db ?? 1;
             } else {
                 $releaseAttribute['released'] = 0;
-                $releaseAttribute['backup_db'] = 1;
+                $releaseAttribute['backup_db'] = $releaseAttribute['backup_db'] ?? 1;
             }
             $releaseAttributes[] = $releaseAttribute;
         }
