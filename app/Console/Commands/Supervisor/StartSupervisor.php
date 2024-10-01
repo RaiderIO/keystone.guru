@@ -35,10 +35,10 @@ class StartSupervisor extends Command
         $appType = $appType === 'local' ? '' : '-' . $appType;
 
         $this->shell([
-            'sudo supervisorctl reread',
-            'sudo supervisorctl update',
-            sprintf('sudo supervisorctl start laravel-echo-server%s:*', $appType),
-            sprintf('sudo supervisorctl start laravel-horizon%s:*', $appType),
+            'sudo /usr/bin/supervisorctl reread',
+            'sudo /usr/bin/supervisorctl update',
+            sprintf('sudo /usr/bin/supervisorctl start laravel-echo-server%s:*', $appType),
+            sprintf('sudo /usr/bin/supervisorctl start laravel-horizon%s:*', $appType),
         ]);
 
         return 0;

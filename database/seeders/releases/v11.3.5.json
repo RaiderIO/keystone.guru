@@ -1,0 +1,31 @@
+{
+    "id": 252,
+    "release_changelog_id": 259,
+    "version": "v11.3.5",
+    "title": "Ara-Kara and The Stonevault enemy placement (v2)",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2024-10-01T11:51:11+00:00",
+    "updated_at": "2024-10-01T11:51:11+00:00",
+    "changelog": {
+        "id": 259,
+        "release_id": 252,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 259,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2529,
+                "change": "Ara-Kara enemy placement updated."
+            },
+            {
+                "release_changelog_id": 259,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2518,
+                "change": "The Stonevault enemy placement updated (attempt 2)."
+            }
+        ]
+    }
+}
