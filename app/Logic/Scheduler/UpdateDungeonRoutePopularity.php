@@ -9,6 +9,7 @@
 namespace App\Logic\Scheduler;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\PublishedState;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -18,7 +19,7 @@ class UpdateDungeonRoutePopularity
     {
         Log::channel('scheduler')->debug('>> Updating dungeonroute popularity');
 
-        DB::update('
+        $updatedRoutes = DB::update('
             UPDATE dungeon_routes, (
                 SELECT model_id, count(0) as views
                 FROM page_views
@@ -39,21 +40,28 @@ class UpdateDungeonRoutePopularity
             */
                 * GREATEST(0, (1 - DATEDIFF(NOW(), dungeon_routes.updated_at) / :popularityFalloffDays))
             /*
-                If your route is cloned, it cannot show up in any popularity pages
-             */
-                * IF(dungeon_routes.clone_of IS NOT NULL, 1, 0)
-            /*
                 Adds a penalty if your route does not use the latest mapping version for your dungeon
              */
                 * IF(FIND_IN_SET(dungeon_routes.mapping_version_id, latest_mapping_version_ids.ids) > 1, 1, :outOfDateMappingVersionPenalty)
             WHERE dungeon_routes.id = page_views.model_id
+            /*
+               Only public routes can have their popularity updated for performance reasons
+             */
+                AND dungeon_routes.published_state_id IN (:publishedStates)
+            /*
+                If your route is cloned, it cannot show up in any popularity pages
+             */
+                AND dungeon_routes.clone_of IS NULL
         ', [
             'modelClass'                     => DungeonRoute::class,
             'popularityDate'                 => now()->subDays(config('keystoneguru.discover.service.popular_days'))->toDateTimeString(),
             'popularityFalloffDays'          => config('keystoneguru.discover.service.popular_falloff_days'),
             'outOfDateMappingVersionPenalty' => config('keystoneguru.discover.service.popular_out_of_date_mapping_version_penalty'),
+            'publishedStates'                => implode(',', [PublishedState::ALL[PublishedState::WORLD]]),
         ]);
 
-        Log::channel('scheduler')->debug('OK Updating dungeonroute popularity');
+        Log::channel('scheduler')->debug(
+            sprintf('OK Updating dungeonroute popularity for %d routes', $updatedRoutes)
+        );
     }
 }
