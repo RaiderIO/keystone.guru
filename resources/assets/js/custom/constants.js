@@ -582,6 +582,12 @@ let c = {
             margin: 2,
             arcSegments: function (nr) {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
+            },
+            // Whenever the user clicks on a killzone, the map will pan to the killzone using these settings
+            // https://leafletjs.com/reference.html#zoom/pan-options
+            selectionSetViewOptions: {
+                animate: true,
+                duration: 1
             }
         },
         mountablearea: {
