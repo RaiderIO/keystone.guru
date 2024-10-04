@@ -17,7 +17,7 @@ class MapContext extends Signalable {
         }
 
         // Init spells
-        let spells = this._options.static.spells;
+        let spells = this._options.static.selectableSpells;
         this.spells = [];
         for (let i = 0; i < spells.length; i++) {
             this.spells.push(
