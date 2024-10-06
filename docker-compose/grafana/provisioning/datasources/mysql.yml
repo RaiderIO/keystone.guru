@@ -1,0 +1,17 @@
+apiVersion: 1
+datasources:
+  - name: MySQL
+    type: mysql
+    access: proxy
+    url: db:3306
+    database: keystone.guru.dev
+    user: homestead
+    secureJsonData:
+      password: secret
+    jsonData:
+      tlsAuth: false            # Set to true if using SSL/TLS for the connection
+      tlsAuthWithCACert: false  # Set to true if you have a CA certificate for TLS
+      maxOpenConnections: 100   # Connection pool settings
+      maxIdleConnections: 10
+      connectionMaxLifetime: 14400
+    isDefault: false

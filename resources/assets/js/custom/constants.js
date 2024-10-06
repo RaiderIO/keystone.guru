@@ -590,6 +590,9 @@ let c = {
                 duration: 1
             }
         },
+        killZonePath: {
+            defaultHandlers: [[0, '#ff0000'], [50, '#0000BB'], [100, '#00ff00']],
+        },
         mountablearea: {
             color: '#eb4934',
             margin: 2,

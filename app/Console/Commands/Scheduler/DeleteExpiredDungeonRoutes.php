@@ -2,12 +2,9 @@
 
 namespace App\Console\Commands\Scheduler;
 
-use App\Models\DungeonRoute\DungeonRoute;
 use Exception;
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
-class DeleteExpiredDungeonRoutes extends Command
+class DeleteExpiredDungeonRoutes extends SchedulerCommand
 {
     /**
      * The name and signature of the console command.
@@ -31,21 +28,9 @@ class DeleteExpiredDungeonRoutes extends Command
      */
     public function handle(): int
     {
-        $dungeonRoutes = DungeonRoute::with(['brushlines', 'paths', 'killZones', 'livesessions'])
-            ->whereRaw('expires_at < NOW()')
-            ->where('expires_at', '!=', 0)
-            ->whereNotNull('expires_at')
-            ->get();
-
-        // Retrieve all routes and then delete them
-        foreach ($dungeonRoutes as $dungeonRoute) {
-            /** @var $dungeonRoute DungeonRoute */
-            try {
-                $dungeonRoute->delete();
-            } catch (Exception $ex) {
-                Log::channel('scheduler')->error($ex);
-            }
-        }
+        return $this->trackTime(function () {
+            $this->deleteExpiredDungeonRoutes();
+        });
 
         return 0;
     }

@@ -12,8 +12,8 @@ class MySqlStats extends Measurement
      */
     public function getPoints(): array
     {
-        $threadsConnected = DB::select('SHOW STATUS WHERE `variable_name` = "Threads_connected"')[0]->Value;
-        $maxThreads       = DB::select('SHOW VARIABLES LIKE "max_connections"')[0]->Value;
+        $threadsConnected = (int)DB::select('SHOW STATUS WHERE `variable_name` = "Threads_connected"')[0]->Value;
+        $maxThreads       = (int)DB::select('SHOW VARIABLES LIKE "max_connections"')[0]->Value;
 
         return [
             new Point(

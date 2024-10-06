@@ -55,6 +55,8 @@ use App\Console\Commands\Release\Report as ReleaseReport;
 use App\Console\Commands\Release\Save as ReleaseSave;
 use App\Console\Commands\Release\Success as ReleaseSuccess;
 use App\Console\Commands\Scheduler\DeleteExpiredDungeonRoutes;
+use App\Console\Commands\Scheduler\DungeonRoute\UpdatePopularity;
+use App\Console\Commands\Scheduler\DungeonRoute\UpdateRating;
 use App\Console\Commands\Scheduler\RefreshAffixGroupEaseTiers;
 use App\Console\Commands\Scheduler\RefreshOutdatedThumbnails;
 use App\Console\Commands\Scheduler\Telemetry\Telemetry;
@@ -70,8 +72,6 @@ use App\Console\Commands\Wowhead\FetchMissingSpellIcons;
 use App\Console\Commands\Wowhead\FetchSpellData;
 use App\Console\Commands\Wowhead\RefreshDisplayIds as RefreshDisplayIdsWowhead;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
-use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
-use App\Logic\Scheduler\UpdateDungeonRouteRating;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -119,6 +119,10 @@ class Kernel extends ConsoleKernel
         CreateMissing::class,
         CreateMissingFloors::class,
         ImportInstanceIds::class,
+
+        // DungeonRoute
+        UpdatePopularity::class,
+        UpdateRating::class,
 
         // Environment
         EnvironmentUpdatePrepare::class,
@@ -218,8 +222,9 @@ class Kernel extends ConsoleKernel
         $debug   = config('app.debug');
         $appType = config('app.type');
 
-        $schedule->call(new UpdateDungeonRoutePopularity)->hourly();
-        $schedule->call(new UpdateDungeonRouteRating)->everyFifteenMinutes();
+        $schedule->command('dungeonroute:updatepopularity')->hourly();
+        $schedule->command('dungeonroute:updaterating')->everyFifteenMinutes();
+
         $schedule->command('scheduler:refreshoutdatedthumbnails')->everyFifteenMinutes();
         $schedule->command('scheduler:deleteexpired')->hourly();
 
