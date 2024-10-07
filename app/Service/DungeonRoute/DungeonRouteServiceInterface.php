@@ -10,5 +10,5 @@ interface DungeonRouteServiceInterface
 
     public function refreshOutdatedThumbnails(): int;
 
-    public function deleteOutdatedDungeonRoutes(): int;
+    public function deleteExpiredDungeonRoutes(): int;
 }

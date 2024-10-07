@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Console\Commands\Scheduler;
+namespace App\Console\Commands\Scheduler\DungeonRoute;
 
+use App\Console\Commands\Scheduler\SchedulerCommand;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use Exception;
 
@@ -12,7 +13,7 @@ class RefreshOutdatedThumbnails extends SchedulerCommand
      *
      * @var string
      */
-    protected $signature = 'scheduler:refreshoutdatedthumbnails';
+    protected $signature = 'dungeonroute:refreshoutdatedthumbnails';
 
     /**
      * The console command description.

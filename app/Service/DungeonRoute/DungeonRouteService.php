@@ -138,7 +138,7 @@ class DungeonRouteService implements DungeonRouteServiceInterface
         return 0;
     }
 
-    public function deleteOutdatedDungeonRoutes(): int
+    public function deleteExpiredDungeonRoutes(): int
     {
         $deletedRouteCount = 0;
         try {
