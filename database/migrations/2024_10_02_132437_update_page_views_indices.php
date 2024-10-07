@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        set_time_limit(999999);
+        set_time_limit(-1);
 
         Schema::table('page_views', function (Blueprint $table) {
             if (Schema::hasIndex('page_views', 'page_views_popularity_index')) {
@@ -28,7 +28,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        set_time_limit(999999);
+        set_time_limit(-1);
 
         Schema::table('page_views', function (Blueprint $table) {
             if (Schema::hasIndex('page_views', 'page_views_popularity_index')) {

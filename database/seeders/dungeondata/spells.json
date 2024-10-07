@@ -47555,6 +47555,25 @@
         ]
     },
     {
+        "id": 321837,
+        "category": null,
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "spell_shadow_detectinvisibility",
+        "name": "Oopsie",
+        "schools_mask": 8,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": false,
+        "cast_time": 0,
+        "duration": null,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2024-10-07T00:00:00+00:00",
+        "spell_dungeons": []
+    },
+    {
         "id": 321873,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",

@@ -17068,5 +17068,25 @@
         "raw_event": "9\/23\/2024 22:15:22.0482  SPELL_PERIODIC_MISSED,Creature-0-1465-1822-2312-138255-000071CA30,\"Ashvane Spotter\",0x10a48,0x0,Player-1092-0842C043,\"Qineroth-BurningBlade-EU\",0x20512,0x20,272140,\"Iron Volley\",0x1,ABSORB,nil,1141489,2213491,nil\r\n",
         "created_at": "2024-09-24T10:19:43+00:00",
         "updated_at": "2024-09-24T10:19:43+00:00"
+    },
+    {
+        "id": 1708,
+        "spell_id": 321837,
+        "before": null,
+        "after": "{\"id\": 321837, \"aura\": false, \"name\": \"Oopsie\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_shadow_detectinvisibility\", \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-10-07T20:25:56.669522Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-100624_192349_6_mists-of-tirna-scithe.zip",
+        "raw_event": "10\/6\/2024 19:53:09.567-5  SPELL_DAMAGE,Creature-0-3133-2290-1204-165108-00018330CD,\"Illusionary Clone\",0xa48,0x1,Player-96-0C8554F4,\"Aspyrx-Skullcrusher-US\",0x511,0x0,321837,\"Oopsie\",0x8,Player-96-0C8554F4,0000000000000000,3114361,12819936,87760,9527,143279,0,6,470,1250,0,-7180.36,2429.86,1669,3.9591,614,4731908,6672526,-1,8,0,0,393949,nil,nil,nil\r\n",
+        "created_at": "2024-10-07T20:25:56+00:00",
+        "updated_at": "2024-10-07T20:25:56+00:00"
+    },
+    {
+        "id": 1709,
+        "spell_id": 321837,
+        "before": "{\"id\": 321837, \"aura\": 0, \"name\": \"Oopsie\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_shadow_detectinvisibility\", \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-10-07T20:25:56.669522Z\"}",
+        "after": "{\"id\": 321837, \"aura\": 0, \"name\": \"Oopsie\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"spell_shadow_detectinvisibility\", \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-10-07T20:25:56.669522Z\"}",
+        "combat_log_path": "tmp\/WoWCombatLog-100624_192349_6_mists-of-tirna-scithe.zip",
+        "raw_event": "10\/6\/2024 19:53:09.567-5  SPELL_DAMAGE,Creature-0-3133-2290-1204-165108-00018330CD,\"Illusionary Clone\",0xa48,0x1,Player-96-0C8554F4,\"Aspyrx-Skullcrusher-US\",0x511,0x0,321837,\"Oopsie\",0x8,Player-96-0C8554F4,0000000000000000,3114361,12819936,87760,9527,143279,0,6,470,1250,0,-7180.36,2429.86,1669,3.9591,614,4731908,6672526,-1,8,0,0,393949,nil,nil,nil\r\n",
+        "created_at": "2024-10-07T20:25:56+00:00",
+        "updated_at": "2024-10-07T20:25:56+00:00"
     }
 ]
