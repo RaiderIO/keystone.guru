@@ -17,7 +17,7 @@ class MySqlStats extends Measurement
 
         return [
             new Point(
-                'threads_connected',
+                'mysql_threads_connected',
                 null,
                 $this->getTags(),
                 [

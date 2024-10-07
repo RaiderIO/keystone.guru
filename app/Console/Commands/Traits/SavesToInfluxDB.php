@@ -13,6 +13,7 @@ trait SavesToInfluxDB
         $tags = array_merge($this->getTags(), $tags);
 
         $point = new Point($measurement, null, $tags, $fields, $timestamp ?? time());
+
         // This function does actually exist
         InfluxDB::writePoints([$point], Database::PRECISION_SECONDS);
     }
