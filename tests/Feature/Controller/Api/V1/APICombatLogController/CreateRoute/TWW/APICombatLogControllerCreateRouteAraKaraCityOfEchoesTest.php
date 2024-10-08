@@ -45,7 +45,27 @@ class APICombatLogControllerCreateRouteAraKaraCityOfEchoesTest extends APICombat
     }
 
     #[Test]
-    public function create_givenTwwS1AraKaraCityOfEchoes3Json_shouldReturnValidDungeonRoute(): void
+    public function create_givenTwwS1AraKaraCityOfEchoesJah6Json_shouldReturnValidDungeonRoute(): void
+    {
+        // Arrange
+        $postBody = $this->getJsonData('TWW/tww_s1_ara_kara_city_of_echoes_jah_6', self::FIXTURES_ROOT_DIR);
+
+        // Act
+        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+
+        // Assert
+        $response->assertCreated();
+
+        $responseArr = json_decode($response->content(), true);
+
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($responseArr, 27, 510);
+//        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
+    }
+
+    #[Test]
+    public function create_givenTwwS1AraKaraCityOfEchoes13Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
         $postBody = $this->getJsonData('TWW/tww_s1_ara_kara_city_of_echoes_13', self::FIXTURES_ROOT_DIR);
