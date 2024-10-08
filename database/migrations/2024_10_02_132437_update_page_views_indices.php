@@ -13,7 +13,7 @@ return new class extends Migration {
         set_time_limit(-1);
 
         Schema::table('page_views', function (Blueprint $table) {
-            if (Schema::hasIndex('page_views', 'page_views_popularity_index')) {
+            if (Schema::hasIndex('page_views', 'page_views_model_class_index')) {
                 $table->dropIndex('page_views_model_class_index');
             }
 
