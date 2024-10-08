@@ -292,6 +292,7 @@ class RowElementKillZone extends RowElement {
 
             $spellList.append($(template(data)));
         }
+        $spellList.refreshTooltips();
 
         // Toggle the row color based on overpulled or obsolete npcs
         if (getState().getMapContext() instanceof MapContextLiveSession) {

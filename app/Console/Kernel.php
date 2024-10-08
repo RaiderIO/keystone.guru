@@ -253,11 +253,11 @@ class Kernel extends ConsoleKernel
         // We don't want the cache when we're debugging to ensure fresh data every time
         if (!$debug) {
             $schedule->command('discover:cache')->hourly();
-            $schedule->command('keystoneguru:view', ['operation' => 'cache'])->everyTenMinutes();
+            $schedule->command('keystoneguru:view cache')->everyTenMinutes();
         }
 
         // Ensure redis remains healthy
-        $schedule->command('redis:clearidlekeys', ['seconds' => 900])->everyFifteenMinutes();
+        $schedule->command('redis:clearidlekeys 900')->everyFifteenMinutes();
 
         // Aggregate all metrics so they're nice and snappy to load
         $schedule->command('metric:aggregate')->everyFiveMinutes();

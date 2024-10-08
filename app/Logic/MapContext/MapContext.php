@@ -104,8 +104,11 @@ abstract class MapContext
                 ]);
             }, config('keystoneguru.cache.dungeonData.ttl'));
 
-        $static = $this->cacheService->remember('static_data', static fn() => [
-            'selectableSpells'                  => Spell::where('selectable', true)->get(),
+        $selectableSpells = Spell::where('selectable', true)->get();
+        $static           = $this->cacheService->remember('static_data', static fn() => [
+            // @TODO remove this
+            'spells'                            => $selectableSpells,
+            'selectableSpells'                  => $selectableSpells,
             'mapIconTypes'                      => MapIconType::all(),
             'unknownMapIconType'                => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
             'awakenedObeliskGatewayMapIconType' => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),

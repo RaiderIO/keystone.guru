@@ -36,6 +36,11 @@ class Random extends Command
         SeasonServiceInterface               $seasonService,
         DungeonRouteRepositoryInterface      $dungeonRouteRepository
     ): int {
+
+        $this->call('keystoneguru:view', ['operation' => 'cache']);
+
+        dd('died');
+
         $count = 0;
 
         $this->info('Test');
