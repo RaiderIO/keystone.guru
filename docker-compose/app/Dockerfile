@@ -113,9 +113,9 @@ COPY etc/ /etc/
 
 RUN chmod -R 440 /etc/sudoers.d/
 
-COPY var/ /var/
-
 COPY root/ /root/
+
+COPY var/ /var/
 
 COPY .env /tmp/.env
 
