@@ -1,0 +1,73 @@
+{
+    "id": 253,
+    "release_changelog_id": 260,
+    "version": "v11.4",
+    "title": "Many smaller bugfixes - various background services improvements",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2024-10-08T09:01:32+00:00",
+    "updated_at": "2024-10-08T09:01:32+00:00",
+    "changelog": {
+        "id": 260,
+        "release_id": 253,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 260,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2537,
+                "change": "Background tasks' execution time is now logged and graphed - this will help fix performance issues."
+            },
+            {
+                "release_changelog_id": 260,
+                "release_changelog_category_id": 3,
+                "ticket_id": 2538,
+                "change": "Selecting a pull in the sidebar now always pans to the target location instead of sometimes snapping to it (when the location was out of the current viewport)."
+            },
+            {
+                "release_changelog_id": 260,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2552,
+                "change": "Updated Ara-kara mapping."
+            },
+            {
+                "release_changelog_id": 260,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2535,
+                "change": "Routes that somehow end up with an empty title (I guard against this but it can still very rarely happen) can now be accessed again."
+            },
+            {
+                "release_changelog_id": 260,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2533,
+                "change": "After updating, the site's background services no longer continue to run on the previous website version."
+            },
+            {
+                "release_changelog_id": 260,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2536,
+                "change": "Adding a new enemy to a pull no longer deselects the pull in the sidebar."
+            },
+            {
+                "release_changelog_id": 260,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2532,
+                "change": "Calculation of enemy forces of routes are no longer excessively executed."
+            },
+            {
+                "release_changelog_id": 260,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2540,
+                "change": "Fixed broken image of Google on the login page."
+            },
+            {
+                "release_changelog_id": 260,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2417,
+                "change": "Spells used in pulls should now always load correctly and not sometimes show a 404 not found\/broken image."
+            }
+        ]
+    }
+}
