@@ -92,7 +92,6 @@ function hsv2rgb(h, s, v) {
 function rgb2hsv(r, g, b) {
     let v = Math.max(r, g, b), n = v - Math.min(r, g, b);
     let h = n && ((v === r) ? (g - b) / n : ((v === g) ? 2 + (b - r) / n : 4 + (r - g) / n));
-    console.log([60 * (h < 0 ? h + 6 : h), v && n / v, v]);
     return [60 * (h < 0 ? h + 6 : h), v && n / v, v];
 }
 

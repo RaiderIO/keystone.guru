@@ -294,9 +294,11 @@ class RowElementKillZone extends RowElement {
         }
 
         // Toggle the row color based on overpulled or obsolete npcs
-        let $row = $(`#map_killzonessidebar_killzone_${this.killZone.id}`);
-        $row.toggleClass('bg-success', overpulledNpcs.length > 0);
-        $row.toggleClass('bg-danger', obsoleteNpcs.length > 0);
+        if (getState().getMapContext() instanceof MapContextLiveSession) {
+            let $row = $(`#map_killzonessidebar_killzone_${this.killZone.id}`);
+            $row.toggleClass('bg-success', overpulledNpcs.length > 0);
+            $row.toggleClass('bg-danger', obsoleteNpcs.length > 0);
+        }
 
         this.initialized = true;
     }

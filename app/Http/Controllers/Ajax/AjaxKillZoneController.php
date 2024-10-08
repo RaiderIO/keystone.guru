@@ -143,7 +143,7 @@ class AjaxKillZoneController extends Controller
 
             $data['id'] = $killZone?->id ?? null;
 
-            $result = $this->saveKillZone($dungeonRoute, $data);
+            $result = $this->saveKillZone($dungeonRoute, $data, $killZone !== null);
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }

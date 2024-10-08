@@ -2,8 +2,6 @@
 
 namespace App\Console;
 
-use App\Console\Commands\AdProvider\SyncAdsTxt;
-use App\Console\Commands\Cache\RedisClearIdleKeys;
 use App\Console\Commands\ChallengeModeRunData\ConvertToEvents;
 use App\Console\Commands\CombatLog\CreateDungeonRoutes;
 use App\Console\Commands\CombatLog\CreateMappingVersion;
@@ -17,7 +15,6 @@ use App\Console\Commands\CombatLog\SplitZoneChange;
 use App\Console\Commands\CombatLogEvent\SaveToOpensearch;
 use App\Console\Commands\Database\Backup;
 use App\Console\Commands\Database\SeedOne;
-use App\Console\Commands\Discover\Cache as DiscoverCache;
 use App\Console\Commands\Dungeon\CreateMissing;
 use App\Console\Commands\Dungeon\CreateMissingFloors;
 use App\Console\Commands\Dungeon\ImportInstanceIds;
@@ -43,8 +40,6 @@ use App\Console\Commands\MDT\ExportMapping;
 use App\Console\Commands\MDT\ImportMapping;
 use App\Console\Commands\MDT\ImportNpcs;
 use App\Console\Commands\MDT\ImportSpells;
-use App\Console\Commands\Metric\Aggregate;
-use App\Console\Commands\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Random;
 use App\Console\Commands\ReadOnlyMode\Disable as DisableReadOnlyMode;
 use App\Console\Commands\ReadOnlyMode\Enable as EnableReadOnlyMode;
@@ -54,24 +49,29 @@ use App\Console\Commands\Release\GetCurrent as ReleaseGetCurrent;
 use App\Console\Commands\Release\Report as ReleaseReport;
 use App\Console\Commands\Release\Save as ReleaseSave;
 use App\Console\Commands\Release\Success as ReleaseSuccess;
-use App\Console\Commands\Scheduler\DeleteExpiredDungeonRoutes;
+use App\Console\Commands\Scheduler\AdProvider\SyncAdsTxt;
+use App\Console\Commands\Scheduler\Cache\RedisClearIdleKeys;
+use App\Console\Commands\Scheduler\Discover\Cache as DiscoverCache;
+use App\Console\Commands\Scheduler\DungeonRoute\DeleteExpired;
+use App\Console\Commands\Scheduler\DungeonRoute\RefreshOutdatedThumbnails;
+use App\Console\Commands\Scheduler\DungeonRoute\UpdatePopularity;
+use App\Console\Commands\Scheduler\DungeonRoute\UpdateRating;
+use App\Console\Commands\Scheduler\Metric\Aggregate;
+use App\Console\Commands\Scheduler\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Scheduler\RefreshAffixGroupEaseTiers;
-use App\Console\Commands\Scheduler\RefreshOutdatedThumbnails;
 use App\Console\Commands\Scheduler\Telemetry\Telemetry;
+use App\Console\Commands\Scheduler\Thumbnail\DeleteExpiredJobs;
+use App\Console\Commands\Scheduler\View\Cache;
 use App\Console\Commands\Spell\ExportCsv;
 use App\Console\Commands\Spell\ImportCsv;
 use App\Console\Commands\Supervisor\StartSupervisor;
 use App\Console\Commands\Supervisor\StopSupervisor;
-use App\Console\Commands\Thumbnail\DeleteExpiredJobs;
-use App\Console\Commands\View\Cache;
 use App\Console\Commands\Wowhead\FetchDisplayIds;
 use App\Console\Commands\Wowhead\FetchHealth;
 use App\Console\Commands\Wowhead\FetchMissingSpellIcons;
 use App\Console\Commands\Wowhead\FetchSpellData;
 use App\Console\Commands\Wowhead\RefreshDisplayIds as RefreshDisplayIdsWowhead;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
-use App\Logic\Scheduler\UpdateDungeonRoutePopularity;
-use App\Logic\Scheduler\UpdateDungeonRouteRating;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -119,6 +119,10 @@ class Kernel extends ConsoleKernel
         CreateMissing::class,
         CreateMissingFloors::class,
         ImportInstanceIds::class,
+
+        // DungeonRoute
+        UpdatePopularity::class,
+        UpdateRating::class,
 
         // Environment
         EnvironmentUpdatePrepare::class,
@@ -175,7 +179,7 @@ class Kernel extends ConsoleKernel
         ReleaseSuccess::class,
 
         // Scheduler
-        DeleteExpiredDungeonRoutes::class,
+        DeleteExpired::class,
         RefreshAffixGroupEaseTiers::class,
         RefreshOutdatedThumbnails::class,
         Telemetry::class,
@@ -218,10 +222,11 @@ class Kernel extends ConsoleKernel
         $debug   = config('app.debug');
         $appType = config('app.type');
 
-        $schedule->call(new UpdateDungeonRoutePopularity)->hourly();
-        $schedule->call(new UpdateDungeonRouteRating)->everyFifteenMinutes();
-        $schedule->command('scheduler:refreshoutdatedthumbnails')->everyFifteenMinutes();
-        $schedule->command('scheduler:deleteexpired')->hourly();
+        $schedule->command('dungeonroute:updatepopularity')->hourly();
+        $schedule->command('dungeonroute:updaterating')->everyFifteenMinutes();
+
+        $schedule->command('dungeonroute:refreshoutdatedthumbnails')->everyFifteenMinutes();
+        $schedule->command('dungeonroute:deleteexpired')->hourly();
 
         if (in_array($appType, ['mapping', 'local'])) {
             $schedule->command('mapping:sync')->everyFiveMinutes();

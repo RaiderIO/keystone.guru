@@ -39,7 +39,7 @@
     <div class="row">
         <div class="col">
             <a href="{{ route('login.google') }}">
-                <img alt="Google" class="google_login_image mx-auto d-block"/>
+                <div class="google_login_image mx-auto d-block"></div>
             </a>
         </div>
     </div>

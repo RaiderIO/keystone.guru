@@ -836,13 +836,21 @@ class DungeonMap extends Signalable {
 
         // Switch floors if the floor is not on the current map
         let floorIds = killZone.getFloorIds();
+
+        let animate = c.map.killzone.selectionSetViewOptions.animate;
         if (floorIds.length > 0 && !floorIds.includes(getState().getCurrentFloor().id)) {
             getState().setFloorId(floorIds[0]);
+            // Don't animate when we switch floors - we're already disoriented so may as well make it quick
+            animate = false;
         }
 
         // Center the map to this killzone
         if (killZone.enemies.length > 0 && killZone.isVisible()) {
-            this.leafletMap.setView(killZone.getLayerCenteroid(), currentZoomLevel);
+            this.leafletMap.setView(
+                killZone.getLayerCenteroid(),
+                currentZoomLevel,
+                $.extend({}, c.map.killzone.selectionSetViewOptions, {animate: animate})
+            );
         }
     }
 }

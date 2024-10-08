@@ -81,6 +81,10 @@ abstract class MapContext
                 // Filter out floors that we do not need
                 $dungeon->setRelation('floors', $this->getFloors());
 
+                $auras = Spell::where('aura', true)
+                    ->get()
+                    ->each(fn(Spell $spell) => $spell->setVisible(['id', 'name', 'icon_url']));
+
                 return array_merge($dungeon->toArray(), $this->getEnemies(), [
                     'latestMappingVersion'      => $this->floor->dungeon->currentMappingVersion,
                     'npcs'                      => $this->floor->dungeon->npcs()->with([
@@ -88,7 +92,7 @@ abstract class MapContext
                         // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
                         'enemyForces' => fn(HasOne $query) => $query->where('mapping_version_id', $this->mappingVersion->id),
                     ])->get(),
-                    'auras'                     => Spell::where('aura', true)->get(),
+                    'auras'                     => $auras,
                     'enemies'                   => $this->mappingVersion->mapContextEnemies($this->coordinatesService, $useFacade),
                     'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
                     'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $useFacade),
@@ -101,7 +105,7 @@ abstract class MapContext
             }, config('keystoneguru.cache.dungeonData.ttl'));
 
         $static = $this->cacheService->remember('static_data', static fn() => [
-            'spells'                            => Spell::all(),
+            'selectableSpells'                  => Spell::where('selectable', true)->get(),
             'mapIconTypes'                      => MapIconType::all(),
             'unknownMapIconType'                => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
             'awakenedObeliskGatewayMapIconType' => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Console\Commands\Metric;
+namespace App\Console\Commands\Scheduler\Metric;
 
+use App\Console\Commands\Scheduler\SchedulerCommand;
 use App\Service\Metric\MetricServiceInterface;
-use Illuminate\Console\Command;
 
 /**
  * Class Aggregate
@@ -12,7 +12,7 @@ use Illuminate\Console\Command;
  *
  * @since 16/02/2023
  */
-class Aggregate extends Command
+class Aggregate extends SchedulerCommand
 {
     /**
      * The name and signature of the console command.
@@ -33,14 +33,16 @@ class Aggregate extends Command
      */
     public function handle(MetricServiceInterface $metricService): int
     {
-        if ($metricService->aggregateMetrics()) {
-            $this->info('Successfully aggregated metrics');
+        return $this->trackTime(function () use ($metricService) {
+            if ($metricService->aggregateMetrics()) {
+                $this->info('Successfully aggregated metrics');
 
-            return 0;
-        } else {
-            $this->error('Failed to aggregate metrics');
+                return 0;
+            } else {
+                $this->error('Failed to aggregate metrics');
 
-            return 1;
-        }
+                return 1;
+            }
+        });
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Console\Commands\Cache;
+namespace App\Console\Commands\Scheduler\Cache;
 
+use App\Console\Commands\Scheduler\SchedulerCommand;
 use App\Service\Cache\CacheServiceInterface;
-use Illuminate\Console\Command;
 
-class RedisClearIdleKeys extends Command
+class RedisClearIdleKeys extends SchedulerCommand
 {
     /**
      * The name and signature of the console command.
@@ -26,10 +26,12 @@ class RedisClearIdleKeys extends Command
      */
     public function handle(CacheServiceInterface $cacheService): int
     {
-        $seconds = (int)$this->argument('seconds');
+        return $this->trackTime(function () use ($cacheService) {
+            $seconds = (int)$this->argument('seconds');
 
-        $cacheService->clearIdleKeys($seconds);
+            $cacheService->clearIdleKeys($seconds);
 
-        return 0;
+            return 0;
+        });
     }
 }

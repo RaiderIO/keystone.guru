@@ -1,0 +1,12 @@
+apiVersion: 1
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    url: http://influxdb:8086 # 8086 is default port - but I moved it to avoid conflicts
+    isDefault: true
+    database: local
+    user: admin
+    password: admin123
+    jsonData:
+      timeInterval: "5s"

@@ -135,14 +135,21 @@ class CacheService implements CacheServiceInterface
             $this->unset($key);
         }
 
+        // Delete all
+        $this->deleteKeysByPattern([
+        ]);
         foreach (Dungeon::all() as $dungeon) {
+
             $this->unset(sprintf('dungeon_%d', $dungeon->id));
         }
 
         // Clear all view caches for dungeonroutes - go through redis to drop all cards
         $prefix            = config('database.redis.options.prefix');
         $this->deleteKeysByPattern([
+            // Cards
             sprintf('/%sdungeonroute_card:(?>vertical|horizontal):[a-zA-Z_]+:[01]_[01]_[01]_\d+/', $prefix),
+            // Dungeon data used in MapContext
+            sprintf('/%sdungeon_\d+_\d+_[a-z_]+/', $prefix),
         ]);
     }
 
@@ -160,6 +167,10 @@ class CacheService implements CacheServiceInterface
 
     private function deleteKeysByPattern(array $regexes, ?int $idleTimeSeconds = null): int
     {
+        if(empty($regexes)){
+            return 0;
+        }
+
         // Only keys starting with this prefix may be cleaned up by this task, ex.
         $prefix = config('database.redis.options.prefix');
 

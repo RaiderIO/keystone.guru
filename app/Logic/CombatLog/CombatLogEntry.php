@@ -16,7 +16,15 @@ class CombatLogEntry
 {
     public const DATE_FORMATS = [
         'm/d H:i:s.v',
+        'm/d/Y H:i:s.v-1',
+        'm/d/Y H:i:s.v-2',
+        'm/d/Y H:i:s.v-3',
         'm/d/Y H:i:s.v-4', // I don't  know what the -4 stands for - assuming timezone? There's no thingy for it though
+        'm/d/Y H:i:s.v-5',
+        'm/d/Y H:i:s.v-6',
+        'm/d/Y H:i:s.v-7',
+        'm/d/Y H:i:s.v-8',
+        'm/d/Y H:i:s.v-9',
         'm/d/Y H:i:s.v1', // I don't know what the 1-9 stands for
         'm/d/Y H:i:s.v2',
         'm/d/Y H:i:s.v3',
@@ -141,7 +149,7 @@ class CombatLogEntry
         }
 
         foreach (self::DATE_FORMATS as $key => $dateFormat) {
-            // Don't double check if it's not needed
+            // Don't double-check if it's not needed
             if ($key === $this->previousDateFormat) {
                 continue;
             }

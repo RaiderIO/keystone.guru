@@ -235,9 +235,43 @@ services:
     networks:
       - keystone.guru
 
+  influxdb:
+    image: influxdb:1.8.10
+    container_name: keystone.guru-influxdb
+    ports:
+      - "8096:8086" # 8086 is default port - but I moved it to avoid conflicts
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=local                     # Creates a default database named 'mydb'
+      - INFLUXDB_ADMIN_USER=admin             # Sets up an admin user (requires `INFLUXDB_ADMIN_PASSWORD`)
+      - INFLUXDB_ADMIN_PASSWORD=admin123      # Admin password
+    restart: unless-stopped
+    networks:
+      - keystone.guru
+
+  grafana:
+    image: grafana/grafana:9.5.19-ubuntu
+    container_name: keystone.guru-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./docker-compose/grafana/provisioning:/etc/grafana/provisioning    # Mount provisioning directory
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+    depends_on:
+      - influxdb
+    networks:
+      - keystone.guru
+
+
 volumes:
   opensearch-data1:
   opensearch-data2:
+  influxdb-data:
+  grafana-data:
 
 secrets:
   deployer_ssh_key:

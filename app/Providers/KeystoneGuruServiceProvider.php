@@ -54,6 +54,8 @@ use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DevDiscoverService;
 use App\Service\DungeonRoute\DiscoverService;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
+use App\Service\DungeonRoute\DungeonRouteService;
+use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\EchoServer\EchoServerHttpApiService;
@@ -143,6 +145,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogEventServiceInterface::class, CombatLogEventService::class);
         $this->app->bind(DungeonServiceInterface::class, DungeonService::class);
         $this->app->bind(CookieServiceInterface::class, CookieService::class);
+        $this->app->bind(DungeonRouteServiceInterface::class, DungeonRouteService::class);
 
         // Depends on CookieService
         $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);

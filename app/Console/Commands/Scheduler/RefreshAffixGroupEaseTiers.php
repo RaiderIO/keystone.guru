@@ -7,9 +7,8 @@ use App\Models\AffixGroup\AffixGroupEaseTierPull;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\AffixGroup\ArchonApiServiceInterface;
 use App\Service\AffixGroup\Exceptions\InvalidResponseException;
-use Illuminate\Console\Command;
 
-class RefreshAffixGroupEaseTiers extends Command
+class RefreshAffixGroupEaseTiers extends SchedulerCommand
 {
     /**
      * The name and signature of the console command.
@@ -32,28 +31,30 @@ class RefreshAffixGroupEaseTiers extends Command
         ArchonApiServiceInterface          $archonApiService,
         AffixGroupEaseTierServiceInterface $affixGroupEaseTierService
     ): int {
-        try {
-            $tierLists = $archonApiService->getDungeonEaseTierListOverall();
-        } catch (InvalidResponseException $invalidResponseException) {
-            $this->warn(sprintf('Invalid response: %s', $invalidResponseException->getMessage()));
+        return $this->trackTime(function () use ($archonApiService, $affixGroupEaseTierService) {
+            try {
+                $tierLists = $archonApiService->getDungeonEaseTierListOverall();
+            } catch (InvalidResponseException $invalidResponseException) {
+                $this->warn(sprintf('Invalid response: %s', $invalidResponseException->getMessage()));
 
-            // Don't fail the deployment when this happens
+                // Don't fail the deployment when this happens
+                return 0;
+            }
+
+            if (!isset($tierLists['encounterTierList'])) {
+                $this->warn(sprintf('Invalid response: %s', json_encode($tierLists)));
+
+                // Don't fail the deployment when this happens
+                return 0;
+            }
+
+            $affixGroupEaseTierService->parseTierList($tierLists);
+
+            // Clear model cache so that it will be refreshed upon next request
+            $this->call('modelCache:clear', ['--model' => AffixGroupEaseTier::class]);
+            $this->call('modelCache:clear', ['--model' => AffixGroupEaseTierPull::class]);
+
             return 0;
-        }
-
-        if (!isset($tierLists['encounterTierList'])) {
-            $this->warn(sprintf('Invalid response: %s', json_encode($tierLists)));
-
-            // Don't fail the deployment when this happens
-            return 0;
-        }
-
-        $affixGroupEaseTierService->parseTierList($tierLists);
-
-        // Clear model cache so that it will be refreshed upon next request
-        $this->call('modelCache:clear', ['--model' => AffixGroupEaseTier::class]);
-        $this->call('modelCache:clear', ['--model' => AffixGroupEaseTierPull::class]);
-
-        return 0;
+        });
     }
 }

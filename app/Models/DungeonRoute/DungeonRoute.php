@@ -251,7 +251,12 @@ class DungeonRoute extends Model
 
     public function getTitleSlug(): string
     {
-        return Str::slug($this->title, '-', null);
+        // IF the title is somehow not set, we return the dungeon title, slugged
+        return Str::slug(
+            empty($this->title) ? __($this->dungeon->name, [], 'en_US') : $this->title,
+            '-',
+            null
+        );
     }
 
     public function mappingVersion(): BelongsTo
@@ -1483,11 +1488,11 @@ class DungeonRoute extends Model
             $showDungeon  = [0, 1];
             $isAdmin      = [0, 1];
 
-            foreach($orientations as $orientation) {
-                foreach($locales as $code => $name) {
-                    foreach($showAffixes as $showAffix) {
-                        foreach($showDungeon as $showDungeonImage) {
-                            foreach($isAdmin as $admin) {
+            foreach ($orientations as $orientation) {
+                foreach ($locales as $code => $name) {
+                    foreach ($showAffixes as $showAffix) {
+                        foreach ($showDungeon as $showDungeonImage) {
+                            foreach ($isAdmin as $admin) {
                                 Cache::delete(self::getCardCacheKey($dungeonRouteId, $orientation, $code, $showAffix, $showDungeonImage, $admin));
                             }
                         }
