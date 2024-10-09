@@ -20,6 +20,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         "Dawn of the Infinite: Murozond's Rise"  => "Murozond's Rise",
         'The Everbloom'                          => 'Everbloom',
         'Uldaman: Legacy of Tyr'                 => 'Uldaman',
+        'Ara-Kara: City of Echoes'               => 'Ara-Kara, City of Echoes',
     ];
     public const DATE_TIME_FORMAT     = 'Y-m-d\TH:i:sP';
 
@@ -58,13 +59,19 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
 
     /**
      * {@inheritDoc}
+     * @throws \Exception
      */
     public function parseTierList(array $tierListsResponse): ?AffixGroupEaseTierPull
     {
         $lastEaseTierPull = AffixGroupEaseTierPull::latest()->first();
 
         $affixGroupString = $tierListsResponse['encounterTierList']['label'];
-        $affixGroup       = $this->getAffixGroupByString($affixGroupString);
+        // TWW S1 _kinda_ did away with affixes, but I still have them, Archon removed them
+        // so I'm just subbing them with the current affix group if not set
+        dump($affixGroupString);
+        $affixGroup = $affixGroupString === null
+            ? $this->seasonService->getCurrentSeason()?->getCurrentAffixGroup()
+            : $this->getAffixGroupByString($affixGroupString);
 
         if ($affixGroup === null) {
             $this->log->parseTierListUnknownAffixGroup($affixGroupString);
