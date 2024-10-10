@@ -36,17 +36,18 @@ class ImageService implements ImageServiceInterface
 
 
             $imagickImage->readImage($filePath);
+            $imagickImage->setImageAlphaChannel(Imagick::ALPHACHANNEL_SET);
 
             // Create the hexagon mask and apply it to the image
             $mask = $this->createHexagonMask($width, $height);
             $imagickImage->compositeImage($mask, Imagick::COMPOSITE_DSTIN, 0, 0);
 
             // Create the hexagon border mask and apply it to the image
-            $mask = $this->createHexagonBorderMask($width, $height, 'black', 7);
+            $mask = $this->createHexagonBorderMask($width, $height, 'black', 3);
             $imagickImage->compositeImage($mask, Imagick::COMPOSITE_ATOP, 0, 0);
-            $mask = $this->createHexagonBorderMask($width, $height, 'white', 2);
-            $imagickImage->compositeImage($mask, Imagick::COMPOSITE_ATOP, 0, 0);
-            $mask = $this->createHexagonBorderMask($width, $height, 'white', 1, 4);
+//            $mask = $this->createHexagonBorderMask($width, $height, 'white', 2);
+//            $imagickImage->compositeImage($mask, Imagick::COMPOSITE_ATOP, 0, 0);
+            $mask = $this->createHexagonBorderMask($width, $height, 'white', 3, 3);
             $imagickImage->compositeImage($mask, Imagick::COMPOSITE_ATOP, 0, 0);
 
             // Save the result
