@@ -61,6 +61,7 @@
         "ext-json": "*",
         "ext-lua": "*",
         "ext-zip": "*",
+        "ext-imagick": "*",
         "akaunting/laravel-language": "^1.0",
         "barryvdh/laravel-ide-helper": "^3.0",
         "beyondcode/laravel-server-timing": "^1.4",
