@@ -26,6 +26,7 @@ use App\Console\Commands\Github\CreateGithubReleasePullRequest;
 use App\Console\Commands\Github\CreateGithubReleaseTicket;
 use App\Console\Commands\Handlebars\Refresh as HandlebarsRefresh;
 use App\Console\Commands\Localization\LocalizationSync;
+use App\Console\Commands\MapIcon\GenerateItemIcons;
 use App\Console\Commands\Mapping\AssignMDTIDs;
 use App\Console\Commands\Mapping\Commit as MappingCommit;
 use App\Console\Commands\Mapping\Copy as MappingCopy;
@@ -142,6 +143,9 @@ class Kernel extends ConsoleKernel
         // Localization
         LocalizationSync::class,
 
+        // MapIcon
+        GenerateItemIcons::class,
+
         // Mapping
         AssignMDTIDs::class,
         MappingCommit::class,
@@ -253,11 +257,11 @@ class Kernel extends ConsoleKernel
         // We don't want the cache when we're debugging to ensure fresh data every time
         if (!$debug) {
             $schedule->command('discover:cache')->hourly();
-            $schedule->command('keystoneguru:view', ['operation' => 'cache'])->everyTenMinutes();
+            $schedule->command('keystoneguru:view cache')->everyTenMinutes();
         }
 
         // Ensure redis remains healthy
-        $schedule->command('redis:clearidlekeys', ['seconds' => 900])->everyFifteenMinutes();
+        $schedule->command('redis:clearidlekeys 900')->everyFifteenMinutes();
 
         // Aggregate all metrics so they're nice and snappy to load
         $schedule->command('metric:aggregate')->everyFiveMinutes();

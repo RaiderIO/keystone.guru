@@ -33,10 +33,8 @@ class TimewalkingEvent extends CacheModel
 
     //    REMOVE THIS CLASS? IS IT NEEDED? COUPLE IT TO A SEASON INSTEAD OF AN EXPANSION?
 
-    public const TIMEWALKING_EVENT_LEGION = 'legion';
-
-    public const TIMEWALKING_EVENT_BFA = 'bfa';
-
+    public const TIMEWALKING_EVENT_LEGION      = 'legion';
+    public const TIMEWALKING_EVENT_BFA         = 'bfa';
     public const TIMEWALKING_EVENT_SHADOWLANDS = 'shadowlands';
 
     public function expansion(): BelongsTo

@@ -136,15 +136,12 @@ class CacheService implements CacheServiceInterface
         }
 
         // Delete all
-        $this->deleteKeysByPattern([
-        ]);
         foreach (Dungeon::all() as $dungeon) {
-
             $this->unset(sprintf('dungeon_%d', $dungeon->id));
         }
 
         // Clear all view caches for dungeonroutes - go through redis to drop all cards
-        $prefix            = config('database.redis.options.prefix');
+        $prefix = config('database.redis.options.prefix');
         $this->deleteKeysByPattern([
             // Cards
             sprintf('/%sdungeonroute_card:(?>vertical|horizontal):[a-zA-Z_]+:[01]_[01]_[01]_\d+/', $prefix),
@@ -158,7 +155,7 @@ class CacheService implements CacheServiceInterface
         // Only keys starting with this prefix may be cleaned up by this task, ex.
         // keystoneguru-live-cache:d8123999fdd7267f49290a1f2bb13d3b154b452a:f723072f44f1e4727b7ae26316f3d61dd3fe3d33
         // keystoneguru-live-cache:p79vfrAn4QazxHVtLb5s4LssQ5bi6ZaWGNTMOblt
-        $prefix            = config('database.redis.options.prefix');
+        $prefix = config('database.redis.options.prefix');
 
         return $this->deleteKeysByPattern([
             sprintf('/%s[a-zA-Z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
@@ -167,7 +164,7 @@ class CacheService implements CacheServiceInterface
 
     private function deleteKeysByPattern(array $regexes, ?int $idleTimeSeconds = null): int
     {
-        if(empty($regexes)){
+        if (empty($regexes)) {
             return 0;
         }
 

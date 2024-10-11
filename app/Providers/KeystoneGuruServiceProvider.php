@@ -65,6 +65,8 @@ use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\GameVersion\GameVersionService;
 use App\Service\GameVersion\GameVersionServiceInterface;
+use App\Service\Image\ImageService;
+use App\Service\Image\ImageServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyService;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\MapContext\MapContextService;
@@ -146,6 +148,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(DungeonServiceInterface::class, DungeonService::class);
         $this->app->bind(CookieServiceInterface::class, CookieService::class);
         $this->app->bind(DungeonRouteServiceInterface::class, DungeonRouteService::class);
+        $this->app->bind(ImageServiceInterface::class, ImageService::class);
 
         // Depends on CookieService
         $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);

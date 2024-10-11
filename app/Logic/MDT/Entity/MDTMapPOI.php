@@ -7,10 +7,8 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class MDTMapPOI implements Arrayable
 {
-    public const TEMPLATE_MAP_LINK_PIN = 'MapLinkPinTemplate';
-
+    public const TEMPLATE_MAP_LINK_PIN      = 'MapLinkPinTemplate';
     public const TEMPLATE_DEATH_RELEASE_PIN = 'DeathReleasePinTemplate';
-
     // Ny'alotha spires
     public const TEMPLATE_VIGNETTE_PIN = 'VignettePinTemplate';
 
@@ -32,6 +30,7 @@ class MDTMapPOI implements Arrayable
     public const TYPE_NELTHARUS_CHAIN      = 'neltharusChain';
     public const TYPE_NELTHARUS_FOOD       = 'neltharusFood';
     public const TYPE_NELTHARUS_SHIELD     = 'neltharusShield';
+    public const TYPE_NW_ITEM              = 'nwItem';
 
     public const ALL_TYPES = [
         self::TYPE_MAP_LINK,
@@ -46,21 +45,18 @@ class MDTMapPOI implements Arrayable
         self::TYPE_NELTHARUS_CHAIN,
         self::TYPE_NELTHARUS_FOOD,
         self::TYPE_NELTHARUS_SHIELD,
+        self::TYPE_NW_ITEM,
     ];
 
     private readonly string $template;
-
     private readonly string $type;
-
-    private readonly ?int $target;
-
-    private readonly ?int $direction;
-
-    private readonly ?int $connectionIndex;
-
-    private readonly float $x;
-
-    private readonly float $y;
+    private readonly ?int   $itemType;
+    private readonly ?int   $itemIndex;
+    private readonly ?int   $target;
+    private readonly ?int   $direction;
+    private readonly ?int   $connectionIndex;
+    private readonly float  $x;
+    private readonly float  $y;
 
     /**
      * @throws Exception
@@ -69,9 +65,11 @@ class MDTMapPOI implements Arrayable
     {
         $this->template        = $this->rawMapPOI['template'];
         $this->type            = $this->rawMapPOI['type'];
-        $this->target          = $this->rawMapPOI['target'] ?? 0;
-        $this->direction       = $this->rawMapPOI['direction'] ?? 0;
-        $this->connectionIndex = $this->rawMapPOI['connectionIndex'] ?? 0;
+        $this->itemType        = $this->rawMapPOI['itemType'] ?? null;
+        $this->itemIndex       = $this->rawMapPOI['itemIndex'] ?? null;
+        $this->target          = $this->rawMapPOI['target'] ?? null;
+        $this->direction       = $this->rawMapPOI['direction'] ?? null;
+        $this->connectionIndex = $this->rawMapPOI['connectionIndex'] ?? null;
         $this->x               = $this->rawMapPOI['x'];
         $this->y               = $this->rawMapPOI['y'];
 
@@ -97,6 +95,16 @@ class MDTMapPOI implements Arrayable
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function getItemType(): ?int
+    {
+        return $this->itemType;
+    }
+
+    public function getItemIndex(): ?int
+    {
+        return $this->itemIndex;
     }
 
     public function getTarget(): ?int
@@ -135,6 +143,8 @@ class MDTMapPOI implements Arrayable
             'subLevel'        => $this->subLevel,
             'template'        => $this->template,
             'type'            => $this->type,
+            'itemType'        => $this->itemType,
+            'itemIndex'       => $this->itemIndex,
             'target'          => $this->target,
             'direction'       => $this->direction,
             'connectionIndex' => $this->connectionIndex,

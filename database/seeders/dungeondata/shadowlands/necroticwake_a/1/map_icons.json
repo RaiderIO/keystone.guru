@@ -9,7 +9,7 @@
         "lng": 262.125,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -22,7 +22,7 @@
         "lng": 282,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -256,7 +256,7 @@
         "lng": 262.125,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -269,7 +269,7 @@
         "lng": 282,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -503,7 +503,7 @@
         "lng": 262.125,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -516,7 +516,7 @@
         "lng": 282,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -750,7 +750,7 @@
         "lng": 262.125,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -763,7 +763,7 @@
         "lng": 282,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -993,11 +993,11 @@
         "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 69,
-        "lat": -73.375,
-        "lng": 262.125,
+        "lat": -64.195132160238,
+        "lng": 275.54133267188,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -1005,49 +1005,10 @@
         "floor_id": 89,
         "dungeon_route_id": null,
         "team_id": null,
-        "map_icon_type_id": 67,
+        "map_icon_type_id": 68,
         "lat": -87.75,
         "lng": 282,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
-        "permanent_tooltip": 0,
-        "seasonal_index": 0,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 393,
-        "floor_id": 89,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 66,
-        "lat": -155.25,
-        "lng": 86.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 393,
-        "floor_id": 89,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 67,
-        "lat": -118.375,
-        "lng": 149.625,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 393,
-        "floor_id": 89,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 69,
-        "lat": -79.25,
-        "lng": 136.6875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1058,9 +1019,22 @@
         "dungeon_route_id": null,
         "team_id": null,
         "map_icon_type_id": 65,
-        "lat": -77.625,
-        "lng": 51.125,
+        "lat": -81.169192950122,
+        "lng": 154.04279228113,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 393,
+        "floor_id": 89,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 69,
+        "lat": -68.534365745622,
+        "lng": 61.38739278146,
+        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1109,45 +1083,6 @@
         "floor_id": 89,
         "dungeon_route_id": null,
         "team_id": null,
-        "map_icon_type_id": 41,
-        "lat": -143.25,
-        "lng": 63.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.grisly_curio",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 393,
-        "floor_id": 89,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 9,
-        "lat": -50.5,
-        "lng": 143.75,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.anima_crystal_shard",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 393,
-        "floor_id": 89,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 66,
-        "lat": -65,
-        "lng": 233,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 393,
-        "floor_id": 89,
-        "dungeon_route_id": null,
-        "team_id": null,
         "map_icon_type_id": 65,
         "lat": -215.5,
         "lng": 227,
@@ -1187,35 +1122,9 @@
         "floor_id": 89,
         "dungeon_route_id": null,
         "team_id": null,
-        "map_icon_type_id": 67,
+        "map_icon_type_id": 68,
         "lat": -191.5,
         "lng": 158.1875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 393,
-        "floor_id": 89,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 69,
-        "lat": -172.8125,
-        "lng": 169.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 393,
-        "floor_id": 89,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 68,
-        "lat": -125.5625,
-        "lng": 148.625,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
@@ -1226,10 +1135,36 @@
         "floor_id": 89,
         "dungeon_route_id": null,
         "team_id": null,
-        "map_icon_type_id": 66,
-        "lat": -179.625,
-        "lng": 237.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
+        "map_icon_type_id": 65,
+        "lat": -172.8125,
+        "lng": 169.25,
+        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 393,
+        "floor_id": 89,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 68,
+        "lat": -121.37091587353,
+        "lng": 141.15271604219,
+        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 393,
+        "floor_id": 89,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 69,
+        "lat": -150.39747605026,
+        "lng": 86.60123381013,
+        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

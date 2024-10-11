@@ -44,6 +44,8 @@ class Cache extends SchedulerCommand
                 }
 
                 $this->info(sprintf('Successfully cached in %sms', Stopwatch::elapsed('cache')));
+            } else {
+                $this->error('No operation passed!');
             }
 
             return 0;

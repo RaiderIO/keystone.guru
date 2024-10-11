@@ -1,0 +1,8 @@
+/* fixes to playwire bottom rail */
+#pw-oop-bottom_rail,
+#pw-oop-bottom_rail2 {
+    background: none !important;
+    border: none !important;
+    pointer-events: none !important;
+    width: fit-content !important;
+}

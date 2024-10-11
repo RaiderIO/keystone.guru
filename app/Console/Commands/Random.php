@@ -6,6 +6,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\Image\ImageServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -34,23 +35,36 @@ class Random extends Command
         ChallengeModeRunDataServiceInterface $challengeModeRunDataService,
         CoordinatesServiceInterface          $coordinatesService,
         SeasonServiceInterface               $seasonService,
-        DungeonRouteRepositoryInterface      $dungeonRouteRepository
+        DungeonRouteRepositoryInterface      $dungeonRouteRepository,
+        ImageServiceInterface                $imageService
     ): int {
-        $count = 0;
 
-        $this->info('Test');
+        dd(
+            $imageService->convertToItemImage(
+                resource_path('assets/images/enemyportraits/171750.png'),
+                resource_path('assets/images/enemyportraits/171750_converted.png')
+            )
+        );
 
-        $progressBar = $this->output->createProgressBar(100);
-        $progressBar->setFormat(ProgressBar::FORMAT_DEBUG); // ""
-        $progressBar->start();
-
-        for ($i = 0; $i < 100; $i++) {
-            $progressBar->setMessage(sprintf('Processing %d', $count));
-            $progressBar->advance();
-            usleep(500000);
-            $count++;
-        }
-        $progressBar->finish();
+//        $this->call('keystoneguru:view', ['operation' => 'cache']);
+//
+//        dd('died');
+//
+//        $count = 0;
+//
+//        $this->info('Test');
+//
+//        $progressBar = $this->output->createProgressBar(100);
+//        $progressBar->setFormat(ProgressBar::FORMAT_DEBUG); // ""
+//        $progressBar->start();
+//
+//        for ($i = 0; $i < 100; $i++) {
+//            $progressBar->setMessage(sprintf('Processing %d', $count));
+//            $progressBar->advance();
+//            usleep(500000);
+//            $count++;
+//        }
+//        $progressBar->finish();
 
 //        $dungeonRoute = $dungeonRouteRepository->find(1715);
 //

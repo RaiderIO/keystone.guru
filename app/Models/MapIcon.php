@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string              $comment
  * @property bool                $permanent_tooltip
  * @property int                 $seasonal_index
+ *
  * @property MappingVersion|null $mappingVersion
  * @property Floor               $floor
  * @property DungeonRoute|null   $dungeonRoute
@@ -98,6 +99,7 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
     public function mapicontype(): BelongsTo
     {
         // Need the foreign key for some reason
+        // (later: because you didn't use camelCase for the function name doofus)
         return $this->belongsTo(MapIconType::class, 'map_icon_type_id');
     }
 
