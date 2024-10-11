@@ -67,7 +67,7 @@ return [
                 'start'                  => 'Start',
                 'bloody_javelin'         => 'Bloody Javelin: Throws a Kyrian javelin at the target, inflicting Physical damage to all enemies it passes through and additional Physical damage every 2 sec for 16 sec. Enemies hit take 20% increased damage for 16 sec.',
                 'forgotten_forgehammer'  => 'Forgotten Forgehammer: Hurls a mighty Kyrian hammer at the target, inflicting Physical damage and stunning the target for 8 sec.',
-                'malfunctioning_goliath' => 'Kyrian: Malfunctioning Goliath - Ejects 5 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants Anima Exhaust. This increases movement speed by 20% and causes AoE damage procs and healing every 4 seconds for 1 min.',
+                'malfunctioning_goliath' => 'Malfunctioning Goliath: Ejects 5 Anima orbs which remain on the ground for about 12 seconds. Stepping on an orb grants Anima Exhaust. This increases movement speed by 20% and causes AoE damage procs and healing every 4 seconds for 1 min.',
                 'discharged_anima'       => 'Discharged Anima: Unleash the stored anima, inflicting Arcane damage to nearby enemies and interrupting their spellcasting every 1 sec for 8 sec.',
                 'discarded_shield'       => 'Discarded Shield: Activate to reduce damage taken by 50% for all allies within 8 yds for 6 sec.',
                 'anima_crystal_shard'    => 'Anima Crystal Shard',
