@@ -9,7 +9,7 @@
         "lng": 262.125,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -22,7 +22,7 @@
         "lng": 282,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -256,7 +256,7 @@
         "lng": 262.125,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -269,7 +269,7 @@
         "lng": 282,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -503,7 +503,7 @@
         "lng": 262.125,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -516,7 +516,7 @@
         "lng": 282,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -750,7 +750,7 @@
         "lng": 262.125,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
@@ -763,7 +763,7 @@
         "lng": 282,
         "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
-        "seasonal_index": 0,
+        "seasonal_index": null,
         "is_admin": true
     },
     {
