@@ -1,0 +1,43 @@
+{
+    "id": 254,
+    "release_changelog_id": 261,
+    "version": "v11.4.1",
+    "title": "Reworked map items",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2024-10-11T11:20:37+00:00",
+    "updated_at": "2024-10-11T11:20:37+00:00",
+    "changelog": {
+        "id": 261,
+        "release_id": 254,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 261,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2514,
+                "change": "Legion timewalking has ended. Finally."
+            },
+            {
+                "release_changelog_id": 261,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2549,
+                "change": "Necrotic Wake items corrected for The War Within Season 1."
+            },
+            {
+                "release_changelog_id": 261,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2546,
+                "change": "All interactable items on the map are now hexagons. Necrotic Wake, Mists of Tirna Scithe and City of Threads now use these new item icons."
+            },
+            {
+                "release_changelog_id": 261,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2557,
+                "change": "Archon.gg integration is now working properly again."
+            }
+        ]
+    }
+}

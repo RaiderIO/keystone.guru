@@ -17,7 +17,7 @@ jobs:
         uses: php-actions/composer@v6
         with:
           php_version: "8.2"
-          args: "--ignore-platform-req=ext-lua --ignore-platform-req=ext-zip --ignore-platform-req=ext-pcntl"
+          args: "--ignore-platform-req=ext-lua --ignore-platform-req=ext-zip --ignore-platform-req=ext-pcntl --ignore-platform-req=ext-imagick"
         env:
           COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.DEPLOYER_PAT }}"} }'
       - name: Setup Deployer
