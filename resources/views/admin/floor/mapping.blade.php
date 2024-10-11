@@ -1,8 +1,9 @@
+@php use App\Logic\MapContext\MapContextMappingVersion;use App\Models\Floor\Floor;use App\Models\Mapping\MappingVersion; @endphp
 <?php
 /**
- * @var $floor \App\Models\Floor\Floor
- * @var $mapContext \App\Logic\MapContext\MapContextMappingVersion
- * @var $mappingVersion \App\Models\Mapping\MappingVersion
+ * @var Floor                    $floor
+ * @var MapContextMappingVersion $mapContext
+ * @var MappingVersion           $mappingVersion
  */
 ?>
 
@@ -11,7 +12,7 @@
     'custom' => true,
     'footer' => false,
     'header' => false,
-    'title' => sprintf(__('view_admin.floor.mapping.title'), __($floor->dungeon->name))
+    'title' => sprintf(__('view_admin.floor.mapping.title'), __($floor->dungeon->name)),
 ])
 @section('header-title')
     {{ sprintf(__('view_admin.floor.mapping.header'), __($floor->dungeon->name)) }}
@@ -31,7 +32,7 @@
                 'brushline',
                 'path',
                 'killzone',
-                'killzonepath'
+                'killzonepath',
             ],
             'show' => [
                 'header' => true,

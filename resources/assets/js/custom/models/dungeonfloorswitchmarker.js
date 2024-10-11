@@ -211,12 +211,12 @@ class DungeonFloorSwitchMarker extends Icon {
     _getDecorator() {
         let result = null;
 
-        if (getState().getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE && this.linked_dungeon_floor_switch_marker_id !== null) {
+        if (getState().isCurrentDungeonFacadeEnabled() && this.linked_dungeon_floor_switch_marker_id !== null) {
             /** @type {DungeonFloorSwitchMarkerMapObjectGroup} */
             let dungeonFloorSwitchMarkerMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER);
             let linkedDungeonFloorSwitchMarker = dungeonFloorSwitchMarkerMapObjectGroup.findMapObjectById(this.linked_dungeon_floor_switch_marker_id);
 
-            if (linkedDungeonFloorSwitchMarker !== null) {
+            if (linkedDungeonFloorSwitchMarker !== null && linkedDungeonFloorSwitchMarker.isVisible()) {
                 let options = c.map.dungeonfloorswitchmarker.floorUnionConnectionPolylineOptions;
 
                 if (this.mouseOver) {
@@ -246,7 +246,7 @@ class DungeonFloorSwitchMarker extends Icon {
             // Tol'dagor doors don't have a target (locked doors)
             let state = getState();
             // Don't do anything when we have combined floors! We can already see everything
-            if (state.getMapFacadeStyle() === MAP_FACADE_STYLE_SPLIT_FLOORS && self.target_floor_id !== null) {
+            if (!state.isCurrentDungeonFacadeEnabled() && self.target_floor_id !== null) {
                 state.setFloorId(self.target_floor_id);
             }
         }).on('mouseover', function () {
@@ -276,7 +276,9 @@ class DungeonFloorSwitchMarker extends Icon {
         console.assert(this instanceof DungeonFloorSwitchMarker, 'this is not a DungeonFloorSwitchMarker', this);
 
         let state = getState();
-        if (state.getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE) {
+
+        // We do not know the names of the other floors at this point - awkward
+        if (state.isCurrentDungeonFacadeEnabled()) {
             return '';
         }
 
@@ -296,7 +298,11 @@ class DungeonFloorSwitchMarker extends Icon {
         let targetFloor = state.getMapContext().getFloorById(this.target_floor_id);
 
         if (targetFloor !== false) {
-            return `${lang.get('messages.dungeonfloorswitchmarker_go_to_label')} ${lang.get(targetFloor.name)}`;
+            // if (state.isCurrentDungeonFacadeEnabled()) {
+            //     return lang.get('messages.dungeonfloorswitchmarker_to_label', {floor: lang.get(targetFloor.name)});
+            // } else {
+            return lang.get('messages.dungeonfloorswitchmarker_go_to_label', {floor: lang.get(targetFloor.name)});
+            // }
         } else {
             return `${lang.get('messages.dungeonfloorswitchmarker_unknown_label')}`;
         }

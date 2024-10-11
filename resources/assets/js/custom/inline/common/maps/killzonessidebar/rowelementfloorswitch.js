@@ -30,8 +30,9 @@ class RowElementFloorSwitch extends RowElement {
      */
     _floorSwitchRowClicked() {
         let targetFloorId = parseInt($(this).data('id'));
-        if (getState().getCurrentFloor().id !== targetFloorId) {
-            getState().setFloorId(targetFloorId);
+        let state = getState();
+        if (!state.isCurrentDungeonFacadeEnabled() && state.getCurrentFloor().id !== targetFloorId) {
+            state.setFloorId(targetFloorId);
         }
     }
 

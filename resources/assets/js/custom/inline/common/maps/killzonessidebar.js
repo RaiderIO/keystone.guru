@@ -76,8 +76,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
             return;
         }
 
-        let showFloorSwitches = getState().getPullsSidebarFloorSwitchVisibility() && getState().getMapFacadeStyle() === MAP_FACADE_STYLE_SPLIT_FLOORS;
-
+        let showFloorSwitches = getState().getPullsSidebarFloorSwitchVisibility();
         if (showFloorSwitches && this.rowElements.length === 0) {
             this._addFloorSwitch(killZone, getState().getMapContext().getDefaultFloor(), true);
         }
@@ -176,12 +175,13 @@ class CommonMapsKillzonessidebar extends InlineCode {
         $('.map_killzonessidebar_floor_switch').remove();
 
         // Re-add them only if we should
-        if (getState().getPullsSidebarFloorSwitchVisibility() && getState().getMapFacadeStyle() === MAP_FACADE_STYLE_SPLIT_FLOORS) {
+        if (getState().getPullsSidebarFloorSwitchVisibility()) {
             let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
             /** @type KillZone */
             let previousKillZone = null;
             let previousKillZoneFloorIds = [];
             let killZoneFloorIds = [];
+            /** @type KillZone[] */
             let sortedObjects = _.sortBy(_.values(killZoneMapObjectGroup.objects), 'index');
             for (let i = 0; i < sortedObjects.length; i++) {
                 let killZone = sortedObjects[i];

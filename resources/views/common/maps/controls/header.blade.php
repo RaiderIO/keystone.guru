@@ -1,15 +1,27 @@
 <?php
+
+use App\Logic\MapContext\MapContext;
+use App\Logic\MapContext\MapContextDungeonExplore;
+use App\Logic\MapContext\MapContextMappingVersionEdit;
+use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Floor\Floor;
+use App\Models\LiveSession;
+use App\Models\Mapping\MappingVersion;
+use App\Models\Team;
+
 /**
- * @var $theme string
- * @var $isUserAdmin bool
- * @var $mapContext \App\Logic\MapContext\MapContext
- * @var $dungeon \App\Models\Dungeon
- * @var $floor \App\Models\Floor\Floor
- * @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute|null
- * @var $livesession \App\Models\LiveSession|null
- * @var $mappingVersion \App\Models\Mapping\MappingVersion|null
- * @var $edit bool
+ * @var string              $theme
+ * @var bool                $isUserAdmin
+ * @var MapContext          $mapContext
+ * @var Dungeon             $dungeon
+ * @var Floor               $floor
+ * @var DungeonRoute|null   $dungeonroute
+ * @var LiveSession|null    $livesession
+ * @var MappingVersion|null $mappingVersion
+ * @var bool                $edit
  */
+
 $echo        ??= false;
 $mayUserEdit = $dungeonroute?->mayUserEdit(Auth::user()) ?? false;
 $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
@@ -91,7 +103,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                                     <h5 class="mb-0 mr-2">
                                         @isset($dungeonroute)
                                             {{ $dungeonroute->title }}
-                                        @elseif($mapContext instanceof \App\Logic\MapContext\MapContextDungeonExplore)
+                                        @elseif($mapContext instanceof MapContextDungeonExplore)
                                             {{ __('view_common.maps.map.explore_header_title', ['dungeon' => __($dungeon->name)]) }}
                                         @else
                                             <a href="{{ route('admin.floor.edit', ['dungeon' => $floor->dungeon, 'floor' => $floor]) }}">
@@ -117,8 +129,8 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                             </div>
                         </div>
                     </div>
-                    @if(!($mapContext instanceof \App\Logic\MapContext\MapContextDungeonExplore))
-                        @if(isset($dungeonroute) && $dungeonroute->team instanceof \App\Models\Team)
+                    @if(!($mapContext instanceof MapContextDungeonExplore))
+                        @if(isset($dungeonroute) && $dungeonroute->team instanceof Team)
                             <div class="row no-gutters">
                                 <div class="col">
                                 <span class="text-primary">
@@ -220,7 +232,24 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                         </li>
                     @endif
                 @endisset
-                @if( $mapContext instanceof \App\Logic\MapContext\MapContextMappingVersionEdit )
+                @if( $mapContext instanceof MapContextDungeonExplore && $isUserAdmin )
+                    <li class="nav-item mr-2">
+                        <div class="d-flex h-100">
+                            <div class="row justify-content-center align-self-center">
+                                <a class="col" href="{{ route('admin.floor.edit.mapping', [
+                                            'dungeon' => $dungeon,
+                                            'floor' => $dungeon->floors()->first(),
+                                            'mapping_version' => $dungeon->currentMappingVersion->id
+                                        ]) }}">
+                                    <button class="btn btn-success btn-sm">
+                                        <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                @endif
+                @if( $mapContext instanceof MapContextMappingVersionEdit )
                     <li class="nav-item mr-2">
                         <div class="d-flex h-100">
                             <div class="row justify-content-center align-self-center">
@@ -365,7 +394,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
             </div>
         </div>
     @endcomponent
-@elseif($mapContext instanceof \App\Logic\MapContext\MapContextMappingVersionEdit)
+@elseif($mapContext instanceof MapContextMappingVersionEdit)
     @component('common.general.modal', ['id' => 'edit_mapping_version_modal', 'size' => 'xl'])
         @include('common.modal.mappingversion', ['mappingVersion' => $mappingVersion])
     @endcomponent
