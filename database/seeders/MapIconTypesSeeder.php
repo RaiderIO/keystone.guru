@@ -122,6 +122,11 @@ class MapIconTypesSeeder extends Seeder implements TableSeederInterface
 
             MapIconType::MAP_ICON_TYPE_CHEST        => ['name' => 'mapicontypes.chest', 'width' => 32, 'height' => 32],
             MapIconType::MAP_ICON_TYPE_CHEST_LOCKED => ['name' => 'mapicontypes.chest_locked', 'width' => 32, 'height' => 32],
+
+            MapIconType::MAP_ICON_TYPE_MISTS_STATSHROOM  => ['name' => 'mapicontypes.mists_statshroom', 'width' => 32, 'height' => 32, 'admin_only' => true],
+            MapIconType::MAP_ICON_TYPE_MISTS_TOUGHSHROOM => ['name' => 'mapicontypes.mists_toughshroom', 'width' => 32, 'height' => 32, 'admin_only' => true],
+
+            MapIconType::MAP_ICON_TYPE_COT_SHADECASTER => ['name' => 'mapicontypes.cot_shadecaster', 'width' => 32, 'height' => 32, 'admin_only' => true],
         ];
 
         $mapIconTypeAttributes = [];

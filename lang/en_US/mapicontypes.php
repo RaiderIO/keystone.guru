@@ -96,5 +96,8 @@ return [
     'class_evoker'                      => 'Evoker',
     'chest'                             => 'Chest',
     'chest_locked'                      => 'Locked chest',
+    'mists_statshroom'                  => 'Statshroom',
+    'mists_toughshroom'                 => 'Toughshroom',
+    'cot_shadecaster'                   => 'Queen Ansurek Shadecaster',
 
 ];

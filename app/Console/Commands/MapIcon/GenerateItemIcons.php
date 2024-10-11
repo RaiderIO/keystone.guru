@@ -35,6 +35,9 @@ class GenerateItemIcons extends Command
             'assets/images/mapicon_gen/inv_mace_1h_bastionquest_b_01.png'    => 'nw_item_hammer.png',
             'assets/images/mapicon_gen/inv_shield_1h_bastionquest_b_01.jpg'  => 'nw_item_shield.png',
             'assets/images/mapicon_gen/inv_polearm_2h_bastionquest_b_01.png' => 'nw_item_spear.png',
+            'assets/images/mapicon_gen/inv_misc_starspecklemushroom.jpg'     => 'mists_item_statshroom.png',
+            'assets/images/mapicon_gen/inv_mushroom_06.jpg'                  => 'mists_item_toughshroom.png',
+            'assets/images/mapicon_gen/inv_offhand_1h_nerubianraid_d_01.jpg' => 'cot_item_shadecaster.png',
         ];
 
 
