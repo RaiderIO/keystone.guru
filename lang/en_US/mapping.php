@@ -30,6 +30,7 @@ return [
             'mists_of_tirna_scithe' => [
                 'start'                          => 'Start',
                 'brambles'                       => 'Night Elves, Tauren, Highmountain Tauren, Druids, and Khaz Algar Herbalists with at least 25 Skill: unlock shortcut',
+                'overgrown_roots'                => 'Night Elves, Tauren, Highmountain Tauren, Druids, and Khaz Algar Herbalists with at least 25 Skill: unlock area with buffs',
                 'depleted_anima_seed'            => 'Graveyard: you must activate this first before it\'s active!',
                 'map_missing_wall'               => 'Wall that doesn\'t appear on map',
                 'savory_statshroom'              => 'Savory Statshroom: Eat the mushroom, instantly healing 100% health and increasing Strength, Agility, and Intellect by 10% for 10 min.',
