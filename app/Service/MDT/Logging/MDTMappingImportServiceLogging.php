@@ -27,6 +27,11 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->end(__METHOD__);
     }
 
+    public function importDungeonMappingVersionFromMDTNoChangeDetected(string $key, ?string $latestMdtMappingHash): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
     public function importDungeonStart(): void
     {
         $this->start(__METHOD__);

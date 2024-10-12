@@ -66,8 +66,10 @@ class MDTNpc implements Arrayable
         $this->health           = (int)$this->rawMdtNpc['health'];
         $this->healthPercentage = $this->rawMdtNpc['health_percentage'] ?? null;
 
+        // We need to do this ksort magic because php arrays that we get from Lua are in a random order - this makes it consistent
         if (isset($this->rawMdtNpc['characteristics'])) {
-            $this->characteristics = $rawMdtNpc['characteristics'];
+            $this->recur_ksort($this->rawMdtNpc['characteristics']);
+            $this->characteristics = $this->rawMdtNpc['characteristics'];
         } else {
             $this->characteristics = [];
         }
