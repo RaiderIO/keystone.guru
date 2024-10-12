@@ -37,6 +37,7 @@ class GenerateItemIcons extends Command
             'inv_polearm_2h_bastionquest_b_01.png'  => 'nw_item_spear.png',
             'inv_misc_starspecklemushroom.jpg'      => 'mists_item_statshroom.png',
             'inv_mushroom_06.jpg'                   => 'mists_item_toughshroom.png',
+            'inv_misc_root_02.jpg'                  => 'mists_item_overgrown_roots.png',
             'inv_offhand_1h_nerubianraid_d_01.jpg'  => 'cot_item_shadecaster.png',
             'inv_enchanting_craftedreagent_bar.jpg' => 'sv_item_imbued_iron_energy.png',
             'inv_misc_web_02.jpg'                   => 'ara_kara_item_silk_wrap.png',

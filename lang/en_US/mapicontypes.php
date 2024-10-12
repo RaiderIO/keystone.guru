@@ -98,6 +98,7 @@ return [
     'chest_locked'                      => 'Locked chest',
     'mists_statshroom'                  => 'Statshroom',
     'mists_toughshroom'                 => 'Toughshroom',
+    'mists_overgrown_roots'             => 'Overgrown Roots',
     'cot_shadecaster'                   => 'Queen Ansurek Shadecaster',
     'sv_imbued_iron_energy'             => 'Imbued Iron Energy',
     'ara_kara_silk_wrap'                => 'Silk Wrap',
