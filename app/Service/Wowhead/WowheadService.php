@@ -208,7 +208,10 @@ class WowheadService implements WowheadServiceInterface
                 $mechanicSet   = true;
             } // Spell name
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_NAME)) {
-                $name = html_entity_decode(str_replace([self::IDENTIFYING_TOKEN_SPELL_NAME, '"', '>'], '', $line));
+                $name = html_entity_decode(
+                    str_replace([self::IDENTIFYING_TOKEN_SPELL_NAME, '"', '>'], '', $line),
+                    ENT_QUOTES | ENT_XML1
+                );
             } // Spell school
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_SCHOOL)) {
                 $schoolFound = true;
