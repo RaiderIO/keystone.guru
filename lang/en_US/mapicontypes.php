@@ -100,5 +100,6 @@ return [
     'mists_toughshroom'                 => 'Toughshroom',
     'cot_shadecaster'                   => 'Queen Ansurek Shadecaster',
     'sv_imbued_iron_energy'             => 'Imbued Iron Energy',
+    'ara_kara_silk_wrap'                => 'Silk Wrap',
 
 ];
