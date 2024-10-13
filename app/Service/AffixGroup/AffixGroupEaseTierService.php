@@ -68,7 +68,6 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         $affixGroupString = $tierListsResponse['encounterTierList']['label'];
         // TWW S1 _kinda_ did away with affixes, but I still have them, Archon removed them
         // so I'm just subbing them with the current affix group if not set
-        dump($affixGroupString);
         $affixGroup = $affixGroupString === null
             ? $this->seasonService->getCurrentSeason()?->getCurrentAffixGroup()
             : $this->getAffixGroupByString($affixGroupString);
