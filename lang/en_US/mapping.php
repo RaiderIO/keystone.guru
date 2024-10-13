@@ -85,6 +85,11 @@ return [
                 'exit'                 => 'Exit',
             ],
         ],
+        'tww' => [
+            'the_stonevault' => [
+                'imbued_iron_energy' => 'Warriors, Dwarves, Blacksmiths (25): Energy trapped inside the Imbued Iron Bar releases, increasing the Versatility of all players within 20 yards by 10% for 10 mins.',
+            ],
+        ]
     ],
 
 ];
