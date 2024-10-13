@@ -1,9 +1,15 @@
 <?php
 /**
- * @var $dungeon \App\Models\Dungeon
- * @var $floor \App\Models\Floor\Floor
- * @var $floorCouplings \App\Models\Floor\FloorCoupling[]|\Illuminate\Support\Collection
+ * @var Dungeon                   $dungeon
+ * @var Floor                     $floor
+ * @var Collection<FloorCoupling> $floorCouplings
  */
+
+use App\Models\Dungeon;
+use App\Models\Floor\Floor;
+use App\Models\Floor\FloorCoupling;
+use Illuminate\Support\Collection;
+
 $floor ??= null;
 ?>
 @extends('layouts.sitepage', [
@@ -17,10 +23,6 @@ $floor ??= null;
 @section('header-title')
     {{ sprintf(isset($floor) ? __('view_admin.floor.edit.header_edit') : __('view_admin.floor.edit.header_new'), __($dungeon->name)) }}
 @endsection
-<?php
-/**
- */
-?>
 
 @section('content')
     @isset($floor)
@@ -136,10 +138,10 @@ $floor ??= null;
 
     @isset($floor)
         <div class="form-group">
-            @include('admin.floor.speedrunrequirednpcs', ['difficulty' => \App\Models\Dungeon::DIFFICULTY_10_MAN, 'floor' => $floor])
+            @include('admin.floor.speedrunrequirednpcs', ['difficulty' => Dungeon::DIFFICULTY_10_MAN, 'floor' => $floor])
         </div>
         <div class="form-group">
-            @include('admin.floor.speedrunrequirednpcs', ['difficulty' => \App\Models\Dungeon::DIFFICULTY_25_MAN, 'floor' => $floor])
+            @include('admin.floor.speedrunrequirednpcs', ['difficulty' => Dungeon::DIFFICULTY_25_MAN, 'floor' => $floor])
         </div>
     @endisset
 @endsection

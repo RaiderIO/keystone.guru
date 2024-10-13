@@ -523,7 +523,7 @@ class StateManager extends Signalable {
 
     /**
      * Gets the data of the currently selected floor
-     * @returns {boolean|{Object}}
+     * @returns {boolean|{id: Number}}
      */
     getCurrentFloor() {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
@@ -560,6 +560,17 @@ class StateManager extends Signalable {
         console.assert(this instanceof StateManager, 'this is not a StateManager', this);
 
         return this._userData;
+    }
+
+    /**
+     * Checks if the current dungeon has facade enabled AND if we want to see it. False otherwise.
+     * @returns {number|boolean}
+     */
+    isCurrentDungeonFacadeEnabled() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return this._mapContext.getMappingVersion().facade_enabled &&
+            this.getMapFacadeStyle() === MAP_FACADE_STYLE_FACADE;
     }
 
     /**
@@ -678,7 +689,7 @@ class StateManager extends Signalable {
 
         $.ajax({
             type: 'POST',
-            url: `/ajax/metric/route/${getState().getMapContext().getPublicKey()}`,
+            url: `/ajax/metric/route/${this._mapContext.getPublicKey()}`,
             dataType: 'json',
             data: {
                 category: category,

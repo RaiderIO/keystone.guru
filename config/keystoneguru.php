@@ -197,7 +197,7 @@ return [
         /**
          * The maximum amount of thumbnails that will be queued in a single run.
          */
-        'refresh_outdated_count' => 150,
+        'refresh_outdated_count' => 10000,
     ],
 
     /**

@@ -127,7 +127,10 @@ class MapIconType extends CacheModel
     public const MAP_ICON_TYPE_CHEST_LOCKED                      = 'chest_locked';
     public const MAP_ICON_TYPE_MISTS_STATSHROOM                  = 'mists_item_statshroom';
     public const MAP_ICON_TYPE_MISTS_TOUGHSHROOM                 = 'mists_item_toughshroom';
+    public const MAP_ICON_TYPE_MISTS_OVERGROWN_ROOTS             = 'mists_item_overgrown_roots';
     public const MAP_ICON_TYPE_COT_SHADECASTER                   = 'cot_item_shadecaster';
+    public const MAP_ICON_TYPE_SV_IMBUED_IRON_ENERGY             = 'sv_item_imbued_iron_energy';
+    public const MAP_ICON_TYPE_ARA_KARA_SILK_WRAP                = 'ara_kara_item_silk_wrap';
 
     public const ALL = [
         self::MAP_ICON_TYPE_UNKNOWN                   => 1,
@@ -244,8 +247,14 @@ class MapIconType extends CacheModel
 
         self::MAP_ICON_TYPE_MISTS_STATSHROOM  => 95,
         self::MAP_ICON_TYPE_MISTS_TOUGHSHROOM => 96,
+        self::MAP_ICON_TYPE_MISTS_OVERGROWN_ROOTS => 100,
 
         self::MAP_ICON_TYPE_COT_SHADECASTER => 97,
+
+        self::MAP_ICON_TYPE_SV_IMBUED_IRON_ENERGY => 98,
+
+        self::MAP_ICON_TYPE_ARA_KARA_SILK_WRAP => 99,
+        // 101 next
     ];
 
     public function mapIcons(): HasMany

@@ -14,6 +14,8 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importMappingVersionFromMDTEnd(): void;
 
+    public function importDungeonMappingVersionFromMDTNoChangeDetected(string $key, ?string $latestMdtMappingHash): void;
+
     public function importDungeonStart(): void;
 
     public function importDungeonTotalCounts(int $mdtDungeonID, int $normal, int $teeming): void;

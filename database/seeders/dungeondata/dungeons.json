@@ -12583,8 +12583,8 @@
                 "name": "dungeons.tww.city_of_threads.floors.the_transformatory",
                 "default": 0,
                 "facade": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 20,
+                "max_enemy_size": 40,
                 "enemy_engagement_max_range": null,
                 "enemy_engagement_max_range_patrols": null,
                 "ingame_min_x": 1400,
@@ -12596,7 +12596,7 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 975,
+                        "id": 977,
                         "floor1_id": 287,
                         "floor2_id": 286,
                         "direction": "up"

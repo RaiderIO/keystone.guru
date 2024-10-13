@@ -114,7 +114,6 @@ Expansion::EXPANSION_BFA => [
     Dungeon::DUNGEON_FREEHOLD             => 'Freehold',
     Dungeon::DUNGEON_KINGS_REST           => 'KingsRest',
     Dungeon::DUNGEON_SHRINE_OF_THE_STORM  => 'ShrineoftheStorm',
-    Dungeon::DUNGEON_SIEGE_OF_BORALUS     => 'SiegeofBoralus',
     Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS => 'TempleofSethraliss',
     Dungeon::DUNGEON_THE_MOTHERLODE       => 'TheMotherlode',
     Dungeon::DUNGEON_THE_UNDERROT         => 'TheUnderrot',
@@ -131,11 +130,9 @@ Expansion::EXPANSION_SHADOWLANDS => [
     // SL
     Dungeon::DUNGEON_DE_OTHER_SIDE              => 'DeOtherSide',
     Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
-    Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE      => 'MistsOfTirnaScithe',
     Dungeon::DUNGEON_PLAGUEFALL                 => 'Plaguefall',
     Dungeon::DUNGEON_SANGUINE_DEPTHS            => 'SanguineDepths',
     Dungeon::DUNGEON_SPIRES_OF_ASCENSION        => 'SpiresOfAscension',
-    Dungeon::DUNGEON_THE_NECROTIC_WAKE          => 'TheNecroticWake',
     Dungeon::DUNGEON_THEATER_OF_PAIN            => 'TheaterOfPain',
     Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER => 'TazaveshLower',
     Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   => 'TazaveshUpper',
@@ -170,6 +167,13 @@ Expansion::EXPANSION_DRAGONFLIGHT => [
 Expansion::EXPANSION_TWW => [
     // Cata
     Dungeon::DUNGEON_GRIM_BATOL              => 'GrimBatol',
+
+    // BFA
+    Dungeon::DUNGEON_SIEGE_OF_BORALUS        => 'SiegeofBoralus',
+
+    // Shadowlands
+    Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE   => 'MistsOfTirnaScithe',
+    Dungeon::DUNGEON_THE_NECROTIC_WAKE       => 'TheNecroticWake',
 
     // TWW
     Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES => 'AraKara',

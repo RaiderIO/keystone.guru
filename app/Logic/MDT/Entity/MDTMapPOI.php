@@ -19,6 +19,7 @@ class MDTMapPOI implements Arrayable
     ];
 
     public const TYPE_MAP_LINK             = 'mapLink';
+    public const TYPE_DUNGEON_ENTRANCE     = 'dungeonEntrance';
     public const TYPE_GRAVEYARD            = 'graveyard';
     public const TYPE_GENERAL_NOTE         = 'generalNote';
     public const TYPE_ZOOM                 = 'zoom';
@@ -31,9 +32,14 @@ class MDTMapPOI implements Arrayable
     public const TYPE_NELTHARUS_FOOD       = 'neltharusFood';
     public const TYPE_NELTHARUS_SHIELD     = 'neltharusShield';
     public const TYPE_NW_ITEM              = 'nwItem';
+    public const TYPE_ARA_KARA_ITEM        = 'araKaraItem';
+    public const TYPE_MISTS_ITEM           = 'mistsItem';
+    public const TYPE_STONEVAULT_ITEM      = 'stonevaultItem';
+    public const TYPE_COT_ITEM             = 'cityOfThreadsItem';
 
     public const ALL_TYPES = [
         self::TYPE_MAP_LINK,
+        self::TYPE_DUNGEON_ENTRANCE,
         self::TYPE_GRAVEYARD,
         self::TYPE_GENERAL_NOTE,
         self::TYPE_ZOOM,
@@ -46,6 +52,10 @@ class MDTMapPOI implements Arrayable
         self::TYPE_NELTHARUS_FOOD,
         self::TYPE_NELTHARUS_SHIELD,
         self::TYPE_NW_ITEM,
+        self::TYPE_ARA_KARA_ITEM,
+        self::TYPE_STONEVAULT_ITEM,
+        self::TYPE_MISTS_ITEM,
+        self::TYPE_COT_ITEM,
     ];
 
     private readonly string $template;

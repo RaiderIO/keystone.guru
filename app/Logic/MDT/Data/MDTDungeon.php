@@ -327,6 +327,13 @@ class MDTDungeon
                         end
                     ';
 
+            $replaceStrings = [
+                'local addonName = ...' => 'local addonName = "MythicDungeonTools"',
+            ];
+            foreach ($replaceStrings as $search => $replace) {
+                $eval = str_replace($search, $replace, $eval);
+            }
+
             /** @phpstan-ignore-next-line */
             $lua = new Lua();
             $lua->eval($eval);

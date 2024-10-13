@@ -556,7 +556,7 @@ class MapContext extends Signalable {
 
     /**
      *
-     * @returns {id: Number, dungeon_id: Number, version: Number}
+     * @returns {id: Number, dungeon_id: Number, version: Number, facade_enabled: Boolean}
      */
     getDungeonLatestMappingVersion() {
         return this._options.dungeon.latestMappingVersion;
@@ -564,7 +564,7 @@ class MapContext extends Signalable {
 
     /**
      *
-     * @returns {id: Number, dungeon_id: Number, version: Number}
+     * @returns {id: Number, dungeon_id: Number, version: Number, facade_enabled: Boolean}
      */
     getMappingVersion() {
         return this._options.mappingVersion;

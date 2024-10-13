@@ -30,20 +30,23 @@ class GenerateItemIcons extends Command
         ImageServiceInterface $imageService
     ): int {
         $imagePaths = [
-            'assets/images/mapicon_gen/spell_animabastion_orb.jpg'           => 'nw_item_anima.png',
-            'assets/images/mapicon_gen/171750.png'                           => 'nw_item_goliath.png',
-            'assets/images/mapicon_gen/inv_mace_1h_bastionquest_b_01.png'    => 'nw_item_hammer.png',
-            'assets/images/mapicon_gen/inv_shield_1h_bastionquest_b_01.jpg'  => 'nw_item_shield.png',
-            'assets/images/mapicon_gen/inv_polearm_2h_bastionquest_b_01.png' => 'nw_item_spear.png',
-            'assets/images/mapicon_gen/inv_misc_starspecklemushroom.jpg'     => 'mists_item_statshroom.png',
-            'assets/images/mapicon_gen/inv_mushroom_06.jpg'                  => 'mists_item_toughshroom.png',
-            'assets/images/mapicon_gen/inv_offhand_1h_nerubianraid_d_01.jpg' => 'cot_item_shadecaster.png',
+            'spell_animabastion_orb.jpg'            => 'nw_item_anima.png',
+            '171750.png'                            => 'nw_item_goliath.png',
+            'inv_mace_1h_bastionquest_b_01.png'     => 'nw_item_hammer.png',
+            'inv_shield_1h_bastionquest_b_01.jpg'   => 'nw_item_shield.png',
+            'inv_polearm_2h_bastionquest_b_01.png'  => 'nw_item_spear.png',
+            'inv_misc_starspecklemushroom.jpg'      => 'mists_item_statshroom.png',
+            'inv_mushroom_06.jpg'                   => 'mists_item_toughshroom.png',
+            'inv_misc_root_02.jpg'                  => 'mists_item_overgrown_roots.png',
+            'inv_offhand_1h_nerubianraid_d_01.jpg'  => 'cot_item_shadecaster.png',
+            'inv_enchanting_craftedreagent_bar.jpg' => 'sv_item_imbued_iron_energy.png',
+            'inv_misc_web_02.jpg'                   => 'ara_kara_item_silk_wrap.png',
         ];
 
 
         foreach ($imagePaths as $sourceImage => $targetImage) {
             $imageService->convertToItemImage(
-                resource_path($sourceImage),
+                resource_path(sprintf('assets/images/mapicon_gen/%s', $sourceImage)),
                 resource_path(sprintf('assets/images/mapicon/%s', $targetImage))
             );
         }

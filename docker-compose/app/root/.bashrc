@@ -5,6 +5,7 @@ history -s 'php artisan combatlog:outputcreateroutejson tmp/'
 history -s 'php artisan environment:update'
 history -s 'php artisan handlebars:refresh'
 history -s 'php artisan localization:sync en_US '
+history -s 'php artisan mapicon:generateitemicons'
 history -s 'php artisan mapping:save'
 history -s 'php artisan mdt:importmapping '
 history -s 'php artisan wowhead:fetchdisplayids '
@@ -14,3 +15,7 @@ history -s 'php artisan wowhead:fetchspelldata '
 history -s 'php artisan wowhead:refreshdisplayids'
 history -s './vendor/bin/phpunit -c phpunit.xml'
 history -s './refresh_db_seed.sh'
+
+# Prevent composer complaining about this if you got it symlinked
+git config --global --add safe.directory /var/www/vendor/nnoggie/mythicdungeontools
+git config --global --add safe.directory /var/www/vendor/wotuu/

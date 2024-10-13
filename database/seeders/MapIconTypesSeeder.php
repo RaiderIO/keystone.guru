@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\MapIcon;
 use App\Models\MapIconType;
 use Illuminate\Database\Seeder;
 
@@ -125,8 +126,13 @@ class MapIconTypesSeeder extends Seeder implements TableSeederInterface
 
             MapIconType::MAP_ICON_TYPE_MISTS_STATSHROOM  => ['name' => 'mapicontypes.mists_statshroom', 'width' => 32, 'height' => 32, 'admin_only' => true],
             MapIconType::MAP_ICON_TYPE_MISTS_TOUGHSHROOM => ['name' => 'mapicontypes.mists_toughshroom', 'width' => 32, 'height' => 32, 'admin_only' => true],
+            MapIconType::MAP_ICON_TYPE_MISTS_OVERGROWN_ROOTS => ['name' => 'mapicontypes.mists_overgrown_roots', 'width' => 32, 'height' => 32, 'admin_only' => true],
 
             MapIconType::MAP_ICON_TYPE_COT_SHADECASTER => ['name' => 'mapicontypes.cot_shadecaster', 'width' => 32, 'height' => 32, 'admin_only' => true],
+
+            MapIconType::MAP_ICON_TYPE_SV_IMBUED_IRON_ENERGY => ['name' => 'mapicontypes.sv_imbued_iron_energy', 'width' => 32, 'height' => 32, 'admin_only' => true],
+
+            MapIconType::MAP_ICON_TYPE_ARA_KARA_SILK_WRAP => ['name' => 'mapicontypes.ara_kara_silk_wrap', 'width' => 32, 'height' => 32, 'admin_only' => true],
         ];
 
         $mapIconTypeAttributes = [];

@@ -814,5 +814,17 @@
         "color_animated": null,
         "label": "Imported from MDT - group 36",
         "vertices_json": "[{\"lat\":-166.30537931034,\"lng\":321.39227586207},{\"lat\":-154.57737931034,\"lng\":321.39227586207},{\"lat\":-154.57737931034,\"lng\":338.00193103448},{\"lat\":-166.30537931034,\"lng\":338.00193103448}]"
+    },
+    {
+        "id": 12388,
+        "mapping_version_id": 386,
+        "floor_id": 302,
+        "group": 37,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-37.377582,\"lng\":251.117285},{\"lat\":-53.492247,\"lng\":252.313869},{\"lat\":-55.610175,\"lng\":271.367178},{\"lat\":-36.825079,\"lng\":273.116032}]"
     }
 ]

@@ -282,13 +282,19 @@ class Floor extends CacheModel implements MappingModelInterface
         }
 
         // Either grab the facade floor, or grab the requested floor _as long as it's not the facade floor_, otherwise return the default floor
-        return $builder->where(static fn(Builder $builder) => $builder->when($useFacade, static fn(Builder $builder) => $builder->where('facade', 1)
-            ->orWhere('default', 1))->when(!$useFacade, static fn(Builder $builder) => $builder->where('facade', 0)
-            ->where(static function (Builder $builder) use ($floorIndex) {
-                // Either try to resolve the actual floor, or revert to the default if not found
-                $builder->where('index', $floorIndex)
-                    ->orWhere('default', 1);
-            })))->orderByDesc($useFacade ? 'facade' : 'default')
+        return $builder->where(
+            static fn(Builder $builder) => $builder->when(
+                $useFacade,
+                static fn(Builder $builder) => $builder->where('facade', 1)->orWhere('default', 1)
+            )->when(
+                !$useFacade,
+                static fn(Builder $builder) => $builder->where('facade', 0)->where(static function (Builder $builder) use ($floorIndex) {
+                    // Either try to resolve the actual floor, or revert to the default if not found
+                    $builder->where('index', $floorIndex)
+                        ->orWhere('default', 1);
+                })
+            )
+        )->orderByDesc($useFacade ? 'facade' : 'index')
             ->limit(1);
     }
 

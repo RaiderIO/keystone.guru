@@ -78,9 +78,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
             return $newMappingVersion;
         } else {
-            throw new Exception(
-                sprintf('Most recent mapping version is already imported from this MDT version! (%s - %s)', $dungeon->key, $latestMdtMappingHash)
-            );
+            $this->log->importDungeonMappingVersionFromMDTNoChangeDetected($dungeon->key, $latestMdtMappingHash);
+            return $currentMappingVersion;
         }
     }
 

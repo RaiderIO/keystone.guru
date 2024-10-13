@@ -7,6 +7,7 @@ use App\Models\Spell\Spell;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
 
 class FetchSpellData extends Command
 {
@@ -40,7 +41,7 @@ class FetchSpellData extends Command
 
             $spells = $dungeon->spells;
         } else {
-            $spells = Spell::where('name', '')->get();
+            $spells = Spell::whereNull('fetched_data_at')->get();
         }
 
         $this->info(sprintf('Fetching spell data for %d spells', $spells->count()));
@@ -54,6 +55,7 @@ class FetchSpellData extends Command
                 $this->warn('- Unable to find spell data for spell!');
             } else {
                 $spellAttributes = $spellDataResult->toArray();
+                $spellAttributes['fetched_data_at'] = Carbon::now();
                 $spell->update($spellAttributes);
 
                 $this->info(sprintf('- %s', $spellDataResult->getName()));
