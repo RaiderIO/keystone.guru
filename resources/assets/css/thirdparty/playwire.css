@@ -6,3 +6,8 @@
     pointer-events: none !important;
     width: fit-content !important;
 }
+
+#pw-oop-bottom_rail iframe,
+#pw-oop-bottom_rail2 iframe {
+    pointer-events: auto !important;
+}
