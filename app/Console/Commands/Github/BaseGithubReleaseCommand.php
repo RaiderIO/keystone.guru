@@ -5,7 +5,7 @@ namespace App\Console\Commands\Github;
 use App\Models\Release;
 use Illuminate\Console\Command;
 
-abstract class GithubReleaseCommand extends Command
+abstract class BaseGithubReleaseCommand extends Command
 {
     public function findReleaseByVersion(?string $version): ?Release
     {
