@@ -9,7 +9,7 @@ use Github\Exception\ValidationFailedException;
 use GrahamCampbell\GitHub\Facades\GitHub;
 use Throwable;
 
-class CreateGithubRelease extends GithubReleaseCommand
+class CreateGithubRelease extends BaseGithubReleaseCommand
 {
     use ExecutesShellCommands;
 
@@ -64,10 +64,8 @@ class CreateGithubRelease extends GithubReleaseCommand
                     'name'     => $release->version,
                     'body'     => $body,
                 ]);
-                $this->info(sprintf('Successfully created GitHub release %s', $release->version));
 
-                // Fetch the created version from Github so we can use it later on
-                $this->shell('git fetch');
+                $this->info(sprintf('Successfully created GitHub release %s', $release->version));
             } catch (ValidationFailedException $exception) {
                 $this->warn(sprintf('Unable to create Github release for %s: %s', $release->version, $exception->getMessage()));
             }

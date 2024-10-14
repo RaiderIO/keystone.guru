@@ -9,7 +9,7 @@ return [
     'db_backup_dir'      => env('DB_BACKUP_DIR'),
     'mapping_backup_dir' => env('MAPPING_BACKUP_DIR'),
 
-    'github_username' => 'Wotuu',
+    'github_username' => 'RaiderIO',
 
     'github_repository' => 'Keystone.guru',
 

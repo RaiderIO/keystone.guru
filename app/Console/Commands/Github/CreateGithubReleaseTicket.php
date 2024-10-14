@@ -7,7 +7,7 @@ use Github\Api\Issue;
 use Github\Exception\MissingArgumentException;
 use GrahamCampbell\GitHub\Facades\GitHub;
 
-class CreateGithubReleaseTicket extends GithubReleaseCommand
+class CreateGithubReleaseTicket extends BaseGithubReleaseCommand
 {
     use ExecutesShellCommands;
 

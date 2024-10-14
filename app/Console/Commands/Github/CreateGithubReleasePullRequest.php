@@ -7,7 +7,7 @@ use Github\Api\PullRequest;
 use Github\Exception\MissingArgumentException;
 use GrahamCampbell\GitHub\Facades\GitHub;
 
-class CreateGithubReleasePullRequest extends GithubReleaseCommand
+class CreateGithubReleasePullRequest extends BaseGithubReleaseCommand
 {
     use ExecutesShellCommands;
 
