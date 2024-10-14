@@ -1,5 +1,5 @@
 <?php
-/** @var $theme string */
+/** @var string $theme */
 
 $isDarkMode = $theme === 'darkly';
 ?>

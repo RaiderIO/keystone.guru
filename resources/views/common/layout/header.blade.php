@@ -4,6 +4,7 @@ use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 /**
  * @var GameVersion             $currentUserGameVersion
@@ -122,7 +123,7 @@ $navs[route('misc.affixes')] = [
                             <?php
                             /** @noinspection PhpUndefinedVariableInspection */
                             $headerText = $route;
-                            $dropdownId = \Illuminate\Support\Str::slug($headerText)
+                            $dropdownId = Str::slug($headerText)
                             ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="{{ $dropdownId }}" role="button"
@@ -140,10 +141,11 @@ $navs[route('misc.affixes')] = [
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item nav-item-divider"></li>
-                @include('common.layout.navgameversions')
+                @include('common.layout.nav.gameversions')
+                @include('common.layout.nav.gameversions')
                 @include('vendor.language.flags')
-                @include('common.layout.navuser')
-                @include('common.layout.navthemeswitch')
+                @include('common.layout.nav.user')
+                @include('common.layout.nav.themeswitch')
             </ul>
         </div>
     </div>

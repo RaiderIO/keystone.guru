@@ -307,7 +307,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
-        view()->composer('common.layout.navuser', static function (View $view) use ($isUserAdmin) {
+        view()->composer('common.layout.nav.user', static function (View $view) use ($isUserAdmin) {
             $view->with('numUserReports', $isUserAdmin ? UserReport::where('status', 0)->count() : 0);
         });
 

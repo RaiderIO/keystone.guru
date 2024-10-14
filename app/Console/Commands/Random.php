@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\CombatLog\CombatLogAnalyze;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
+use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Image\ImageServiceInterface;
@@ -31,6 +33,7 @@ class Random extends Command
      * Execute the console command.
      */
     public function handle(
+        CombatLogDataExtractionService       $combatLogDataExtractionService,
         CombatLogEventServiceInterface       $combatLogEventService,
         ChallengeModeRunDataServiceInterface $challengeModeRunDataService,
         CoordinatesServiceInterface          $coordinatesService,
@@ -39,12 +42,23 @@ class Random extends Command
         ImageServiceInterface                $imageService
     ): int {
 
-        dd(
-            $imageService->convertToItemImage(
-                resource_path('assets/images/enemyportraits/171750.png'),
-                resource_path('assets/images/enemyportraits/171750_converted.png')
-            )
+        $filePath = base_path('tmp/WoWCombatLog-100624_192349_6_ara-kara-city-of-echoes.zip');
+
+        $combatLogAnalyze = CombatLogAnalyze::create([
+            'combat_log_path' => $filePath,
+        ]);
+
+        $combatLogDataExtractionService->extractDataAsync(
+            $filePath,
+            $combatLogAnalyze
         );
+
+//        dd(
+//            $imageService->convertToItemImage(
+//                resource_path('assets/images/enemyportraits/171750.png'),
+//                resource_path('assets/images/enemyportraits/171750_converted.png')
+//            )
+//        );
 
 //        $this->call('keystoneguru:view', ['operation' => 'cache']);
 //

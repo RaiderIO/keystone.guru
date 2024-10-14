@@ -1,7 +1,12 @@
 <?php
+use App\Models\GameVersion\GameVersion;
+use Illuminate\Support\Collection;
+
 /**
- * @var \Illuminate\Support\Collection<\App\Models\GameVersion\GameVersion> $allGameVersions
- * @var \App\Models\GameVersion\GameVersion                                 $currentUserGameVersion
+ * This is only visible for mobile users
+ *
+ * @var Collection<GameVersion> $allGameVersions
+ * @var GameVersion             $currentUserGameVersion
  */
 ?>
 <li class="nav-item dropdown d-lg-none d-block">

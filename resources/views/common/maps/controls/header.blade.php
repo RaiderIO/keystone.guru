@@ -161,7 +161,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                 </li>
             </ul>
             @if($echo)
-                @include('common.layout.navconnectedusers')
+                @include('common.layout.nav.connectedusers')
             @endif
             <ul class="navbar-nav">
                 <li class="nav-item nav-item-divider">
@@ -282,8 +282,8 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                 <li class="nav-item nav-item-divider">
 
                 </li>
-                @include('common.layout.navuser')
-                @include('common.layout.navthemeswitch')
+                @include('common.layout.nav.user')
+                @include('common.layout.nav.themeswitch')
             </ul>
         </div>
     </div>

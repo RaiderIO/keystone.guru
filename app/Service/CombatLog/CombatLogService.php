@@ -27,7 +27,9 @@ use ZipArchive;
 
 class CombatLogService implements CombatLogServiceInterface
 {
-    public function __construct(private readonly SeasonServiceInterface $seasonService, private readonly CombatLogServiceLoggingInterface $log)
+    public function __construct(
+        private readonly SeasonServiceInterface           $seasonService,
+        private readonly CombatLogServiceLoggingInterface $log)
     {
     }
 
