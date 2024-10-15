@@ -14,7 +14,7 @@ trait Curl
                 CURLOPT_FOLLOWLOCATION => true,   // follow redirects
                 CURLOPT_MAXREDIRS      => 10,     // stop after 10 redirects
                 CURLOPT_ENCODING       => '',     // handle compressed
-                CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36', // name of client
+                CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36', // name of client
                 CURLOPT_AUTOREFERER    => true,   // set referrer on redirect
                 CURLOPT_CONNECTTIMEOUT => 120,    // time-out on connect
                 CURLOPT_TIMEOUT        => 120,    // time-out on response

@@ -109,7 +109,7 @@ class SpellDataExtractor implements DataExtractorInterface
             // If the NPC broke an aura - that's not the NPC casting "Stealth" on a player - no it broke it out of it,
             // so don't assign that spell to this NPC
             if (!($suffix instanceof AuraBrokenSpell) && !($suffix instanceof AuraBroken)) {
-                $this->extractSpellData($result, $parsedEvent, $prefix);
+                $this->extractSpellData($result, $currentDungeon, $parsedEvent, $prefix);
 
                 $this->assignDungeonToSpell($result, $currentDungeon, $parsedEvent, $prefix);
 
@@ -152,9 +152,10 @@ class SpellDataExtractor implements DataExtractorInterface
     }
 
     private function extractSpellData(
-        ExtractedDataResult $result,
-        CombatLogEvent      $parsedEvent,
-        Spell               $spell
+        ExtractedDataResult          $result,
+        DataExtractionCurrentDungeon $currentDungeon,
+        CombatLogEvent               $parsedEvent,
+        Spell                        $spell
     ): void {
         // Now that we've extract spell data from the combat log, either update the data that's there in the database,
         // or fetch some additional info from Wowhead
@@ -167,7 +168,7 @@ class SpellDataExtractor implements DataExtractorInterface
         }
 
         // Create a new spell and fetch the info for it
-        $createdSpell = $this->createSpellAndFetchInfo($result, $this->wowheadService, $spell, $parsedEvent);
+        $createdSpell = $this->createSpellAndFetchInfo($result, $currentDungeon, $spell, $parsedEvent);
         if ($createdSpell instanceof SpellModel) {
             // Add to master list so that it doesn't get inserted twice
             $this->allSpells->put($spellId, $createdSpell);
@@ -313,15 +314,15 @@ class SpellDataExtractor implements DataExtractorInterface
     }
 
     private function createSpellAndFetchInfo(
-        ExtractedDataResult     $result,
-        WowheadServiceInterface $wowheadService,
-        Spell                   $spell,
-        CombatLogEvent          $combatLogEvent
+        ExtractedDataResult          $result,
+        DataExtractionCurrentDungeon $currentDungeon,
+        Spell                        $spell,
+        CombatLogEvent               $combatLogEvent
     ): ?SpellModel {
         try {
             $this->log->createSpellAndFetchInfoStart($spell->getSpellId());
 
-            $spellDataResult = $wowheadService->getSpellData($spell->getSpellId());
+            $spellDataResult = $this->wowheadService->getSpellData($currentDungeon->dungeon->gameVersion, $spell->getSpellId());
 
             $spellAttributes = [
                 'id'              => $spell->getSpellId(),
