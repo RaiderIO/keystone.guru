@@ -17,5 +17,5 @@ history -s './vendor/bin/phpunit -c phpunit.xml'
 history -s './refresh_db_seed.sh'
 
 # Prevent composer complaining about this if you got it symlinked
-git config --global --add safe.directory /var/www/vendor/nnoggie/mythicdungeontools
+git config --global --add safe.directory /var/www/vendor/nnoggie/
 git config --global --add safe.directory /var/www/vendor/wotuu/

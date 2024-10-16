@@ -272,7 +272,12 @@ class MDTDungeon
     {
         $lua = null;
 
-        $mdtHome          = base_path('vendor/nnoggie/mythicdungeontools');
+        $mdtHome          = base_path(
+            sprintf(
+                'vendor/nnoggie/%s',
+                Conversion::isDungeonInMainlineMDT($this->dungeon) ? 'mythicdungeontools' : 'mdt-legacy'
+            )
+        );
         $expansionName    = Conversion::getExpansionName($this->dungeon->key);
         $mdtExpansionName = Conversion::getMDTExpansionName($this->dungeon->key);
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3b9e51668d867a949c216e5d25216f4d",
+    "content-hash": "11bdee914039e0cf256f0c0076ece8b2",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -5030,6 +5030,16 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v5.0.2"
             },
             "time": "2024-03-05T20:51:40+00:00"
+        },
+        {
+            "name": "nnoggie/mdt-legacy",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Wotuu/MDT_Legacy.git",
+                "reference": "c39f3fe717207090301d3489cd0c5a3f15353d1f"
+            },
+            "type": "library"
         },
         {
             "name": "nnoggie/mythicdungeontools",
@@ -14350,10 +14360,10 @@
     "platform": {
         "php": ">=8.2",
         "ext-curl": "*",
+        "ext-imagick": "*",
         "ext-json": "*",
         "ext-lua": "*",
-        "ext-zip": "*",
-        "ext-imagick": "*"
+        "ext-zip": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
