@@ -27,8 +27,8 @@ $echo        ??= false;
 $mayUserEdit = $dungeonroute?->mayUserEdit(Auth::user()) ?? false;
 $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
 
-$dominantAffix = $dungeonroute->getDominantAffix();
-$seasonalAffix = $dungeonroute->getSeasonalAffix();
+$dominantAffix = $dungeonroute?->getDominantAffix();
+$seasonalAffix = $dungeonroute?->getSeasonalAffix();
 ?>
 <nav id="map_header"
      class="map_fade_out navbar navbar-expand-xl {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">

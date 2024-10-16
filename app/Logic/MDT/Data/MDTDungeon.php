@@ -308,6 +308,10 @@ class MDTDungeon
                         MDT.zoneIdToDungeonIdx = {}
 
                         local L = {}
+
+                        function UnitFactionGroup(who)
+                            return "Horde"
+                        end
                         ' .
                 // Some files require LibStub
                 file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) . PHP_EOL .
