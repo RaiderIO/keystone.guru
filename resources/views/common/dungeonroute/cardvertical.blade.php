@@ -24,12 +24,7 @@ $cacheFn = static function ()
 use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $__env)
 
 {
-    $dominantAffix = 'keystone';
-    if ($dungeonroute->hasUniqueAffix(Affix::AFFIX_FORTIFIED)) {
-        $dominantAffix = strtolower(Affix::AFFIX_FORTIFIED);
-    } else if ($dungeonroute->hasUniqueAffix(Affix::AFFIX_TYRANNICAL)) {
-        $dominantAffix = strtolower(Affix::AFFIX_TYRANNICAL);
-    }
+    $dominantAffix = strtolower($dungeonroute->getDominantAffix() ?? 'keystone');
 
     $seasonalAffix = $dungeonroute->getSeasonalAffix();
     if (!isset($tierAffixGroup)) {
@@ -38,7 +33,9 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
             $tierAffixGroup = $dungeonroute->affixes->first();
         } else {
             // If the affix list contains the current affix, we can use that to display the tier instead
-            $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(static fn(AffixGroup $affixGroup) => $affixGroup->id === $currentAffixGroup->id)->isNotEmpty() ? $currentAffixGroup : null);
+            $tierAffixGroup = $currentAffixGroup === null ? null : ($dungeonroute->affixes->filter(
+                static fn(AffixGroup $affixGroup) => $affixGroup->id === $currentAffixGroup->id)->isNotEmpty() ? $currentAffixGroup : null
+            );
         }
     }
     // Attempt a default value if there's only one affix set
@@ -116,16 +113,26 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                                      data-placement="bottom"
                                      data-html="true"
                                      data-content="{{ $affixes }}" style="cursor: pointer;">
-                                    <div class="col">
-                                        <img class="select_icon"
-                                             src="{{ url(sprintf('/images/affixes/%s.jpg', $dominantAffix)) }}"
-                                             alt="Dominant affix"/>
+                                    @php($dominantAffixKey = strtolower($dominantAffix))
+                                    <div class="col-auto">
+                                        <img class="select_icon mr-1"
+                                             src="{{ url(sprintf('/images/affixes/%s.jpg', $dominantAffixKey)) }}"
+                                             alt="{{ __('view_common.dungeonroute.card.dominant_affix') }}"
+                                             @if($dominantAffixKey !== 'keystone')
+                                             data-toggle="tooltip"
+                                             title="{{ __(sprintf('affixes.%s.name', $dominantAffixKey)) }}"
+                                             @endif
+                                        />
                                     </div>
                                     @if($seasonalAffix !== null)
-                                        <div class="col ml-1">
-                                            <img class="select_icon"
-                                                 src="{{ url(sprintf('/images/affixes/%s.jpg', Str::slug($seasonalAffix, '_'))) }}"
-                                                 alt="Dominant affix"/>
+                                        @php($seasonalAffixKey = strtolower(Str::slug($seasonalAffix, '_')))
+                                        <div class="col-auto">
+                                            <img class="select_icon mr-1"
+                                                 src="{{ url(sprintf('/images/affixes/%s.jpg', $seasonalAffixKey)) }}"
+                                                 alt="{{ __('view_common.dungeonroute.card.seasonal_affix') }}"
+                                                 data-toggle="tooltip"
+                                                 title="{{ __(sprintf('affixes.%s.name', $seasonalAffixKey)) }}"
+                                            />
                                         </div>
                                     @endif
                                 </div>

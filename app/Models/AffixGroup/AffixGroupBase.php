@@ -69,15 +69,8 @@ abstract class AffixGroupBase extends CacheModel
 
     public function hasAffix(string $key): bool
     {
-        $result = false;
-
-        foreach ($this->affixes as $affix) {
-            /** @var $affix Affix */
-            if ($result = ($affix->key === $key)) {
-                break;
-            }
-        }
-
-        return $result;
+        return $this->affixes->filter(function(Affix $affix) use ($key) {
+            return $affix->key === $key;
+        })->isNotEmpty();
     }
 }

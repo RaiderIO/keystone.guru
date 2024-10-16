@@ -23,12 +23,7 @@ $cacheFn = static function ()
 use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $__env)
 
 {
-    $dominantAffix = 'keystone';
-    if ($dungeonroute->hasUniqueAffix(\App\Models\Affix::AFFIX_FORTIFIED)) {
-        $dominantAffix = strtolower(\App\Models\Affix::AFFIX_FORTIFIED);
-    } else if ($dungeonroute->hasUniqueAffix(\App\Models\Affix::AFFIX_TYRANNICAL)) {
-        $dominantAffix = strtolower(\App\Models\Affix::AFFIX_TYRANNICAL);
-    }
+    $dominantAffix = strtolower($dungeonroute->getDominantAffix() ?? 'keystone');
 
     $seasonalAffix = $dungeonroute->getSeasonalAffix();
     if (!isset($tierAffixGroup)) {

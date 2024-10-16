@@ -41,6 +41,8 @@ return [
             'updated_at'               => 'Updated %s',
             'report'                   => 'Report',
             'refresh_thumbnail'        => 'Refresh thumbnail',
+            'dominant_affix'           => 'Dominant affix',
+            'seasonal_affix'           => 'Seasonal affix',
         ],
         'cardlist'   => [
             'no_dungeonroutes' => 'No routes found',
@@ -204,7 +206,7 @@ return [
         ],
     ],
     'layout'       => [
-        'footer'  => [
+        'footer' => [
             'developer'         => 'Developer',
             'api_documentation' => 'API documentation',
             'keystone_guru'     => 'Keystone.guru',
@@ -224,7 +226,7 @@ return [
             'trademark_footer'  => 'World of Warcraft, Warcraft and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries. This website is not affiliated with Blizzard Entertainment.',
             'social'            => 'Social',
         ],
-        'header'  => [
+        'header' => [
             'toggle_navigation_title' => 'Toggle navigation',
             'create_route'            => 'Create route',
             'search'                  => 'Search',
@@ -234,7 +236,7 @@ return [
             'affixes'                 => 'Affixes',
             'new'                     => 'NEW',
         ],
-        'nav' => [
+        'nav'    => [
             'user' => [
                 'login'             => 'Login',
                 'register'          => 'Register',
@@ -254,7 +256,7 @@ return [
                 'my_profile'        => 'My public profile',
                 'account_settings'  => 'Account settings',
                 'logout'            => 'Logout',
-            ]
+            ],
         ],
     ],
     'maps'         => [
@@ -331,6 +333,8 @@ return [
                 'toggle_navigation'              => 'Toggle navigation',
                 'stop'                           => 'Stop',
                 'start'                          => 'Start',
+                'dominant_affix'                 => 'Dominant affix',
+                'seasonal_affix'                 => 'Seasonal affix',
                 'live_session_expires_in'        => 'Expires in %s',
                 'edit_route'                     => 'Edit route',
                 'view_route'                     => 'View route',
@@ -339,6 +343,8 @@ return [
                 'simulate_route'                 => 'Simulate',
                 'edit_route_settings'            => 'Route settings',
                 'edit_mapping_version'           => 'Edit mapping version',
+                'admin_header_title'             => '%s (mapping version %d)',
+                'explore_header_title'           => 'Explore :dungeon',
                 'share'                          => 'Share',
                 'start_live_session'             => 'Start live session',
                 'start_live_session_paragraph_1' => 'Once you start running your route in-game you can create a live session where Keystone.guru will aid you in completing your M+ key. You may follow another user\'s map movements by selecting the option when clicking their icon/initials in the top header.',
@@ -400,8 +406,6 @@ return [
                 Every time Blizzard makes a change to the mapping or an error is corrected, a new mapping version is created.
                 Routes that are created with previous mapping versions are not automatically updated to the latest version.
                 This warning indicates the mapping version used by this route is out of date and may not represent the in-game mapping',
-            'explore_header_title'                   => 'Explore :dungeon',
-            'admin_header_title'                     => '%s (mapping version %d)',
 
             'route' => 'Route',
         ],

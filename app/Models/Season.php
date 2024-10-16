@@ -58,6 +58,9 @@ class Season extends CacheModel
     const SEASON_DF_S3        = 12;
     const SEASON_DF_S4        = 13;
     const SEASON_TWW_S1       = 14;
+    const SEASON_TWW_S2       = 15;
+    const SEASON_TWW_S3       = 16;
+    const SEASON_TWW_S4       = 17;
 
     const ALL_SEASONS = [
         self::SEASON_BFA_S1,
@@ -74,6 +77,9 @@ class Season extends CacheModel
         self::SEASON_DF_S3,
         self::SEASON_DF_S4,
         self::SEASON_TWW_S1,
+        self::SEASON_TWW_S2,
+        self::SEASON_TWW_S3,
+        self::SEASON_TWW_S4,
     ];
 
     protected $fillable = [
