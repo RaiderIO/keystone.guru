@@ -135,8 +135,6 @@ class WowheadService implements WowheadServiceInterface
     {
         $response = $this->getNpcPageHtml($gameVersion, $npc);
 
-        dump($response);
-
         // Hacky shit to scrape it
         $displayId = null;
         $lines     = explode(PHP_EOL, $response);
@@ -165,7 +163,6 @@ class WowheadService implements WowheadServiceInterface
         $iconName      = '';
         $name          = '';
         $schoolsMask   = 0;
-        $aura          = false;
         $castTime      = null;
         $duration      = null;
 
@@ -298,7 +295,6 @@ class WowheadService implements WowheadServiceInterface
             $iconName,
             $name,
             $schoolsMask,
-            $aura,
             $castTime,
             $duration
         );

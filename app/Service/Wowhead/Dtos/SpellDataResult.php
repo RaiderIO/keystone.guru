@@ -14,7 +14,6 @@ class SpellDataResult implements Arrayable
         private readonly string  $iconName,
         private readonly string  $name,
         private readonly int     $schoolsMask,
-        private readonly bool    $aura,
         private readonly ?int    $castTime,
         private readonly ?int    $duration,
     ) {
@@ -56,11 +55,6 @@ class SpellDataResult implements Arrayable
         return $this->schoolsMask;
     }
 
-    public function isAura(): bool
-    {
-        return $this->aura;
-    }
-
     public function getCastTime(): ?int
     {
         return $this->castTime;
@@ -81,7 +75,6 @@ class SpellDataResult implements Arrayable
             'icon_name'      => $this->iconName,
             'name'           => $this->name,
             'schools_mask'   => $this->schoolsMask,
-            'aura'           => $this->aura,
             'cast_time'      => $this->castTime,
             'duration'       => $this->duration,
         ];
