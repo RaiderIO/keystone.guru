@@ -457,12 +457,11 @@ html, body, #map, #app, .wrapper {
     color: unset !important;
 }
 
-.route_sidebar .map_killzonessidebar_killzone .enemy_spell_col {
-    flex-grow: 1;      /* Allow both to grow */
-    flex-shrink: 1;    /* Allow both to shrink */
-    flex-basis: 0;     /* Start at 0 so they take available space */
-    max-width: 50%;    /* Limit each column to a max of 50% */
-    min-width: 0;      /* Allow the columns to shrink below 50% */
+.route_sidebar .map_killzonessidebar_killzone .spell_container {
+    max-width: 50%;
+}
+.route_sidebar .map_killzonessidebar_killzone .spell_container .spell_list {
+    justify-content: right;
 }
 
 .grapick_color_picker_button_outer {
