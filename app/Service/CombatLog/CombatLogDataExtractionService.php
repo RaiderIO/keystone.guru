@@ -7,6 +7,8 @@ use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\CombatLog\CombatLogAnalyze;
+use App\Models\CombatLog\CombatLogAnalyzeStatus;
 use App\Models\Dungeon;
 use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
 use App\Service\CombatLog\DataExtractors\DataExtractorInterface;
@@ -18,6 +20,7 @@ use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 use App\Service\CombatLog\Logging\CombatLogDataExtractionServiceLoggingInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Wowhead\WowheadServiceInterface;
+use Exception;
 use Illuminate\Support\Collection;
 
 class CombatLogDataExtractionService implements CombatLogDataExtractionServiceInterface
@@ -48,7 +51,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         ]);
     }
 
-    public function extractData(string $filePath): ExtractedDataResult
+    public function extractData(string $filePath, callable $onProcessLine = null): ExtractedDataResult
     {
         $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
 
@@ -61,16 +64,22 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         }
 
         $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
-        use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds) {
+        use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds, $onProcessLine) {
             $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => trim($rawEvent), 'lineNr' => $lineNr]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
-            $parsedEvent    = $combatLogEntry->parseEvent([], $combatLogVersion);
 
+            $parsedEvent = $combatLogEntry->parseEvent([], $combatLogVersion);
+
+            if ($onProcessLine !== null) {
+                $onProcessLine($lineNr, $parsedEvent);
+            }
+
+            // This shouldn't be called - it throws an exception before when this happens?
             if ($combatLogEntry->getParsedTimestamp() === null) {
                 $this->log->extractDataTimestampNotSet();
 
-                return $parsedEvent;
+                return null;
             }
 
             // Override the current data if we can, otherwise default back to whatever we parsed before
@@ -143,6 +152,84 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
                     $this->log->extractDataZoneChangeSetZone(__($dungeon->name, [], 'en_US'));
                 }
             }
+        }
+
+        return $result;
+    }
+
+    public function extractDataAsync(string $filePath, CombatLogAnalyze $combatLogAnalyze): ?ExtractedDataResult
+    {
+        $result = null;
+        try {
+            $this->log->extractDataAsyncStart($filePath, $combatLogAnalyze->id);
+
+            $this->log->extractDataAsyncVerifying();
+            $combatLogAnalyze->update([
+                'status' => CombatLogAnalyzeStatus::Verifying,
+            ]);
+
+            $totalLines = 0;
+            try {
+                $this->combatLogService->parseCombatLog($filePath, function (int $combatLogVersion, string $rawEvent) use (&$totalLines) {
+                    $totalLines++;
+
+                    return (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
+                });
+            } catch (Exception $e) {
+                $this->log->extractDataAsyncVerifyError($e);
+
+                $combatLogAnalyze->update([
+                    'status' => CombatLogAnalyzeStatus::Error,
+                    'error'  => __('services.combatlogservice.analyze_combat_log.verify_error', [
+                        'error' => $e->getMessage(),
+                    ]),
+                ]);
+
+                return null;
+            }
+
+            try {
+                $this->log->extractDataAsyncProcessing();
+                $combatLogAnalyze->update([
+                    'status' => CombatLogAnalyzeStatus::Processing,
+                ]);
+
+                $result = $this->extractData($filePath, function (int $lineNr) use ($totalLines, $combatLogAnalyze) {
+                    $progressPercent = (int)(($lineNr / $totalLines) * 100);
+                    if ($progressPercent !== $combatLogAnalyze->percent_completed && $progressPercent % 5 === 0) {
+                        $this->log->extractDataAsyncAnalyzeProgress($progressPercent, $lineNr, $totalLines);
+
+                        $combatLogAnalyze->update([
+                            'percent_completed' => $progressPercent,
+                        ]);
+                    }
+                });
+                $combatLogAnalyze->update([
+                    'percent_completed' => 100,
+                    'result'            => json_encode($result->toArray()),
+                ]);
+            } catch (Exception $e) {
+                $this->log->extractDataAsyncAnalyzeError($e);
+
+                $combatLogAnalyze->update([
+                    'status' => CombatLogAnalyzeStatus::Error,
+                    'error'  => __('services.combatlogservice.analyze_combat_log.processing_error', [
+                        'error' => $e->getMessage(),
+                    ]),
+                ]);
+
+                return null;
+            } finally {
+                $this->log->extractDataAsyncCompleted();
+
+                $combatLogAnalyze->update([
+                    'status' => CombatLogAnalyzeStatus::Completed,
+                ]);
+            }
+
+
+        } finally {
+            $this->log->extractDataAsyncEnd();
         }
 
         return $result;

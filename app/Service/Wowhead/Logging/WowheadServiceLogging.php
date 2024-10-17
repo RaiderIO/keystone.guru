@@ -21,6 +21,11 @@ class WowheadServiceLogging extends StructuredLogging implements WowheadServiceL
         $this->end(__METHOD__);
     }
 
+    public function getSpellDataSpellDoesNotExist(string $gameVersion, int $spellId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
     public function downloadSpellIconDownloadResult(string $targetFilePath, bool $result): void
     {
         $this->debug(__METHOD__, get_defined_vars());
@@ -29,6 +34,11 @@ class WowheadServiceLogging extends StructuredLogging implements WowheadServiceL
     public function getSpellDataIconNameNotFound(string $line, string $jsonString): void
     {
         $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function getSpellDataIconNameSpellIdDoesNotMatch(string $line, array $json, int $spellId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
     }
 
     public function getSpellDataSpellSchoolNotFound(string $schoolsStr, string $school): void

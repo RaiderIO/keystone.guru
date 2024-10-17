@@ -457,6 +457,13 @@ html, body, #map, #app, .wrapper {
     color: unset !important;
 }
 
+.route_sidebar .map_killzonessidebar_killzone .spell_container {
+    max-width: 50%;
+}
+.route_sidebar .map_killzonessidebar_killzone .spell_container .spell_list {
+    justify-content: right;
+}
+
 .grapick_color_picker_button_outer {
     left: -6px;
     top: -9px;

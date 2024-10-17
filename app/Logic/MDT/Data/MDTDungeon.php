@@ -272,7 +272,12 @@ class MDTDungeon
     {
         $lua = null;
 
-        $mdtHome          = base_path('vendor/nnoggie/mythicdungeontools');
+        $mdtHome          = base_path(
+            sprintf(
+                'vendor/nnoggie/%s',
+                Conversion::isDungeonInMainlineMDT($this->dungeon) ? 'mythicdungeontools' : 'mdt-legacy'
+            )
+        );
         $expansionName    = Conversion::getExpansionName($this->dungeon->key);
         $mdtExpansionName = Conversion::getMDTExpansionName($this->dungeon->key);
 
@@ -303,6 +308,10 @@ class MDTDungeon
                         MDT.zoneIdToDungeonIdx = {}
 
                         local L = {}
+
+                        function UnitFactionGroup(who)
+                            return "Horde"
+                        end
                         ' .
                 // Some files require LibStub
                 file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) . PHP_EOL .

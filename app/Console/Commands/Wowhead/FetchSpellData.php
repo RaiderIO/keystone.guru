@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Wowhead;
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Exception;
@@ -35,8 +36,9 @@ class FetchSpellData extends Command
     {
         $dungeonKey = $this->option('dungeon');
 
+        /** @var Dungeon|null $dungeon */
+        $dungeon = null;
         if ($dungeonKey !== null) {
-            /** @var Dungeon $dungeon */
             $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
 
             $spells = $dungeon->spells;
@@ -46,21 +48,35 @@ class FetchSpellData extends Command
 
         $this->info(sprintf('Fetching spell data for %d spells', $spells->count()));
 
+        $gameVersions = [];
+        if ($dungeon?->gameVersion !== null) {
+            $gameVersions[] = $dungeon->gameVersion;
+        } else {
+            // Check both retail and classic era
+            $gameVersions = GameVersion::whereIn('id', [
+                GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+                GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA],
+            ])->get();
+        }
+
         foreach ($spells as $spell) {
             $this->info(sprintf('Fetching spell data for spell %d', $spell->id));
 
-            $spellDataResult = $wowheadService->getSpellData($spell->id);
+            foreach ($gameVersions as $gameVersion) {
+                $spellDataResult = $wowheadService->getSpellData($gameVersion, $spell->id);
 
-            if ($spellDataResult === null) {
-                $this->warn('- Unable to find spell data for spell!');
-            } else {
-                $spellAttributes = $spellDataResult->toArray();
-                $spellAttributes['fetched_data_at'] = Carbon::now();
-                $spell->update($spellAttributes);
+                if ($spellDataResult === null) {
+                    $this->warn(sprintf('- Unable to find spell data for spell (%s)!', __($gameVersion->name, [], 'en_US')));
+                } else {
+                    $spellAttributes                    = $spellDataResult->toArray();
+                    $spellAttributes['fetched_data_at'] = Carbon::now();
+                    $spell->update($spellAttributes);
 
-                $this->info(sprintf('- %s', $spellDataResult->getName()));
-                foreach (array_filter($spellAttributes) as $key => $value) {
-                    $this->comment(sprintf('-- %s: %s', $key, $value));
+                    $this->info(sprintf('- %s', $spellDataResult->getName()));
+                    foreach (array_filter($spellAttributes) as $key => $value) {
+                        $this->comment(sprintf('-- %s: %s', $key, $value));
+                    }
+                    break;
                 }
             }
 

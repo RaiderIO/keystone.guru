@@ -2,6 +2,8 @@
 
 namespace App\Service\CombatLog\Logging;
 
+use Exception;
+
 interface CombatLogDataExtractionServiceLoggingInterface
 {
     public function extractDataTimestampNotSet(): void;
@@ -19,4 +21,20 @@ interface CombatLogDataExtractionServiceLoggingInterface
     public function extractSpellAuraIdsDungeonNotSet(): void;
 
     public function extractSpellAuraIdsFoundSpellId(int $spellId): void;
+
+    public function extractDataAsyncStart(string $filePath, int $id): void;
+
+    public function extractDataAsyncVerifying(): void;
+
+    public function extractDataAsyncVerifyError(Exception $e): void;
+
+    public function extractDataAsyncProcessing(): void;
+
+    public function extractDataAsyncAnalyzeProgress(int $progressPercent, int $lineNr, int $totalLines): void;
+
+    public function extractDataAsyncAnalyzeError(Exception $e): void;
+
+    public function extractDataAsyncCompleted(): void;
+
+    public function extractDataAsyncEnd(): void;
 }

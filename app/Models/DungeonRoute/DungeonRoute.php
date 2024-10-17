@@ -1297,6 +1297,42 @@ class DungeonRoute extends Model
         return $affixGroup?->load('season')?->season;
     }
 
+    public function getDominantAffix(): ?string
+    {
+        $fortifiedCount = $tyrannicalCount = 0;
+        if (in_array($this->season_id, [Season::SEASON_TWW_S1, Season::SEASON_TWW_S2, Season::SEASON_TWW_S3, Season::SEASON_TWW_S4])) {
+            foreach ($this->affixes as $affixGroup) {
+                // Look at the 2nd affix - this is what people are going to be focussed on mostly!
+                // These affix groups have both fortified and tyrannical so just look at the one that comes first
+                /** @var Affix $affix */
+                $affix = $affixGroup->affixes->get(1);
+                if ($affix->key === Affix::AFFIX_FORTIFIED) {
+                    $fortifiedCount++;
+                } else if ($affix->key === Affix::AFFIX_TYRANNICAL) {
+                    $tyrannicalCount++;
+                }
+            }
+        } else {
+            // These seasons either contain fortified or tyrannical, not both
+            foreach ($this->affixes as $affixGroup) {
+                if ($affixGroup->hasAffix(Affix::AFFIX_FORTIFIED)) {
+                    $fortifiedCount++;
+                } else if ($affixGroup->hasAffix(Affix::AFFIX_TYRANNICAL)) {
+                    $tyrannicalCount++;
+                }
+            }
+        }
+
+        if ($fortifiedCount > $tyrannicalCount) {
+            return Affix::AFFIX_FORTIFIED;
+        } else if ($tyrannicalCount > $fortifiedCount) {
+            return Affix::AFFIX_TYRANNICAL;
+        } else {
+            // No real dominant affix found!
+            return null;
+        }
+    }
+
     public function getSeasonalAffix(): ?string
     {
         $foundSeasonalAffix = null;

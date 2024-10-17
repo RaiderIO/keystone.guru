@@ -163,8 +163,11 @@ class RowElementKillZone extends RowElement {
             }
         }
 
+        let hasAnything = hasBoss || hasAwakened || hasPrideful || hasInspiring || hasShrouded || hasShroudedZulGamux;
+
         let cumulativeShroudedEnemyStacks = this.killZone.getShroudedEnemyStacksCumulative();
         // Reset any previous states
+        $(`#map_killzonessidebar_killzone_${this.killZone.id}_placeholder:not(.draggable--original)`).toggle(!hasAnything);
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_boss:not(.draggable--original)`).toggle(hasBoss);
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_awakened:not(.draggable--original)`).toggle(hasAwakened);
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_prideful:not(.draggable--original)`).toggle(hasPrideful);

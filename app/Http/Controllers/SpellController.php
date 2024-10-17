@@ -144,7 +144,7 @@ class SpellController extends Controller
             'categories'     => collect(Spell::ALL_CATEGORIES)->mapWithKeys(function (string $category) {
                 return [
                     $category =>
-                        __(sprintf('spells.category.%s', $category), [], 'en_US'),
+                        __(sprintf('spells.category.%s', $category)),
                 ];
             })->toArray(),
             'dispelTypes'    => Spell::ALL_DISPEL_TYPES,
@@ -152,7 +152,7 @@ class SpellController extends Controller
             'cooldownGroups' => collect(Spell::ALL_COOLDOWN_GROUPS)->mapWithKeys(function (string $cooldownGroupKey) {
                 return [
                     $cooldownGroupKey =>
-                        __(sprintf('spells.cooldown_group.%s', $cooldownGroupKey), [], 'en_US'),
+                        __(sprintf('spells.cooldown_group.%s', $cooldownGroupKey)),
                 ];
             })->toArray(),
         ];

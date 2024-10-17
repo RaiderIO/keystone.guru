@@ -26,13 +26,14 @@ class WowheadService implements WowheadServiceInterface
     private const IDENTIFYING_TOKEN_DISPLAY_ID = 'linksButton.dataset.displayId =';
 
 
-    private const IDENTIFYING_TOKEN_SPELL_NAME        = '<meta property="og:title" content=';
-    private const IDENTIFYING_TOKEN_SPELL_ICON_NAME   = 'WH.Gatherer.addData(29,';
-    private const IDENTIFYING_TOKEN_SPELL_MECHANIC    = '<th>Mechanic</th>';
-    private const IDENTIFYING_TOKEN_SPELL_SCHOOL      = '<th>School</th>';
-    private const IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE = '<th>Dispel type</th>';
-    private const IDENTIFYING_TOKEN_SPELL_CAST_TIME   = '<th>Cast time</th>';
-    private const IDENTIFYING_TOKEN_SPELL_DURATION    = '<th>Duration</th>';
+    private const IDENTIFYING_TOKEN_SPELL_DOES_NOT_EXIST = 'Spell #%d doesn\'t exist. It may have been removed from the game.';
+    private const IDENTIFYING_TOKEN_SPELL_NAME           = '<meta property="og:title" content=';
+    private const IDENTIFYING_TOKEN_SPELL_ICON_NAME      = 'WeakAuraExport.setOptions(';
+    private const IDENTIFYING_TOKEN_SPELL_MECHANIC       = '<th>Mechanic</th>';
+    private const IDENTIFYING_TOKEN_SPELL_SCHOOL         = '<th>School</th>';
+    private const IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE    = '<th>Dispel type</th>';
+    private const IDENTIFYING_TOKEN_SPELL_CAST_TIME      = '<th>Cast time</th>';
+    private const IDENTIFYING_TOKEN_SPELL_DURATION       = '<th>Duration</th>';
 
     public function __construct(
         private readonly WowheadServiceLoggingInterface $log
@@ -134,8 +135,6 @@ class WowheadService implements WowheadServiceInterface
     {
         $response = $this->getNpcPageHtml($gameVersion, $npc);
 
-        dump($response);
-
         // Hacky shit to scrape it
         $displayId = null;
         $lines     = explode(PHP_EOL, $response);
@@ -153,19 +152,17 @@ class WowheadService implements WowheadServiceInterface
         return $displayId;
     }
 
-    public function getSpellData(int $spellId): ?SpellDataResult
+    public function getSpellData(GameVersion $gameVersion, int $spellId): ?SpellDataResult
     {
-        $response = $this->getSpellPageHtml($spellId);
+        $response = $this->getSpellPageHtml($gameVersion, $spellId);
 
         // More hacky shit to scrape data we need
-        $spellId       = 0;
         $mechanic      = null;
         $cooldownGroup = sprintf('spells.cooldown_group.%s', Spell::COOLDOWN_GROUP_UNKNOWN); // I can't find info on this on Wowhead?
         $dispelType    = '';
         $iconName      = '';
         $name          = '';
         $schoolsMask   = 0;
-        $aura          = false;
         $castTime      = null;
         $duration      = null;
 
@@ -177,9 +174,15 @@ class WowheadService implements WowheadServiceInterface
         foreach ($lines as $line) {
             $line = trim($line);
 
+            // Check if the spell was removed
+            if(str_contains($line, sprintf(self::IDENTIFYING_TOKEN_SPELL_DOES_NOT_EXIST, $spellId))){
+                $this->log->getSpellDataSpellDoesNotExist($gameVersion->key, $spellId);
+                // Like, we're done, don't return anything
+                return null;
+            }
             // Spell icon name
-            if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_ICON_NAME)) {
-                // WH.Gatherer.addData(29, 3, {"135988":{"name":"spell_ice_lament","icon":"spell_ice_lament"}});
+            else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_ICON_NAME)) {
+                // WeakAuraExport.setOptions({"id":322486,"name":"Overgrowth","iconFilename":"inv_misc_herb_nightmarevine_stem","appliesABuff":true,"display":"progress-bar-medium","trigger":"player-has-debuff"});
                 if (preg_match('/{.*}/', $line, $matches)) {
                     $jsonString = $matches[0];
                     $json       = json_decode($jsonString, true);
@@ -189,9 +192,13 @@ class WowheadService implements WowheadServiceInterface
                         continue;
                     }
 
+                    if ((int)$json['id'] !== $spellId) {
+                        $this->log->getSpellDataIconNameSpellIdDoesNotMatch($line, $json, $spellId);
+                        continue;
+                    }
+
                     // I don't know the number of the first array key - convert it to 0 always
-                    $json     = array_values($json);
-                    $iconName = $json[0]['icon'];
+                    $iconName = $json['iconFilename'];
                 }
             } // Mechanic
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_MECHANIC)) {
@@ -288,7 +295,6 @@ class WowheadService implements WowheadServiceInterface
             $iconName,
             $name,
             $schoolsMask,
-            $aura,
             $castTime,
             $duration
         );
@@ -311,10 +317,11 @@ class WowheadService implements WowheadServiceInterface
         );
     }
 
-    public function getSpellPageHtml(int $spellId): string
+    public function getSpellPageHtml(GameVersion $gameVersion, int $spellId): string
     {
         return $this->curlGet(
-            sprintf('https://wowhead.com/spell=%s',
+            sprintf('https://wowhead.com/%sspell=%s',
+                $gameVersion->key === GameVersion::GAME_VERSION_RETAIL ? '' : $gameVersion->key . '/',
                 $spellId
             )
         );

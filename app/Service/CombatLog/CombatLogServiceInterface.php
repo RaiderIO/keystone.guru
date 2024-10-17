@@ -40,6 +40,9 @@ interface CombatLogServiceInterface
 
     public function compressCombatLog(string $filePathToTxt): string;
 
+    /**
+     * Iterates over a combat log and calls the callback for each event.
+     */
     public function parseCombatLog(string $filePath, callable $callback): void;
 
     public function saveCombatLogToFile(Collection $rawEvents, string $filePath): bool;

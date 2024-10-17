@@ -2,6 +2,7 @@
 
 use App\Logic\MapContext\MapContext;
 use App\Logic\MapContext\MapContextDungeonExplore;
+use App\Logic\MapContext\MapContextLiveSession;
 use App\Logic\MapContext\MapContextMappingVersionEdit;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -25,6 +26,9 @@ use App\Models\Team;
 $echo        ??= false;
 $mayUserEdit = $dungeonroute?->mayUserEdit(Auth::user()) ?? false;
 $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
+
+$dominantAffix = $dungeonroute?->getDominantAffix();
+$seasonalAffix = $dungeonroute?->getSeasonalAffix();
 ?>
 <nav id="map_header"
      class="map_fade_out navbar navbar-expand-xl {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
@@ -48,7 +52,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                         <div class="d-flex h-100">
                             <div class="row justify-content-center align-self-center">
                                 <div class="col">
-                                    @if( $mapContext instanceof \App\Logic\MapContext\MapContextLiveSession )
+                                    @if( $mapContext instanceof MapContextLiveSession )
                                             <?php $stopped = $livesession->expires_at !== null; ?>
                                         @if(!$stopped)
                                             <button id="stop_live_session" class="btn btn-danger btn-sm"
@@ -99,15 +103,37 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                     <div class="row no-gutters">
                         <div id="route_title" class="col my-1">
                             <div class="row no-gutters">
+                                @if($dominantAffix !== null)
+                                    @php($dominantAffixKey = strtolower($dominantAffix))
+                                    <div class="col-auto">
+                                        <img class="select_icon mr-1"
+                                             src="{{ url(sprintf('/images/affixes/%s.jpg', $dominantAffixKey)) }}"
+                                             alt="{{ __('view_common.maps.controls.header.dominant_affix') }}"
+                                             data-toggle="tooltip"
+                                             title="{{ __(sprintf('affixes.%s.name', $dominantAffixKey)) }}"
+                                        />
+                                    </div>
+                                @endif
+                                @if($seasonalAffix !== null)
+                                    @php($seasonalAffixKey = strtolower(Str::slug($seasonalAffix, '_')))
+                                    <div class="col-auto">
+                                        <img class="select_icon mr-1"
+                                             src="{{ url(sprintf('/images/affixes/%s.jpg', $seasonalAffixKey)) }}"
+                                             alt="{{ __('view_common.maps.controls.header.seasonal_affix') }}"
+                                             data-toggle="tooltip"
+                                             title="{{ __(sprintf('affixes.%s.name', $seasonalAffixKey)) }}"
+                                        />
+                                    </div>
+                                @endif
                                 <div class="col">
                                     <h5 class="mb-0 mr-2">
                                         @isset($dungeonroute)
                                             {{ $dungeonroute->title }}
                                         @elseif($mapContext instanceof MapContextDungeonExplore)
-                                            {{ __('view_common.maps.map.explore_header_title', ['dungeon' => __($dungeon->name)]) }}
+                                            {{ __('view_common.maps.controls.header.explore_header_title', ['dungeon' => __($dungeon->name)]) }}
                                         @else
                                             <a href="{{ route('admin.floor.edit', ['dungeon' => $floor->dungeon, 'floor' => $floor]) }}">
-                                                {{ sprintf(__('view_common.maps.map.admin_header_title'), __($dungeon->name), $mappingVersion->version) }}
+                                                {{ sprintf(__('view_common.maps.controls.header.admin_header_title'), __($dungeon->name), $mappingVersion->version) }}
                                             </a>
                                         @endisset
                                     </h5>
@@ -161,7 +187,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                 </li>
             </ul>
             @if($echo)
-                @include('common.layout.navconnectedusers')
+                @include('common.layout.nav.connectedusers')
             @endif
             <ul class="navbar-nav">
                 <li class="nav-item nav-item-divider">
@@ -282,8 +308,8 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
                 <li class="nav-item nav-item-divider">
 
                 </li>
-                @include('common.layout.navuser')
-                @include('common.layout.navthemeswitch')
+                @include('common.layout.nav.user')
+                @include('common.layout.nav.themeswitch')
             </ul>
         </div>
     </div>
