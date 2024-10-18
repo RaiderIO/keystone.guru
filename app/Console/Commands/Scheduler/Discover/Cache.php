@@ -4,9 +4,8 @@ namespace App\Console\Commands\Scheduler\Discover;
 
 use App\Console\Commands\Scheduler\SchedulerCommand;
 use App\Jobs\RefreshDiscoverCache;
-use App\Models\Dungeon;
 use App\Models\Expansion;
-use App\Models\GameServerRegion;
+use App\Models\Season;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 
@@ -49,10 +48,22 @@ class Cache extends SchedulerCommand
             // Disable cache so that we may refresh it
             $discoverService = $discoverService->withCache(false);
 
+            $expansions = [
+                $expansionService->getCurrentExpansion(),
+                $expansionService->getNextExpansion(),
+            ];
+
             // Refresh caches for all categories
-            foreach (Expansion::with(['dungeons'])->active()->get() as $expansion) {
+            foreach ($expansions as $expansion) {
+                // Next expansion is usually going to be empty, unless we're actively approaching a new expansion
+                if ($expansion === null) {
+                    continue;
+                }
+
                 /** @var Expansion $expansion */
                 $this->info(sprintf('- %s', $expansion->shortname));
+
+                $expansion->load('dungeons');
 
                 // First we will parse all pages for a certain expansion (just let me see all dungeons for an expansion)
                 $discoverService = $discoverService->withExpansion($expansion);
@@ -62,43 +73,36 @@ class Cache extends SchedulerCommand
                 $discoverService->popularUsers();
 
                 // In theory this can lead to cache misses when we're in the process of switching seasons, but I'll take it
-                $currentSeason = $expansionService->getCurrentSeason($expansion, GameServerRegion::getUserOrDefaultRegion());
-
-                foreach ($expansion->dungeons()->active()->get() as $dungeon) {
-                    /** @var Dungeon $dungeon */
-                    $this->info(sprintf('-- Dungeon %s', $dungeon->key));
-
-                    $discoverService->popularByDungeon($dungeon);
-                    $discoverService->newByDungeon($dungeon);
-                    $discoverService->popularUsersByDungeon($dungeon);
-
-                    foreach ($currentSeason?->affixGroups ?? [] as $affixGroup) {
-                        //                    $this->info(sprintf('--- AffixGroup %s', $affixgroup->getTextAttribute()));
-                        $discoverService->popularByDungeonAndAffixGroup($dungeon, $affixGroup);
-                        $discoverService->newByDungeonAndAffixGroup($dungeon, $affixGroup);
-                        $discoverService->popularUsersByDungeonAndAffixGroup($dungeon, $affixGroup);
-                    }
-                }
+                /** @var Season[] $seasons */
+                $seasons = [
+                    $expansionService->getCurrentSeason($expansion),
+                    $expansionService->getNextSeason($expansion),
+                ];
 
                 // Now, if this expansion has a current season, re-build all the pages as if they're viewing the
                 // :expansion/season/:season page. Remember, an expansion's season can have dungeons from any other expansion into it
                 // The cache key changes when you assign a season to the DiscoverService so those pages need to be cached again
-                if ($currentSeason !== null) {
-                    foreach ($currentSeason->affixGroups ?? [] as $affixGroup) {
+                foreach ($seasons as $season) {
+                    // May be null if we're in between seasons, or the next season is not known yet
+                    if ($season === null) {
+                        continue;
+                    }
+                    $this->info(sprintf('- %s', $season->name));
+
+                    foreach ($season->affixGroups ?? [] as $affixGroup) {
                         $this->info(sprintf('-- AffixGroup %s', $affixGroup->getTextAttribute()));
                         $discoverService->popularGroupedByDungeonByAffixGroup($affixGroup);
                     }
 
-                    $this->info(sprintf('-- %s', $currentSeason->name));
-                    $discoverService = $discoverService->withSeason($currentSeason);
-                    foreach ($currentSeason->dungeons()->active()->get() as $dungeon) {
-                        $this->info(sprintf('--- Dungeon %s', $dungeon->key));
+                    $discoverService = $discoverService->withSeason($season);
+                    foreach ($season->dungeons()->active()->get() as $dungeon) {
+                        $this->info(sprintf('-- Dungeon %s', $dungeon->key));
 
                         $discoverService->popularByDungeon($dungeon);
                         $discoverService->newByDungeon($dungeon);
                         $discoverService->popularUsersByDungeon($dungeon);
 
-                        foreach ($currentSeason->affixGroups ?? [] as $affixGroup) {
+                        foreach ($season->affixGroups ?? [] as $affixGroup) {
                             $this->info(sprintf('--- AffixGroup %s', $affixGroup->getTextAttribute()));
                             $discoverService->popularGroupedByDungeonByAffixGroup($affixGroup);
                         }

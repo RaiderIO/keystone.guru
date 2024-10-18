@@ -116,8 +116,10 @@ class Expansion extends CacheModel
         return $this->hasOne(TimewalkingEvent::class);
     }
 
-    public function currentSeason(GameServerRegion $gameServerRegion): ?Season
+    public function currentSeason(?GameServerRegion $gameServerRegion = null): ?Season
     {
+        $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion();
+
         if ($this->currentSeasonCache === null) {
             $this->currentSeasonCache = collect();
         }
@@ -140,8 +142,10 @@ class Expansion extends CacheModel
         return $season;
     }
 
-    public function nextSeason(GameServerRegion $gameServerRegion): ?Season
+    public function nextSeason(?GameServerRegion $gameServerRegion = null): ?Season
     {
+        $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion();
+
         if ($this->nextSeasonCache === null) {
             $this->nextSeasonCache = collect();
         }

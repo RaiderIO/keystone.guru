@@ -11,23 +11,23 @@ use Illuminate\Support\Collection;
 
 interface ExpansionServiceInterface
 {
-    public function getExpansionAt(Carbon $carbon, GameServerRegion $gameServerRegion): ?Expansion;
+    public function getExpansionAt(Carbon $carbon, ?GameServerRegion $gameServerRegion = null): ?Expansion;
 
-    public function getCurrentExpansion(GameServerRegion $gameServerRegion): Expansion;
+    public function getCurrentExpansion(?GameServerRegion $gameServerRegion = null): Expansion;
 
-    public function getNextExpansion(GameServerRegion $gameServerRegion): ?Expansion;
+    public function getNextExpansion(?GameServerRegion $gameServerRegion = null): ?Expansion;
 
-    public function getData(Expansion $expansion, GameServerRegion $gameServerRegion): ExpansionData;
+    public function getData(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ExpansionData;
 
-    public function getCurrentSeason(Expansion $expansion, GameServerRegion $gameServerRegion): ?Season;
+    public function getCurrentSeason(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?Season;
 
-    public function getNextSeason(Expansion $expansion, GameServerRegion $gameServerRegion): ?Season;
+    public function getNextSeason(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?Season;
 
     public function getActiveDungeons(Expansion $expansion): Collection;
 
-    public function getCurrentAffixGroup(Expansion $expansion, GameServerRegion $gameServerRegion): ?AffixGroup;
+    public function getCurrentAffixGroup(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?AffixGroup;
 
-    public function getNextAffixGroup(Expansion $expansion, GameServerRegion $gameServerRegion): ?AffixGroup;
+    public function getNextAffixGroup(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?AffixGroup;
 
-    public function getCurrentSeasonAffixGroups(Expansion $expansion, GameServerRegion $gameServerRegion): Collection;
+    public function getCurrentSeasonAffixGroups(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): Collection;
 }

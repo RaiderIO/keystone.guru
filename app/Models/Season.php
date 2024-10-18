@@ -217,14 +217,14 @@ class Season extends CacheModel
      *
      * @throws Exception
      */
-    public function getNextAffixGroupInRegion(GameServerRegion $region): ?AffixGroup
+    public function getNextAffixGroupInRegion(?GameServerRegion $region = null): ?AffixGroup
     {
         try {
             $result = $this->getAffixGroupAt(Carbon::now()->addWeek(), $region);
         } catch (Exception $exception) {
             Log::error('Error getting current affix group', [
                 'exception' => $exception,
-                'region'    => $region->short,
+                'region'    => ($region ?? GameServerRegion::getUserOrDefaultRegion())->short,
             ]);
             throw $exception;
         }
@@ -239,11 +239,13 @@ class Season extends CacheModel
      */
     public function getCurrentAffixGroup(): ?AffixGroup
     {
+        $region = GameServerRegion::getUserOrDefaultRegion();
         try {
-            $result = $this->getAffixGroupAt(Carbon::now(), GameServerRegion::getUserOrDefaultRegion());
+            $result = $this->getAffixGroupAt(Carbon::now(), $region);
         } catch (Exception $exception) {
             Log::error('Error getting current affix group', [
                 'exception' => $exception,
+                'region'    => $region->short,
             ]);
             throw new Exception('Error getting current affix group');
         }
@@ -258,13 +260,15 @@ class Season extends CacheModel
      */
     public function getNextAffixGroup(): ?AffixGroup
     {
+        $region = GameServerRegion::getUserOrDefaultRegion();
         try {
-            $result = $this->getAffixGroupAt(Carbon::now()->addDays(7), GameServerRegion::getUserOrDefaultRegion());
+            $result = $this->getAffixGroupAt(Carbon::now()->addDays(7), $region);
         } catch (Exception $exception) {
-            Log::error('Error getting current affix group', [
+            Log::error('Error getting next affix group', [
                 'exception' => $exception,
+                'region'    => $region->short,
             ]);
-            throw new Exception('Error getting current affix group');
+            throw new Exception('Error getting next affix group');
         }
 
         return $result;
@@ -279,7 +283,7 @@ class Season extends CacheModel
      * @throws Exception
      * @TODO Move to SeasonService
      */
-    public function getAffixGroupAt(Carbon $date, GameServerRegion $region): ?AffixGroup
+    public function getAffixGroupAt(Carbon $date, ?GameServerRegion $region = null): ?AffixGroup
     {
         /** @var SeasonService $seasonService */
         if ($this->hasTimewalkingEvent()) {
