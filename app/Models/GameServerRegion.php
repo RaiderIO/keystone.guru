@@ -30,14 +30,10 @@ class GameServerRegion extends CacheModel
     public $timestamps = false;
 
     public const AMERICAS = 'us';
-
-    public const EUROPE = 'eu';
-
-    public const CHINA = 'cn';
-
-    public const TAIWAN = 'tw';
-
-    public const KOREA = 'kr';
+    public const EUROPE   = 'eu';
+    public const CHINA    = 'cn';
+    public const TAIWAN   = 'tw';
+    public const KOREA    = 'kr';
 
     public const DEFAULT_REGION = GameServerRegion::AMERICAS;
 
@@ -69,6 +65,8 @@ class GameServerRegion extends CacheModel
         /** @var CacheServiceInterface $cacheService */
         $cacheService = App::make(CacheServiceInterface::class);
 
-        return $cacheService->remember('default_region', static fn() => GameServerRegion::where('short', self::DEFAULT_REGION)->first());
+        return $cacheService->remember('default_region',
+            static fn() => GameServerRegion::where('short', self::DEFAULT_REGION)->first()
+        );
     }
 }

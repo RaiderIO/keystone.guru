@@ -151,7 +151,7 @@ class SeasonService implements SeasonServiceInterface
      *
      * @throws Exception
      */
-    public function getAffixGroupIndexAt(Carbon $date, GameServerRegion $region, ?Expansion $expansion = null): ?int
+    public function getAffixGroupIndexAt(Carbon $date, ?GameServerRegion $region = null, ?Expansion $expansion = null): ?int
     {
         $season = $this->getSeasonAt($date, $expansion, $region);
         // There's no season active at the given time!
