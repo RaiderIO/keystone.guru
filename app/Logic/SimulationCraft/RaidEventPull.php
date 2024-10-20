@@ -60,7 +60,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         // Convert the location of the pack to in-game location, and then determine the delay according to floor x-y
         $killLocation = $killZone->getKillLocation();
         // No enemies killed, no location, no pull, no delay
-        if ($killLocation === null) {
+        if ($killLocation === null || $previousKillLocation->getFloor() === null || $killLocation->getFloor() === null) {
             return 0;
         }
 
