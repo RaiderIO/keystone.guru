@@ -127,11 +127,15 @@ class RowElementKillZone extends RowElement {
                 .text(`${enemyForcesCumulativePercent}%`)
                 .attr('title', `+${enemyForcesPercent}%`)
                 .refreshTooltips();
+
+            // console.warn('refresh tooltips percentage', this.killZone.id);
         } else if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
             $(`#map_killzonessidebar_killzone_${this.killZone.id}_enemy_forces_cumulative:not(.draggable--original)`)
                 .text(`${this.killZone.getEnemyForcesCumulative()}/${this.map.enemyForcesManager.getEnemyForcesRequired()}`)
                 .attr('title', `+${killZoneEnemyForces}`)
                 .refreshTooltips();
+
+            // console.warn('refresh tooltips enemy forces', this.killZone.id);
         }
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_index:not(.draggable--original)`).text(this.killZone.getIndex());
 
@@ -259,7 +263,9 @@ class RowElementKillZone extends RowElement {
                 'dangerous': npc.enemy.npc.dangerous === 1
             });
 
-            $enemyList.append($(template(data)));
+            let $enemy = $(template(data));
+            $enemyList.append($enemy);
+            $enemy.refreshTooltips();
         }).bind(this);
 
         // Rebuild the npc lists
@@ -293,9 +299,10 @@ class RowElementKillZone extends RowElement {
                 'pull_color': this.killZone.color,
             });
 
-            $spellList.append($(template(data)));
+            let $spell = $(template(data));
+            $spell.refreshTooltips();
+            $spellList.append($spell);
         }
-        $spellList.refreshTooltips();
 
         // Toggle the row color based on overpulled or obsolete npcs
         if (getState().getMapContext() instanceof MapContextLiveSession) {
