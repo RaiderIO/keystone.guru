@@ -398,7 +398,7 @@
         "encounter_id": null,
         "name": "Verdant Mandragora",
         "base_health": 57900,
-        "health_percentage": 100,
+        "health_percentage": null,
         "level": null,
         "mdt_scale": null,
         "aggressiveness": "aggressive",
