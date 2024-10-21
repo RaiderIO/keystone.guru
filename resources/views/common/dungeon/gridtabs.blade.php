@@ -1,23 +1,31 @@
 <?php
+
+use App\Models\Dungeon;
+use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
+use Illuminate\Support\Collection;
+
 /**
- * @var \App\Models\GameVersion\GameVersion                   $currentUserGameVersion
- * @var \App\Models\Season|null                               $nextSeason
- * @var \App\Models\Season                                    $currentSeason
- * @var \Illuminate\Support\Collection<\App\Models\Expansion> $activeExpansions
- * @var string                                                $id
- * @var string                                                $tabsId
- * @var bool                                                  $selectable
- * @var callable|null                                         $subtextFn
+ * @var GameVersion           $currentUserGameVersion
+ * @var Season|null           $nextSeason
+ * @var Season                $currentSeason
+ * @var Collection<Expansion> $activeExpansions
+ * @var string                $id
+ * @var string                $tabsId
+ * @var bool                  $selectable
+ * @var callable|null         $subtextFn
  */
-$selectedSeasonId = $currentUserGameVersion->has_seasons ? ($nextSeason ?? $currentSeason)->id : null;
-$selectable       ??= true;
-$route            ??= null;
-$routeParams      ??= [];
-$linkMapFn        = static fn(\App\Models\Dungeon $dungeon) => [
+
+$selectedSeasonId      = $currentUserGameVersion->has_seasons ? ($nextSeason ?? $currentSeason)->id : null;
+$selectable            ??= true;
+$route                 ??= null;
+$routeParams           ??= [];
+$linkMapFn             = static fn(Dungeon $dungeon) => [
     'dungeon' => $dungeon->key,
     'link'    => route($route, array_merge($routeParams, ['dungeon' => $dungeon])),
 ];
-$subtextFn        ??= null;
+$subtextFn             ??= null;
 $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $currentSeason->expansion_id;
 ?>
 <div id="{{ $id }}">
@@ -51,8 +59,7 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
         <?php
         $index = 0; ?>
         @foreach($activeExpansions as $expansion)
-                <?php
-                /** @var \App\Models\Expansion $expansion */ ?>
+            <?php /** @var Expansion $expansion */ ?>
             @if($expansion->hasDungeonForGameVersion($currentUserGameVersion))
                 @php($active = $selectedSeasonId === null && $index === 0)
                 <li class="nav-item">
@@ -105,8 +112,7 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
         <?php
         $index = 0; ?>
         @foreach($activeExpansions as $expansion)
-                <?php
-                /** @var \App\Models\Expansion $expansion */ ?>
+                <?php /** @var Expansion $expansion */ ?>
             @if($expansion->hasDungeonForGameVersion($currentUserGameVersion))
                 <div id="{{ $expansion->shortname }}-grid-content"
                      class="tab-pane fade show {{ $selectedSeasonId === null && $index === 0 ? 'active' : '' }}"

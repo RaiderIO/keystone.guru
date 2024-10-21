@@ -116,6 +116,10 @@ trait DungeonConstants
     public const DUNGEON_ZUL_AMAN                 = 'zul_aman';
     public const DUNGEON_ZUL_GURUB                = 'zul_gurub';
 
+    // Cataclysm raid
+    public const RAID_FIRELANDS   = 'firelands';
+    public const RAID_DRAGON_SOUL = 'dragonsoul';
+
     // Mists of Pandaria
     public const DUNGEON_GATE_OF_THE_SETTING_SUN    = 'gate_of_the_setting_sun';
     public const DUNGEON_MOGU_SHAN_PALACE           = 'mogu_shan palace';

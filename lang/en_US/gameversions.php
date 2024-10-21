@@ -17,4 +17,8 @@ return [
         'name'        => 'Retail Beta',
         'description' => 'Retail Beta',
     ],
+    'cata'   => [
+        'name'        => 'Cata',
+        'description' => 'Cata',
+    ],
 ];
