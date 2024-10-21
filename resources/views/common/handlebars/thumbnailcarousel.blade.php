@@ -8,8 +8,6 @@
 
         let items = [];
 
-        console.log(row.dungeon);
-
         if (row.has_thumbnail) {
             let facadeEnabled = row.dungeon.floors[row.dungeon.floors.length - 1].facade;
             for (let index in row.dungeon.floors) {

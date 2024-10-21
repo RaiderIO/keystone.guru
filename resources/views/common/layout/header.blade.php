@@ -108,7 +108,7 @@ $navs[route('misc.affixes')] = [
                         <li class="nav-item nav-item-divider"></li>
                     @elseif(filter_var($route, FILTER_VALIDATE_URL) !== false)
                         <li class="nav-item">
-                            <a class="nav-link pr-3 {{ strpos(Request::url(), $route) === 0 ? 'active' : '' }}"
+                            <a class="nav-link pr-3 {{ str_starts_with(Request::url(), $route) ? 'active' : '' }}"
                                href="{{ $route }}">
                                 @isset($opts['fa'])
                                     <i class="{{ $opts['fa'] }}"></i>
@@ -142,10 +142,11 @@ $navs[route('misc.affixes')] = [
             <ul class="navbar-nav">
                 <li class="nav-item nav-item-divider"></li>
                 @include('common.layout.nav.gameversions')
-                @include('common.layout.nav.gameversions')
                 @include('vendor.language.flags')
                 @include('common.layout.nav.user')
                 @include('common.layout.nav.themeswitch')
+                <li class="nav-item nav-item-divider"></li>
+                @include('common.layout.nav.uploadlogs')
             </ul>
         </div>
     </div>

@@ -116,7 +116,7 @@ return [
             'unkilled_enemy_opacity'                 => 'Unkilled enemy opacity',
             'unkilled_enemy_opacity_title'           => 'This option allows you to fade out enemies that are not part of any of your pulls. This can reduce the clutter of enemies you want to ignore.',
             'unkilled_important_enemy_opacity'       => 'Unkilled important enemy opacity',
-            'unkilled_important_enemy_opacity_title' => 'Important enemies are those that are either Prideful, marked as Inspiring or are marked as required. These can be rendered at a different opacity than other enemies to highlight their importance should you reduce the opacity of all other enemies.',
+            'unkilled_important_enemy_opacity_title' => 'Important enemies are bosses, those that are permanently affected by an affix (Inspiring, Prideful etc.) or are marked as required. These can be rendered at a different opacity than other enemies to highlight their importance should you reduce the opacity of all other enemies.',
             'show_aggressiveness_border'             => 'Show aggressiveness border',
             'show_aggressiveness_border_title'       => 'Enabling this setting will render all enemies with a border to indicate their aggressiveness. Red for aggressive enemies, yellow for neutral enemies, green for friendly enemies etc.',
             'highlight_dangerous_enemies'            => 'Highlight dangerous enemies',
@@ -257,6 +257,9 @@ return [
                 'account_settings'  => 'Account settings',
                 'logout'            => 'Logout',
             ],
+            'uploadlogs' => [
+                'upload_logs' => 'Upload logs to improve Keystone.guru',
+            ]
         ],
     ],
     'maps'         => [
@@ -538,6 +541,9 @@ return [
                 'description'       => 'The advanced options aim to further increase the accuracy of the generated simulation craft string and have the numbers come closer to what you\'d experience in reality.',
             ],
         ],
+        'uploadlogs' => [
+            'title' => 'Upload logs',
+        ]
     ],
     'release'      => [
         'release' => [

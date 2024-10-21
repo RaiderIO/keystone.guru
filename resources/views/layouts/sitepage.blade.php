@@ -143,11 +143,13 @@ $breadcrumbsParams ??= [];
     @endif
 
     @if($header)
-        <!-- Modal create route -->
         @component('common.general.modal', ['id' => 'create_route_modal', 'size' => 'xl'])
             @include('common.modal.createroute')
         @endcomponent
-        <!-- END modal create route -->
+
+        @component('common.general.modal', ['id' => 'upload_logs_modal', 'size' => 'lg'])
+            @include('common.modal.uploadlogs')
+        @endcomponent
     @endif
 
 @endsection

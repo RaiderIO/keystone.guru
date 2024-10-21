@@ -21,7 +21,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 
 <h3 class="card-title">{{ __('view_common.modal.simulate.title') }}</h3>
 
-@component('common.general.alert', ['type' => 'info', 'name' => ''])
+@component('common.general.alert', ['type' => 'info', 'name' => 'simulate-intro'])
     {{ __('view_common.modal.simulate.intro') }}
 @endcomponent
 
