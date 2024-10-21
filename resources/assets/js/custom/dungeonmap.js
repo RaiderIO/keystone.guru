@@ -558,9 +558,12 @@ class DungeonMap extends Signalable {
                 mapControls.push(new DrawControls(this, editableLayers));
             }
 
+            let state = getState();
+            let mapContext = state.getMapContext();
+
             // Only when enemy forces are relevant in their display (not in a view)
-            if (!getState().isMapAdmin()) {
-                if (getState().getMapContext().isDungeonSpeedrunEnabled()) {
+            if (!state.isMapAdmin() && !(mapContext instanceof MapContextDungeonExplore)) {
+                if (mapContext.isDungeonSpeedrunEnabled()) {
                     mapControls.push(new DungeonSpeedrunRequiredNpcsControls(this));
                 } else if (this.options.showControls.enemyForces) {
                     mapControls.push(new EnemyForcesControls(this));
@@ -571,12 +574,12 @@ class DungeonMap extends Signalable {
             }
 
             if (this.options.edit &&
-                getState().getMapContext().getDungeon().key === DUNGEON_SIEGE_OF_BORALUS ||
-                getState().getMapContext().getDungeon().key === DUNGEON_THE_NEXUS) {
+                mapContext.getDungeon().key === DUNGEON_SIEGE_OF_BORALUS ||
+                mapContext.getDungeon().key === DUNGEON_THE_NEXUS) {
                 mapControls.push(new FactionDisplayControls(this));
             }
 
-            if (getState().isEchoEnabled()) {
+            if (state.isEchoEnabled()) {
                 mapControls.push(new EchoControls(this));
             }
 
