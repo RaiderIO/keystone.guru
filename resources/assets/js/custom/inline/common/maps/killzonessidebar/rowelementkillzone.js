@@ -140,7 +140,8 @@ class RowElementKillZone extends RowElement {
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_index:not(.draggable--original)`).text(this.killZone.getIndex());
 
         // Show boss icon or not
-        let hasBoss = false, hasAwakened = false, hasPrideful = false, hasInspiring = false, hasShrouded = false,
+        let bossNames = [];
+        let hasAwakened = false, hasPrideful = false, hasInspiring = false, hasShrouded = false,
             hasShroudedZulGamux = false;
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
@@ -149,8 +150,8 @@ class RowElementKillZone extends RowElement {
             for (let enemyKey in enemyMapObjectGroup.objects) {
                 let enemy = enemyMapObjectGroup.objects[enemyKey];
                 if (enemy.id === enemyId) {
-                    if (!hasBoss && enemy.isBossNpc()) {
-                        hasBoss = true;
+                    if (enemy.isBossNpc()) {
+                        bossNames.push(enemy.npc.name);
                     } else if (!hasAwakened && enemy.isAwakenedNpc()) {
                         hasAwakened = true;
                     } else if (!hasPrideful && enemy.isPridefulNpc()) {
@@ -167,12 +168,15 @@ class RowElementKillZone extends RowElement {
             }
         }
 
-        let hasAnything = hasBoss || hasAwakened || hasPrideful || hasInspiring || hasShrouded || hasShroudedZulGamux;
+        let hasAnything = hasAwakened || hasPrideful || hasInspiring || hasShrouded || hasShroudedZulGamux;
 
         let cumulativeShroudedEnemyStacks = this.killZone.getShroudedEnemyStacksCumulative();
         // Reset any previous states
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_placeholder:not(.draggable--original)`).toggle(!hasAnything);
-        $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_boss:not(.draggable--original)`).toggle(hasBoss);
+        $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_boss:not(.draggable--original)`)
+            .attr('title', lang.get(`messages.kill_zone_has_boss_label`, {bosses: bossNames.join(', ')}))
+            .toggle(bossNames.length > 0)
+            .refreshTooltips();
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_awakened:not(.draggable--original)`).toggle(hasAwakened);
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_prideful:not(.draggable--original)`).toggle(hasPrideful);
         $(`#map_killzonessidebar_killzone_${this.killZone.id}_has_inspiring:not(.draggable--original)`).toggle(hasInspiring);
