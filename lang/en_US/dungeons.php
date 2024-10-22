@@ -202,7 +202,7 @@ return [
         'zulgurub'                    => [
             'name'   => 'Zul\'Gurub',
             'floors' => [
-                'zul_gurub' => 'Zul\'Gurub',
+                'zulgurub' => 'Zul\'Gurub',
             ],
         ],
         'onyxias_lair_classic'        => [
