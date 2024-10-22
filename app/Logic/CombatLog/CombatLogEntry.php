@@ -16,16 +16,22 @@ class CombatLogEntry
 {
     public const DATE_FORMATS = [
         'm/d H:i:s.v',
-        'm/d/Y H:i:s.v-1',
+        'm/d/Y H:i:s.v-1', // These are all the timezones that are used in the combat log
         'm/d/Y H:i:s.v-2',
         'm/d/Y H:i:s.v-3',
-        'm/d/Y H:i:s.v-4', // I don't  know what the -4 stands for - assuming timezone? There's no thingy for it though
+        'm/d/Y H:i:s.v-4',
         'm/d/Y H:i:s.v-5',
         'm/d/Y H:i:s.v-6',
         'm/d/Y H:i:s.v-7',
         'm/d/Y H:i:s.v-8',
         'm/d/Y H:i:s.v-9',
-        'm/d/Y H:i:s.v1', // I don't know what the 1-9 stands for
+        'm/d/Y H:i:s.v-10',
+        'm/d/Y H:i:s.v-11',
+        'm/d/Y H:i:s.v-12',
+        'm/d/Y H:i:s.v-13',
+        'm/d/Y H:i:s.v-14',
+        'm/d/Y H:i:s.v0',
+        'm/d/Y H:i:s.v1',
         'm/d/Y H:i:s.v2',
         'm/d/Y H:i:s.v3',
         'm/d/Y H:i:s.v4',
@@ -34,7 +40,11 @@ class CombatLogEntry
         'm/d/Y H:i:s.v7',
         'm/d/Y H:i:s.v8',
         'm/d/Y H:i:s.v9',
-        'm/d/Y H:i:s.v0',
+        'm/d/Y H:i:s.v10',
+        'm/d/Y H:i:s.v11',
+        'm/d/Y H:i:s.v12',
+        'm/d/Y H:i:s.v13',
+        'm/d/Y H:i:s.v14',
     ];
 
     private const RAW_EVENT_IGNORE = [
@@ -45,12 +55,12 @@ class CombatLogEntry
         'COMBAT_LOG_VERSION,20,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,11.0.0,PROJECT_ID,1',
     ];
 
+    /** @var int|null Remembers what date format was last found in the combat log and uses that for subsequent format parses first. */
+    private static ?int $previousDateFormat = null;
+
     private ?Carbon $parsedTimestamp = null;
 
     private ?BaseEvent $parsedEvent = null;
-
-    /** @var int|null Remembers what date format was last found in the combat log and uses that for subsequent format parses first. */
-    private ?int $previousDateFormat = null;
 
     public function __construct(private readonly string $rawEvent)
     {
@@ -140,9 +150,9 @@ class CombatLogEntry
         $parsedTimestamp = null;
 
         // If we had a previous date format, try to parse with that format first
-        if ($this->previousDateFormat !== null) {
+        if (self::$previousDateFormat !== null) {
             try {
-                return Carbon::createFromFormat(self::DATE_FORMATS[$this->previousDateFormat], $timestamp);
+                return Carbon::createFromFormat(self::DATE_FORMATS[self::$previousDateFormat], $timestamp);
             } catch (InvalidFormatException $invalidFormatException) {
                 // Ignore, we'll try the other formats
             }
@@ -150,14 +160,14 @@ class CombatLogEntry
 
         foreach (self::DATE_FORMATS as $key => $dateFormat) {
             // Don't double-check if it's not needed
-            if ($key === $this->previousDateFormat) {
+            if ($key === self::$previousDateFormat) {
                 continue;
             }
 
             try {
                 $parsedTimestamp = Carbon::createFromFormat($dateFormat, $timestamp);
 
-                $this->previousDateFormat = $key;
+                self::$previousDateFormat = $key;
             } catch (InvalidFormatException $invalidFormatException) {
                 continue;
             }

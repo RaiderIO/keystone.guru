@@ -5198,30 +5198,5 @@
         "npc_characteristics": [],
         "npc_spells": [],
         "npc_enemy_forces": []
-    },
-    {
-        "id": 121139,
-        "dungeon_id": 58,
-        "classification_id": 1,
-        "npc_type_id": 8,
-        "npc_class_id": 1,
-        "display_id": 38804,
-        "encounter_id": null,
-        "name": "Warpweaver Torell",
-        "base_health": 12345,
-        "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
-        "aggressiveness": "friendly",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "runs_away_in_fear": 0,
-        "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
-        "npc_enemy_forces": []
     }
 ]
