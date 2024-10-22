@@ -12,15 +12,15 @@ class Message extends Signalable {
     constructor(props) {
         super();
 
+        let state = getState();
         // Default values
         this.user = {
-            public_key: getState().getUser().public_key
+            public_key: state.getUser().public_key
         };
-        this.floor_id = getState().getCurrentFloor().id;
+        this.floor_id = state.getCurrentFloor().id;
 
         // This calls the implementing class' static getName() function
         this.__name = this.constructor.getName();
-
 
         // Assign the properties to the current object
         for (let index in props) {

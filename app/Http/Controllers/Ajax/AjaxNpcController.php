@@ -23,7 +23,7 @@ class AjaxNpcController extends Controller
     public function delete(Request $request)
     {
         try {
-            /** @var \App\Models\Npc\Npc $npc */
+            /** @var Npc $npc */
             $npc = Npc::findOrFail($request->get('id'));
 
             if ($npc->delete()) {

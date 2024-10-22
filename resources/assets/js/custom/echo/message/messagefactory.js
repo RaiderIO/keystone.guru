@@ -9,6 +9,14 @@ class MessageFactory {
     create(name, props) {
         let result = null;
         switch (name) {
+            // KillZone
+            case KillZoneChangedMessage.getName():
+                result = new KillZoneChangedMessage(props);
+                break;
+            case KillZoneDeletedMessage.getName():
+                result = new KillZoneDeletedMessage(props);
+                break;
+
             // LiveSession
             case LiveSessionInviteMessage.getName():
                 result = new LiveSessionInviteMessage(props);
@@ -21,6 +29,9 @@ class MessageFactory {
             case NpcChangedMessage.getName():
                 result = new NpcChangedMessage(props);
                 break;
+            case NpcDeletedMessage.getName():
+                result = new NpcDeletedMessage(props);
+                break;
 
             // Overpulled enemies
             case OverpulledEnemyChangedMessage.getName():
@@ -29,7 +40,6 @@ class MessageFactory {
             case OverpulledEnemyDeletedMessage.getName():
                 result = new OverpulledEnemyDeletedMessage(props);
                 break;
-
 
             // Whisper
             case MousePositionMessage.getName():
