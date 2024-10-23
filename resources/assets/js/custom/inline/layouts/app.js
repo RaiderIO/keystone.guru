@@ -290,6 +290,7 @@ function refreshTooltips($element = null) {
                 .tooltip({trigger: 'manual'});
         }
     }
+    return $element;
 }
 
 /**

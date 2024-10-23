@@ -1,6 +1,10 @@
 <?php
-/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute|null */
 
+use App\Models\DungeonRoute\DungeonRoute;
+
+/**
+ * @var DungeonRoute|null $dungeonroute
+ */
 ?>
 <h3 class="card-title">{{ __('view_common.modal.routesettings.title') }}</h3>
 

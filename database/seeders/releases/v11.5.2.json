@@ -1,0 +1,55 @@
+{
+    "id": 257,
+    "release_changelog_id": 264,
+    "version": "v11.5.2",
+    "title": "More bugfixes",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2024-10-23T09:15:26+00:00",
+    "updated_at": "2024-10-23T09:15:26+00:00",
+    "changelog": {
+        "id": 264,
+        "release_id": 257,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 264,
+                "release_changelog_category_id": 3,
+                "ticket_id": 2579,
+                "change": "Boss in pull indicator now shows the name of the boss(es) in the tooltip."
+            },
+            {
+                "release_changelog_id": 264,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2578,
+                "change": "Reduced the amount of pages being cached - should reduce resource usage and increase performance (yeah)."
+            },
+            {
+                "release_changelog_id": 264,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2574,
+                "change": "Having empty pulls in your route and generating a SimulationCraft string should no longer sometimes cause a crash."
+            },
+            {
+                "release_changelog_id": 264,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2580,
+                "change": "Having an empty pull between two pulls where a floor switch occurs, no longer removes the floor listing from the pull window."
+            },
+            {
+                "release_changelog_id": 264,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2581,
+                "change": "Explore pages for speedrun dungeons no longer show required NPCs in an unstyled frame."
+            },
+            {
+                "release_changelog_id": 264,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2587,
+                "change": "Current season now has 8 affixes instead of 4 (I missed that it didn't roll over after 4 last week but there's probably 8 or more affix rotations this season)."
+            }
+        ]
+    }
+}

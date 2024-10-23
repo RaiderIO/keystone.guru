@@ -444,6 +444,7 @@ class AjaxDungeonRouteController extends Controller
 
     /**
      * @throws AuthorizationException
+     * @throws Exception
      */
     public function store(
         AjaxDungeonRouteSubmitFormRequest $request,

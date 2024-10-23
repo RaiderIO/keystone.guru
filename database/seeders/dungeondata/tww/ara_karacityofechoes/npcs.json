@@ -1341,7 +1341,7 @@
         "encounter_id": null,
         "name": "Reinforced Drone",
         "base_health": 15913068,
-        "health_percentage": 100,
+        "health_percentage": null,
         "level": 80,
         "mdt_scale": 0.8,
         "aggressiveness": "aggressive",

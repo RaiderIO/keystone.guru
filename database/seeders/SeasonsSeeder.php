@@ -233,7 +233,7 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'index'                   => 1,
                 'start'                   => '2024-09-16 00:00:00',
                 'presets'                 => 0,
-                'affix_group_count'       => 4,
+                'affix_group_count'       => 8,
                 'start_affix_group_index' => 3,
                 'key_level_min'           => 2,
                 'key_level_max'           => 18,

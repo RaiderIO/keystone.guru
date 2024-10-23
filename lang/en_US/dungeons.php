@@ -202,7 +202,7 @@ return [
         'zulgurub'                    => [
             'name'   => 'Zul\'Gurub',
             'floors' => [
-                'zul_gurub' => 'Zul\'Gurub',
+                'zulgurub' => 'Zul\'Gurub',
             ],
         ],
         'onyxias_lair_classic'        => [
@@ -217,19 +217,22 @@ return [
                 'molten_core' => 'Molten Core',
             ],
         ],
-        'blackwinglair'                  => [
+        'blackwinglair'               => [
             'name'   => 'Blackwing Lair',
             'floors' => [
-                'blackwinglair' => 'Blackwing Lair',
+                'dragonmaw_garrison'   => 'Dragonmaw Garrison',
+                'halls_of_strife'      => 'Halls of Strife',
+                'crimson_laboratories' => 'Crimson Laboratories',
+                'nefarians_lair'       => 'Nefarian\'s Lair',
             ],
         ],
-        'ruinsofahnqiraj'                  => [
+        'ruinsofahnqiraj'             => [
             'name'   => 'Ruins of Ahn\'Qiraj',
             'floors' => [
                 'ruinsofahnqiraj' => 'Ruins of Ahn\'Qiraj',
             ],
         ],
-        'templeofahnqiraj'                  => [
+        'templeofahnqiraj'            => [
             'name'   => 'Temple of Ahn\'Qiraj',
             'floors' => [
                 'templeofahnqiraj' => 'Temple of Ahn\'Qiraj',
@@ -445,6 +448,26 @@ return [
                 'abyssal_halls'       => 'Abyssal Halls',
                 'throne_of_neptulon'  => 'Throne of Neptulon',
                 'throne_of_the_tides' => 'Throne of the Tides',
+            ],
+        ],
+        'firelands'           => [
+            'name'   => 'Firelands',
+            'floors' => [
+                'firelands'              => 'Firelands',
+                'anvil_of_conflagration' => 'Anvil of Conflagration',
+                'sulfuron_keep'          => 'Sulfuron Keep',
+            ],
+        ],
+        'dragon_soul'         => [
+            'name'   => 'Dragon Soul',
+            'floors' => [
+                'the_dragonblight'   => 'The Dragonblight',
+                'maw_of_go_rath'     => 'Maw of Go\'rath',
+                'maw_of_shu_ma'      => 'Maw of Shu\'ma',
+                'eye_of_eternity'    => 'Eye of Eternity',
+                'skyfire_airship'    => 'Skyfire Airship',
+                'spine_of_deathwing' => 'Spine of Deathwing',
+                'the_maelstrom'      => 'The Maelstrom',
             ],
         ],
     ],

@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
  * @property string      $model_class
  * @property string      $before_model
  * @property string|null $after_model
+ *
  * @property Carbon      $updated_at
  * @property Carbon      $created_at
  *
@@ -25,7 +26,13 @@ class MappingChangeLog extends Model
     use HasGenericModelRelation;
     use SeederModel;
 
-    protected $fillable = ['dungeon_id', 'model_id', 'model_class', 'before_model', 'after_model'];
+    protected $fillable = [
+        'dungeon_id',
+        'model_id',
+        'model_class',
+        'before_model',
+        'after_model'
+    ];
 
     public function shouldSynchronize(MappingCommitLog $mostRecentMappingCommitLog): bool
     {

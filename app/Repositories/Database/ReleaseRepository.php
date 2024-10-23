@@ -18,7 +18,10 @@ class ReleaseRepository extends DatabaseRepository implements ReleaseRepositoryI
     {
         // If released column exists
         if (Schema::hasColumn('releases', 'released')) {
-            return Release::where('released', false)->orderBy('id', 'desc')->first();
+            return Release::where('released', false)
+                ->disableCache()
+                ->orderBy('id', 'desc')
+                ->first();
         } else {
             return null;
         }

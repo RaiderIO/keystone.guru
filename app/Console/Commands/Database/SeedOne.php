@@ -78,7 +78,7 @@ class SeedOne extends Command
      *
      * @return string
      */
-    protected function getDatabase()
+    protected function getDatabase(): string
     {
         $database = $this->input->getOption('database');
 

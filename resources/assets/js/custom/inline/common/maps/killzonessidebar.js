@@ -174,26 +174,36 @@ class CommonMapsKillzonessidebar extends InlineCode {
         // Remove all from the sidebar
         $('.map_killzonessidebar_floor_switch').remove();
 
+        let state = getState();
+
         // Re-add them only if we should
-        if (getState().getPullsSidebarFloorSwitchVisibility()) {
+        if (state.getPullsSidebarFloorSwitchVisibility()) {
+            let mapContext = state.getMapContext();
             let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
             /** @type KillZone */
             let previousKillZone = null;
             let previousKillZoneFloorIds = [];
             let killZoneFloorIds = [];
+
             /** @type KillZone[] */
             let sortedObjects = _.sortBy(_.values(killZoneMapObjectGroup.objects), 'index');
             for (let i = 0; i < sortedObjects.length; i++) {
                 let killZone = sortedObjects[i];
+
+
                 if (i === 0) {
-                    this._addFloorSwitch(killZone, getState().getMapContext().getDefaultFloor(), true);
+                    this._addFloorSwitch(killZone, mapContext.getDefaultFloor(), true);
+                }
+                // Completely ignore empty pulls, assume they're on the same floor as before
+                else if (killZone.enemies.length === 0) {
+                    continue;
                 } else {
                     // Don't insert a floor switch if we happen to have an empty pull
                     killZoneFloorIds = killZone.getFloorIds();
                     if (killZoneFloorIds.length > 0 && previousKillZoneFloorIds.length > 0) {
                         let floorDifference = _.difference(killZoneFloorIds, previousKillZoneFloorIds);
                         if (floorDifference.length > 0) {
-                            this._addFloorSwitch(killZone, getState().getMapContext().getFloorById(floorDifference[0]));
+                            this._addFloorSwitch(killZone, mapContext.getFloorById(floorDifference[0]));
                         }
                     }
                 }

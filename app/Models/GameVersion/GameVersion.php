@@ -41,12 +41,14 @@ class GameVersion extends CacheModel
     public const GAME_VERSION_WRATH       = 'wotlk';
     public const GAME_VERSION_CLASSIC_ERA = 'classic';
     public const GAME_VERSION_BETA        = 'beta';
+    public const GAME_VERSION_CATA        = 'cata';
 
     public const ALL = [
         self::GAME_VERSION_RETAIL      => 1,
         self::GAME_VERSION_CLASSIC_ERA => 2,
         self::GAME_VERSION_WRATH       => 3,
         self::GAME_VERSION_BETA        => 4,
+        self::GAME_VERSION_CATA        => 5,
     ];
 
     /**

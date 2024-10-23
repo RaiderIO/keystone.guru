@@ -20,12 +20,12 @@ trait ChangesMapping
             throw new Exception('Must have at least a $beforeModel OR $afterModel');
         }
 
-        (new MappingChangeLog([
+        MappingChangeLog::create([
             'dungeon_id'   => $beforeModel?->getDungeonId() ?? $afterModel->getDungeonId(),
             'model_id'     => $beforeModel?->id ?? $afterModel->id,
             'model_class'  => ($beforeModel ?? $afterModel)::class,
             'before_model' => $beforeModel !== null ? json_encode($beforeModel->toArray()) : null,
             'after_model'  => $afterModel !== null ? json_encode($afterModel->toArray()) : null,
-        ]))->save();
+        ]);
     }
 }
