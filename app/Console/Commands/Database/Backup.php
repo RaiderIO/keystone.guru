@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Database;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
-use App\Repositories\Database\ReleaseRepository;
+use App\Models\Release;
 use App\Repositories\Interfaces\ReleaseRepositoryInterface;
 use Illuminate\Console\Command;
 
@@ -32,7 +32,12 @@ class Backup extends Command
         $release = (bool)$this->option('release');
 
         // If we're not releasing, or we are releasing and the release asks for a backup. Do a backup by default, though, to be sure.
-        if (!$release || ($releaseRepository->getLatestUnreleasedRelease()?->backup_db ?? true)) {
+        $latestUnreleasedRelease = $releaseRepository->getLatestUnreleasedRelease();
+        if (!$release || ($latestUnreleasedRelease?->backup_db ?? true)) {
+            if ($latestUnreleasedRelease instanceof Release) {
+                $this->info(sprintf('Backing up MySQL database for release %d...', $latestUnreleasedRelease->id));
+            }
+
             // Backup MySql database if the environment asks for it!
             $backupDir = config('keystoneguru.db_backup_dir');
 
