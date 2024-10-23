@@ -145,8 +145,8 @@ $navs[route('misc.affixes')] = [
                 @include('vendor.language.flags')
                 @include('common.layout.nav.user')
                 @include('common.layout.nav.themeswitch')
-                <li class="nav-item nav-item-divider"></li>
-                @include('common.layout.nav.uploadlogs')
+{{--                <li class="nav-item nav-item-divider"></li>--}}
+{{--                @include('common.layout.nav.uploadlogs')--}}
             </ul>
         </div>
     </div>
