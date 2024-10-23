@@ -1,21 +1,20 @@
 <div id="map_killzonessidebar_killzone_{{id}}" class="map_killzonessidebar_killzone selectable pl-2 pr-3 py-1"
      data-id="{{id}}"
      style="">
-    <div class="row no-gutters align-items-center">
+    <div class="row no-gutters">
+        <div class="col-auto">
+            <button id="map_killzonessidebar_killzone_{{id}}_edit"
+                    type="button"
+                    class="btn btn-primary"
+                    data-toggle="button" aria-pressed="false">
+                <i class="fa" aria-hidden="true"></i>
+                <span id="map_killzonessidebar_killzone_{{id}}_index" style="font-size: 1em"></span>
+            </button>
+        </div>
         <div class="col">
             <div class="row no-gutters align-items-center">
-                <div class="col-auto">
-                    <button id="map_killzonessidebar_killzone_{{id}}_edit"
-                            type="button"
-                            class="btn btn-primary"
-                            data-toggle="button" aria-pressed="false">
-                        <i class="fa" aria-hidden="true"></i>
-                        <span id="map_killzonessidebar_killzone_{{id}}_index" style="font-size: 1em"></span>
-                    </button>
-                </div>
-
                 <div class="col">
-                    <div class="row no-gutters align-items-center">
+                    <div class="row no-gutters">
                         <div class="col row no-gutters">
                             <div class="col px-2 enemy_container">
                                 <div id="map_killzonessidebar_killzone_{{id}}_enemy_list"
@@ -32,65 +31,57 @@
                             </div>
                         </div>
 
-                        <div id="map_killzonessidebar_killzone_{{id}}_placeholder" class="col-auto px-2"
-                             style="display: none;">
-                            <div style="width: 16px; height: 16px;">
+                        <div class="col-auto row no-gutters align-items-center" style="height: 38px;">
+                            <div id="map_killzonessidebar_killzone_{{id}}_placeholder" class="col-auto px-2"
+                                 style="display: none;">
+                                <div style="width: 16px; height: 16px;">
 
+                                </div>
                             </div>
-                        </div>
 
-                        <div id="map_killzonessidebar_killzone_{{id}}_has_boss" class="col-auto px-2"
-                             data-toggle="tooltip" title="{{kill_zone_has_boss_label}}" style="display: none;">
-                            <img src="/images/mapicon/raid_marker_skull.png"
-                                 style="width: 16px; height: 16px;"/>
-                        </div>
+                            <div id="map_killzonessidebar_killzone_{{id}}_has_boss" class="col-auto px-2"
+                                 data-toggle="tooltip" title="{{kill_zone_has_boss_label}}" style="display: none;">
+                                <img src="/images/mapicon/raid_marker_skull.png"
+                                     style="width: 16px; height: 16px;"/>
+                            </div>
 
-                        <div id="map_killzonessidebar_killzone_{{id}}_has_awakened" class="col-auto  px-2"
-                             data-toggle="tooltip" title="{{kill_zone_has_awakened_label}}"
-                             style="display: none;">
-                            <img src="/images/enemymodifiers/awakened.png"
-                                 style="width: 16px; height: 16px;"/>
-                        </div>
+                            <div id="map_killzonessidebar_killzone_{{id}}_has_awakened" class="col-auto  px-2"
+                                 data-toggle="tooltip" title="{{kill_zone_has_awakened_label}}"
+                                 style="display: none;">
+                                <img src="/images/enemymodifiers/awakened.png"
+                                     style="width: 16px; height: 16px;"/>
+                            </div>
 
-                        <div id="map_killzonessidebar_killzone_{{id}}_has_prideful" class="col-auto px-2"
-                             data-toggle="tooltip" title="{{kill_zone_has_prideful_label}}"
-                             style="display: none;">
-                            <img src="/images/enemymodifiers/prideful.png"
-                                 style="width: 16px; height: 16px; border-radius: 16px;"/>
-                        </div>
+                            <div id="map_killzonessidebar_killzone_{{id}}_has_prideful" class="col-auto px-2"
+                                 data-toggle="tooltip" title="{{kill_zone_has_prideful_label}}"
+                                 style="display: none;">
+                                <img src="/images/enemymodifiers/prideful.png"
+                                     style="width: 16px; height: 16px; border-radius: 16px;"/>
+                            </div>
 
-                        <div id="map_killzonessidebar_killzone_{{id}}_has_shrouded" class="col-auto px-2"
-                             data-toggle="tooltip" title="{{kill_zone_has_shrouded_label}}"
-                             style="display: none;">
-                            <span class="shrouded_stacks"></span>
-                            <img src="/images/enemymodifiers/shrouded.png"
-                                 style="width: 16px; height: 16px; border-radius: 16px;"/>
-                        </div>
+                            <div id="map_killzonessidebar_killzone_{{id}}_has_shrouded" class="col-auto px-2"
+                                 data-toggle="tooltip" title="{{kill_zone_has_shrouded_label}}"
+                                 style="display: none;">
+                                <span class="shrouded_stacks"></span>
+                                <img src="/images/enemymodifiers/shrouded.png"
+                                     style="width: 16px; height: 16px; border-radius: 16px;"/>
+                            </div>
 
-                        <div id="map_killzonessidebar_killzone_{{id}}_has_shrouded_zul_gamux"
-                             class="col-auto px-2"
-                             data-toggle="tooltip" title="{{kill_zone_has_shrouded_zul_gamux_label}}"
-                             style="display: none;">
-                            <span class="shrouded_stacks"></span>
-                            <img src="/images/enemymodifiers/shrouded_zul_gamux.png"
-                                 style="width: 16px; height: 16px; border-radius: 16px;"/>
-                        </div>
+                            <div id="map_killzonessidebar_killzone_{{id}}_has_shrouded_zul_gamux"
+                                 class="col-auto px-2"
+                                 data-toggle="tooltip" title="{{kill_zone_has_shrouded_zul_gamux_label}}"
+                                 style="display: none;">
+                                <span class="shrouded_stacks"></span>
+                                <img src="/images/enemymodifiers/shrouded_zul_gamux.png"
+                                     style="width: 16px; height: 16px; border-radius: 16px;"/>
+                            </div>
 
-                        <div id="map_killzonessidebar_killzone_{{id}}_has_inspiring" class="col-auto px-2"
-                             data-toggle="tooltip" title="{{kill_zone_has_inspiring_label}}"
-                             style="display: none;">
-                            <img src="/images/enemymodifiers/inspiring.png"
-                                 style="width: 16px; height: 16px;"/>
-                        </div>
-
-                        <div class="col-auto px-2">
-                            <h5 class="map_killzonessidebar_killzone_text {{text-class}} mb-0">
-                    <span id="map_killzonessidebar_killzone_{{id}}_enemy_forces_cumulative"
-                          data-toggle="tooltip"></span>
-                                <!--                <span id="map_killzonessidebar_killzone_{{id}}_enemy_forces_container">-->
-                                <!--                            (<span class="text-success" id="map_killzonessidebar_killzone_{{id}}_enemy_forces"></span>)-->
-                                <!--                        </span>-->
-                            </h5>
+                            <div id="map_killzonessidebar_killzone_{{id}}_has_inspiring" class="col-auto px-2"
+                                 data-toggle="tooltip" title="{{kill_zone_has_inspiring_label}}"
+                                 style="display: none;">
+                                <img src="/images/enemymodifiers/inspiring.png"
+                                     style="width: 16px; height: 16px;"/>
+                            </div>
                         </div>
                     </div>
                     <div class="row no-gutters">
@@ -104,9 +95,25 @@
             </div>
         </div>
 
+
+        <div class="col-auto px-2">
+            <div class="row no-gutters align-items-center" style="height: 38px;">
+                <div class="col">
+                    <h5 class="map_killzonessidebar_killzone_text {{text-class}} mb-0">
+                        <span id="map_killzonessidebar_killzone_{{id}}_enemy_forces_cumulative"
+                              data-toggle="tooltip">
+                        </span>
+                    </h5>
+                </div>
+            </div>
+        </div>
         <div class="col-auto">
-            <div id="map_killzonessidebar_killzone_{{id}}_grip" class="grip">
-                <i class="fas fa-grip-vertical"></i>
+            <div class="row no-gutters align-items-center" style="height: 38px;">
+                <div class="col">
+                    <div id="map_killzonessidebar_killzone_{{id}}_grip" class="grip">
+                        <i class="fas fa-grip-vertical"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

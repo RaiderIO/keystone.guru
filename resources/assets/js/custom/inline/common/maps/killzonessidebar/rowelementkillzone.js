@@ -168,7 +168,7 @@ class RowElementKillZone extends RowElement {
             }
         }
 
-        let hasAnything = hasAwakened || hasPrideful || hasInspiring || hasShrouded || hasShroudedZulGamux;
+        let hasAnything = bossNames.length > 0 || hasAwakened || hasPrideful || hasInspiring || hasShrouded || hasShroudedZulGamux;
 
         let cumulativeShroudedEnemyStacks = this.killZone.getShroudedEnemyStacksCumulative();
         // Reset any previous states
