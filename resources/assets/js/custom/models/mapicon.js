@@ -43,17 +43,25 @@ class MapIcon extends Icon {
 
         return this._cachedAttributes = super._getAttributes(force).concat([
             new Attribute({
-                // Reads team_id, stores as show_across_team
+                // Modified by show_across_team
                 name: 'team_id',
                 type: 'int',
                 default: null,
+                edit: false
+            }),
+            new Attribute({
+                // Reads team_id, stores as show_across_team
+                name: 'show_across_team',
+                type: 'bool',
+                default: self.team_id !== null,
                 edit: getState().getMapContext().getTeamId() >= 1,
                 setter: function (value) {
                     // If team_id is not null, we show this across the entire team
-                    this.show_across_team = value;
+                    self.show_across_team = value;
+                    self._setValue('team_id', value ? getState().getMapContext().getTeamId() : null);
                 },
                 getter: function () {
-                    return this.show_across_team ? getState().getMapContext().getTeamId() : null;
+                    return self.show_across_team;
                 }
             }),
             new Attribute({
