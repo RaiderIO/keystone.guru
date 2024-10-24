@@ -1155,14 +1155,15 @@ class KillZone extends MapObject {
             // Only when NOT currently editing the layer
             if (!(this.map.getMapState() instanceof EnemySelection && this.map.getMapState().getMapObject().id === this.id)) {
                 let tooltipText = this.index + '';
+                let state = getState();
 
                 // For speedruns, stop here and don't add anything else
-                if (!getState().getMapContext().isDungeonSpeedrunEnabled() &&
-                    getState().getMapZoomLevel() >= c.map.killzone.getCurrentFloorPercentageDisplayZoom()) {
-                    if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_PERCENTAGE) {
+                if (!state.getMapContext().isDungeonSpeedrunEnabled() &&
+                    state.getMapZoomLevel() >= c.map.killzone.getCurrentFloorPercentageDisplayZoom()) {
+                    if (state.getKillZonesNumberStyle() === NUMBER_STYLE_PERCENTAGE) {
                         let enemyForcesCumulativePercent = getFormattedPercentage(this.getEnemyForcesCumulative(), this.map.enemyForcesManager.getEnemyForcesRequired());
                         tooltipText += ` - ${enemyForcesCumulativePercent}%`;
-                    } else if (getState().getKillZonesNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
+                    } else if (state.getKillZonesNumberStyle() === NUMBER_STYLE_ENEMY_FORCES) {
                         tooltipText += ` - ${this.getEnemyForcesCumulative()}/${this.map.enemyForcesManager.getEnemyForcesRequired()}`;
                     }
                 }
@@ -1263,13 +1264,14 @@ class KillZone extends MapObject {
 
     cleanup() {
         let self = this;
+        let state = getState();
 
 
-        getState().getMapContext().unregister('teeming:changed', this);
+        state.getMapContext().unregister('teeming:changed', this);
         let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
         killZoneMapObjectGroup.unregister('killzone:changed', this);
-        getState().unregister('mapzoomlevel:changed', this);
-        getState().unregister('killzonesnumberstyle:changed', this);
+        state.unregister('mapzoomlevel:changed', this);
+        state.unregister('killzonesnumberstyle:changed', this);
         this.unregister('object:deleted', this);
         this.unregister('object:changed', this);
         this.map.unregister('map:refresh', this);
