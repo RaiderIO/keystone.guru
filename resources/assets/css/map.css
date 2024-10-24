@@ -405,6 +405,10 @@ html, body, #map, #app, .wrapper {
     content: "\f078";
 }
 
+.route_sidebar.right .map_killzonessidebar_floor_switch .edit {
+    width: 50px;
+}
+
 .route_sidebar.right .map_killzonessidebar_floor_switch h6 {
     font-size: 1.1rem;
 }
