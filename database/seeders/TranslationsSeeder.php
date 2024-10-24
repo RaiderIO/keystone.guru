@@ -30,7 +30,7 @@ class TranslationsSeeder extends Seeder implements TableSeederInterface
 
                 $translationAttributes = array_merge(
                     $translationAttributes,
-                    $this->insertTranslationsRecursive($translations, $locale)
+                    $this->insertTranslationsRecursive($translations, $locale, $fileName . '.')
                 );
             }
         }
