@@ -656,7 +656,7 @@ let c = {
             // How often to send the mouse frequency, in milliseconds
             mouseSendFrequencyMs: 500,
             // The amount of users before an overflow is initiated
-            userOverflowCount: 5
+            userOverflowCount: 1
         },
         sanitizeTextDefaultAllowedTags: ['h4', 'h5', 'h6', 'b', 'i', 'br'],
         sanitizeText: function (text, convertLineEnding = true) {
