@@ -42,6 +42,19 @@ abstract class ContextEvent implements ShouldBroadcast
         } else if ($this->context instanceof Dungeon) {
             $result[] = new PresenceChannel(sprintf('%s-mapping-version-edit.%s', config('app.type'), $this->context->getRouteKey()));
         }
+//        if ($this->context instanceof DungeonRoute) {
+//            $presenceChannel = new PresenceChannel('');
+//            $presenceChannel->name = sprintf('%s-route-edit.%s', config('app.type'), $this->context->getRouteKey());
+//            $result[] = new PresenceChannel($presenceChannel);
+//        } else if ($this->context instanceof LiveSession) {
+//            $presenceChannel = new PresenceChannel('');
+//            $presenceChannel->name = sprintf('%s-live-session.%s', config('app.type'), $this->context->getRouteKey());
+//            $result[] = new PresenceChannel($presenceChannel);
+//        } else if ($this->context instanceof Dungeon) {
+//            $presenceChannel = new PresenceChannel('');
+//            $presenceChannel->name = sprintf('%s-mapping-version-edit.%s', config('app.type'), $this->context->getRouteKey());
+//            $result[] = new PresenceChannel($presenceChannel);
+//        }
 
         return $result;
     }

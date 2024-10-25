@@ -25,8 +25,7 @@ class EchoControls extends MapControl {
         this.mapControlOptions = {
             onAdd: function () {
                 return jQuery('<span>', {
-                    // @TODO translate
-                    text: 'Connecting...'
+                    text: lang.get('messages.echo_connecting_label')
                 })[0];
             }
         };
