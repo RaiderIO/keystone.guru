@@ -621,6 +621,12 @@ let c = {
         editsidebar: {
             pullGradient: {
                 defaultHandlers: [[0, '#FF0000'], [100, '#00FF00']]
+            },
+            pullsWorkbench: {
+                description: {
+                    maxLength: 500,
+                    warningThreshold: 0.75
+                }
             }
         },
         colorPickerDefaultOptions: {

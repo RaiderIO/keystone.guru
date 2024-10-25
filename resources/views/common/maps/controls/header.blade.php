@@ -309,7 +309,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
 
                 </li>
                 @include('common.layout.nav.user')
-                @include('common.layout.nav.themeswitch')
+{{--                @include('common.layout.nav.themeswitch')--}}
             </ul>
         </div>
     </div>

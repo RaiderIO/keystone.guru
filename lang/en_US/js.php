@@ -85,6 +85,7 @@ return [
     'pull_workbench_remove_kill_area_label'                                => 'Remove kill area',
     'pull_workbench_pull_description_label'                                => 'Pull :index description',
     'pull_workbench_pull_supported_tags_label'                             => 'Supported HTML tags: :tags',
+    'pull_workbench_pull_description_length'                 => 'Description length: :current/:max',
     'kill_zone_has_boss_label'                                             => ':bosses in pull',
     'kill_zone_has_awakened_label'                                         => 'Awakened enemy in pull',
     'kill_zone_has_prideful_label'                                         => 'Prideful enemy in pull',
