@@ -50,5 +50,18 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": null,
+        "floor_id": 302,
+        "dungeon_route_id": null,
+        "team_id": 1,
+        "map_icon_type_id": 11,
+        "lat": -85.98632721911818,
+        "lng": 151.83661578565804,
+        "comment": "Assigned to a team!",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": false
     }
 ]
