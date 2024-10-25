@@ -170,10 +170,10 @@ let scripts = [
 
     // Echo messages
     'resources/assets/js/custom/echo/message/message.js',
-    'resources/assets/js/custom/echo/message/listen/killzone/changed.js',
-    'resources/assets/js/custom/echo/message/listen/killzone/deleted.js',
     'resources/assets/js/custom/echo/message/listen/livesession/invite.js',
     'resources/assets/js/custom/echo/message/listen/livesession/stop.js',
+    'resources/assets/js/custom/echo/message/listen/models/killzone/changed.js',
+    'resources/assets/js/custom/echo/message/listen/models/killzone/deleted.js',
     'resources/assets/js/custom/echo/message/listen/npc/changed.js',
     'resources/assets/js/custom/echo/message/listen/npc/deleted.js',
     'resources/assets/js/custom/echo/message/listen/overpulledenemy/changed.js',
@@ -185,10 +185,13 @@ let scripts = [
     // Echo message handlers
     'resources/assets/js/custom/echo/messagehandler/messagehandler.js',
     'resources/assets/js/custom/echo/messagehandler/listen/colorchanged.js',
-    'resources/assets/js/custom/echo/messagehandler/listen/killzone/changed.js',
-    'resources/assets/js/custom/echo/messagehandler/listen/killzone/deleted.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/invite.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/stop.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/models/basemodelhandler.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/models/modelchangedhandler.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/models/modeldeletedhandler.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/models/killzone/changed.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/models/killzone/deleted.js',
     'resources/assets/js/custom/echo/messagehandler/listen/overpulledenemy/changed.js',
     'resources/assets/js/custom/echo/messagehandler/listen/overpulledenemy/deleted.js',
     'resources/assets/js/custom/echo/messagehandler/listen/npc/changed.js',

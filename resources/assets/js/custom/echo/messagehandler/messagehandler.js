@@ -3,6 +3,10 @@
  * @property {String} message
  */
 class MessageHandler extends Signalable {
+    /**
+     * @param echo {Echo}
+     * @param message {String}
+     */
     constructor(echo, message) {
         super();
 
@@ -27,6 +31,7 @@ class MessageHandler extends Signalable {
         console.assert(this instanceof MessageHandler, 'this is not a MessageHandler', this);
 
         console.log(`Listening for ${this.getMessage()}`);
+        // console.log(presenceChannel);
         presenceChannel.listen(this.getMessage(), this.onReceive.bind(this));
     }
 
@@ -35,6 +40,8 @@ class MessageHandler extends Signalable {
      */
     onReceive(e) {
         console.assert(this instanceof MessageHandler, 'this is not a MessageHandler', this);
+
+        console.log(`MessageHandler::onReceive:`, e);
 
         // Try to re-map the received message to an object that we know of
         let message = new MessageFactory().create(e.__name, e);

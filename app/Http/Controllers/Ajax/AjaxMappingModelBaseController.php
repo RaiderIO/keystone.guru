@@ -38,12 +38,13 @@ abstract class AjaxMappingModelBaseController extends Controller
         array                  $validated,
         string                 $modelClass,
         ?MappingModelInterface $model = null,
-        ?Closure               $onSaveSuccess = null
+        ?Closure               $onSaveSuccess = null,
+        ?Model                 $echoContext = null
     ): Model {
         $validated['mapping_version_id'] = $mappingVersion?->id;
 
         /** @var Model $modelClass */
-        return DB::transaction(function () use ($validated, $modelClass, $model, $onSaveSuccess) {
+        return DB::transaction(function () use ($validated, $modelClass, $model, $onSaveSuccess, $echoContext) {
             /** @var Model|null $beforeModel */
             $beforeModel = $model === null ? null : clone $model;
 
@@ -68,7 +69,8 @@ abstract class AjaxMappingModelBaseController extends Controller
                 }
 
                 if (Auth::check()) {
-                    broadcast(new ModelChangedEvent($model->floor->dungeon, Auth::getUser(), $model));
+                    $echoContext = $echoContext ?? $model->floor->dungeon;
+                    broadcast(new ModelChangedEvent($echoContext, Auth::getUser(), $model));
                 }
 
                 return $model;

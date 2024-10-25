@@ -38,7 +38,7 @@ class MapObjectGroup extends Signalable {
         // Callback to when the manager has received data from the server
         this.manager.map.register('map:beforerefresh', this, this._onBeforeRefresh.bind(this));
         // Whenever the map refreshes, we need to add ourselves to the map again
-        this.manager.map.register('map:refresh', this, (function (mapRefreshEvent) {
+        this.manager.map.register('map:refresh', this, (function () {
             // Rebuild the layer group
             self.layerGroup = new L.LayerGroup();
         }).bind(this));
@@ -49,28 +49,28 @@ class MapObjectGroup extends Signalable {
         }
 
         // @TODO Convert this to the new echo message system
-        if (getState().isEchoEnabled()) {
-            let presenceChannel = window.Echo.join(getState().getMapContext().getEchoChannelName());
-
-            for (let index in this.names) {
-                if (this.names.hasOwnProperty(index)) {
-                    presenceChannel.listen(`.${this.names[index]}-changed`, (e) => {
-                        if (self._shouldHandleChangedEchoEvent(e)) {
-                            let mapObject = self._loadMapObject(e.model, null, e.user);
-                            self.setMapObjectVisibility(mapObject, true);
-                        }
-                    }).listen(`.${this.names[index]}-deleted`, (e) => {
-                        if (self._shouldHandleDeletedEchoEvent(e)) {
-                            let mapObject = self.findMapObjectById(e.model_id);
-                            if (mapObject !== null) {
-                                mapObject.localDelete();
-                                self._showDeletedFromEcho(mapObject, e.user);
-                            }
-                        }
-                    });
-                }
-            }
-        }
+        // if (getState().isEchoEnabled()) {
+        //     let presenceChannel = window.Echo.join(getState().getMapContext().getEchoChannelName());
+        //
+        //     for (let index in this.names) {
+        //         if (this.names.hasOwnProperty(index)) {
+        //             presenceChannel.listen(`.${this.names[index]}-changed`, (e) => {
+        //                 if (self._shouldHandleChangedEchoEvent(e)) {
+        //                     let mapObject = self.loadMapObject(e.model, null, e.user);
+        //                     self.setMapObjectVisibility(mapObject, true);
+        //                 }
+        //             }).listen(`.${this.names[index]}-deleted`, (e) => {
+        //                 if (self._shouldHandleDeletedEchoEvent(e)) {
+        //                     let mapObject = self.findMapObjectById(e.model_id);
+        //                     if (mapObject !== null) {
+        //                         mapObject.localDelete();
+        //                         self._showDeletedFromEcho(mapObject, e.user);
+        //                     }
+        //                 }
+        //             });
+        //         }
+        //     }
+        // }
     }
 
     /**
@@ -87,46 +87,6 @@ class MapObjectGroup extends Signalable {
      */
     _getRawObjects() {
         console.error('Implement _getRawObjects()!');
-    }
-
-    /**
-     * Basic checks for if a received echo event is applicable to this map object group.
-     * @param e {Object}
-     * @returns {boolean}
-     * @private
-     */
-    _shouldHandleEchoEvent(e) {
-        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
-
-        return e.user.public_key !== getState().getUser().public_key;
-    }
-
-    /**
-     * Checks if a received _changed_ event is applicable to this map object group.
-     * @param e {Object}
-     * @returns {boolean}
-     * @private
-     */
-    _shouldHandleChangedEchoEvent(e) {
-        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
-        console.assert(typeof e.model !== 'undefined', 'model was not defined in received event!', this, e);
-        console.assert(typeof e.model.floor_id !== 'undefined', 'model.floor_id was not defined in received event!', this, e);
-
-        // floor -1 means it's omnipresent (such as killzones)
-        return this._shouldHandleEchoEvent(e) && (e.model.floor_id === getState().getCurrentFloor().id || e.model.floor_id === -1);
-    }
-
-    /**
-     * Checks if a received _deleted_ event is applicable to this map object group.
-     * @param e {Object}
-     * @returns {boolean|boolean}
-     * @private
-     */
-    _shouldHandleDeletedEchoEvent(e) {
-        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
-        console.assert(typeof e.model_id !== 'undefined', 'model_id was not defined in received event!', this, e);
-
-        return this._shouldHandleEchoEvent(e);
     }
 
     /**
@@ -250,15 +210,14 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
-     * Restores an object that was received from the server.
+     * Restores an object that was received from the server/Echo.
      *
      * @param remoteMapObject {object}
      * @param layer {L.layer|null} Optional layer that was created already
      * @param user {Object|null} The user that created this object (if done from Echo)
      * @return {MapObject}
-     * @protected
      */
-    _loadMapObject(remoteMapObject, layer = null, user = null) {
+    loadMapObject(remoteMapObject, layer = null, user = null) {
         console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
 
         let mapObject = this.findMapObjectById(remoteMapObject.id);
@@ -382,22 +341,6 @@ class MapObjectGroup extends Signalable {
     }
 
     /**
-     *
-     * @param localMapObject {MapObject}
-     * @param user {Object}
-     * @protected
-     */
-    _showDeletedFromEcho(localMapObject, user) {
-        console.assert(this instanceof MapObjectGroup, 'this is not a MapObjectGroup', this);
-
-        if (getState().isEchoEnabled() && getState().getUser().public_key !== user.public_key && user.name !== null) {
-            showInfoNotification(lang.get('messages.echo_object_deleted_notification')
-                .replace('{object}', localMapObject.toString())
-                .replace('{user}', user.name));
-        }
-    }
-
-    /**
      * Called whenever a map object is initialized for the first time
      * @param objectInitializedEvent {object}
      * @private
@@ -511,7 +454,7 @@ class MapObjectGroup extends Signalable {
 
             // Now draw the map objects on the map
             for (let i = 0; i < mapObjects.length; i++) {
-                this._loadMapObject(mapObjects[i]);
+                this.loadMapObject(mapObjects[i]);
             }
 
             this._initialized = true;
@@ -666,7 +609,7 @@ class MapObjectGroup extends Signalable {
     onNewLayerCreated(layer) {
         console.assert(this instanceof MapObjectGroup, 'this was not a MapObjectGroup', this);
 
-        let createdMapObject = this._loadMapObject({id: -1}, layer);
+        let createdMapObject = this.loadMapObject({id: -1}, layer);
 
         // Make sure it's visible on the map
         this.setMapObjectVisibility(createdMapObject, true);

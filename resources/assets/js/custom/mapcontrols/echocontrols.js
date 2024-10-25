@@ -23,8 +23,9 @@ class EchoControls extends MapControl {
         this._onEchoCursorsEnabledChanged();
 
         this.mapControlOptions = {
-            onAdd: function (leafletMap) {
+            onAdd: function () {
                 return jQuery('<span>', {
+                    // @TODO translate
                     text: 'Connecting...'
                 })[0];
             }
@@ -168,7 +169,7 @@ class EchoControls extends MapControl {
             cursorsEnabled: getState().getDungeonMap().options.edit,
             cursorsActive: getState().getEchoCursorsEnabled(),
             users: getState().getEcho().getUsers().slice(0, c.map.echo.userOverflowCount),
-            hasUsersOverflow: getState().getEcho().getUsers().length >= c.map.echo.userOverflowCount,
+            hasUsersOverflow: getState().getEcho().getUsers().length > c.map.echo.userOverflowCount,
             usersOverflow: getState().getEcho().getUsers().slice(c.map.echo.userOverflowCount),
             type: getState().getMapContext().getType(),
         }));

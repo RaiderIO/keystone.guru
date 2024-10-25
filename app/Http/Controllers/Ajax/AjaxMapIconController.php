@@ -110,7 +110,9 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
             $mapIcon->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id']);
             // Only when icons that are not sticky to the map are saved
             $dungeonRoute?->touch();
-        });
+        },
+            // Can be null, it will then default to the dungeon internally
+            $dungeonRoute);
     }
 
     /**
