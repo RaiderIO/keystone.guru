@@ -110,7 +110,7 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
 
     public function getIsAdminAttribute(): bool
     {
-        return $this->dungeon_route_id === null;
+        return $this->mapping_version_id !== null;
     }
 
     public function isAwakenedObelisk(): bool

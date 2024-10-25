@@ -23,7 +23,12 @@ class MapIcon extends Icon {
         super(
             map,
             layer,
-            $.extend({}, {name: 'map_icon', route_suffix: 'mapicon', has_route_model_binding: true, ignore_mapping_version_suffix: true}, options)
+            $.extend({}, {
+                name: 'map_icon',
+                route_suffix: 'mapicon',
+                has_route_model_binding: true,
+                ignore_mapping_version_suffix: true
+            }, options)
         );
 
         this.label = 'MapIcon';
@@ -53,14 +58,20 @@ class MapIcon extends Icon {
                 // Reads team_id, stores as show_across_team
                 name: 'show_across_team',
                 type: 'bool',
-                default: self.team_id !== null,
+                default: null,
+                // This field only shows up when this route is assigned to a team
                 edit: getState().getMapContext().getTeamId() >= 1,
                 setter: function (value) {
                     // If team_id is not null, we show this across the entire team
                     self.show_across_team = value;
-                    self._setValue('team_id', value ? getState().getMapContext().getTeamId() : null);
+                    self.team_id = value ? getState().getMapContext().getTeamId() : null;
                 },
                 getter: function () {
+                    if (typeof self.show_across_team === 'undefined' || self.show_across_team === null) {
+                        // Set a default here - we cannot set the default in the attribute if it
+                        // depends on another attribute!
+                        self.show_across_team = typeof self.team_id !== 'undefined' && self.team_id !== null
+                    }
                     return self.show_across_team;
                 }
             }),
@@ -133,7 +144,8 @@ class MapIcon extends Icon {
     isEditable() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         // Admin may edit everything, but not useful when editing a dungeonroute
-        return super.isEditable() && this.linked_awakened_obelisk_id === null &&
+        return super.isEditable() &&
+            this.linked_awakened_obelisk_id === null &&
             getState().isMapAdmin() === this.is_admin;
     }
 

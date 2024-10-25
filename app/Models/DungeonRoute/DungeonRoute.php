@@ -392,7 +392,13 @@ class DungeonRoute extends Model
 
     public function mapicons(): HasMany
     {
-        return $this->hasMany(MapIcon::class);
+        return $this->hasMany(MapIcon::class)
+            ->when($this->team_id !== null, function ($query) {
+                $query->orWhere(function ($query) {
+                    $query->where('map_icons.team_id', $this->team_id)
+                        ->whereIn('map_icons.floor_id', $this->dungeon->floors->pluck('id'));
+                });
+            });
     }
 
     public function routeattributes(): BelongsToMany
