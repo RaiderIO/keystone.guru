@@ -223,6 +223,9 @@ class DungeonRoute extends Model
 
     protected $casts = [
         'enemy_forces' => 'integer',
+        'demo'         => 'integer',
+        'level_min'    => 'integer',
+        'level_max'    => 'integer',
     ];
 
     /**
@@ -767,8 +770,8 @@ class DungeonRoute extends Model
         // Can still be null if there are no seasons for this dungeon, like in Classic
         $this->season_id = $activeSeason->id ?? null;
 
-        $this->faction_id     = 1;
-        $this->difficulty     = 1;
+        $this->faction_id = 1;
+//        $this->difficulty     = 1;
         $this->seasonal_index = 0;
         $this->teeming        = 0;
 
@@ -787,6 +790,12 @@ class DungeonRoute extends Model
         if ($this->level_min === null || $this->level_max === null) {
             $this->level_min = $this->level_min ?? $activeSeason->key_level_min;
             $this->level_max = $this->level_max ?? $activeSeason->key_level_max;
+        }
+        if ($this->level_min !== null) {
+            $this->level_min = (int)$this->level_min;
+        }
+        if ($this->level_max !== null) {
+            $this->level_max = (int)$this->level_max;
         }
 
         $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
@@ -839,7 +848,7 @@ class DungeonRoute extends Model
         $this->season_id = $activeSeason->id ?? null;
 
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
-        $this->difficulty     = 1;
+//        $this->difficulty     = 1;
         $this->seasonal_index = (int)$request->get('seasonal_index', [$this->seasonal_index])[0];
         $this->teeming        = 0; // (int)$request->get('teeming', $this->teeming) ?? 0;
 
@@ -863,6 +872,12 @@ class DungeonRoute extends Model
         if ($this->level_min === null || $this->level_max === null) {
             $this->level_min = $this->level_min ?? $activeSeason->key_level_min;
             $this->level_max = $this->level_max ?? $activeSeason->key_level_max;
+        }
+        if ($this->level_min !== null) {
+            $this->level_min = (int)$this->level_min;
+        }
+        if ($this->level_max !== null) {
+            $this->level_max = (int)$this->level_max;
         }
 
         if ($user?->hasRole(Role::ROLE_ADMIN)) {
