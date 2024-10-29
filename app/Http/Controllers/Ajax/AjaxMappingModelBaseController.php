@@ -43,6 +43,10 @@ abstract class AjaxMappingModelBaseController extends Controller
     ): Model {
         $validated['mapping_version_id'] = $mappingVersion?->id;
 
+        if(!is_a($modelClass, Model::class, true)){
+            throw new Exception(sprintf('Class %s is not a model!', $modelClass));
+        }
+
         /** @var Model $modelClass */
         return DB::transaction(function () use ($validated, $modelClass, $model, $onSaveSuccess, $echoContext) {
             /** @var Model|null $beforeModel */
@@ -56,7 +60,6 @@ abstract class AjaxMappingModelBaseController extends Controller
             }
 
             if ($success) {
-
                 $model->load(['mappingVersion', 'floor', 'floor.dungeon']);
 
                 if ($onSaveSuccess != null) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Events\Model\ModelDeletedEvent;
+use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Http\Requests\MapIcon\MapIconFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
@@ -25,6 +26,8 @@ use Throwable;
 
 class AjaxMapIconController extends AjaxMappingModelBaseController
 {
+    use ChangesDungeonRoute;
+
     protected function shouldCallMappingChanged(?MappingModelInterface $beforeModel, ?MappingModelInterface $afterModel): bool
     {
         /** @var MapIcon $beforeModel */
@@ -67,7 +70,10 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
             $this->authorize('addMapIcon', $dungeonRoute);
         }
 
-        return $this->storeModel($mappingVersion, $validated, MapIcon::class, $mapIcon, static function (MapIcon $mapIcon) use ($coordinatesService, $validated, $user, $dungeonRoute) {
+        $beforeModel = $mapIcon === null ? null : clone $mapIcon;
+
+        return $this->storeModel($mappingVersion, $validated, MapIcon::class, $mapIcon,
+            function (MapIcon $mapIcon) use ($coordinatesService, $validated, $user, $dungeonRoute, &$beforeModel) {
             // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
             $updateAttributes = [];
             $teamId           = $validated['team_id'];
@@ -122,6 +128,8 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
             // Only when icons that are not sticky to the map are saved
             $dungeonRoute?->touch();
 
+            $this->dungeonRouteChanged($dungeonRoute, $beforeModel, $mapIcon);
+
             // If we were using a facade before, echo facade locations back so the UI can make sense of that!
             if ($useFacade) {
                 $mapIcon->setAttribute('lat', $originalLatLng->getLat());
@@ -166,6 +174,8 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
                     // Trigger mapping changed event so the mapping gets saved across all environments
                     $this->mappingChanged($mapIcon, null);
                 } else {
+                    $this->dungeonRouteChanged($dungeonRoute, $mapIcon, null);
+
                     $dungeonRoute->touch();
                 }
 

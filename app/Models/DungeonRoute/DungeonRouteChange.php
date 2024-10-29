@@ -35,6 +35,7 @@ class DungeonRouteChange extends Model
         'user_id',
         'team_id',
         'team_role',
+        'model_id',
         'model_class',
         'before',
         'after',

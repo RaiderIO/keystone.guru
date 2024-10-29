@@ -44,19 +44,40 @@ trait ChangesDungeonRoute
         ]);
     }
 
-    private function getChangedData(array $before, array $after, array $excludeKeys = []): array
+    private function getChangedData(array $before, array $after, array $excludeKeysOnUpdate = []): array
     {
         $alteredKeys = [];
-        foreach ($before as $key => $value) {
-            if (in_array($key, $excludeKeys)) {
-                continue;
+        // Creating a new model
+        if (empty($before)) {
+            foreach ($after as $key => $value) {
+                $alteredKeys[$key] = [
+                    'before' => null,
+                    'after'  => $value,
+                ];
             }
-
-            if ($value !== $after[$key]) {
+        }
+        // Deleting a model
+        else if (empty($after)) {
+            foreach ($before as $key => $value) {
                 $alteredKeys[$key] = [
                     'before' => $value,
-                    'after'  => $after[$key],
+                    'after'  => null,
                 ];
+            }
+        }
+        // Updating a model
+        else {
+            foreach ($before as $key => $value) {
+                if (in_array($key, $excludeKeysOnUpdate)) {
+                    continue;
+                }
+
+                if ($value !== $after[$key]) {
+                    $alteredKeys[$key] = [
+                        'before' => $value,
+                        'after'  => $after[$key],
+                    ];
+                }
             }
         }
 
