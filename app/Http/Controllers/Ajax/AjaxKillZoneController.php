@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Http\Requests\KillZone\APIDeleteAllFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneMassFormRequest;
@@ -28,6 +29,8 @@ use Teapot\StatusCode\Http;
 
 class AjaxKillZoneController extends Controller
 {
+    use ChangesDungeonRoute;
+
     /**
      * @throws \Exception
      */
@@ -54,10 +57,17 @@ class AjaxKillZoneController extends Controller
 
         $this->authorize('addKillZone', $dungeonroute);
 
+        /** @var KillZone|null $beforeModel */
+        $beforeModel = $killZone === null ? null : clone $killZone;
+
         if (!$killZone->exists) {
             $killZone = KillZone::create($data);
+            // We JUST created the KillZone - so it does not have enemies (yet)
+            $killZone->setEnemiesAttributeCache(collect());
             $success  = $killZone instanceof KillZone;
         } else {
+            // Set the cache on the before model to properly store the changes
+            $beforeModel->getEnemiesAttribute(true);
             $success = $killZone->update($data);
         }
 
@@ -112,6 +122,11 @@ class AjaxKillZoneController extends Controller
             if ($recalculateEnemyForces) {
                 RefreshEnemyForces::dispatch($dungeonroute->id);
             }
+
+            $this->dungeonRouteChanged($dungeonroute, $beforeModel, $killZone, function (array &$beforeAttributes, array &$afterAttributes) use ($beforeModel, $killZone) {
+                $beforeAttributes['enemies'] = $beforeModel?->getEnemiesAttribute() ?? [];
+                $afterAttributes['enemies']  = $killZone->getEnemiesAttribute();
+            });
 
             // If killzone has lat/lng set, convert it to facade location if it's not already
             $useFacade = $dungeonroute->mappingVersion->facade_enabled &&
@@ -287,6 +302,9 @@ class AjaxKillZoneController extends Controller
 
                 $dungeonRoute->load('killZones');
                 $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
+
+                $this->dungeonRouteChanged($dungeonRoute, $killZone, null);
+
                 // Touch the route so that the thumbnail gets updated
                 $dungeonRoute->touch();
 
@@ -325,6 +343,8 @@ class AjaxKillZoneController extends Controller
                     /** @var User $user */
                     $user = Auth::user();
                     foreach ($killZones as $killZone) {
+                        $this->dungeonRouteChanged($dungeonRoute, $killZone, null);
+
                         broadcast(new ModelDeletedEvent($dungeonRoute, $user, $killZone));
                     }
 
@@ -334,9 +354,9 @@ class AjaxKillZoneController extends Controller
                 }
 
                 $dungeonRoute->load('killZones');
-                $dungeonRoute->update(['enemy_forces' => $dungeonRoute->getEnemyForces()]);
+                $dungeonRoute->update(['enemy_forces' => 0]);
                 // Touch the route so that the thumbnail gets updated
-                $dungeonRoute->touch(null);
+                $dungeonRoute->touch();
 
                 $result = ['enemy_forces' => $dungeonRoute->enemy_forces];
             } catch (\Exception) {

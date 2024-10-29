@@ -10,7 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 trait ChangesDungeonRoute
 {
-    private const IGNORE_KEYS = ['updated_at'];
+    private const IGNORE_KEYS = [
+        'index', // KillZone index upon mass change.. I don't care about this
+        'updated_at',
+    ];
 
     /**
      * @param DungeonRoute $dungeonRoute
@@ -18,7 +21,7 @@ trait ChangesDungeonRoute
      * @param Model|null   $afterModel
      * @throws Exception
      */
-    public function dungeonRouteChanged(DungeonRoute $dungeonRoute, ?Model $beforeModel, ?Model $afterModel): void
+    public function dungeonRouteChanged(DungeonRoute $dungeonRoute, ?Model $beforeModel, ?Model $afterModel, ?callable $modifyAttributes = null): void
     {
         if ($beforeModel === null && $afterModel === null) {
             throw new Exception('Must have at least a $beforeModel OR $afterModel');
@@ -29,19 +32,25 @@ trait ChangesDungeonRoute
         $boolToInt        = fn($value) => is_bool($value) ? (int)$value : $value;
         $beforeAttributes = $beforeModel !== null ? array_map($boolToInt, $beforeModel->getAttributes()) : [];
         $afterAttributes  = $afterModel !== null ? array_map($boolToInt, $afterModel->getAttributes()) : [];
+        if ($modifyAttributes !== null) {
+            $modifyAttributes($beforeAttributes, $afterAttributes);
+        }
 
         $changedKeys = $this->getChangedData($beforeAttributes, $afterAttributes, self::IGNORE_KEYS);
 
-        DungeonRouteChange::create([
-            'dungeon_route_id' => $dungeonRoute->id,
-            'user_id'          => $user?->id,
-            'team_id'          => $dungeonRoute->team_id,
-            'team_role'        => $dungeonRoute->team?->getUserRole($user),
-            'model_id'         => $beforeModel?->id ?? $afterModel->id,
-            'model_class'      => ($beforeModel ?? $afterModel)::class,
-            'before'           => $beforeModel !== null ? json_encode(array_intersect_key($beforeAttributes, $changedKeys)) : null,
-            'after'            => $afterModel !== null ? json_encode(array_intersect_key($afterAttributes, $changedKeys)) : null,
-        ]);
+        // If there are any changes, log them
+        if (!empty($changedKeys)) {
+            DungeonRouteChange::create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'user_id'          => $user?->id,
+                'team_id'          => $dungeonRoute->team_id,
+                'team_role'        => $dungeonRoute->team?->getUserRole($user),
+                'model_id'         => $beforeModel?->id ?? $afterModel->id,
+                'model_class'      => ($beforeModel ?? $afterModel)::class,
+                'before'           => $beforeModel !== null ? json_encode(array_intersect_key($beforeAttributes, $changedKeys)) : null,
+                'after'            => $afterModel !== null ? json_encode(array_intersect_key($afterAttributes, $changedKeys)) : null,
+            ]);
+        }
     }
 
     private function getChangedData(array $before, array $after, array $excludeKeysOnUpdate = []): array
@@ -55,8 +64,7 @@ trait ChangesDungeonRoute
                     'after'  => $value,
                 ];
             }
-        }
-        // Deleting a model
+        } // Deleting a model
         else if (empty($after)) {
             foreach ($before as $key => $value) {
                 $alteredKeys[$key] = [
@@ -64,8 +72,7 @@ trait ChangesDungeonRoute
                     'after'  => null,
                 ];
             }
-        }
-        // Updating a model
+        } // Updating a model
         else {
             foreach ($before as $key => $value) {
                 if (in_array($key, $excludeKeysOnUpdate)) {

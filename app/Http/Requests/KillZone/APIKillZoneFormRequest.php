@@ -2,19 +2,28 @@
 
 namespace App\Http\Requests\KillZone;
 
+use App\Http\Requests\Traits\CastInputData;
 use App\Models\Floor\Floor;
+use App\Models\KillZone\KillZone;
 use App\Models\Spell\Spell;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class APIKillZoneFormRequest extends FormRequest
 {
+    use CastInputData;
+
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
         return true;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge($this->castInputData($this, KillZone::class));
     }
 
     /**

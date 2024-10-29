@@ -28,12 +28,14 @@ use Illuminate\Support\Facades\DB;
  * @property int                       $index
  * @property float|null                $lat
  * @property float|null                $lng
+ *
  * @property DungeonRoute              $dungeonRoute
  * @property Floor                     $floor
  * @property Collection<int>           $enemies
  * @property Collection<KillZoneEnemy> $killZoneEnemies
  * @property Collection<KillZoneSpell> $killZoneSpells
  * @property Collection<Spell>         $spells
+ *
  * @property Carbon                    $updated_at
  * @property Carbon                    $created_at
  *
@@ -73,10 +75,11 @@ class KillZone extends Model
     ];
 
     protected $casts = [
-        'floor_id' => 'integer',
-        'index'    => 'integer',
-        'lat'      => 'float',
-        'lng'      => 'float',
+        'dungeon_route_id' => 'integer',
+        'floor_id'         => 'integer',
+        'index'            => 'integer',
+        'lat'              => 'float',
+        'lng'              => 'float',
     ];
 
     /** @var Collection<int>|null */
@@ -87,13 +90,17 @@ class KillZone extends Model
 
     private ?Floor $dominantFloorCache = null;
 
-    public function setEnemiesAttributeCache(Collection $enemyIds): void
+    public function setEnemiesAttributeCache(?Collection $enemyIds): void
     {
         $this->enemiesAttributeCache = $enemyIds;
     }
 
-    public function getEnemiesAttribute(): Collection
+    public function getEnemiesAttribute(?bool $resetCache = false): Collection
     {
+        if ($resetCache) {
+            $this->enemiesAttributeCache = null;
+        }
+
         return $this->enemiesAttributeCache ?? Enemy::select('enemies.id')
             ->join('kill_zone_enemies', static function (JoinClause $clause) {
                 $clause->on('kill_zone_enemies.npc_id', DB::raw('coalesce(enemies.mdt_npc_id, enemies.npc_id)'))
