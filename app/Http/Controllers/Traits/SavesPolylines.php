@@ -23,16 +23,21 @@ trait SavesPolylines
     /**
      * @param array{color: string, color_animated: string, weight: int, vertices_json: string} $data
      */
-    private function savePolyline(
+    private function savePolylineToModel(
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
         Polyline                    $polyline,
         Model                       $ownerModel,
-        array                       $data,
-        ?Floor                      &$changedFloor
+        array                       $data
     ): Polyline {
         // The incoming lat/lngs are facade lat/lngs, save the icon on the proper floor
-        if ($mappingVersion->facade_enabled && User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE) {
+        $useFacade        = $mappingVersion->facade_enabled && User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+        $originalVertices = $data['vertices_json'];
+        /** @var Floor $originalFloor */
+        $originalFloor = $ownerModel->floor;
+        $changedFloor  = null;
+
+        if ($useFacade) {
             $vertices     = json_decode($data['vertices_json'], true);
             $realVertices = [];
             foreach ($vertices as $vertex) {
@@ -43,13 +48,16 @@ trait SavesPolylines
                 );
 
                 $realVertices[] = $latLng->toArray();
-                $changedFloor   = $latLng->getFloor();
+                // Assume the floor of the first vertex in the list
+                if ($changedFloor === null) {
+                    $changedFloor = $latLng->getFloor();
+                }
             }
 
             $data['vertices_json'] = json_encode($realVertices);
         }
 
-        return Polyline::updateOrCreate([
+        $polyline = Polyline::updateOrCreate([
             'id' => $polyline->id,
         ], [
             'model_id'       => $ownerModel->id,
@@ -62,5 +70,23 @@ trait SavesPolylines
             'weight'         => (int)($data['weight'] ?? 2),
             'vertices_json'  => $data['vertices_json'] ?? '{}',
         ]);
+
+        // Couple the model to the newly created/updated polyline
+        $ownerModel->update([
+            'polyline_id' => $polyline->id,
+            'floor_id'    => $changedFloor?->id ?? $originalFloor->id,
+        ]);
+        $ownerModel->setRelation('polyline', $polyline);
+
+        // If we received a request from facade, we need to convert the vertices back to facade coordinates
+        if ($useFacade) {
+            $ownerModel->setRelation('floor', $originalFloor);
+            $ownerModel->setAttribute('floor_id', $originalFloor->id);
+            $polyline->setAttribute('vertices_json', $originalVertices);
+        }
+
+//        dd($changedFloor, $originalVertices, $ownerModel, $polyline);
+
+        return $polyline;
     }
 }

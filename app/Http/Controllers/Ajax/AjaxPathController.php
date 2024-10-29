@@ -69,24 +69,13 @@ class AjaxPathController extends Controller
             try {
                 if ($success) {
                     // Create a new polyline and save it
-                    $changedFloor = null;
-                    $polyline     = $this->savePolyline(
+                    $this->savePolylineToModel(
                         $coordinatesService,
                         $dungeonRoute->mappingVersion,
                         Polyline::findOrNew($path->polyline_id),
                         $path,
-                        $validated['polyline'],
-                        $changedFloor
+                        $validated['polyline']
                     );
-
-                    // Couple the path to the polyline
-                    $path->update([
-                        'polyline_id' => $polyline->id,
-                        'floor_id'    => $changedFloor?->id ?? $path->floor_id,
-                    ]);
-
-                    // Load the polyline so it can be echoed back to the user
-                    $path->load(['polyline']);
 
                     // Set or unset the linked awakened obelisks now that we have an ID
                     $path->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id'] ?? null);

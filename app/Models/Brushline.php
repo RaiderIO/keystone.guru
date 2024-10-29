@@ -14,14 +14,17 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int          $id
  * @property int          $dungeon_route_id
  * @property int          $floor_id
  * @property int          $polyline_id
- * @property string       $updated_at
- * @property string       $created_at
+ *
+ * @property Carbon       $updated_at
+ * @property Carbon       $created_at
+ *
  * @property DungeonRoute $dungeonRoute
  * @property Polyline     $polyline
  * @property Floor        $floor

@@ -69,24 +69,13 @@ class AjaxBrushlineController extends Controller
             try {
                 if ($success) {
                     // Create a new polyline and save it
-                    $changedFloor = null;
-                    $polyline     = $this->savePolyline(
+                    $this->savePolylineToModel(
                         $coordinatesService,
                         $dungeonRoute->mappingVersion,
                         Polyline::findOrNew($brushline->polyline_id),
                         $brushline,
-                        $validated['polyline'],
-                        $changedFloor
+                        $validated['polyline']
                     );
-
-                    // Couple the path to the polyline
-                    $brushline->update([
-                        'polyline_id' => $polyline->id,
-                        'floor_id'    => $changedFloor?->id ?? $brushline->floor_id,
-                    ]);
-
-                    // Load the polyline, so it can be echoed back to the user
-                    $brushline->load(['polyline']);
 
                     // Something's updated; broadcast it
                     if (Auth::check()) {
