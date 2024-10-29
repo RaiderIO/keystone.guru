@@ -15,6 +15,7 @@ use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\KillZone\KillZoneSpell;
 use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -30,8 +31,12 @@ class AjaxKillZoneController extends Controller
     /**
      * @throws \Exception
      */
-    private function saveKillZone(DungeonRoute $dungeonroute, array $data, bool $recalculateEnemyForces = true): KillZone
-    {
+    private function saveKillZone(
+        CoordinatesServiceInterface $coordinatesService,
+        DungeonRoute                $dungeonroute,
+        array                       $data,
+        bool                        $recalculateEnemyForces = true
+    ): KillZone {
         $enemyIds = $data['enemies'] ?? null;
         unset($data['enemies']);
         $data['dungeon_route_id'] = $dungeonroute->id;
@@ -79,7 +84,7 @@ class AjaxKillZoneController extends Controller
                         'npc_id'       => $enemy->mdt_npc_id ?? $enemy->npc_id,
                         'mdt_id'       => $enemy->mdt_id,
                     ];
-                    $validEnemyIds[]   = $enemyId;
+                    $validEnemyIds[]   = (int)$enemyId;
                 }
 
                 // Bulk insert
@@ -108,6 +113,36 @@ class AjaxKillZoneController extends Controller
                 RefreshEnemyForces::dispatch($dungeonroute->id);
             }
 
+            // If killzone has lat/lng set, convert it to facade location if it's not already
+            $useFacade = $dungeonroute->mappingVersion->facade_enabled &&
+                User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+
+            if ($killZone->hasKillArea()) {
+                // Track this latlng so we can re-echo it back to the user if we still want to use facades
+                $originalLatLng = $killZone->getLatLng();
+
+                // Only when we actually have a kill location set!
+                if ($useFacade && $originalLatLng->getFloor() !== null) {
+                    $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
+                        $dungeonroute->mappingVersion,
+                        $originalLatLng
+                    );
+
+                    // Save the killzone with converted lat/lngs in the database
+                    $killZone->update([
+                        'lat'      => $latLng->getLat(),
+                        'lng'      => $latLng->getLng(),
+                        'floor_id' => $latLng->getFloor()->id,
+                    ]);
+                }
+
+                // But echo it back as facade!
+                $killZone->setAttribute('lat', $originalLatLng->getLat());
+                $killZone->setAttribute('lng', $originalLatLng->getLng());
+                $killZone->setAttribute('floor_id', $originalLatLng->getFloor()->id);
+                $killZone->setRelation('floor', $originalLatLng->getFloor());
+            }
+
             if (Auth::check()) {
                 // Something's updated; broadcast it
                 /** @var User $user */
@@ -125,8 +160,12 @@ class AjaxKillZoneController extends Controller
      * @throws AuthorizationException
      * @throws \Exception
      */
-    public function store(APIKillZoneFormRequest $request, DungeonRoute $dungeonRoute, ?KillZone $killZone = null): KillZone
-    {
+    public function store(
+        CoordinatesServiceInterface $coordinatesService,
+        APIKillZoneFormRequest      $request,
+        DungeonRoute                $dungeonRoute,
+        ?KillZone                   $killZone = null
+    ): KillZone {
         $dungeonRoute = $killZone?->dungeonRoute ?? $dungeonRoute;
 
         try {
@@ -143,7 +182,7 @@ class AjaxKillZoneController extends Controller
 
             $data['id'] = $killZone?->id ?? null;
 
-            $result = $this->saveKillZone($dungeonRoute, $data, $killZone !== null);
+            $result = $this->saveKillZone($coordinatesService, $dungeonRoute, $data, $killZone !== null);
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
         }
@@ -156,8 +195,11 @@ class AjaxKillZoneController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function storeAll(APIKillZoneMassFormRequest $request, DungeonRoute $dungeonRoute)
-    {
+    public function storeAll(
+        CoordinatesServiceInterface $coordinatesService,
+        APIKillZoneMassFormRequest  $request,
+        DungeonRoute                $dungeonRoute
+    ) {
         $this->authorize('edit', $dungeonRoute);
 
         $validated = $request->validated();
@@ -170,7 +212,7 @@ class AjaxKillZoneController extends Controller
                 $kzDataWithoutEnemies = $killZoneData;
                 unset($kzDataWithoutEnemies['enemies']);
                 // Do not save the enemy forces - we save it one time down below
-                $killZones->push($this->saveKillZone($dungeonRoute, $kzDataWithoutEnemies, false));
+                $killZones->push($this->saveKillZone($coordinatesService, $dungeonRoute, $kzDataWithoutEnemies, false));
             } catch (Exception) {
                 return response(sprintf('Unable to find kill zone %s', $killZoneData['id']), Http::NOT_FOUND);
             }

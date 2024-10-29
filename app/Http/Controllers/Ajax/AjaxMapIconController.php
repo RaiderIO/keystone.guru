@@ -33,6 +33,11 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     }
 
     /**
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param MapIconFormRequest          $request
+     * @param MappingVersion|null         $mappingVersion Set -> admin endpoint,
+     * @param DungeonRoute|null           $dungeonRoute Set -> route edit endpoint
+     * @param MapIcon|null                $mapIcon
      * @return MapIcon|Model
      *
      * @throws AuthorizationException
@@ -43,8 +48,8 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         MapIconFormRequest          $request,
         ?MappingVersion             $mappingVersion,
         ?DungeonRoute               $dungeonRoute,
-        ?MapIcon                    $mapIcon = null): MapIcon
-    {
+        ?MapIcon                    $mapIcon = null
+    ): MapIcon {
         $dungeonRoute                  = $mapIcon?->dungeonRoute ?? $dungeonRoute;
         $validated                     = $request->validated();
         $validated['dungeon_route_id'] = $dungeonRoute?->id;
@@ -54,10 +59,8 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 
         $isUserAdmin = $user?->hasRole(Role::ROLE_ADMIN);
         // Must be an admin to use this endpoint like this!
-        if ($dungeonRoute === null) {
-            if (!$isUserAdmin) {
-                throw new Exception('Unable to save map icon!');
-            }
+        if ($mappingVersion !== null && !$isUserAdmin) {
+            throw new Exception('Unable to save map icon!');
         } // We're editing a map comment for the user, carry on
         else {
             $this->authorize('edit', $dungeonRoute);
@@ -77,13 +80,23 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
                     ];
                 }
             }
-            // The incoming lat/lngs are facade lat/lngs, save the icon on the proper floor
-            if (User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE) {
-                $mapIcon->load('mappingVersion');
 
+            // Prevent people being able to update icons that only the admin should if they're supplying a valid dungeon route
+            if ($mapIcon->exists && $mapIcon->dungeon_route_id === null && $dungeonRoute !== null && $mapIcon->team_id === null) {
+                throw new Exception('Unable to save map icon!');
+            }
+
+            // The incoming lat/lngs are facade lat/lngs, save the icon on the proper floor
+            // If we're editing from an admin PoV facade is NEVER enabled, so ignore this then!
+            $useFacade = $dungeonRoute?->mappingVersion->facade_enabled &&
+                User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+
+            // Track this latlng so we can re-echo it back to the user if we still want to use facades
+            $originalLatLng = $mapIcon->getLatLng();
+            if ($useFacade) {
                 $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
-                    $dungeonRoute?->mappingVersion ?? $mapIcon->mappingVersion,
-                    $mapIcon->getLatLng()
+                    $dungeonRoute->mappingVersion,
+                    $originalLatLng
                 );
 
                 $updateAttributes = array_merge($updateAttributes, [
@@ -102,14 +115,20 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
             $mapIcon->update(array_merge($updateAttributes, [
                 'mapping_version_id' => $dungeonRoute === null ? $validated['mapping_version_id'] : null,
             ]));
-            // Prevent people being able to update icons that only the admin should if they're supplying a valid dungeon route
-            if ($mapIcon->exists && $mapIcon->dungeon_route_id === null && $dungeonRoute !== null && $mapIcon->team_id === null) {
-                throw new Exception('Unable to save map icon!');
-            }
+
             // Set or unset the linked awakened obelisks now that we have an ID
             $mapIcon->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id']);
+
             // Only when icons that are not sticky to the map are saved
             $dungeonRoute?->touch();
+
+            // If we were using a facade before, echo facade locations back so the UI can make sense of that!
+            if ($useFacade) {
+                $mapIcon->setAttribute('lat', $originalLatLng->getLat());
+                $mapIcon->setAttribute('lng', $originalLatLng->getLng());
+                $mapIcon->setAttribute('floor_id', $originalLatLng->getFloor()->id);
+                $mapIcon->setRelation('floor', $originalLatLng->getFloor());
+            }
         },
             // Can be null, it will then default to the dungeon internally
             $dungeonRoute);
@@ -159,6 +178,19 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         }
 
         return $result;
+    }
+
+    /**
+     * @throws AuthorizationException
+     * @throws Throwable
+     */
+    public function dungeonRouteStore(
+        CoordinatesServiceInterface $coordinatesService,
+        MapIconFormRequest          $request,
+        DungeonRoute                $dungeonRoute,
+        ?MapIcon                    $mapIcon = null): MapIcon
+    {
+        return $this->store($coordinatesService, $request, null, $dungeonRoute, $mapIcon);
     }
 
     /**

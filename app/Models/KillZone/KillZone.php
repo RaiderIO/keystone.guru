@@ -22,12 +22,12 @@ use Illuminate\Support\Facades\DB;
 /**
  * @property int                       $id
  * @property int                       $dungeon_route_id
- * @property int                       $floor_id
+ * @property int|null                  $floor_id
  * @property string                    $color
  * @property string                    $description
  * @property int                       $index
- * @property float                     $lat
- * @property float                     $lng
+ * @property float|null                $lat
+ * @property float|null                $lng
  * @property DungeonRoute              $dungeonRoute
  * @property Floor                     $floor
  * @property Collection<int>           $enemies
@@ -135,6 +135,11 @@ class KillZone extends Model
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
+    }
+
+    public function hasKillArea(): bool
+    {
+        return $this->floor_id !== null && $this->lat !== null && $this->lng !== null;
     }
 
     /**
