@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Traits;
 
 use App\Logic\Structs\LatLng;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Patreon\PatreonBenefit;
@@ -20,13 +21,18 @@ use Illuminate\Support\Facades\Auth;
 
 trait SavesPolylines
 {
+    use ChangesDungeonRoute;
+
     /**
      * @param array{color: string, color_animated: string, weight: int, vertices_json: string} $data
+     * @throws \Exception
      */
     private function savePolylineToModel(
         CoordinatesServiceInterface $coordinatesService,
+        ?DungeonRoute               $dungeonRoute,
         MappingVersion              $mappingVersion,
         Polyline                    $polyline,
+        ?Model                      $beforeModel,
         Model                       $ownerModel,
         array                       $data
     ): Polyline {
@@ -78,14 +84,16 @@ trait SavesPolylines
         ]);
         $ownerModel->setRelation('polyline', $polyline);
 
+        if ($dungeonRoute !== null) {
+            $this->dungeonRouteChanged($dungeonRoute, $beforeModel, $ownerModel);
+        }
+
         // If we received a request from facade, we need to convert the vertices back to facade coordinates
         if ($useFacade) {
             $ownerModel->setRelation('floor', $originalFloor);
             $ownerModel->setAttribute('floor_id', $originalFloor->id);
             $polyline->setAttribute('vertices_json', $originalVertices);
         }
-
-//        dd($changedFloor, $originalVertices, $ownerModel, $polyline);
 
         return $polyline;
     }

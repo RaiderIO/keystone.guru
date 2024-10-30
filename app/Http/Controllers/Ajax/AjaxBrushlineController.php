@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\Model\ModelChangedEvent;
 use App\Events\Model\ModelDeletedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Brushline\APIBrushlineFormRequest;
@@ -52,6 +53,8 @@ class AjaxBrushlineController extends Controller
         }
 
         DB::transaction(function () use ($coordinatesService, $brushline, $dungeonRoute, $validated, &$result) {
+            $beforeModel = $brushline === null ? null : clone $brushline;
+
             if ($brushline === null) {
                 $brushline = Brushline::create([
                     'dungeon_route_id' => $dungeonRoute->id,
@@ -71,8 +74,10 @@ class AjaxBrushlineController extends Controller
                     // Create a new polyline and save it
                     $this->savePolylineToModel(
                         $coordinatesService,
+                        $dungeonRoute,
                         $dungeonRoute->mappingVersion,
                         Polyline::findOrNew($brushline->polyline_id),
+                        $beforeModel,
                         $brushline,
                         $validated['polyline']
                     );
@@ -114,6 +119,8 @@ class AjaxBrushlineController extends Controller
                 if (Auth::check()) {
                     broadcast(new ModelDeletedEvent($dungeonRoute, Auth::getUser(), $brushline));
                 }
+
+                $this->dungeonRouteChanged($dungeonRoute, $brushline, null);
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonRoute->touch();

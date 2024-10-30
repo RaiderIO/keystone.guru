@@ -33,11 +33,18 @@ use Illuminate\Support\Carbon;
  */
 class Brushline extends Model
 {
-    public $visible = ['id', 'floor_id', 'polyline'];
+    protected $visible = ['id', 'floor_id', 'polyline'];
 
-    public $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id', 'created_at', 'updated_at'];
+    protected $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id', 'created_at', 'updated_at'];
 
-    public $with = ['polyline'];
+    protected $casts = [
+        'id'               => 'int',
+        'dungeon_route_id' => 'int',
+        'floor_id'         => 'int',
+        'polyline_id'      => 'int',
+    ];
+
+    protected $with = ['polyline'];
 
     /**
      * Get the dungeon route that this brushline is attached to.
