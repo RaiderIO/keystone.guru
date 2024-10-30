@@ -35,6 +35,6 @@ return [
     ],
     '503' => [
         'title'   => 'Service Unavailable',
-        'message' => 'Upgrading Keystone.guru. We\'ll be back in a few minutes!',
+        'message' => 'Keystone.guru is down for maintenance. We\'ll be back soon!',
     ],
 ];

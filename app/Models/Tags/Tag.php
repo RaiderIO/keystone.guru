@@ -35,6 +35,8 @@ class Tag extends Model
 
     protected $visible = ['id', 'name', 'color'];
 
+    protected $with = ['tagCategory'];
+
     public function tagCategory(): BelongsTo
     {
         return $this->belongsTo(TagCategory::class);

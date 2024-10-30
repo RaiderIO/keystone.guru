@@ -1,3 +1,6 @@
+<?php
+    use App\Models\Tags\TagCategory;
+?>
 @extends('layouts.sitepage', ['title' => __('view_profile.tags.title')])
 
 @section('header-title')
@@ -18,5 +21,5 @@
          !!}
     </p>
 
-    @include('common.tag.manager', ['category' => \App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL])
+    @include('common.tag.manager', ['category' => TagCategory::DUNGEON_ROUTE_PERSONAL])
 @endsection
