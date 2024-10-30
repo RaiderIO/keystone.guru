@@ -28,13 +28,15 @@ trait CastInputData
         $casts = $model->getCasts();
         $data  = $request->all();
 
-        if ($subModel !== null) {
-            $data = $data[$subModel];
-        }
+        if ($subModel === null || isset($data[$subModel])) {
+            if ($subModel !== null) {
+                $data = $data[$subModel];
+            }
 
-        foreach ($casts as $field => $type) {
-            if (isset($data[$field])) {
-                $data[$field] = $this->castValue($data[$field], $type);
+            foreach ($casts as $field => $type) {
+                if (isset($data[$field])) {
+                    $data[$field] = $this->castValue($data[$field], $type);
+                }
             }
         }
 
