@@ -5,6 +5,7 @@ namespace App\Http\Requests\Brushline;
 use App\Http\Requests\Traits\CastInputData;
 use App\Models\Brushline;
 use App\Models\Floor\Floor;
+use App\Models\Polyline;
 use App\Rules\JsonStringCountRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -24,6 +25,7 @@ class APIBrushlineFormRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->castInputData($this, Brushline::class);
+        $this->castInputData($this, Polyline::class, 'polyline');
     }
 
     /**

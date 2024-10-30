@@ -9,14 +9,17 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int          $id
  * @property int          $dungeon_route_id
  * @property int          $floor_id
  * @property int          $polyline_id
- * @property string       $updated_at
- * @property string       $created_at
+ *
+ * @property Carbon       $updated_at
+ * @property Carbon       $created_at
+ *
  * @property DungeonRoute $dungeonRoute
  * @property Polyline     $polyline
  * @property Floor        $floor
@@ -27,11 +30,18 @@ class Path extends Model
 {
     use HasLinkedAwakenedObelisk;
 
-    public $visible = ['id', 'floor_id', 'linked_awakened_obelisk_id', 'polyline'];
+    protected $visible = ['id', 'floor_id', 'linked_awakened_obelisk_id', 'polyline'];
 
-    public $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id', 'created_at', 'updated_at'];
+    protected $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id', 'created_at', 'updated_at'];
 
-    public $with = ['polyline', 'linkedawakenedobelisks'];
+    protected $casts = [
+        'id'               => 'int',
+        'dungeon_route_id' => 'int',
+        'floor_id'         => 'int',
+        'polyline_id'      => 'int',
+    ];
+
+    protected $with = ['polyline', 'linkedawakenedobelisks'];
 
     protected $appends = ['linked_awakened_obelisk_id'];
 
@@ -58,7 +68,7 @@ class Path extends Model
         return $this->belongsTo(Floor::class);
     }
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 

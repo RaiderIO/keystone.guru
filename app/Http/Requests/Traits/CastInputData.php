@@ -16,7 +16,7 @@ trait CastInputData
      * @param string  $model
      * @return array
      */
-    protected function castInputData(Request $request, string $model): array
+    protected function castInputData(Request $request, string $model, string $subModel = null): array
     {
         // Ensure the class exists and is an instance of Model
         if (!class_exists($model) || !is_a($model, Model::class, true)) {
@@ -27,6 +27,10 @@ trait CastInputData
 
         $casts = $model->getCasts();
         $data  = $request->all();
+
+        if ($subModel !== null) {
+            $data = $data[$subModel];
+        }
 
         foreach ($casts as $field => $type) {
             if (isset($data[$field])) {

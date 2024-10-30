@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int|null       $mdt_id
  * @property string         $teeming
  * @property string         $faction
+ *
  * @property MappingVersion $mappingVersion
  * @property Floor          $floor
  * @property Polyline       $polyline
@@ -43,17 +44,18 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         'faction',
     ];
 
-    public $with = ['polyline'];
-
-    public $timestamps = false;
-
     protected $casts = [
+        'id'                 => 'integer',
         'mapping_version_id' => 'integer',
         'floor_id'           => 'integer',
         'polyline_id'        => 'integer',
         'mdt_npc_id'         => 'integer',
         'mdt_id'             => 'integer',
     ];
+
+    public $with = ['polyline'];
+
+    public $timestamps = false;
 
     public function mappingVersion(): BelongsTo
     {

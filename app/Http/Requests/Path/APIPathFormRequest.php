@@ -2,19 +2,30 @@
 
 namespace App\Http\Requests\Path;
 
+use App\Http\Requests\Traits\CastInputData;
 use App\Models\Floor\Floor;
+use App\Models\Path;
+use App\Models\Polyline;
 use App\Rules\JsonStringCountRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class APIPathFormRequest extends FormRequest
 {
+    use CastInputData;
+
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
         return true;
+    }
+
+    public function prepareForValidation(): void
+    {
+        $this->castInputData($this, Path::class);
+        $this->castInputData($this, Polyline::class, 'polyline');
     }
 
     /**

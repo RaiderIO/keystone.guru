@@ -52,6 +52,8 @@ class AjaxPathController extends Controller
         }
 
         DB::transaction(function () use ($coordinatesService, $path, $dungeonRoute, $validated, &$result) {
+            $beforeModel = $path === null ? null : clone $path;
+
             if ($path === null) {
                 $path    = Path::create([
                     'dungeon_route_id' => $dungeonRoute->id,
@@ -71,8 +73,10 @@ class AjaxPathController extends Controller
                     // Create a new polyline and save it
                     $this->savePolylineToModel(
                         $coordinatesService,
+                        $dungeonRoute,
                         $dungeonRoute->mappingVersion,
                         Polyline::findOrNew($path->polyline_id),
+                        $beforeModel,
                         $path,
                         $validated['polyline']
                     );
@@ -121,6 +125,8 @@ class AjaxPathController extends Controller
                     $user = Auth::getUser();
                     broadcast(new ModelDeletedEvent($dungeonRoute, $user, $path));
                 }
+
+                $this->dungeonRouteChanged($dungeonRoute, $path, null);
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonRoute->touch();

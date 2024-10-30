@@ -36,6 +36,8 @@ trait SavesPolylines
         Model                       $ownerModel,
         array                       $data
     ): Polyline {
+        $beforePolyline = clone $polyline;
+
         // The incoming lat/lngs are facade lat/lngs, save the icon on the proper floor
         $useFacade        = $mappingVersion->facade_enabled && User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
         $originalVertices = $data['vertices_json'];
@@ -76,6 +78,11 @@ trait SavesPolylines
             'weight'         => (int)($data['weight'] ?? 2),
             'vertices_json'  => $data['vertices_json'] ?? '{}',
         ]);
+
+        if ($dungeonRoute !== null) {
+            $this->dungeonRouteChanged($dungeonRoute, $beforePolyline->exists ? $beforePolyline : null, $polyline);
+        }
+
 
         // Couple the model to the newly created/updated polyline
         $ownerModel->update([
