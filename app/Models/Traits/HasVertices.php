@@ -4,6 +4,9 @@ namespace App\Models\Traits;
 
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
+use App\Models\Mapping\MappingVersion;
+use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
 
 /**
@@ -27,5 +30,40 @@ trait HasVertices
         }
 
         return $result;
+    }
+
+    protected function getCoordinatesData(
+        CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
+        Floor                       $floor
+    ): array {
+        $latLngs = $this->getDecodedLatLngs();
+
+        $splitFloorsLatLngs = collect();
+        $facadeLatLngs      = collect();
+
+        if ($floor->facade) {
+            foreach ($latLngs as $latLng) {
+                $facadeLatLngs->push($latLng);
+                $splitFloorsLatLngs->push(
+                    $coordinatesService->convertFacadeMapLocationToMapLocation($mappingVersion, $latLng)
+                );
+            }
+
+        } else {
+            foreach ($latLngs as $latLng) {
+                $splitFloorsLatLngs->push($latLng);
+                $facadeLatLngs->push(
+                    $coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $latLng)
+                );
+            }
+        }
+
+        return [
+            'coordinates' => [
+                User::MAP_FACADE_STYLE_SPLIT_FLOORS => $splitFloorsLatLngs->toArray(),
+                User::MAP_FACADE_STYLE_FACADE       => $facadeLatLngs->toArray(),
+            ],
+        ];
     }
 }

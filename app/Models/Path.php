@@ -4,8 +4,11 @@ namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\EventModelInterface;
 use App\Models\Traits\HasLinkedAwakenedObelisk;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -26,7 +29,7 @@ use Illuminate\Support\Carbon;
  *
  * @mixin Eloquent
  */
-class Path extends Model
+class Path extends Model implements EventModelInterface
 {
     use HasLinkedAwakenedObelisk;
 
@@ -66,6 +69,19 @@ class Path extends Model
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function getEventData(): array
+    {
+        /** @var CoordinatesServiceInterface $coordinatesService */
+        $coordinatesService = app()->make(CoordinatesServiceInterface::class);
+
+        return array_merge([
+
+        ], $this->polyline->getCoordinatesData($coordinatesService, $this->dungeonRoute->mappingVersion, $this->floor));
     }
 
     protected static function boot(): void
