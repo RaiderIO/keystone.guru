@@ -62,8 +62,10 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 
         $isUserAdmin = $user?->hasRole(Role::ROLE_ADMIN);
         // Must be an admin to use this endpoint like this!
-        if ($mappingVersion !== null && !$isUserAdmin) {
-            throw new Exception('Unable to save map icon!');
+        if ($dungeonRoute === null) {
+            if (!$isUserAdmin) {
+                throw new Exception('Unable to save map icon!');
+            }
         } // We're editing a map comment for the user, carry on
         else {
             $this->authorize('edit', $dungeonRoute);
@@ -74,70 +76,72 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 
         return $this->storeModel($mappingVersion, $validated, MapIcon::class, $mapIcon,
             function (MapIcon $mapIcon) use ($coordinatesService, $validated, $user, $dungeonRoute, &$beforeModel) {
-            // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
-            $updateAttributes = [];
-            $teamId           = $validated['team_id'];
-            if ($teamId !== null) {
-                $team = Team::find($teamId);
-                if ($team !== null && $user !== null && $team->isUserCollaborator($user)) {
-                    $updateAttributes = [
-                        'team_id'          => $teamId,
-                        'dungeon_route_id' => null,
-                    ];
+                // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
+                $updateAttributes = [];
+                $teamId           = $validated['team_id'];
+                if ($teamId !== null) {
+                    $team = Team::find($teamId);
+                    if ($team !== null && $user !== null && $team->isUserCollaborator($user)) {
+                        $updateAttributes = [
+                            'team_id'          => $teamId,
+                            'dungeon_route_id' => null,
+                        ];
+                    }
                 }
-            }
 
-            // Prevent people being able to update icons that only the admin should if they're supplying a valid dungeon route
-            if ($mapIcon->exists && $mapIcon->dungeon_route_id === null && $dungeonRoute !== null && $mapIcon->team_id === null) {
-                throw new Exception('Unable to save map icon!');
-            }
+                // Prevent people being able to update icons that only the admin should if they're supplying a valid dungeon route
+                if ($mapIcon->exists && $mapIcon->dungeon_route_id === null && $dungeonRoute !== null && $mapIcon->team_id === null) {
+                    throw new Exception('Unable to save map icon!');
+                }
 
-            // The incoming lat/lngs are facade lat/lngs, save the icon on the proper floor
-            // If we're editing from an admin PoV facade is NEVER enabled, so ignore this then!
-            $useFacade = $dungeonRoute?->mappingVersion->facade_enabled &&
-                User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+                // The incoming lat/lngs are facade lat/lngs, save the icon on the proper floor
+                // If we're editing from an admin PoV facade is NEVER enabled, so ignore this then!
+                $useFacade = $dungeonRoute?->mappingVersion->facade_enabled &&
+                    User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
 
-            // Track this latlng so we can re-echo it back to the user if we still want to use facades
-            $originalLatLng = $mapIcon->getLatLng();
-            if ($useFacade) {
-                $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
-                    $dungeonRoute->mappingVersion,
-                    $originalLatLng
-                );
+                // Track this latlng so we can re-echo it back to the user if we still want to use facades
+                $originalLatLng = $mapIcon->getLatLng();
+                if ($useFacade) {
+                    $latLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
+                        $dungeonRoute->mappingVersion,
+                        $originalLatLng
+                    );
 
-                $updateAttributes = array_merge($updateAttributes, [
-                    'lat'      => $latLng->getLat(),
-                    'lng'      => $latLng->getLng(),
-                    'floor_id' => $latLng->getFloor()->id,
-                ]);
+                    $updateAttributes = array_merge($updateAttributes, [
+                        'lat'      => $latLng->getLat(),
+                        'lng'      => $latLng->getLng(),
+                        'floor_id' => $latLng->getFloor()->id,
+                    ]);
 
-                $mapIcon->setRelation('floor', $latLng->getFloor());
-                // Ensure the dungeon is loaded (required for the base class)
-                $mapIcon->load(['floor.dungeon']);
-            }
+                    $mapIcon->setRelation('floor', $latLng->getFloor());
+                    // Ensure the dungeon is loaded (required for the base class)
+                    $mapIcon->load(['floor.dungeon']);
+                }
 
-            // Set the mapping version if it was placed in the context of a dungeon, or reset it to null if not in context
-            // of a dungeon
-            $mapIcon->update(array_merge($updateAttributes, [
-                'mapping_version_id' => $dungeonRoute === null ? $validated['mapping_version_id'] : null,
-            ]));
+                // Set the mapping version if it was placed in the context of a dungeon, or reset it to null if not in context
+                // of a dungeon
+                $mapIcon->update(array_merge($updateAttributes, [
+                    'mapping_version_id' => $dungeonRoute === null ? $validated['mapping_version_id'] : null,
+                ]));
 
-            // Set or unset the linked awakened obelisks now that we have an ID
-            $mapIcon->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id']);
+                // Set or unset the linked awakened obelisks now that we have an ID
+                $mapIcon->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id']);
 
-            // Only when icons that are not sticky to the map are saved
-            $dungeonRoute?->touch();
+                // Only when icons that are not sticky to the map are saved
+                $dungeonRoute?->touch();
 
-            $this->dungeonRouteChanged($dungeonRoute, $beforeModel, $mapIcon);
+                if ($dungeonRoute !== null) {
+                    $this->dungeonRouteChanged($dungeonRoute, $beforeModel, $mapIcon);
+                }
 
-            // If we were using a facade before, echo facade locations back so the UI can make sense of that!
-            if ($useFacade) {
-                $mapIcon->setAttribute('lat', $originalLatLng->getLat());
-                $mapIcon->setAttribute('lng', $originalLatLng->getLng());
-                $mapIcon->setAttribute('floor_id', $originalLatLng->getFloor()->id);
-                $mapIcon->setRelation('floor', $originalLatLng->getFloor());
-            }
-        },
+                // If we were using a facade before, echo facade locations back so the UI can make sense of that!
+                if ($useFacade) {
+                    $mapIcon->setAttribute('lat', $originalLatLng->getLat());
+                    $mapIcon->setAttribute('lng', $originalLatLng->getLng());
+                    $mapIcon->setAttribute('floor_id', $originalLatLng->getFloor()->id);
+                    $mapIcon->setRelation('floor', $originalLatLng->getFloor());
+                }
+            },
             // Can be null, it will then default to the dungeon internally
             $dungeonRoute);
     }

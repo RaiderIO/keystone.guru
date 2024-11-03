@@ -20,24 +20,25 @@ class Echo extends Signalable {
         this._status = ECHO_STATUS_DISCONNECTED;
 
         this._handlers = [
+            // Live Session
+            new InviteHandler(this),
+            new StopHandler(this),
+
             // KillZone
             new KillZoneChangedHandler(this),
             new KillZoneDeletedHandler(this),
             // MapIcon
             new MapIconChangedHandler(this),
             new MapIconDeletedHandler(this),
-
             // NPC
             new NpcChangedHandler(this),
             new NpcDeletedHandler(this),
-
-            // Live Session
-            new InviteHandler(this),
-            new StopHandler(this),
-
             // Overpulled enemies
             new OverpulledEnemyChangedHandler(this),
             new OverpulledEnemyDeletedHandler(this),
+
+            // Color changed
+            // new ColorChangedHandler(this),
 
             // Whisper handlers
             new MousePositionHandler(this),

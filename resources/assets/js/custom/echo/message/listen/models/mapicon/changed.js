@@ -8,7 +8,7 @@
  * @property {Object} model
  * @property {MapIconChangedData} model_data
  */
-class MapIconChangedMessage extends Message {
+class MapIconChangedMessage extends ModelMessage {
     static getName() {
         return 'mapicon-changed';
     }

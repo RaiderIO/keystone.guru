@@ -16,8 +16,13 @@ class MapIconChangedHandler extends ModelChangedHandler {
         if (shouldHandle) {
             let mapIconMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_MAPICON);
 
+            // Apply the correct coordinates for our choice of facade
+            let coordinates = this._getCorrectLatLngFromEvent(e);
+
+            e.model = $.extend({}, e.model, coordinates);
+
             let mapObject = mapIconMapObjectGroup.loadMapObject(e.model, null, e.user);
-            mapIconMapObjectGroup.setMapObjectVisibility(mapObject, true);
+            mapIconMapObjectGroup.setMapObjectVisibility(mapObject, mapObject.shouldBeVisible());
         }
 
         return shouldHandle;

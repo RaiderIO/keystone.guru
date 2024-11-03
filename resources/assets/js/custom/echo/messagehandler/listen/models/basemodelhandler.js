@@ -33,6 +33,6 @@ class BaseModelHandler extends MessageHandler {
     onReceive(e) {
         super.onReceive(e);
 
-        return this._shouldHandleChangedEchoEvent(e);
+        return this._shouldHandleEchoEvent(e);
     }
 }

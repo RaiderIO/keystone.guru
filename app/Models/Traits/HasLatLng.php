@@ -54,8 +54,8 @@ trait HasLatLng
 
         return [
             'coordinates' => [
-                User::MAP_FACADE_STYLE_SPLIT_FLOORS => $splitFloorsLatLng->toArray(),
-                User::MAP_FACADE_STYLE_FACADE       => $facadeLatLng->toArray(),
+                User::MAP_FACADE_STYLE_SPLIT_FLOORS => $splitFloorsLatLng->toArrayWithFloor(),
+                User::MAP_FACADE_STYLE_FACADE       => $facadeLatLng->toArrayWithFloor(),
             ],
         ];
     }
