@@ -41,7 +41,9 @@ class MessageHandler extends Signalable {
     onReceive(e) {
         console.assert(this instanceof MessageHandler, 'this is not a MessageHandler', this);
 
-        console.log(`MessageHandler::onReceive:`, e);
+        if(!(['mouse-position', 'viewport'].includes(e.__name))) {
+            console.log(`MessageHandler::onReceive:`, e);
+        }
 
         // Try to re-map the received message to an object that we know of
         let message = new MessageFactory().create(e.__name, e);

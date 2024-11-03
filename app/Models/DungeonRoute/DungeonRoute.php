@@ -723,7 +723,11 @@ class DungeonRoute extends Model
         } else {
             return $this->isOwnedByUser($user) || $this->isSandbox() || $user->hasRole(Role::ROLE_ADMIN) ||
                 // Route is part of a team, user is a collaborator, and route is not unpublished
-                ($this->team !== null && $this->team->isUserCollaborator($user) && $this->published_state_id !== PublishedState::ALL[PublishedState::UNPUBLISHED]);
+                (
+                    $this->team !== null &&
+                    $this->team->isUserCollaborator($user) &&
+                    $this->published_state_id !== PublishedState::ALL[PublishedState::UNPUBLISHED]
+                );
         }
     }
 
@@ -733,9 +737,10 @@ class DungeonRoute extends Model
     public function claim(int $userId): bool
     {
         if ($result = $this->isSandbox()) {
-            $this->author_id  = $userId;
-            $this->expires_at = null;
-            $this->save();
+            $this->update([
+                'author_id'  => $userId,
+                'expires_at' => null,
+            ]);
         }
 
         return $result;
@@ -1250,9 +1255,10 @@ class DungeonRoute extends Model
     }
 
     /**
-     * @param null $user
+     * @param User|null $user
+     * @return bool
      */
-    public function isOwnedByUser($user = null): bool
+    public function isOwnedByUser(?User $user = null): bool
     {
         // Can't have a function as a default value
         if ($user === null) {

@@ -74,7 +74,7 @@ class Team extends Model
     /**
      * Checks if a user can add/remove a route to this team or not.
      *
-     * @param  $user  User
+     * @param User $user
      */
     public function canAddRemoveRoute(User $user): bool
     {

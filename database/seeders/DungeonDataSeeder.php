@@ -439,7 +439,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             }
         }
         // Delete all map icons that are always there
-        DB::table('map_icons')->whereNull('dungeon_route_id')->whereNull('team_id')->delete();
+        DB::table('map_icons')->whereNotNull('mapping_version_id')->delete();
         // Delete polylines related to enemy patrols
         DB::table('polylines')->where('model_class', EnemyPatrol::class)->delete();
     }

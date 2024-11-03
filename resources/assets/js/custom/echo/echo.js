@@ -23,6 +23,9 @@ class Echo extends Signalable {
             // KillZone
             new KillZoneChangedHandler(this),
             new KillZoneDeletedHandler(this),
+            // MapIcon
+            new MapIconChangedHandler(this),
+            new MapIconDeletedHandler(this),
 
             // NPC
             new NpcChangedHandler(this),
