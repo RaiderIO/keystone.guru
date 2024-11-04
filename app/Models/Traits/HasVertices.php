@@ -37,7 +37,7 @@ trait HasVertices
         MappingVersion              $mappingVersion,
         Floor                       $floor
     ): array {
-        $latLngs = $this->getDecodedLatLngs();
+        $latLngs = $this->getDecodedLatLngs($floor);
 
         $splitFloorsLatLngs = collect();
         $facadeLatLngs      = collect();
