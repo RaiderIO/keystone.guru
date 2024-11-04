@@ -32,7 +32,7 @@ trait HasVertices
         return $result;
     }
 
-    protected function getCoordinatesData(
+    public function getCoordinatesData(
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
         Floor                       $floor
