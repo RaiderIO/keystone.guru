@@ -52,6 +52,8 @@ class AjaxPathController extends Controller
         }
 
         DB::transaction(function () use ($coordinatesService, $path, $dungeonRoute, $validated, &$result) {
+            $beforeModel = $path === null ? null : clone $path;
+
             if ($path === null) {
                 $path    = Path::create([
                     'dungeon_route_id' => $dungeonRoute->id,
@@ -69,24 +71,15 @@ class AjaxPathController extends Controller
             try {
                 if ($success) {
                     // Create a new polyline and save it
-                    $changedFloor = null;
-                    $polyline     = $this->savePolyline(
+                    $this->savePolylineToModel(
                         $coordinatesService,
+                        $dungeonRoute,
                         $dungeonRoute->mappingVersion,
                         Polyline::findOrNew($path->polyline_id),
+                        $beforeModel,
                         $path,
-                        $validated['polyline'],
-                        $changedFloor
+                        $validated['polyline']
                     );
-
-                    // Couple the path to the polyline
-                    $path->update([
-                        'polyline_id' => $polyline->id,
-                        'floor_id'    => $changedFloor?->id ?? $path->floor_id,
-                    ]);
-
-                    // Load the polyline so it can be echoed back to the user
-                    $path->load(['polyline']);
 
                     // Set or unset the linked awakened obelisks now that we have an ID
                     $path->setLinkedAwakenedObeliskByMapIconId($validated['linked_awakened_obelisk_id'] ?? null);
@@ -132,6 +125,8 @@ class AjaxPathController extends Controller
                     $user = Auth::getUser();
                     broadcast(new ModelDeletedEvent($dungeonRoute, $user, $path));
                 }
+
+                $this->dungeonRouteChanged($dungeonRoute, $path, null);
 
                 // Touch the route so that the thumbnail gets updated
                 $dungeonRoute->touch();

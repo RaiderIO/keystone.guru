@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\EventModelInterface;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
@@ -20,13 +21,14 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int|null       $mdt_id
  * @property string         $teeming
  * @property string         $faction
+ *
  * @property MappingVersion $mappingVersion
  * @property Floor          $floor
  * @property Polyline       $polyline
  *
  * @mixin Eloquent
  */
-class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
+class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface, EventModelInterface
 {
     use SeederModel;
 
@@ -43,17 +45,18 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         'faction',
     ];
 
-    public $with = ['polyline'];
-
-    public $timestamps = false;
-
     protected $casts = [
+        'id'                 => 'integer',
         'mapping_version_id' => 'integer',
         'floor_id'           => 'integer',
         'polyline_id'        => 'integer',
         'mdt_npc_id'         => 'integer',
         'mdt_id'             => 'integer',
     ];
+
+    public $with = ['polyline'];
+
+    public $timestamps = false;
 
     public function mappingVersion(): BelongsTo
     {
@@ -89,6 +92,11 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         $clonedEnemyPatrol->update(['polyline_id' => $clonedPolyLine->id]);
 
         return $clonedEnemyPatrol;
+    }
+
+    public function getEventData(): array
+    {
+        return [];
     }
 
     protected static function boot(): void

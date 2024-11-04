@@ -15,9 +15,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         return getState().getMapContext().getKillZones();
     }
 
-    _loadMapObject(remoteMapObject, layer = null, user = null) {
+    loadMapObject(remoteMapObject, layer = null, user = null) {
         /** @type {KillZone} */
-        let mapObject = super._loadMapObject(remoteMapObject, layer, user);
+        let mapObject = super.loadMapObject(remoteMapObject, layer, user);
 
         // If this was received from Echo..
         if (user !== null && remoteMapObject.lat !== null && remoteMapObject.lng !== null) {
@@ -227,7 +227,7 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         }
 
         let lastKillZone = this._findLastKillZone();
-        let killZone = this._loadMapObject({
+        let killZone = this.loadMapObject({
             color: c.map.killzone.polygonOptions.color(lastKillZone !== null ? lastKillZone.color : null),
             floor_id: null, // Only for the killzone location which is not set from a 'new pull'
             enemies: enemyIds,

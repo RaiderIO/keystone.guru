@@ -1,6 +1,6 @@
 <ul id="edit_route_echo_members_container" class="list-group list-group-horizontal">
     {{#if cursorsEnabled}}
-        <li class="list-group-item p-0 m-0 border-0">
+        <li class="list-group-item p-0 m-0 mr-1 border-0 cursor">
             {{#if cursorsActive}}
                 <button id="echo_toggle_cursors"
                         type="button" class="btn btn-dark btn-sm p-1 w-100 h-100 active"
@@ -18,7 +18,6 @@
             {{/if}}
         </li>
     {{/if}}
-    <li class="list-group-item separator p-2 border-0"></li>
     {{#each users}}
         <li class="list-group-item p-0 m-0 echo_user echo_user_{{public_key}}">
             <div class="dropdown">
@@ -57,9 +56,9 @@
         </li>
     {{/each}}
     {{#if hasUsersOverflow}}
-        <li class="list-group-item p-0 m-0 ml-1">
+        <li class="list-group-item p-0 m-0 ml-1 border-0 echo_user_overflow">
             <div class="dropdown">
-                <button class="btn btn-secondary" type="button" id="edit_route_echo_members_overflow_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn btn-sm btn-secondary" type="button" id="edit_route_echo_members_overflow_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-ellipsis-v"></i>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="edit_route_echo_members_overflow_dropdown">

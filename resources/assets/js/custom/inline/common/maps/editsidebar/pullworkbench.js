@@ -117,10 +117,13 @@ class PullWorkBench extends Signalable {
         );
         $(`#map_killzonessidebar_killzone_description_modal_textarea`).val(
             this.killZone.description ?? ''
-        );
+        ).on('keydown', this._descriptionKeyDown);
+
         $(`#map_killzonessidebar_killzone_spells_modal_select`).val(
             this.killZone.spellIds
         );
+
+        this._descriptionKeyDown();
         refreshSelectPickers();
         $(`#map_killzonessidebar_killzone_description_modal_save`).unbind('click').bind('click', function () {
             self.killZone.description = $(`#map_killzonessidebar_killzone_description_modal_textarea`).val();
@@ -130,6 +133,21 @@ class PullWorkBench extends Signalable {
             self.killZone.setSpells($(`#map_killzonessidebar_killzone_spells_modal_select`).val());
             self.killZone.save();
         });
+    }
+
+    _descriptionKeyDown() {
+        // Show or hide the warning
+        let description = $(`#map_killzonessidebar_killzone_description_modal_textarea`).val();
+
+        $(`#map_killzonessidebar_killzone_description_modal_remaining_characters`).toggle(
+            description.length > c.map.editsidebar.pullsWorkbench.description.maxLength *
+            c.map.editsidebar.pullsWorkbench.description.warningThreshold
+        ).text(
+            lang.get('messages.pull_workbench_pull_description_length', {
+                current: description.length,
+                max: c.map.editsidebar.pullsWorkbench.description.maxLength
+            })
+        );
     }
 
     /**

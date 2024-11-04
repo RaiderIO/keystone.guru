@@ -35,34 +35,30 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
     ): EnemyPatrol {
         $validated = $request->validated();
 
+        $beforeModel = $enemyPatrol !== null ? clone $enemyPatrol : null;
+
         return $this->storeModel(
             $mappingVersion,
             $validated,
             EnemyPatrol::class,
             $enemyPatrol,
-            function (EnemyPatrol $enemyPatrol) use ($coordinatesService, $validated) {
-                $changedFloor = null;
+            function (EnemyPatrol $enemyPatrol) use ($coordinatesService, $validated, $beforeModel) {
+                // A bit of a hack but disable the facade status of the mapping version - when editing an enemy patrol
+                // we use the admin panel, which NEVER uses the facade view since we're editing.
+                $enemyPatrol->mappingVersion->facade_enabled = false;
 
                 // Create a new polyline and save it
-                $polyline = $this->savePolyline(
+                $this->savePolylineToModel(
                     $coordinatesService,
+                    null, // Disable saving changes - we don't need that
                     $enemyPatrol->mappingVersion,
                     Polyline::findOrNew($enemyPatrol->polyline_id),
+                    $beforeModel,
                     $enemyPatrol,
-                    $validated['polyline'],
-                    $changedFloor
+                    $validated['polyline']
                 );
 
-                // Couple the patrol to the polyline
-                $saveResult = $enemyPatrol->update([
-                    'polyline_id' => $polyline->id,
-                    'floor_id'    => $changedFloor?->id ?? $enemyPatrol->floor_id,
-                ]);
-
-                // Load the polyline, so it can be echoed back to the user
-                $enemyPatrol->load(['polyline']);
-
-                return $saveResult;
+                return true;
             }
         );
     }

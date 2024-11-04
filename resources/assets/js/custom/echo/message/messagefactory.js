@@ -16,6 +16,13 @@ class MessageFactory {
             case KillZoneDeletedMessage.getName():
                 result = new KillZoneDeletedMessage(props);
                 break;
+            // MapIcon
+            case MapIconChangedMessage.getName():
+                result = new MapIconChangedMessage(props);
+                break;
+            case MapIconDeletedMessage.getName():
+                result = new MapIconDeletedMessage(props);
+                break;
 
             // LiveSession
             case LiveSessionInviteMessage.getName():

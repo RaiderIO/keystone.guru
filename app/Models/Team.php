@@ -74,7 +74,7 @@ class Team extends Model
     /**
      * Checks if a user can add/remove a route to this team or not.
      *
-     * @param  $user  User
+     * @param User $user
      */
     public function canAddRemoveRoute(User $user): bool
     {
@@ -128,7 +128,8 @@ class Team extends Model
     /**
      * Get the role of a user in this team, or false if the user does not exist in this team.
      *
-     * @param  $user  User
+     * @param User $user
+     * @return string|null
      */
     public function getUserRole(User $user): ?string
     {
@@ -141,8 +142,8 @@ class Team extends Model
     /**
      * Get the roles that a user may assign to other users in this team.
      *
-     * @param  $user  User The user attempting to change roles.
-     * @param  $targetUser  User The user that is targeted for a role change.
+     * @param User $user The user attempting to change roles.
+     * @param User $targetUser The user that is targeted for a role change.
      */
     public function getAssignableRoles(User $user, User $targetUser): array
     {
@@ -180,9 +181,10 @@ class Team extends Model
      *
      * @TODO Should this go to a Policy?
      *
-     * @param  $user  User
-     * @param  $targetUser  User
-     * @param  $role  string
+     * @param User   $user
+     * @param User   $targetUser
+     * @param string $role
+     * @return bool
      */
     public function canChangeRole(User $user, User $targetUser, string $role): bool
     {
@@ -211,8 +213,8 @@ class Team extends Model
     /**
      * Changes the role of a user in this team.
      *
-     * @param  $user  User The user of which the role should be changed.
-     * @param  $role  string The new role of the user.
+     * @param User   $user The user of which the role should be changed.
+     * @param string $role The new role of the user.
      */
     public function changeRole(User $user, string $role): void
     {
@@ -238,7 +240,7 @@ class Team extends Model
     /**
      * Gets if a user is an admin and may perform admin actions.
      *
-     * @param  $user  User
+     * @param User $user
      */
     public function isUserAdmin(User $user): bool
     {
@@ -250,7 +252,7 @@ class Team extends Model
     /**
      * Checks if the user is a collaborator or higher.
      *
-     * @param  $user  User
+     * @param User $user
      * @return bool True if the user is, false if not.
      */
     public function isUserCollaborator(User $user): bool
@@ -261,7 +263,7 @@ class Team extends Model
     /**
      * Gets if a user is a moderator and may perform moderation actions.
      *
-     * @param  $user  User
+     * @param User $user
      */
     public function isUserModerator(User $user): bool
     {
@@ -273,7 +275,7 @@ class Team extends Model
     /**
      * Checks if a user is a member of this team or not.
      *
-     * @param  $user  User|null
+     * @param User|null $user
      */
     public function isUserMember(?User $user): bool
     {
@@ -340,8 +342,8 @@ class Team extends Model
     /**
      * Adds a member to this team.
      *
-     * @param  $user  User
-     * @param  $role  string
+     * @param User   $user
+     * @param string $role
      */
     public function addMember(User $user, string $role): void
     {
@@ -387,22 +389,19 @@ class Team extends Model
             ->get();
     }
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
         // Delete team properly if it gets deleted
         static::deleting(static function (Team $team) {
             // Delete icons
-            if ($team->iconfile !== null) {
-                $team->iconfile->delete();
-            }
+            $team->iconfile?->delete();
             // Remove any ad-free giveaways if the giver was part of this team
-            foreach ($team->members as $teamMember) {
-                if ($teamMember->patreonAdFreeGiveaway === null) {
-                    continue;
-                }
-
+            foreach ($team->members->filter(function (TeamUser $teamUser) {
+                return $teamUser->user->patreonAdFreeGiveaway !== null;
+            }) as $teamMember) {
+                /** @var User $teamMember */
                 // If the giver of the patreon ad-free giveaway was part of this team
                 if ($team->members->pluck('id')->search($teamMember->patreonAdFreeGiveaway->giver_user_id)) {
                     // The team connection no longer exists, and this user LOSES their ad-free giveaway connection
@@ -411,7 +410,8 @@ class Team extends Model
             }
             // Delete all tags team tags belonging to our routes
             Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
-                ->whereIn('model_id', $team->dungeonroutes->pluck('id')->toArray())->delete();
+                ->whereIn('model_id', $team->dungeonroutes->pluck('id')->toArray())
+                ->delete();
             // Remove all users associated with this team
             TeamUser::where('team_id', $team->id)->delete();
             // Unassign all routes from this team

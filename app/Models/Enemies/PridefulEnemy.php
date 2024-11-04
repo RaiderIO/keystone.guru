@@ -5,9 +5,12 @@ namespace App\Models\Enemies;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\EventModelInterface;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\Reportable;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -18,13 +21,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int          $floor_id
  * @property float        $lat
  * @property float        $lng
- * @property DungeonRoute $dungeonroute
+ *
+ * @property DungeonRoute $dungeonRoute
  * @property Enemy        $enemy
  * @property Floor        $floor
  *
  * @mixin Eloquent
  */
-class PridefulEnemy extends Model
+class PridefulEnemy extends Model implements EventModelInterface
 {
     use HasLatLng;
     use Reportable;
@@ -33,7 +37,7 @@ class PridefulEnemy extends Model
 
     protected $visible = ['enemy_id', 'floor_id', 'lat', 'lng'];
 
-    public function dungeonroute(): BelongsTo
+    public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
@@ -46,5 +50,18 @@ class PridefulEnemy extends Model
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function getEventData(): array
+    {
+        /** @var CoordinatesServiceInterface $coordinatesService */
+        $coordinatesService = app()->make(CoordinatesServiceInterface::class);
+
+        return array_merge([
+
+        ], $this->getCoordinatesData($coordinatesService));
     }
 }

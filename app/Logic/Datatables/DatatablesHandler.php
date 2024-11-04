@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 
 abstract class DatatablesHandler
 {
+    const VALID_COLUMN_NAMES = ['title', 'public_key'];
+
     protected Builder $builder;
 
     /** @var DatatablesColumnHandler[] */
@@ -86,8 +88,8 @@ abstract class DatatablesHandler
             $columns = $this->request->get('columns', []);
             foreach ($columns as $column) {
                 $columnName = $column['name'];
-                // Only if the column name was set
-                if (!empty($columnName)) {
+                // Only if the column name was set - column name comes from the client, do not trust it!!
+                if (!empty($columnName) && in_array($columnName, self::VALID_COLUMN_NAMES)) {
                     // Only if not handled by a custom column handler
                     if (!isset($this->columnHandlers[$columnName])) {
                         // Handle filtering/sorting by this column

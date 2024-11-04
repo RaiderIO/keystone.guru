@@ -252,7 +252,6 @@ class Icon extends VersionableMapObject {
      */
     isEditable() {
         console.assert(this instanceof Icon, 'this is not an Icon', this);
-        // Admin may edit everything, but not useful when editing a dungeonroute
         return this.map_icon_type.isEditable();
     }
 

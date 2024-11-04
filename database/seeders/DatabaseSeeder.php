@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
         TagCategorySeeder::class,
         PublishedStatesSeeder::class,
         CharacteristicsSeeder::class,
+        TranslationsSeeder::class,
 
         // Depends on ExpansionsSeeder, SeasonsSeeder
         AffixSeeder::class,
@@ -66,6 +67,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(CacheServiceInterface $cacheService, array $seederClasses = null): void
     {
+        foreach ($seederClasses ?? [] as $seederClass) {
+            if (!class_exists($seederClass)) {
+                throw new Exception('Seeder class ' . $seederClass . ' does not exist!');
+            }
+        }
+
         self::$running = true;
 
         $cacheService->dropCaches();

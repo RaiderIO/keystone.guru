@@ -85,6 +85,8 @@ use Illuminate\Support\Collection;
             ) !!}
             <div id="map_killzonessidebar_killzone_description_modal_supported_html_tags" class="form-group">
             </div>
+            <div id="map_killzonessidebar_killzone_description_modal_remaining_characters" class="form-group text-warning" style="display: none;">
+            </div>
             {{ Form::textarea('map_killzonessidebar_killzone_description_modal_textarea', '', [
                 'class' => 'form-control',
                 'id' => 'map_killzonessidebar_killzone_description_modal_textarea',

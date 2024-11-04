@@ -7,9 +7,12 @@ use App\Models\Affix;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\EventModelInterface;
 use App\Models\Spell\Spell;
 use App\Models\Traits\HasLatLng;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -22,24 +25,26 @@ use Illuminate\Support\Facades\DB;
 /**
  * @property int                       $id
  * @property int                       $dungeon_route_id
- * @property int                       $floor_id
+ * @property int|null                  $floor_id
  * @property string                    $color
  * @property string                    $description
  * @property int                       $index
- * @property float                     $lat
- * @property float                     $lng
+ * @property float|null                $lat
+ * @property float|null                $lng
+ *
  * @property DungeonRoute              $dungeonRoute
  * @property Floor                     $floor
  * @property Collection<int>           $enemies
  * @property Collection<KillZoneEnemy> $killZoneEnemies
  * @property Collection<KillZoneSpell> $killZoneSpells
  * @property Collection<Spell>         $spells
+ *
  * @property Carbon                    $updated_at
  * @property Carbon                    $created_at
  *
  * @mixin Eloquent
  */
-class KillZone extends Model
+class KillZone extends Model implements EventModelInterface
 {
     use HasLatLng;
 
@@ -73,10 +78,11 @@ class KillZone extends Model
     ];
 
     protected $casts = [
-        'floor_id' => 'integer',
-        'index'    => 'integer',
-        'lat'      => 'float',
-        'lng'      => 'float',
+        'dungeon_route_id' => 'integer',
+        'floor_id'         => 'integer',
+        'index'            => 'integer',
+        'lat'              => 'float',
+        'lng'              => 'float',
     ];
 
     /** @var Collection<int>|null */
@@ -87,13 +93,17 @@ class KillZone extends Model
 
     private ?Floor $dominantFloorCache = null;
 
-    public function setEnemiesAttributeCache(Collection $enemyIds): void
+    public function setEnemiesAttributeCache(?Collection $enemyIds): void
     {
         $this->enemiesAttributeCache = $enemyIds;
     }
 
-    public function getEnemiesAttribute(): Collection
+    public function getEnemiesAttribute(?bool $resetCache = false): Collection
     {
+        if ($resetCache) {
+            $this->enemiesAttributeCache = null;
+        }
+
         return $this->enemiesAttributeCache ?? Enemy::select('enemies.id')
             ->join('kill_zone_enemies', static function (JoinClause $clause) {
                 $clause->on('kill_zone_enemies.npc_id', DB::raw('coalesce(enemies.mdt_npc_id, enemies.npc_id)'))
@@ -135,6 +145,11 @@ class KillZone extends Model
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
+    }
+
+    public function hasKillArea(): bool
+    {
+        return $this->floor_id !== null && $this->lat !== null && $this->lng !== null;
     }
 
     /**
@@ -342,6 +357,23 @@ class KillZone extends Model
             ", ['teeming' => (int)$teeming, 'kill_zone_id' => $this->id]);
 
         return collect($queryResult);
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function getEventData(): array
+    {
+        if($this->floor_id === null ) {
+            return [];
+        }
+
+        /** @var CoordinatesServiceInterface $coordinatesService */
+        $coordinatesService = app()->make(CoordinatesServiceInterface::class);
+
+        return array_merge([
+
+        ], $this->getCoordinatesData($coordinatesService));
     }
 
     protected static function boot()

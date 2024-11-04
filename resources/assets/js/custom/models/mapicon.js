@@ -23,7 +23,12 @@ class MapIcon extends Icon {
         super(
             map,
             layer,
-            $.extend({}, {name: 'map_icon', route_suffix: 'mapicon', has_route_model_binding: true, ignore_mapping_version_suffix: true}, options)
+            $.extend({}, {
+                name: 'map_icon',
+                route_suffix: 'mapicon',
+                has_route_model_binding: true,
+                ignore_mapping_version_suffix: true
+            }, options)
         );
 
         this.label = 'MapIcon';
@@ -43,17 +48,31 @@ class MapIcon extends Icon {
 
         return this._cachedAttributes = super._getAttributes(force).concat([
             new Attribute({
-                // Reads team_id, stores as show_across_team
+                // Modified by show_across_team
                 name: 'team_id',
                 type: 'int',
                 default: null,
+                edit: false
+            }),
+            new Attribute({
+                // Reads team_id, stores as show_across_team
+                name: 'show_across_team',
+                type: 'bool',
+                default: null,
+                // This field only shows up when this route is assigned to a team
                 edit: getState().getMapContext().getTeamId() >= 1,
                 setter: function (value) {
                     // If team_id is not null, we show this across the entire team
-                    this.show_across_team = value;
+                    self.show_across_team = value;
+                    self.team_id = value ? getState().getMapContext().getTeamId() : null;
                 },
                 getter: function () {
-                    return this.show_across_team ? getState().getMapContext().getTeamId() : null;
+                    if (typeof self.show_across_team === 'undefined' || self.show_across_team === null) {
+                        // Set a default here - we cannot set the default in the attribute if it
+                        // depends on another attribute!
+                        self.show_across_team = typeof self.team_id !== 'undefined' && self.team_id !== null
+                    }
+                    return self.show_across_team;
                 }
             }),
             new Attribute({
@@ -125,7 +144,8 @@ class MapIcon extends Icon {
     isEditable() {
         console.assert(this instanceof MapIcon, 'this is not a MapIcon', this);
         // Admin may edit everything, but not useful when editing a dungeonroute
-        return super.isEditable() && this.linked_awakened_obelisk_id === null &&
+        return super.isEditable() &&
+            this.linked_awakened_obelisk_id === null &&
             getState().isMapAdmin() === this.is_admin;
     }
 

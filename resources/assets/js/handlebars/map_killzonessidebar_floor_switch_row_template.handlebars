@@ -1,7 +1,7 @@
 <div id="map_killzonessidebar_floor_switch_{{id}}" class="map_killzonessidebar_floor_switch py-1"
      data-id="{{target_floor_id}}">
     <div class="row no-gutters">
-        <div style="width: 50px;">
+        <div class="{{#if edit}}edit{{/if}}">
             <img class="mx-auto d-block"
                 {{#if start}}
                  src="/images/mapicon/dungeon_start.png"

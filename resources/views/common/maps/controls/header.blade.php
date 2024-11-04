@@ -101,8 +101,22 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
                 @endisset
                 <li class="nav-item h-100">
                     <div class="row no-gutters">
-                        <div id="route_title" class="col my-1">
+                        <div class="col my-1">
                             <div class="row no-gutters">
+                                @auth
+                                    @isset($dungeonroute)
+                                            <?php $isFavoritedByCurrentUser = $dungeonroute->isFavoritedByCurrentUser(); ?>
+                                        <div class="col-auto">
+                                            <h5 class="mb-0 mr-2 pt-1">
+                                                <i id="route_favorited" class="fas fa-star favorite_star favorited"
+                                                   style="display: {{ $isFavoritedByCurrentUser ? 'inherit' : 'none' }}"></i>
+                                                <i id="route_not_favorited" class="far fa-star favorite_star"
+                                                   style="display: {{ $isFavoritedByCurrentUser ? 'none' : 'inherit' }}"></i>
+                                                {!! Form::hidden('favorite', $isFavoritedByCurrentUser ? '1' : '0', ['id' => 'favorite']) !!}
+                                            </h5>
+                                        </div>
+                                    @endisset
+                                @endauth
                                 @if($dominantAffix !== null)
                                     @php($dominantAffixKey = strtolower($dominantAffix))
                                     <div class="col-auto">
@@ -126,7 +140,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
                                     </div>
                                 @endif
                                 <div class="col">
-                                    <h5 class="mb-0 mr-2">
+                                    <h5 id="route_title" class="mb-0 mr-2">
                                         @isset($dungeonroute)
                                             {{ $dungeonroute->title }}
                                         @elseif($mapContext instanceof MapContextDungeonExplore)
@@ -138,20 +152,6 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
                                         @endisset
                                     </h5>
                                 </div>
-                                @auth
-                                    @isset($dungeonroute)
-                                            <?php $isFavoritedByCurrentUser = $dungeonroute->isFavoritedByCurrentUser(); ?>
-                                        <div class="col-auto">
-                                            <h5 class="mb-0 mr-2">
-                                                <i id="route_favorited" class="fas fa-star favorite_star favorited"
-                                                   style="display: {{ $isFavoritedByCurrentUser ? 'inherit' : 'none' }}"></i>
-                                                <i id="route_not_favorited" class="far fa-star favorite_star"
-                                                   style="display: {{ $isFavoritedByCurrentUser ? 'none' : 'inherit' }}"></i>
-                                                {!! Form::hidden('favorite', $isFavoritedByCurrentUser ? '1' : '0', ['id' => 'favorite']) !!}
-                                            </h5>
-                                        </div>
-                                    @endisset
-                                @endauth
                             </div>
                         </div>
                     </div>
@@ -309,7 +309,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
 
                 </li>
                 @include('common.layout.nav.user')
-                @include('common.layout.nav.themeswitch')
+{{--                @include('common.layout.nav.themeswitch')--}}
             </ul>
         </div>
     </div>

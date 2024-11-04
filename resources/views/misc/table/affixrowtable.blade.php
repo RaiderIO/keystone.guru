@@ -55,7 +55,7 @@ $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $
     <?php
     foreach ($affixGroup->affixes as $i => $affix){
         $isSeasonalAffix = $affix->id === $season->seasonal_affix_id;
-        $lastColumn      = $i === count($affixGroup->affixes) - 1;
+        $lastColumn      = $i === $affixGroup->affixes->count() - 1;
         $class           = $currentWeekClass . $topBorderClass . $bottomBorderClass;
         $class           .= $lastColumn ? 'last_column ' : '';
         $class           .= $isSeasonalAffix ? 'seasonal ' : '';

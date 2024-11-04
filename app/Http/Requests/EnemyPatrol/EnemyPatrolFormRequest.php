@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\EnemyPatrol;
 
+use App\Http\Requests\Traits\CastInputData;
 use App\Models\Enemy;
+use App\Models\EnemyPatrol;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
@@ -13,12 +15,20 @@ use Illuminate\Validation\Rule;
 
 class EnemyPatrolFormRequest extends FormRequest
 {
+    use CastInputData;
+
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
         return true;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->castInputData($this, EnemyPatrol::class);
+        $this->castInputData($this, Polyline::class, 'polyline');
     }
 
     /**

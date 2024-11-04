@@ -1,7 +1,7 @@
 class NpcChangedHandler extends MessageHandler {
 
     constructor(echo) {
-        super(echo, '.npc-changed');
+        super(echo, NpcChangedMessage.getName());
     }
 
 

@@ -255,7 +255,7 @@ class KillZonePathMapObjectGroup extends PolylineMapObjectGroup {
     createNewPath(vertices, options) {
         console.assert(this instanceof KillZonePathMapObjectGroup, 'this is not a KillZonePathMapObjectGroup', this);
 
-        let path = this._loadMapObject($.extend(true, {}, {
+        let path = this.loadMapObject($.extend(true, {}, {
             id: this.currentId++,
             polyline: {
                 color: c.map.polyline.killzonepath.color,

@@ -2,9 +2,6 @@
 
 namespace App\Console\Commands\Database;
 
-use App\Console\Commands\Traits\ExecutesShellCommands;
-use App\Repositories\Database\ReleaseRepository;
-use App\Repositories\Interfaces\ReleaseRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Console\Command;
@@ -55,13 +52,15 @@ class SeedOne extends Command
     ): int {
         $className = $this->argument('className');
 
+        $databaseSeeder->setCommand($this);
+
         $this->resolver->setDefaultConnection($this->getDatabase());
 
         try {
             $classNames = explode(',', $className);
             $this->info(sprintf('Seeding database with only %s...', implode(', ', $classNames)));
 
-            $fullClassNames = collect()->map(function ($className) {
+            $fullClassNames = collect($classNames)->map(function ($className) {
                 return 'Database\\Seeders\\' . $className;
             })->toArray();
 

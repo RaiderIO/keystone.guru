@@ -5,6 +5,7 @@
 namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Http\Controllers\Traits\ListsBrushlines;
 use App\Http\Controllers\Traits\ListsDungeonFloorSwitchMarkers;
 use App\Http\Controllers\Traits\ListsEnemies;
@@ -68,6 +69,7 @@ class AjaxDungeonRouteController extends Controller
     use ListsEnemyPatrols;
     use ListsMapIcons;
     use ListsPaths;
+    use ChangesDungeonRoute;
 
     /**
      * @return mixed
@@ -238,11 +240,9 @@ class AjaxDungeonRouteController extends Controller
                                      'ratings', 'routeattributes', 'dungeon', 'dungeon.activeFloors', 'mappingVersion'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
-            ->when($expansion !== null, static fn(Builder $builder) =>
-                $builder->where('dungeons.expansion_id', $expansion->id)
+            ->when($expansion !== null, static fn(Builder $builder) => $builder->where('dungeons.expansion_id', $expansion->id)
             )
-            ->when($season !== null, static fn(Builder $builder) =>
-                $builder->where('dungeon_routes.season_id', $season->id)
+            ->when($season !== null, static fn(Builder $builder) => $builder->where('dungeon_routes.season_id', $season->id)
             )
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
@@ -455,8 +455,12 @@ class AjaxDungeonRouteController extends Controller
     ): DungeonRoute {
         $this->authorize('edit', $dungeonRoute);
 
+        $beforeDungeonRoute = null;
+
         if ($dungeonRoute === null) {
             $dungeonRoute = new DungeonRoute();
+        } else {
+            $beforeDungeonRoute = clone $dungeonRoute;
         }
 
         // Update or insert it
@@ -464,15 +468,20 @@ class AjaxDungeonRouteController extends Controller
             abort(500, 'Unable to save dungeonroute');
         }
 
+        $this->dungeonRouteChanged($dungeonRoute, $beforeDungeonRoute, $dungeonRoute);
+
         return $dungeonRoute;
     }
 
     /**
      * @throws AuthorizationException
+     * @throws Exception
      */
-    public function storePullGradient(Request $request, SeasonService $seasonService, DungeonRoute $dungeonRoute): Response
+    public function storePullGradient(Request $request, DungeonRoute $dungeonRoute): Response
     {
         $this->authorize('edit', $dungeonRoute);
+
+        $beforeDungeonRoute = clone $dungeonRoute;
 
         $dungeonRoute->pull_gradient              = $request->get('pull_gradient', '');
         $dungeonRoute->pull_gradient_apply_always = $request->get('pull_gradient_apply_always', false);
@@ -481,6 +490,8 @@ class AjaxDungeonRouteController extends Controller
         if (!$dungeonRoute->save()) {
             abort(500, 'Unable to save dungeonroute');
         }
+
+        $this->dungeonRouteChanged($dungeonRoute, $beforeDungeonRoute, $dungeonRoute);
 
         return response()->noContent();
     }
@@ -495,6 +506,8 @@ class AjaxDungeonRouteController extends Controller
         if (!$dungeonRoute->delete()) {
             abort(500, 'Unable to delete dungeonroute');
         }
+
+        $this->dungeonRouteChanged($dungeonRoute, $dungeonRoute, null);
 
         return response()->noContent();
     }
@@ -512,12 +525,16 @@ class AjaxDungeonRouteController extends Controller
             abort(422, 'This sharing state is not available for this route');
         }
 
+        $beforeDungeonRoute = clone $dungeonRoute;
+
         $dungeonRoute->published_state_id = PublishedState::ALL[$publishedState];
         if ($dungeonRoute->published_state_id === PublishedState::ALL[PublishedState::WORLD]) {
             $dungeonRoute->published_at = date('Y-m-d H:i:s', time());
         }
 
         $dungeonRoute->save();
+
+        $this->dungeonRouteChanged($dungeonRoute, $beforeDungeonRoute, $dungeonRoute);
 
         return response()->noContent();
     }

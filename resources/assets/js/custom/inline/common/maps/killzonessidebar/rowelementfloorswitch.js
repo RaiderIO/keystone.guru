@@ -16,10 +16,12 @@ class RowElementFloorSwitch extends RowElement {
     _getTemplateData() {
         console.assert(this instanceof RowElementFloorSwitch, 'this is not a RowElementFloorSwitch', this);
 
+        let state = getState();
         return {
             'id': this.killZone.id,
             'target_floor_id': this.targetFloor.id,
             'name': lang.get(this.targetFloor.name),
+            'edit': state.getMapContext() instanceof MapContextDungeonRoute && state.getDungeonMap().options.edit,
             'start': this.start
         };
     }

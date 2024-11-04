@@ -10,31 +10,44 @@ namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\EventModelInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int          $id
  * @property int          $dungeon_route_id
  * @property int          $floor_id
  * @property int          $polyline_id
- * @property string       $updated_at
- * @property string       $created_at
+ *
+ * @property Carbon       $updated_at
+ * @property Carbon       $created_at
+ *
  * @property DungeonRoute $dungeonRoute
  * @property Polyline     $polyline
  * @property Floor        $floor
  *
  * @mixin Eloquent
  */
-class Brushline extends Model
+class Brushline extends Model implements EventModelInterface
 {
-    public $visible = ['id', 'floor_id', 'polyline'];
+    protected $visible = ['id', 'floor_id', 'polyline'];
 
-    public $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id', 'created_at', 'updated_at'];
+    protected $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id', 'created_at', 'updated_at'];
 
-    public $with = ['polyline'];
+    protected $casts = [
+        'id'               => 'int',
+        'dungeon_route_id' => 'int',
+        'floor_id'         => 'int',
+        'polyline_id'      => 'int',
+    ];
+
+    protected $with = ['polyline'];
 
     /**
      * Get the dungeon route that this brushline is attached to.
@@ -58,6 +71,19 @@ class Brushline extends Model
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    public function getEventData(): array
+    {
+        /** @var CoordinatesServiceInterface $coordinatesService */
+        $coordinatesService = app()->make(CoordinatesServiceInterface::class);
+
+        return array_merge([
+
+        ], $this->polyline->getCoordinatesData($coordinatesService, $this->dungeonRoute->mappingVersion, $this->floor));
     }
 
     protected static function boot(): void

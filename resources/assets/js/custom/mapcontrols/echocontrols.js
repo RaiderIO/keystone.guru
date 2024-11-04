@@ -23,9 +23,9 @@ class EchoControls extends MapControl {
         this._onEchoCursorsEnabledChanged();
 
         this.mapControlOptions = {
-            onAdd: function (leafletMap) {
+            onAdd: function () {
                 return jQuery('<span>', {
-                    text: 'Connecting...'
+                    text: lang.get('messages.echo_connecting_label')
                 })[0];
             }
         };

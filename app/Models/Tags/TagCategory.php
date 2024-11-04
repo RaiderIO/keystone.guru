@@ -35,6 +35,6 @@ class TagCategory extends Model
      */
     public function getRouteKeyName(): string
     {
-        return 'category';
+        return 'name';
     }
 }

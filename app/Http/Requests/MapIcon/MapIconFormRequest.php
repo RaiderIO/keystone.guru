@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\MapIcon;
 
+use App\Http\Requests\Traits\CastInputData;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Team;
@@ -13,12 +15,19 @@ use Illuminate\Validation\Rule;
 
 class MapIconFormRequest extends FormRequest
 {
+    use CastInputData;
+
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
         return true;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge($this->castInputData($this, MapIcon::class));
     }
 
     /**

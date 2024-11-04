@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Floor\Floor;
 use App\Models\Interfaces\ConvertsVerticesInterface;
+use App\Models\Interfaces\EventModelInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -31,7 +32,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class EnemyPack extends CacheModel implements ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
+class EnemyPack extends CacheModel implements ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface, EventModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasVertices;
@@ -87,5 +88,10 @@ class EnemyPack extends CacheModel implements ConvertsVerticesInterface, Mapping
     public function getDungeonId(): ?int
     {
         return $this->floor?->dungeon_id ?? null;
+    }
+
+    public function getEventData(): array
+    {
+        return [];
     }
 }

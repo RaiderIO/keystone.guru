@@ -1,0 +1,55 @@
+{
+    "id": 258,
+    "release_changelog_id": 265,
+    "version": "v11.6",
+    "title": "Bugfixes and major backend improvement preparations",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2024-11-04T20:56:44+00:00",
+    "updated_at": "2024-11-04T20:56:44+00:00",
+    "changelog": {
+        "id": 265,
+        "release_id": 258,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 265,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2590,
+                "change": "Reduced the amount of users that you can see when route syncing to 1. To view more users, press the three dots to see a full list. This will help with the header being too crowded on popular routes."
+            },
+            {
+                "release_changelog_id": 265,
+                "release_changelog_category_id": 2,
+                "ticket_id": 2582,
+                "change": "Pull descriptions can now have up to 500 characters (up from 255)."
+            },
+            {
+                "release_changelog_id": 265,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2591,
+                "change": "Editing a route's name no longer replaces it with the new title incorrectly in the header."
+            },
+            {
+                "release_changelog_id": 265,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2545,
+                "change": "Various elements in the pull sidebar now properly align vertically."
+            },
+            {
+                "release_changelog_id": 265,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2584,
+                "change": "\"Show across all teams\" for map icons is now a checkbox as intended."
+            },
+            {
+                "release_changelog_id": 265,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2484,
+                "change": "Editing an object twice in a row while in combined floor mode (MDT map style) no longer applies translations twice, leading to an incorrect placement of the object."
+            }
+        ]
+    }
+}

@@ -1,14 +1,17 @@
 <?php
 
 /** @var string $category */
+
 /** @var string $theme */
+
+use App\Models\Tags\TagCategory;
 
 $tagCategoryNameMapping = [
     1 => __('view_common.tag.manager.route_personal'),
     2 => __('view_common.tag.manager.route_team')
 ];
 
-$tags        = Auth::user()->tags(\App\Models\Tags\TagCategory::ALL[$category])->groupByRaw('name')->get()->groupBy(['tag_category_id']);
+$tags        = Auth::user()->tags(TagCategory::ALL[$category])->groupByRaw('name')->get()->groupBy(['tag_category_id']);
 $isDarkTheme = $theme === 'darkly';
 ?>
 @include('common.general.inline', ['path' => 'common/tag/tagmanager'])
@@ -57,7 +60,7 @@ $isDarkTheme = $theme === 'darkly';
         @endforeach
     </div>
 @endforeach
-{{ Form::model(Auth::user(), ['route' => $category === \App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL ? 'profile.tag.create' : 'team.tag.create', 'method' => 'post']) }}
+{{ Form::model(Auth::user(), ['route' => $category === TagCategory::DUNGEON_ROUTE_PERSONAL ? 'profile.tag.create' : 'team.tag.create', 'method' => 'post']) }}
 <div class="form-group{{ $errors->has('tag_name_new') ? ' has-error' : '' }}">
     {!! Form::label('tag_name_new', __('view_common.tag.manager.create_tag')) !!}
     {!! Form::text('tag_name_new', null, ['class' => 'form-control']) !!}

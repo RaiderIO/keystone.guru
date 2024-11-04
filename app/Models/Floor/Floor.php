@@ -188,7 +188,7 @@ class Floor extends CacheModel implements MappingModelInterface
 
     public function mapIconsForExport(): HasMany
     {
-        return $this->hasMany(MapIcon::class)->where('dungeon_route_id', null)->orderBy('id');
+        return $this->hasMany(MapIcon::class)->whereNotNull('mapping_version_id')->orderBy('id');
     }
 
     public function mountableAreasForExport(): HasMany

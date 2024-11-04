@@ -237,7 +237,7 @@ return [
             'new'                     => 'NEW',
         ],
         'nav'    => [
-            'user' => [
+            'user'       => [
                 'login'             => 'Login',
                 'register'          => 'Register',
                 'telescope'         => 'Telescope',
@@ -259,7 +259,7 @@ return [
             ],
             'uploadlogs' => [
                 'upload_logs' => 'Upload logs to improve Keystone.guru',
-            ]
+            ],
         ],
     ],
     'maps'         => [
@@ -373,9 +373,9 @@ return [
             'pullsworkbench' => [
                 'modal'            => [
                     'description' => [
-                        'label'               => 'Description',
-                        'supported_html_tags' => 'Supported HTML tags: ',
-                        'save'                => 'Save',
+                        'label'                => 'Description',
+                        'supported_html_tags'  => 'Supported HTML tags: ',
+                        'save'                 => 'Save',
                     ],
                     'spells'      => [
                         'label' => 'Spells',
@@ -541,9 +541,9 @@ return [
                 'description'       => 'The advanced options aim to further increase the accuracy of the generated simulation craft string and have the numbers come closer to what you\'d experience in reality.',
             ],
         ],
-        'uploadlogs' => [
+        'uploadlogs'         => [
             'title' => 'Upload logs',
-        ]
+        ],
     ],
     'release'      => [
         'release' => [

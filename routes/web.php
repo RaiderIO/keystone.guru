@@ -455,8 +455,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::delete('/killzone/{killZone}', (new AjaxKillZoneController())->delete(...));
             Route::delete('/killzone', (new AjaxKillZoneController())->deleteAll(...));
 
-            Route::post('/mapicon', (new AjaxMapIconController())->store(...));
-            Route::put('/mapicon/{mapIcon}', (new AjaxMapIconController())->store(...));
+            Route::post('/mapicon', (new AjaxMapIconController())->dungeonRouteStore(...));
+            Route::put('/mapicon/{mapIcon}', (new AjaxMapIconController())->dungeonRouteStore(...));
             Route::delete('/mapicon/{mapIcon}', (new AjaxMapIconController())->delete(...));
 
             Route::post('/pridefulenemy/{enemy}', (new AjaxPridefulEnemyController())->store(...));

@@ -1,5 +1,16 @@
 /**
- * @property {Object} user
+ * @typedef {Object} MessageUser
+ * @property {string} color
+ * @property {string} name
+ * @property {string} public_key
+ */
+
+/**
+ * @property {MessageUser} user
+ * @property {string} context_route_key
+ * @property {string} context_class
+ *
+ * ?? Are these properties needed at all?
  * @property {Number} floor_id
  * @property {string} __name
  */
