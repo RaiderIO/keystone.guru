@@ -32,12 +32,12 @@ trait HasVertices
         return $result;
     }
 
-    protected function getCoordinatesData(
+    public function getCoordinatesData(
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
         Floor                       $floor
     ): array {
-        $latLngs = $this->getDecodedLatLngs();
+        $latLngs = $this->getDecodedLatLngs($floor);
 
         $splitFloorsLatLngs = collect();
         $facadeLatLngs      = collect();

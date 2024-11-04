@@ -33,7 +33,7 @@ trait HasLatLng
         return $this;
     }
 
-    protected function getCoordinatesData(CoordinatesServiceInterface $coordinatesService): array
+    public function getCoordinatesData(CoordinatesServiceInterface $coordinatesService): array
     {
         $splitFloorsLatLng = $this->getLatLng();
 
