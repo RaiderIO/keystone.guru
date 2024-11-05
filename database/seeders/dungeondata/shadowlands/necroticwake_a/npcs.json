@@ -8,7 +8,7 @@
         "display_id": 96477,
         "encounter_id": 2392,
         "name": "Surgeon Stitchflesh",
-        "base_health": 85930569,
+        "base_health": 68798844,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.5,
@@ -274,6 +274,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17154,
+                "mapping_version_id": 419,
+                "npc_id": 162729,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17074,
                 "mapping_version_id": 409,
                 "npc_id": 162729,
@@ -397,6 +404,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17157,
+                "mapping_version_id": 419,
+                "npc_id": 163121,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17077,
                 "mapping_version_id": 409,
@@ -702,6 +716,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17160,
+                "mapping_version_id": 419,
+                "npc_id": 163128,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17080,
                 "mapping_version_id": 409,
                 "npc_id": 163128,
@@ -913,6 +934,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17162,
+                "mapping_version_id": 419,
+                "npc_id": 163618,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17082,
                 "mapping_version_id": 409,
                 "npc_id": 163618,
@@ -1037,6 +1065,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17161,
+                "mapping_version_id": 419,
+                "npc_id": 163619,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17081,
                 "mapping_version_id": 409,
                 "npc_id": 163619,
@@ -1122,6 +1157,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17174,
+                "mapping_version_id": 419,
+                "npc_id": 163620,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17094,
                 "mapping_version_id": 409,
                 "npc_id": 163620,
@@ -1203,6 +1245,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17173,
+                "mapping_version_id": 419,
+                "npc_id": 163621,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17093,
                 "mapping_version_id": 409,
@@ -1487,7 +1536,7 @@
         "display_id": 96218,
         "encounter_id": null,
         "name": "Stitchflesh's Creation",
-        "base_health": 47739204,
+        "base_health": 39817642,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 1.5,
@@ -1663,6 +1712,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17158,
+                "mapping_version_id": 419,
+                "npc_id": 165137,
+                "enemy_forces": 18,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17078,
                 "mapping_version_id": 409,
                 "npc_id": 165137,
@@ -1790,6 +1846,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17155,
+                "mapping_version_id": 419,
+                "npc_id": 165138,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17075,
                 "mapping_version_id": 409,
                 "npc_id": 165138,
@@ -1877,6 +1940,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17166,
+                "mapping_version_id": 419,
+                "npc_id": 165197,
+                "enemy_forces": 24,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17086,
                 "mapping_version_id": 409,
@@ -2004,6 +2074,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17164,
+                "mapping_version_id": 419,
+                "npc_id": 165222,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17084,
                 "mapping_version_id": 409,
@@ -2184,6 +2261,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17165,
+                "mapping_version_id": 419,
+                "npc_id": 165824,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17085,
                 "mapping_version_id": 409,
                 "npc_id": 165824,
@@ -2320,6 +2404,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17159,
+                "mapping_version_id": 419,
+                "npc_id": 165872,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17079,
                 "mapping_version_id": 409,
                 "npc_id": 165872,
@@ -2447,6 +2538,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17170,
+                "mapping_version_id": 419,
+                "npc_id": 165911,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17090,
                 "mapping_version_id": 409,
                 "npc_id": 165911,
@@ -2528,6 +2626,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17163,
+                "mapping_version_id": 419,
+                "npc_id": 165919,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17083,
                 "mapping_version_id": 409,
@@ -2839,6 +2944,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17156,
+                "mapping_version_id": 419,
+                "npc_id": 166302,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17076,
                 "mapping_version_id": 409,
                 "npc_id": 166302,
@@ -3032,6 +3144,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17171,
+                "mapping_version_id": 419,
+                "npc_id": 167731,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17091,
                 "mapping_version_id": 409,
@@ -3293,7 +3412,7 @@
         "display_id": 96132,
         "encounter_id": null,
         "name": "Shuffling Corpse",
-        "base_health": 6545484,
+        "base_health": 7167175,
         "health_percentage": null,
         "level": 60,
         "mdt_scale": 0.7,
@@ -3357,6 +3476,13 @@
         ],
         "npc_spells": [],
         "npc_enemy_forces": [
+            {
+                "id": 17167,
+                "mapping_version_id": 419,
+                "npc_id": 171500,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17087,
                 "mapping_version_id": 409,
@@ -3486,6 +3612,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17169,
+                "mapping_version_id": 419,
+                "npc_id": 172981,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17089,
                 "mapping_version_id": 409,
@@ -3620,6 +3753,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17168,
+                "mapping_version_id": 419,
+                "npc_id": 173016,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17088,
                 "mapping_version_id": 409,
                 "npc_id": 173016,
@@ -3713,6 +3853,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17172,
+                "mapping_version_id": 419,
+                "npc_id": 173044,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17092,
                 "mapping_version_id": 409,
