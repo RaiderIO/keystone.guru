@@ -25,7 +25,10 @@
                    aria-haspopup="true"
                    aria-expanded="false">
                     {{#ifCond avatar_url '==' null}}
-                        {{initials}}
+                        <!-- Somehow required - align-center class does not take precedence -->
+                        <div style="text-align: center">
+                            {{initials}}
+                        </div>
                     {{else}}
                         <img src="{{avatar_url}}" alt="{{initials}}"/>
                     {{/ifCond}}

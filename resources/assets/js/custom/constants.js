@@ -297,6 +297,7 @@ let c = {
             zoomControl: false,
             minZoom: 1,
             maxZoom: 10,
+            maxNativeZoom: 5,
             zoomSnap: 0,
             boxZoom: false,
             wheelDebounceTime: 100,

@@ -703,7 +703,7 @@ class DungeonMap extends Signalable {
 
         let dungeonData = getState().getMapContext().getDungeon();
         this.mapTileLayer = L.tileLayer(`/images/tiles/${dungeonData.expansion.shortname}/${dungeonData.key}/${currentFloor.index}/{z}/{x}_{y}.png`, {
-            maxNativeZoom: 5,
+            maxNativeZoom: c.map.leafletSettings.maxNativeZoom,
             maxZoom: floorMaxZoomLevel,
             attribution: 'Map data © Blizzard Entertainment',
             tileSize: tileSize,
