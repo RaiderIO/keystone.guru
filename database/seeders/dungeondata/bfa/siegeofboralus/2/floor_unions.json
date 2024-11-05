@@ -48,5 +48,15 @@
         "lng": 200.36,
         "size": 430,
         "rotation": 90
+    },
+    {
+        "id": 403,
+        "mapping_version_id": 420,
+        "floor_id": 303,
+        "target_floor_id": 47,
+        "lat": -66.9,
+        "lng": 200.36,
+        "size": 430,
+        "rotation": 90
     }
 ]

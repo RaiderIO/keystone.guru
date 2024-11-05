@@ -257,7 +257,8 @@ class Team extends Model
      */
     public function isUserCollaborator(User $user): bool
     {
-        return $this->getUserRole($user) !== TeamUser::ROLE_MEMBER;
+        $userRole = $this->getUserRole($user);
+        return $userRole !== null && $this->getUserRole($user) !== TeamUser::ROLE_MEMBER;
     }
 
     /**
@@ -276,6 +277,7 @@ class Team extends Model
      * Checks if a user is a member of this team or not.
      *
      * @param User|null $user
+     * @return bool
      */
     public function isUserMember(?User $user): bool
     {
@@ -377,9 +379,12 @@ class Team extends Model
         }
 
         $roles    = TeamUser::ALL_ROLES;
-        $newOwner = $this->teamusers->where('user_id', '!=', $user->id)->sortByDesc(static fn($obj, $key) => $roles[$obj->role])->first();
+        /** @var TeamUser|null $newOwner */
+        $newOwner = $this->teamusers->where('user_id', '!=', $user->id)
+            ->sortByDesc(static fn($obj, $key) => $roles[$obj->role])
+            ->first();
 
-        return $newOwner !== null ? $newOwner->user : null;
+        return $newOwner?->user;
     }
 
     public function getAvailableTags(): Collection

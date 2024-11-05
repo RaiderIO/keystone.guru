@@ -23,6 +23,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -83,6 +86,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -94,6 +100,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17108,
+                "mapping_version_id": 416,
+                "npc_id": 210109,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16907,
                 "mapping_version_id": 400,
@@ -140,7 +153,7 @@
         "display_id": 118714,
         "encounter_id": 2579,
         "name": "Skarmorak",
-        "base_health": 139239345,
+        "base_health": 125533481,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -155,6 +168,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -290,6 +306,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17107,
+                "mapping_version_id": 416,
+                "npc_id": 212389,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16906,
                 "mapping_version_id": 400,
                 "npc_id": 212389,
@@ -397,6 +420,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17115,
+                "mapping_version_id": 416,
+                "npc_id": 212400,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16914,
                 "mapping_version_id": 400,
@@ -521,6 +551,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17123,
+                "mapping_version_id": 416,
+                "npc_id": 212403,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16922,
                 "mapping_version_id": 400,
                 "npc_id": 212403,
@@ -641,6 +678,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17116,
+                "mapping_version_id": 416,
+                "npc_id": 212405,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16915,
                 "mapping_version_id": 400,
                 "npc_id": 212405,
@@ -757,6 +801,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17109,
+                "mapping_version_id": 416,
+                "npc_id": 212453,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16908,
                 "mapping_version_id": 400,
@@ -881,6 +932,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17112,
+                "mapping_version_id": 416,
+                "npc_id": 212764,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16911,
                 "mapping_version_id": 400,
                 "npc_id": 212764,
@@ -943,6 +1001,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
@@ -958,6 +1019,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17111,
+                "mapping_version_id": 416,
+                "npc_id": 212765,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16910,
                 "mapping_version_id": 400,
@@ -1004,7 +1072,7 @@
         "display_id": 119856,
         "encounter_id": 2582,
         "name": "Void Speaker Eirich",
-        "base_health": 159130680,
+        "base_health": 143466834,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -1107,6 +1175,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
@@ -1162,6 +1233,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -1300,6 +1374,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17117,
+                "mapping_version_id": 416,
+                "npc_id": 213338,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16916,
                 "mapping_version_id": 400,
                 "npc_id": 213338,
@@ -1360,6 +1441,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1380,6 +1464,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17118,
+                "mapping_version_id": 416,
+                "npc_id": 213343,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16917,
                 "mapping_version_id": 400,
@@ -1509,6 +1600,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17121,
+                "mapping_version_id": 416,
+                "npc_id": 213954,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16920,
                 "mapping_version_id": 400,
@@ -1678,6 +1776,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17120,
+                "mapping_version_id": 416,
+                "npc_id": 214066,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16919,
                 "mapping_version_id": 400,
                 "npc_id": 214066,
@@ -1755,6 +1860,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17119,
+                "mapping_version_id": 416,
+                "npc_id": 214264,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16918,
                 "mapping_version_id": 400,
@@ -1861,6 +1973,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17114,
+                "mapping_version_id": 416,
+                "npc_id": 214350,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16913,
                 "mapping_version_id": 400,
                 "npc_id": 214350,
@@ -1906,7 +2025,7 @@
         "display_id": 37518,
         "encounter_id": 2579,
         "name": "Crystal Shard",
-        "base_health": 1591307,
+        "base_health": 1275261,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1921,6 +2040,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -2038,6 +2160,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17113,
+                "mapping_version_id": 416,
+                "npc_id": 221979,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16912,
                 "mapping_version_id": 400,
@@ -2166,6 +2295,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17110,
+                "mapping_version_id": 416,
+                "npc_id": 222923,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 16909,
                 "mapping_version_id": 400,
                 "npc_id": 222923,
@@ -2285,6 +2421,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17122,
+                "mapping_version_id": 416,
+                "npc_id": 224962,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 16921,
                 "mapping_version_id": 400,

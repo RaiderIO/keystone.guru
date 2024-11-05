@@ -50,6 +50,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
@@ -65,6 +68,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17128,
+                "mapping_version_id": 417,
+                "npc_id": 210966,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17026,
                 "mapping_version_id": 406,
@@ -142,6 +152,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
@@ -206,7 +219,7 @@
         "display_id": 114315,
         "encounter_id": 2581,
         "name": "Anubikkaj",
-        "base_health": 208859018,
+        "base_health": 139349505,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.7,
@@ -221,6 +234,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -275,7 +291,7 @@
         "display_id": 115760,
         "encounter_id": null,
         "name": "Ascendant Viscoxria",
-        "base_health": 56690306,
+        "base_health": 37826761,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2.5,
@@ -290,6 +306,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -310,6 +329,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17134,
+                "mapping_version_id": 417,
+                "npc_id": 211261,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17032,
                 "mapping_version_id": 406,
@@ -387,6 +413,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
@@ -408,6 +437,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17136,
+                "mapping_version_id": 417,
+                "npc_id": 211262,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17034,
                 "mapping_version_id": 406,
@@ -485,6 +521,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
@@ -509,6 +548,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17135,
+                "mapping_version_id": 417,
+                "npc_id": 211263,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17033,
                 "mapping_version_id": 406,
@@ -584,6 +630,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -607,6 +656,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17131,
+                "mapping_version_id": 417,
+                "npc_id": 211341,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17029,
                 "mapping_version_id": 406,
@@ -734,6 +790,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
@@ -758,6 +817,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17137,
+                "mapping_version_id": 417,
+                "npc_id": 213885,
+                "enemy_forces": 30,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17035,
                 "mapping_version_id": 406,
@@ -893,6 +959,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17125,
+                "mapping_version_id": 417,
+                "npc_id": 213892,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17023,
                 "mapping_version_id": 406,
                 "npc_id": 213892,
@@ -1027,6 +1100,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17129,
+                "mapping_version_id": 417,
+                "npc_id": 213893,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17027,
                 "mapping_version_id": 406,
                 "npc_id": 213893,
@@ -1157,6 +1237,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17124,
+                "mapping_version_id": 417,
+                "npc_id": 213894,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17022,
                 "mapping_version_id": 406,
@@ -1295,6 +1382,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17130,
+                "mapping_version_id": 417,
+                "npc_id": 213895,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17028,
                 "mapping_version_id": 406,
                 "npc_id": 213895,
@@ -1383,7 +1477,7 @@
         "display_id": 116834,
         "encounter_id": null,
         "name": "Sureki Militant",
-        "base_health": 32754194,
+        "base_health": 35835879,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.8,
@@ -1415,6 +1509,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17132,
+                "mapping_version_id": 417,
+                "npc_id": 213932,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17030,
                 "mapping_version_id": 406,
@@ -1492,6 +1593,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
@@ -1504,6 +1608,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17133,
+                "mapping_version_id": 417,
+                "npc_id": 213934,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17031,
                 "mapping_version_id": 406,
@@ -1579,6 +1690,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -1699,6 +1813,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
@@ -1717,6 +1834,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17126,
+                "mapping_version_id": 417,
+                "npc_id": 214761,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17024,
                 "mapping_version_id": 406,
@@ -1794,6 +1918,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
@@ -1806,6 +1933,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17127,
+                "mapping_version_id": 417,
+                "npc_id": 214762,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17025,
                 "mapping_version_id": 406,
