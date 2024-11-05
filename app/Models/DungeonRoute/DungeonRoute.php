@@ -226,6 +226,7 @@ class DungeonRoute extends Model
         'demo'         => 'integer',
         'level_min'    => 'integer',
         'level_max'    => 'integer',
+        'rating'       => 'float',
     ];
 
     /**

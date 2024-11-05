@@ -80,7 +80,7 @@ class DungeonRouteService implements DungeonRouteServiceInterface
 
             $updatedRouteCount = DB::update('
             UPDATE dungeon_routes, (
-                SELECT dungeon_route_id, avg(dungeon_route_ratings.rating) as ratingAvg, count(dungeon_route_ratings.rating) as ratingCount
+                SELECT dungeon_route_id, truncate(avg(dungeon_route_ratings.rating), 1) as ratingAvg, count(dungeon_route_ratings.rating) as ratingCount
                             FROM dungeon_route_ratings
                             GROUP BY dungeon_route_ratings.dungeon_route_id
                 ) as ratings
