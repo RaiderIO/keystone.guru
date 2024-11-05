@@ -155,6 +155,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17141,
+                "mapping_version_id": 418,
+                "npc_id": 214840,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17039,
                 "mapping_version_id": 407,
                 "npc_id": 214840,
@@ -476,6 +483,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17140,
+                "mapping_version_id": 418,
+                "npc_id": 216293,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17038,
                 "mapping_version_id": 407,
                 "npc_id": 216293,
@@ -614,6 +628,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17146,
+                "mapping_version_id": 418,
+                "npc_id": 216333,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17044,
                 "mapping_version_id": 407,
                 "npc_id": 216333,
@@ -679,7 +700,7 @@
         "npc_class_id": 1,
         "display_id": 120876,
         "encounter_id": null,
-        "name": "Starved Crawler",
+        "name": "Ravenous Crawler",
         "base_health": 5092182,
         "health_percentage": null,
         "level": 80,
@@ -751,6 +772,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17138,
+                "mapping_version_id": 418,
+                "npc_id": 216336,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17036,
                 "mapping_version_id": 407,
@@ -893,6 +921,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17145,
+                "mapping_version_id": 418,
+                "npc_id": 216337,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17043,
                 "mapping_version_id": 407,
                 "npc_id": 216337,
@@ -981,6 +1016,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 432868
+            },
+            {
                 "spell_id": 434252
             },
             {
@@ -997,6 +1035,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17148,
+                "mapping_version_id": 418,
+                "npc_id": 216338,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17046,
                 "mapping_version_id": 407,
@@ -1136,6 +1181,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17149,
+                "mapping_version_id": 418,
+                "npc_id": 216340,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17047,
                 "mapping_version_id": 407,
                 "npc_id": 216340,
@@ -1273,6 +1325,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17139,
+                "mapping_version_id": 418,
+                "npc_id": 216341,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17037,
                 "mapping_version_id": 407,
@@ -1415,6 +1474,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17153,
+                "mapping_version_id": 418,
+                "npc_id": 216363,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17051,
                 "mapping_version_id": 407,
                 "npc_id": 216363,
@@ -1519,6 +1585,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17150,
+                "mapping_version_id": 418,
+                "npc_id": 216364,
+                "enemy_forces": 14,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17048,
                 "mapping_version_id": 407,
@@ -1661,6 +1734,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17151,
+                "mapping_version_id": 418,
+                "npc_id": 216365,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17049,
                 "mapping_version_id": 407,
                 "npc_id": 216365,
@@ -1786,6 +1866,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17152,
+                "mapping_version_id": 418,
+                "npc_id": 217039,
+                "enemy_forces": 35,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17050,
                 "mapping_version_id": 407,
                 "npc_id": 217039,
@@ -1887,6 +1974,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17144,
+                "mapping_version_id": 418,
+                "npc_id": 217531,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17042,
                 "mapping_version_id": 407,
@@ -1999,6 +2093,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17142,
+                "mapping_version_id": 418,
+                "npc_id": 217533,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17040,
                 "mapping_version_id": 407,
                 "npc_id": 217533,
@@ -2106,6 +2207,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17143,
+                "mapping_version_id": 418,
+                "npc_id": 218324,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17041,
                 "mapping_version_id": 407,
@@ -2227,7 +2335,7 @@
         "display_id": 117870,
         "encounter_id": null,
         "name": "Bloodstained Webmage",
-        "base_health": 7160880,
+        "base_health": 5733236,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.1,
@@ -2382,6 +2490,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17147,
+                "mapping_version_id": 418,
+                "npc_id": 223253,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17045,
                 "mapping_version_id": 407,
