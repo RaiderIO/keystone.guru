@@ -14,7 +14,6 @@ class BrushlineDeletedHandler extends ModelDeletedHandler {
         console.log(`BrushlineDeletedHandler::onReceive: ${e.model_id} ${e.model_class}`);
 
         if (shouldHandle) {
-
             let brushlineMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_BRUSHLINE);
 
             let mapObject = brushlineMapObjectGroup.findMapObjectById(e.model_id);

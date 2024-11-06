@@ -275,7 +275,13 @@ class EchoControls extends MapControl {
             .echo_user_${user.public_key} {
                 border: 3px ${getState().getEcho().getUserColor(user.public_key)} solid !important;
                 border-radius: 16px;
-            }`)
+            }
+
+            .echo_user_${user.public_key}_tooltip {
+                background-color: ${getState().getEcho().getUserColor(user.public_key)};
+            }
+
+            `)
             .appendTo('head');
 
         // Update the text color depending on the luminance
