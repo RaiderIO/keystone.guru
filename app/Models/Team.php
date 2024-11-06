@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
  * @property string                   $description
  * @property string                   $invite_code
  * @property string                   $default_role
+ *
  * @property Collection<TeamUser>     $teamusers
  * @property Collection<User>         $members
  * @property Collection<DungeonRoute> $dungeonroutes
@@ -403,8 +404,8 @@ class Team extends Model
             // Delete icons
             $team->iconfile?->delete();
             // Remove any ad-free giveaways if the giver was part of this team
-            foreach ($team->members->filter(function (TeamUser $teamUser) {
-                return $teamUser->user->patreonAdFreeGiveaway !== null;
+            foreach ($team->members->filter(function (User $member) {
+                return $member->patreonAdFreeGiveaway !== null;
             }) as $teamMember) {
                 /** @var User $teamMember */
                 // If the giver of the patreon ad-free giveaway was part of this team

@@ -325,7 +325,7 @@ class Npc extends CacheModel implements MappingModelInterface
         return $this->dungeon_id ?? null;
     }
 
-    protected static function booted()
+    protected static function booted(): void
     {
         parent::booted();
 
