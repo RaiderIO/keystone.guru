@@ -37,7 +37,7 @@ class ModelChangedHandler extends BaseModelHandler {
     /**
      *
      * @param e
-     * @returns {{lat: Number, lng: Number, floor_id: Number}}
+     * @returns {MessageCoordinate|MessageCoordinate[]}
      * @protected
      */
     _getCorrectLatLngFromEvent(e) {
