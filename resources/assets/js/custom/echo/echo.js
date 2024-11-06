@@ -24,6 +24,9 @@ class Echo extends Signalable {
             new InviteHandler(this),
             new StopHandler(this),
 
+            // Brushline
+            new BrushlineChangedHandler(this),
+            new BrushlineDeletedHandler(this),
             // KillZone
             new KillZoneChangedHandler(this),
             new KillZoneDeletedHandler(this),

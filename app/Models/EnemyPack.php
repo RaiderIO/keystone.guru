@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Floor\Floor;
 use App\Models\Interfaces\ConvertsVerticesInterface;
-use App\Models\Interfaces\EventModelInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -27,12 +26,13 @@ use Illuminate\Support\Collection;
  * @property string|null       $color_animated
  * @property string            $label
  * @property string            $vertices_json
+ *
  * @property Floor             $floor
  * @property Collection<Enemy> $enemies
  *
  * @mixin Eloquent
  */
-class EnemyPack extends CacheModel implements ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface, EventModelInterface
+class EnemyPack extends CacheModel implements ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasVertices;
@@ -60,6 +60,7 @@ class EnemyPack extends CacheModel implements ConvertsVerticesInterface, Mapping
     protected $casts = [
         'mapping_version_id' => 'integer',
         'floor_id'           => 'integer',
+        'group'              => 'integer',
     ];
 
     public function mappingVersion(): BelongsTo
@@ -88,10 +89,5 @@ class EnemyPack extends CacheModel implements ConvertsVerticesInterface, Mapping
     public function getDungeonId(): ?int
     {
         return $this->floor?->dungeon_id ?? null;
-    }
-
-    public function getEventData(): array
-    {
-        return [];
     }
 }

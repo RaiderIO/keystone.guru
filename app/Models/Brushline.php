@@ -10,10 +10,7 @@ namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
-use App\Models\Interfaces\EventModelInterface;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -34,7 +31,7 @@ use Illuminate\Support\Carbon;
  *
  * @mixin Eloquent
  */
-class Brushline extends Model implements EventModelInterface
+class Brushline extends Model
 {
     protected $visible = ['id', 'floor_id', 'polyline'];
 
@@ -71,19 +68,6 @@ class Brushline extends Model implements EventModelInterface
     public function floor(): BelongsTo
     {
         return $this->belongsTo(Floor::class);
-    }
-
-    /**
-     * @throws BindingResolutionException
-     */
-    public function getEventData(): array
-    {
-        /** @var CoordinatesServiceInterface $coordinatesService */
-        $coordinatesService = app()->make(CoordinatesServiceInterface::class);
-
-        return array_merge([
-
-        ], $this->polyline->getCoordinatesData($coordinatesService, $this->dungeonRoute->mappingVersion, $this->floor));
     }
 
     protected static function boot(): void

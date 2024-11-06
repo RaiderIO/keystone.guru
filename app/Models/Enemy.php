@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Floor\Floor;
-use App\Models\Interfaces\EventModelInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -54,7 +53,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class Enemy extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface, EventModelInterface
+class Enemy extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
@@ -220,10 +219,5 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
     public function getUniqueKey(): string
     {
         return sprintf('%d-%d', $this->getMdtNpcId(), $this->mdt_id);
-    }
-
-    public function getEventData(): array
-    {
-        return [];
     }
 }

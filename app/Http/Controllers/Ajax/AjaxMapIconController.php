@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\Model\ModelDeletedEvent;
+use App\Events\Models\MapIcon\MapIconChangedEvent;
+use App\Events\Models\MapIcon\MapIconDeletedEvent;
+use App\Events\Models\ModelChangedEvent;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Http\Requests\MapIcon\MapIconFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -74,7 +76,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 
         $beforeModel = $mapIcon === null ? null : clone $mapIcon;
 
-        return $this->storeModel($mappingVersion, $validated, MapIcon::class, $mapIcon,
+        return $this->storeModel($coordinatesService, $mappingVersion, $validated, MapIcon::class, $mapIcon,
             function (MapIcon $mapIcon) use ($coordinatesService, $validated, $user, $dungeonRoute, &$beforeModel) {
                 // Set the team_id if the user has the rights to do this. May be null if not set or no rights for it.
                 $updateAttributes = [];
@@ -168,9 +170,7 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         try {
             if ($mapIcon->delete()) {
                 if (Auth::check()) {
-                    /** @var User $user */
-                    $user = Auth::user();
-                    broadcast(new ModelDeletedEvent($dungeonRoute ?? $mapIcon->floor->dungeon, $user, $mapIcon));
+                    broadcast(new MapIconDeletedEvent($dungeonRoute ?? $mapIcon->floor->dungeon, Auth::user(), $mapIcon));
                 }
 
                 // Only when icons that are sticky to the map are saved
@@ -228,5 +228,10 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
     public function adminDelete(Request $request, MappingVersion $mappingVersion, MapIcon $mapIcon)
     {
         return $this->delete($request, null, $mapIcon);
+    }
+
+    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, MapIcon|Model $model): ModelChangedEvent
+    {
+        return new MapIconChangedEvent($coordinatesService, $context, Auth::getUser(), $model);
     }
 }

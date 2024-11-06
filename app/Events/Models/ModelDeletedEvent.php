@@ -1,26 +1,22 @@
 <?php
 
-namespace App\Events\Model;
+namespace App\Events\Models;
 
 use App\Events\ContextEvent;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
-use ReflectionClass;
 
-class ModelDeletedEvent extends ContextEvent
+abstract class ModelDeletedEvent extends ContextEvent
 {
     protected int $modelId;
 
     protected string $modelClass;
-
-    private readonly string $modelName;
 
     public function __construct(Model $context, User $user, Model $model)
     {
         // Don't save Model here because serialization will fail due to object being deleted
         $this->modelId    = $model->getRouteKey();
         $this->modelClass = $model::class;
-        $this->modelName  = strtolower((new ReflectionClass($model))->getShortName());
         parent::__construct($context, $user);
     }
 
@@ -31,10 +27,5 @@ class ModelDeletedEvent extends ContextEvent
             'model_id'    => $this->modelId,
             'model_class' => $this->modelClass,
         ]);
-    }
-
-    public function broadcastAs(): string
-    {
-        return sprintf('%s-deleted', $this->modelName);
     }
 }

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\Model\ModelDeletedEvent;
+use App\Events\Models\EnemyPack\EnemyPackChangedEvent;
+use App\Events\Models\EnemyPack\EnemyPackDeletedEvent;
+use App\Events\Models\ModelChangedEvent;
 use App\Http\Requests\EnemyPack\EnemyPackFormRequest;
 use App\Models\EnemyPack;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
@@ -22,11 +25,15 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
      *
      * @throws Throwable
      */
-    public function store(EnemyPackFormRequest $request, MappingVersion $mappingVersion, ?EnemyPack $enemyPack = null): EnemyPack
-    {
+    public function store(
+        EnemyPackFormRequest        $request,
+        CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
+        ?EnemyPack                  $enemyPack = null
+    ): EnemyPack {
         $validated = $request->validated();
 
-        return $this->storeModel($mappingVersion, $validated, EnemyPack::class, $enemyPack);
+        return $this->storeModel($coordinatesService, $mappingVersion, $validated, EnemyPack::class, $enemyPack);
     }
 
     /**
@@ -43,7 +50,7 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
                 if (Auth::check()) {
                     /** @var User $user */
                     $user = Auth::getUser();
-                    broadcast(new ModelDeletedEvent($enemyPack->floor->dungeon, $user, $enemyPack));
+                    broadcast(new EnemyPackDeletedEvent($enemyPack->floor->dungeon, $user, $enemyPack));
                 }
 
                 $result = response()->noContent();
@@ -53,5 +60,10 @@ class AjaxEnemyPackController extends AjaxMappingModelBaseController
 
             return $result;
         });
+    }
+
+    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
+    {
+        return new EnemyPackChangedEvent($context, $user, $model);
     }
 }

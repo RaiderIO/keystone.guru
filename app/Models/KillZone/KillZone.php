@@ -7,12 +7,9 @@ use App\Models\Affix;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
-use App\Models\Interfaces\EventModelInterface;
 use App\Models\Spell\Spell;
 use App\Models\Traits\HasLatLng;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -44,7 +41,7 @@ use Illuminate\Support\Facades\DB;
  *
  * @mixin Eloquent
  */
-class KillZone extends Model implements EventModelInterface
+class KillZone extends Model
 {
     use HasLatLng;
 
@@ -359,24 +356,7 @@ class KillZone extends Model implements EventModelInterface
         return collect($queryResult);
     }
 
-    /**
-     * @throws BindingResolutionException
-     */
-    public function getEventData(): array
-    {
-        if($this->floor_id === null ) {
-            return [];
-        }
-
-        /** @var CoordinatesServiceInterface $coordinatesService */
-        $coordinatesService = app()->make(CoordinatesServiceInterface::class);
-
-        return array_merge([
-
-        ], $this->getCoordinatesData($coordinatesService));
-    }
-
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 

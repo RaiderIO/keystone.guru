@@ -24,7 +24,7 @@ trait ChangesDungeonRoute
     public function dungeonRouteChanged(DungeonRoute $dungeonRoute, ?Model $beforeModel, ?Model $afterModel, ?callable $modifyAttributes = null): void
     {
         // We only care for these changes when the route is part of a team
-        if ($dungeonRoute->team_id === null) {
+        if ($dungeonRoute->team_id === -1) {
             return;
         }
 

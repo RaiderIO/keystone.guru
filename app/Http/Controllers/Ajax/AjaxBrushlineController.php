@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\Model\ModelChangedEvent;
-use App\Events\Model\ModelDeletedEvent;
+use App\Events\Models\Brushline\BrushlineChangedEvent;
+use App\Events\Models\Brushline\BrushlineDeletedEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Brushline\APIBrushlineFormRequest;
@@ -84,7 +83,7 @@ class AjaxBrushlineController extends Controller
 
                     // Something's updated; broadcast it
                     if (Auth::check()) {
-                        broadcast(new ModelChangedEvent($dungeonRoute, Auth::user(), $brushline));
+                        broadcast(new BrushlineChangedEvent($coordinatesService, $dungeonRoute, Auth::user(), $brushline));
                     }
 
                     // Touch the route so that the thumbnail gets updated
@@ -117,7 +116,7 @@ class AjaxBrushlineController extends Controller
         try {
             if ($brushline->delete()) {
                 if (Auth::check()) {
-                    broadcast(new ModelDeletedEvent($dungeonRoute, Auth::getUser(), $brushline));
+                    broadcast(new BrushlineDeletedEvent($dungeonRoute, Auth::getUser(), $brushline));
                 }
 
                 $this->dungeonRouteChanged($dungeonRoute, $brushline, null);

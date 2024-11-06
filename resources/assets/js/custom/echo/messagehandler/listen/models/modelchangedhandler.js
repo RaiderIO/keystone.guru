@@ -55,11 +55,8 @@ class ModelChangedHandler extends BaseModelHandler {
                 result = coordinates.split_floors;
             }
         } else {
-            result = {
-                lat: e.model.lat,
-                lng: e.model.lng,
-                floor_id: e.model.floor_id
-            };
+            console.error('No coordinates found in changed event!', e);
+            result = false;
         }
 
         return result;

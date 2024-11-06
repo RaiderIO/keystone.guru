@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\Model\ModelChangedEvent;
-use App\Events\Model\ModelDeletedEvent;
+use App\Events\Models\Path\PathChangedEvent;
+use App\Events\Models\Path\PathDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Controllers\Traits\ValidatesFloorId;
@@ -88,7 +88,7 @@ class AjaxPathController extends Controller
                     if (Auth::check()) {
                         /** @var User $user */
                         $user = Auth::getUser();
-                        broadcast(new ModelChangedEvent($dungeonRoute, $user, $path));
+                        broadcast(new PathChangedEvent($coordinatesService, $dungeonRoute, $user, $path));
                     }
 
                     // Touch the route so that the thumbnail gets updated
@@ -123,7 +123,7 @@ class AjaxPathController extends Controller
                 if (Auth::check()) {
                     /** @var User $user */
                     $user = Auth::getUser();
-                    broadcast(new ModelDeletedEvent($dungeonRoute, $user, $path));
+                    broadcast(new PathDeletedEvent($dungeonRoute, $user, $path));
                 }
 
                 $this->dungeonRouteChanged($dungeonRoute, $path, null);
