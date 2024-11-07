@@ -16,31 +16,32 @@ class ModelChangedHandler extends BaseModelHandler {
     //
     //     return result;
 
-        // let state = getState();
-        // let currentFloorId = state.getCurrentFloor().id;
-        //
-        // if (typeof e.model.model_data !== 'undefined' && typeof e.model.model_data.coordinates !== 'undefined') {
-        //     result = result && (
-        //         // Use facade?
-        //         state.isCurrentDungeonFacadeEnabled() ?
-        //             //
-        //             e.model.model_data.coordinates.facade.floor_id === currentFloorId :
-        //             e.model.model_data.coordinates.split_floors.floor_id === currentFloorId
-        //     )
-        // } else {
-        //     result = result && (e.model.floor_id === currentFloorId || e.model.floor_id === -1);
-        // }
-        //
-        // return result;
+    // let state = getState();
+    // let currentFloorId = state.getCurrentFloor().id;
+    //
+    // if (typeof e.model.model_data !== 'undefined' && typeof e.model.model_data.coordinates !== 'undefined') {
+    //     result = result && (
+    //         // Use facade?
+    //         state.isCurrentDungeonFacadeEnabled() ?
+    //             //
+    //             e.model.model_data.coordinates.facade.floor_id === currentFloorId :
+    //             e.model.model_data.coordinates.split_floors.floor_id === currentFloorId
+    //     )
+    // } else {
+    //     result = result && (e.model.floor_id === currentFloorId || e.model.floor_id === -1);
+    // }
+    //
+    // return result;
     // }
 
     /**
      *
      * @param e
+     * @param expectsCoordinates {boolean}
      * @returns {MessageCoordinate|MessageCoordinate[]}
      * @protected
      */
-    _getCorrectLatLngFromEvent(e) {
+    _getCorrectLatLngFromEvent(e, expectsCoordinates = true) {
         console.assert(this instanceof ModelChangedHandler, 'this is not a ModelChangedHandler', this);
 
         let result;
@@ -55,7 +56,9 @@ class ModelChangedHandler extends BaseModelHandler {
                 result = coordinates.split_floors;
             }
         } else {
-            console.error('No coordinates found in changed event!', e);
+            if (expectsCoordinates) {
+                console.error('No coordinates found in changed event!', e);
+            }
             result = false;
         }
 

@@ -19,7 +19,7 @@ class KillZoneChangedHandler extends ModelChangedHandler {
             let killZoneMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
 
             // Apply the correct coordinates for our choice of facade
-            let coordinates = this._getCorrectLatLngFromEvent(e);
+            let coordinates = this._getCorrectLatLngFromEvent(e, false);
             if( coordinates !== false ){
                 e.model = $.extend({}, e.model, coordinates);
             }
