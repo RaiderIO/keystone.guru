@@ -157,6 +157,6 @@ class MapIcon extends Icon {
     }
 
     toString() {
-        return `Map icon (${this.comment === null ? '' : this.comment.substring(0, 25)})`;
+        return `Map icon ${this.comment === null ? '' : `(${this.comment.substring(0, 50)})`}`;
     }
 }

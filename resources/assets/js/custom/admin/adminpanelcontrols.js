@@ -79,39 +79,39 @@ class AdminPanelControls extends MapControl {
 
         this._mapControl = L.control.domElement({position: 'bottomright'}).addTo(this.map.leafletMap);
 
-        $('#mapping_manipulation_tools_rotate_btn').bind('click', this._mappingRotate.bind(this));
-
-        $('#mapping_manipulation_tools_scale_x_minus_btn').bind('click', this._mappingScaleXMinus.bind(this));
-        $('#mapping_manipulation_tools_scale_x_plus_btn').bind('click', this._mappingScaleXPlus.bind(this));
-
-        $('#mapping_manipulation_tools_scale_y_minus_btn').bind('click', this._mappingScaleYMinus.bind(this));
-        $('#mapping_manipulation_tools_scale_y_plus_btn').bind('click', this._mappingScaleYPlus.bind(this));
-
-        $('#mapping_manipulation_tools_move_x_minus_btn').bind('click', this._mappingMoveXMinus.bind(this));
-        $('#mapping_manipulation_tools_move_x_plus_btn').bind('click', this._mappingMoveXPlus.bind(this));
-
-        $('#mapping_manipulation_tools_move_y_minus_btn').bind('click', this._mappingMoveYMinus.bind(this));
-        $('#mapping_manipulation_tools_move_y_plus_btn').bind('click', this._mappingMoveYPlus.bind(this));
-
-        let ids = [
-            'mapping_manipulation_tools_rotate_btn',
-
-            'mapping_manipulation_tools_scale_x_minus_btn',
-            'mapping_manipulation_tools_scale_x_plus_btn',
-
-            'mapping_manipulation_tools_scale_y_minus_btn',
-            'mapping_manipulation_tools_scale_y_plus_btn',
-
-            'mapping_manipulation_tools_move_x_minus_btn',
-            'mapping_manipulation_tools_move_x_plus_btn',
-
-            'mapping_manipulation_tools_move_y_minus_btn',
-            'mapping_manipulation_tools_move_y_plus_btn',
-        ];
-
-        for (let index in ids) {
-            L.DomEvent.disableClickPropagation(L.DomUtil.get(ids[index]));
-        }
+        // $('#mapping_manipulation_tools_rotate_btn').bind('click', this._mappingRotate.bind(this));
+        //
+        // $('#mapping_manipulation_tools_scale_x_minus_btn').bind('click', this._mappingScaleXMinus.bind(this));
+        // $('#mapping_manipulation_tools_scale_x_plus_btn').bind('click', this._mappingScaleXPlus.bind(this));
+        //
+        // $('#mapping_manipulation_tools_scale_y_minus_btn').bind('click', this._mappingScaleYMinus.bind(this));
+        // $('#mapping_manipulation_tools_scale_y_plus_btn').bind('click', this._mappingScaleYPlus.bind(this));
+        //
+        // $('#mapping_manipulation_tools_move_x_minus_btn').bind('click', this._mappingMoveXMinus.bind(this));
+        // $('#mapping_manipulation_tools_move_x_plus_btn').bind('click', this._mappingMoveXPlus.bind(this));
+        //
+        // $('#mapping_manipulation_tools_move_y_minus_btn').bind('click', this._mappingMoveYMinus.bind(this));
+        // $('#mapping_manipulation_tools_move_y_plus_btn').bind('click', this._mappingMoveYPlus.bind(this));
+        //
+        // let ids = [
+        //     'mapping_manipulation_tools_rotate_btn',
+        //
+        //     'mapping_manipulation_tools_scale_x_minus_btn',
+        //     'mapping_manipulation_tools_scale_x_plus_btn',
+        //
+        //     'mapping_manipulation_tools_scale_y_minus_btn',
+        //     'mapping_manipulation_tools_scale_y_plus_btn',
+        //
+        //     'mapping_manipulation_tools_move_x_minus_btn',
+        //     'mapping_manipulation_tools_move_x_plus_btn',
+        //
+        //     'mapping_manipulation_tools_move_y_minus_btn',
+        //     'mapping_manipulation_tools_move_y_plus_btn',
+        // ];
+        //
+        // for (let index in ids) {
+        //     L.DomEvent.disableClickPropagation(L.DomUtil.get(ids[index]));
+        // }
     }
 
     cleanup() {

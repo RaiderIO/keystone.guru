@@ -62,14 +62,21 @@ class ModelChangedHandler extends BaseModelHandler {
         return result;
     }
 
-    // /**
-    //  *
-    //  * @param e {KillZoneChangedMessage}
-    //  * @return boolean
-    //  */
-    // onReceive(e) {
-    //     super.onReceive(e);
-    //
-    //     return this._shouldHandleChangedEchoEvent(e);
-    // }
+    /**
+     *
+     * @param localMapObject {MapObject}
+     * @param user {Object}
+     * @protected
+     */
+    _showChangedFromEchoNotification(localMapObject, user) {
+        console.assert(this instanceof ModelChangedHandler, 'this is not a ModelChangedHandler', this);
+
+        let state = getState();
+        if (state.isEchoEnabled() && state.getUser().public_key !== user.public_key && user.name !== null) {
+            showInfoNotification(lang.get('messages.echo_object_changed_notification', {
+                object: localMapObject.toString(),
+                user: user.name
+            }));
+        }
+    }
 }

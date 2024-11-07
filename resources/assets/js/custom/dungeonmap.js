@@ -561,6 +561,12 @@ class DungeonMap extends Signalable {
             let state = getState();
             let mapContext = state.getMapContext();
 
+            // Defined in sitescripts
+            // noinspection JSUnresolvedReference
+            // if (isUserAdmin) {
+                mapControls.push(new AdminPanelControls(this));
+            // }
+
             // Only when enemy forces are relevant in their display (not in a view)
             if (!state.isMapAdmin() && !(mapContext instanceof MapContextDungeonExplore)) {
                 if (mapContext.isDungeonSpeedrunEnabled()) {

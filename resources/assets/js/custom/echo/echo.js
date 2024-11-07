@@ -39,6 +39,9 @@ class Echo extends Signalable {
             // Overpulled enemies
             new OverpulledEnemyChangedHandler(this),
             new OverpulledEnemyDeletedHandler(this),
+            // Path
+            new PathChangedHandler(this),
+            new PathDeletedHandler(this),
 
             // Color changed
             // new ColorChangedHandler(this),

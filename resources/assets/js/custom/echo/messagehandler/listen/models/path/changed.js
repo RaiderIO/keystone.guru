@@ -1,20 +1,20 @@
-class BrushlineChangedHandler extends ModelChangedHandler {
+class PathChangedHandler extends ModelChangedHandler {
 
     constructor(echo) {
-        super(echo, BrushlineChangedMessage.getName());
+        super(echo, PathChangedMessage.getName());
     }
 
     /**
      *
-     * @param e {BrushlineChangedMessage}
+     * @param e {PathChangedMessage}
      * @return boolean
      */
     onReceive(e) {
         let shouldHandle = super.onReceive(e);
 
-        console.log(`BrushlineChangedHandler::onReceive:`, shouldHandle, e);
+        console.log(`PathChangedHandler::onReceive:`, shouldHandle, e);
         if (shouldHandle) {
-            let brushlineMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_BRUSHLINE);
+            let pathMapObjectGroup = this.echo.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_PATH);
 
             // Apply the correct coordinates for our choice of facade
             /** @type {MessageCoordinate[]} */
@@ -27,8 +27,8 @@ class BrushlineChangedHandler extends ModelChangedHandler {
             }
 
 
-            let mapObject = brushlineMapObjectGroup.loadMapObject(e.model, null, e.user);
-            brushlineMapObjectGroup.setMapObjectVisibility(mapObject, mapObject.shouldBeVisible());
+            let mapObject = pathMapObjectGroup.loadMapObject(e.model, null, e.user);
+            pathMapObjectGroup.setMapObjectVisibility(mapObject, mapObject.shouldBeVisible());
         }
 
         return shouldHandle;

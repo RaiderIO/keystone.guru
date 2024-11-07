@@ -44,6 +44,13 @@ class MessageFactory {
             case OverpulledEnemyDeletedMessage.getName():
                 result = new OverpulledEnemyDeletedMessage(props);
                 break;
+            // Path
+            case PathChangedMessage.getName():
+                result = new PathChangedMessage(props);
+                break;
+            case PathDeletedMessage.getName():
+                result = new PathDeletedMessage(props);
+                break;
 
             // LiveSession
             case LiveSessionInviteMessage.getName():
