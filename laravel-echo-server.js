@@ -18,7 +18,8 @@ EchoServer.run({
         "redis": {
             "host": env.REDIS_HOST,
             "port": env.REDIS_PORT,
-            "db": env.REDIS_DB
+            "db": env.REDIS_DB,
+            "keyPrefix": env.REDIS_PREFIX
         },
         "publishPresence": true
     },
