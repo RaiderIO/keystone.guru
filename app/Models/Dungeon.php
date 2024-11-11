@@ -6,6 +6,7 @@ use App\Logic\MDT\Conversion;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Interfaces\TracksPageViewInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
@@ -41,6 +42,7 @@ use Mockery\Exception;
  * @property bool                                   $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
  * @property bool                                   $speedrun_difficulty_10_man_enabled True if this dungeon's speedrun is for 10-man.
  * @property bool                                   $speedrun_difficulty_25_man_enabled True if this dungeon's speedrun is for 25-man.
+ * @property int                                    $views The amount of views this dungeon has had.
  * @property bool                                   $active True if this dungeon is active, false if it is not.
  * @property bool                                   $mdt_supported True if MDT is supported for this dungeon, false if it is not.
  *
@@ -70,7 +72,7 @@ use Mockery\Exception;
  *
  * @mixin Eloquent
  */
-class Dungeon extends CacheModel implements MappingModelInterface
+class Dungeon extends CacheModel implements MappingModelInterface, TracksPageViewInterface
 {
     use DungeonConstants;
 
@@ -96,11 +98,12 @@ class Dungeon extends CacheModel implements MappingModelInterface
         'name',
         'key',
         'slug',
+        'views',
     ];
 
     public $with = ['expansion', 'gameVersion', 'floors'];
 
-    public $hidden = ['slug', 'active', 'mdt_id', 'zone_id', 'instance_id', 'created_at', 'updated_at'];
+    public $hidden = ['slug', 'views', 'active', 'mdt_id', 'zone_id', 'instance_id'];
 
     public $timestamps = false;
 
@@ -293,7 +296,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
      */
     public function scopeFactionSelectionRequired(Builder $query): Builder
     {
-        return $query->whereIn('key', [/*self::DUNGEON_SIEGE_OF_BORALUS,*/self::DUNGEON_THE_NEXUS]);
+        return $query->whereIn('key', [/*self::DUNGEON_SIEGE_OF_BORALUS,*/ self::DUNGEON_THE_NEXUS]);
     }
 
     /**
@@ -468,7 +471,7 @@ class Dungeon extends CacheModel implements MappingModelInterface
 
                     // City of Threads:
                     // Eye of the Queen gives 0 enemy forces but is in the mapping regardless
-                    220003
+                    220003,
                 ]);
             })
             ->get();
@@ -535,6 +538,19 @@ class Dungeon extends CacheModel implements MappingModelInterface
     public function getDungeonId(): ?int
     {
         return $this->id;
+    }
+
+    public function trackPageView(int $source = 0): bool
+    {
+        // Handle route views counting
+        if ($result = PageView::trackPageView($this->id, Dungeon::class, $source)) {
+            // Do not update the updated_at time - triggering a refresh of the thumbnails
+            $this->timestamps = false;
+
+            $this->update(['views' => ++$this->views]);
+        }
+
+        return $result;
     }
 
     public static function boot(): void

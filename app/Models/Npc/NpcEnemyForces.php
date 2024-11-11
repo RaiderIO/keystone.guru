@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int            $npc_id
  * @property int            $enemy_forces
  * @property int|null       $enemy_forces_teeming
+ *
  * @property MappingVersion $mappingVersion
  * @property Npc            $npc
  *

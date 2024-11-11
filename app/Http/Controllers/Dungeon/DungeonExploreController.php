@@ -88,6 +88,8 @@ class DungeonExploreController extends Controller
 
             $heatmapActive = Feature::active(Heatmap::class) && $dungeon->gameVersion->has_seasons;
 
+            $dungeon->trackPageView();
+
             return view('dungeon.explore.view', [
                 'dungeon'                 => $dungeon,
                 'floor'                   => $floor,

@@ -20,6 +20,7 @@ use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Models\Interfaces\ConvertsVerticesInterface;
+use App\Models\Interfaces\TracksPageViewInterface;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Laratrust\Role;
@@ -142,7 +143,7 @@ use Psr\SimpleCache\InvalidArgumentException;
  *
  * @mixin Eloquent
  */
-class DungeonRoute extends Model
+class DungeonRoute extends Model implements TracksPageViewInterface
 {
     use GeneratesPublicKey;
     use HasFactory;
@@ -1487,8 +1488,7 @@ class DungeonRoute extends Model
                 $this->views_embed++;
             }
 
-            $this->popularity++;
-            $this->update(['views', 'views_embed', 'popularity']);
+            $this->update(['views', 'views_embed']);
         }
 
         return $result;
