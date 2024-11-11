@@ -580,7 +580,6 @@ class DungeonMap extends Signalable {
             }
 
             if (this.options.edit &&
-                mapContext.getDungeon().key === DUNGEON_SIEGE_OF_BORALUS ||
                 mapContext.getDungeon().key === DUNGEON_THE_NEXUS) {
                 mapControls.push(new FactionDisplayControls(this));
             }
