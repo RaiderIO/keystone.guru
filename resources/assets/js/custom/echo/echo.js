@@ -44,7 +44,7 @@ class Echo extends Signalable {
             new PathDeletedHandler(this),
 
             // Color changed
-            // new ColorChangedHandler(this),
+            new UserColorChangedHandler(this),
 
             // Whisper handlers
             new MousePositionHandler(this),
