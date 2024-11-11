@@ -1,4 +1,4 @@
-class ColorChangedHandler extends MessageHandler {
+class UserColorChangedHandler extends MessageHandler {
 
     constructor(echo) {
         super(echo, '.user-color-changed');

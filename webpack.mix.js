@@ -185,13 +185,13 @@ let scripts = [
     'resources/assets/js/custom/echo/message/listen/models/overpulledenemy/deleted.js',
     'resources/assets/js/custom/echo/message/listen/models/path/changed.js',
     'resources/assets/js/custom/echo/message/listen/models/path/deleted.js',
+    'resources/assets/js/custom/echo/message/listen/usercolorchanged.js',
     'resources/assets/js/custom/echo/message/whisper/viewport.js',
     'resources/assets/js/custom/echo/message/whisper/mouseposition.js',
     'resources/assets/js/custom/echo/message/messagefactory.js',
 
     // Echo message handlers
     'resources/assets/js/custom/echo/messagehandler/messagehandler.js',
-    'resources/assets/js/custom/echo/messagehandler/listen/colorchanged.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/invite.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/stop.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/basemodelhandler.js',
@@ -209,6 +209,7 @@ let scripts = [
     'resources/assets/js/custom/echo/messagehandler/listen/models/overpulledenemy/deleted.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/path/changed.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/path/deleted.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/usercolorchanged.js',
     'resources/assets/js/custom/echo/messagehandler/whisper/whispermessagehandler.js',
     'resources/assets/js/custom/echo/messagehandler/whisper/viewport.js',
     'resources/assets/js/custom/echo/messagehandler/whisper/mouseposition.js',

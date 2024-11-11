@@ -52,6 +52,11 @@ class MessageFactory {
                 result = new PathDeletedMessage(props);
                 break;
 
+            // Color changed
+            case UserColorChangedMessage.getName():
+                result = new UserColorChangedMessage(props);
+                break;
+
             // LiveSession
             case LiveSessionInviteMessage.getName():
                 result = new LiveSessionInviteMessage(props);
