@@ -3,6 +3,7 @@
 namespace App\Logic\SimulationCraft;
 
 use App\Models\KillZone\KillZone;
+use App\Models\SimulationCraft\SimulationCraftRaidBuffs;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
@@ -57,9 +58,13 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
             override.bloodlust=%d
             override.arcane_intellect=%d
             override.power_word_fortitude=%d
+            override.mark_of_the_wild=%d
             override.battle_shout=%d
             override.mystic_touch=%d
             override.chaos_brand=%d
+            override.skyfury=%d
+            override.hunters_mark=%d
+            override.power_infusion=%d
             override.bleeding=0
             single_actor_batch=1
             max_time=%s
@@ -68,12 +73,16 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
             %s
             keystone_level=%d
             raid_events=/invulnerable,cooldown=5160,duration=5160,retarget=1
-        ', $this->options->bloodlust,
-            $this->options->arcane_intellect,
-            $this->options->power_word_fortitude,
-            $this->options->battle_shout,
-            $this->options->mystic_touch,
-            $this->options->chaos_brand,
+        ', $this->options->hasRaidBuff(SimulationCraftRaidBuffs::Bloodlust) ? 1 : 0,
+            $this->options->hasRaidBuff(SimulationCraftRaidBuffs::ArcaneIntellect) ? 1 : 0,
+            $this->options->hasRaidBuff(SimulationCraftRaidBuffs::PowerWordFortitude) ? 1 : 0,
+            $this->options->hasRaidBuff(SimulationCraftRaidBuffs::MarkOfTheWild) ? 1 : 0,
+            $this->options->hasRaidBuff(SimulationCraftRaidBuffs::BattleShout) ? 1 : 0,
+            $this->options->hasRaidBuff(SimulationCraftRaidBuffs::MysticTouch) ? 1 : 0,
+            $this->options->hasRaidBuff(SimulationCraftRaidBuffs::ChaosBrand) ? 1 : 0,
+            $this->options->hasRaidBuff(SimulationCraftRaidBuffs::Skyfury) ? 1 : 0,
+            $this->options->hasRaidBuff(SimulationCraftRaidBuffs::HuntersMark) ? 1 : 0,
+            $this->options->hasRaidBuff(SimulationCraftRaidBuffs::PowerInfusion) ? 1 : 0,
             $this->options->dungeonroute->mappingVersion->timer_max_seconds,
             $this->options->dungeonroute->title,
             $this->options->shrouded_bounty_type === SimulationCraftRaidEventsOptions::SHROUDED_BOUNTY_TYPE_NONE ?

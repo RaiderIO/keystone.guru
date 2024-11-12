@@ -6,12 +6,14 @@ use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSimulateFormRequest;
 use App\Models\Affix;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Patreon\PatreonBenefit;
+use App\Models\Traits\BitMasks;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\User;
 use Auth;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Random\RandomException;
 
 /**
  * @property int          $id
@@ -22,12 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string       $shrouded_bounty_type
  * @property string       $affix Comma separated list of affixes
  * @property int|null     $thundering_clear_seconds
- * @property bool         $bloodlust Override to say yes/no to Bloodlust/Heroism being available.
- * @property bool         $arcane_intellect
- * @property bool         $power_word_fortitude
- * @property bool         $battle_shout
- * @property bool         $mystic_touch
- * @property bool         $chaos_brand
+ * @property int          $raid_buffs_mask
  * @property float        $hp_percent
  * @property float        $ranged_pull_compensation_yards Premium: the amount of yards that are 'free' between pulls because you
  *                                                 don't have to always walk from center of previous pull to center of next pull. This reduces the delay between pulls making the sims more accurate
@@ -43,7 +40,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class SimulationCraftRaidEventsOptions extends Model
 {
-    use GeneratesPublicKey;
+    use GeneratesPublicKey, BitMasks;
 
     public $timestamps = true;
 
@@ -55,12 +52,7 @@ class SimulationCraftRaidEventsOptions extends Model
         'shrouded_bounty_type',
         'affix',
         'thundering_clear_seconds',
-        'bloodlust',
-        'arcane_intellect',
-        'power_word_fortitude',
-        'battle_shout',
-        'mystic_touch',
-        'chaos_brand',
+        'raid_buffs_mask',
         'hp_percent',
         'simulate_bloodlust_per_pull',
         'ranged_pull_compensation_yards',
@@ -68,6 +60,18 @@ class SimulationCraftRaidEventsOptions extends Model
     ];
 
     protected $with = ['dungeonroute'];
+
+    protected $casts = [
+        'id'                             => 'int',
+        'dungeon_route_id'               => 'int',
+        'user_id'                        => 'int',
+        'key_level'                      => 'int',
+        'thundering_clear_seconds'       => 'int',
+        'raid_buffs_mask'                => 'int',
+        'hp_percent'                     => 'float',
+        'ranged_pull_compensation_yards' => 'int',
+        'use_mounts'                     => 'bool',
+    ];
 
     public const SHROUDED_BOUNTY_TYPE_NONE    = 'none';
     public const SHROUDED_BOUNTY_TYPE_CRIT    = 'crit';
@@ -106,6 +110,21 @@ class SimulationCraftRaidEventsOptions extends Model
         return $this->thundering_clear_seconds !== null;
     }
 
+    public function addRaidBuff(SimulationCraftRaidBuffs $raidBuff): void
+    {
+        $this->raid_buffs_mask = $this->bitMaskAdd($this->raid_buffs_mask, $raidBuff->value);
+    }
+
+    public function removeRaidBuff(SimulationCraftRaidBuffs $raidBuff): void
+    {
+        $this->raid_buffs_mask = $this->bitMaskRemove($this->raid_buffs_mask, $raidBuff->value);
+    }
+
+    public function hasRaidBuff(SimulationCraftRaidBuffs $raidBuff): bool
+    {
+        return $this->bitMaskHasValue($this->raid_buffs_mask, $raidBuff->value);
+    }
+
     public function hasAffix(string $affix): bool
     {
         return in_array($affix, explode(',', $this->affix));
@@ -128,6 +147,9 @@ class SimulationCraftRaidEventsOptions extends Model
         return $affixes;
     }
 
+    /**
+     * @throws RandomException
+     */
     public static function fromRequest(AjaxDungeonRouteSimulateFormRequest $request, DungeonRoute $dungeonRoute): SimulationCraftRaidEventsOptions
     {
         $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ADVANCED_SIMULATION);

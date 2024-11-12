@@ -8,15 +8,16 @@ use App\Models\Season;
  * @var String[]    $affixes
  * @var bool        $isShrouded
  * @var bool        $isThundering
+ * @var array       $raidBuffsOptions
  */
 ?>
 
-    <!-- General settings -->
+        <!-- General settings -->
 <div class="form-group">
     <label for="simulate_key_level">
-        {{ __('view_common.modal.simulate.key_level') }}
+        {{ __('view_common.modal.simulateoptions.default.key_level') }}
         <i class="fas fa-info-circle" data-toggle="tooltip"
-           title="{{ __('view_common.modal.simulate.key_level_title') }}"></i>
+           title="{{ __('view_common.modal.simulateoptions.default.key_level_title') }}"></i>
     </label>
     <div class="row">
         <div class="col">
@@ -32,9 +33,9 @@ use App\Models\Season;
 @if($isShrouded)
     <div class="form-group">
         <label for="simulate_shrouded_bounty_type">
-            {{ __('view_common.modal.simulate.shrouded_bounty_type') }}
+            {{ __('view_common.modal.simulateoptions.default.shrouded_bounty_type') }}
             <i class="fas fa-info-circle" data-toggle="tooltip"
-               title="{{ __('view_common.modal.simulate.shrouded_bounty_type_title') }}"></i>
+               title="{{ __('view_common.modal.simulateoptions.default.shrouded_bounty_type_title') }}"></i>
         </label>
         <div class="row">
             <div class="col">
@@ -49,9 +50,9 @@ use App\Models\Season;
 <div class="form-group row">
     <div class="col">
         <label for="simulate_affix">
-            {{ __('view_common.modal.simulate.affixes') }}
+            {{ __('view_common.modal.simulateoptions.default.affixes') }}
             <i class="fas fa-info-circle" data-toggle="tooltip"
-               title="{{ __('view_common.modal.simulate.affix_title') }}"></i>
+               title="{{ __('view_common.modal.simulateoptions.default.affix_title') }}"></i>
         </label>
         <div class="row">
             <div class="col">
@@ -66,9 +67,9 @@ use App\Models\Season;
     @if($isThundering)
         <div class="col">
             <label for="simulate_thundering">
-                {{ __('view_common.modal.simulate.simulate_thundering_clear_seconds') }}
+                {{ __('view_common.modal.simulateoptions.default.simulate_thundering_clear_seconds') }}
                 <i class="fas fa-info-circle" data-toggle="tooltip"
-                   title="{{ __('view_common.modal.simulate.simulate_thundering_clear_seconds_title') }}"></i>
+                   title="{{ __('view_common.modal.simulateoptions.default.simulate_thundering_clear_seconds_title') }}"></i>
             </label>
             <div class="row">
                 <div class="col">
@@ -83,64 +84,18 @@ use App\Models\Season;
 
 <div class="form-group row no-gutters">
     <div class="col">
-        <label for="simulate_bloodlust">
-            {{ __('view_common.modal.simulate.bloodlust') }}
+        <label for="simulate_raid_buffs">
+            {{ __('view_common.modal.simulateoptions.default.raid_buffs') }}
             <i class="fas fa-info-circle" data-toggle="tooltip"
-               title="{{ __('view_common.modal.simulate.bloodlust_title') }}"></i>
+               title="{{ __('view_common.modal.simulateoptions.default.raid_buffs_title') }}"></i>
         </label>
         <div class="row">
             <div class="col">
-                {!! Form::checkbox('simulate_bloodlust', 1, null, ['id' => 'simulate_bloodlust', 'class' => 'form-control left_checkbox']) !!}
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <label for="simulate_arcane_intellect">
-            {{ __('view_common.modal.simulate.arcane_intellect') }}
-        </label>
-        <div class="row">
-            <div class="col">
-                {!! Form::checkbox('simulate_arcane_intellect', 1, null, ['id' => 'simulate_arcane_intellect', 'class' => 'form-control left_checkbox']) !!}
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <label for="simulate_power_word_fortitude">
-            {{ __('view_common.modal.simulate.power_word_fortitude') }}
-        </label>
-        <div class="row">
-            <div class="col">
-                {!! Form::checkbox('simulate_power_word_fortitude', 1, null, ['id' => 'simulate_power_word_fortitude', 'class' => 'form-control left_checkbox']) !!}
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <label for="simulate_battle_shout">
-            {{ __('view_common.modal.simulate.battle_shout') }}
-        </label>
-        <div class="row">
-            <div class="col">
-                {!! Form::checkbox('simulate_battle_shout', 1, null, ['id' => 'simulate_battle_shout', 'class' => 'form-control left_checkbox']) !!}
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <label for="simulate_mystic_touch">
-            {{ __('view_common.modal.simulate.mystic_touch') }}
-        </label>
-        <div class="row">
-            <div class="col">
-                {!! Form::checkbox('simulate_mystic_touch', 1, null, ['id' => 'simulate_mystic_touch', 'class' => 'form-control left_checkbox']) !!}
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <label for="simulate_chaos_brand">
-            {{ __('view_common.modal.simulate.chaos_brand') }}
-        </label>
-        <div class="row">
-            <div class="col">
-                {!! Form::checkbox('simulate_chaos_brand', 1, null, ['id' => 'simulate_chaos_brand', 'class' => 'form-control left_checkbox']) !!}
+                {!! Form::select('simulate_raid_buffs', $raidBuffsOptions, null, [
+                    'id' => 'simulate_raid_buffs',
+                    'class' => 'form-control selectpicker',
+                    'multiple' => 'multiple',
+                ]) !!}
             </div>
         </div>
     </div>
@@ -148,9 +103,9 @@ use App\Models\Season;
 
 <div class="form-group">
     <label for="simulate_hp_percent">
-        {{ __('view_common.modal.simulate.hp_percent') }}
+        {{ __('view_common.modal.simulateoptions.default.hp_percent') }}
         <i class="fas fa-info-circle" data-toggle="tooltip"
-           title="{{ __('view_common.modal.simulate.hp_percent_title') }}"></i>
+           title="{{ __('view_common.modal.simulateoptions.default.hp_percent_title') }}"></i>
     </label>
     <div class="row">
         <div class="col">
@@ -161,9 +116,9 @@ use App\Models\Season;
 
 <div class="form-group">
     <label for="simulate_bloodlust_per_pull">
-        {{ __('view_common.modal.simulate.bloodlust_per_pull') }}
+        {{ __('view_common.modal.simulateoptions.default.bloodlust_per_pull') }}
         <i class="fas fa-info-circle" data-toggle="tooltip"
-           title="{{ __('view_common.modal.simulate.bloodlust_per_pull_title') }}"></i>
+           title="{{ __('view_common.modal.simulateoptions.default.bloodlust_per_pull_title') }}"></i>
     </label>
     <div class="row">
         <div class="col">

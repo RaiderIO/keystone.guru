@@ -13,6 +13,7 @@ use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Release;
 use App\Models\Season;
+use App\Models\SimulationCraft\SimulationCraftRaidBuffs;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Models\User;
 use App\Models\UserReport;
@@ -119,6 +120,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Jenssegers\Agent\Agent;
+use Str;
 
 class KeystoneGuruServiceProvider extends ServiceProvider
 {
@@ -519,7 +521,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             }
             $affixes = [];
             foreach (SimulationCraftRaidEventsOptions::ALL_AFFIXES as $affix) {
-                $affixes[$affix] = __(sprintf('view_common.modal.simulate.affixes_map.%s', $affix));
+                $affixes[$affix] = __(sprintf('view_common.modal.simulateoptions.default.affixes_map.%s', $affix));
             }
             /** @var Season $currentSeason */
             $currentSeason     = $regionViewVariables['currentSeason'];
@@ -527,6 +529,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('shroudedBountyTypes', $shroudedBountyTypes);
             $view->with('affixes', $affixes);
             $view->with('isShrouded', $currentAffixGroup?->hasAffix(Affix::AFFIX_SHROUDED) ?? false);
+            $view->with('raidBuffsOptions', collect(SimulationCraftRaidBuffs::cases())->mapWithKeys(static function (SimulationCraftRaidBuffs $raidBuff) {
+                return [
+                    $raidBuff->value =>
+                    __(sprintf('view_common.modal.simulateoptions.default.raid_buffs_map.%s', Str::lower(Str::snake($raidBuff->name))))
+                ];
+            })->toArray());
         });
 
         // Thirdparty

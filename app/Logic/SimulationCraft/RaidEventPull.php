@@ -7,6 +7,7 @@ use App\Logic\Structs\LatLng;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\MountableArea;
+use App\Models\SimulationCraft\SimulationCraftRaidBuffs;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
@@ -33,7 +34,8 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
     public function calculateRaidEventPullEnemies(KillZone $killZone, LatLng $previousKillLocation): RaidEventPullInterface
     {
         // If bloodlust is enabled, and if this pull has bloodlust active on it..
-        $this->bloodLust = $this->options->bloodlust && in_array($killZone->id, explode(',', $this->options->simulate_bloodlust_per_pull));
+        $this->bloodLust = $this->options->hasRaidBuff(SimulationCraftRaidBuffs::Bloodlust) &&
+            in_array($killZone->id, explode(',', $this->options->simulate_bloodlust_per_pull));
 
         $this->pullIndex            = $killZone->index;
         $this->raidEventPullEnemies = collect();
