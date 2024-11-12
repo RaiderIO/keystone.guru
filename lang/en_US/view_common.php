@@ -373,9 +373,9 @@ return [
             'pullsworkbench' => [
                 'modal'            => [
                     'description' => [
-                        'label'                => 'Description',
-                        'supported_html_tags'  => 'Supported HTML tags: ',
-                        'save'                 => 'Save',
+                        'label'               => 'Description',
+                        'supported_html_tags' => 'Supported HTML tags: ',
+                        'save'                => 'Save',
                     ],
                     'spells'      => [
                         'label' => 'Spells',
@@ -414,6 +414,13 @@ return [
         ],
     ],
     'modal'        => [
+        'dungeonroute'       => [
+            'removed' => [
+                'title'        => 'Route removed',
+                'description'  => 'Your route has been removed and can no longer be viewed/edited. This can happen if your route was a temporary route and it has been automatically cleaned up or you deleted the route in a different browser tab.',
+                'back_to_home' => 'Back to home',
+            ],
+        ],
         'userreport'         => [
             'dungeonroute' => [
                 'report_route'           => 'Report route',

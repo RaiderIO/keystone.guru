@@ -181,4 +181,8 @@ class MapContextDungeonRoute extends MapContext {
     setLevelMax(levelMax) {
         this._options.levelMax = levelMax;
     }
+
+    getDungeonRouteClass() {
+        return this._options.dungeonRouteClass;
+    }
 }

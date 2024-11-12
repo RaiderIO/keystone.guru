@@ -78,7 +78,14 @@ trait DungeonRouteProperties
                 'raid_marker_name' => $drEnemyRaidMarker->raidMarker->name,
             ]),
             // A list of affixes that this route has (not to be confused with AffixGroups)
-            'uniqueAffixes'            => $dungeonRoute->affixes->map(static fn(AffixGroup $affixGroup) => $affixGroup->affixes)->collapse()->unique()->pluck(['name'])->map(static fn(string $name) => __($name, [], 'en_US')),
+            'uniqueAffixes'            => $dungeonRoute->affixes
+                ->map(static fn(AffixGroup $affixGroup) => $affixGroup->affixes)
+                ->collapse()
+                ->unique()
+                ->pluck(['name'])
+                ->map(static fn(string $name) => __($name, [], 'en_US')),
+            // Used for showing a modal when the route has been deleted while editing
+            'dungeonRouteClass' => DungeonRoute::class,
         ];
     }
 }
