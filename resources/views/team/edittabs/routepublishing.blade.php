@@ -10,7 +10,20 @@ use App\Models\Team;
     <h4>
         {{ __('view_team.edittabs.routepublishing.title') }}
     </h4>
-    <p>
+    <div class="form-group">
         {{ __('view_team.edittabs.routepublishing.description') }}
-    </p>
+    </div>
+    <div class="form-group">
+        @include('common.dungeonroute.table', [
+            'view' => 'team',
+            'team' => $team,
+            'tableId' => 'route_publishing_table',
+            'filterButtonId' => 'route_publishing_filter_button',
+            'dungeonSelectId' => 'route_publishing_dungeon',
+            'affixSelectId' => 'route_publishing_affixes',
+            'attributesSelectId' => 'route_publishing_attributes',
+            'requirementsSelectId' => 'route_publishing_requirements',
+            'tagsSelectId' => 'route_publishing_tags',
+        ])
+    </div>
 </div>

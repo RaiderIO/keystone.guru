@@ -50,7 +50,7 @@ use App\Models\Team;
             <div class="col-lg mt-2">
                 <div class="card text-center">
                     <div class="card-header">
-                        {{ __('view_team.edit.routes') }}
+                        {{ __('view_team.edittabs.overview.routes') }}
                     </div>
                     <div class="card-body">
                         <h1>{{ $team->getVisibleRouteCount() }}</h1>
@@ -61,7 +61,7 @@ use App\Models\Team;
             <div class="col-lg mt-2">
                 <div class="card text-center">
                     <div class="card-header">
-                        {{ __('view_team.edit.members') }}
+                        {{ __('view_team.edittabs.overview.members') }}
                     </div>
                     <div class="card-body">
                         <h1>{{ $team->members()->count() }}</h1>
