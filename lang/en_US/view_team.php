@@ -19,7 +19,9 @@ return [
             'ad_free_giveaway_description_available'     => 'Thank you for subscribing to Keystone.guru\'s :patreon! You can give away :current more ad-free experiences to Keystone.guru to any team member.',
         ],
         'overview'        => [
-            'title' => 'Overview',
+            'title'   => 'Overview',
+            'routes'  => 'Routes',
+            'members' => 'Members',
         ],
         'routepublishing' => [
             'title' => 'Route publishing',

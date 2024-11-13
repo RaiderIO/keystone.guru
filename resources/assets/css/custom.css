@@ -58,7 +58,7 @@
     }
 }
 
-#routes_table .not_clickable {
+.routes_table .not_clickable {
     cursor: default !important;
 }
 

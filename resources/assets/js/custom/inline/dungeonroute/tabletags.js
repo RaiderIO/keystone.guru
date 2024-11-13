@@ -176,8 +176,8 @@ class DungeonRouteTableTagsHandler {
 
         // New tags text field
         let sourceTags = {};
-        for (let i = 0; i < this._dungeonrouteTable.options.autocompletetags.length; i++) {
-            let tagName = this._dungeonrouteTable.options.autocompletetags[i].name;
+        for (let i = 0; i < this._dungeonrouteTable.options.autoCompleteTags.length; i++) {
+            let tagName = this._dungeonrouteTable.options.autoCompleteTags[i].name;
             sourceTags[`${tagName}`] = i;
         }
 

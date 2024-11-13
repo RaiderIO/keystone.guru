@@ -1,19 +1,37 @@
 @inject('seasonService', 'App\Service\Season\SeasonService')
 <?php
-/** @var $seasonService \App\Service\Season\SeasonService */
-/** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $searchTags */
-/** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $autocompletetags */
-/** @var $allRouteAttributes \Illuminate\Support\Collection<\App\Models\RouteAttribute> */
-/** This is the template for the Affix Selection when using it in a dropdown */
 
-/** @var \App\Models\DungeonRoute\DungeonRoute $model */
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\RouteAttribute;
+use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
+use App\Models\Team;
+use App\Service\Season\SeasonService;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+
+/**
+ * @var SeasonService              $seasonService
+ * @var Collection<Tag>            $searchTags
+ * @var Collection<Tag>            $autoCompleteTags
+ * @var Collection<RouteAttribute> $allRouteAttributes
+ */
+
+/** @var DungeonRoute $model */
 if (!isset($affixgroups)) {
     $affixgroups = $seasonService->getCurrentSeason()->affixGroups()->with('affixes')->get();
 }
 
 /** @var App\Models\Team|null $team */
-$team      ??= null;
-$favorites ??= false;
+$team                 ??= null;
+$favorites            ??= false;
+$tableId              ??= 'routes_table';
+$filterButtonId       ??= 'dungeonroute_filter';
+$dungeonSelectId      ??= 'dungeonroute_search_dungeon_id';
+$affixSelectId        ??= 'dungeonroute_affixes_select';
+$attributesSelectId   ??= 'dungeonroute_attributes_select';
+$requirementsSelectId ??= 'dungeonroute_requirements_select';
+$tagsSelectId         ??= 'dungeonroute_tags_select';
 
 /** @var string $view */
 $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
@@ -23,36 +41,45 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 if ($team !== null) {
     $searchTags = $team->getAvailableTags();
 } else if (Auth::check()) {
-    $tagCategoryId = \App\Models\Tags\TagCategory::ALL[\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL];
+    $tagCategoryId = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL];
     $searchTags    = Auth::user()->tags($tagCategoryId)->unique($tagCategoryId)->get();
 } else {
     $searchTags = collect();
 }
 
 
-$autocompleteTags = collect();
+$autoCompleteTags = collect();
 
 if (Auth::check()) {
     if ($team === null) {
-        $autocompleteTags = Auth::user()->tags()->unique(\App\Models\Tags\TagCategory::ALL[\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL])->get();
+        $autoCompleteTags = Auth::user()->tags()->unique(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])->get();
     } else {
-        $autocompleteTags = $team->getAvailableTags();
+        $autoCompleteTags = $team->getAvailableTags();
     }
 } else {
-    $autocompletetags = collect();
+    $autoCompleteTags = collect();
 }
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/table',
         'options' =>  [
             'tableView' => $view,
             'viewMode' => $cookieViewMode,
+
+            'tableSelector' => '#' . $tableId,
+            'filterButtonSelector' => '#' . $filterButtonId,
+            'dungeonSelectId' => '#' . $dungeonSelectId,
+            'affixSelectId' => '#' . $affixSelectId,
+            'attributesSelectId' => '#' . $attributesSelectId,
+            'requirementsSelectId' => '#' . $requirementsSelectId,
+            'tagsSelectId' => '#' . $tagsSelectId,
+            'tableListViewToggleSelector' => sprintf('.%s_filter_container .table_list_view_toggle', $tableId),
+
             'teamPublicKey' => $team ? $team->public_key : '',
-            'teams' => Auth::check() ? Auth::user()->teams()->whereHas('teamusers', function($teamuser){
-                /** @var $teamuser \App\Models\TeamUser  */
-                $teamuser->isModerator(Auth::id());
+            'teams' => Auth::check() ? Auth::user()->teams()->whereHas('teamUsers', function(Builder $builder){
+                $builder->isModerator(Auth::id());
             })->get() : [],
-            'autocompletetags' => $autocompleteTags,
-        ]
+            'autoCompleteTags' => $autoCompleteTags,
+        ],
 ])
 
 @section('scripts')
@@ -71,13 +98,13 @@ if (Auth::check()) {
     @include('common.handlebars.groupsetup')
     @include('common.handlebars.affixgroups')
     @include('common.handlebars.routeattributes')
-    @include('common.handlebars.affixgroupsselect')
+    @include('common.handlebars.affixgroupsselect', ['id' => $affixSelectId])
     @include('common.handlebars.biglistfeatures')
     @include('common.handlebars.thumbnailcarousel')
 @endsection
 
-<div class="row no-gutters">
-    @if($team instanceof \App\Models\Team)
+<div class="row no-gutters {{$tableId}}_filter_container">
+    @if($team instanceof Team)
         <div class="col-lg pl-1 pr-1">
             {!! Form::label('team_name', __('view_common.dungeonroute.table.team')) !!}
             {!! Form::text('team_name', $team->name, ['class' => 'form-control', 'readonly' => 'readonly']) !!}
@@ -85,18 +112,18 @@ if (Auth::check()) {
     @endisset
     <div class="col-lg pl-1 pr-1">
         @include('common.dungeon.select', [
-            'id' => 'dungeonroute_search_dungeon_id',
+            'id' => $dungeonSelectId,
             'allowSeasonSelection' => true,
             'showSeasons' => true,
             'showAll' => true,
             'showExpansions' => true,
-            'required' => false
+            'required' => false,
         ])
     </div>
     <div class="col-lg pl-1 pr-1">
-        {!! Form::label('affixes[]', __('view_common.dungeonroute.table.affixes')) !!}
-        {!! Form::select('affixes[]', $affixgroups->pluck('text', 'id'), null,
-            ['id' => 'affixes',
+        {!! Form::label(sprintf('%s[]', $affixSelectId), __('view_common.dungeonroute.table.affixes')) !!}
+        {!! Form::select(sprintf('%s[]', $affixSelectId), $affixgroups->pluck('text', 'id'), null,
+            ['id' => $affixSelectId,
             'class' => 'form-control affixselect selectpicker',
             'multiple' => 'multiple',
             'data-selected-text-format' => 'count > 1',
@@ -104,30 +131,32 @@ if (Auth::check()) {
     </div>
     <div class="col-lg pl-1 pr-1">
         @include('common.dungeonroute.attributes', [
-        'selectedIds' => array_merge( [-1], $allRouteAttributes->pluck('id')->toArray() ),
-        'showNoAttributes' => true])
+            'id' => $attributesSelectId,
+            'selectedIds' => array_merge( [-1], $allRouteAttributes->pluck('id')->toArray() ),
+            'showNoAttributes' => true
+        ])
     </div>
     <div class="col-lg pl-1 pr-1">
-        {!! Form::label('dungeonroute_requirements_select', __('view_common.dungeonroute.table.requirements')) !!}
         <?php
         $requirements = ['enough_enemy_forces' => __('view_common.dungeonroute.table.enemy_enemy_forces')];
         if (Auth::check() && $view !== 'favorites') {
             $requirements['favorite'] = __('view_common.dungeonroute.table.favorite');
         }
         ?>
-        {!! Form::select('dungeon_id', $requirements, 0, [
-            'id' => 'dungeonroute_requirements_select',
+        {!! Form::label($requirementsSelectId, __('view_common.dungeonroute.table.requirements')) !!}
+        {!! Form::select($requirementsSelectId, $requirements, 0, [
+            'id' => $requirementsSelectId,
             'class' => 'form-control selectpicker',
             'multiple' => 'multiple',
             'data-selected-text-format' => 'count > 1',
-            'data-count-selected-text' => __('view_common.dungeonroute.table.requirements_selected')
+            'data-count-selected-text' => __('view_common.dungeonroute.table.requirements_selected'),
         ]) !!}
     </div>
     @if(($view === 'profile' || $view === 'team'))
         <div class="col-lg pl-1 pr-1">
-            {!! Form::label('dungeonroute_tags_select[]', __('view_common.dungeonroute.table.tags')) !!}
-            {!! Form::select('dungeonroute_tags_select[]', $searchTags->pluck('name', 'name'), null,
-                ['id' => 'dungeonroute_tags_select',
+            {!! Form::label(sprintf('%s[]', $tagsSelectId), __('view_common.dungeonroute.table.tags')) !!}
+            {!! Form::select(sprintf('%s[]', $tagsSelectId), $searchTags->pluck('name', 'name'), null,
+                ['id' => $tagsSelectId,
                 'class' => 'form-control selectpicker',
                 'multiple' => 'multiple',
                 // Change the original text
@@ -140,7 +169,7 @@ if (Auth::check()) {
         <div class="mb-2">
             &nbsp;
         </div>
-        <button id="dungeonroute_filter" class="btn btn-info col-lg">
+        <button id="{{ $filterButtonId }}" class="btn btn-info col-lg">
             <i class="fas fa-filter"></i> {{ __('view_common.dungeonroute.table.filter') }}
         </button>
     </div>
@@ -149,20 +178,19 @@ if (Auth::check()) {
             &nbsp;
         </div>
         <div class="mb-2 text-right">
-            <button id="table_biglist_btn"
-                    class="btn {{ $cookieViewMode === 'biglist' ? 'btn-primary' : 'btn-default' }} table_list_view_toggle"
-                    data-viewmode="biglist">
+            <button
+                class="btn {{ $cookieViewMode === 'biglist' ? 'btn-primary' : 'btn-default' }} biglist table_list_view_toggle"
+                data-viewmode="biglist">
                 <i class="fas fa-th-list"></i>
             </button>
-            <button id="table_list_btn"
-                    class="btn {{ $cookieViewMode === 'list' ? 'btn-primary' : 'btn-default' }}  table_list_view_toggle"
+            <button class="btn {{ $cookieViewMode === 'list' ? 'btn-primary' : 'btn-default' }} list table_list_view_toggle"
                     data-viewmode="list">
                 <i class="fas fa-list"></i>
             </button>
         </div>
     </div>
 </div>
-<table id="routes_table" class="routes_table tablesorter default_table dt-responsive nowrap table-striped mt-2"
+<table id="{{ $tableId }}" class="routes_table tablesorter default_table dt-responsive nowrap table-striped mt-2"
        width="100%">
     <thead>
     </thead>
