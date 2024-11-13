@@ -57,8 +57,8 @@ trait DungeonRouteProperties
             'pullGradientApplyAlways' => $dungeonRoute->pull_gradient_apply_always,
             'faction'                 => $dungeonRoute->faction->key,
             'enemyForces'             => $dungeonRoute->enemy_forces,
-            'levelMin'                => $dungeonRoute->level_min,
-            'levelMax'                => $dungeonRoute->level_max,
+            'levelMin'                => $dungeonRoute->level_min ?? config('keystoneguru.keystone.levels.default_min'),
+            'levelMax'                => $dungeonRoute->level_max ?? config('keystoneguru.keystone.levels.default_max'),
             'dungeonDifficulty'       => $dungeonRoute->dungeon_difficulty,
 
             'mappingVersionUpgradeUrl' => route('dungeonroute.upgrade', [
