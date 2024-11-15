@@ -13,8 +13,9 @@ use App\Models\User;
  * @var int  $userAdFreeTeamMembersMax
  */
 
-$title = sprintf(__('view_team.edit.title'), $team->name);
-$routesTableInlineId = 'team_edit_routes_table';
+$title                        = sprintf(__('view_team.edit.title'), $team->name);
+$routesTableInlineId          = 'team_edit_routes_table';
+$routePublishingTableInlineId = 'team_edit_route_publishing_table';
 
 /** @var User $user */
 $user      = Auth::user();
@@ -67,7 +68,7 @@ foreach ($team->teamUsers as $teamUser) {
     </a>
 @endsection
 @include('common.general.inline', ['path' => 'team/edit', 'options' => [
-    'dependenciesById' => [$routesTableInlineId],
+    'dependenciesById' => [$routesTableInlineId, $routePublishingTableInlineId],
     'routesTableInlineId' => $routesTableInlineId,
 
     'routePublishingEnabledSelector' => '#route_publishing_enabled_checkbox',
@@ -98,21 +99,21 @@ foreach ($team->teamUsers as $teamUser) {
         @include('team.edittabs.routes', [
             'inlineId' => $routesTableInlineId,
             'team' => $team,
-            'userIsModerator' => $userIsModerator
+            'userIsModerator' => $userIsModerator,
         ])
         @include('team.edittabs.members', [
             'team' => $team,
             'userIsModerator' => $userIsModerator,
             'userHasAdFreeTeamMembersPatreonBenefit' => $userHasAdFreeTeamMembersPatreonBenefit,
             'userAdFreeTeamMembersRemaining' => $userAdFreeTeamMembersRemaining,
-            'userAdFreeTeamMembersMax' => $userAdFreeTeamMembersMax
+            'userAdFreeTeamMembersMax' => $userAdFreeTeamMembersMax,
         ])
         @include('team.edittabs.teamtags', ['team' => $team])
 
         @if($userIsModerator)
             @include('team.edittabs.routepublishing', [
-                'inlineId' => 'team_edit_route_publishing_table',
-                'team' => $team
+                'inlineId' => $routePublishingTableInlineId,
+                'team' => $team,
             ])
             @include('team.edittabs.details', ['team' => $team])
         @endif

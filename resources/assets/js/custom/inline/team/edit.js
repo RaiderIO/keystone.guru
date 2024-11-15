@@ -12,9 +12,16 @@ class TeamEdit extends InlineCode {
         super.activate();
 
         let self = this;
-        let code = _inlineManager.getInlineCodeById(this.options.routesTableInlineId);
-        let tableView = code.getTableView();
-        tableView.setIsUserModerator(this.options.userIsModerator);
+
+        // All dungeon route tables on this page need to know if the user is a moderator or not
+        let routesTablesInlineCode = _inlineManager.getInlineCode('dungeonroute/table');
+        for (let index in routesTablesInlineCode) {
+            let tableView = routesTablesInlineCode[index].getTableView();
+            tableView.setIsUserModerator(this.options.userIsModerator);
+        }
+
+        let routesTableInlineCode = _inlineManager.getInlineCodeById(this.options.routesTableInlineId);
+        let tableView = routesTableInlineCode.getTableView();
 
         $('#team_invite_link_copy_to_clipboard').unbind('click').bind('click', function () {
             copyToClipboard($('#team_members_invite_link').val());
@@ -29,7 +36,7 @@ class TeamEdit extends InlineCode {
         $('#add_route_btn:enabled').unbind('click').bind('click', function () {
             tableView.setAddMode(true);
 
-            code.refreshTable();
+            routesTableInlineCode.refreshTable();
             $(this).hide();
             $('#view_existing_routes').show();
         });
@@ -38,7 +45,7 @@ class TeamEdit extends InlineCode {
         $('#view_existing_routes').unbind('click').bind('click', function () {
             tableView.setAddMode(false);
 
-            code.refreshTable();
+            routesTableInlineCode.refreshTable();
             $(this).hide();
             $('#add_route_btn').show();
         });
@@ -91,7 +98,7 @@ class TeamEdit extends InlineCode {
             });
         });
 
-        $(this.options.routePublishingEnabledSelector).on('change', function(){
+        $(this.options.routePublishingEnabledSelector).on('change', function () {
             $.ajax({
                 type: 'PUT',
                 url: `/ajax/team/${self.options.teamPublicKey}/routepublishing`,

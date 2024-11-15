@@ -232,3 +232,73 @@ class TeamTableView extends TableView {
         return 'team';
     }
 }
+
+
+class TeamRoutePublishingTableView extends TableView {
+    constructor() {
+        super();
+
+        this._teamPublicKey = '';
+        this._isUserModerator = false;
+    }
+
+    /**
+     * Set the team ID (for filtering purposes)
+     * @param value
+     */
+    setTeamPublicKey(value) {
+        this._teamPublicKey = value;
+    }
+
+    setIsUserModerator(value) {
+        this._isUserModerator = value;
+    }
+
+    /**
+     * Gets the Id of the team that was set for this view.
+     * @returns {*}
+     */
+    getTeamPublicKey() {
+        return this._teamPublicKey;
+    }
+
+    /**
+     * Get the parameters when sending the AJAX request
+     * @returns {{team_public_key: *}}
+     */
+    getAjaxParameters() {
+        return {team_public_key: this._teamPublicKey};
+    }
+
+    getColumns(view) {
+        let defaultDungeonId = $('#dungeonroute_search_dungeon_id').val();
+
+        this._columns = {
+            list: [
+                {name: 'title', width: '15%'},
+                {name: 'dungeon', width: '15%', defaultSearch: defaultDungeonId},
+                {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
+                // {name: 'setup', width: '15%'},
+                {name: 'enemy_forces', width: '10%'},
+            ],
+            biglist: [
+                {name: 'preview', width: '15%', clickable: false},
+                {name: 'title', width: '15%'},
+                {name: 'dungeon', width: '15%', className: 'd-none d-lg-table-cell', defaultSearch: defaultDungeonId},
+                {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
+            ]
+        };
+
+        // Push different columns based on if add mode is enabled or not
+        if (this._isUserModerator) {
+            this._columns.list.push({name: 'scheduling', width: '15%', clickable: false});
+            this._columns.biglist.push({name: 'scheduling', width: '15%', clickable: false});
+        }
+
+        return super.getColumns(view);
+    }
+
+    getName() {
+        return 'team_route_publishing';
+    }
+}

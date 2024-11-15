@@ -5,6 +5,7 @@ class DungeonrouteTable extends InlineCode {
         this._viewMode = 'biglist';
         this._dt = null;
 
+        /** @type TableView */
         this._tableView = null;
         this._routeData = [];
         // Handles the displaying of tags inside the table
@@ -85,6 +86,10 @@ class DungeonrouteTable extends InlineCode {
             }
             case 'team': {
                 this._tableView = new TeamTableView();
+                break;
+            }
+            case 'team_route_publishing': {
+                this._tableView = new TeamRoutePublishingTableView();
                 break;
             }
             case 'routes': {
@@ -475,6 +480,13 @@ class DungeonrouteTable extends InlineCode {
                         result = template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
                     }
                     return result;
+                }
+            },
+            scheduling: {
+                'title': lang.get('messages.scheduling_label'),
+                'render': function (data, type, row, meta) {
+                    let template = Handlebars.templates['team_dungeonroute_table_route_publishing_actions_template'];
+                    return template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
                 }
             }
         };

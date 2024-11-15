@@ -361,6 +361,7 @@ return [
     'floorunion_rotation_label'                                            => 'Rotation',
     'floorunionarea_floor_union_id_label'                                  => 'Floor Union ID',
     'actions_label'                                                        => 'Actions',
+    'scheduling_label'                                                     => 'Scheduling',
     'add_to_team_label'                                                    => 'Add to team...',
     'view_label'                                                           => 'View',
     'collaborator_label'                                                   => 'Edit',

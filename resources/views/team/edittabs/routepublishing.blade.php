@@ -28,7 +28,7 @@ use App\Models\Team;
     <div class="form-group">
         @include('common.dungeonroute.table', [
             'inlineId' => $inlineId,
-            'view' => 'team',
+            'view' => 'team_route_publishing',
             'team' => $team,
             'tableId' => 'route_publishing_table',
             'filterButtonId' => 'route_publishing_filter_button',
