@@ -14,6 +14,8 @@ use App\Models\User;
  */
 
 $title = sprintf(__('view_team.edit.title'), $team->name);
+$routesTableInlineId = 'team_edit_routes_table';
+
 /** @var User $user */
 $user      = Auth::user();
 $menuItems = [
@@ -65,6 +67,8 @@ foreach ($team->teamUsers as $teamUser) {
     </a>
 @endsection
 @include('common.general.inline', ['path' => 'team/edit', 'options' => [
+    'dependenciesById' => [$routesTableInlineId],
+    'routesTableInlineId' => $routesTableInlineId,
     'data' => $data,
     'teamName' => $team->name,
     'teamPublicKey' => $team->public_key,
@@ -88,7 +92,11 @@ foreach ($team->teamUsers as $teamUser) {
 
     <div class="tab-content">
         @include('team.edittabs.overview', ['team' => $team])
-        @include('team.edittabs.routes', ['team' => $team, 'userIsModerator' => $userIsModerator])
+        @include('team.edittabs.routes', [
+            'inlineId' => $routesTableInlineId,
+            'team' => $team,
+            'userIsModerator' => $userIsModerator
+        ])
         @include('team.edittabs.members', [
             'team' => $team,
             'userIsModerator' => $userIsModerator,
@@ -99,7 +107,10 @@ foreach ($team->teamUsers as $teamUser) {
         @include('team.edittabs.teamtags', ['team' => $team])
 
         @if($userIsModerator)
-            @include('team.edittabs.routepublishing', ['team' => $team])
+            @include('team.edittabs.routepublishing', [
+                'inlineId' => 'team_edit_route_publishing_table',
+                'team' => $team
+            ])
             @include('team.edittabs.details', ['team' => $team])
         @endif
     </div>

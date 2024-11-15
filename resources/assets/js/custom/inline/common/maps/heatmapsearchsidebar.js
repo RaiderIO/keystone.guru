@@ -1,10 +1,10 @@
 class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
 
-    constructor(options) {
+    constructor(id, bladePath, options) {
         super(new SearchHandlerHeatmap($.extend({}, {
             loaderSelector: options.loaderSelector,
-        }, options)), options);
+        }, options)), id, bladePath, options);
 
         this.sidebar = new Sidebar(options);
 

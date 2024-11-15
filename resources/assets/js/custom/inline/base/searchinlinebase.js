@@ -1,7 +1,7 @@
 class SearchInlineBase extends InlineCode {
 
-    constructor(searchHandler, options) {
-        super(options);
+    constructor(searchHandler, id, bladePath, options) {
+        super(id, bladePath, options);
 
         /** @type {SearchHandler} */
         this.searchHandler = searchHandler;

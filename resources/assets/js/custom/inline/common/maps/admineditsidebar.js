@@ -1,6 +1,6 @@
 class CommonMapsAdmineditsidebar extends InlineCode {
-    constructor(options) {
-        super(options);
+    constructor(id, bladePath, options) {
+        super(id, bladePath, options);
 
         this.sidebar = new SidebarNavigation(options);
 

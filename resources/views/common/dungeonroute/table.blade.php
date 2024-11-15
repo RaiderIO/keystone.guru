@@ -15,14 +15,17 @@ use Illuminate\Support\Collection;
  * @var Collection<Tag>            $searchTags
  * @var Collection<Tag>            $autoCompleteTags
  * @var Collection<RouteAttribute> $allRouteAttributes
+ * @var string|null                $inlineId
+ * @var Team|null                  $team
+ * @var DungeonRoute               $model
  */
 
-/** @var DungeonRoute $model */
 if (!isset($affixgroups)) {
     $affixgroups = $seasonService->getCurrentSeason()->affixGroups()->with('affixes')->get();
 }
 
-/** @var App\Models\Team|null $team */
+// Ok if it's not set - it's just a random default then
+$inlineId             ??= bin2hex(random_bytes(16));
 $team                 ??= null;
 $favorites            ??= false;
 $tableId              ??= 'routes_table';
@@ -60,7 +63,9 @@ if (Auth::check()) {
     $autoCompleteTags = collect();
 }
 ?>
-@include('common.general.inline', ['path' => 'dungeonroute/table',
+@include('common.general.inline', [
+        'id' => $inlineId,
+        'path' => 'dungeonroute/table',
         'options' =>  [
             'tableView' => $view,
             'viewMode' => $cookieViewMode,
@@ -88,7 +93,7 @@ if (Auth::check()) {
     <!--suppress HtmlDeprecatedAttribute -->
     <script type="text/javascript">
         $(function () {
-            let code = _inlineManager.getInlineCode('dungeonroute/table');
+            let code = _inlineManager.getInlineCodeById('{{ $inlineId }}');
 
             // Build the table
             code.refreshTable();
@@ -133,7 +138,7 @@ if (Auth::check()) {
         @include('common.dungeonroute.attributes', [
             'id' => $attributesSelectId,
             'selectedIds' => array_merge( [-1], $allRouteAttributes->pluck('id')->toArray() ),
-            'showNoAttributes' => true
+            'showNoAttributes' => true,
         ])
     </div>
     <div class="col-lg pl-1 pr-1">
@@ -179,11 +184,12 @@ if (Auth::check()) {
         </div>
         <div class="mb-2 text-right">
             <button
-                class="btn {{ $cookieViewMode === 'biglist' ? 'btn-primary' : 'btn-default' }} biglist table_list_view_toggle"
-                data-viewmode="biglist">
+                    class="btn {{ $cookieViewMode === 'biglist' ? 'btn-primary' : 'btn-default' }} biglist table_list_view_toggle"
+                    data-viewmode="biglist">
                 <i class="fas fa-th-list"></i>
             </button>
-            <button class="btn {{ $cookieViewMode === 'list' ? 'btn-primary' : 'btn-default' }} list table_list_view_toggle"
+            <button
+                    class="btn {{ $cookieViewMode === 'list' ? 'btn-primary' : 'btn-default' }} list table_list_view_toggle"
                     data-viewmode="list">
                 <i class="fas fa-list"></i>
             </button>

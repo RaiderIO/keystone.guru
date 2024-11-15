@@ -1,7 +1,7 @@
 class CommonMapsMap extends InlineCode {
 
-    constructor(options) {
-        super(options);
+    constructor(id, bladePath, options) {
+        super(id, bladePath, options);
         this._dungeonMap = null;
 
         this.settingsTabMap = new SettingsTabMap(options);

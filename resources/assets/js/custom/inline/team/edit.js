@@ -1,7 +1,7 @@
 class TeamEdit extends InlineCode {
 
-    constructor(options) {
-        super(options);
+    constructor(id, bladePath, options) {
+        super(id, bladePath, options);
         this._dt = null;
     }
 
@@ -12,7 +12,7 @@ class TeamEdit extends InlineCode {
         super.activate();
 
         let self = this;
-        let code = _inlineManager.getInlineCode('dungeonroute/table');
+        let code = _inlineManager.getInlineCodeById(this.options.routesTableInlineId);
         let tableView = code.getTableView();
         tableView.setIsUserModerator(this.options.userIsModerator);
 
