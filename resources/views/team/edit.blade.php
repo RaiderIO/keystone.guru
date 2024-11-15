@@ -69,6 +69,9 @@ foreach ($team->teamUsers as $teamUser) {
 @include('common.general.inline', ['path' => 'team/edit', 'options' => [
     'dependenciesById' => [$routesTableInlineId],
     'routesTableInlineId' => $routesTableInlineId,
+
+    'routePublishingEnabledSelector' => '#route_publishing_enabled_checkbox',
+
     'data' => $data,
     'teamName' => $team->name,
     'teamPublicKey' => $team->public_key,

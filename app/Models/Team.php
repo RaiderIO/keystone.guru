@@ -20,15 +20,16 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property int    $id
- * @property string $public_key
- * @property string $name
- * @property string $description
- * @property string $invite_code
- * @property string $default_role
+ * @property int                      $id
+ * @property string                   $public_key
+ * @property string                   $name
+ * @property string                   $description
+ * @property string                   $invite_code
+ * @property string                   $default_role
+ * @property boolean                  $route_publishing_enabled
  *
- * @property Carbon $updated_at
- * @property Carbon $created_at
+ * @property Carbon                   $updated_at
+ * @property Carbon                   $created_at
  *
  * @property Collection<TeamUser>     $teamUsers
  * @property Collection<User>         $members
@@ -48,7 +49,7 @@ class Team extends Model
         'public_key',
     ];
 
-    protected $fillable = ['default_role'];
+    protected $fillable = ['default_role', 'route_publishing_enabled'];
 
     protected $with = ['iconfile'];
 
@@ -92,6 +93,7 @@ class Team extends Model
      * Checks if a user can add/remove a route to this team or not.
      *
      * @param User $user
+     * @return bool
      */
     public function canAddRemoveRoute(User $user): bool
     {
@@ -419,6 +421,16 @@ class Team extends Model
             static fn() => Team::where('id', config('keystoneguru.raider_io.team_id'))->first(),
             config('keystoneguru.cache.raider_io_team.ttl'),
         );
+    }
+
+    /**
+     * Gets all tags available for routes in this team.
+     */
+    public function getAvailableTags(): Collection
+    {
+        return Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
+            ->whereIn('model_id', $this->dungeonRoutes->pluck('id'))
+            ->get();
     }
 
     #[\Override]

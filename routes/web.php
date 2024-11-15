@@ -700,12 +700,13 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             });
             // Teams
             Route::prefix('team/{team}')->group(static function () {
-                Route::put('/changedefaultrole', new AjaxTeamController()->changeDefaultRole(...));
-                Route::put('/changerole', new AjaxTeamController()->changeRole(...));
-                Route::post('/route/{dungeonroute}', new AjaxTeamController()->addRoute(...));
-                Route::delete('/member/{user}', new AjaxTeamController()->removeMember(...));
-                Route::delete('/route/{dungeonroute}', new AjaxTeamController()->removeRoute(...));
-                Route::get('/refreshlink', new AjaxTeamController()->refreshInviteLink(...));
+                Route::put('/changedefaultrole', (new AjaxTeamController())->changeDefaultRole(...));
+                Route::put('/routepublishing', (new AjaxTeamController())->changeRoutePublishing(...));
+                Route::put('/changerole', (new AjaxTeamController())->changeRole(...));
+                Route::post('/route/{dungeonroute}', (new AjaxTeamController())->addRoute(...));
+                Route::delete('/member/{user}', (new AjaxTeamController())->removeMember(...));
+                Route::delete('/route/{dungeonroute}', (new AjaxTeamController())->removeRoute(...));
+                Route::get('/refreshlink', (new AjaxTeamController())->refreshInviteLink(...));
                 // Ad-free giveaway
                 Route::post('/member/{user}/adfree', new AjaxTeamController()->addAdFreeGiveaway(...));
                 Route::delete('/member/{user}/adfree', new AjaxTeamController()->removeAdFreeGiveaway(...));
