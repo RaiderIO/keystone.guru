@@ -3,7 +3,8 @@
 use App\Models\Team;
 
 /**
- * @var Team $team
+ * @var Team   $team
+ * @var string $inlineId
  */
 ?>
 <div class="tab-pane fade" id="route_publishing" role="tabpanel" aria-labelledby="route-publishing-tab">
@@ -15,6 +16,7 @@ use App\Models\Team;
     </div>
     <div class="form-group">
         @include('common.dungeonroute.table', [
+            'inlineId' => $inlineId,
             'view' => 'team',
             'team' => $team,
             'tableId' => 'route_publishing_table',

@@ -3,8 +3,9 @@
 use App\Models\Team;
 
 /**
- * @var Team $team
- * @var bool $userIsModerator
+ * @var Team   $team
+ * @var bool   $userIsModerator
+ * @var string $inlineId
  */
 ?>
 <div class="tab-pane fade" id="routes" role="tabpanel" aria-labelledby="routes-tab">
@@ -33,6 +34,6 @@ use App\Models\Team;
             </div>
         </div>
 
-        @include('common.dungeonroute.table', ['view' => 'team', 'team' => $team])
+        @include('common.dungeonroute.table', ['inlineId' => $inlineId, 'view' => 'team', 'team' => $team])
     </div>
 </div>

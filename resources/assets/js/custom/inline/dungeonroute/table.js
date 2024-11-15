@@ -1,7 +1,7 @@
 class DungeonrouteTable extends InlineCode {
 
-    constructor(options) {
-        super(options);
+    constructor(id, bladePath, options) {
+        super(id, bladePath, options);
         this._viewMode = 'biglist';
         this._dt = null;
 
@@ -31,7 +31,7 @@ class DungeonrouteTable extends InlineCode {
 
         let self = this;
 
-        $(this.options.filterButtonId).unbind('click').bind('click', function () {
+        $(this.options.filterButtonSelector).unbind('click').bind('click', function () {
             // Build the search parameters
             let dungeonId = $(self.options.dungeonSelectId).val();
             let affixes = $(self.options.affixSelectId).val();
@@ -109,8 +109,6 @@ class DungeonrouteTable extends InlineCode {
      * Binds a datatables instance to a jquery element.
      **/
     refreshTable() {
-        console.warn('refreshtable', this.options.tableSelector);
-
         let self = this;
 
         // Send cookie
@@ -399,9 +397,6 @@ class DungeonrouteTable extends InlineCode {
             actions: {
                 'title': lang.get('js.actions_label'),
                 'render': function (data, type, row, meta) {
-                    if (row.author.id !== self.options.currentUserId && !isUserAdmin) {
-                        return '';
-                    }
 
                     let template = Handlebars.templates['dungeonroute_table_profile_actions_template'];
 
@@ -421,8 +416,9 @@ class DungeonrouteTable extends InlineCode {
                     }
 
                     // 9 = Shadowlands, 10 = Dragonflight
-                    let seasonId = row.affixes.length === 0 ? false : row.affixes[0].expansion_id;
-                    let isShadowlandsRoute = seasonId === 9;
+                    let expansion = row.dungeon.expansion.shortname;
+                    let isShadowlandsRoute = expansion === EXPANSION_SHADOWLANDS;
+                    // let isDragonflightRoute = expansion === EXPANSION_DRAGONFLIGHT;
 
                     let rowHasEncryptedAffix = rowHasAffix(row, AFFIX_ENCRYPTED);
                     let rowHasShroudedAffix = rowHasAffix(row, AFFIX_SHROUDED);
@@ -547,7 +543,7 @@ class DungeonrouteTable extends InlineCode {
             success: function (json) {
                 showSuccessNotification(lang.get('js.route_published_state_changed'));
                 // Refresh the table
-                $(self.options.filterButtonId).trigger('click');
+                $(self.options.filterButtonSelector).trigger('click');
             }
         });
     }
@@ -570,7 +566,7 @@ class DungeonrouteTable extends InlineCode {
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_delete_successful'));
                     // Refresh the table
-                    $(self.options.filterButtonId).trigger('click');
+                    $(self.options.filterButtonSelector).trigger('click');
                 }
             });
         });
@@ -625,7 +621,7 @@ class DungeonrouteTable extends InlineCode {
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_clone_successful'));
                     // Refresh the table
-                    $(self.options.filterButtonId).trigger('click');
+                    $(self.options.filterButtonSelector).trigger('click');
                 }
             });
         }, null, {closeWith: ['button']});
@@ -672,7 +668,7 @@ class DungeonrouteTable extends InlineCode {
                 success: function (json) {
                     showSuccessNotification(lang.get('js.route_migration_successful'));
                     // Refresh the table
-                    $(self.options.filterButtonId).trigger('click');
+                    $(self.options.filterButtonSelector).trigger('click');
                 }
             });
         }, null, {closeWith: ['button']});
@@ -714,7 +710,7 @@ class DungeonrouteTable extends InlineCode {
         $(this.options.tagsSelectId).val(tags);
 
         // Refresh the list of routes
-        $(this.options.filterButtonId).trigger('click');
+        $(this.options.filterButtonSelector).trigger('click');
     }
 
     /**

@@ -23,7 +23,7 @@ use App\Models\Team;
                         <div class="card-body p-0">
                             <div class="row">
                                 <div class="col" style="max-width: 128px">
-                                    <img class="card-img-top d-block"
+                                    <img class="card-img-top d-block p-2"
                                          src="{{ $team->iconfile->getURL() }}"
                                          alt="{{ __('view_team.edit.icon_image_alt') }}"
                                          style="max-width: 128px; max-height: 128px;">
