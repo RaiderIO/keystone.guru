@@ -24,7 +24,10 @@ return [
             'members' => 'Members',
         ],
         'routepublishing' => [
-            'title' => 'Route publishing',
+            'title'       => 'Route publishing',
+            'warning'     => 'When route publishing is enabled, all team members with role Moderator or Admin can adjust the published state of all your routes attached to this team.',
+            'description' => 'Route publishing allows you to publish routes with the world on a schedule. You can set a date/time per route when they will automatically be put in Published state and be visible to the world.',
+            'enabled'     => 'Enabled',
         ],
         'routes'          => [
             'title'                  => 'Route list',

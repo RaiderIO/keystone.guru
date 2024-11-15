@@ -368,6 +368,7 @@ return [
     'admin_label'                                                          => 'Own',
     'change_role_success'                                                  => 'Permissions updated',
     'change_default_role_success'                                          => 'Default role updated',
+    'change_route_publishing_success'                                      => 'Route publishing settings updated',
     'team_admin'                                                           => 'Administrate team',
     'team_moderator'                                                       => 'Moderate team',
     'team_collaborator'                                                    => 'Edit routes',

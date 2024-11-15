@@ -22,22 +22,22 @@ use Illuminate\Support\Facades\Auth;
  * @property string                   $description
  * @property string                   $invite_code
  * @property string                   $default_role
+ * @property boolean                  $route_publishing_enabled
  *
  * @property Collection<TeamUser>     $teamUsers
  * @property Collection<User>         $members
- * @property Collection<DungeonRoute> $dungeonroutes
+ * @property Collection<DungeonRoute> $dungeonRoutes
  *
  * @mixin Eloquent
  */
 class Team extends Model
 {
     use HasIconFile;
+    use GeneratesPublicKey;
 
     protected $visible = ['name', 'description', 'public_key'];
 
-    protected $fillable = ['default_role'];
-
-    use GeneratesPublicKey;
+    protected $fillable = ['default_role', 'route_publishing_enabled'];
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -57,7 +57,7 @@ class Team extends Model
         return $this->belongsToMany(User::class, 'team_users');
     }
 
-    public function dungeonroutes(): HasMany
+    public function dungeonRoutes(): HasMany
     {
         return $this->hasMany(DungeonRoute::class);
     }
@@ -67,7 +67,7 @@ class Team extends Model
      */
     public function getVisibleRouteCount(): int
     {
-        return $this->dungeonroutes()->whereIn('published_state_id', PublishedState::whereIn('name', [
+        return $this->dungeonRoutes()->whereIn('published_state_id', PublishedState::whereIn('name', [
             PublishedState::TEAM, PublishedState::WORLD, PublishedState::WORLD_WITH_LINK,
         ])->get()->pluck('id'))->count();
     }
@@ -76,6 +76,7 @@ class Team extends Model
      * Checks if a user can add/remove a route to this team or not.
      *
      * @param User $user
+     * @return bool
      */
     public function canAddRemoveRoute(User $user): bool
     {
@@ -259,6 +260,7 @@ class Team extends Model
     public function isUserCollaborator(User $user): bool
     {
         $userRole = $this->getUserRole($user);
+
         return $userRole !== null && $this->getUserRole($user) !== TeamUser::ROLE_MEMBER;
     }
 
@@ -329,7 +331,7 @@ class Team extends Model
                     $member->patreonAdFreeGiveaway->delete();
                 }
 
-                $this->dungeonroutes()->where('team_id', $this->id)->where('author_id', $member->id)->update(['team_id' => null]);
+                $this->dungeonRoutes()->where('team_id', $this->id)->where('author_id', $member->id)->update(['team_id' => null]);
                 $result = TeamUser::where('team_id', $this->id)->where('user_id', $member->id)->delete();
             } catch (Exception) {
                 logger()->error('Unable to remove member from team', [
@@ -379,7 +381,7 @@ class Team extends Model
                 ));
         }
 
-        $roles    = TeamUser::ALL_ROLES;
+        $roles = TeamUser::ALL_ROLES;
         /** @var TeamUser|null $newOwner */
         $newOwner = $this->teamUsers->where('user_id', '!=', $user->id)
             ->sortByDesc(static fn($obj, $key) => $roles[$obj->role])
@@ -391,7 +393,7 @@ class Team extends Model
     public function getAvailableTags(): Collection
     {
         return Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
-            ->whereIn('model_id', $this->dungeonroutes->pluck('id'))
+            ->whereIn('model_id', $this->dungeonRoutes->pluck('id'))
             ->get();
     }
 
@@ -416,7 +418,7 @@ class Team extends Model
             }
             // Delete all tags team tags belonging to our routes
             Tag::where('tag_category_id', TagCategory::ALL[TagCategory::DUNGEON_ROUTE_TEAM])
-                ->whereIn('model_id', $team->dungeonroutes->pluck('id')->toArray())
+                ->whereIn('model_id', $team->dungeonRoutes->pluck('id')->toArray())
                 ->delete();
             // Remove all users associated with this team
             TeamUser::where('team_id', $team->id)->delete();
