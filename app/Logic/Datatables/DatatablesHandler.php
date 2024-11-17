@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 
 abstract class DatatablesHandler
 {
-    const VALID_COLUMN_NAMES = ['title', 'public_key'];
+    const VALID_COLUMN_NAMES = ['title', 'public_key', 'name', 'email'];
 
     protected Builder $builder;
 

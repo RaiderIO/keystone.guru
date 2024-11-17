@@ -22,7 +22,10 @@ class AjaxUserController extends Controller
     {
         $users = User::with(['patreonUserLink', 'roles', 'dungeonroutes'])->selectRaw('users.*');
 
-        $datatablesResult = (new UsersDatatablesHandler($request))->setBuilder($users)->applyRequestToBuilder()->getResult();
+        $datatablesResult = (new UsersDatatablesHandler($request))
+            ->setBuilder($users)
+            ->applyRequestToBuilder()
+            ->getResult();
 
         foreach ($datatablesResult['data'] as $user) {
             /** @var $user User */

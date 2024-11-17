@@ -9,6 +9,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Teapot\StatusCode;
@@ -28,6 +29,7 @@ class Handler extends ExceptionHandler
         ModelNotFoundException::class,
         TokenMismatchException::class,
         ValidationException::class,
+        BadRequestException::class
     ];
 
     /**
