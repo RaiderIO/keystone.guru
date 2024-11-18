@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'cache-prefix' => '',
+    'cache-prefix' => 'laravel-model-caching:',
 
     'enabled' => env('MODEL_CACHE_ENABLED', true),
 
