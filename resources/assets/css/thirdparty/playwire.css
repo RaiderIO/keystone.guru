@@ -4,10 +4,15 @@
     background: none !important;
     border: none !important;
     pointer-events: none !important;
-    width: fit-content !important;
+    /*width: fit-content !important;*/
 }
 
 #pw-oop-bottom_rail iframe,
 #pw-oop-bottom_rail2 iframe {
     pointer-events: auto !important;
+}
+
+/** Otherwise the video will be above the blank space for the bottom rail */
+.pw-corner-ad-video {
+    margin-bottom: 0 !important;
 }
