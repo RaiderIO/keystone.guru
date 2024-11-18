@@ -1580,7 +1580,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         );
     }
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 

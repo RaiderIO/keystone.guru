@@ -328,6 +328,8 @@ class DungeonRouteController extends Controller
         ThumbnailServiceInterface     $thumbnailService,
         ?DungeonRoute                 $dungeonroute = null
     ): DungeonRoute {
+
+
         if ($dungeonroute === null) {
             $dungeonroute = new DungeonRoute();
         }
