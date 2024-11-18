@@ -236,7 +236,7 @@ class User extends Authenticatable implements LaratrustUser
      */
     public function canCreateDungeonRoute(): bool
     {
-        return DungeonRoute::where('author_id', $this->id)->count() < config('keystoneguru.registered_user_dungeonroute_limit') ||
+        return $this->dungeonRoutes()->count() < config('keystoneguru.registered_user_dungeonroute_limit') ||
             $this->hasPatreonBenefit(PatreonBenefit::UNLIMITED_DUNGEONROUTES);
     }
 
@@ -248,7 +248,7 @@ class User extends Authenticatable implements LaratrustUser
     public function getRemainingRouteCount(): int
     {
         return (int)max(0,
-            config('keystoneguru.registered_user_dungeonroute_limit') - DungeonRoute::where('author_id', $this->id)->count()
+            config('keystoneguru.registered_user_dungeonroute_limit') - $this->dungeonRoutes()->count()
         );
     }
 
@@ -295,10 +295,10 @@ class User extends Authenticatable implements LaratrustUser
 
     public static function getCurrentUserMapFacadeStyle(): string
     {
-        return optional(Auth::user())->map_facade_style ?? $_COOKIE['map_facade_style'] ?? User::DEFAULT_MAP_FACADE_STYLE;
+        return Auth::user()?->map_facade_style ?? $_COOKIE['map_facade_style'] ?? User::DEFAULT_MAP_FACADE_STYLE;
     }
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 

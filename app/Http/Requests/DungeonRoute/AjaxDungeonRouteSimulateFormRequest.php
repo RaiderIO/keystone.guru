@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\DungeonRoute;
 
+use App\Models\SimulationCraft\SimulationCraftRaidBuffs;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -31,12 +32,10 @@ class AjaxDungeonRouteSimulateFormRequest extends FormRequest
                 SimulationCraftRaidEventsOptions::ALL_AFFIXES
             )],
             'thundering_clear_seconds'       => 'required|int|max:15',
-            'bloodlust'                      => 'required|in:0,1',
-            'arcane_intellect'               => 'required|in:0,1',
-            'power_word_fortitude'           => 'required|in:0,1',
-            'battle_shout'                   => 'required|in:0,1',
-            'mystic_touch'                   => 'required|in:0,1',
-            'chaos_brand'                    => 'required|in:0,1',
+            'raid_buffs_mask'                     => sprintf(
+                'required|int|max:%d',
+                pow(2, collect(SimulationCraftRaidBuffs::cases())->count() - 1)
+            ),
             'hp_percent'                     => 'required|int',
             'ranged_pull_compensation_yards' => 'required|int',
             'use_mounts'                     => 'in:0,1',

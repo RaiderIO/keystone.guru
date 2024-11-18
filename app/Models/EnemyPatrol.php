@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Floor\Floor;
-use App\Models\Interfaces\EventModelInterface;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
@@ -28,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  *
  * @mixin Eloquent
  */
-class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface, EventModelInterface
+class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
 {
     use SeederModel;
 
@@ -92,11 +91,6 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         $clonedEnemyPatrol->update(['polyline_id' => $clonedPolyLine->id]);
 
         return $clonedEnemyPatrol;
-    }
-
-    public function getEventData(): array
-    {
-        return [];
     }
 
     protected static function boot(): void

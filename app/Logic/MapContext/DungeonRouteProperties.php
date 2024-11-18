@@ -57,8 +57,8 @@ trait DungeonRouteProperties
             'pullGradientApplyAlways' => $dungeonRoute->pull_gradient_apply_always,
             'faction'                 => $dungeonRoute->faction->key,
             'enemyForces'             => $dungeonRoute->enemy_forces,
-            'levelMin'                => $dungeonRoute->level_min,
-            'levelMax'                => $dungeonRoute->level_max,
+            'levelMin'                => $dungeonRoute->level_min ?? config('keystoneguru.keystone.levels.default_min'),
+            'levelMax'                => $dungeonRoute->level_max ?? config('keystoneguru.keystone.levels.default_max'),
             'dungeonDifficulty'       => $dungeonRoute->dungeon_difficulty,
 
             'mappingVersionUpgradeUrl' => route('dungeonroute.upgrade', [
@@ -78,7 +78,14 @@ trait DungeonRouteProperties
                 'raid_marker_name' => $drEnemyRaidMarker->raidMarker->name,
             ]),
             // A list of affixes that this route has (not to be confused with AffixGroups)
-            'uniqueAffixes'            => $dungeonRoute->affixes->map(static fn(AffixGroup $affixGroup) => $affixGroup->affixes)->collapse()->unique()->pluck(['name'])->map(static fn(string $name) => __($name, [], 'en_US')),
+            'uniqueAffixes'            => $dungeonRoute->affixes
+                ->map(static fn(AffixGroup $affixGroup) => $affixGroup->affixes)
+                ->collapse()
+                ->unique()
+                ->pluck(['name'])
+                ->map(static fn(string $name) => __($name, [], 'en_US')),
+            // Used for showing a modal when the route has been deleted while editing
+            'dungeonRouteClass' => DungeonRoute::class,
         ];
     }
 }

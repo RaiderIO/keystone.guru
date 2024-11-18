@@ -3,6 +3,7 @@ $class  ??= '';
 $size   ??= 'md';
 $static ??= false;
 $active ??= false;
+$showClose ??= true;
 ?>
 @if( $active )
     @include('common.general.inline', ['path' => 'modal/active', 'options' => [
@@ -16,9 +17,11 @@ $active ??= false;
     @endif>
     <div class="{{ $class }} modal-dialog modal-{{$size}} vertical-align-center">
         <div class="modal-content">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                <i class="fas fa-times"></i>
-            </button>
+            @if($showClose)
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <i class="fas fa-times"></i>
+                </button>
+            @endif
             <div class="probootstrap-modal-flex">
                 <div class="probootstrap-modal-content">
                     {{ $slot }}

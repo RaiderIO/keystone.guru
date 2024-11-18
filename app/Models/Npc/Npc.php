@@ -7,7 +7,6 @@ use App\Models\CacheModel;
 use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\Enemy;
-use App\Models\Interfaces\EventModelInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Spell\Spell;
@@ -58,7 +57,7 @@ use InvalidArgumentException;
  *
  * @mixin Eloquent
  */
-class Npc extends CacheModel implements MappingModelInterface, EventModelInterface
+class Npc extends CacheModel implements MappingModelInterface
 {
     use SeederModel;
 
@@ -326,12 +325,7 @@ class Npc extends CacheModel implements MappingModelInterface, EventModelInterfa
         return $this->dungeon_id ?? null;
     }
 
-    public function getEventData(): array
-    {
-        return [];
-    }
-
-    protected static function booted()
+    protected static function booted(): void
     {
         parent::booted();
 

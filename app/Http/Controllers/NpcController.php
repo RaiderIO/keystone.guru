@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\Model\ModelChangedEvent;
+use App\Events\Models\Npc\NpcChangedEvent;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Http\Requests\NpcFormRequest;
 use App\Models\Dungeon;
@@ -152,12 +152,12 @@ class NpcController extends Controller
                 // Broadcast the event for all dungeons
                 foreach (Dungeon::all() as $dungeon) {
                     if ($npc->dungeon === null && $messagesSentToDungeons->search($dungeon->id) === false) {
-                        broadcast(new ModelChangedEvent($dungeon, $user, $npc));
+                        broadcast(new NpcChangedEvent($dungeon, $user, $npc));
                         $messagesSentToDungeons->push($dungeon->id);
                     }
 
                     if ($npcBefore->dungeon === null && $messagesSentToDungeons->search($dungeon->id) === false) {
-                        broadcast(new ModelChangedEvent($dungeon, $user, $npcBefore));
+                        broadcast(new NpcChangedEvent($dungeon, $user, $npcBefore));
                         $messagesSentToDungeons->push($dungeon->id);
                     }
                 }
@@ -168,12 +168,12 @@ class NpcController extends Controller
             if (!$npcAllDungeon) {
                 // Let previous dungeon know that this NPC is no longer available
                 if ($messagesSentToDungeons->search($npc->dungeon->id) === false) {
-                    broadcast(new ModelChangedEvent($npc->dungeon, $user, $npc));
+                    broadcast(new NpcChangedEvent($npc->dungeon, $user, $npc));
                     $messagesSentToDungeons->push($npc->dungeon->id);
                 }
 
                 if (!$npcBeforeAllDungeon && $messagesSentToDungeons->search($npc->dungeon->id) === false) {
-                    broadcast(new ModelChangedEvent($npcBefore->dungeon, $user, $npc));
+                    broadcast(new NpcChangedEvent($npcBefore->dungeon, $user, $npc));
                     $messagesSentToDungeons->push($npc->dungeon->id);
                 }
             }

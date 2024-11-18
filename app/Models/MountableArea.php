@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
 use App\Models\Interfaces\ConvertsVerticesInterface;
-use App\Models\Interfaces\EventModelInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -26,7 +25,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class MountableArea extends CacheModel implements ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface, EventModelInterface
+class MountableArea extends CacheModel implements ConvertsVerticesInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasVertices;
@@ -95,10 +94,5 @@ class MountableArea extends CacheModel implements ConvertsVerticesInterface, Map
     public function getDungeonId(): ?int
     {
         return $this->floor?->dungeon_id ?? null;
-    }
-
-    public function getEventData(): array
-    {
-        return [];
     }
 }

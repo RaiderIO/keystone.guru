@@ -57,6 +57,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Random\RandomException;
 use Teapot\StatusCode\Http;
 use Throwable;
 
@@ -762,6 +763,7 @@ class AjaxDungeonRouteController extends Controller
 
     /**
      * @throws AuthorizationException
+     * @throws RandomException
      */
     public function simulate(AjaxDungeonRouteSimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonRoute): array
     {

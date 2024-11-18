@@ -3,7 +3,6 @@
 namespace App\Models\Floor;
 
 use App\Models\CacheModel;
-use App\Models\Interfaces\EventModelInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -31,7 +30,7 @@ use Illuminate\Support\Collection;
  *
  * @mixin Eloquent
  */
-class FloorUnion extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface, EventModelInterface
+class FloorUnion extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
@@ -88,10 +87,5 @@ class FloorUnion extends CacheModel implements MappingModelCloneableInterface, M
     public function getDungeonId(): ?int
     {
         return $this->floor->dungeon_id;
-    }
-
-    public function getEventData(): array
-    {
-        return [];
     }
 }

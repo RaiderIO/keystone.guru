@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\Model\ModelDeletedEvent;
+use App\Events\Models\Npc\NpcDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Logic\Datatables\ColumnHandler\Npc\DungeonColumnHandler;
@@ -29,7 +29,7 @@ class AjaxNpcController extends Controller
             if ($npc->delete()) {
                 /** @var User $user */
                 $user = Auth::user();
-                broadcast(new ModelDeletedEvent($npc->dungeon, $user, $npc));
+                broadcast(new NpcDeletedEvent($npc->dungeon, $user, $npc));
             }
 
             // Trigger mapping changed event so the mapping gets saved across all environments

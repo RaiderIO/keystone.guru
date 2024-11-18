@@ -1,9 +1,12 @@
+<?php
+    use Illuminate\Support\Collection;
+?>
 <script>
     /** Instance that handles the internal state for the dungeon map */
     let _stateManager;
     // Init it right away
     _stateManager = new StateManager();
-    _stateManager.setMapContext({!! new \Illuminate\Support\Collection($mapContext) !!});
+    _stateManager.setMapContext({!! new Collection($mapContext) !!});
     _stateManager.setPatreonBenefits({!! $patreonBenefits !!});
     @isset($userData)
     _stateManager.setUserData({!! $userData !!});

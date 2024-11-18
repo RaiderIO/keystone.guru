@@ -373,9 +373,9 @@ return [
             'pullsworkbench' => [
                 'modal'            => [
                     'description' => [
-                        'label'                => 'Description',
-                        'supported_html_tags'  => 'Supported HTML tags: ',
-                        'save'                 => 'Save',
+                        'label'               => 'Description',
+                        'supported_html_tags' => 'Supported HTML tags: ',
+                        'save'                => 'Save',
                     ],
                     'spells'      => [
                         'label' => 'Spells',
@@ -414,6 +414,13 @@ return [
         ],
     ],
     'modal'        => [
+        'dungeonroute'       => [
+            'removed' => [
+                'title'        => 'Route removed',
+                'description'  => 'Your route has been removed and can no longer be viewed/edited. This can happen if your route was a temporary route and it has been automatically cleaned up or you deleted the route in a different browser tab.',
+                'back_to_home' => 'Back to home',
+            ],
+        ],
         'userreport'         => [
             'dungeonroute' => [
                 'report_route'           => 'Report route',
@@ -487,58 +494,69 @@ return [
             'copy_to_clipboard'                => 'Copy to clipboard',
         ],
         'simulate'           => [
-            'intro'                                   => 'To use the simulation feature, generate a SimulationCraft string for your character and paste the
+            'intro'                      => 'To use the simulation feature, generate a SimulationCraft string for your character and paste the
                 generated string of Keystone.guru under your character\'s output string. Then hit Simulate like you usually would! If you use raidbots.com, create your character\'s SimC string through either the addon or the site, select Advanced and paste Keystone.guru\'s output below your character\'s SimC string.',
-            'title'                                   => 'Simulate route',
-            'key_level'                               => 'Key level',
-            'key_level_title'                         => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
-            'shrouded_bounty_type'                    => 'Shrouded bounty',
-            'shrouded_bounty_type_title'              => 'The Shrouded bounty that you can select at the beginning of the dungeon.',
-            'shrouded_bounty_types'                   => [
-                'none'    => 'No bounty',
-                'crit'    => 'Crit',
-                'haste'   => 'Haste',
-                'mastery' => 'Mastery',
-                'vers'    => 'Versatility',
+            'title'                      => 'Simulate route',
+            'get_simulationcraft_string' => 'Get SimulationCraft string',
+            'simulationcraft_string'     => 'Simulationcraft string',
+            'loading'                    => 'Loading...',
+            'copy_to_clipboard'          => 'Copy to clipboard',
+        ],
+        'simulateoptions'    => [
+            'default'  => [
+
+                'key_level'                               => 'Key level',
+                'key_level_title'                         => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
+                'shrouded_bounty_type'                    => 'Shrouded bounty',
+                'shrouded_bounty_type_title'              => 'The Shrouded bounty that you can select at the beginning of the dungeon.',
+                'shrouded_bounty_types'                   => [
+                    'none'    => 'No bounty',
+                    'crit'    => 'Crit',
+                    'haste'   => 'Haste',
+                    'mastery' => 'Mastery',
+                    'vers'    => 'Versatility',
+                ],
+                'affixes'                                 => 'Affixes',
+                'affixes_title'                           => 'Select Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%. You can select both at once.',
+                'affixes_map'                             => [
+                    'fortified'  => 'Fortified',
+                    'tyrannical' => 'Tyrannical',
+                ],
+                'simulate_thundering_clear_seconds'       => 'Seconds to clear Thundering',
+                'simulate_thundering_clear_seconds_title' => 'The amount of time before you clear the Thundering stacks. More seconds equals more dps as you get the additional damage effects longer. Setting this value to 0 disables Thundering affix altogether.',
+                'raid_buffs_title'                        => 'Allows the selection of raid-wide buffs. Note: if Bloodlust is disabled, Bloodlust/Heroism/etc. per pull does not do anything.',
+                'raid_buffs'                              => 'Raid buffs',
+                'raid_buffs_map'                          => [
+                    'bloodlust'            => 'Bloodlust',
+                    'arcane_intellect'     => 'Arcane Intellect',
+                    'power_word_fortitude' => 'Power Word: Fortitude',
+                    'mark_of_the_wild'     => 'Mark of the Wild',
+                    'battle_shout'         => 'Battle Shout',
+                    'mystic_touch'         => 'Mystic Touch',
+                    'chaos_brand'          => 'Chaos Brand',
+                    'skyfury'              => 'Skyfury Totem',
+                    'hunters_mark'         => 'Hunter\'s Mark',
+                    'power_infusion'       => 'Power Infusion',
+                    'bleeding'             => 'Bleeding',
+                ],
+                'hp_percent'                              => 'HP percentage',
+                'hp_percent_title'                        => 'The amount of percent that your character has to damage all enemies before it is considered \'killed\'. This will be your share of the damage in a dungeon.',
+                'bloodlust_per_pull'                      => 'Bloodlust/Heroism/etc. per pull',
+                'bloodlust_per_pull_title'                => 'Allows you to select which pulls have Bloodlust/Heroism/etc. Assigning these spells to a pull automatically populates this dropdown.',
             ],
-            'affixes'                                 => 'Affixes',
-            'affixes_title'                           => 'Select Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%. You can select both at once.',
-            'affixes_map'                             => [
-                'fortified'  => 'Fortified',
-                'tyrannical' => 'Tyrannical',
-            ],
-            'simulate_thundering_clear_seconds'       => 'Seconds to clear Thundering',
-            'simulate_thundering_clear_seconds_title' => 'The amount of time before you clear the Thundering stacks. More seconds equals more dps as you get the additional damage effects longer. Setting this value to 0 disables Thundering affix altogether.',
-            'bloodlust'                               => 'Bloodlust enabled',
-            'bloodlust_title'                         => 'Allows you to enable/disable Bloodlust/Heroism/Time Warp/Fury of the Aspects globally. Note: when disabled, Bloodlust/Heroism/Time Warp/Fury of the Aspects per pull does not do anything.',
-            'arcane_intellect'                        => 'Arcane Intellect',
-            'power_word_fortitude'                    => 'PW: Fortitude',
-            'battle_shout'                            => 'Battle Shout',
-            'mystic_touch'                            => 'Mystic Touch',
-            'chaos_brand'                             => 'Chaos Brand',
-            'hp_percent'                              => 'HP percentage',
-            'hp_percent_title'                        => 'The amount of percent that your character has to damage all enemies before it is considered \'killed\'. This will be your share of the damage in a dungeon.',
-            'bloodlust_per_pull'                      => 'Bloodlust/Heroism/Time Warp/Fury of the Aspects per pull.',
-            'bloodlust_per_pull_title'                => 'Allows you to select which pulls have Bloodlust/Heroism/Time Warp/Fury of the Aspects. Assigning these spells to a pull automatically populates this dropdown.',
-            'ranged_pull_compensation_yards'          => 'Ranged pull compensation in yards.',
-            'ranged_pull_compensation_yards_title'    => 'When doing a M+ run you never run from pack to pack and body pull them -
+            'advanced' => [
+                'ranged_pull_compensation_yards'       => 'Ranged pull compensation in yards',
+                'ranged_pull_compensation_yards_title' => 'When doing a M+ run you never run from pack to pack and body pull them -
                 you use a ranged ability to pull them most of the time. This value allows you to compensate for your ranged abilities
                 and reduce the delay between packs. Note: this will reduce the walking distance by this amount, so setting this to the
                 max range of your ability is not advised for accurate sim results. Between 50%-75% of your spell\'s max range should be good,
                 unless you\'re literally chain pulling with no down time in between.',
-            'use_mounts'                              => 'Use mounts',
-            'use_mounts_title'                        => 'Will attempt to use your mount (if it\'s quicker and available) to reduce the distance between the current pull and the next pull.',
-            'get_simulationcraft_string'              => 'Get SimulationCraft string',
-            'simulationcraft_string'                  => 'Simulationcraft string',
-            'loading'                                 => 'Loading...',
-            'copy_to_clipboard'                       => 'Copy to clipboard',
-        ],
-        'simulateoptions'    => [
-            'advanced' => [
-                'patreon_link_text' => 'Patreon',
-                'patreon_only'      => 'Advanced simulation options are available if you subscribe to Keystone.guru\'s :patreon.',
-                'advanced_options'  => 'Advanced options',
-                'description'       => 'The advanced options aim to further increase the accuracy of the generated simulation craft string and have the numbers come closer to what you\'d experience in reality.',
+                'use_mounts'                           => 'Use mounts',
+                'use_mounts_title'                     => 'Will attempt to use your mount (if it\'s quicker and available) to reduce the distance between the current pull and the next pull.',
+                'patreon_link_text'                    => 'Patreon',
+                'patreon_only'                         => 'Advanced simulation options are available if you subscribe to Keystone.guru\'s :patreon.',
+                'advanced_options'                     => 'Advanced options',
+                'description'                          => 'The advanced options aim to further increase the accuracy of the generated simulation craft string and have the numbers come closer to what you\'d experience in reality.',
             ],
         ],
         'uploadlogs'         => [

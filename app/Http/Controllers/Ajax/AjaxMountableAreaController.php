@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\Model\ModelDeletedEvent;
+use App\Events\Models\ModelChangedEvent;
+use App\Events\Models\MountableArea\MountableAreaChangedEvent;
+use App\Events\Models\MountableArea\MountableAreaDeletedEvent;
 use App\Http\Requests\MountableArea\MountableAreaFormRequest;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MountableArea;
 use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -26,16 +29,17 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
      * @throws Throwable
      */
     public function store(
-        MountableAreaFormRequest $request,
-        MappingVersion           $mappingVersion,
-        ?MountableArea           $mountableArea = null): MountableArea
+        MountableAreaFormRequest    $request,
+        CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
+        ?MountableArea              $mountableArea = null): MountableArea
     {
         $validated = $request->validated();
 
         $validated['vertices_json'] = json_encode($request->get('vertices'));
         unset($validated['vertices']);
 
-        return $this->storeModel($mappingVersion, $validated, MountableArea::class, $mountableArea);
+        return $this->storeModel($coordinatesService, $mappingVersion, $validated, MountableArea::class, $mountableArea);
     }
 
     /**
@@ -54,7 +58,7 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
                     if (Auth::check()) {
                         /** @var User $user */
                         $user = Auth::user();
-                        broadcast(new ModelDeletedEvent($mountableArea->floor->dungeon, $user, $mountableArea));
+                        broadcast(new MountableAreaDeletedEvent($mountableArea->floor->dungeon, $user, $mountableArea));
                     }
                 }
 
@@ -65,5 +69,10 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
 
             return $result;
         });
+    }
+
+    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
+    {
+        return new MountableAreaChangedEvent($context, $user, $model);
     }
 }

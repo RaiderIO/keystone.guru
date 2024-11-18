@@ -40,17 +40,18 @@ class CommonDungeonrouteSimulate extends InlineCode {
      * @private
      */
     _getData() {
+        let raidBuffs = $('#simulate_raid_buffs').val();
+        let raidBuffsMask = 0;
+        for (let i = 0; i < raidBuffs.length; i++) {
+            raidBuffsMask += parseInt(raidBuffs[i]);
+        }
+
         return {
             key_level: $(this.options.keyLevelSelector).val(),
             shrouded_bounty_type: $('#simulate_shrouded_bounty_type').val(),
             affix: $('#simulate_affix').val(),
             thundering_clear_seconds: $('#simulate_thundering_clear_seconds').val(),
-            bloodlust: $('#simulate_bloodlust').is(':checked') ? 1 : 0,
-            arcane_intellect: $('#simulate_arcane_intellect').is(':checked') ? 1 : 0,
-            power_word_fortitude: $('#simulate_power_word_fortitude').is(':checked') ? 1 : 0,
-            battle_shout: $('#simulate_battle_shout').is(':checked') ? 1 : 0,
-            mystic_touch: $('#simulate_mystic_touch').is(':checked') ? 1 : 0,
-            chaos_brand: $('#simulate_chaos_brand').is(':checked') ? 1 : 0,
+            raid_buffs_mask: raidBuffsMask,
             hp_percent: $('#simulate_hp_percent').val(),
             ranged_pull_compensation_yards: $('#simulate_ranged_pull_compensation_yards').val(),
             use_mounts: $('#simulate_use_mounts').is(':checked') ? 1 : 0,
@@ -149,9 +150,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
             return;
         }
 
-        let self = this;
-
-        let $keyLevelSlider = $(this.options.keyLevelSelector)
+        $(this.options.keyLevelSelector)
             .ionRangeSlider({
                 grid: true,
                 grid_snap: true,
@@ -161,7 +160,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
             });
 
         if (this.options.isThundering) {
-            let $thunderingClearSecondsSlider = $('#simulate_thundering_clear_seconds')
+            $('#simulate_thundering_clear_seconds')
                 .ionRangeSlider({
                     grid: true,
                     grid_snap: true,
@@ -171,7 +170,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
                 });
         }
 
-        let $hpPercentage = $('#simulate_hp_percent')
+        $('#simulate_hp_percent')
             .ionRangeSlider({
                 grid: true,
                 grid_snap: true,
@@ -180,7 +179,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
                 max: 100
             });
 
-        let $rangedPullCompensationYards = $('#simulate_ranged_pull_compensation_yards')
+        $('#simulate_ranged_pull_compensation_yards')
             .ionRangeSlider({
                 grid: true,
                 grid_snap: true,

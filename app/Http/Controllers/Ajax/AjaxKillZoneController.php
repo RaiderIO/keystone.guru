@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\Model\ModelChangedEvent;
-use App\Events\Model\ModelDeletedEvent;
+use App\Events\Models\KillZone\KillZoneChangedEvent;
+use App\Events\Models\KillZone\KillZoneDeletedEvent;
+use App\Events\Models\PridefulEnemy\PridefulEnemyDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Http\Requests\KillZone\APIDeleteAllFormRequest;
@@ -64,7 +65,7 @@ class AjaxKillZoneController extends Controller
             $killZone = KillZone::create($data);
             // We JUST created the KillZone - so it does not have enemies (yet)
             $killZone->setEnemiesAttributeCache(collect());
-            $success  = $killZone instanceof KillZone;
+            $success = $killZone instanceof KillZone;
         } else {
             // Set the cache on the before model to properly store the changes
             $beforeModel->getEnemiesAttribute(true);
@@ -162,7 +163,7 @@ class AjaxKillZoneController extends Controller
                 // Something's updated; broadcast it
                 /** @var User $user */
                 $user = Auth::user();
-                broadcast(new ModelChangedEvent($dungeonroute, $user, $killZone));
+                broadcast(new KillZoneChangedEvent($coordinatesService, $dungeonroute, $user, $killZone));
             }
         } else {
             throw new Exception('Unable to save kill zone!');
@@ -297,7 +298,7 @@ class AjaxKillZoneController extends Controller
                 if (Auth::check()) {
                     /** @var User $user */
                     $user = Auth::user();
-                    broadcast(new ModelDeletedEvent($dungeonRoute, $user, $killZone));
+                    broadcast(new KillZoneDeletedEvent($dungeonRoute, $user, $killZone));
                 }
 
                 $dungeonRoute->load('killZones');
@@ -345,11 +346,11 @@ class AjaxKillZoneController extends Controller
                     foreach ($killZones as $killZone) {
                         $this->dungeonRouteChanged($dungeonRoute, $killZone, null);
 
-                        broadcast(new ModelDeletedEvent($dungeonRoute, $user, $killZone));
+                        broadcast(new KillZoneDeletedEvent($dungeonRoute, $user, $killZone));
                     }
 
                     foreach ($pridefulEnemies as $pridefulEnemy) {
-                        broadcast(new ModelDeletedEvent($dungeonRoute, $user, $pridefulEnemy));
+                        broadcast(new PridefulEnemyDeletedEvent($dungeonRoute, $user, $pridefulEnemy));
                     }
                 }
 

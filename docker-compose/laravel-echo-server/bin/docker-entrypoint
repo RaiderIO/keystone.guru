@@ -39,9 +39,9 @@ if [[ "$1" == 'start' ]] || [[ "$1" == 'client:add' ]] || [[ "$1" == 'client:rem
         sed -i "s|LARAVEL_ECHO_SERVER_CLIENT_KEY|${LARAVEL_ECHO_SERVER_CLIENT_KEY}|i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
         sed -i "s|LARAVEL_ECHO_SERVER_DB|${LARAVEL_ECHO_SERVER_DB:-redis}|i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
         sed -i "s|REDIS_HOST|${REDIS_HOST:-redis}|i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
-        sed -i "s|REDIS_PORT|${REDIS_PORT:-6379}|i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
+        sed -i "s|REDIS_PORT|${REDIS_PORT:-6380}|i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
         sed -i "s|REDIS_PASSWORD|${REDIS_PASSWORD}|i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
-        sed -i "s|REDIS_PREFIX|${REDIS_PREFIX-laravel_database_}|i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
+        sed -i "s|REDIS_PREFIX|${REDIS_PREFIX}|i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
         sed -i "s|REDIS_DB|${REDIS_DB:-0}|i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
         # Remove password config if it is empty
         sed -i "s|\"password\": \"\",||i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json

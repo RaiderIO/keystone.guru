@@ -290,6 +290,11 @@ if ($isAdmin) {
             @include('common.modal.userreport.enemy')
         @endcomponent
     @endisset
+    @if($mapContext instanceof MapContextDungeonRoute)
+        @component('common.general.modal', ['id' => 'dungeonroute_removed_modal', 'static' => true, 'showClose' => false])
+            @include('common.modal.dungeonroute.removed', ['dungeonroute' => $dungeonroute])
+        @endcomponent
+    @endisset
 
     @if(isset($show['controls']['pulls']) && $show['controls']['pulls'] ||
         isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])

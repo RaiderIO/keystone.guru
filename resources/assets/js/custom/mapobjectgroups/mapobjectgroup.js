@@ -319,7 +319,7 @@ class MapObjectGroup extends Signalable {
                 let oldTooltipLayerId = layer._leaflet_id;
 
                 let tooltip = layer.bindTooltip(user.name, {
-                    permanent: true, className: `user_color_${user.public_key} ${fontClass}`, direction: 'top'
+                    permanent: true, className: `echo_user_${user.public_key}_tooltip ${fontClass}`, direction: 'top'
                 });
 
                 // Fadeout after some time
@@ -333,7 +333,7 @@ class MapObjectGroup extends Signalable {
                         // Rebind killzone pull index tooltip
                         localMapObject.layer.bindTooltip(oldTooltip._content, oldTooltip.options);
                     }
-                }, c.map.echo.tooltipFadeOutTimeout);
+                }, c.map.echo.tooltipFadeOutTimeoutMs);
             } else {
                 console.warn('Unable to display echo received action to user, layer was null', localMapObject);
             }

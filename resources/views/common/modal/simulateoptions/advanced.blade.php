@@ -32,9 +32,9 @@ $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\M
 
                     <div class="form-group">
                         <label for="simulate_hp_percent">
-                            {{ __('view_common.modal.simulate.ranged_pull_compensation_yards') }}
+                            {{ __('view_common.modal.simulateoptions.advanced.ranged_pull_compensation_yards') }}
                             <i class="fas fa-info-circle" data-toggle="tooltip"
-                               title="{{ __('view_common.modal.simulate.ranged_pull_compensation_yards_title') }}"></i>
+                               title="{{ __('view_common.modal.simulateoptions.advanced.ranged_pull_compensation_yards_title') }}"></i>
                         </label>
                         <div class="row">
                             <div class="col">
@@ -51,9 +51,9 @@ $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\M
 
                     <div class="form-group">
                         <label for="simulate_use_mounts">
-                            {{ __('view_common.modal.simulate.use_mounts') }}
+                            {{ __('view_common.modal.simulateoptions.advanced.use_mounts') }}
                             <i class="fas fa-info-circle" data-toggle="tooltip"
-                               title="{{ __('view_common.modal.simulate.use_mounts_title') }}"></i>
+                               title="{{ __('view_common.modal.simulateoptions.advanced.use_mounts_title') }}"></i>
                         </label>
                         <div class="row">
                             <div class="col">

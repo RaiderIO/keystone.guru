@@ -16,8 +16,10 @@
     "database": "redis",
     "databaseConfig": {
         "redis": {
-            "port": 6380,
-            "host": "redis"
+            "port": "REDIS_PORT",
+            "host": "REDIS_HOST",
+            "db": "REDIS_HOST_DB",
+            "keyPrefix": "REDIS_PREFIX"
         },
         "sqlite": {
             "databasePath": "/database/laravel-echo-server.sqlite"

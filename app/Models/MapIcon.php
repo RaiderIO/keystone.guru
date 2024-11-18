@@ -4,16 +4,13 @@ namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
-use App\Models\Interfaces\EventModelInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\HasLinkedAwakenedObelisk;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use Eloquent;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -37,7 +34,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class MapIcon extends Model implements MappingModelCloneableInterface, MappingModelInterface, EventModelInterface
+class MapIcon extends Model implements MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
@@ -129,18 +126,5 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
     public function getDungeonId(): ?int
     {
         return $this->floor?->dungeon_id ?? null;
-    }
-
-    /**
-     * @throws BindingResolutionException
-     */
-    public function getEventData(): array
-    {
-        /** @var CoordinatesServiceInterface $coordinatesService */
-        $coordinatesService = app()->make(CoordinatesServiceInterface::class);
-
-        return array_merge([
-
-        ], $this->getCoordinatesData($coordinatesService));
     }
 }

@@ -25,7 +25,10 @@
                    aria-haspopup="true"
                    aria-expanded="false">
                     {{#ifCond avatar_url '==' null}}
-                        {{initials}}
+                        <!-- Somehow required - align-center class does not take precedence -->
+                        <div style="text-align: center">
+                            {{initials}}
+                        </div>
                     {{else}}
                         <img src="{{avatar_url}}" alt="{{initials}}"/>
                     {{/ifCond}}
@@ -49,7 +52,7 @@
                         {{/unless}}
                     {{/ifCond}}
                     <a class="dropdown-item" href="{{url}}" target="_blank">
-                        <i class="fas fa-user"></i> {{../connected_user_view_profile_label}}
+                        <i class="fas fa-user" style="color: {{color}};"></i> {{../connected_user_view_profile_label}}
                     </a>
                 </div>
             </div>
@@ -64,7 +67,7 @@
                 <div class="dropdown-menu" aria-labelledby="edit_route_echo_members_overflow_dropdown">
                     {{#each usersOverflow}}
                     <a class="dropdown-item" href="{{url}}" target="_blank">
-                        <i class="fas fa-user"></i> {{initials}}
+                        <i class="fas fa-user" style="color: {{color}};"></i> {{initials}}
                     </a>
                     {{/each}}
                 </div>

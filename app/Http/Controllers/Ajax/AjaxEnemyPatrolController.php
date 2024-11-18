@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\Model\ModelDeletedEvent;
+use App\Events\Models\EnemyPatrol\EnemyPatrolChangedEvent;
+use App\Events\Models\EnemyPatrol\EnemyPatrolDeletedEvent;
+use App\Events\Models\ModelChangedEvent;
 use App\Http\Controllers\Traits\SavesPolylines;
 use App\Http\Requests\EnemyPatrol\EnemyPatrolFormRequest;
 use App\Models\EnemyPatrol;
@@ -38,6 +40,7 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
         $beforeModel = $enemyPatrol !== null ? clone $enemyPatrol : null;
 
         return $this->storeModel(
+            $coordinatesService,
             $mappingVersion,
             $validated,
             EnemyPatrol::class,
@@ -73,7 +76,7 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
                 if (Auth::check()) {
                     /** @var User $user */
                     $user = Auth::getUser();
-                    broadcast(new ModelDeletedEvent($enemyPatrol->floor->dungeon, $user, $enemyPatrol));
+                    broadcast(new EnemyPatrolDeletedEvent($enemyPatrol->floor->dungeon, $user, $enemyPatrol));
                 }
 
                 // Trigger mapping changed event so the mapping gets saved across all environments
@@ -87,4 +90,11 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
 
         return $result;
     }
+
+    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
+    {
+        return new EnemyPatrolChangedEvent($context, $user, $model);
+    }
+
+
 }

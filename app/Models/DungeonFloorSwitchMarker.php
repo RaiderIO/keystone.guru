@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorCoupling;
-use App\Models\Interfaces\EventModelInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -33,7 +32,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  *
  * @mixin Eloquent
  */
-class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface, EventModelInterface
+class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
@@ -146,31 +145,4 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneab
             default => 2,
         };
     }
-
-    public function getEventData(): array
-    {
-        return [];
-    }
-
-    //    /**
-    //     * @param float $ingameX
-    //     * @return DungeonFloorSwitchMarker
-    //     */
-    //    public function setIngameX(float $ingameX): DungeonFloorSwitchMarker
-    //    {
-    //        $this->ingameX = $ingameX;
-    //
-    //        return $this;
-    //    }
-    //
-    //    /**
-    //     * @param float $ingameY
-    //     * @return DungeonFloorSwitchMarker
-    //     */
-    //    public function setIngameY(float $ingameY): DungeonFloorSwitchMarker
-    //    {
-    //        $this->ingameY = $ingameY;
-    //
-    //        return $this;
-    //    }
 }

@@ -15,8 +15,7 @@ class AdminDungeonMap extends DungeonMap {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
         let result = [];
 
-        if (getState().getMapContext().getDungeon().key === DUNGEON_SIEGE_OF_BORALUS ||
-            getState().getMapContext().getDungeon().key === DUNGEON_THE_NEXUS) {
+        if (getState().getMapContext().getDungeon().key === DUNGEON_THE_NEXUS) {
             result.push(new FactionDisplayControls(this));
         }
 

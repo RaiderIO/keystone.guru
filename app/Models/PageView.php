@@ -70,10 +70,6 @@ class PageView extends Model
             ]);
 
             $result = true;
-        } else {
-            // Keep track of when it was updated
-            $mostRecentPageView->updated_at = Carbon::now()->toDateTimeString();
-            $mostRecentPageView->save();
         }
 
         return $result;
@@ -96,6 +92,7 @@ class PageView extends Model
         return PageView::where('user_id', $userId)
             ->where('model_id', $modelId)
             ->where('model_class', $modelClass)
-            ->where('session_id', $sessionId)->first();
+            ->where('session_id', $sessionId)
+            ->first();
     }
 }

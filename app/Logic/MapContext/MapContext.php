@@ -9,6 +9,7 @@ use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\Npc;
 use App\Models\PublishedState;
 use App\Models\RaidMarker;
 use App\Models\Spell\Spell;
@@ -91,7 +92,12 @@ abstract class MapContext
                         'spells',
                         // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
                         'enemyForces' => fn(HasOne $query) => $query->where('mapping_version_id', $this->mappingVersion->id),
-                    ])->get(),
+                    ])
+                        // Disable cache for this query though! Since NpcEnemyForces is a cache model, it can otherwise return values from another mapping version
+                        ->disableCache()
+                        ->get()
+                        // Only show what we need in the FE
+                        ->each(fn(Npc $npc) => $npc->enemyForces?->setVisible(['enemy_forces', 'enemy_forces_teeming'])),
                     'auras'                     => $auras,
                     'enemies'                   => $this->mappingVersion->mapContextEnemies($this->coordinatesService, $useFacade),
                     'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
@@ -144,7 +150,7 @@ abstract class MapContext
 
             'echoChannelName' => $this->getEchoChannelName(),
             // May be null
-            'userPublicKey'   => optional(Auth::user())->public_key,
+            'userPublicKey'   => Auth::user()?->public_key,
         ];
     }
 }

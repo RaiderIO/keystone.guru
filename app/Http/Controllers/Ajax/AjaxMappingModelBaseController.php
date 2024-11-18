@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\Model\ModelChangedEvent;
+use App\Events\Models\ModelChangedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Closure;
 use DB;
 use Exception;
@@ -34,21 +36,22 @@ abstract class AjaxMappingModelBaseController extends Controller
      * @throws Throwable
      */
     protected function storeModel(
-        ?MappingVersion        $mappingVersion,
-        array                  $validated,
-        string                 $modelClass,
-        ?MappingModelInterface $model = null,
-        ?Closure               $onSaveSuccess = null,
-        ?Model                 $echoContext = null
+        CoordinatesServiceInterface $coordinatesService,
+        ?MappingVersion             $mappingVersion,
+        array                       $validated,
+        string                      $modelClass,
+        ?MappingModelInterface      $model = null,
+        ?Closure                    $onSaveSuccess = null,
+        ?Model                      $echoContext = null
     ): Model {
         $validated['mapping_version_id'] = $mappingVersion?->id;
 
-        if(!is_a($modelClass, Model::class, true)){
+        if (!is_a($modelClass, Model::class, true)) {
             throw new Exception(sprintf('Class %s is not a model!', $modelClass));
         }
 
         /** @var Model $modelClass */
-        return DB::transaction(function () use ($validated, $modelClass, $model, $onSaveSuccess, $echoContext) {
+        return DB::transaction(function () use ($coordinatesService, $validated, $modelClass, $model, $onSaveSuccess, $echoContext) {
             /** @var Model|null $beforeModel */
             $beforeModel = $model === null ? null : clone $model;
 
@@ -73,7 +76,7 @@ abstract class AjaxMappingModelBaseController extends Controller
 
                 if (Auth::check()) {
                     $echoContext = $echoContext ?? $model->floor->dungeon;
-                    broadcast(new ModelChangedEvent($echoContext, Auth::getUser(), $model));
+                    broadcast($this->getModelChangedEvent($coordinatesService, $echoContext, Auth::user(), $model));
                 }
 
                 return $model;
@@ -82,4 +85,6 @@ abstract class AjaxMappingModelBaseController extends Controller
             }
         });
     }
+
+    protected abstract function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent;
 }

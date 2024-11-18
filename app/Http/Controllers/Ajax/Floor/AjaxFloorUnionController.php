@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Ajax\Floor;
 
-use App\Events\Model\ModelDeletedEvent;
+use App\Events\Models\FloorUnion\FloorUnionChangedEvent;
+use App\Events\Models\FloorUnion\FloorUnionDeletedEvent;
+use App\Events\Models\ModelChangedEvent;
 use App\Http\Controllers\Ajax\AjaxMappingModelBaseController;
 use App\Http\Requests\Floor\FloorUnionFormRequest;
 use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use DB;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -30,13 +33,14 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
      * @throws Throwable
      */
     public function store(
-        FloorUnionFormRequest $request,
-        MappingVersion        $mappingVersion,
-        ?FloorUnion           $floorUnion = null
+        FloorUnionFormRequest       $request,
+        CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
+        ?FloorUnion                 $floorUnion = null
     ): FloorUnion|Model {
         $validated = $request->validated();
 
-        return $this->storeModel($mappingVersion, $validated, FloorUnion::class, $floorUnion);
+        return $this->storeModel($coordinatesService, $mappingVersion, $validated, FloorUnion::class, $floorUnion);
     }
 
     /**
@@ -52,7 +56,7 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
                     if (Auth::check()) {
                         /** @var User $user */
                         $user = Auth::getUser();
-                        broadcast(new ModelDeletedEvent($floorUnion->floor->dungeon, $user, $floorUnion));
+                        broadcast(new FloorUnionDeletedEvent($floorUnion->floor->dungeon, $user, $floorUnion));
                     }
                 }
 
@@ -64,4 +68,11 @@ class AjaxFloorUnionController extends AjaxMappingModelBaseController
             return $result;
         });
     }
+
+    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
+    {
+        return new FloorUnionChangedEvent($context, $user, $model);
+    }
+
+
 }

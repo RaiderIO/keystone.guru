@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\Model\ModelDeletedEvent;
+use App\Events\Models\Enemy\EnemyChangedEvent;
+use App\Events\Models\Enemy\EnemyDeletedEvent;
+use App\Events\Models\ModelChangedEvent;
 use App\Http\Requests\Enemy\APIEnemyFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
@@ -50,7 +52,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
         // -1 is a special value that means 'default' in the database
         $validated['kill_priority'] = (int)$validated['kill_priority'] === -1 ? null : (int)$validated['kill_priority'];
 
-        return $this->storeModel($mappingVersion, $validated, Enemy::class, $enemy, static function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
+        return $this->storeModel($coordinatesService, $mappingVersion, $validated, Enemy::class, $enemy, static function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
             $activeAuras = $request->get('active_auras', []);
             // Clear current active auras
             $enemy->enemyActiveAuras()->delete();
@@ -131,7 +133,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                     if (Auth::check()) {
                         /** @var User $user */
                         $user = Auth::getUser();
-                        broadcast(new ModelDeletedEvent($enemy->floor->dungeon, $user, $enemy));
+                        broadcast(new EnemyDeletedEvent($enemy->floor->dungeon, $user, $enemy));
                     }
                 }
 
@@ -142,5 +144,10 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
 
             return $result;
         });
+    }
+
+    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
+    {
+        return new EnemyChangedEvent($coordinatesService, $context, $user, $model);
     }
 }

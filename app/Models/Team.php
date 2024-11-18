@@ -22,7 +22,8 @@ use Illuminate\Support\Facades\Auth;
  * @property string                   $description
  * @property string                   $invite_code
  * @property string                   $default_role
- * @property Collection<TeamUser>     $teamusers
+ *
+ * @property Collection<TeamUser>     $teamUsers
  * @property Collection<User>         $members
  * @property Collection<DungeonRoute> $dungeonroutes
  *
@@ -46,7 +47,7 @@ class Team extends Model
         return 'public_key';
     }
 
-    public function teamusers(): HasMany
+    public function teamUsers(): HasMany
     {
         return $this->hasMany(TeamUser::class);
     }
@@ -134,7 +135,7 @@ class Team extends Model
     public function getUserRole(User $user): ?string
     {
         /** @var TeamUser $teamUser */
-        $teamUser = $this->teamusers()->where('user_id', $user->id)->first();
+        $teamUser = $this->teamUsers()->where('user_id', $user->id)->first();
 
         return $teamUser?->role;
     }
@@ -219,7 +220,7 @@ class Team extends Model
     public function changeRole(User $user, string $role): void
     {
         /** @var TeamUser $teamUser */
-        $teamUser = $this->teamusers()->where('user_id', $user->id)->first();
+        $teamUser = $this->teamUsers()->where('user_id', $user->id)->first();
         $roles    = TeamUser::ALL_ROLES;
         // Only when user is part of the team, and when the role is a valid one.
         if ($teamUser !== null && isset($roles[$role])) {
@@ -380,7 +381,7 @@ class Team extends Model
 
         $roles    = TeamUser::ALL_ROLES;
         /** @var TeamUser|null $newOwner */
-        $newOwner = $this->teamusers->where('user_id', '!=', $user->id)
+        $newOwner = $this->teamUsers->where('user_id', '!=', $user->id)
             ->sortByDesc(static fn($obj, $key) => $roles[$obj->role])
             ->first();
 
@@ -403,8 +404,8 @@ class Team extends Model
             // Delete icons
             $team->iconfile?->delete();
             // Remove any ad-free giveaways if the giver was part of this team
-            foreach ($team->members->filter(function (TeamUser $teamUser) {
-                return $teamUser->user->patreonAdFreeGiveaway !== null;
+            foreach ($team->members->filter(function (User $member) {
+                return $member->patreonAdFreeGiveaway !== null;
             }) as $teamMember) {
                 /** @var User $teamMember */
                 // If the giver of the patreon ad-free giveaway was part of this team

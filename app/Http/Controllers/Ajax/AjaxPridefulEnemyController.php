@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\Model\ModelChangedEvent;
-use App\Events\Model\ModelDeletedEvent;
+use App\Events\Models\PridefulEnemy\PridefulEnemyChangedEvent;
+use App\Events\Models\PridefulEnemy\PridefulEnemyDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
 use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -22,8 +23,12 @@ class AjaxPridefulEnemyController extends Controller
     /**
      * @throws Exception
      */
-    public function store(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy): PridefulEnemy
-    {
+    public function store(
+        Request                     $request,
+        CoordinatesServiceInterface $coordinatesService,
+        DungeonRoute                $dungeonRoute,
+        Enemy                       $enemy
+    ): PridefulEnemy {
         $this->authorize('edit', $dungeonRoute);
 
         /** @var PridefulEnemy $pridefulEnemy */
@@ -35,6 +40,7 @@ class AjaxPridefulEnemyController extends Controller
 
         $pridefulEnemy->dungeon_route_id = $dungeonRoute->id;
         $pridefulEnemy->enemy_id         = $enemy->id;
+        // @TODO support facades? Idk it's all legacy at this point - the dungeons that have Prideful enemies are all not supported by facade anyway
         $pridefulEnemy->floor_id         = (int)$request->get('floor_id');
         $pridefulEnemy->lat              = (float)$request->get('lat');
         $pridefulEnemy->lng              = (float)$request->get('lng');
@@ -46,7 +52,7 @@ class AjaxPridefulEnemyController extends Controller
         if (Auth::check()) {
             /** @var User $user */
             $user = Auth::getUser();
-            broadcast(new ModelChangedEvent($dungeonRoute, $user, $pridefulEnemy));
+            broadcast(new PridefulEnemyChangedEvent($coordinatesService, $dungeonRoute, $user, $pridefulEnemy));
         }
 
         $dungeonRoute->touch();
@@ -69,7 +75,7 @@ class AjaxPridefulEnemyController extends Controller
             if ($pridefulEnemy && $pridefulEnemy->delete() && Auth::check()) {
                 /** @var User $user */
                 $user = Auth::getUser();
-                broadcast(new ModelDeletedEvent($dungeonRoute, $user, $pridefulEnemy));
+                broadcast(new PridefulEnemyDeletedEvent($dungeonRoute, $user, $pridefulEnemy));
             }
 
             $dungeonRoute->touch();

@@ -18,9 +18,9 @@ function getUserMousePositionIcon(userMousePosition) {
 
     let width = c.map.mapicon.calculateSize(32);
     let height = c.map.mapicon.calculateSize(32);
-    // Remove 6 for border, then 17 for 2 characters wide
-    let textWidth = width / 2;
-    textWidth -= (c.map.leafletSettings.maxZoom - getState().getMapZoomLevel());
+    // 4 for padding
+    let textWidth = width - (4 + 18); // 10 for the icon
+    textWidth += (c.map.leafletSettings.maxNativeZoom - getState().getMapZoomLevel());
 
     let handlebarsData = $.extend({}, {
         public_key: userMousePosition.public_key,

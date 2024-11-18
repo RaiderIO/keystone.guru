@@ -561,6 +561,12 @@ class DungeonMap extends Signalable {
             let state = getState();
             let mapContext = state.getMapContext();
 
+            // Defined in sitescripts
+            // noinspection JSUnresolvedReference
+            // if (isUserAdmin) {
+                mapControls.push(new AdminPanelControls(this));
+            // }
+
             // Only when enemy forces are relevant in their display (not in a view)
             if (!state.isMapAdmin() && !(mapContext instanceof MapContextDungeonExplore)) {
                 if (mapContext.isDungeonSpeedrunEnabled()) {
@@ -574,7 +580,6 @@ class DungeonMap extends Signalable {
             }
 
             if (this.options.edit &&
-                mapContext.getDungeon().key === DUNGEON_SIEGE_OF_BORALUS ||
                 mapContext.getDungeon().key === DUNGEON_THE_NEXUS) {
                 mapControls.push(new FactionDisplayControls(this));
             }
@@ -703,7 +708,7 @@ class DungeonMap extends Signalable {
 
         let dungeonData = getState().getMapContext().getDungeon();
         this.mapTileLayer = L.tileLayer(`/images/tiles/${dungeonData.expansion.shortname}/${dungeonData.key}/${currentFloor.index}/{z}/{x}_{y}.png`, {
-            maxNativeZoom: 5,
+            maxNativeZoom: c.map.leafletSettings.maxNativeZoom,
             maxZoom: floorMaxZoomLevel,
             attribution: 'Map data © Blizzard Entertainment',
             tileSize: tileSize,

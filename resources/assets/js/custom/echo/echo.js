@@ -24,6 +24,9 @@ class Echo extends Signalable {
             new InviteHandler(this),
             new StopHandler(this),
 
+            // Brushline
+            new BrushlineChangedHandler(this),
+            new BrushlineDeletedHandler(this),
             // KillZone
             new KillZoneChangedHandler(this),
             new KillZoneDeletedHandler(this),
@@ -36,9 +39,12 @@ class Echo extends Signalable {
             // Overpulled enemies
             new OverpulledEnemyChangedHandler(this),
             new OverpulledEnemyDeletedHandler(this),
+            // Path
+            new PathChangedHandler(this),
+            new PathDeletedHandler(this),
 
             // Color changed
-            // new ColorChangedHandler(this),
+            new UserColorChangedHandler(this),
 
             // Whisper handlers
             new MousePositionHandler(this),

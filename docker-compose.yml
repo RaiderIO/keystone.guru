@@ -144,6 +144,20 @@ services:
     networks:
       - keystone.guru
 
+  php-redis-admin:
+    image: erikdubbelboer/phpredisadmin
+    container_name: keystone.guru-php-redis-admin
+    depends_on:
+      - redis
+    ports:
+      - "6381:80"
+    environment:
+        - REDIS_1_HOST=redis
+        - REDIS_1_name="Keystone.guru Redis"
+        - REDIS_1_PORT=6380
+    networks:
+      - keystone.guru
+
   php-deployer:
     build:
       context: docker-compose/php-deployer

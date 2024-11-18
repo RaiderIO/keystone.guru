@@ -1022,7 +1022,17 @@ class MapObject extends Signalable {
                 // Even if we were synced, make sure user knows it's no longer / an error occurred
                 self.setSynced(false);
 
-                defaultAjaxErrorFn(xhr, textStatus, errorThrown);
+                let mapContext = getState().getMapContext();
+
+                if (typeof xhr.responseJSON === 'object' &&
+                    typeof xhr.responseJSON.message === 'string' &&
+                    xhr.responseJSON.message === `No query results for model [${mapContext.getDungeonRouteClass()}] ${mapContext.getPublicKey()}`) {
+                    // Route has been removed! Show a modal to the user
+                    $('#dungeonroute_removed_modal').modal('show');
+                } else {
+                    defaultAjaxErrorFn(xhr, textStatus, errorThrown);
+                }
+
                 self.signal('save:error');
             }
         });
