@@ -74,6 +74,9 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('create-reports', function (Request $request) {
             return Limit::perHour(60)->by($request->user()?->id ?: $request->ip());
         });
+        RateLimiter::for('create-user', function (Request $request) {
+            return Limit::perHour(5)->by($request->user()?->id ?: $request->ip());
+        });
 
         // Heavy GET requests
         RateLimiter::for('search-dungeonroute', function (Request $request) {
