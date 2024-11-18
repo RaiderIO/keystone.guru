@@ -1,0 +1,91 @@
+{
+    "id": 260,
+    "release_changelog_id": 267,
+    "version": "v11.7",
+    "title": "Fixed route synchronization, added various raid-wide buff support to SimulationCraft integration, along with many other bugfixes.",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2024-11-18T13:22:42+00:00",
+    "updated_at": "2024-11-18T13:22:42+00:00",
+    "changelog": {
+        "id": 267,
+        "release_id": 260,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 267,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2613,
+                "change": "Creating various elements are now subject to rate limiting. You should never reach these limits on normal usage - but if you do let me know and I can expand them a bit. They're purely here to prevent abuse and\/or attacks on the site."
+            },
+            {
+                "release_changelog_id": 267,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2602,
+                "change": "Rating in route overview pages are now rounded off to 2 digits at max."
+            },
+            {
+                "release_changelog_id": 267,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2598,
+                "change": "User bubbles of those viewing the route along with you, plus those when using route synchornization are now properly vertically\/horizontally aligned."
+            },
+            {
+                "release_changelog_id": 267,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2606,
+                "change": "[Hotfixed] Deleting a team no longer causes a crash."
+            },
+            {
+                "release_changelog_id": 267,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2596,
+                "change": "Editing an object in combined floor mode twice in a row now no longer applies transformations twice - causing the object to moved to a place where it shouldn't be."
+            },
+            {
+                "release_changelog_id": 267,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2608,
+                "change": "[Hotfixed] Enemy forces count is no longer sometimes used from a different mapping version than the one you had selected for your route."
+            },
+            {
+                "release_changelog_id": 267,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2572,
+                "change": "Attempting to edit a deleted route no longer causes crashes - but instead gracefully fails by showing you a modal message instead."
+            },
+            {
+                "release_changelog_id": 267,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2609,
+                "change": "Mountable areas no longer show up the absolute first time you access Keystone.guru."
+            },
+            {
+                "release_changelog_id": 267,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2610,
+                "change": "Fixed display issues if your route somehow as their key levels not set."
+            },
+            {
+                "release_changelog_id": 267,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2566,
+                "change": "Fixed placement of ads on route viewing pages."
+            },
+            {
+                "release_changelog_id": 267,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2585,
+                "change": "Route change synchronization now works again. This was broken accidentally a while ago and I never found out. Anyway - it works again and I gave everything a thorough check-up and refresh. Should be good to go again!"
+            },
+            {
+                "release_changelog_id": 267,
+                "release_changelog_category_id": 10,
+                "ticket_id": 2504,
+                "change": "Added support for Mark of the Wild, Skyfury Totem, Hunter's Mark and Power Infusion."
+            }
+        ]
+    }
+}
