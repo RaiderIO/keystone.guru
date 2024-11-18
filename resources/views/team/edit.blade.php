@@ -23,7 +23,7 @@ $menuItems = [
 ];
 // May only edit details when member is a moderator
 if ($userIsModerator) {
-    $menuItems[] = ['icon' => 'fa-clock', 'text' => __('view_team.edittabs.routepublishing.title'), 'target' => '#route_publishing'];
+//    $menuItems[] = ['icon' => 'fa-clock', 'text' => __('view_team.edittabs.routepublishing.title'), 'target' => '#route_publishing'];
     $menuItems[] = ['icon' => 'fa-tag', 'text' => __('view_team.edittabs.tags.title'), 'target' => '#team_tags'];
     $menuItems[] = ['icon' => 'fa-edit', 'text' => __('view_team.edittabs.details.title'), 'target' => '#details'];
 }
@@ -99,7 +99,7 @@ foreach ($team->teamUsers as $teamUser) {
         @include('team.edittabs.teamtags', ['team' => $team])
 
         @if($userIsModerator)
-            @include('team.edittabs.routepublishing', ['team' => $team])
+{{--            @include('team.edittabs.routepublishing', ['team' => $team])--}}
             @include('team.edittabs.details', ['team' => $team])
         @endif
     </div>
