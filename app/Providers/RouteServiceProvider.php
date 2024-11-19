@@ -12,7 +12,7 @@ use RateLimiter;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    private const RATE_LIMIT_OVERRIDE = null;
+    private const RATE_LIMIT_OVERRIDE = 999999;
 
     /**
      * Define your route model bindings, pattern filters, etc.
