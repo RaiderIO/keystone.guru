@@ -101,6 +101,8 @@ class RouteServiceProvider extends ServiceProvider
 
     private function noLimitForExemptions(Request $request): ?Limit
     {
+        return Limit::none();
+
         /** @var User|null $user */
         $user = $request->user();
 
