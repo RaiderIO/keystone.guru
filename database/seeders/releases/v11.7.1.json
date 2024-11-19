@@ -1,0 +1,37 @@
+{
+    "id": 261,
+    "release_changelog_id": 268,
+    "version": "v11.7.1",
+    "title": "Rate limiting updates, more bugfixes",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2024-11-19T13:58:28+00:00",
+    "updated_at": "2024-11-19T13:58:28+00:00",
+    "changelog": {
+        "id": 268,
+        "release_id": 261,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 268,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2618,
+                "change": "Admin-only coordinate controls no longer show up for everyone, whoops!"
+            },
+            {
+                "release_changelog_id": 268,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2619,
+                "change": "It is no longer possible to create permanent routes while not logged in by editing the request done to the server."
+            },
+            {
+                "release_changelog_id": 268,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2613,
+                "change": "Temporarily disabled rate limiting while investigating why it gets triggered so often."
+            }
+        ]
+    }
+}

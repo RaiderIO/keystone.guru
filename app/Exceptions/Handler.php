@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Logging\HandlerLoggingInterface;
+use Auth;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -12,6 +14,7 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Teapot\StatusCode;
 use Throwable;
 
@@ -29,7 +32,7 @@ class Handler extends ExceptionHandler
         ModelNotFoundException::class,
         TokenMismatchException::class,
         ValidationException::class,
-        BadRequestException::class
+        BadRequestException::class,
     ];
 
     /**
@@ -43,6 +46,13 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $e): void
     {
+        $handlerLogging = app()->make(HandlerLoggingInterface::class);
+
+        if ($e instanceof TooManyRequestsHttpException) {
+            $user = Auth::user();
+            $handlerLogging->tooManyRequests(request()?->ip() ?? 'unknown IP', $user?->id, $user?->name, $e);
+        }
+
         parent::report($e);
     }
 

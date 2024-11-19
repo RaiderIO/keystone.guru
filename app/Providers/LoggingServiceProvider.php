@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Exceptions\Logging\HandlerLogging;
+use App\Exceptions\Logging\HandlerLoggingInterface;
 use App\Http\Middleware\Logging\DebugInfoContextLoggerLogging;
 use App\Http\Middleware\Logging\DebugInfoContextLoggerLoggingInterface;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLogging;
@@ -81,6 +83,9 @@ class LoggingServiceProvider extends ServiceProvider
     public function register(): void
     {
         parent::register();
+
+        // Exceptions
+        $this->app->bind(HandlerLoggingInterface::class, HandlerLogging::class);
 
         // Middleware
         $this->app->bind(DebugInfoContextLoggerLoggingInterface::class, DebugInfoContextLoggerLogging::class);

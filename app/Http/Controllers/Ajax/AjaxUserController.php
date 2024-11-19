@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserFormRequest;
+use App\Logic\Datatables\ColumnHandler\Npc\NameColumnHandler;
+use App\Logic\Datatables\ColumnHandler\Users\EmailColumnHandler;
+use App\Logic\Datatables\ColumnHandler\Users\IdColumnHandler;
 use App\Logic\Datatables\UsersDatatablesHandler;
 use App\Models\User;
 use Auth;
@@ -22,7 +25,14 @@ class AjaxUserController extends Controller
     {
         $users = User::with(['patreonUserLink', 'roles', 'dungeonroutes'])->selectRaw('users.*');
 
-        $datatablesResult = (new UsersDatatablesHandler($request))
+        $datatablesHandler = (new UsersDatatablesHandler($request));
+
+        $datatablesResult = $datatablesHandler
+            ->addColumnHandler([
+                new IdColumnHandler($datatablesHandler),
+                new EmailColumnHandler($datatablesHandler),
+                new NameColumnHandler($datatablesHandler),
+            ])
             ->setBuilder($users)
             ->applyRequestToBuilder()
             ->getResult();

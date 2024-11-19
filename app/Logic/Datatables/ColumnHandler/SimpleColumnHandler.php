@@ -13,13 +13,30 @@ use Illuminate\Database\Eloquent\Builder;
 
 class SimpleColumnHandler extends DatatablesColumnHandler
 {
+    /**
+     * @var string[] The simple column handler may use these column names - the columns that are requested are coming
+     * from the front end and cannot be trusted - so add a filter here.
+     */
+    const VALID_COLUMN_NAMES = [
+        'id',
+        'title',
+        'public_key',
+        'name',
+        'email'
+    ];
+
     public function __construct(DatatablesHandler $dtHandler, $columnName, $columnData = null)
     {
         parent::__construct($dtHandler, $columnName, $columnData);
     }
 
-    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch)
+    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch): void
     {
+        // If the column name is not valid, ignore it entirely
+        if( !in_array($this->getColumnName(), self::VALID_COLUMN_NAMES) ) {
+            return;
+        }
+
         // If we should search for this value
         if ($columnData['searchable'] === 'true') {
             $searchValue = $columnData['search']['value'] ?? $generalSearch;

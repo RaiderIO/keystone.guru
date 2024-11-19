@@ -6,6 +6,7 @@ use App\Models\Release;
 use App\Models\User;
 use Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Rollbar\Payload\Level;
 use Rollbar\Rollbar;
@@ -40,6 +41,13 @@ class AppServiceProvider extends ServiceProvider
                 'correlationId' => correlationId(),
             ],
         ]);
+
+        // Ensure that we know the original IP address that made the request
+        // https://khalilst.medium.com/get-real-client-ip-behind-cloudflare-in-laravel-189cb89059ff
+        Request::setTrustedProxies(
+            ['REMOTE_ADDR'],
+            Request::HEADER_X_FORWARDED_FOR
+        );
     }
 
     /**

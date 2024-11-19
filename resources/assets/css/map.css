@@ -499,8 +499,8 @@ html, body, #map, #app, .wrapper {
     font-size: 1.15rem;
 }
 
-.user_mouse_position .container,
-.user_mouse_position .container img,
+.user_mouse_position,
+.user_mouse_position img,
 .theme #edit_route_echo_members_container .dropdown .nav-link,
 .theme #edit_route_echo_members_container .dropdown .nav-link img {
     padding: 0 !important;
@@ -508,6 +508,19 @@ html, body, #map, #app, .wrapper {
     height: 30px;
     font-size: 1.15rem;
     border-radius: 16px;
+}
+
+.user_mouse_position {
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    -ms-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+
+.user_mouse_position .inner {
+    background-color: black;
+    border-radius: 32px;
 }
 
 .theme .echo_user {
@@ -704,19 +717,6 @@ html, body, #map, #app, .wrapper {
 
 .leaflet-edit-marker-selected.delete {
     border-color: red !important;
-}
-
-.user_mouse_position {
-    -webkit-transition: all 0.2s linear;
-    -moz-transition: all 0.2s linear;
-    -o-transition: all 0.2s linear;
-    -ms-transition: all 0.2s linear;
-    transition: all 0.2s linear;
-}
-
-.user_mouse_position .inner {
-    background-color: black;
-    border-radius: 32px;
 }
 
 .map_icon.leaflet-edit-marker-selected.leaflet-marker-icon {

@@ -253,7 +253,7 @@ if ($isAdmin) {
     {{--            @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer'])--}}
     {{--        @endif--}}
     {{--    @endif--}}
-    <footer class="fixed-bottom container p-0" style="width: 728px">
+    <footer class="fixed-bottom container p-0" style="width: 728px; margin-bottom: 72px;">
         <div id="snackbar_container">
 
         </div>

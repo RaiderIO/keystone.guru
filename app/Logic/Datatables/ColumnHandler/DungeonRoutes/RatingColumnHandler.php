@@ -20,7 +20,7 @@ class RatingColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'rating');
     }
 
-    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch)
+    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch): void
     {
 
         //        $rating = $columnData['search']['value'];
