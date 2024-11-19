@@ -76,7 +76,9 @@ class MDTImportController extends Controller
 
         $validated = $request->validated();
 
-        $sandbox = $validated['mdt_import_sandbox'] ?? false;
+        // If you're logged in, we will use the sandbox setting. Otherwise, we will ignore it.
+        $sandbox = Auth::check() ? ($validated['mdt_import_sandbox'] ?? false) : false;
+
         // @TODO This should be handled differently imho
         if ($sandbox || ($user !== null && $user->canCreateDungeonRoute())) {
             $string = $validated['import_string'];
