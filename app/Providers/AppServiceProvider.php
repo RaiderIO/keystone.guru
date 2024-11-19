@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Models\Release;
 use App\Models\User;
+use App\Overrides\CustomRateLimiter;
 use Auth;
+use Illuminate\Cache\RateLimiter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
@@ -55,6 +57,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Bind our custom rate limiter
+        $this->app->extend(RateLimiter::class, function ($command, $app) {
+            return new CustomRateLimiter($app->make('cache')->driver(
+                $app['config']->get('cache.limiter')
+            ));
+        });
     }
 }

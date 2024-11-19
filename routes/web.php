@@ -97,17 +97,17 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::get('login/discord/callback', (new DiscordLoginController())->handleProviderCallback(...))->name('login.discord.callback');
     Route::get('new', (new DungeonRouteController())->create(...))->name('dungeonroute.new');
     Route::get('new/temporary', (new DungeonRouteController())->createTemporary(...))->name('dungeonroute.temporary.new');
-//    Route::middleware('throttle:create-dungeonroute')->group(static function () {
+    Route::middleware('throttle:create-dungeonroute')->group(static function () {
         Route::post('new', (new DungeonRouteController())->saveNew(...))->name('dungeonroute.savenew');
         Route::post('new/temporary', (new DungeonRouteController())->saveNewTemporary(...))->name('dungeonroute.temporary.savenew');
         Route::post('new/mdtimport', (new MDTImportController())->import(...))->name('dungeonroute.new.mdtimport');
-//    });
+    });
     Route::get('patreon-link', (new PatreonController())->link(...))->name('patreon.link');
     Route::get('patreon-oauth', (new PatreonController())->oauth_redirect(...))->name('patreon.oauth.redirect');
     Route::get('dungeonroutes', (new SiteController())->dungeonroutes(...));
-//    Route::middleware('throttle:search-dungeonroute')->group(static function () {
+    Route::middleware('throttle:search-dungeonroute')->group(static function () {
         Route::get('search', (new DungeonRouteDiscoverController())->search(...))->name('dungeonroutes.search');
-//    });
+    });
     // Game version toggle
     Route::prefix('gameversion')->group(static function () {
         Route::get('/{gameVersion}', (new GameVersionController())->update(...))->name('gameversion.update');
@@ -180,9 +180,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('live/{livesession}', (new LiveSessionLegacyController())->view(...));
             Route::get('live/{livesession}/{floorIndex}', (new LiveSessionLegacyController())->viewfloor(...));
             // Clone a route
-//            Route::middleware('throttle:create-dungeonroute')->group(static function () {
+            Route::middleware('throttle:create-dungeonroute')->group(static function () {
                 Route::get('clone', (new DungeonRouteLegacyController())->cloneOld(...));
-//            });
+            });
             // Claiming a route that was made by /sandbox functionality
             Route::get('claim', (new DungeonRouteLegacyController())->claimOld(...));
         });
@@ -199,21 +199,21 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::delete('delete', (new ProfileController())->delete(...))->name('profile.delete');
             Route::patch('{user}/privacy', (new ProfileController())->updatePrivacy(...))->name('profile.updateprivacy');
             Route::patch('/', (new ProfileController())->changepassword(...))->name('profile.changepassword');
-//            Route::middleware('throttle:create-tag')->group(static function () {
+            Route::middleware('throttle:create-tag')->group(static function () {
                 Route::post('tag', (new ProfileController())->createtag(...))->name('profile.tag.create');
-//            });
+            });
         });
         Route::get('teams', (new TeamController())->get(...))->name('team.list');
         Route::prefix('team')->group(static function () {
             Route::get('new', (new TeamController())->create(...))->name('team.new');
             Route::get('{team}', (new TeamController())->edit(...))->name('team.edit');
             Route::delete('{team}', (new TeamController())->delete(...))->name('team.delete');
-//            Route::middleware('throttle:create-tag')->group(static function () {
+            Route::middleware('throttle:create-tag')->group(static function () {
                 Route::post('tag', (new TeamController())->createtag(...))->name('team.tag.create');
-//            });
-//            Route::middleware('throttle:create-team')->group(static function () {
+            });
+            Route::middleware('throttle:create-team')->group(static function () {
                 Route::post('new', (new TeamController())->savenew(...))->name('team.savenew');
-//            });
+            });
             Route::patch('{team}', (new TeamController())->update(...))->name('team.update');
             Route::get('invite/{invitecode}/accept', (new TeamController())->inviteaccept(...))->name('team.invite.accept');
         });
@@ -372,9 +372,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::prefix('tag')->group(static function () {
             Route::get('/', (new AjaxTagController())->all(...))->name('ajax.tag.all');
             Route::get('/{category}', (new AjaxTagController())->get(...))->name('ajax.tag.list');
-//            Route::middleware('throttle:create-tag')->group(static function () {
+            Route::middleware('throttle:create-tag')->group(static function () {
                 Route::post('/', (new AjaxTagController())->store(...))->name('ajax.tag.create');
-//            });
+            });
             Route::delete('/{tag}', (new AjaxTagController())->delete(...))->name('ajax.tag.delete');
 
             // Profile
@@ -387,21 +387,21 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
         Route::get('/{publickey}/data', (new AjaxDungeonRouteController())->data(...));
 
-//        Route::middleware('throttle:create-reports')->group(static function () {
+        Route::middleware('throttle:create-reports')->group(static function () {
             Route::post('userreport/dungeonroute/{dungeonroute}', (new AjaxUserReportController())->dungeonrouteStore(...))->name('ajax.userreport.dungeonroute');
             Route::post('userreport/enemy/{enemy}', (new AjaxUserReportController())->enemyStore(...))->name('ajax.userreport.enemy');
-//        });
+        });
 
         Route::get('/routes', (new AjaxDungeonRouteController())->get(...));
 
-//        Route::middleware('throttle:search-dungeonroute')->group(static function () {
+        Route::middleware('throttle:search-dungeonroute')->group(static function () {
             Route::get('/search', (new AjaxDungeonRouteController())->htmlsearch(...));
             Route::get('/search/{category}', (new AjaxDungeonRouteController())->htmlsearchcategory(...));
-//        });
+        });
 
-//        Route::middleware('throttle:mdt-details')->group(static function () {
+        Route::middleware('throttle:mdt-details')->group(static function () {
             Route::post('/mdt/details', (new MDTImportController())->details(...))->name('mdt.details');
-//        });
+        });
 
         Route::post('/profile/legal', (new AjaxProfileController())->legalAgree(...));
 
@@ -488,17 +488,17 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
             Route::post('/raidmarker/{enemy}', (new AjaxEnemyController())->setRaidMarker(...));
 
-//            Route::middleware('throttle:create-dungeonroute')->group(static function () {
+            Route::middleware('throttle:create-dungeonroute')->group(static function () {
                 Route::post('/clone/team/{team}', (new AjaxDungeonRouteController())->cloneToTeam(...));
-//            });
+            });
 
-//            Route::middleware('throttle:mdt-export')->group(static function () {
+            Route::middleware('throttle:mdt-export')->group(static function () {
                 Route::get('/mdtExport', (new AjaxDungeonRouteController())->mdtExport(...))->name('api.dungeonroute.mdtexport');
-//            });
+            });
 
-//            Route::middleware('throttle:simulate')->group(static function () {
+            Route::middleware('throttle:simulate')->group(static function () {
                 Route::post('/simulate', (new AjaxDungeonRouteController())->simulate(...))->name('api.dungeonroute.simulate');
-//            });
+            });
         });
 
         // Must be logged in to perform these actions

@@ -354,7 +354,7 @@ class CreateRouteDungeonRouteService implements CreateRouteDungeonRouteServiceIn
             $hasResolvedEnemy = $createRouteBodyNpc->getResolvedEnemy() !== null;
 
             $mapIconAttributes[] = array_merge([
-                'mapping_version_id' => $mappingVersion->id,
+                'mapping_version_id' => null,
                 'floor_id'           => $currentFloor->id,
                 'dungeon_route_id'   => $dungeonRoute?->id ?? null,
                 'team_id'            => null,

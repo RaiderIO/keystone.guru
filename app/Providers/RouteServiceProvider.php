@@ -12,14 +12,14 @@ use RateLimiter;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    private const RATE_LIMIT_OVERRIDE = 999999;
+    private const RATE_LIMIT_OVERRIDE = null;
 
     /**
      * Define your route model bindings, pattern filters, etc.
      */
     public function boot(): void
     {
-        //
+        $this->configureRateLimiting();
 
         parent::boot();
     }
@@ -32,9 +32,6 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
-
-        //
-        $this->configureRateLimiting();
     }
 
 
@@ -101,8 +98,6 @@ class RouteServiceProvider extends ServiceProvider
 
     private function noLimitForExemptions(Request $request): ?Limit
     {
-        return Limit::none();
-
         /** @var User|null $user */
         $user = $request->user();
 
@@ -117,6 +112,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         /** @var User|null $user */
         $user = $request->user();
+
         return $user?->id ?: $request->ip();
     }
 }
