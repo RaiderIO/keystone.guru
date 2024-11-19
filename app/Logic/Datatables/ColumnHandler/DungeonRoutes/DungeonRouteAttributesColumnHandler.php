@@ -20,7 +20,7 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'routeattributes.name');
     }
 
-    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch)
+    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch): void
     {
         $routeattributes = $columnData['search']['value'];
         // If filtering or ordering

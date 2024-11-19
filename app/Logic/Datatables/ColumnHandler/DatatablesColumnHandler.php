@@ -26,9 +26,13 @@ abstract class DatatablesColumnHandler
     }
 
     /**
-     * @return mixed
+     * @param Builder $subBuilder
+     * @param         $columnData
+     * @param         $order
+     * @param         $generalSearch
+     * @return void
      */
-    abstract protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch);
+    abstract protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch): void;
 
     public function getDtHandler(): DatatablesHandler
     {

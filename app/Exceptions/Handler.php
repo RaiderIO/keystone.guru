@@ -32,7 +32,7 @@ class Handler extends ExceptionHandler
         ModelNotFoundException::class,
         TokenMismatchException::class,
         ValidationException::class,
-        BadRequestException::class
+        BadRequestException::class,
     ];
 
     /**
@@ -48,9 +48,9 @@ class Handler extends ExceptionHandler
     {
         $handlerLogging = app()->make(HandlerLoggingInterface::class);
 
-        if( $e instanceof TooManyRequestsHttpException ) {
+        if ($e instanceof TooManyRequestsHttpException) {
             $user = Auth::user();
-            $handlerLogging->tooManyRequests($e->getMessage(), $user?->id, $user?->name, $e);
+            $handlerLogging->tooManyRequests(request()?->ip() ?? 'unknown IP', $user?->id, $user?->name, $e);
         }
 
         parent::report($e);
