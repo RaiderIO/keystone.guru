@@ -12,6 +12,8 @@ use App\Service\Cache\Logging\CacheServiceLogging;
 use App\Service\Cache\Logging\CacheServiceLoggingInterface;
 use App\Service\ChallengeModeRunData\Logging\ChallengeModeRunDataServiceLogging;
 use App\Service\ChallengeModeRunData\Logging\ChallengeModeRunDataServiceLoggingInterface;
+use App\Service\Cloudflare\Logging\CloudflareServiceLogging;
+use App\Service\Cloudflare\Logging\CloudflareServiceLoggingInterface;
 use App\Service\CombatLog\Builders\Logging\CreateRouteBodyCombatLogEventsBuilderLogging;
 use App\Service\CombatLog\Builders\Logging\CreateRouteBodyCombatLogEventsBuilderLoggingInterface;
 use App\Service\CombatLog\Builders\Logging\CreateRouteBodyCorrectionBuilderLogging;
@@ -98,6 +100,9 @@ class LoggingServiceProvider extends ServiceProvider
 
         // Challenge Mode Run Data
         $this->app->bind(ChallengeModeRunDataServiceLoggingInterface::class, ChallengeModeRunDataServiceLogging::class);
+
+        // Cloudflare
+        $this->app->bind(CloudflareServiceLoggingInterface::class, CloudflareServiceLogging::class);
 
         // Combat log
         /// Builders

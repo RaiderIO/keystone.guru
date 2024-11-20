@@ -28,6 +28,8 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cache\DevCacheService;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataService;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
+use App\Service\Cloudflare\CloudflareService;
+use App\Service\Cloudflare\CloudflareServiceInterface;
 use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\CombatLogMappingVersionService;
@@ -207,6 +209,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
 //        $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOApiService::class);
         $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
+        $this->app->bind(CloudflareServiceInterface::class, CloudflareService::class);
 
         // Depends on CombatLogService, SeasonService, WowheadService
         $this->app->bind(CombatLogDataExtractionServiceInterface::class, CombatLogDataExtractionService::class);

@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Release;
 use App\Models\User;
 use App\Overrides\CustomRateLimiter;
+use App\Service\Cloudflare\CloudflareServiceInterface;
 use Auth;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Database\Eloquent\Model;
@@ -18,7 +19,9 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    public function boot(
+        CloudflareServiceInterface $cloudflareService
+    ): void
     {
         Model::preventLazyLoading(!app()->isProduction());
 
@@ -44,12 +47,19 @@ class AppServiceProvider extends ServiceProvider
             ],
         ]);
 
-        // Ensure that we know the original IP address that made the request
-        // https://khalilst.medium.com/get-real-client-ip-behind-cloudflare-in-laravel-189cb89059ff
-        Request::setTrustedProxies(
-            ['REMOTE_ADDR'],
-            Request::HEADER_X_FORWARDED_FOR
-        );
+        // https://developers.cloudflare.com/fundamentals/reference/http-request-headers/
+        if (app()->isProduction()) {
+            // Ensure that we know the original IP address that made the request
+            // https://khalilst.medium.com/get-real-client-ip-behind-cloudflare-in-laravel-189cb89059ff
+            Request::setTrustedProxies(
+                $cloudflareService->getIpRanges(),
+                Request::HEADER_X_FORWARDED_FOR |
+                Request::HEADER_X_FORWARDED_HOST |
+                Request::HEADER_X_FORWARDED_PORT |
+                Request::HEADER_X_FORWARDED_PROTO |
+                Request::HEADER_X_FORWARDED_AWS_ELB
+            );
+        }
     }
 
     /**
