@@ -72,7 +72,7 @@ Auth::routes();
 // Webhooks
 Route::post('webhook/github', (new WebhookController())->github(...))->name('webhook.github');
 
-Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger'])->group(static function () {
+Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger', 'track_ip'])->group(static function () {
     // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', (new SiteController())->home(...));
     Route::get('credits', (new SiteController())->credits(...))->name('misc.credits');

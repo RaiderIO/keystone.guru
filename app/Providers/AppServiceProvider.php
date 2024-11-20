@@ -21,8 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(
         CloudflareServiceInterface $cloudflareService
-    ): void
-    {
+    ): void {
+
         Model::preventLazyLoading(!app()->isProduction());
 
         /** @var User|null $user */

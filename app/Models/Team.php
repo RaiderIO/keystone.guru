@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,6 +24,9 @@ use Illuminate\Support\Facades\Auth;
  * @property string                   $invite_code
  * @property string                   $default_role
  *
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
+ *
  * @property Collection<TeamUser>     $teamUsers
  * @property Collection<User>         $members
  * @property Collection<DungeonRoute> $dungeonroutes
@@ -32,12 +36,11 @@ use Illuminate\Support\Facades\Auth;
 class Team extends Model
 {
     use HasIconFile;
+    use GeneratesPublicKey;
 
     protected $visible = ['name', 'description', 'public_key'];
 
     protected $fillable = ['default_role'];
-
-    use GeneratesPublicKey;
 
     /**
      * https://stackoverflow.com/a/34485411/771270
