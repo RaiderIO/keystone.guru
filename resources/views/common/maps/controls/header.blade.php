@@ -49,7 +49,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
             <ul class="navbar-nav mr-auto">
                 @isset($dungeonroute)
                     <li class="nav-item">
-                        <div class="d-flex h-100">
+                        <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
                             <div class="row justify-content-center align-self-center">
                                 <div class="col">
                                     @if( $mapContext instanceof MapContextLiveSession )
@@ -196,7 +196,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
                 @auth
                     @if( isset($dungeonroute) && $dungeonroute->isSandbox() )
                         <li class="nav-item mr-2">
-                            <div class="d-flex h-100">
+                            <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
                                 <div class="row justify-content-center align-self-center">
                                     <a class="col" href="{{ route('dungeonroute.claim', [
                                             'dungeon' => $dungeonroute->dungeon,
@@ -216,7 +216,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
                 @isset($dungeonroute)
                     @if($isUserAdmin)
                         <li class="nav-item mr-2">
-                            <div class="d-flex h-100">
+                            <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
                                 <div class="row justify-content-center align-self-center">
                                     <div class="col">
                                         <button id="edit_route_admin_settings_button"
@@ -231,7 +231,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
                     @endif
 
                     <li class="nav-item mr-2">
-                        <div class="d-flex h-100">
+                        <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
                             <div class="row justify-content-center align-self-center">
                                 <div class="col">
                                     <button id="simulate_route_button" class="btn btn-info btn-sm" data-toggle="modal"
@@ -244,7 +244,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
                     </li>
                     @if(!$dungeonroute->isSandbox() && $edit)
                         <li class="nav-item mr-2">
-                            <div class="d-flex h-100">
+                            <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
                                 <div class="row justify-content-center align-self-center">
                                     <div class="col">
                                         <button id="edit_route_settings_button" class="btn btn-info btn-sm"
@@ -260,7 +260,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
                 @endisset
                 @if( $mapContext instanceof MapContextDungeonExplore && $isUserAdmin )
                     <li class="nav-item mr-2">
-                        <div class="d-flex h-100">
+                        <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
                             <div class="row justify-content-center align-self-center">
                                 <a class="col" href="{{ route('admin.floor.edit.mapping', [
                                             'dungeon' => $dungeon,
@@ -277,7 +277,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
                 @endif
                 @if( $mapContext instanceof MapContextMappingVersionEdit )
                     <li class="nav-item mr-2">
-                        <div class="d-flex h-100">
+                        <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
                             <div class="row justify-content-center align-self-center">
                                 <div class="col">
                                     <button id="edit_mapping_version_button" class="btn btn-info btn-sm"
@@ -294,7 +294,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
 
                 @if($showShare)
                     <li class="nav-item">
-                        <div class="d-flex h-100">
+                        <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
                             <div class="row justify-content-center align-self-center">
                                 <div class="col">
                                     <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#share_modal">
