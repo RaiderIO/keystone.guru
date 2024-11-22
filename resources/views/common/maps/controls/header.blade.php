@@ -48,58 +48,52 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
         <div class="collapse navbar-collapse text-center text-xl-left" id="mainNavbar">
             <ul class="navbar-nav mr-auto">
                 @isset($dungeonroute)
-                    <li class="nav-item">
-                        <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
-                            <div class="row justify-content-center align-self-center">
-                                <div class="col">
-                                    @if( $mapContext instanceof MapContextLiveSession )
-                                            <?php $stopped = $livesession->expires_at !== null; ?>
-                                        @if(!$stopped)
-                                            <button id="stop_live_session" class="btn btn-danger btn-sm"
-                                                    data-toggle="modal" data-target="#stop_live_session_modal">
-                                                <i class="fas fa-stop"></i> {{ __('view_common.maps.controls.header.stop') }}
-                                            </button>
+                    @component('common.maps.controls.buttons.headerbutton')
+                        @if( $mapContext instanceof MapContextLiveSession )
+                                <?php $stopped = $livesession->expires_at !== null; ?>
+                            @if(!$stopped)
+                                <button id="stop_live_session" class="btn btn-danger btn-sm"
+                                        data-toggle="modal" data-target="#stop_live_session_modal">
+                                    <i class="fas fa-stop"></i> {{ __('view_common.maps.controls.header.stop') }}
+                                </button>
+                            @endif
+                            <div id="stopped_live_session_container" class="row no-gutters"
+                                 style="display: {{ $stopped ? 'inherit' : 'none' }}">
+                                <div class="row">
+                                    <div class="col">
+                                    <span id="stopped_live_session_countdown">
+                                        {{ $stopped ? sprintf(__('view_common.maps.controls.header.live_session_expires_in'), $livesession->getExpiresInHoursSeconds()) : '' }}
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        @if($mayUserEdit)
+                                            <a href="{{ route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
+                                               class="btn-sm btn-success w-100">
+                                                <i class="fas fa-edit"></i> {{ __('view_common.maps.controls.header.edit_route') }}
+                                            </a>
+                                        @else
+                                            <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
+                                               class="btn-sm btn-success w-100">
+                                                <i class="fas fa-eye"></i> {{ __('view_common.maps.controls.header.view_route') }}
+                                            </a>
                                         @endif
-                                        <div id="stopped_live_session_container" class="row no-gutters"
-                                             style="display: {{ $stopped ? 'inherit' : 'none' }}">
-                                            <div class="row">
-                                                <div class="col">
-                                                <span id="stopped_live_session_countdown">
-                                                    {{ $stopped ? sprintf(__('view_common.maps.controls.header.live_session_expires_in'), $livesession->getExpiresInHoursSeconds()) : '' }}
-                                                </span>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col">
-                                                    @if($mayUserEdit)
-                                                        <a href="{{ route('dungeonroute.edit', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
-                                                           class="btn-sm btn-success w-100">
-                                                            <i class="fas fa-edit"></i> {{ __('view_common.maps.controls.header.edit_route') }}
-                                                        </a>
-                                                    @else
-                                                        <a href="{{ route('dungeonroute.view', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
-                                                           class="btn-sm btn-success w-100">
-                                                            <i class="fas fa-eye"></i> {{ __('view_common.maps.controls.header.view_route') }}
-                                                        </a>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @else
-                                        <button class="btn btn-success btn-sm" data-toggle="modal"
-                                                data-target="#start_live_session_modal">
-                                            <i class="fas fa-play"></i> {{ __('view_common.maps.controls.header.start') }}
-                                        </button>
-                                    @endif
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
+                        @else
+                            <button class="btn btn-success btn-sm w-100"
+                                    data-toggle="modal" data-target="#start_live_session_modal">
+                                <i class="fas fa-play"></i> {{ __('view_common.maps.controls.header.start') }}
+                            </button>
+                        @endif
+                    @endcomponent
                     <li class="nav-item nav-item-divider">
 
                     </li>
                 @endisset
-                <li class="nav-item h-100">
+                @component('common.maps.controls.buttons.headerbutton')
                     <div class="row no-gutters">
                         <div class="col my-1">
                             <div class="row no-gutters">
@@ -184,7 +178,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
                             </div>
                         @endif
                     @endif
-                </li>
+                @endcomponent
             </ul>
             @if($echo)
                 @include('common.layout.nav.connectedusers')
@@ -195,115 +189,76 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
                 </li>
                 @auth
                     @if( isset($dungeonroute) && $dungeonroute->isSandbox() )
-                        <li class="nav-item mr-2">
-                            <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
-                                <div class="row justify-content-center align-self-center">
-                                    <a class="col" href="{{ route('dungeonroute.claim', [
-                                            'dungeon' => $dungeonroute->dungeon,
-                                            'title' => $dungeonroute->getTitleSlug(),
-                                            'dungeonroute' => $dungeonroute]
-                                        ) }}">
-                                        <button class="btn btn-success btn-sm">
-                                            <i class="fas fa-save"></i> {{ __('view_common.maps.controls.header.save_to_profile') }}
-                                        </button>
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
+                        @component('common.maps.controls.buttons.headerbutton')
+                            <a href="{{ route('dungeonroute.claim', [
+                                    'dungeon' => $dungeonroute->dungeon,
+                                    'title' => $dungeonroute->getTitleSlug(),
+                                    'dungeonroute' => $dungeonroute]
+                                ) }}">
+                                <button class="btn btn-success btn-sm w-100">
+                                    <i class="fas fa-save"></i> {{ __('view_common.maps.controls.header.save_to_profile') }}
+                                </button>
+                            </a>
+                        @endcomponent
                     @endif
                 @endauth
 
                 @isset($dungeonroute)
                     @if($isUserAdmin)
-                        <li class="nav-item mr-2">
-                            <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
-                                <div class="row justify-content-center align-self-center">
-                                    <div class="col">
-                                        <button id="edit_route_admin_settings_button"
-                                                class="btn btn-info btn-sm" data-toggle="modal"
-                                                data-target="#edit_route_admin_settings_modal">
-                                            <i class="fas fa-toolbox"></i> {{ __('view_common.maps.controls.header.edit_route_admin_settings') }}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                        @component('common.maps.controls.buttons.headerbutton')
+                            <button id="edit_route_admin_settings_button" class="btn btn-info btn-sm w-100"
+                                    data-toggle="modal" data-target="#edit_route_admin_settings_modal">
+                                <i class="fas fa-toolbox"></i> {{ __('view_common.maps.controls.header.edit_route_admin_settings') }}
+                            </button>
+                        @endcomponent
                     @endif
 
-                    <li class="nav-item mr-2">
-                        <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
-                            <div class="row justify-content-center align-self-center">
-                                <div class="col">
-                                    <button id="simulate_route_button" class="btn btn-info btn-sm" data-toggle="modal"
-                                            data-target="#simulate_modal">
-                                        <i class="fas fa-atom"></i> {{ __('view_common.maps.controls.header.simulate_route') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                    @component('common.maps.controls.buttons.headerbutton')
+                        <button id="simulate_route_button" class="btn btn-info btn-sm w-100"
+                                data-toggle="modal" data-target="#simulate_modal">
+                            <i class="fas fa-atom"></i> {{ __('view_common.maps.controls.header.simulate_route') }}
+                        </button>
+                    @endcomponent
+
                     @if(!$dungeonroute->isSandbox() && $edit)
-                        <li class="nav-item mr-2">
-                            <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
-                                <div class="row justify-content-center align-self-center">
-                                    <div class="col">
-                                        <button id="edit_route_settings_button" class="btn btn-info btn-sm"
-                                                data-toggle="modal"
-                                                data-target="#edit_route_settings_modal">
-                                            <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_route_settings') }}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                        @component('common.maps.controls.buttons.headerbutton')
+                            <button id="edit_route_settings_button" class="btn btn-info btn-sm w-100"
+                                    data-toggle="modal" data-target="#edit_route_settings_modal">
+                                <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_route_settings') }}
+                            </button>
+                        @endcomponent
                     @endif
                 @endisset
                 @if( $mapContext instanceof MapContextDungeonExplore && $isUserAdmin )
-                    <li class="nav-item mr-2">
-                        <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
-                            <div class="row justify-content-center align-self-center">
-                                <a class="col" href="{{ route('admin.floor.edit.mapping', [
-                                            'dungeon' => $dungeon,
-                                            'floor' => $dungeon->floors()->first(),
-                                            'mapping_version' => $dungeon->currentMappingVersion->id
-                                        ]) }}">
-                                    <button class="btn btn-success btn-sm">
-                                        <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                    </li>
+                    @component('common.maps.controls.buttons.headerbutton')
+                        <a href="{{ route('admin.floor.edit.mapping', [
+                                    'dungeon' => $dungeon,
+                                    'floor' => $dungeon->floors()->first(),
+                                    'mapping_version' => $dungeon->currentMappingVersion->id
+                                ]) }}">
+                            <button class="btn btn-success btn-sm w-100">
+                                <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
+                            </button>
+                        </a>
+                    @endcomponent
                 @endif
                 @if( $mapContext instanceof MapContextMappingVersionEdit )
-                    <li class="nav-item mr-2">
-                        <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
-                            <div class="row justify-content-center align-self-center">
-                                <div class="col">
-                                    <button id="edit_mapping_version_button" class="btn btn-info btn-sm"
-                                            data-toggle="modal"
-                                            data-target="#edit_mapping_version_modal">
-                                        <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                    @component('common.maps.controls.buttons.headerbutton')
+                        <button id="edit_mapping_version_button" class="btn btn-info btn-sm w-100"
+                                data-toggle="modal" data-target="#edit_mapping_version_modal">
+                            <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
+                        </button>
+                    @endcomponent
                 @endif
 
 
                 @if($showShare)
-                    <li class="nav-item">
-                        <div class="d-block d-xl-flex h-100 pb-1 pb-xl-0">
-                            <div class="row justify-content-center align-self-center">
-                                <div class="col">
-                                    <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#share_modal">
-                                        <i class="fas fa-share"></i> {{ __('view_common.maps.controls.header.share') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                    @component('common.maps.controls.buttons.headerbutton')
+                        <button class="btn btn-info btn-sm w-100"
+                                data-toggle="modal" data-target="#share_modal">
+                            <i class="fas fa-share"></i> {{ __('view_common.maps.controls.header.share') }}
+                        </button>
+                    @endcomponent
                 @endif
                 <li class="nav-item nav-item-divider">
 
