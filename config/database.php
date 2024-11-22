@@ -204,7 +204,7 @@ return [
             'prefix'  => env('REDIS_PREFIX',
                 sprintf('%s-%s-cache:',
                     Str::slug(env('APP_NAME', 'laravel')),
-                    Str::slug(config('app.type'))
+                    Str::slug(env('APP_TYPE', 'local'))
                 )
             ),
         ],

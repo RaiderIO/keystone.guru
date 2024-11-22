@@ -19,7 +19,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->configureRateLimiting();
 
         parent::boot();
     }
@@ -32,9 +32,6 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
-
-        //
-        $this->configureRateLimiting();
     }
 
 
@@ -101,6 +98,9 @@ class RouteServiceProvider extends ServiceProvider
 
     private function noLimitForExemptions(Request $request): ?Limit
     {
+        // Temporarily disable this!
+        return Limit::none();
+
         /** @var User|null $user */
         $user = $request->user();
 
@@ -115,6 +115,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         /** @var User|null $user */
         $user = $request->user();
+
         return $user?->id ?: $request->ip();
     }
 }

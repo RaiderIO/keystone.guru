@@ -7,6 +7,11 @@ use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\AffixGroup\AffixGroupEaseTierService;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
+use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
+use App\Service\Cache\Logging\CacheServiceLoggingInterface;
+use App\Service\Cloudflare\CloudflareService;
+use App\Service\Cloudflare\Logging\CloudflareServiceLoggingInterface;
 use App\Service\CombatLog\CombatLogService;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
@@ -159,6 +164,42 @@ class ServiceFixtures
             ->setConstructorArgs([
                 $coordinatesService ?? ServiceFixtures::getCoordinatesServiceMock($testCase),
                 $log ?? LoggingFixtures::createCombatLogEventServiceLogging($testCase),
+            ])
+            ->getMock();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function getCacheServiceMock(
+        PublicTestCase                $testCase,
+        array                         $methodsToMock = [],
+        ?CacheServiceLoggingInterface $log = null,
+    ): MockObject|CloudflareService {
+        return $testCase
+            ->getMockBuilder(CacheService::class)
+            ->onlyMethods($methodsToMock)
+            ->setConstructorArgs([
+                $log ?? LoggingFixtures::createCacheServiceLogging($testCase),
+            ])
+            ->getMock();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function getCloudflareServiceMock(
+        PublicTestCase                        $testCase,
+        array                                 $methodsToMock = [],
+        CacheServiceInterface|MockObject|null $cacheService = null,
+        ?CloudflareServiceLoggingInterface    $log = null,
+    ): MockObject|CloudflareService {
+        return $testCase
+            ->getMockBuilder(CloudflareService::class)
+            ->onlyMethods($methodsToMock)
+            ->setConstructorArgs([
+                $cacheService ?? ServiceFixtures::getCacheServiceMock($testCase),
+                $log ?? LoggingFixtures::createCloudflareServiceLogging($testCase),
             ])
             ->getMock();
     }

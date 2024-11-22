@@ -17,7 +17,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $message
  * @property bool   $contact_ok
  * @property string $status
- * @property User   $author
+ *
+ * @property User   $user
  *
  * @mixin Eloquent
  */
@@ -27,6 +28,6 @@ class UserReport extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 }

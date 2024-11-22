@@ -9,7 +9,7 @@ $currentUserLocaleName = language()->getName($currentUserLocale);
        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         @include('vendor.language.flag', ['code' => $currentUserLocale, 'name' => $currentUserLocaleName])
     </a>
-    <div class="dropdown-menu text-center text-lg-left" aria-labelledby="languageDropdown">
+    <div class="dropdown-menu text-center text-xl-left" aria-labelledby="languageDropdown">
         @foreach (language()->allowed() as $code => $name)
             <a class="dropdown-item {{ $currentUserLocale === $code ? 'active' : '' }}"
                href="{{ language()->back($code) }}">

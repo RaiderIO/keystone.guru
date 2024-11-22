@@ -3,6 +3,8 @@
 namespace Tests\Fixtures;
 
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
+use App\Service\Cache\Logging\CacheServiceLoggingInterface;
+use App\Service\Cloudflare\Logging\CloudflareServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
 use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
@@ -70,4 +72,24 @@ class LoggingFixtures
     ): MockObject|CombatLogEventServiceLoggingInterface {
         return $testCase->createMock(CombatLogEventServiceLoggingInterface::class);
     }
+
+    /**
+     * @throws Exception
+     */
+    public static function createCloudflareServiceLogging(
+        PublicTestCase $testCase
+    ): MockObject|CloudflareServiceLoggingInterface {
+        return $testCase->createMock(CloudflareServiceLoggingInterface::class);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function createCacheServiceLogging(
+        PublicTestCase $testCase
+    ): MockObject|CacheServiceLoggingInterface {
+        return $testCase->createMock(CacheServiceLoggingInterface::class);
+    }
+
+
 }

@@ -130,7 +130,7 @@ $navs[route('misc.affixes')] = [
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ $headerText }}
                             </a>
-                            <div class="dropdown-menu text-center text-lg-left" aria-labelledby="{{ $dropdownId }}">
+                            <div class="dropdown-menu text-center text-xl-left" aria-labelledby="{{ $dropdownId }}">
                                 @foreach($opts as $optsKey => $text)
                                     <a class="dropdown-item" href="{{ $optsKey }}">{!! $text !!}</a>
                                 @endforeach

@@ -10,7 +10,9 @@ use App\Http\Middleware\LegalAgreed;
 use App\Http\Middleware\OnlyAjax;
 use App\Http\Middleware\ReadOnlyMode;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\TracksUserIpAddress;
 use App\Http\Middleware\TrimStrings;
+use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\VerifyCsrfToken;
 use App\Http\Middleware\ViewCacheBuster;
 use BeyondCode\ServerTiming\Middleware\ServerTimingMiddleware;
@@ -58,6 +60,7 @@ class Kernel extends HttpKernel
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
+            TrustProxies::class,
         ],
 
         'api' => [
@@ -66,6 +69,7 @@ class Kernel extends HttpKernel
             'debug_info_context_logger' => DebugInfoContextLogger::class,
             'read_only_mode'            => ReadOnlyMode::class,
             'authentication'            => ApiAuthentication::class,
+            TrustProxies::class,
         ],
     ];
 
@@ -89,5 +93,6 @@ class Kernel extends HttpKernel
         'debugbarmessagelogger'     => DebugBarMessageLogger::class,
         'debug_info_context_logger' => DebugInfoContextLogger::class,
         'read_only_mode'            => ReadOnlyMode::class,
+        'track_ip'                  => TracksUserIpAddress::class,
     ];
 }

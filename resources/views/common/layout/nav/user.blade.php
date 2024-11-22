@@ -21,7 +21,7 @@ $user = Auth::user();
            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             @include('common.user.name', ['user' => $user])
         </a>
-        <div class="dropdown-menu text-center text-lg-left" aria-labelledby="navbarDropdown">
+        <div class="dropdown-menu text-center text-xl-left" aria-labelledby="navbarDropdown">
             @if( $user->hasRole(Role::ROLE_ADMIN))
                 @if( config('telescope.enabled') )
                     <a class="dropdown-item"
