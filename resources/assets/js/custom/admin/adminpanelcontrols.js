@@ -31,6 +31,11 @@ class AdminPanelControls extends MapControl {
         this.moveStep = 2;
 
         this.map.leafletMap.on('mousemove', function (mouseMoveEvent) {
+            // When switching between normal mode and mobile mode, the latlng may be undefined
+            // probably because mobile does not have a mouse
+            if (mouseMoveEvent.latlng === undefined) {
+                return;
+            }
             let lat = _.round(mouseMoveEvent.latlng.lat, 3);
             let lng = _.round(mouseMoveEvent.latlng.lng, 3);
 

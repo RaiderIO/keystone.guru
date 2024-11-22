@@ -181,7 +181,11 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
                 @endcomponent
             </ul>
             @if($echo)
-                @include('common.layout.nav.connectedusers')
+                <ul class="navbar-nav">
+                    @component('common.maps.controls.buttons.headerbutton')
+                        @include('common.layout.nav.connectedusers')
+                    @endcomponent
+                </ul>
             @endif
             <ul class="navbar-nav">
                 <li class="nav-item nav-item-divider">
