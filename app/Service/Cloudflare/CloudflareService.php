@@ -28,7 +28,7 @@ class CloudflareService implements CloudflareServiceInterface
 
     public function getIpRangesV4(bool $useCache = true): array
     {
-        return $this->cacheService->rememberWhen($useCache, 'cloudflare:ip_ranges_v4', function () {
+        return $this->cacheService->rememberWhen($useCache, 'cloudflare:ip-ranges-v4', function () {
             $response = $this->curlGet(sprintf('%s/ips-v4', self::CLOUDFLARE_BASE_URL));
 
             return $this->validateIpAddressRanges($response, FILTER_FLAG_IPV4);
@@ -37,7 +37,7 @@ class CloudflareService implements CloudflareServiceInterface
 
     public function getIpRangesV6(bool $useCache = true): array
     {
-        return $this->cacheService->rememberWhen($useCache, 'cloudflare:ip_ranges_v6', function () {
+        return $this->cacheService->rememberWhen($useCache, 'cloudflare:ip-ranges-v6', function () {
             $response = $this->curlGet(sprintf('%s/ips-v6', self::CLOUDFLARE_BASE_URL));
 
             return $this->validateIpAddressRanges($response, FILTER_FLAG_IPV6);
