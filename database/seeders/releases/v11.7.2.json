@@ -1,0 +1,31 @@
+{
+    "id": 262,
+    "release_changelog_id": 269,
+    "version": "v11.7.2",
+    "title": "Map menu layout improvements on mobile",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2024-11-22T11:08:53+00:00",
+    "updated_at": "2024-11-22T11:08:53+00:00",
+    "changelog": {
+        "id": 269,
+        "release_id": 262,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 269,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2620,
+                "change": "Added support for Cloudflare proxy IPs."
+            },
+            {
+                "release_changelog_id": 269,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2624,
+                "change": "Map menu on mobile looks a lot better now."
+            }
+        ]
+    }
+}
