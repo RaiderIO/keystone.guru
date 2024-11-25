@@ -1,5 +1,5 @@
 <?php
-/** @var $hasNewChangelog boolean */
+/** @var boolean $hasNewChangelog */
 ?>
 <div class="home">
     <section class="footer1 cid-soU7JptK9v" id="footer1-m">

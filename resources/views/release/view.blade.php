@@ -1,5 +1,11 @@
 <?php
-/** @var $release \App\Models\Release */
+use App\Models\Release;
+
+/**
+ * @var Release $release
+ */
+
+
 $title = sprintf('%s (%s)', $release->version, $release->created_at->format('Y/m/d'));
 ?>
 @extends('layouts.sitepage', ['showLegalModal' => true, 'title' => $title])

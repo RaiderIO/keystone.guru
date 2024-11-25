@@ -1,8 +1,12 @@
 <?php
+
+use Illuminate\Database\Eloquent\Model;
+
 /**
- * @var \Illuminate\Database\Eloquent\Model $model
- * @var                                     $exclude array
+ * @var Model $model
+ * @var array $exclude
  */
+
 $exclude ??= [];
 ?>
 <table>

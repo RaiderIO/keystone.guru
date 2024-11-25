@@ -211,7 +211,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                             @foreach($chunkedFeaturedAffixes as $affixRow)
                                 <div class="row mt-2 pl-2 featured_affixes">
                                     @foreach($affixRow as $affix)
-                                            <?php /** @var $affix Affix */ ?>
+                                            <?php /** @var Affix $affix */ ?>
                                         <div class="col px-xl-1">
                                             <div
                                                     class="select_icon class_icon affix_icon_{{ $affix->image_name }} selectable"

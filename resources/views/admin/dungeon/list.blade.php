@@ -10,9 +10,15 @@
     </a>
 @endsection
 <?php
+
+use App\Models\Dungeon;
+use App\Models\Floor\Floor;
+use App\Models\Mapping\MappingVersion;
+use Illuminate\Support\Collection;
+
 /**
- * @var $models \App\Models\Dungeon
- * @var $floor  \App\Models\Floor\Floor
+ * @var Collection<Dungeon> $models
+ * @var Floor               $floor
  */
 ?>
 
@@ -51,8 +57,7 @@
         <tbody>
         @foreach ($models as $dungeon)
                 <?php
-                /** @var \App\Models\Dungeon|null $dungeon */
-                /** @var \App\Models\Mapping\MappingVersion $mappingVersion */
+                /** @var MappingVersion|null $mappingVersion */
                 $mappingVersion = $dungeon->mappingVersions->first();
                 ?>
             <tr>

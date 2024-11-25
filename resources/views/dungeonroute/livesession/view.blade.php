@@ -1,8 +1,16 @@
 @extends('layouts.map', ['custom' => true, 'footer' => false, 'header' => false, 'title' => $dungeonroute->title, 'cookieConsent' => $dungeonroute->demo === 1 ? false : null ])
 <?php
-/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
-/** @var $livesession \App\Models\LiveSession */
-/** @var $floor \App\Models\Floor\Floor */
+
+use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Floor\Floor;
+use App\Models\LiveSession;
+
+/**
+ * @var DungeonRoute $dungeonroute
+ * @var LiveSession  $livesession
+ * @var Floor        $floor
+ */
 
 $affixes         = $dungeonroute->affixes->pluck('text', 'id');
 $selectedAffixes = $dungeonroute->affixes->pluck('id');
@@ -11,7 +19,7 @@ if (count($affixes) == 0) {
     $selectedAffixes = -1;
 }
 
-$dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
+$dungeon = Dungeon::findOrFail($dungeonroute->dungeon_id);
 ?>
 @section('scripts')
     @parent
@@ -22,7 +30,7 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
 
 @include('common.general.inline', [
     'path' => 'dungeonroute/livesession',
-    'dependencies' => ['common/maps/map']
+    'dependencies' => ['common/maps/map'],
 ])
 
 @section('content')
@@ -46,11 +54,11 @@ $dungeon = \App\Models\Dungeon::findOrFail($dungeonroute->dungeon_id);
                     'embed' => !$dungeonroute->isSandbox(),
                     'mdt-export' => $dungeon->mdt_supported,
                     'publish' => false,
-                ]
+                ],
             ],
             'hiddenMapObjectGroups' => [
                 'floorunion',
-                'floorunionarea'
+                'floorunionarea',
             ],
         ])
     </div>

@@ -1,7 +1,14 @@
 <?php
-/** @var $expansion \App\Models\Expansion */
-/** @var $season \App\Models\Season */
-/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute|null */
+
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Expansion;
+use App\Models\Season;
+
+/**
+ * @var Expansion         $expansion
+ * @var Season            $season
+ * @var DungeonRoute|null $dungeonroute
+ */
 
 $presets = [];
 for ($i = 0; $i < $season->presets; ++$i) {

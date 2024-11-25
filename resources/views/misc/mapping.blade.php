@@ -1,3 +1,9 @@
+<?php
+
+use App\Models\Dungeon;
+use App\Models\Floor\Floor;
+
+?>
 @extends('layouts.sitepage', ['showLegalModal' => false, 'title' => __('view_misc.mapping.title')])
 
 @section('header-title', __('view_misc.mapping.header'))
@@ -18,8 +24,8 @@
             {{ __('view_misc.mapping.teeming') }}
         </div>
     </div>
-    @foreach(\App\Models\Dungeon::with(['npcs'])->active()->get() as $dungeon )
-            <?php /** @var $dungeon \App\Models\Dungeon */ ?>
+    @foreach(Dungeon::with(['npcs'])->active()->get() as $dungeon )
+            <?php /** @var Dungeon $dungeon */ ?>
         <div class="row">
             <div class="col-lg-2">
                 {{ __($dungeon->name) }}
@@ -45,7 +51,7 @@
                         $totalUnassignedEnemies = 0;
                         $hasTeemingEnemy        = false;
                         foreach ($dungeon->floors()->with(['dungeon'])->get() as $floor) {
-                            /** @var $floor \App\Models\Floor\Floor */
+                            /** @var Floor $floor */
                             $totalEnemies           += $floor->enemies()->count();
                             $totalUnassignedEnemies += $floor->enemies()->whereNull('npc_id')->count();
                             $hasTeemingEnemy        = $hasTeemingEnemy || $floor->enemies()->where('teeming', 'visible')->count() > 0;

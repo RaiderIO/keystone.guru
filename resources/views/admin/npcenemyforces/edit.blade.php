@@ -1,7 +1,11 @@
 <?php
+
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcEnemyForces;
+
 /**
- * @var $npc \App\Models\Npc\Npc
- * @var $npcEnemyForces \App\Models\Npc\NpcEnemyForces
+ * @var Npc $npc
+ * @var NpcEnemyForces $npcEnemyForces
  */
 ?>
 @extends('layouts.sitepage', [
