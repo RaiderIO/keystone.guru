@@ -26,6 +26,14 @@ use Illuminate\Support\Collection;
         let roles = {!! $allRoles; !!};
 
         $(function () {
+            // On user_ip_addresses_modal modal show, fill it with the ip addresses
+            $('#user_ip_addresses_modal').on('show.bs.modal', function (event) {
+                let button = $(event.relatedTarget);
+                let ipAddresses = button.data('ip-addresses').replaceAll(',', "\n");
+
+                $('#user_ip_addresses_textarea').val(ipAddresses);
+            });
+
             $('#admin_user_table').DataTable({
                 'processing': true,
                 'serverSide': true,
@@ -169,4 +177,15 @@ use Illuminate\Support\Collection;
         </tr>
         </thead>
     </table>
+
+    @component('common.general.modal', ['id' => 'user_ip_addresses_modal'])
+        <h4>{{ __('view_admin.user.list.ip_addresses_header') }}</h4>
+        <p>
+            <a href="{{ sprintf('https://dash.cloudflare.com/%s/keystone.guru/security/waf/tools', config('keystoneguru.cloudflare.id')) }}">
+                {{ __('view_admin.user.list.ip_addresses_cloudflare_link') }}
+            </a>
+        </p>
+        <textarea id="user_ip_addresses_textarea" class="w-100" rows="20"></textarea>
+    @endcomponent
+
 @endsection

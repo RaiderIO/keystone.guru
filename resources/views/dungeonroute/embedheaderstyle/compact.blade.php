@@ -1,9 +1,14 @@
 <?php
+
+use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Floor\Floor;
+
 /**
- * @var $dungeonRoute \App\Models\DungeonRoute\DungeonRoute
- * @var $dungeon \App\Models\Dungeon
- * @var $floor \App\Models\Floor\Floor
- * @var $embedOptions array
+ * @var DungeonRoute $dungeonRoute
+ * @var Dungeon      $dungeon
+ * @var Floor        $floor
+ * @var array        $embedOptions
  */
 
 $routeParams     = ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dungeonRoute, 'title' => $dungeonRoute->getTitleSlug()];
@@ -49,7 +54,7 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
         </div>
         <div class="col-auto px-1">
             <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
-            @if($dungeon->floors()->count() > 1)
+            @if($embedOptions['show']['floorSelection'])
                 {!! Form::select('map_floor_selection_dropdown', [__('view_dungeonroute.embed.select_floor')], 1, ['id' => 'map_floor_selection_dropdown', 'class' => 'form-control selectpicker']) !!}
             @endif
         </div>

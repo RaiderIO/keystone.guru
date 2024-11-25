@@ -3,6 +3,7 @@
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\User;
 
 /**
  * @var DungeonRoute $dungeonroute
@@ -18,6 +19,12 @@ $selectedAffixes = $dungeonroute->affixes->pluck('id');
 if (count($affixes) == 0) {
     $affixes         = [-1 => __('view_dungeonroute.embed.any')];
     $selectedAffixes = -1;
+}
+$mapFacadeStyle ??= User::getCurrentUserMapFacadeStyle();
+$useFacade      = $mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE;
+
+if( $dungeon->floorsForMapFacade($dungeonroute->mappingVersion, $useFacade)->active()->count() === 1) {
+    $embedOptions['show']['floorSelection'] = false;
 }
 ?>
 

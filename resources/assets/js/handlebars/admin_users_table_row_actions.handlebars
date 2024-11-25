@@ -9,19 +9,26 @@
                 <form method="POST" action="/admin/user/{{../user.id}}/make/{{name}}" accept-charset="UTF-8"
                       autocomplete="off">
                     <input name="_token" type="hidden" value="{{csrf_token}}">
-                    <input class="btn btn-info" name="submit" type="submit" value="{{../make_label}} {{display_name}}">
+                    <input class="btn btn-info w-100" name="submit" type="submit" value="{{../make_label}} {{display_name}}">
                 </form>
             </a>
         {{/each}}
+        <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="#">
             <form method="POST" action="/admin/user/{{user.id}}/delete" accept-charset="UTF-8"
                   autocomplete="off">
                 <input name="_method" type="hidden" value="DELETE">
                 <input name="_token" type="hidden" value="{{csrf_token}}">
-                <input class="btn btn-danger ml-1" name="submit" type="submit" value="{{delete_user_label}}">
+                <input class="btn btn-danger w-100" name="submit" type="submit" value="{{delete_user_label}}">
             </form>
         </a>
         <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#"
+           data-toggle="modal" data-target="#user_ip_addresses_modal"
+           data-ip-addresses="{{user.ip_addresses_string}}"
+        >
+            {{view_ip_addresses_label}}
+        </a>
         <a class="dropdown-item" href="/admin/user/{{user.id}}/grantAllBenefits">
             {{grant_all_benefits_label}}
         </a>

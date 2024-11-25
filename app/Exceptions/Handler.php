@@ -32,7 +32,9 @@ class Handler extends ExceptionHandler
         ModelNotFoundException::class,
         TokenMismatchException::class,
         ValidationException::class,
-        BadRequestException::class,
+        // Added it to prevent spam from people trying to exploit the API
+        // Now that I have better protection I want to see those exceptions again so I can ban their asses
+//        BadRequestException::class,
     ];
 
     /**

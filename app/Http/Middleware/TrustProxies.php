@@ -37,10 +37,11 @@ class TrustProxies extends Middleware
     {
         // https://developers.cloudflare.com/fundamentals/reference/http-request-headers/
         if (app()->isProduction()) {
+            $this->proxies = $this->cloudflareService->getIpRanges();
             // Ensure that we know the original IP address that made the request
             // https://khalilst.medium.com/get-real-client-ip-behind-cloudflare-in-laravel-189cb89059ff
             Request::setTrustedProxies(
-                $this->cloudflareService->getIpRanges(),
+                $this->proxies,
                 $this->headers
             );
         }

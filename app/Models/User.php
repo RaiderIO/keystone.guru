@@ -26,36 +26,40 @@ use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
 
 /**
- * @property int                      $id
- * @property string                   $public_key
- * @property int                      $game_server_region_id
- * @property int                      $patreon_user_link_id
- * @property int                      $game_version_id
- * @property string                   $name
- * @property string                   $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
- * @property string                   $email
- * @property string                   $locale
- * @property string                   $theme
- * @property string                   $echo_color
- * @property bool                     $echo_anonymous
- * @property bool                     $changed_username
- * @property string                   $timezone
- * @property string                   $map_facade_style
- * @property string                   $password
- * @property string                   $raw_patreon_response_data
- * @property bool                     $legal_agreed
- * @property int                      $legal_agreed_ms
- * @property bool                     $analytics_cookie_opt_out
- * @property PatreonUserLink          $patreonUserLink
- * @property GameServerRegion         $gameServerRegion
- * @property GameVersion              $gameVersion
- * @property PatreonAdFreeGiveaway    $patreonAdFreeGiveaway
- * @property bool                     $is_admin
- * @property Collection<DungeonRoute> $dungeonRoutes
- * @property Collection<UserReport>   $reports
- * @property Collection<Team>         $teams
- * @property Collection<Role>         $roles
- * @property Collection<Tag>          $tags
+ * @property int                       $id
+ * @property string                    $public_key
+ * @property int                       $game_server_region_id
+ * @property int                       $patreon_user_link_id
+ * @property int                       $game_version_id
+ * @property string                    $name
+ * @property string                    $initials The initials (two letters) of a user so we can display it as the connected user in case of no avatar
+ * @property string                    $email
+ * @property string                    $locale
+ * @property string                    $theme
+ * @property string                    $echo_color
+ * @property bool                      $echo_anonymous
+ * @property bool                      $changed_username
+ * @property string                    $timezone
+ * @property string                    $map_facade_style
+ * @property string                    $password
+ * @property string                    $raw_patreon_response_data
+ * @property bool                      $legal_agreed
+ * @property int                       $legal_agreed_ms
+ * @property bool                      $analytics_cookie_opt_out
+ *
+ * @property PatreonUserLink           $patreonUserLink
+ * @property GameServerRegion          $gameServerRegion
+ * @property GameVersion               $gameVersion
+ * @property PatreonAdFreeGiveaway     $patreonAdFreeGiveaway
+ *
+ * @property bool                      $is_admin
+ *
+ * @property Collection<DungeonRoute>  $dungeonRoutes
+ * @property Collection<UserReport>    $reports
+ * @property Collection<Team>          $teams
+ * @property Collection<Role>          $roles
+ * @property Collection<Tag>           $tags
+ * @property Collection<UserIpAddress> $ipAddresses
  *
  * @mixin Eloquent
  */
@@ -161,6 +165,11 @@ class User extends Authenticatable implements LaratrustUser
     public function patreonAdFreeGiveaway(): HasOne
     {
         return $this->hasOne(PatreonAdFreeGiveaway::class, 'receiver_user_id');
+    }
+
+    public function ipAddresses(): HasMany
+    {
+        return $this->hasMany(UserIpAddress::class);
     }
 
     /**

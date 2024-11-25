@@ -371,6 +371,10 @@ return [
         'server_access_token' => env('ROLLBAR_SERVER_ACCESS_TOKEN'),
     ],
 
+    'cloudflare' => [
+        'id' => env('CLOUDFLARE_ID'),
+    ],
+
     'heatmap' => [
         'service' => [
             'data' => [
