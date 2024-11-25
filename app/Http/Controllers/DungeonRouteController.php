@@ -566,6 +566,7 @@ class DungeonRouteController extends Controller
                     'affixes'         => (bool)$showAffixes,         // Default true - available
                     'title'           => (bool)$showTitle,           // Default true - available
                     'presenterButton' => (bool)$showPresenterButton, // Default false, not available
+                    'floorSelection'  => true,                       // Always available, but can be overridden later if there's no floors to select
                 ],
             ],
         ]);
