@@ -12,7 +12,7 @@ use RateLimiter;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    private const RATE_LIMIT_OVERRIDE = 999999;
+    private const RATE_LIMIT_OVERRIDE = null;
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -98,9 +98,6 @@ class RouteServiceProvider extends ServiceProvider
 
     private function noLimitForExemptions(Request $request): ?Limit
     {
-        // Temporarily disable this!
-        return Limit::none();
-
         /** @var User|null $user */
         $user = $request->user();
 
