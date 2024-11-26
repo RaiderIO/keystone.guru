@@ -9,7 +9,8 @@
             <div class="row mbr-white">
                 <div class="col-12 col-md-6 col-lg-3">
                     <h5 class="mbr-section-subtitle mbr-fonts-style mb-2 display-7">
-                        <strong>{{ __('view_common.layout.footer.developer') }}</strong></h5>
+                        <strong>{{ __('view_common.layout.footer.developer') }}</strong>
+                    </h5>
                     <ul class="list mbr-fonts-style display-4">
                         <li class="mbr-text item-wrap">
                             <a href="{{ route('l5-swagger.public.api') }}">
@@ -27,7 +28,8 @@
                     <br>
 
                     <h5 class="mbr-section-subtitle mbr-fonts-style mb-2 display-7">
-                        <strong>{{ __('view_common.layout.footer.keystone_guru') }}</strong></h5>
+                        <strong>{{ __('view_common.layout.footer.keystone_guru') }}</strong>
+                    </h5>
                     <ul class="list mbr-fonts-style display-4">
                         <li class="mbr-text item-wrap">
                             <a href="{{ route('misc.changelog') }}">
@@ -47,7 +49,8 @@
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
                     <h5 class="mbr-section-subtitle mbr-fonts-style mb-2 display-7">
-                        <strong>{{ __('view_common.layout.footer.external') }}</strong></h5>
+                        <strong>{{ __('view_common.layout.footer.external') }}</strong>
+                    </h5>
                     <ul class="list mbr-fonts-style display-4">
 
                         <li class="mbr-text item-wrap">
@@ -69,7 +72,8 @@
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
                     <h5 class="mbr-section-subtitle mbr-fonts-style mb-2 display-7">
-                        <strong>{{ __('view_common.layout.footer.legal') }}</strong></h5>
+                        <strong>{{ __('view_common.layout.footer.legal') }}</strong>
+                    </h5>
                     <ul class="list mbr-fonts-style display-4">
                         <li class="mbr-text item-wrap">
                             <a href="{{ route('legal.terms') }}">{{ __('view_common.layout.footer.terms_of_service') }}</a>
