@@ -12,7 +12,7 @@
                         <strong>{{ __('view_common.layout.footer.developer') }}</strong></h5>
                     <ul class="list mbr-fonts-style display-4">
                         <li class="mbr-text item-wrap">
-                            <a href="{{ route('l5-swagger.default.api') }}">
+                            <a href="{{ route('l5-swagger.public.api') }}">
                                 {{ __('view_common.layout.footer.api_documentation') }}
                             </a>
                         </li>
