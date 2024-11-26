@@ -16,6 +16,13 @@
                                 {{ __('view_common.layout.footer.api_documentation') }}
                             </a>
                         </li>
+                        @if(Auth::check() && Auth::user()->hasRole('internal_team|admin'))
+                            <li class="mbr-text item-wrap">
+                                <a href="{{ route('l5-swagger.internal_team.api') }}">
+                                    {{ __('view_common.layout.footer.api_documentation_internal_team') }}
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                     <br>
 

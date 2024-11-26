@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'default'        => 'default',
+    'default'        => 'public',
     'documentations' => [
-        'default' => [
+        'public' => [
             'api' => [
                 'title' => 'Keystone.guru Developer Documentation',
             ],
@@ -13,6 +13,15 @@ return [
                  * Route for accessing api documentation interface
                 */
                 'api' => 'api/documentation',
+
+                'docs' => 'docs',
+
+                'middleware' => [
+                    'api'             => ['web'],
+                    'asset'           => ['web'],
+                    'docs'            => ['web'],
+                    'oauth2_callback' => ['web'],
+                ],
             ],
             'paths'  => [
                 /*
@@ -39,7 +48,65 @@ return [
                  * Absolute paths to directory containing the swagger annotations are stored.
                 */
                 'annotations'            => [
-                    base_path('app'),
+                    base_path('app/Http/Resources'),
+                    base_path('app/Http/Models'),
+                    base_path('app/Http/Controllers/Api/V1/Spec'),
+                    base_path('app/Http/Controllers/Api/V1/Public'),
+                ],
+
+            ],
+        ],
+        'internal_team' => [
+            'api' => [
+                'title' => 'Keystone.guru Internal Team Developer Documentation',
+            ],
+
+            'routes' => [
+                /*
+                 * Route for accessing api documentation interface
+                */
+                'api' => 'api/documentation-internal-team',
+
+                'docs' => 'docs-internal-team',
+
+                'oauth2_callback' => 'api/internal-team/oauth2-callback',
+
+                'middleware' => [
+                    'api'             => ['web', 'auth', 'role:internal_team|admin'],
+                    'asset'           => ['web', 'auth', 'role:internal_team|admin'],
+                    'docs'            => ['web', 'auth', 'role:internal_team|admin'],
+                    'oauth2_callback' => ['web', 'auth', 'role:internal_team|admin'],
+                ],
+            ],
+            'paths'  => [
+                /*
+                 * Edit to include full URL in ui for assets
+                */
+                'use_absolute_path'      => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
+
+                /*
+                 * File name of the generated json documentation file
+                */
+                'docs_json'              => 'api-docs-internal-team.json',
+
+                /*
+                 * File name of the generated YAML documentation file
+                */
+                'docs_yaml'              => 'api-docs-internal-team.yaml',
+
+                /*
+                * Set this to `json` or `yaml` to determine which documentation file to use in UI
+                */
+                'format_to_use_for_docs' => env('L5_FORMAT_TO_USE_FOR_DOCS', 'json'),
+
+                /*
+                 * Absolute paths to directory containing the swagger annotations are stored.
+                */
+                'annotations'            => [
+                    base_path('app/Http/Resources'),
+                    base_path('app/Http/Models'),
+                    base_path('app/Http/Controllers/Api/V1/Spec'),
+                    base_path('app/Http/Controllers/Api/V1/InternalTeam'),
                 ],
 
             ],

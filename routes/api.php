@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\V1\Combatlog\APICombatLogController;
-use App\Http\Controllers\Api\V1\Dungeon\APIDungeonController;
-use App\Http\Controllers\Api\V1\Route\APIDungeonRouteController;
-use App\Http\Controllers\Api\V1\Route\APIDungeonRouteThumbnailJobController;
+use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogController;
+use App\Http\Controllers\Api\V1\Public\Dungeon\APIDungeonController;
+use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteController;
+use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteThumbnailJobController;
 
 /*
 |--------------------------------------------------------------------------

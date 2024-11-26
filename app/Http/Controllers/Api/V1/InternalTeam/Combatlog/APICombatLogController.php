@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Combatlog;
+namespace App\Http\Controllers\Api\V1\InternalTeam\Combatlog;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\CreateRouteRequest;
@@ -14,6 +14,22 @@ class APICombatLogController extends Controller
 {
     use SavesStringToTempDisk;
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/combatlog/route",
+     *     summary="Create a new route from a combat log",
+     *     tags={"CombatLog"},
+     *
+     *     @OA\RequestBody(
+     *           description="Request object containing all parameters required to generate a route from a combat log",
+     *          required=true,
+     *
+     *          @OA\JsonContent(ref="#/components/schemas/RouteThumbnailRequest")
+     *      ),
+     *
+     *     @OA\Response(response=200, description="Successful operation")
+     * )
+     */
     public function createRoute(
         CreateRouteRequest                      $request,
         CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService

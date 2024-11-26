@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Route;
+namespace App\Http\Controllers\Api\V1\Public\Route;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DungeonRouteThumbnailJob\DungeonRouteThumbnailJobResource;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Route;
+namespace App\Http\Controllers\Api\V1\Public\Route;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\DungeonRoute\DungeonRouteListRequest;
@@ -55,7 +55,7 @@ class APIDungeonRouteController extends Controller
      *     ),
      *
      *     @OA\RequestBody(
-     *          description="Pet object that needs to be added to the store",
+     *          description="Request object containing all parameters required to generate a thumbnail",
      *          required=true,
      *
      *          @OA\JsonContent(ref="#/components/schemas/RouteThumbnailRequest")
