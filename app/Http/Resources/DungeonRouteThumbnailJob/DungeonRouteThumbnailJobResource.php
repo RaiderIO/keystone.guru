@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\DungeonRouteThumbnailJob;
 
+use App\Http\Models\Response\RouteThumbnailJob\RouteThumbnailJobResponseModel;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use App\Service\DungeonRoute\ThumbnailService;
 use Illuminate\Contracts\Support\Arrayable;
@@ -33,20 +34,20 @@ class DungeonRouteThumbnailJobResource extends JsonResource
         $isCompleted = $this->status === DungeonRouteThumbnailJob::STATUS_COMPLETED;
 
         return [
-            'id'                   => $this->id,
-            'public_key'           => $this->dungeonRoute->public_key,
-            'floor_index'          => $this->floor->index,
-            'status'               => $this->status,
-            'viewport_width'       => $this->viewport_width ?? config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_width'),
-            'viewport_height'      => $this->viewport_height ?? config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_height'),
-            'image_width'          => $this->image_width ?? config('keystoneguru.api.dungeon_route.thumbnail.default_image_width'),
-            'image_height'         => $this->image_height ?? config('keystoneguru.api.dungeon_route.thumbnail.default_image_height'),
-            'zoom_level'           => $this->zoom_level ?? config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level'),
-            'quality'              => $this->quality ?? config('keystoneguru.api.dungeon_route.thumbnail.default_quality'),
-            'queue_size'           => $queueSize,
-            'estimated_completion' => $isCompleted ? null : $this->created_at->addSeconds($queueSize * config('keystoneguru.api.dungeon_route.thumbnail.estimated_generation_time_seconds')),
-            'expires_at'           => $this->created_at->addSeconds(config('keystoneguru.api.dungeon_route.thumbnail.expiration_time_seconds')),
-            'links'                => [
+            'id'                  => $this->id,
+            'publicKey'           => $this->dungeonRoute->public_key,
+            'floorIndex'          => $this->floor->index,
+            'status'              => $this->status,
+            'viewportWidth'       => $this->viewport_width ?? config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_width'),
+            'viewportHeight'      => $this->viewport_height ?? config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_height'),
+            'imageWidth'          => $this->image_width ?? config('keystoneguru.api.dungeon_route.thumbnail.default_image_width'),
+            'imageHeight'         => $this->image_height ?? config('keystoneguru.api.dungeon_route.thumbnail.default_image_height'),
+            'zoomLevel'           => $this->zoom_level ?? config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level'),
+            'quality'             => $this->quality ?? config('keystoneguru.api.dungeon_route.thumbnail.default_quality'),
+            'queueSize'           => $queueSize,
+            'estimatedCompletion' => $isCompleted ? null : $this->created_at->addSeconds($queueSize * config('keystoneguru.api.dungeon_route.thumbnail.estimated_generation_time_seconds')),
+            'expiresAt'           => $this->created_at->addSeconds(config('keystoneguru.api.dungeon_route.thumbnail.expiration_time_seconds')),
+            'links'               => [
                 'status' => route('api.v1.thumbnailjob.get', ['dungeonRouteThumbnailJob' => $this]),
                 'result' => $isCompleted
                     ? url(

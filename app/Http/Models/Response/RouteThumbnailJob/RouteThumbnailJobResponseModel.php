@@ -2,10 +2,12 @@
 
 namespace App\Http\Models\Response\RouteThumbnailJob;
 
+use App\Http\Models\Response\ResponseModel;
+
 /**
  * @OA\Schema(schema="RouteThumbnailJob")
  */
-class RouteThumbnailJobResponseModel
+class RouteThumbnailJobResponseModel extends ResponseModel
 {
     /**
      * @OA\Property(example="69")
@@ -15,12 +17,12 @@ class RouteThumbnailJobResponseModel
     /**
      * @OA\Property(example="MS4cR1S")
      */
-    public string $public_key;
+    public string $publicKey;
 
     /**
      * @OA\Property(example="1",description="If the dungeon supports combined floors, the highest floor_index represents the floor with all combined floors.")
      */
-    public int $floor_index;
+    public int $floorIndex;
 
     /**
      * @OA\Property(enum={"queued", "completed", "expired", "error"})
@@ -30,27 +32,27 @@ class RouteThumbnailJobResponseModel
     /**
      * @OA\Property(example="900")
      */
-    public int $viewport_width;
+    public int $viewportWidth;
 
     /**
      * @OA\Property(example="600")
      */
-    public int $viewport_height;
+    public int $viewportHeight;
 
     /**
      * @OA\Property(example="900")
      */
-    public int $image_width;
+    public int $imageWidth;
 
     /**
      * @OA\Property(example="600")
      */
-    public int $image_height;
+    public int $imageHeight;
 
     /**
      * @OA\Property(example="2.2")
      */
-    public float $zoom_level;
+    public float $zoomLevel;
 
     /**
      * @OA\Property(example="90")
@@ -60,17 +62,17 @@ class RouteThumbnailJobResponseModel
     /**
      * @OA\Property(example="493")
      */
-    public int $queue_size;
+    public int $queueSize;
 
     /**
      * @OA\Property(example="2024-01-25T20:22:14.000000Z")
      */
-    public string $estimated_completion;
+    public string $estimatedCompletion;
 
     /**
      * @OA\Property(example="2025-01-25T20:22:14.000000Z")
      */
-    public string $expires_at;
+    public string $expiresAt;
 
     /**
      * @OA\Property(ref="#/components/schemas/RouteThumbnailJobLinks")

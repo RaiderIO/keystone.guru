@@ -1,16 +1,26 @@
 <?php
 
-namespace App\Http\Requests\Api\V1;
+namespace App\Http\Requests\Api\V1\CombatLog\Route;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRoute;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Http\Requests\Api\V1\APIFormRequest;
 use App\Models\Affix;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Rules\CombatLogRouteNpcChronologicalRule;
 use Illuminate\Validation\Rule;
 
+/**
+ * @method CombatLogRouteRequestModel|null getModel()
+ */
 class CombatLogRouteRequest extends APIFormRequest
 {
+
+    protected function getRequestModelClass(): string
+    {
+        return CombatLogRouteRequestModel::class;
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -24,7 +34,7 @@ class CombatLogRouteRequest extends APIFormRequest
      */
     public function rules(): array
     {
-        $dateFormat = sprintf('date_format:"%s"', CombatLogRoute::DATE_TIME_FORMAT);
+        $dateFormat = sprintf('date_format:"%s"', CombatLogRouteRequestModel::DATE_TIME_FORMAT);
 
         return [
             'metadata.runId'                => ['required', 'string'],

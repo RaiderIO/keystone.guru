@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\V1\InternalTeam\Combatlog;
 
 use App\Http\Controllers\Controller;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRoute;
-use App\Http\Requests\Api\V1\CombatLogRouteRequest;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Http\Requests\Api\V1\CombatLog\Route\CombatLogRouteRequest;
 use App\Http\Resources\CombatLog\CombatLogRouteResource;
 use App\Http\Resources\DungeonRoute\DungeonRouteResource;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
@@ -37,7 +37,7 @@ class APICombatLogController extends Controller
         $validated = $request->validated();
 
         return new DungeonRouteResource($combatLogRouteDungeonRouteService->convertCombatLogRouteToDungeonRoute(
-            CombatLogRoute::createFromArray($validated)
+            CombatLogRouteRequestModel::createFromArray($validated)
         ));
     }
 
@@ -48,7 +48,7 @@ class APICombatLogController extends Controller
         $validated = $request->validated();
 
         return new CombatLogRouteResource($combatLogRouteDungeonRouteService->correctCombatLogRoute(
-            CombatLogRoute::createFromArray($validated)
+            CombatLogRouteRequestModel::createFromArray($validated)
         ));
     }
 }

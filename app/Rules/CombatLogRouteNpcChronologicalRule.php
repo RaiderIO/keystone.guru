@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRoute;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Carbon;
@@ -30,8 +30,8 @@ class CombatLogRouteNpcChronologicalRule implements ValidationRule
                 continue;
             }
 
-            $engagedAtCarbon = Carbon::createFromFormat(CombatLogRoute::DATE_TIME_FORMAT, $engagedAt);
-            $diedAtCarbon    = Carbon::createFromFormat(CombatLogRoute::DATE_TIME_FORMAT, $diedAt);
+            $engagedAtCarbon = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $engagedAt);
+            $diedAtCarbon    = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $diedAt);
 
             if ($diedAtCarbon->isBefore($engagedAtCarbon)) {
                 $this->failedNpcIndices[] = $index;

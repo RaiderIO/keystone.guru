@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api\V1\Public\Route;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\V1\DungeonRoute\DungeonRouteListRequest;
-use App\Http\Requests\Api\V1\DungeonRoute\DungeonRouteThumbnailRequest;
+use App\Http\Models\Request\Route\DungeonRouteThumbnailRequestModel;
+use App\Http\Requests\Api\V1\Route\DungeonRouteListRequest;
+use App\Http\Requests\Api\V1\Route\DungeonRouteThumbnailRequest;
 use App\Http\Resources\DungeonRoute\DungeonRouteCollectionResource;
 use App\Http\Resources\DungeonRouteThumbnailJob\DungeonRouteThumbnailJobCollectionResource;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -69,17 +70,17 @@ class APIDungeonRouteController extends Controller
         APIDungeonRouteControllerServiceInterface $apiDungeonRouteControllerService,
         DungeonRoute                              $dungeonRoute
     ): DungeonRouteThumbnailJobCollectionResource {
-        $validated = $request->validated();
+        $model = $request->getModel();
 
         return new DungeonRouteThumbnailJobCollectionResource(
             $apiDungeonRouteControllerService->createThumbnails(
                 $dungeonRoute,
-                $validated['viewport_width'] ?? null,
-                $validated['viewport_height'] ?? null,
-                $validated['image_width'] ?? null,
-                $validated['image_height'] ?? null,
-                $validated['zoom_level'] ?? null,
-                $validated['quality'] ?? null
+                $model->viewportWidth,
+                $model->viewportHeight,
+                $model->imageWidth,
+                $model->imageHeight,
+                $model->zoomLevel,
+                $model->quality
             )
         );
     }

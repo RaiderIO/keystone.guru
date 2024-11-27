@@ -2,13 +2,13 @@
 
 namespace App\Service\CombatLog;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRoute;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeMode;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoord;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadata;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpc;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettings;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpell;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeEnd as ChallengeModeEndSpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartSpecialEvent;
@@ -75,7 +75,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
      * @throws DungeonNotSupportedException
      * @throws Exception
      */
-    public function convertCombatLogRouteToDungeonRoute(CombatLogRoute $combatLogRoute): DungeonRoute
+    public function convertCombatLogRouteToDungeonRoute(CombatLogRouteRequestModel $combatLogRoute): DungeonRoute
     {
         $dungeonRoute = (new CombatLogRouteDungeonRouteBuilder(
             $this->seasonService,
@@ -106,7 +106,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
      * @throws DungeonNotSupportedException
      * @throws Exception
      */
-    public function convertCombatLogRouteToCombatLogEvents(CombatLogRoute $combatLogRoute): Collection
+    public function convertCombatLogRouteToCombatLogEvents(CombatLogRouteRequestModel $combatLogRoute): Collection
     {
         $builder = new CombatLogRouteCombatLogEventsBuilder(
             $this->seasonService,
@@ -125,7 +125,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         return $builder->getCombatLogEvents();
     }
 
-    public function correctCombatLogRoute(CombatLogRoute $combatLogRoute): CombatLogRoute
+    public function correctCombatLogRoute(CombatLogRouteRequestModel $combatLogRoute): CombatLogRouteRequestModel
     {
         $builder = new CombatLogRouteCorrectionBuilder(
             $this->seasonService,
@@ -148,7 +148,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     /**
      * @throws Exception
      */
-    public function getCombatLogRoute(string $combatLogFilePath): CombatLogRoute
+    public function getCombatLogRoute(string $combatLogFilePath): CombatLogRouteRequestModel
     {
         ini_set('max_execution_time', 1800);
 
@@ -170,9 +170,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             /** @var ChallengeModeEndSpecialEvent $challengeModeEndEvent */
             $challengeModeEndEvent = $resultEvents->filter(static fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
 
-            $challengeMode = new CombatLogRouteChallengeMode(
-                $challengeModeStartEvent->getTimestamp()->format(CombatLogRoute::DATE_TIME_FORMAT),
-                $challengeModeEndEvent->getTimestamp()->format(CombatLogRoute::DATE_TIME_FORMAT),
+            $challengeMode = new CombatLogRouteChallengeModeRequestModel(
+                $challengeModeStartEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                $challengeModeEndEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
                 $challengeModeEndEvent->getSuccess(),
                 $challengeModeEndEvent->getTotalTimeMS(),
                 $challengeModeStartEvent->getChallengeModeID(),
@@ -207,12 +207,12 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     $npcEngagedEvents->forget($guid->getGuid());
 
                     $npcs->push(
-                        new CombatLogRouteNpc(
+                        new CombatLogRouteNpcRequestModel(
                             $guid->getId(),
                             $guid->getSpawnUID(),
-                            $npcEngagedEvent->getEngagedEvent()->getTimestamp()->format(CombatLogRoute::DATE_TIME_FORMAT),
-                            $resultEvent->getBaseEvent()->getTimestamp()->format(CombatLogRoute::DATE_TIME_FORMAT),
-                            new CombatLogRouteCoord(
+                            $npcEngagedEvent->getEngagedEvent()->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                            $resultEvent->getBaseEvent()->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                            new CombatLogRouteCoordRequestModel(
                                 $npcEngagedEvent->getEngagedEvent()->getAdvancedData()->getPositionX(),
                                 $npcEngagedEvent->getEngagedEvent()->getAdvancedData()->getPositionY(),
                                 $npcEngagedEvent->getEngagedEvent()->getAdvancedData()->getUiMapId()
@@ -224,11 +224,11 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     $advancedData = $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData();
 
                     $spells->push(
-                        new CombatLogRouteSpell(
+                        new CombatLogRouteSpellRequestModel(
                             $resultEvent->getSpellId(),
                             $advancedData->getInfoGuid()->getGuid(),
-                            $resultEvent->getBaseEvent()->getTimestamp()->format(CombatLogRoute::DATE_TIME_FORMAT),
-                            new CombatLogRouteCoord(
+                            $resultEvent->getBaseEvent()->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                            new CombatLogRouteCoordRequestModel(
                                 $advancedData->getPositionX(),
                                 $advancedData->getPositionY(),
                                 $advancedData->getUiMapId()
@@ -242,9 +242,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 throw new Exception("Found enemies that weren't killed!");
             }
 
-            return new CombatLogRoute(
-                new CombatLogRouteMetadata(Uuid::uuid4()->toString()),
-                new CombatLogRouteSettings(true, true),
+            return new CombatLogRouteRequestModel(
+                new CombatLogRouteMetadataRequestModel(Uuid::uuid4()->toString()),
+                new CombatLogRouteSettingsRequestModel(true, true),
                 $challengeMode,
                 $npcs,
                 $spells
@@ -255,7 +255,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         }
     }
 
-    private function saveChallengeModeRun(CombatLogRoute $combatLogRoute, DungeonRoute $dungeonRoute): void
+    private function saveChallengeModeRun(CombatLogRouteRequestModel $combatLogRoute, DungeonRoute $dungeonRoute): void
     {
         // Insert a run
         $now = Carbon::now();
@@ -318,9 +318,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     }
 
     private function generateMapIcons(
-        MappingVersion $mappingVersion,
-        CombatLogRoute $combatLogRoute,
-        ?DungeonRoute  $dungeonRoute = null
+        MappingVersion             $mappingVersion,
+        CombatLogRouteRequestModel $combatLogRoute,
+        ?DungeonRoute              $dungeonRoute = null
     ): void {
         $now                 = now();
         $mapIconAttributes   = [];

@@ -3,7 +3,7 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRoute;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
@@ -36,7 +36,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
         KillZoneRepositoryInterface               $killZoneRepository,
         KillZoneEnemyRepositoryInterface          $killZoneEnemyRepository,
         KillZoneSpellRepositoryInterface          $killZoneSpellRepository,
-        CombatLogRoute $combatLogRoute
+        CombatLogRouteRequestModel $combatLogRoute
     ) {
         /** @var CombatLogRouteCombatLogEventsBuilderLoggingInterface $log */
         $log       = App::make(CombatLogRouteCombatLogEventsBuilderLoggingInterface::class);
@@ -63,8 +63,8 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
             $this->log->getCombatLogEventsStart();
 
             $now   = Carbon::now();
-            $start = Carbon::createFromFormat(CombatLogRoute::DATE_TIME_FORMAT, $this->combatLogRoute->challengeMode->start);
-            $end   = Carbon::createFromFormat(CombatLogRoute::DATE_TIME_FORMAT, $this->combatLogRoute->challengeMode->end);
+            $start = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $this->combatLogRoute->challengeMode->start);
+            $end   = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $this->combatLogRoute->challengeMode->end);
 
             $floors = $this->dungeonRoute->dungeon->floors->keyBy('id');
 

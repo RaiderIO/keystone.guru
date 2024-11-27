@@ -3,14 +3,14 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRoute;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeMode;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoord;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadata;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpc;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcCorrection;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettings;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpell;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcCorrectionRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
@@ -24,7 +24,7 @@ use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
 
 /**
- * Takes a CombatLogRoute and pushes it through ARC. It then returns a new CombatLogRoute with the locations corrected
+ * Takes a CombatLogRouteRequestModel and pushes it through ARC. It then returns a new CombatLogRouteRequestModel with the locations corrected
  * to those of resolved enemies.
  *
  * @author Wouter
@@ -44,7 +44,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         KillZoneRepositoryInterface               $killZoneRepository,
         KillZoneEnemyRepositoryInterface          $killZoneEnemyRepository,
         KillZoneSpellRepositoryInterface          $killZoneSpellRepository,
-        CombatLogRoute $combatLogRoute
+        CombatLogRouteRequestModel $combatLogRoute
     ) {
         /** @var CombatLogRouteCorrectionBuilderLoggingInterface $log */
         $log       = App::make(CombatLogRouteCorrectionBuilderLoggingInterface::class);
@@ -63,11 +63,11 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         );
     }
 
-    public function getCombatLogRoute(): CombatLogRoute
+    public function getCombatLogRoute(): CombatLogRouteRequestModel
     {
-        /** @var Collection<CombatLogRouteNpc> $npcs */
+        /** @var Collection<CombatLogRouteNpcRequestModel> $npcs */
         $npcs = new Collection();
-        /** @var Collection<CombatLogRouteSpell> $npcs */
+        /** @var Collection<CombatLogRouteSpellRequestModel> $npcs */
         $spells = new Collection();
 
         try {
@@ -93,17 +93,17 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                 );
 
                 $npcs->push(
-                    new CombatLogRouteNpcCorrection(
+                    new CombatLogRouteNpcCorrectionRequestModel(
                         $npc->npcId,
                         $npc->spawnUid,
                         $npc->engagedAt,
                         $npc->diedAt,
-                        new CombatLogRouteCoord(
+                        new CombatLogRouteCoordRequestModel(
                             $npc->coord->x,
                             $npc->coord->y,
                             $npc->coord->uiMapId
                         ),
-                        new CombatLogRouteCoord(
+                        new CombatLogRouteCoordRequestModel(
                             $ingameXY->getX(2),
                             $ingameXY->getY(2),
                             $floor->ui_map_id
@@ -114,7 +114,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
 
             foreach ($this->combatLogRoute->spells as $spell) {
                 $spells->push(
-                    new CombatLogRouteSpell(
+                    new CombatLogRouteSpellRequestModel(
                         $spell->spellId,
                         $spell->playerUid,
                         $spell->castAt,
@@ -123,11 +123,11 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                 );
             }
 
-            $result = new CombatLogRoute(
+            $result = new CombatLogRouteRequestModel(
             // For now no changes in these, but making copies regardless
-                new CombatLogRouteMetadata($this->combatLogRoute->metadata->runId),
-                new CombatLogRouteSettings($this->combatLogRoute->settings->temporary, $this->combatLogRoute->settings->debugIcons),
-                new CombatLogRouteChallengeMode(
+                new CombatLogRouteMetadataRequestModel($this->combatLogRoute->metadata->runId),
+                new CombatLogRouteSettingsRequestModel($this->combatLogRoute->settings->temporary, $this->combatLogRoute->settings->debugIcons),
+                new CombatLogRouteChallengeModeRequestModel(
                     $this->combatLogRoute->challengeMode->start,
                     $this->combatLogRoute->challengeMode->end,
                     $this->combatLogRoute->challengeMode->success,

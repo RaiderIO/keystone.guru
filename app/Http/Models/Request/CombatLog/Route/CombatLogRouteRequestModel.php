@@ -2,6 +2,7 @@
 
 namespace App\Http\Models\Request\CombatLog\Route;
 
+use App\Http\Models\Request\RequestModel;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Faction;
@@ -16,28 +17,29 @@ use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Random\RandomException;
 
 /**
- * @property Collection<CombatLogRouteNpc>   $npcs
- * @property Collection<CombatLogRouteSpell> $spells
+ * @property Collection<CombatLogRouteNpcRequestModel>   $npcs
+ * @property Collection<CombatLogRouteSpellRequestModel> $spells
  */
-class CombatLogRoute implements Arrayable
+class CombatLogRouteRequestModel extends RequestModel implements Arrayable
 {
     //    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:sP';
     public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s.vP';
 
     public function __construct(
-        public CombatLogRouteMetadata      $metadata,
-        public CombatLogRouteSettings      $settings,
-        public CombatLogRouteChallengeMode $challengeMode,
-        public Collection                  $npcs,
-        public Collection                  $spells
+        public ?CombatLogRouteMetadataRequestModel      $metadata = null,
+        public ?CombatLogRouteSettingsRequestModel      $settings = null,
+        public ?CombatLogRouteChallengeModeRequestModel $challengeMode = null,
+        public ?Collection                              $npcs = null,
+        public ?Collection                              $spells = null
     ) {
     }
 
 
     /**
-     * @throws DungeonNotSupportedException
+     * @throws DungeonNotSupportedException|RandomException
      */
     public function createDungeonRoute(
         SeasonServiceInterface                    $seasonService,
@@ -95,39 +97,13 @@ class CombatLogRoute implements Arrayable
         return $dungeonRoute;
     }
 
-    public function toArray(): array
+    public static function getCollectionItemType(string $key): ?string
     {
-        return [
-            'metadata'      => $this->metadata->toArray(),
-            'settings'      => $this->settings->toArray(),
-            'challengeMode' => $this->challengeMode->toArray(),
-            'npcs'          => $this->npcs->map(fn(CombatLogRouteNpc $npc) => $npc->toArray())->toArray(),
-            'spells'        => $this->spells->map(fn(CombatLogRouteSpell $spell) => $spell->toArray())->toArray(),
-        ];
+        return match ($key) {
+            'npcs' => CombatLogRouteNpcRequestModel::class,
+            'spells' => CombatLogRouteSpellRequestModel::class,
+            default => null,
+        };
     }
 
-    public static function createFromArray(array $body): CombatLogRoute
-    {
-        $metadata      = CombatLogRouteMetadata::createFromArray($body['metadata'] ?? []);
-        $settings      = CombatLogRouteSettings::createFromArray($body['settings'] ?? []);
-        $challengeMode = CombatLogRouteChallengeMode::createFromArray($body['challengeMode']);
-
-        $npcs = collect();
-        foreach ($body['npcs'] as $npc) {
-            $npcs->push(CombatLogRouteNpc::createFromArray($npc));
-        }
-
-        $spells = collect();
-        foreach ($body['spells'] ?? [] as $spell) {
-            $spells->push(CombatLogRouteSpell::createFromArray($spell));
-        }
-
-        return new CombatLogRoute(
-            $metadata,
-            $settings,
-            $challengeMode,
-            $npcs,
-            $spells
-        );
-    }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Http\Models\Response\RouteThumbnailJob;
 
+use App\Http\Models\Response\ResponseModel;
+
 /**
  * @OA\Schema(schema="RouteThumbnailJobLinks")
  */
-class RouteThumbnailJobLinksResponseModel
+class RouteThumbnailJobLinksResponseModel extends ResponseModel
 {
     /**
      * @OA\Property(example="https://keystone.guru/api/v1/thumbnailJob/1")
