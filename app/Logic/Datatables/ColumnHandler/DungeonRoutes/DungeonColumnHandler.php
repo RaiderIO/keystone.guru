@@ -12,7 +12,6 @@ use App\Logic\Datatables\ColumnHandler\DatatablesColumnHandler;
 use App\Logic\Datatables\DatatablesHandler;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 
 class DungeonColumnHandler extends DatatablesColumnHandler
 {

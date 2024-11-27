@@ -7,7 +7,6 @@ use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class HeatmapDataFilter implements Arrayable

@@ -11,7 +11,6 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Image\ImageServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Helper\ProgressBar;
 
 class Random extends Command
 {

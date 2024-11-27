@@ -4,7 +4,6 @@ namespace App\Console\Commands\CombatLog;
 
 use App\Models\CombatLog\ParsedCombatLog;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
-use Illuminate\Support\Collection;
 
 class ExtractData extends BaseCombatLogCommand
 {

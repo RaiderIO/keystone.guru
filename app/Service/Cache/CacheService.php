@@ -3,12 +3,10 @@
 namespace App\Service\Cache;
 
 use App\Models\Dungeon;
-use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\Cache\Logging\CacheServiceLoggingInterface;
 use Closure;
 use DateInterval;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Psr\SimpleCache\InvalidArgumentException;
 

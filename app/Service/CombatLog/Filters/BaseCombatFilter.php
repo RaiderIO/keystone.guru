@@ -8,7 +8,6 @@ use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
-use App\Logic\CombatLog\Guid\Guid;
 use App\Logic\CombatLog\SpecialEvents\EncounterEnd\EncounterEndInterface;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Models\Npc\Npc;
