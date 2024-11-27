@@ -13,6 +13,7 @@ history -s 'php artisan wowhead:fetchhealth '
 history -s 'php artisan wowhead:fetchmissingspellicons'
 history -s 'php artisan wowhead:fetchspelldata '
 history -s 'php artisan wowhead:refreshdisplayids'
+history -s 'php artisan l5-swagger:generate --all && php artisan vendor:publish --provider="L5Swagger\L5SwaggerServiceProvider"'
 history -s './vendor/bin/phpunit -c phpunit.xml'
 history -s './refresh_db_seed.sh'
 

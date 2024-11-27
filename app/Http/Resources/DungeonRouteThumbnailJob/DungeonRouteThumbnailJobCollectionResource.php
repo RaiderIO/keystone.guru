@@ -2,13 +2,13 @@
 
 namespace App\Http\Resources\DungeonRouteThumbnailJob;
 
-use App\Http\Models\Response\RouteThumbnailJob\RouteThumbnailJobEnvelopeResponseModel;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 /**
- * Class DungeonRouteThumbnailJobCollectionResource
+ * @OA\Schema(schema="RouteThumbnailJobEnvelope")
+ * @OA\Property(ref="#/components/schemas/RouteThumbnailJob", property="data")
  *
  * @author Wouter
  *
@@ -21,10 +21,10 @@ class DungeonRouteThumbnailJobCollectionResource extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return RouteThumbnailJobEnvelopeResponseModel::createFromArray([
+        return [
             'data' => $this->collection->map(
                 static fn(DungeonRouteThumbnailJob $dungeonRoute) => new DungeonRouteThumbnailJobResource($dungeonRoute)
             )->toArray(),
-        ])->toArray();
+        ];
     }
 }
