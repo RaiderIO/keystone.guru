@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\TrustProxies;
 use App\Models\GameServerRegion;
 use App\Models\Laratrust\Role;
 use App\Models\User;
@@ -48,7 +49,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['guest', 'throttle:create-user']);
+        $this->middleware(['guest', TrustProxies::class, 'throttle:create-user']);
     }
 
     /**
