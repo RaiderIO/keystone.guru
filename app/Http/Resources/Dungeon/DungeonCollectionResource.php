@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 /**
- * Class DungeonCollectionResource
+ * @OA\Schema(schema="DungeonEnvelope")
+ * @OA\Property(type="array",property="data",@OA\Items(ref="#/components/schemas/Dungeon"))
  *
  * @author Wouter
  *

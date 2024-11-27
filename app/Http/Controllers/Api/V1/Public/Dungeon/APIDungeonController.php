@@ -15,7 +15,11 @@ class APIDungeonController extends Controller
      *     summary="Get a list of dungeons",
      *     tags={"Dungeon"},
      *
-     *     @OA\Response(response=200, description="Successful operation")
+     *
+     *     @OA\Response(response=200, description="Successful operation",
+     *
+     *         @OA\JsonContent(ref="#/components/schemas/DungeonEnvelope"))
+     *    )
      * )
      */
     public function get(Request $request): DungeonCollectionResource
