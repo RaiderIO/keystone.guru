@@ -8295,7 +8295,7 @@
         "classification_id": 1,
         "npc_type_id": 9,
         "npc_class_id": 1,
-        "display_id": null,
+        "display_id": 118860,
         "encounter_id": null,
         "name": "Malfunctioning Pylon",
         "base_health": 12345,
