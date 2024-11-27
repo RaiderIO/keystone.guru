@@ -13427,7 +13427,7 @@
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": 287,
-                "map_name": null,
+                "map_name": "BlackwingLair",
                 "name": "dungeons.classic.blackwinglair.floors.dragonmaw_garrison",
                 "default": 1,
                 "facade": 0,
@@ -13442,7 +13442,14 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 978,
+                        "floor1_id": 310,
+                        "floor2_id": 311,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -13451,7 +13458,7 @@
                 "index": 2,
                 "mdt_sub_level": null,
                 "ui_map_id": 288,
-                "map_name": null,
+                "map_name": "BlackwingLair1",
                 "name": "dungeons.classic.blackwinglair.floors.halls_of_strife",
                 "default": 0,
                 "facade": 0,
@@ -13466,7 +13473,20 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 979,
+                        "floor1_id": 311,
+                        "floor2_id": 310,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 980,
+                        "floor1_id": 311,
+                        "floor2_id": 312,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -13475,7 +13495,7 @@
                 "index": 3,
                 "mdt_sub_level": null,
                 "ui_map_id": 289,
-                "map_name": null,
+                "map_name": "BlackwingLair2",
                 "name": "dungeons.classic.blackwinglair.floors.crimson_laboratories",
                 "default": 0,
                 "facade": 0,
@@ -13490,7 +13510,20 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 981,
+                        "floor1_id": 312,
+                        "floor2_id": 311,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 982,
+                        "floor1_id": 312,
+                        "floor2_id": 313,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -13499,7 +13532,7 @@
                 "index": 4,
                 "mdt_sub_level": null,
                 "ui_map_id": 290,
-                "map_name": null,
+                "map_name": "BlackwingLair3",
                 "name": "dungeons.classic.blackwinglair.floors.nefarians_lair",
                 "default": 0,
                 "facade": 0,
@@ -13514,7 +13547,14 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 983,
+                        "floor1_id": 313,
+                        "floor2_id": 312,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }

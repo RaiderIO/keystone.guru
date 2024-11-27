@@ -1,1 +1,24 @@
-[]
+[
+    {
+        "id": 1743,
+        "mapping_version_id": 414,
+        "floor_id": 312,
+        "source_floor_id": null,
+        "target_floor_id": 311,
+        "linked_dungeon_floor_switch_marker_id": 1742,
+        "direction": null,
+        "lat": -174.31,
+        "lng": 126.72
+    },
+    {
+        "id": 1744,
+        "mapping_version_id": 414,
+        "floor_id": 312,
+        "source_floor_id": null,
+        "target_floor_id": 313,
+        "linked_dungeon_floor_switch_marker_id": 1745,
+        "direction": null,
+        "lat": -41.77,
+        "lng": 156.72
+    }
+]
