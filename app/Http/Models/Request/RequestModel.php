@@ -6,6 +6,12 @@ use Illuminate\Support\Collection;
 
 abstract class RequestModel
 {
+
+    /**
+     * You MUST be able to make an instance without any parameters!
+     */
+    abstract public function __construct();
+
     public function toArray(): array
     {
         $result = [];

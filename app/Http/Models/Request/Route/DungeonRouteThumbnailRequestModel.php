@@ -9,6 +9,10 @@ use App\Http\Models\Request\RequestModel;
  */
 class DungeonRouteThumbnailRequestModel extends RequestModel
 {
+    public function __construct()
+    {
+    }
+
     /**
      * @OA\Property(minimum="768",maximum="1620",example="900")
      */
