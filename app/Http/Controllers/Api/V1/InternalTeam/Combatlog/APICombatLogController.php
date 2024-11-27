@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api\V1\InternalTeam\Combatlog;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\V1\CreateRouteRequest;
-use App\Http\Resources\CombatLog\CreateRouteBodyResource;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRoute;
+use App\Http\Requests\Api\V1\CombatLogRouteRequest;
+use App\Http\Resources\CombatLog\CombatLogRouteResource;
 use App\Http\Resources\DungeonRoute\DungeonRouteResource;
-use App\Service\CombatLog\CreateRouteDungeonRouteServiceInterface;
-use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
+use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Traits\SavesStringToTempDisk;
 
 class APICombatLogController extends Controller
@@ -31,24 +31,24 @@ class APICombatLogController extends Controller
      * )
      */
     public function createRoute(
-        CreateRouteRequest                      $request,
-        CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService
+        CombatLogRouteRequest                   $request,
+        CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService
     ): DungeonRouteResource {
         $validated = $request->validated();
 
-        return new DungeonRouteResource($createRouteBodyDungeonRouteService->convertCreateRouteBodyToDungeonRoute(
-            CreateRouteBody::createFromArray($validated)
+        return new DungeonRouteResource($combatLogRouteDungeonRouteService->convertCombatLogRouteToDungeonRoute(
+            CombatLogRoute::createFromArray($validated)
         ));
     }
 
     public function correctEvents(
-        CreateRouteRequest                      $request,
-        CreateRouteDungeonRouteServiceInterface $createRouteBodyDungeonRouteService
-    ): CreateRouteBodyResource {
+        CombatLogRouteRequest                   $request,
+        CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService
+    ): CombatLogRouteResource {
         $validated = $request->validated();
 
-        return new CreateRouteBodyResource($createRouteBodyDungeonRouteService->correctCreateRouteBody(
-            CreateRouteBody::createFromArray($validated)
+        return new CombatLogRouteResource($combatLogRouteDungeonRouteService->correctCombatLogRoute(
+            CombatLogRoute::createFromArray($validated)
         ));
     }
 }

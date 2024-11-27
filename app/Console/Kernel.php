@@ -8,7 +8,7 @@ use App\Console\Commands\CombatLog\CreateMappingVersion;
 use App\Console\Commands\CombatLog\EnsureChallengeMode;
 use App\Console\Commands\CombatLog\ExtractData;
 use App\Console\Commands\CombatLog\ExtractUiMapIds;
-use App\Console\Commands\CombatLog\OutputCreateRouteJson;
+use App\Console\Commands\CombatLog\OutputCombatLogRouteJson;
 use App\Console\Commands\CombatLog\OutputResultEvents;
 use App\Console\Commands\CombatLog\SplitChallengeMode;
 use App\Console\Commands\CombatLog\SplitZoneChange;
@@ -102,7 +102,7 @@ class Kernel extends ConsoleKernel
         ExtractData::class,
         ExtractUiMapIds::class,
         OutputResultEvents::class,
-        OutputCreateRouteJson::class,
+        OutputCombatLogRouteJson::class,
         SplitChallengeMode::class,
         SplitZoneChange::class,
 

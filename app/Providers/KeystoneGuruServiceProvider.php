@@ -38,8 +38,8 @@ use App\Service\CombatLog\CombatLogService;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\CombatLogSplitService;
 use App\Service\CombatLog\CombatLogSplitServiceInterface;
-use App\Service\CombatLog\CreateRouteDungeonRouteService;
-use App\Service\CombatLog\CreateRouteDungeonRouteServiceInterface;
+use App\Service\CombatLog\CombatLogRouteDungeonRouteService;
+use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Service\CombatLog\ResultEventDungeonRouteService;
 use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\CombatLogEvent\CombatLogEventService;
@@ -193,7 +193,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(MDTExportStringServiceInterface::class, MDTExportStringService::class);
 
         // Depends on CombatLogService, SeasonService, CoordinatesService
-        $this->app->bind(CreateRouteDungeonRouteServiceInterface::class, CreateRouteDungeonRouteService::class);
+        $this->app->bind(CombatLogRouteDungeonRouteServiceInterface::class, CombatLogRouteDungeonRouteService::class);
         $this->app->bind(ResultEventDungeonRouteServiceInterface::class, ResultEventDungeonRouteService::class);
 
         // Depends on all of the above - pretty much

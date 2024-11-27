@@ -1,7 +1,7 @@
 history -s 'php artisan combatlog:extractdata tmp'
 history -s 'php artisan combatlog:splitchallengemode tmp'
 history -s 'php artisan combatlog:splitzonechange tmp'
-history -s 'php artisan combatlog:outputcreateroutejson tmp/'
+history -s 'php artisan combatlog:outputcombatlogroutejson tmp/'
 history -s 'php artisan environment:update'
 history -s 'php artisan handlebars:refresh'
 history -s 'php artisan localization:sync en_US '

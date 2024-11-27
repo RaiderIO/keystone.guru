@@ -2,13 +2,13 @@
 
 namespace App\Service\ChallengeModeRunData;
 
+use App\Http\Models\Request\CombatLog\Route\CombatLogRoute;
 use App\Models\CombatLog\ChallengeModeRunData;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\Dungeon;
 use App\Repositories\Interfaces\CombatLog\CombatLogEventRepositoryInterface;
 use App\Service\ChallengeModeRunData\Logging\ChallengeModeRunDataServiceLoggingInterface;
-use App\Service\CombatLog\CreateRouteDungeonRouteServiceInterface;
-use App\Service\CombatLog\Models\CreateRoute\CreateRouteBody;
+use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
@@ -18,7 +18,7 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
     private Collection $dungeonCache;
 
     public function __construct(
-        private readonly CreateRouteDungeonRouteServiceInterface     $createRouteDungeonRouteService,
+        private readonly CombatLogRouteDungeonRouteServiceInterface  $createRouteDungeonRouteService,
         private readonly CombatLogEventRepositoryInterface           $combatLogEventRepository,
         private readonly ChallengeModeRunDataServiceLoggingInterface $log
     ) {
@@ -77,8 +77,8 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
                 return true;
             }
 
-            $combatLogEvents = $this->createRouteDungeonRouteService->convertCreateRouteBodyToCombatLogEvents(
-                CreateRouteBody::createFromArray($decoded)
+            $combatLogEvents = $this->createRouteDungeonRouteService->convertCombatLogRouteToCombatLogEvents(
+                CombatLogRoute::createFromArray($decoded)
             );
 
             $attributes = [];
