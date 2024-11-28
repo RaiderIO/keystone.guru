@@ -38,6 +38,7 @@ class DungeonRouteResource extends JsonResource
         return [
             'dungeonId'           => $this->dungeon_id,
             'publicKey'           => $this->public_key,
+            'public_key'          => $this->public_key, // @TODO Remove me later
             'title'               => $this->title,
             'pulls'               => $this->killZones->count(),
             'enemyForces'         => $this->enemy_forces,

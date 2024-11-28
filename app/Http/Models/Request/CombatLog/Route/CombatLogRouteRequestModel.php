@@ -24,7 +24,7 @@ use Random\RandomException;
  * @OA\Property(property="metadata", ref="#/components/schemas/CombatLogRouteMetadata")
  * @OA\Property(property="settings", ref="#/components/schemas/CombatLogRouteSettings")
  * @OA\Property(property="challengeMode", ref="#/components/schemas/CombatLogRouteChallengeMode")
- * @OA\Property(property="npcs",type="array",items={"$ref":"#/components/schemas/CombatLogRouteNpc"}, nullable=true)
+ * @OA\Property(property="npcs",type="array",items={"$ref":"#/components/schemas/CombatLogRouteNpc"})
  * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpell"}, nullable=true)
  *
  * @property Collection<CombatLogRouteNpcRequestModel>   $npcs
