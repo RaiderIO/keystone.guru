@@ -16,6 +16,7 @@ class APICombatLogController extends Controller
 
     /**
      * @OA\Post(
+     *     operationId="createCombatLogRoute",
      *     path="/api/v1/combatlog/route",
      *     summary="Create a new route from a combat log",
      *     tags={"CombatLog"},

@@ -9,6 +9,8 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 /**
  * @OA\Schema(schema="DungeonEnvelope")
  * @OA\Property(type="array",property="data",@OA\Items(ref="#/components/schemas/Dungeon"))
+ * @OA\Property(ref="#/components/schemas/PaginationLinks",property="links")
+ * @OA\Property(ref="#/components/schemas/PaginationMeta",property="meta")
  *
  * @author Wouter
  *

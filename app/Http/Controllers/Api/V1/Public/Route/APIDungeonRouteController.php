@@ -17,6 +17,7 @@ class APIDungeonRouteController extends Controller
 {
     /**
      * @OA\Get(
+     *      operationId="getRoutes",
      *     path="/api/v1/route",
      *     summary="Get a list of routes",
      *     tags={"Route"},
@@ -40,6 +41,7 @@ class APIDungeonRouteController extends Controller
 
     /**
      * @OA\Post(
+     *     operationId="getThumbnailsByRoute",
      *     path="/api/v1/route/{route}/thumbnail",
      *     summary="Create a new thumbnail for a route you can view",
      *     tags={"Route"},

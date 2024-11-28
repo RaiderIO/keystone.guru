@@ -11,6 +11,7 @@ class APIDungeonRouteThumbnailJobController extends Controller
 {
     /**
      * @OA\Get(
+     *      operationId="getThumbnailJob",
      *      path="/api/v1/route/thumbnailJob/{thumbnailJobId}",
      *      summary="Return the status of a thumbnail job",
      *      tags={"Route"},

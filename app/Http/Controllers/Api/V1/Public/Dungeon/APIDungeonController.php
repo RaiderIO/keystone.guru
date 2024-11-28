@@ -11,6 +11,7 @@ class APIDungeonController extends Controller
 {
     /**
      * @OA\Get(
+     *     operationId="getDungeons",
      *     path="/api/v1/dungeon",
      *     summary="Get a list of dungeons",
      *     tags={"Dungeon"},
