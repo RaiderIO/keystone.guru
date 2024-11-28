@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\User;
 
 use App\Models\User;
 use Illuminate\Contracts\Support\Arrayable;
@@ -9,6 +9,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use JsonSerializable;
 
 /**
+ * @OA\Schema(schema="User")
+ * @OA\Property(property="public_key", type="string", example="MS4cR1S")
+ * @OA\Property(property="name", type="string", example="John Doe")
+ * @OA\Property(property="links", ref="#/components/schemas/UserLinks")
+ * @OA\Property(property="avatar", type="string", example="https://keystone.guru/images/avatar/MS4cR1S.jpg")
+ *
  * @mixin User
  */
 class UserResource extends JsonResource
@@ -23,10 +29,7 @@ class UserResource extends JsonResource
         return [
             'public_key' => $this->public_key,
             'name'       => $this->name,
-            'links'      => [
-                'view'   => route('profile.view', ['user' => $this]),
-                'avatar' => $this->iconfile?->getURL(),
-            ],
+            'links'      => new UserLinksResource($this),
         ];
     }
 }

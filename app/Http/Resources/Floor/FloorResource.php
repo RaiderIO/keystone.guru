@@ -10,14 +10,14 @@ use JsonSerializable;
 
 /**
  * @OA\Schema(schema="Floor")
- * @OA\Property(type="integer",example="69",property="id")
- * @OA\Property(type="integer",example="259",property="uiMapId")
- * @OA\Property(type="string",example="The Stonevault",property="name",description="The English name of the floor")
- * @OA\Property(type="boolean",example="true",property="default",description="True if this is the floor any route for the dungeon opens up to")
- * @OA\Property(type="float",example="true",property="ingameMinX",description="In-game coordinates of the minimum X value of the floor")
- * @OA\Property(type="float",example="true",property="ingameMinY",description="In-game coordinates of the minimum Y value of the floor")
- * @OA\Property(type="float",example="true",property="ingameMaxX",description="In-game coordinates of the maximum X value of the floor")
- * @OA\Property(type="float",example="true",property="ingameMaxY",description="In-game coordinates of the maximum Y value of the floor")
+ * @OA\Property(type="integer", property="id", example="69")
+ * @OA\Property(type="integer", property="uiMapId", example="259")
+ * @OA\Property(type="string", property="name", example="The Stonevault", description="The English name of the floor")
+ * @OA\Property(type="boolean", property="default", example="true", description="True if this is the floor any route for the dungeon opens up to")
+ * @OA\Property(type="number",format="float", property="ingameMinX", example="true", description="In-game coordinates of the minimum X value of the floor")
+ * @OA\Property(type="number",format="float", property="ingameMinY", example="true", description="In-game coordinates of the minimum Y value of the floor")
+ * @OA\Property(type="number",format="float", property="ingameMaxX", example="true", description="In-game coordinates of the maximum X value of the floor")
+ * @OA\Property(type="number",format="float", property="ingameMaxY", example="true", description="In-game coordinates of the maximum Y value of the floor")
  *
  * @mixin Floor
  */

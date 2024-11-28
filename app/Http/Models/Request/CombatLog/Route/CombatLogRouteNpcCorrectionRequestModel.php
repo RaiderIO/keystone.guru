@@ -22,6 +22,14 @@ namespace App\Http\Models\Request\CombatLog\Route;
  *         "uiMapId": 2082
  *     }
  * }
+ *
+ * @OA\Schema(schema="CombatLogRouteNpcCorrection")
+ * @OA\Property(property="npcId", type="integer")
+ * @OA\Property(property="spawnUid", type="string")
+ * @OA\Property(property="engagedAt", type="string", format="date-time")
+ * @OA\Property(property="diedAt", type="string", format="date-time")
+ * @OA\Property(property="coord", ref="#/components/schemas/CombatLogRouteCoord")
+ * @OA\Property(property="coordEnemy", ref="#/components/schemas/CombatLogRouteCoord")
  */
 class CombatLogRouteNpcCorrectionRequestModel extends CombatLogRouteNpcRequestModel
 {

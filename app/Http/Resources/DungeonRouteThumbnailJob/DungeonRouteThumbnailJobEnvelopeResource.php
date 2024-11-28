@@ -14,7 +14,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
  *
  * @since 20/01/2024
  */
-class DungeonRouteThumbnailJobCollectionResource extends ResourceCollection
+class DungeonRouteThumbnailJobEnvelopeResource extends ResourceCollection
 {
     /**
      * Transform the resource into an array.

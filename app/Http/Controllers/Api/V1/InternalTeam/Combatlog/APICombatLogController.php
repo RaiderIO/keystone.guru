@@ -25,10 +25,12 @@ class APICombatLogController extends Controller
      *           description="Request object containing all parameters required to generate a route from a combat log",
      *          required=true,
      *
-     *          @OA\JsonContent(ref="#/components/schemas/RouteThumbnailRequest")
+     *          @OA\JsonContent(ref="#/components/schemas/CombatLogRouteRequest")
      *      ),
      *
-     *     @OA\Response(response=200, description="Successful operation")
+     *     @OA\Response(response=200, description="Successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/DungeonRoute")
+     *     )
      * )
      */
     public function createRoute(

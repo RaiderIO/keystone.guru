@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Models\Request\Route\DungeonRouteThumbnailRequestModel;
 use App\Http\Requests\Api\V1\Route\DungeonRouteListRequest;
 use App\Http\Requests\Api\V1\Route\DungeonRouteThumbnailRequest;
-use App\Http\Resources\DungeonRoute\DungeonRouteCollectionResource;
-use App\Http\Resources\DungeonRouteThumbnailJob\DungeonRouteThumbnailJobCollectionResource;
+use App\Http\Resources\DungeonRoute\DungeonRouteEnvelopeResource;
+use App\Http\Resources\DungeonRouteThumbnailJob\DungeonRouteThumbnailJobEnvelopeResource;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\Controller\Api\V1\APIDungeonRouteControllerServiceInterface;
 use Auth;
@@ -25,11 +25,11 @@ class APIDungeonRouteController extends Controller
      *     @OA\Response(response=200, description="Successful operation")
      * )
      */
-    public function get(DungeonRouteListRequest $request): DungeonRouteCollectionResource
+    public function get(DungeonRouteListRequest $request): DungeonRouteEnvelopeResource
     {
         $validated = $request->validated();
 
-        return new DungeonRouteCollectionResource(
+        return new DungeonRouteEnvelopeResource(
             DungeonRoute::withOnly(['dungeon', 'author', 'killZones', 'affixes'])
                 ->where('author_id', Auth::id())
                 ->when($validated['dungeon_id'] ?? false, static function (Builder $builder) use ($validated) {
@@ -71,10 +71,10 @@ class APIDungeonRouteController extends Controller
         DungeonRouteThumbnailRequest              $request,
         APIDungeonRouteControllerServiceInterface $apiDungeonRouteControllerService,
         DungeonRoute                              $dungeonRoute
-    ): DungeonRouteThumbnailJobCollectionResource {
+    ): DungeonRouteThumbnailJobEnvelopeResource {
         $model = $request->getModel();
 
-        return new DungeonRouteThumbnailJobCollectionResource(
+        return new DungeonRouteThumbnailJobEnvelopeResource(
             $apiDungeonRouteControllerService->createThumbnails(
                 $dungeonRoute,
                 $model->viewportWidth,

@@ -7,13 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 /**
- * Class CombatLogEventCollectionResource
+ * Class CombatLogEventEnvelopeResource
  *
  * @author Wouter
  *
  * @since 02/05/2024
  */
-class CombatLogEventCollectionResource extends ResourceCollection
+class CombatLogEventEnvelopeResource extends ResourceCollection
 {
     /**
      * Transform the resource into an array.

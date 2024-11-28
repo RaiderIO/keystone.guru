@@ -7,13 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 /**
- * Class DungeonRouteCollectionResource
- *
- * @author Wouter
+ * @OA\Schema(schema="DungeonRouteEnvelopeResource")
+ * @OA\Property(property="data",type="array",@OA\Items(ref="#/components/schemas/DungeonRoute"))
  *
  * @since 30/07/2023
  */
-class DungeonRouteCollectionResource extends ResourceCollection
+class DungeonRouteEnvelopeResource extends ResourceCollection
 {
     /**
      * Transform the resource into an array.

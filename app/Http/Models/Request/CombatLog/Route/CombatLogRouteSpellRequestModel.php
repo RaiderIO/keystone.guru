@@ -6,6 +6,13 @@ use App\Http\Models\Request\RequestModel;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
 
+/**
+ * @OA\Schema(schema="CombatLogRouteSpell")
+ * @OA\Property(property="spellId",type="integer")
+ * @OA\Property(property="playerUid",type="string")
+ * @OA\Property(property="castAt",type="string",format="date-time")
+ * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
+ */
 class CombatLogRouteSpellRequestModel extends RequestModel implements Arrayable
 {
     private Carbon $castAtCarbon;

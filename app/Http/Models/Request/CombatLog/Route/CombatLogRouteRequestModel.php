@@ -20,6 +20,13 @@ use Illuminate\Support\Collection;
 use Random\RandomException;
 
 /**
+ * @OA\Schema(schema="CombatLogRouteRequest")
+ * @OA\Property(property="metadata", ref="#/components/schemas/CombatLogRouteMetadata")
+ * @OA\Property(property="settings", ref="#/components/schemas/CombatLogRouteSettings")
+ * @OA\Property(property="challengeMode", ref="#/components/schemas/CombatLogRouteChallengeMode")
+ * @OA\Property(property="npcs",type="array",items={"$ref":"#/components/schemas/CombatLogRouteNpc"}, nullable=true)
+ * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpell"}, nullable=true)
+ *
  * @property Collection<CombatLogRouteNpcRequestModel>   $npcs
  * @property Collection<CombatLogRouteSpellRequestModel> $spells
  */

@@ -16,7 +16,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
  *
  * @since 31/07/2023
  */
-class DungeonCollectionResource extends ResourceCollection
+class DungeonEnvelopeResource extends ResourceCollection
 {
     /**
      * Transform the resource into an array.

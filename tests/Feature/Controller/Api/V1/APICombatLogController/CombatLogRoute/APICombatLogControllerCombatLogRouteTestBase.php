@@ -30,26 +30,26 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
 
     protected function validateDungeon(array $response): void
     {
-        $this->assertEquals($this->dungeon->id, $response['data']['dungeon_id']);
+        $this->assertEquals($this->dungeon->id, $response['data']['dungeonId']);
         $this->assertEquals(__($this->dungeon->name, [], 'en'), $response['data']['title']);
     }
 
     protected function validatePulls(array $responseArr, int $pulls, int $enemyForces): void
     {
         $this->assertEquals($pulls, $responseArr['data']['pulls']);
-        $this->assertEquals($enemyForces, $responseArr['data']['enemy_forces']);
-        $this->assertEquals($this->dungeon->currentMappingVersion->enemy_forces_required, $responseArr['data']['enemy_forces_required']);
+        $this->assertEquals($enemyForces, $responseArr['data']['enemyForces']);
+        $this->assertEquals($this->dungeon->currentMappingVersion->enemy_forces_required, $responseArr['data']['enemyForcesRequired']);
     }
 
     protected function validateAffixes(array $responseArr, string ...$affixes): void
     {
         // AffixGroups
-        $this->assertNotEmpty($responseArr['data']['affix_groups']);
-        $this->assertNotEmpty($responseArr['data']['affix_groups'][0]['affixes'][0]);
+        $this->assertNotEmpty($responseArr['data']['affixGroups']);
+        $this->assertNotEmpty($responseArr['data']['affixGroups'][0]['affixes'][0]);
 
         $validAffixIds = array_map(function (array $affix) {
             return $affix['id'];
-        }, $responseArr['data']['affix_groups'][0]['affixes']);
+        }, $responseArr['data']['affixGroups'][0]['affixes']);
 
         foreach (Affix::whereIn('key', $affixes)->get() as $affix) {
             /** @var Affix $affix */

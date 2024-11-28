@@ -27,11 +27,10 @@ class APIDungeonRouteThumbnailJobController extends Controller
      *          )
      *      ),
      *
-     *      @OA\Response(response=200, description="Successful operation",
-     *
-     *          @OA\JsonContent(ref="#/components/schemas/RouteThumbnailJobEnvelope"))
+     *     @OA\Response(response=200, description="Successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/RouteThumbnailJobEnvelope")
      *     )
-     *  )
+     * )
      *
      * @throws AuthorizationException
      */

@@ -11,23 +11,29 @@ use JsonSerializable;
 
 /**
  * @OA\Schema(schema="RouteThumbnailJob")
- * @OA\Property(type="integer",example="69",property="id")
- * @OA\Property(type="string",example="MS4cR1S",property="publicKey")
- * @OA\Property(type="integer",example="1",property="floorIndex",description="If the dungeon supports combined floors, the highest floor_index represents the floor with all combined floors.")
- * @OA\Property(type="integer",enum={"queued", "completed", "expired", "error"},property="status")
- * @OA\Property(type="integer",example="900",property="viewportWidth")
- * @OA\Property(type="integer",example="600",property="viewportHeight")
- * @OA\Property(type="integer",example="900",property="imageWidth")
- * @OA\Property(type="integer",example="600",property="imageHeight")
- * @OA\Property(type="number",format="float",example="2.2",property="zoomLevel")
- * @OA\Property(type="integer",example="90",property="quality")
- * @OA\Property(type="integer",example="493",property="queueSize")
- * @OA\Property(type="string",example="2024-01-25T20:22:14.000000Z",property="estimatedCompletion")
- * @OA\Property(type="string",example="2025-01-25T20:22:14.000000Z",property="expiresAt")
- * @OA\Property(ref="#/components/schemas/RouteThumbnailJobLinks",property="links")
+ * @OA\Property(type="integer", property="id", example="69")
+ * @OA\Property(type="string", property="publicKey", example="MS4cR1S")
+ * @OA\Property(
+ *     type="integer",
+ *     property="floorIndex",
+ *     example="1",
+ *     description="If the dungeon supports combined floors, the highest floor_index represents the floor with all combined floors."
+ * )
+ * @OA\Property(type="integer", property="status", enum={"queued", "completed", "expired", "error"})
+ * @OA\Property(type="integer", property="viewportWidth", example="900")
+ * @OA\Property(type="integer", property="viewportHeight", example="600")
+ * @OA\Property(type="integer", property="imageWidth", example="900")
+ * @OA\Property(type="integer", property="imageHeight", example="600")
+ * @OA\Property(type="number", format="float", property="zoomLevel", example="2.2")
+ * @OA\Property(type="integer", property="quality", example="90")
+ * @OA\Property(type="integer", property="queueSize", example="493")
+ * @OA\Property(type="string", property="estimatedCompletion", example="2024-01-25T20:22:14.000000Z")
+ * @OA\Property(type="string", property="expiresAt", example="2025-01-25T20:22:14.000000Z")
+ * @OA\Property(ref="#/components/schemas/RouteThumbnailJobLinks", property="links")
  *
  * @mixin DungeonRouteThumbnailJob
  */
+
 class DungeonRouteThumbnailJobResource extends JsonResource
 {
     /**
@@ -55,7 +61,7 @@ class DungeonRouteThumbnailJobResource extends JsonResource
             'queueSize'           => $queueSize,
             'estimatedCompletion' => $isCompleted ? null : $this->created_at->addSeconds($queueSize * config('keystoneguru.api.dungeon_route.thumbnail.estimated_generation_time_seconds')),
             'expiresAt'           => $this->created_at->addSeconds(config('keystoneguru.api.dungeon_route.thumbnail.expiration_time_seconds')),
-            'links'               => (new DungeonRouteThumbnailJobLinksResource($this))->toArray($request),
+            'links'               => new DungeonRouteThumbnailJobLinksResource($this),
         ];
     }
 }
