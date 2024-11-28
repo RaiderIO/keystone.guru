@@ -13431,8 +13431,8 @@
                 "name": "dungeons.classic.blackwinglair.floors.dragonmaw_garrison",
                 "default": 1,
                 "facade": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 26,
+                "max_enemy_size": 40,
                 "enemy_engagement_max_range": null,
                 "enemy_engagement_max_range_patrols": null,
                 "ingame_min_x": 1344.05,
@@ -13444,7 +13444,7 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 978,
+                        "id": 998,
                         "floor1_id": 310,
                         "floor2_id": 311,
                         "direction": "up"
@@ -13462,8 +13462,8 @@
                 "name": "dungeons.classic.blackwinglair.floors.halls_of_strife",
                 "default": 0,
                 "facade": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 26,
+                "max_enemy_size": 40,
                 "enemy_engagement_max_range": null,
                 "enemy_engagement_max_range_patrols": null,
                 "ingame_min_x": 1379.05,
@@ -13475,13 +13475,13 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 979,
+                        "id": 988,
                         "floor1_id": 311,
                         "floor2_id": 310,
                         "direction": "down"
                     },
                     {
-                        "id": 980,
+                        "id": 989,
                         "floor1_id": 311,
                         "floor2_id": 312,
                         "direction": "up"
@@ -13499,8 +13499,8 @@
                 "name": "dungeons.classic.blackwinglair.floors.crimson_laboratories",
                 "default": 0,
                 "facade": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 26,
+                "max_enemy_size": 40,
                 "enemy_engagement_max_range": null,
                 "enemy_engagement_max_range_patrols": null,
                 "ingame_min_x": 1369.05,
@@ -13512,13 +13512,13 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 981,
+                        "id": 995,
                         "floor1_id": 312,
                         "floor2_id": 311,
                         "direction": "down"
                     },
                     {
-                        "id": 982,
+                        "id": 996,
                         "floor1_id": 312,
                         "floor2_id": 313,
                         "direction": "up"
@@ -13536,8 +13536,8 @@
                 "name": "dungeons.classic.blackwinglair.floors.nefarians_lair",
                 "default": 0,
                 "facade": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 26,
+                "max_enemy_size": 40,
                 "enemy_engagement_max_range": null,
                 "enemy_engagement_max_range_patrols": null,
                 "ingame_min_x": 1419.05,
@@ -13549,7 +13549,7 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 983,
+                        "id": 997,
                         "floor1_id": 313,
                         "floor2_id": 312,
                         "direction": "down"

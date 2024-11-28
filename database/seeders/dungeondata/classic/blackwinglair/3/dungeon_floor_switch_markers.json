@@ -1,7 +1,7 @@
 [
     {
         "id": 1743,
-        "mapping_version_id": 414,
+        "mapping_version_id": 422,
         "floor_id": 312,
         "source_floor_id": null,
         "target_floor_id": 311,
@@ -12,7 +12,7 @@
     },
     {
         "id": 1744,
-        "mapping_version_id": 414,
+        "mapping_version_id": 422,
         "floor_id": 312,
         "source_floor_id": null,
         "target_floor_id": 313,
