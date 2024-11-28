@@ -34,5 +34,6 @@ Route::prefix('v1')->group(static function () {
     // Static data
     Route::prefix('dungeon')->group(static function () {
         Route::get('/', (new APIDungeonController())->get(...))->name('api.v1.combatlog.dungeon.list');
+        Route::get('/{dungeon}', (new APIDungeonController())->getDungeon(...))->name('api.v1.combatlog.dungeon.get');
     });
 });
