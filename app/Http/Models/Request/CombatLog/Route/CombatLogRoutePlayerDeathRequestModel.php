@@ -8,7 +8,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
 
 /**
- * @OA\Schema(schema="CombatLogRouteNpc")
+ * @OA\Schema(schema="CombatLogRoutePlayerDeath")
  * @OA\Property(property="characterId", type="integer")
  * @OA\Property(property="classId", type="integer")
  * @OA\Property(property="specId", type="integer")

@@ -127,7 +127,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                 );
             }
 
-            foreach ($this->combatLogRoute->playerDeaths as $playerDeath) {
+            foreach ($this->combatLogRoute->playerDeaths ?? [] as $playerDeath) {
                 $playerDeaths->push(
                     new CombatLogRoutePlayerDeathRequestModel(
                         $playerDeath->characterId,
@@ -169,11 +169,11 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                     $this->combatLogRoute->challengeMode->affixes,
                 ),
                 new CombatLogRouteRosterRequestModel(
-                    $this->combatLogRoute->roster->numMembers,
-                    $this->combatLogRoute->roster->averageItemLevel,
-                    $this->combatLogRoute->roster->characterIds,
-                    $this->combatLogRoute->roster->specIds,
-                    $this->combatLogRoute->roster->classIds,
+                    $this->combatLogRoute->roster?->numMembers,
+                    $this->combatLogRoute->roster?->averageItemLevel,
+                    $this->combatLogRoute->roster?->characterIds,
+                    $this->combatLogRoute->roster?->specIds,
+                    $this->combatLogRoute->roster?->classIds,
                 ),
                 $npcs,
                 $spells,
