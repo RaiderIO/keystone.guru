@@ -125,15 +125,30 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
 
             $result = new CombatLogRouteRequestModel(
             // For now no changes in these, but making copies regardless
-                new CombatLogRouteMetadataRequestModel($this->combatLogRoute->metadata->runId),
-                new CombatLogRouteSettingsRequestModel($this->combatLogRoute->settings->temporary, $this->combatLogRoute->settings->debugIcons),
+                new CombatLogRouteMetadataRequestModel(
+                    $this->combatLogRoute->metadata->runId,
+                    $this->combatLogRoute->metadata->keystoneRunId,
+                    $this->combatLogRoute->metadata->loggedRunId,
+                    $this->combatLogRoute->metadata->period,
+                    $this->combatLogRoute->metadata->season,
+                    $this->combatLogRoute->metadata->regionId,
+                    $this->combatLogRoute->metadata->realmType,
+                    $this->combatLogRoute->metadata->wowInstanceId,
+                ),
+                new CombatLogRouteSettingsRequestModel(
+                    $this->combatLogRoute->settings->temporary,
+                    $this->combatLogRoute->settings->debugIcons
+                ),
                 new CombatLogRouteChallengeModeRequestModel(
                     $this->combatLogRoute->challengeMode->start,
                     $this->combatLogRoute->challengeMode->end,
                     $this->combatLogRoute->challengeMode->success,
                     $this->combatLogRoute->challengeMode->durationMs,
+                    $this->combatLogRoute->challengeMode->parTimeMs,
+                    $this->combatLogRoute->challengeMode->timerFraction,
                     $this->combatLogRoute->challengeMode->challengeModeId,
                     $this->combatLogRoute->challengeMode->level,
+                    $this->combatLogRoute->challengeMode->numDeaths,
                     $this->combatLogRoute->challengeMode->affixes,
                 ),
                 $npcs,

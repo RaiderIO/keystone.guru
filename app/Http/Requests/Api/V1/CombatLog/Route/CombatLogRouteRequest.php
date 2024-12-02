@@ -38,14 +38,24 @@ class CombatLogRouteRequest extends APIFormRequest
 
         return [
             'metadata.runId'                => ['required', 'string'],
+            'metadata.keystoneRunId'        => ['nullable', 'int'],
+            'metadata.loggedRunId'          => ['nullable', 'int'], // @TODO make required after raider.io supports it
+            'metadata.period'               => ['nullable', 'int'], // @TODO make required after raider.io supports it
+            'metadata.season'               => ['nullable', 'string'], // @TODO make required after raider.io supports it
+            'metadata.regionId'             => ['nullable', 'int'], // @TODO make required after raider.io supports it
+            'metadata.realmType'            => ['nullable', 'string'], // @TODO make required after raider.io supports it
+            'metadata.wowInstanceId'        => ['nullable', 'int'],
             'settings.temporary'            => ['nullable', 'bool'],
             'settings.debugIcons'           => ['nullable', 'bool'],
             'challengeMode.start'           => ['required', $dateFormat],
             'challengeMode.end'             => ['required', $dateFormat],
             'challengeMode.durationMs'      => ['required', 'int'],
+            'challengeMode.parTimeMS'       => ['nullable', 'int'], // @TODO make required after raider.io supports it
+            'challengeMode.timerFraction'   => ['nullable', 'numeric'], // @TODO make required after raider.io supports it
             'challengeMode.success'         => ['nullable', 'bool'],
             'challengeMode.challengeModeId' => ['required', Rule::exists(Dungeon::class, 'challenge_mode_id')],
             'challengeMode.level'           => ['required', 'int'],
+            'challengeMode.numDeaths'       => ['nullable', 'int'], // @TODO make required after raider.io supports it
             'challengeMode.affixes'         => ['required', 'array'],
             'challengeMode.affixes.*'       => ['required', Rule::exists(Affix::class, 'affix_id')],
             'npcs'                          => ['required', 'array', new CombatLogRouteNpcChronologicalRule()],

@@ -2,11 +2,11 @@
 
 namespace App\Service\CombatLog;
 
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Logic\CombatLog\Guid\Player;
@@ -46,6 +46,7 @@ use App\Service\CombatLog\ResultEvents\ChallengeModeEnd as ChallengeModeEndResul
 use App\Service\CombatLog\ResultEvents\ChallengeModeStart as ChallengeModeStartResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
+use App\Service\CombatLog\ResultEvents\PlayerDied as PlayerDiedResultEvent;
 use App\Service\CombatLog\ResultEvents\SpellCast;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -170,14 +171,20 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             /** @var ChallengeModeEndSpecialEvent $challengeModeEndEvent */
             $challengeModeEndEvent = $resultEvents->filter(static fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
 
+            $playerDeathEvents = $resultEvents->filter(static fn(BaseResultEvent $resultEvent) => $resultEvent instanceof PlayerDiedResultEvent);
+
             $challengeMode = new CombatLogRouteChallengeModeRequestModel(
                 $challengeModeStartEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
                 $challengeModeEndEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
                 $challengeModeEndEvent->getSuccess(),
                 $challengeModeEndEvent->getTotalTimeMS(),
+                $challengeModeEndEvent->getTotalTimeMS(),
+                $dungeonRoute->mappingVersion->timer_max_seconds === 0 ?
+                    1 : $challengeModeEndEvent->getTotalTimeMS() / $dungeonRoute->mappingVersion->timer_max_seconds,
                 $challengeModeStartEvent->getChallengeModeID(),
                 $challengeModeStartEvent->getKeystoneLevel(),
-                $challengeModeStartEvent->getAffixIDs()
+                $playerDeathEvents->count(),
+                $challengeModeStartEvent->getAffixIDs(),
             );
 
             $npcs             = collect();
@@ -243,7 +250,16 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             }
 
             return new CombatLogRouteRequestModel(
-                new CombatLogRouteMetadataRequestModel(Uuid::uuid4()->toString()),
+                new CombatLogRouteMetadataRequestModel(
+                    Uuid::uuid4()->toString(),
+                    Uuid::uuid4()->toString(),
+                    Uuid::uuid4()->toString(),
+                    99,
+                    'season-tww-1',
+                    2,
+                    'live',
+                    1
+                ),
                 new CombatLogRouteSettingsRequestModel(true, true),
                 $challengeMode,
                 $npcs,

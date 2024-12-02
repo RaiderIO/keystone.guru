@@ -11,6 +11,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
@@ -33,7 +34,7 @@ class Handler extends ExceptionHandler
         ValidationException::class,
         // Added it to prevent spam from people trying to exploit the API
         // Now that I have better protection I want to see those exceptions again so I can ban their asses
-//        BadRequestException::class,
+        BadRequestException::class,
     ];
 
     /**
@@ -47,12 +48,14 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $e): void
     {
+        $request = request();
+
         if (app()->has(HandlerLoggingInterface::class)) {
             $handlerLogging = app()->make(HandlerLoggingInterface::class);
 
             if ($e instanceof TooManyRequestsHttpException) {
                 $user = Auth::user();
-                $handlerLogging->tooManyRequests(request()?->ip() ?? 'unknown IP', request()?->path(), $user?->id, $user?->name, $e);
+                $handlerLogging->tooManyRequests($request?->ip() ?? 'unknown IP', $request?->path(), $user?->id, $user?->name, $e);
             }
         }
 

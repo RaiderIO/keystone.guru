@@ -34,6 +34,8 @@ interface BaseCombatFilterLoggingInterface
 
     public function parseUnitAddedToCurrentPull(int $lineNr, string $newEnemyGuid): void;
 
+    public function parsePlayerDeath(int $lineNr, string $playerGuid): void;
+
     public function getEnemyEngagedEventUsingFirstSightedEvent(string $guid): void;
 
     public function getEnemyEngagedEventUsingEngagedEvent(string $guid): void;

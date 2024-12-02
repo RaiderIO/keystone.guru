@@ -8,6 +8,7 @@ use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
+use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\EncounterEnd\EncounterEndInterface;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Models\Npc\Npc;
@@ -16,6 +17,7 @@ use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyEngaged;
 use App\Service\CombatLog\ResultEvents\EnemyKilled;
+use App\Service\CombatLog\ResultEvents\PlayerDied;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 
@@ -207,7 +209,26 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
             }
         }
 
+        if($this->isPlayerDeathEntry($combatLogEvent)){
+            /** @var UnitDied $combatLogEvent */
+            /** @var Player $playerGuid */
+            $playerGuid = $combatLogEvent->getGenericData()->getDestGuid();
+            $this->resultEvents->push((new PlayerDied($combatLogEvent, $playerGuid)));
+            $this->log->parsePlayerDeath($lineNr, $playerGuid);
+
+            return true;
+        }
+
         return false;
+    }
+
+    private function isPlayerDeathEntry(BaseEvent $combatLogEvent): bool
+    {
+        if (!($combatLogEvent instanceof UnitDied)) {
+            return false;
+        }
+
+        return $combatLogEvent->getGenericData()->getDestGuid() instanceof Player;
     }
 
     private function isEnemyCombatLogEntry(BaseEvent $combatLogEvent): bool
