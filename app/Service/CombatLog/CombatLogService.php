@@ -12,6 +12,7 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\CombatLog\Dtos\ChallengeMode;
+use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Filters\DungeonRoute\CombatLogDungeonRouteFilter;
 use App\Service\CombatLog\Filters\DungeonRoute\DungeonRouteFilter;
@@ -143,15 +144,19 @@ class CombatLogService implements CombatLogServiceInterface
             $dungeonRouteFilter          = (new DungeonRouteFilter($this->seasonService));
             $combatLogDungeonRouteFilter = new CombatLogDungeonRouteFilter();
 
-            $this->parseCombatLogStreaming($combatLogFilePath,
-                static function (BaseEvent $baseEvent, int $lineNr) use (&$dungeonRouteFilter, &$combatLogDungeonRouteFilter) {
-                    // If parsing was successful, it generated a dungeonroute, so then construct our filter
-                    if ($dungeonRouteFilter->parse($baseEvent, $lineNr)) {
-                        $combatLogDungeonRouteFilter->setDungeonRoute($dungeonRouteFilter->getDungeonRoute());
+            try {
+                $this->parseCombatLogStreaming($combatLogFilePath,
+                    static function (BaseEvent $baseEvent, int $lineNr) use (&$dungeonRouteFilter, &$combatLogDungeonRouteFilter) {
+                        // If parsing was successful, it generated a dungeonroute, so then construct our filter
+                        if ($dungeonRouteFilter->parse($baseEvent, $lineNr)) {
+                            $combatLogDungeonRouteFilter->setDungeonRoute($dungeonRouteFilter->getDungeonRoute());
+                        }
+                        $combatLogDungeonRouteFilter->parse($baseEvent, $lineNr);
                     }
-                    $combatLogDungeonRouteFilter->parse($baseEvent, $lineNr);
-                }
-            );
+                );
+            } catch (AdvancedLogNotEnabledException $e) {
+                $this->log->getResultEventsAdvancedLogNotEnabled($e->getMessage());
+            }
 
             // Output the dungeon route as well
             $dungeonRoute = $dungeonRouteFilter->getDungeonRoute();

@@ -3,12 +3,14 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcCorrectionRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRosterRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Models\Floor\Floor;
@@ -69,6 +71,8 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         $npcs = new Collection();
         /** @var Collection<CombatLogRouteSpellRequestModel> $npcs */
         $spells = new Collection();
+        /** @var Collection<CombatLogRoutePlayerDeathRequestModel> $playerDeaths */
+        $playerDeaths = new Collection();
 
         try {
             $this->log->getCombatLogRouteStart();
@@ -123,6 +127,19 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                 );
             }
 
+            foreach ($this->combatLogRoute->playerDeaths as $playerDeath) {
+                $playerDeaths->push(
+                    new CombatLogRoutePlayerDeathRequestModel(
+                        $playerDeath->characterId,
+                        $playerDeath->classId,
+                        $playerDeath->specId,
+                        $playerDeath->itemLevel,
+                        $playerDeath->diedAt,
+                        $playerDeath->coord,
+                    )
+                );
+            }
+
             $result = new CombatLogRouteRequestModel(
             // For now no changes in these, but making copies regardless
                 new CombatLogRouteMetadataRequestModel(
@@ -151,8 +168,16 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                     $this->combatLogRoute->challengeMode->numDeaths,
                     $this->combatLogRoute->challengeMode->affixes,
                 ),
+                new CombatLogRouteRosterRequestModel(
+                    $this->combatLogRoute->roster->numMembers,
+                    $this->combatLogRoute->roster->averageItemLevel,
+                    $this->combatLogRoute->roster->characterIds,
+                    $this->combatLogRoute->roster->specIds,
+                    $this->combatLogRoute->roster->classIds,
+                ),
                 $npcs,
-                $spells
+                $spells,
+                $playerDeaths
             );
         } finally {
             $this->log->getCombatLogRouteEnd();

@@ -26,9 +26,11 @@ use Random\RandomException;
  * @OA\Property(property="challengeMode", ref="#/components/schemas/CombatLogRouteChallengeMode")
  * @OA\Property(property="npcs",type="array",items={"$ref":"#/components/schemas/CombatLogRouteNpc"})
  * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpell"}, nullable=true)
+ * @OA\Property(property="playerDeaths",type="array",items={"$ref":"#/components/schemas/CombatLogRoutePlayerDeath"}, nullable=true)
  *
- * @property Collection<CombatLogRouteNpcRequestModel>   $npcs
- * @property Collection<CombatLogRouteSpellRequestModel> $spells
+ * @property Collection<CombatLogRouteNpcRequestModel>         $npcs
+ * @property Collection<CombatLogRouteSpellRequestModel>       $spells
+ * @property Collection<CombatLogRoutePlayerDeathRequestModel> $playerDeaths
  */
 class CombatLogRouteRequestModel extends RequestModel implements Arrayable
 {
@@ -39,8 +41,10 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         public ?CombatLogRouteMetadataRequestModel      $metadata = null,
         public ?CombatLogRouteSettingsRequestModel      $settings = null,
         public ?CombatLogRouteChallengeModeRequestModel $challengeMode = null,
+        public ?CombatLogRouteRosterRequestModel        $roster = null,
         public ?Collection                              $npcs = null,
-        public ?Collection                              $spells = null
+        public ?Collection                              $spells = null,
+        public ?Collection                              $playerDeaths = null
     ) {
     }
 
@@ -109,6 +113,7 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         return match ($key) {
             'npcs' => CombatLogRouteNpcRequestModel::class,
             'spells' => CombatLogRouteSpellRequestModel::class,
+            'playerDeaths' => CombatLogRoutePlayerDeathRequestModel::class,
             default => null,
         };
     }

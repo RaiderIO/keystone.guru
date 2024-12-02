@@ -6,7 +6,9 @@ use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestMo
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRosterRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Logic\CombatLog\Guid\Player;
@@ -47,7 +49,7 @@ use App\Service\CombatLog\ResultEvents\ChallengeModeStart as ChallengeModeStartR
 use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\CombatLog\ResultEvents\PlayerDied as PlayerDiedResultEvent;
-use App\Service\CombatLog\ResultEvents\SpellCast;
+use App\Service\CombatLog\ResultEvents\SpellCast as SpellCastResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
@@ -59,15 +61,15 @@ use Ramsey\Uuid\Uuid;
 class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteServiceInterface
 {
     public function __construct(
-        protected CombatLogService                               $combatLogService,
-        protected SeasonServiceInterface                         $seasonService,
-        protected CoordinatesServiceInterface                    $coordinatesService,
-        protected DungeonRouteRepositoryInterface                $dungeonRouteRepository,
-        protected DungeonRouteAffixGroupRepositoryInterface      $dungeonRouteAffixGroupRepository,
-        protected AffixGroupRepositoryInterface                  $affixGroupRepository,
-        protected KillZoneRepositoryInterface                    $killZoneRepository,
-        protected KillZoneEnemyRepositoryInterface               $killZoneEnemyRepository,
-        protected KillZoneSpellRepositoryInterface               $killZoneSpellRepository,
+        protected CombatLogService                                  $combatLogService,
+        protected SeasonServiceInterface                            $seasonService,
+        protected CoordinatesServiceInterface                       $coordinatesService,
+        protected DungeonRouteRepositoryInterface                   $dungeonRouteRepository,
+        protected DungeonRouteAffixGroupRepositoryInterface         $dungeonRouteAffixGroupRepository,
+        protected AffixGroupRepositoryInterface                     $affixGroupRepository,
+        protected KillZoneRepositoryInterface                       $killZoneRepository,
+        protected KillZoneEnemyRepositoryInterface                  $killZoneEnemyRepository,
+        protected KillZoneSpellRepositoryInterface                  $killZoneSpellRepository,
         protected CombatLogRouteDungeonRouteServiceLoggingInterface $log
     ) {
     }
@@ -149,7 +151,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
     /**
      * @throws Exception
      */
-    public function getCombatLogRoute(string $combatLogFilePath): CombatLogRouteRequestModel
+    public function getCombatLogRoute(string $combatLogFilePath): ?CombatLogRouteRequestModel
     {
         ini_set('max_execution_time', 1800);
 
@@ -159,7 +161,8 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $dungeonRoute = null;
             $resultEvents = $this->combatLogService->getResultEventsForChallengeMode($combatLogFilePath, $dungeonRoute);
             if (!($dungeonRoute instanceof DungeonRoute)) {
-                throw new Exception('Unable to generate dungeon route from combat log!');
+                $this->log->getCombatLogRouteUnableToGenerateDungeonRoute();
+                return null;
             }
 
             // #1818 Filter out any NPC ids that are invalid
@@ -190,6 +193,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $npcs             = collect();
             $npcEngagedEvents = collect();
             $spells           = collect();
+            $playerDeaths     = collect();
             foreach ($resultEvents as $resultEvent) {
                 if ($resultEvent instanceof EnemyEngagedResultEvent) {
                     $guid = $resultEvent->getGuid();
@@ -226,7 +230,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                             )
                         )
                     );
-                } else if ($resultEvent instanceof SpellCast) {
+                } else if ($resultEvent instanceof SpellCastResultEvent) {
                     /** @var Player $guid */
                     $advancedData = $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData();
 
@@ -242,6 +246,22 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                             )
                         )
                     );
+                } else if ($resultEvent instanceof PlayerDiedResultEvent) {
+                    // @TODO #2638
+                    $playerDeaths->push(
+                        new CombatLogRoutePlayerDeathRequestModel(
+                            1,
+                            2,
+                            3,
+                            638.5,
+                            $resultEvent->getBaseEvent()->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
+                            new CombatLogRouteCoordRequestModel(
+                                $resultEvent->getLastKnownEvent()?->getAdvancedData()->getPositionX(),
+                                $resultEvent->getLastKnownEvent()?->getAdvancedData()->getPositionY(),
+                                $resultEvent->getLastKnownEvent()?->getAdvancedData()->getUiMapId()
+                            )
+                        )
+                    );
                 }
             }
 
@@ -252,8 +272,8 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             return new CombatLogRouteRequestModel(
                 new CombatLogRouteMetadataRequestModel(
                     Uuid::uuid4()->toString(),
-                    Uuid::uuid4()->toString(),
-                    Uuid::uuid4()->toString(),
+                    98765,
+                    87654,
                     99,
                     'season-tww-1',
                     2,
@@ -262,8 +282,17 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 ),
                 new CombatLogRouteSettingsRequestModel(true, true),
                 $challengeMode,
+                // @TODO #2638
+                new CombatLogRouteRosterRequestModel(
+                    5,
+                    637.5,
+                    [1, 2, 3, 4, 5],
+                    [1, 2, 3, 4, 5],
+                    [1, 2, 3, 4, 5]
+                ),
                 $npcs,
-                $spells
+                $spells,
+                $playerDeaths
             );
 
         } finally {

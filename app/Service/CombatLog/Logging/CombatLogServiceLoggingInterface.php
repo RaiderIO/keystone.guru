@@ -10,6 +10,8 @@ interface CombatLogServiceLoggingInterface
 
     public function getResultEventsStart(string $combatLogFilePath): void;
 
+    public function getResultEventsAdvancedLogNotEnabled(string $message): void;
+
     public function getResultEventsEnd(): void;
 
     public function extractCombatLogExtractingArchiveStart(): void;

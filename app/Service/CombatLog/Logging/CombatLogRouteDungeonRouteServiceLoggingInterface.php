@@ -6,6 +6,8 @@ interface CombatLogRouteDungeonRouteServiceLoggingInterface
 {
     public function getCombatLogRouteStart(string $combatLogFilePath): void;
 
+    public function getCombatLogRouteUnableToGenerateDungeonRoute(): void;
+
     public function getCombatLogRouteEnemyEngagedInvalidNpcId(int $npcId): void;
 
     public function getCombatLogRouteEnemyKilledInvalidNpcId(int $npcId): void;

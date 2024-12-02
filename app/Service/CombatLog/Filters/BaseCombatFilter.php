@@ -70,6 +70,9 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     /** @var Collection<CombatLogEvent> List of GUID => CombatLogEvent for all enemies that we are currently in combat with. */
     private readonly Collection $accurateEnemySightings;
 
+    /** @var Collection<CombatLogEvent> List of GUID => CombatLogEvent for all player's last known positions. */
+    private readonly Collection $lastKnownPlayerPositions;
+
     /** @var Collection<string> List of GUIDs for all enemies that have been summoned. Summoned enemies are ignored by default. */
     private readonly Collection $summonedEnemies;
 
@@ -80,10 +83,11 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
     public function __construct(private readonly Collection $resultEvents)
     {
-        $this->validNpcIds            = collect();
-        $this->accurateEnemySightings = collect();
-        $this->summonedEnemies        = collect();
-        $this->killedEnemies          = collect();
+        $this->validNpcIds              = collect();
+        $this->accurateEnemySightings   = collect();
+        $this->lastKnownPlayerPositions = collect();
+        $this->summonedEnemies          = collect();
+        $this->killedEnemies            = collect();
 
         /** @var BaseCombatFilterLoggingInterface $log */
         $log       = App::make(BaseCombatFilterLoggingInterface::class);
@@ -99,6 +103,22 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
     {
         // If a unit has died/is defeated
         if ($combatLogEvent instanceof UnitDied || $this->isEnemyDefeated($combatLogEvent) || $this->hasDeathAuraApplied($combatLogEvent)) {
+            if ($this->isPlayerDeathEntry($combatLogEvent)) {
+                /** @var UnitDied $combatLogEvent */
+                /** @var Player $playerGuid */
+                $playerGuid = $combatLogEvent->getGenericData()->getDestGuid();
+                $this->resultEvents->push(
+                    new PlayerDied(
+                        $combatLogEvent,
+                        $playerGuid,
+                        $this->lastKnownPlayerPositions->get($playerGuid->getGuid())
+                    )
+                );
+                $this->log->parsePlayerDeath($lineNr, $playerGuid);
+
+                return true;
+            }
+
             // If an encounter was ended, then yes this enemy was defeated
             if ($combatLogEvent instanceof EncounterEndInterface) {
                 // Find the NPC that was part of this encounter
@@ -180,6 +200,13 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
             return true;
         }
 
+        // Keep player position data up-to-date
+        if ($this->isPlayerCombatLogEntry($combatLogEvent)) {
+            /** @var AdvancedCombatLogEvent $combatLogEvent */
+            $sourceGuid = $combatLogEvent->getGenericData()->getSourceGuid();
+            $this->lastKnownPlayerPositions->put($sourceGuid->getGuid(), $combatLogEvent);
+        }
+
         if ($combatLogEvent instanceof CombatLogEvent) {
             if ($combatLogEvent->getSuffix() instanceof Summon) {
                 $destGuid = $combatLogEvent->getGenericData()->getDestGuid();
@@ -209,16 +236,6 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
             }
         }
 
-        if($this->isPlayerDeathEntry($combatLogEvent)){
-            /** @var UnitDied $combatLogEvent */
-            /** @var Player $playerGuid */
-            $playerGuid = $combatLogEvent->getGenericData()->getDestGuid();
-            $this->resultEvents->push((new PlayerDied($combatLogEvent, $playerGuid)));
-            $this->log->parsePlayerDeath($lineNr, $playerGuid);
-
-            return true;
-        }
-
         return false;
     }
 
@@ -229,6 +246,13 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         }
 
         return $combatLogEvent->getGenericData()->getDestGuid() instanceof Player;
+    }
+
+    private function isPlayerCombatLogEntry(BaseEvent $combatLogEvent): bool
+    {
+        // We skip all non-advanced combat log events, we need positional information of players.
+        return $combatLogEvent instanceof AdvancedCombatLogEvent &&
+            $combatLogEvent->getGenericData()->getSourceGuid() instanceof Player;
     }
 
     private function isEnemyCombatLogEntry(BaseEvent $combatLogEvent): bool
