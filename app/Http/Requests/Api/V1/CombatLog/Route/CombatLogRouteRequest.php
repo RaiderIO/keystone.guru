@@ -50,7 +50,7 @@ class CombatLogRouteRequest extends APIFormRequest
             'challengeMode.start'           => ['required', $dateFormat],
             'challengeMode.end'             => ['required', $dateFormat],
             'challengeMode.durationMs'      => ['required', 'int'],
-            'challengeMode.parTimeMS'       => ['nullable', 'int'], // @TODO make required after raider.io supports it
+            'challengeMode.parTimeMs'       => ['nullable', 'int'], // @TODO make required after raider.io supports it
             'challengeMode.timerFraction'   => ['nullable', 'numeric'], // @TODO make required after raider.io supports it
             'challengeMode.success'         => ['nullable', 'bool'],
             'challengeMode.challengeModeId' => ['required', Rule::exists(Dungeon::class, 'challenge_mode_id')],

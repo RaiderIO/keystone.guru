@@ -15,7 +15,7 @@ class APICombatLogControllerCorrectEventsTheNokhudOffensiveTest extends APIComba
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_ALGETH_AR_ACADEMY;
+        return Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE;
     }
 
     #[Test]
