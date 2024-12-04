@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\App\Logic\CombatLog\Advanced\RangeDamage;
+namespace Tests\Unit\App\Logic\CombatLog\CombatEvents\Advanced\RangeDamage;
 
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\App\Logic\CombatLog\ChallengeModeStart;
+namespace Tests\Unit\App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;

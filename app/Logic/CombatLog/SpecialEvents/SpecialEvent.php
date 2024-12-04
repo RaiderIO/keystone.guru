@@ -5,6 +5,7 @@ namespace App\Logic\CombatLog\SpecialEvents;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
+use App\Logic\CombatLog\SpecialEvents\CombatantInfo\CombatantInfoBuilder;
 use App\Logic\CombatLog\SpecialEvents\DamageShield\DamageShieldBuilder;
 use App\Logic\CombatLog\SpecialEvents\DamageShieldMissed\DamageShieldMissedBuilder;
 use App\Logic\CombatLog\SpecialEvents\EncounterEnd\EncounterEndBuilder;
@@ -14,7 +15,6 @@ use App\Logic\CombatLog\SpecialEvents\SpellAbsorbed\SpellAbsorbedBuilder;
 use App\Logic\CombatLog\SpecialEvents\SpellAbsorbedSupport\SpellAbsorbedSupportBuilder;
 use Exception;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
 
 abstract class SpecialEvent extends BaseEvent implements HasParameters
 {
@@ -93,8 +93,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_CHALLENGE_MODE_START => ChallengeModeStart::class,
         self::SPECIAL_EVENT_CHALLENGE_MODE_END   => ChallengeModeEnd::class,
 
-        self::SPECIAL_EVENT_COMBATANT_INFO => CombatantInfo::class,
-        self::SPECIAL_EVENT_PARTY_KILL     => PartyKill::class,
+        self::SPECIAL_EVENT_PARTY_KILL => PartyKill::class,
 
         self::SPECIAL_EVENT_UNIT_DESTROYED  => UnitDestroyed::class,
         self::SPECIAL_EVENT_UNIT_DIED       => UnitDied::class,
@@ -122,6 +121,7 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_SPELL_ABSORBED_SUPPORT => SpellAbsorbedSupportBuilder::class,
         self::SPECIAL_EVENT_SPELL_ABSORBED         => SpellAbsorbedBuilder::class,
         self::SPECIAL_EVENT_ENVIRONMENTAL_DAMAGE   => EnvironmentalDamageBuilder::class,
+        self::SPECIAL_EVENT_COMBATANT_INFO => CombatantInfoBuilder::class,
     ];
 
     public function __construct(int $combatLogVersion, Carbon $timestamp, string $eventName, array $parameters, string $rawEvent)
@@ -151,17 +151,15 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         array  $parameters,
         string $rawEvent
     ): SpecialEvent {
-        foreach (self::SPECIAL_EVENT_CLASS_MAPPING as $specialEvent => $className) {
-            if (Str::startsWith($eventName, $specialEvent)) {
-                return new $className($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
-            }
-        }
+        if (isset(self::SPECIAL_EVENT_CLASS_MAPPING[$eventName])) {
+            $className = self::SPECIAL_EVENT_CLASS_MAPPING[$eventName];
 
-        foreach (self::SPECIAL_EVENT_BUILDER_CLASS_MAPPING as $specialEvent => $className) {
-            if (Str::startsWith($eventName, $specialEvent)) {
-                /** @var SpecialEventBuilderInterface $className */
-                return $className::create($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
-            }
+            return new $className($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
+        } else if (isset(self::SPECIAL_EVENT_BUILDER_CLASS_MAPPING[$eventName])) {
+            /** @var SpecialEventBuilderInterface $className */
+            $className = self::SPECIAL_EVENT_BUILDER_CLASS_MAPPING[$eventName];
+
+            return $className::create($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent);
         }
 
         throw new Exception(sprintf('Unable to find special event for %s!', $eventName));

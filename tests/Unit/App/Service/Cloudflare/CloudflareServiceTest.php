@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Cloudflare;
+namespace Tests\Unit\App\Service\Cloudflare;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;

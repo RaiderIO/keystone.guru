@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\App\Logic\CombatLog\Advanced\SwingDamage;
+namespace Tests\Unit\App\Logic\CombatLog\CombatEvents\Advanced\SwingDamage;
 
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
