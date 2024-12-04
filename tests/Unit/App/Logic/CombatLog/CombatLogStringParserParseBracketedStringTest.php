@@ -77,6 +77,31 @@ class CombatLogStringParserParseBracketedStringTest extends PublicTestCase
                 'input' => '(0,0,0,0)',
                 'expected' => [0, 0, 0, 0],
             ],
+            'unquoted-strings' => [
+                'input' => '[Player-1084-0A6C4CFA,462513,Player-1084-0A912E3E,166646,Player-1084-0AD6D1CD,21562,Player-1084-0A5FC4F3,1126,Player-1084-0A6C4CFA,432021,Player-1084-0A6C4CFA,461857,Player-1084-0A5F83A7,6673,Player-1084-0AF6E8C3,465,Player-1084-0A5F088F,1459,Player-1084-0A5F3C15,462854]',
+                'expected' => [
+                    'Player-1084-0A6C4CFA',
+                    462513,
+                    'Player-1084-0A912E3E',
+                    166646,
+                    'Player-1084-0AD6D1CD',
+                    21562,
+                    'Player-1084-0A5FC4F3',
+                    1126,
+                    'Player-1084-0A6C4CFA',
+                    432021,
+                    'Player-1084-0A6C4CFA',
+                    461857,
+                    'Player-1084-0A5F83A7',
+                    6673,
+                    'Player-1084-0AF6E8C3',
+                    465,
+                    'Player-1084-0A5F088F',
+                    1459,
+                    'Player-1084-0A5F3C15',
+                    462854
+                ]
+            ],
         ];
     }
 }

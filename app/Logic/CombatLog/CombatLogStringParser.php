@@ -12,11 +12,12 @@ class CombatLogStringParser
      */
     public static function parseCombatLogLine(string $line): array
     {
-        $result           = [];
-        $current          = '';
-        $bracketLevel     = 0;
-        $parenthesisLevel = 0;
-        $inQuotes         = false;
+        $result              = [];
+        $current             = '';
+        $bracketLevel        = 0;
+        $parenthesisLevel    = 0;
+        $inQuotes            = false;
+        $addedPretendBracket = false;
 
         $length = strlen($line);
         for ($i = 0; $i < $length; $i++) {
@@ -41,8 +42,19 @@ class CombatLogStringParser
             } else {
                 if ($char === '(' && !$inQuotes) {
                     $parenthesisLevel++;
+                    // Support stuff like ...],(0,0,0,0),[...
+                    // Where if we're at the root but there's no bracket, pretend we're inside a bracket
+                    if ($parenthesisLevel === 1 && $bracketLevel === 0 && !$addedPretendBracket) {
+                        $bracketLevel++;
+                        $addedPretendBracket = true;
+                    }
                 } else if ($char === ')' && !$inQuotes) {
                     $parenthesisLevel--;
+                    // And again remove the pretend bracket
+                    if ($parenthesisLevel === 0 && $bracketLevel === 1 && $addedPretendBracket) {
+                        $bracketLevel--;
+                        $addedPretendBracket = false;
+                    }
                 }
                 // Add character to the current value
                 $current .= $char;
@@ -134,7 +146,14 @@ class CombatLogStringParser
                 continue;
             }
 
-            $i++; // Move to the next character
+            if ($content[$i] === ',') {
+                $i++;
+            } else {
+                // If we encountered something that is not [ ( " or a number, we assume unquoted strings
+                // In that case, the next end of the string is the next comma
+                $string   = self::extractString($content, $i, false);
+                $result[] = $string;
+            }
         }
 
         return $result;
@@ -178,15 +197,18 @@ class CombatLogStringParser
         return substr($content, $start, $i - $start - 1); // Extract the tuple content
     }
 
-    private static function extractString(string $content, int &$i): string
+    private static function extractString(string $content, int &$i, bool $isWrappedInQuotes = true): string
     {
-        $start  = ++$i; // Skip the opening quote
-        $length = strlen($content);
-        while ($i < $length && $content[$i] !== '"') {
+        $start        = $isWrappedInQuotes ? ++$i : $i; // Skip the opening quote if we use it
+        $length       = strlen($content);
+        $endCharacter = $isWrappedInQuotes ? '"' : ',';
+        while ($i < $length && $content[$i] !== $endCharacter) {
             $i++;
         }
         $string = substr($content, $start, $i - $start);
-        $i++; // Skip the closing quote
+        if ($isWrappedInQuotes) {
+            $i++; // Skip the closing quote
+        }
 
         return $string;
     }

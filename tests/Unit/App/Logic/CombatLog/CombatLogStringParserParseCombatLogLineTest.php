@@ -13,6 +13,7 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
     #[Test]
     #[Group('CombatLog')]
     #[Group('CombatLogStringParser')]
+    #[Group('ParseCombatLogLine')]
     #[DataProvider('parseCombatLogLine_GivenLine_ShouldParseCorrectly_DataProvider')]
     public function parseCombatLogLine_GivenLine_ShouldParseCorrectly(string $line, array $expected): void
     {
@@ -95,12 +96,23 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
                     '14644',
                 ],
             ],
+            'Failing Test' => [
+                'line' => '10/18/2024 21:34:24.8572,COMBATANT_INFO,[(102380,126443,1)],(0,0,0,0),[(211024,606,())]',
+                'expected' => [
+                    '10/18/2024 21:34:24.8572',
+                    'COMBATANT_INFO',
+                    '[(102380,126443,1)]',
+                    '(0,0,0,0)',
+                    '[(211024,606,())]',
+                ]
+            ],
         ];
     }
 
     #[Test]
     #[Group('CombatLog')]
     #[Group('CombatLogStringParser')]
+    #[Group('ParseCombatLogLine')]
     #[DataProvider('parseCombatLogLine_GivenInvalidLine_ShouldThrowInvalidArgumentException_DataProvider')]
     public function parseCombatLogLine_GivenInvalidLine_ShouldThrowInvalidArgumentException(string $line): void
     {
