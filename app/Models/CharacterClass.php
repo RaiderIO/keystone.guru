@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @property int                                      $id
- * @property string                                   $class_id
+ * @property int                                      $class_id Blizzard class ID
  * @property string                                   $key
  * @property string                                   $name
  * @property string                                   $color

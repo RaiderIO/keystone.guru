@@ -12,6 +12,8 @@ interface CombatLogRouteDungeonRouteServiceLoggingInterface
 
     public function getCombatLogRouteEnemyKilledInvalidNpcId(int $npcId): void;
 
+    public function getCombatLogRoutePlayerDiedUnableToFindCombatantInfo(string $playerGuid): void;
+
     public function getCombatLogRouteEnd(): void;
 
     public function saveChallengeModeRunUnableToFindFloor(int $uiMapId): void;

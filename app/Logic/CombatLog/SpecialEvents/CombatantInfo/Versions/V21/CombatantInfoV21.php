@@ -4,11 +4,13 @@ namespace App\Logic\CombatLog\SpecialEvents\CombatantInfo\Versions\V21;
 
 use App\Logic\CombatLog\CombatLogStringParser;
 use App\Logic\CombatLog\Guid\Guid;
+use App\Logic\CombatLog\Guid\Player;
+use App\Logic\CombatLog\SpecialEvents\CombatantInfo\CombatantInfoInterface;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 
-class CombatantInfoV21 extends SpecialEvent
+class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
 {
-    private Guid  $playerGuid;
+    private Player $playerGuid;
     private int   $faction;
     private int   $strength;
     private int   $agility;
@@ -42,7 +44,7 @@ class CombatantInfoV21 extends SpecialEvent
     private int   $tier;
 
 
-    public function getPlayerGuid(): ?Guid
+    public function getPlayerGuid(): ?Player
     {
         return $this->playerGuid;
     }
@@ -207,7 +209,11 @@ class CombatantInfoV21 extends SpecialEvent
         parent::setParameters($parameters);
 
         // If GUID is null at this point this will crash - but that's okay, we NEED this to be set
-        $this->playerGuid             = Guid::createFromGuidString($parameters[0]);
+        $playerGuid = Guid::createFromGuidString($parameters[0]);
+        if (!($playerGuid instanceof Player)) {
+            throw new \Exception('PlayerGuid is not a Player');
+        }
+        $this->playerGuid = $playerGuid;
         $this->faction                = (int)$parameters[1];
         $this->strength               = (int)$parameters[2];
         $this->agility                = (int)$parameters[3];
@@ -241,6 +247,17 @@ class CombatantInfoV21 extends SpecialEvent
         $this->tier                   = (int)$parameters[31];
 
         return $this;
+    }
+
+    public function getAverageItemLevel(): float
+    {
+        // 3 = shirt, don't count it
+        // 15 = main hand, x2 if 16 has ilvl 0 (= not equipped)
+        // 16 = off hand
+        // 17 = tabard, don't count it
+
+        // Column 0 is the item id, column 1 is the item level
+        return array_sum(array_column($this->equippedItems, 1)) / (count($this->equippedItems) - 3 + ($this->equippedItems[15][1] === 0 ? 2 : 1));
     }
 
     public function getOptionalParameterCount(): int

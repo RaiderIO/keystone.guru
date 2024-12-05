@@ -46,6 +46,7 @@ use App\Service\CombatLog\Logging\CombatLogRouteDungeonRouteServiceLoggingInterf
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\ChallengeModeEnd as ChallengeModeEndResultEvent;
 use App\Service\CombatLog\ResultEvents\ChallengeModeStart as ChallengeModeStartResultEvent;
+use App\Service\CombatLog\ResultEvents\CombatantInfo as CombatantInfoResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\CombatLog\ResultEvents\PlayerDied as PlayerDiedResultEvent;
@@ -162,6 +163,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $resultEvents = $this->combatLogService->getResultEventsForChallengeMode($combatLogFilePath, $dungeonRoute);
             if (!($dungeonRoute instanceof DungeonRoute)) {
                 $this->log->getCombatLogRouteUnableToGenerateDungeonRoute();
+
                 return null;
             }
 
@@ -190,12 +192,15 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 $challengeModeStartEvent->getAffixIDs(),
             );
 
-            $npcs             = collect();
-            $npcEngagedEvents = collect();
-            $spells           = collect();
-            $playerDeaths     = collect();
+            $npcs                    = collect();
+            $npcEngagedEvents        = collect();
+            $spells                  = collect();
+            $playerDeaths            = collect();
+            $mostRecentCombatantInfo = collect();
             foreach ($resultEvents as $resultEvent) {
-                if ($resultEvent instanceof EnemyEngagedResultEvent) {
+                if ($resultEvent instanceof CombatantInfoResultEvent) {
+                    $mostRecentCombatantInfo->put($resultEvent->getGuid()->getGuid(), $resultEvent);
+                } else if ($resultEvent instanceof EnemyEngagedResultEvent) {
                     $guid = $resultEvent->getGuid();
                     if ($validNpcIds->search($guid->getId()) === false) {
                         $this->log->getCombatLogRouteEnemyEngagedInvalidNpcId($guid->getId());
@@ -247,13 +252,23 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                         )
                     );
                 } else if ($resultEvent instanceof PlayerDiedResultEvent) {
-                    // @TODO #2638
+                    /** @var CombatantInfoResultEvent|null $combatantInfo */
+                    $combatantInfo = $mostRecentCombatantInfo->get($resultEvent->getGuid()->getGuid());
+                    if ($combatantInfo === null) {
+                        $this->log->getCombatLogRoutePlayerDiedUnableToFindCombatantInfo($resultEvent->getGuid()->getGuid());
+
+                        continue;
+                    }
+
                     $playerDeaths->push(
                         new CombatLogRoutePlayerDeathRequestModel(
-                            1,
-                            2,
-                            3,
-                            638.5,
+                            // Extract the index of the combatant consistently
+                            $mostRecentCombatantInfo->mapWithKeys(
+                                static fn(CombatantInfoResultEvent $combatantInfo, int $index) => [$index + 1, $combatantInfo]
+                            )->search($combatantInfo),
+                            $combatantInfo->getClass()->class_id,
+                            $combatantInfo->getSpecialization()->specialization_id,
+                            $combatantInfo->getCombatantInfoEvent()->getAverageItemLevel(),
                             $resultEvent->getBaseEvent()->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
                             new CombatLogRouteCoordRequestModel(
                                 $resultEvent->getLastKnownEvent()?->getAdvancedData()->getPositionX(),
@@ -282,13 +297,21 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 ),
                 new CombatLogRouteSettingsRequestModel(true, true),
                 $challengeMode,
-                // @TODO #2638
                 new CombatLogRouteRosterRequestModel(
-                    5,
-                    637.5,
-                    [1, 2, 3, 4, 5],
-                    [1, 2, 3, 4, 5],
-                    [1, 2, 3, 4, 5]
+                    $mostRecentCombatantInfo->count(),
+                    $mostRecentCombatantInfo->map(
+                        static fn(CombatantInfoResultEvent $combatantInfo) => $combatantInfo->getCombatantInfoEvent()->getAverageItemLevel()
+                    )->average(),
+                    // I don't know the Raider.IO character IDs - so just make something up
+                    $mostRecentCombatantInfo->map(
+                        static fn(CombatantInfoResultEvent $combatantInfo, int $index) => $index + 1
+                    )->toArray(),
+                    $mostRecentCombatantInfo->map(
+                        static fn(CombatantInfoResultEvent $combatantInfo) => $combatantInfo->getSpecialization()->specialization_id
+                    )->toArray(),
+                    $mostRecentCombatantInfo->map(
+                        static fn(CombatantInfoResultEvent $combatantInfo) => $combatantInfo->getClass()->class_id
+                    )->toArray()
                 ),
                 $npcs,
                 $spells,

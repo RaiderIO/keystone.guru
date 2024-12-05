@@ -26,6 +26,11 @@ class CombatLogRouteDungeonRouteServiceLogging extends RollbarStructuredLogging 
         $this->info(__METHOD__, get_defined_vars());
     }
 
+    public function getCombatLogRoutePlayerDiedUnableToFindCombatantInfo(string $playerGuid): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
     public function getCombatLogRouteEnd(): void
     {
         $this->end(__METHOD__);

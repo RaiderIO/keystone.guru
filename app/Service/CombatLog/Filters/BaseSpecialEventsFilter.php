@@ -3,12 +3,14 @@
 namespace App\Service\CombatLog\Filters;
 
 use App\Logic\CombatLog\BaseEvent;
+use App\Logic\CombatLog\SpecialEvents\CombatantInfo\CombatantInfoInterface;
 use App\Logic\CombatLog\SpecialEvents\CombatLogVersion;
 use App\Logic\CombatLog\SpecialEvents\MapChange;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Exceptions\FloorNotSupportedException;
 use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
+use App\Service\CombatLog\ResultEvents\CombatantInfo as CombatantInfoResultEvent;
 use App\Service\CombatLog\ResultEvents\CombatLogVersion as CombatLogVersionResultEvent;
 use App\Service\CombatLog\ResultEvents\MapChange as MapChangeResultEvent;
 use App\Service\CombatLog\ResultEvents\ZoneChange as ZoneChangeResultEvent;
@@ -86,6 +88,13 @@ abstract class BaseSpecialEventsFilter implements CombatLogParserInterface
         // Combat log versions yes please
         if ($combatLogEvent instanceof CombatLogVersion) {
             $this->resultEvents->push((new CombatLogVersionResultEvent($combatLogEvent)));
+
+            return true;
+        }
+
+        // Combatant Info.. yes!
+        if ($combatLogEvent instanceof CombatantInfoInterface) {
+            $this->resultEvents->push(new CombatantInfoResultEvent($combatLogEvent));
 
             return true;
         }

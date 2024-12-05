@@ -7,7 +7,7 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEventBuilderInterface;
 use Illuminate\Support\Carbon;
 
-class CombatantInfoBuilder  implements SpecialEventBuilderInterface
+class CombatantInfoBuilder implements SpecialEventBuilderInterface
 {
     public static function create(int $combatLogVersion, Carbon $timestamp, string $eventName, array $parameters, string $rawEvent): SpecialEvent
     {
