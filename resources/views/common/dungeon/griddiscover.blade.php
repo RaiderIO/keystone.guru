@@ -1,13 +1,21 @@
 @inject('seasonService', \App\Service\Season\SeasonServiceInterface::class)
 @inject('subcreationTierListService', \App\Service\AffixGroup\AffixGroupEaseTierServiceInterface::class)
 <?php
+
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\Dungeon;
+use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
+use Illuminate\Support\Collection;
+
 /**
- * @var $currentUserGameVersion \App\Models\GameVersion\GameVersion
- * @var $expansion \App\Models\Expansion
- * @var $dungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection
- * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup|null
- * @var $nextAffixGroup \App\Models\AffixGroup\AffixGroup|null
+ * @var GameVersion $currentUserGameVersion
+ * @var Expansion $expansion
+ * @var Collection<Dungeon> $dungeons
+ * @var AffixGroup|null $currentAffixGroup
+ * @var AffixGroup|null $nextAffixGroup
  */
+
 $colCount ??= 4;
 $rowCount = (int)ceil($dungeons->count() / $colCount);
 
@@ -26,7 +34,7 @@ for ($i = 0;
          ++$j) {
         $index = $i * $colCount + $j;
     if ($dungeons->has($index)){
-        /** @var \App\Models\Dungeon $dungeon */
+        /** @var Dungeon $dungeon */
         $dungeon = $dungeons->get($index);
         $link    = $links->where('dungeon', $dungeon->key)->first();
         ?>

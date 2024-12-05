@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MDT\ImportStringFormRequest;
 use App\Logic\MDT\Exception\InvalidMDTStringException;
 use App\Logic\MDT\Exception\MDTStringParseException;
-use App\Models\MDTImport;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\Models\ImportStringDetails;
 use Exception;

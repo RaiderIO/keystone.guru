@@ -2,23 +2,27 @@
     'rootClass' => 'discover col-xl-8 offset-xl-2',
     'disableDefaultRootClasses' => true,
     'breadcrumbsParams' => [$dungeon],
-    'title' => sprintf('%s routes', __($dungeon->name))
+    'title' => sprintf('%s routes', __($dungeon->name)),
 ])
-
 <?php
+
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\Dungeon;
+use App\Models\Expansion;
+
 /**
- * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
- * @var $showAds boolean
- * @var $isMobile boolean
- * @var $dungeon \App\Models\Dungeon
- * @var $dungeonroutes array
- * @var $expansion \App\Models\Expansion
+ * @var AffixGroup $currentAffixGroup
+ * @var boolean    $showAds
+ * @var boolean    $isMobile
+ * @var Dungeon    $dungeon
+ * @var array      $dungeonroutes
+ * @var Expansion  $expansion
  */
 ?>
 
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
         'options' =>  [
-        ]
+        ],
 ])
 
 @section('content')

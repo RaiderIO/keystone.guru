@@ -1,9 +1,16 @@
 <?php
+
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Season;
+use Illuminate\Support\Collection;
+
 /**
- * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
- * @var $season \App\Models\Season
- * @var $dungeonroutes \App\Models\DungeonRoute\DungeonRoute[]|\Illuminate\Support\Collection
+ * @var AffixGroup $currentAffixGroup
+ * @var Season $season
+ * @var Collection<DungeonRoute> $dungeonroutes
  */
+
 $title      ??= sprintf('%s routes', __($season->name));
 $affixgroup ??= null;
 ?>

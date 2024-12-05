@@ -1,10 +1,18 @@
 <?php
-/** @var $affixGroupEaseTiersByAffixGroup \Illuminate\Support\Collection<\App\Models\AffixGroup\AffixGroupEaseTier> */
-/** @var $tier string */
-/** @var $dungeon \App\Models\Dungeon */
-/** @var $affixgroup \App\Models\AffixGroup\AffixGroup */
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\AffixGroup\AffixGroupEaseTier;
+use App\Models\Dungeon;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection<AffixGroupEaseTier> $affixGroupEaseTiersByAffixGroup
+ * @var string                         $tier
+ * @var Dungeon                        $dungeon
+ * @var AffixGroup                     $affixgroup
+ */
 
 // Users may write their own tiers if they received it from a batch call for example
+
 $tier ??= optional(optional(optional($affixGroupEaseTiersByAffixGroup->get($affixgroup->id))->get($dungeon->id))->first())->tier;
 $url  ??= null;
 ?>

@@ -1,10 +1,16 @@
 <?php
+
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Expansion;
+use Illuminate\Support\Collection;
+
 /**
- * @var $expansion         \App\Models\Expansion
- * @var $title             string
- * @var $cols              int
- * @var $dungeonroutes     \App\Models\DungeonRoute\DungeonRoute[]|\Illuminate\Support\Collection
- * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
+ * @var Expansion                $expansion
+ * @var string                   $title
+ * @var int                      $cols
+ * @var Collection<DungeonRoute> $dungeonroutes
+ * @var AffixGroup               $currentAffixGroup
  */
 
 $dungeon          ??= null;
@@ -43,7 +49,7 @@ $cache            ??= true;
                     'affixgroup' => $affixgroup,
                     'dungeonroutes' => $dungeonroutes,
                     'showDungeonImage' => $showDungeonImage,
-                    'cache' => $cache
+                    'cache' => $cache,
                 ])
             </div>
         </div>
@@ -64,7 +70,7 @@ $cache            ??= true;
             'category' => $category,
             'expansion' => $expansion,
             'dungeon' => $dungeon,
-            'routeListContainerSelector' => '#category_route_list'
+            'routeListContainerSelector' => '#category_route_list',
         ])
     @endif
 </div>

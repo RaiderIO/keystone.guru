@@ -1,3 +1,12 @@
+<?php
+
+use App\Logic\MDT\Exception\ImportWarning;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection $warnings
+ */
+?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.mdt.diff.title')])
 
 @section('header-title', __('view_admin.tools.mdt.diff.header'))
@@ -41,7 +50,6 @@
 
 @section('content')
     <?php
-    /** @var $warnings \Illuminate\Support\Collection */
     $warnings = $warnings->groupBy(static fn($item) => $item->getCategory());
 
     $headers = [
@@ -67,7 +75,7 @@
                     <th width="15%">{{ __('view_admin.tools.mdt.diff.table_header_actions') }}</th>
                 </tr>
                 @foreach($category as $importWarning)
-                        <?php /** @var $importWarning \App\Logic\MDT\Exception\ImportWarning */
+                        <?php /** @var ImportWarning $importWarning */
                         $data   = ($importWarning->getData());
                         $mdtNpc = $data['mdt_npc'];
 

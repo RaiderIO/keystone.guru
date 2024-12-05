@@ -1,7 +1,14 @@
 {
     "data": {
         "metadata": {
-            "runId": "season-df-4 - logged: #3569796 - run: #7579595"
+            "runId": "season-df-4 - logged: #3569796 - run: #7579595",
+            "keystoneRunId": null,
+            "loggedRunId": null,
+            "period": null,
+            "season": null,
+            "regionId": null,
+            "realmType": null,
+            "wowInstanceId": null
         },
         "settings": {
             "temporary": true,
@@ -12,13 +19,23 @@
             "end": "2024-06-03T20:01:39.970+00:00",
             "success": true,
             "durationMs": 1985894,
+            "parTimeMs": null,
+            "timerFraction": null,
             "challengeModeId": 400,
             "level": 14,
+            "numDeaths": null,
             "affixes": [
                 10,
                 124,
                 11
             ]
+        },
+        "roster": {
+            "numMembers": null,
+            "averageItemLevel": null,
+            "characterIds": null,
+            "specIds": null,
+            "classIds": null
         },
         "npcs": [
             {
@@ -1589,6 +1606,7 @@
                     "uiMapId": 2093
                 }
             }
-        ]
+        ],
+        "playerDeaths": []
     }
 }

@@ -1,5 +1,11 @@
 <?php
-/** @var $allRegions \Illuminate\Support\Collection<\App\Models\GameServerRegion> */
+
+use App\Models\GameServerRegion;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection<GameServerRegion> $allRegions
+ */
 ?>
 <div class="form-group">
     <div class="row">

@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\Release;
 
-use App\Models\Release;
 use App\Repositories\Interfaces\ReleaseRepositoryInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Illuminate\Console\Command;

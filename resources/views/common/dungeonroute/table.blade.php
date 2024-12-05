@@ -1,12 +1,24 @@
 @inject('seasonService', 'App\Service\Season\SeasonService')
 <?php
-/** @var $seasonService \App\Service\Season\SeasonService */
-/** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $searchTags */
-/** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $autocompletetags */
-/** @var $allRouteAttributes \Illuminate\Support\Collection<\App\Models\RouteAttribute> */
-/** This is the template for the Affix Selection when using it in a dropdown */
 
-/** @var \App\Models\DungeonRoute\DungeonRoute $model */
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\RouteAttribute;
+use App\Models\Tags\Tag;
+use App\Models\Tags\TagCategory;
+use App\Models\Team;
+use App\Models\TeamUser;
+use App\Service\Season\SeasonService;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+
+/**
+ * @var SeasonService              $seasonService
+ * @var Collection<Tag>           $searchTags
+ * @var Collection<Tag>           $autoCompleteTags
+ * @var Collection<RouteAttribute> $allRouteAttributes
+ */
+
+/** @var DungeonRoute $model */
 if (!isset($affixgroups)) {
     $affixgroups = $seasonService->getCurrentSeason()->affixGroups()->with('affixes')->get();
 }
@@ -23,23 +35,23 @@ $cookieViewMode = isset($_COOKIE['routes_viewmode']) &&
 if ($team !== null) {
     $searchTags = $team->getAvailableTags();
 } else if (Auth::check()) {
-    $tagCategoryId = \App\Models\Tags\TagCategory::ALL[\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL];
+    $tagCategoryId = TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL];
     $searchTags    = Auth::user()->tags($tagCategoryId)->unique($tagCategoryId)->get();
 } else {
     $searchTags = collect();
 }
 
 
-$autocompleteTags = collect();
+$autoCompleteTags = collect();
 
 if (Auth::check()) {
     if ($team === null) {
-        $autocompleteTags = Auth::user()->tags()->unique(\App\Models\Tags\TagCategory::ALL[\App\Models\Tags\TagCategory::DUNGEON_ROUTE_PERSONAL])->get();
+        $autoCompleteTags = Auth::user()->tags()->unique(TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL])->get();
     } else {
-        $autocompleteTags = $team->getAvailableTags();
+        $autoCompleteTags = $team->getAvailableTags();
     }
 } else {
-    $autocompletetags = collect();
+    $autoCompleteTags = collect();
 }
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/table',
@@ -47,12 +59,11 @@ if (Auth::check()) {
             'tableView' => $view,
             'viewMode' => $cookieViewMode,
             'teamPublicKey' => $team ? $team->public_key : '',
-            'teams' => Auth::check() ? Auth::user()->teams()->whereHas('teamusers', function($teamuser){
-                /** @var $teamuser \App\Models\TeamUser  */
-                $teamuser->isModerator(Auth::id());
+            'teams' => Auth::check() ? Auth::user()->teams()->whereHas('teamUsers', function(Builder $teamUsersBuilder){
+                $teamUsersBuilder->isModerator(Auth::id());
             })->get() : [],
-            'autocompletetags' => $autocompleteTags,
-        ]
+            'autoCompleteTags' => $autoCompleteTags,
+        ],
 ])
 
 @section('scripts')
@@ -77,7 +88,7 @@ if (Auth::check()) {
 @endsection
 
 <div class="row no-gutters">
-    @if($team instanceof \App\Models\Team)
+    @if($team instanceof Team)
         <div class="col-lg pl-1 pr-1">
             {!! Form::label('team_name', __('view_common.dungeonroute.table.team')) !!}
             {!! Form::text('team_name', $team->name, ['class' => 'form-control', 'readonly' => 'readonly']) !!}
@@ -90,7 +101,7 @@ if (Auth::check()) {
             'showSeasons' => true,
             'showAll' => true,
             'showExpansions' => true,
-            'required' => false
+            'required' => false,
         ])
     </div>
     <div class="col-lg pl-1 pr-1">
@@ -120,7 +131,7 @@ if (Auth::check()) {
             'class' => 'form-control selectpicker',
             'multiple' => 'multiple',
             'data-selected-text-format' => 'count > 1',
-            'data-count-selected-text' => __('view_common.dungeonroute.table.requirements_selected')
+            'data-count-selected-text' => __('view_common.dungeonroute.table.requirements_selected'),
         ]) !!}
     </div>
     @if(($view === 'profile' || $view === 'team'))

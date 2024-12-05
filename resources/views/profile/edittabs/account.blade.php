@@ -1,5 +1,11 @@
 <?php
-/** @var $user \App\Models\User */
+
+use App\Models\User;
+
+/**
+ * @var User $user
+ */
+
 $deleteConsequences = $user->getDeleteConsequences();
 ?>
 <div class="tab-pane fade" id="account" role="tabpanel" aria-labelledby="account-tab">
