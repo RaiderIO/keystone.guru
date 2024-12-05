@@ -245,12 +245,11 @@ class CombatantInfoV21 extends SpecialEvent
 
     public function getOptionalParameterCount(): int
     {
-        // This event has a lot of variables because it uses an incorrect delimiter to escape the contents ( "(" and ")" )
-        return 1000;
+        return 0;
     }
 
     public function getParameterCount(): int
     {
-        return 1000;
+        return 32;
     }
 }
