@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @property int                                      $id
+ * @property string                                   $class_id
  * @property string                                   $key
  * @property string                                   $name
  * @property string                                   $color
@@ -32,7 +33,7 @@ class CharacterClass extends CacheModel
 
     public $hidden = ['icon_file_id', 'pivot'];
 
-    public $fillable = ['key', 'name', 'color'];
+    public $fillable = ['class_id', 'key', 'name', 'color', 'icon_file_id'];
 
     public const CHARACTER_CLASS_WARRIOR      = 'warrior';
     public const CHARACTER_CLASS_HUNTER       = 'hunter';

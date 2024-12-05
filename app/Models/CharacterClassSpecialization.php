@@ -6,15 +6,16 @@ use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Collection;
 
 /**
- * @property int        $id
- * @property int        $character_class_id
- * @property int        $icon_file_id
- * @property string     $key
- * @property string     $name
- * @property Collection $specializations
+ * @property int            $id
+ * @property int            $character_class_id Internal ID - not a blizzard ID!
+ * @property int            $specialization_id Blizzard ID
+ * @property int            $icon_file_id
+ * @property string         $key
+ * @property string         $name
+ *
+ * @property CharacterClass $class
  *
  * @mixin Eloquent
  */
@@ -27,7 +28,7 @@ class CharacterClassSpecialization extends CacheModel
 
     public $hidden = ['icon_file_id', 'pivot'];
 
-    public $fillable = ['key', 'name', 'character_class_id', 'icon_file_id'];
+    public $fillable = ['character_class_id', 'specialization_id', 'key', 'name', 'icon_file_id'];
 
     public function class(): BelongsTo
     {

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\App\Service\Cloudflare;
 
+use App\Service\Cloudflare\CloudflareServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
