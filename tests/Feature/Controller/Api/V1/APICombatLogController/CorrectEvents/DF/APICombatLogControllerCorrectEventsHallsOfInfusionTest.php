@@ -19,8 +19,8 @@ class APICombatLogControllerCorrectEventsHallsOfInfusionTest extends APICombatLo
     }
 
     #[Test]
-    public function create_givenHallsOfInfusionBunten22Json_shouldReturnCorrectedJsonData(): void
+    public function create_givenHallsOfInfusionBuntenNoRoster22Json_shouldReturnCorrectedJsonData(): void
     {
-        $this->executeTest('DF/df_s2_halls_of_infusion_bunten_22');
+        $this->executeTest('DF/df_s2_halls_of_infusion_bunten_no_roster_22');
     }
 }

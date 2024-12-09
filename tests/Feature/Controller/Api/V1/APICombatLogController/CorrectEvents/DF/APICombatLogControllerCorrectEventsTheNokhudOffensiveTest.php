@@ -19,14 +19,14 @@ class APICombatLogControllerCorrectEventsTheNokhudOffensiveTest extends APIComba
     }
 
     #[Test]
-    public function create_givenTheNokhudOffensive14Json_shouldReturnCorrectedJsonData(): void
+    public function create_givenTheNokhudOffensiveNoRoster14Json_shouldReturnCorrectedJsonData(): void
     {
-        $this->executeTest('DF/df_s4_the_nokhud_offensive_14');
+        $this->executeTest('DF/df_s4_the_nokhud_offensive_no_roster_14');
     }
 
     #[Test]
-    public function create_givenTheNokhudOffensive8Json_shouldReturnCorrectedJsonData(): void
+    public function create_givenTheNokhudOffensiveNoRoster8Json_shouldReturnCorrectedJsonData(): void
     {
-        $this->executeTest('DF/df_s4_the_nokhud_offensive_8');
+        $this->executeTest('DF/df_s4_the_nokhud_offensive_no_roster_8');
     }
 }
