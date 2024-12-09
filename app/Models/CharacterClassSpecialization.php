@@ -32,6 +32,6 @@ class CharacterClassSpecialization extends CacheModel
 
     public function class(): BelongsTo
     {
-        return $this->belongsTo(CharacterClass::class);
+        return $this->belongsTo(CharacterClass::class, 'character_class_id');
     }
 }

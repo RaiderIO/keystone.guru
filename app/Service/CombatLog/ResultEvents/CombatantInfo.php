@@ -39,6 +39,7 @@ class CombatantInfo extends BaseResultEvent
         if (!isset($this->characterClassSpecialization)) {
             $this->characterClassSpecialization = CharacterClassSpecialization
                 ::where('specialization_id', $this->getCombatantInfoEvent()->getCurrentSpecId())
+                ->with('class')
                 ->firstOrFail();
         }
 

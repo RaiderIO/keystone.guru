@@ -185,18 +185,32 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 $challengeModeEndEvent->getTotalTimeMS(),
                 $challengeModeEndEvent->getTotalTimeMS(),
                 $dungeonRoute->mappingVersion->timer_max_seconds === 0 ?
-                    1 : $challengeModeEndEvent->getTotalTimeMS() / $dungeonRoute->mappingVersion->timer_max_seconds,
+                    1 : $challengeModeEndEvent->getTotalTimeMS() / ($dungeonRoute->mappingVersion->timer_max_seconds * 1000),
                 $challengeModeStartEvent->getChallengeModeID(),
                 $challengeModeStartEvent->getKeystoneLevel(),
                 $playerDeathEvents->count(),
                 $challengeModeStartEvent->getAffixIDs(),
             );
 
-            $npcs                    = collect();
-            $npcEngagedEvents        = collect();
-            $spells                  = collect();
-            $playerDeaths            = collect();
-            $mostRecentCombatantInfo = collect();
+            $npcs                           = collect();
+            $npcEngagedEvents               = collect();
+            $spells                         = collect();
+            $playerDeaths                   = collect();
+            /** @var Collection<CombatantInfoResultEvent> $mostRecentCombatantInfo */
+            $mostRecentCombatantInfo        = collect();
+            $mostRecentCombatantInfoIndexFn = static function (string $guid) use ($mostRecentCombatantInfo) {
+                $index = 0;
+                foreach ($mostRecentCombatantInfo as $combatantInfo) {
+                    /** @var CombatantInfoResultEvent $combatantInfo */
+                    if ($combatantInfo->getGuid()->getGuid() === $guid) {
+                        break;
+                    }
+                    $index++;
+                }
+
+                return $index;
+            };
+
             foreach ($resultEvents as $resultEvent) {
                 if ($resultEvent instanceof CombatantInfoResultEvent) {
                     $mostRecentCombatantInfo->put($resultEvent->getGuid()->getGuid(), $resultEvent);
@@ -262,9 +276,11 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
 
                     $playerDeaths->push(
                         new CombatLogRoutePlayerDeathRequestModel(
-                            // Extract the index of the combatant consistently
+                        // Extract the index of the combatant consistently
                             $mostRecentCombatantInfo->mapWithKeys(
-                                static fn(CombatantInfoResultEvent $combatantInfo, int $index) => [$index + 1, $combatantInfo]
+                                static fn(CombatantInfoResultEvent $combatantInfo, string $guidKey) => [
+                                    $mostRecentCombatantInfoIndexFn($guidKey) => $combatantInfo
+                                ]
                             )->search($combatantInfo),
                             $combatantInfo->getClass()->class_id,
                             $combatantInfo->getSpecialization()->specialization_id,
@@ -304,14 +320,14 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     )->average(),
                     // I don't know the Raider.IO character IDs - so just make something up
                     $mostRecentCombatantInfo->map(
-                        static fn(CombatantInfoResultEvent $combatantInfo, int $index) => $index + 1
-                    )->toArray(),
+                        static fn(CombatantInfoResultEvent $combatantInfo, string $guidKey) => $mostRecentCombatantInfoIndexFn($guidKey)
+                    )->values()->toArray(),
                     $mostRecentCombatantInfo->map(
                         static fn(CombatantInfoResultEvent $combatantInfo) => $combatantInfo->getSpecialization()->specialization_id
-                    )->toArray(),
+                    )->values()->toArray(),
                     $mostRecentCombatantInfo->map(
                         static fn(CombatantInfoResultEvent $combatantInfo) => $combatantInfo->getClass()->class_id
-                    )->toArray()
+                    )->values()->toArray()
                 ),
                 $npcs,
                 $spells,

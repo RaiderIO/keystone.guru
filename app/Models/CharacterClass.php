@@ -78,11 +78,11 @@ class CharacterClass extends CacheModel
 
     public function dungeonRoutePlayerClasses(): BelongsToMany
     {
-        return $this->belongsToMany(DungeonRoutePlayerClass::class, 'dungeon_route_player_classes');
+        return $this->belongsToMany(DungeonRoutePlayerClass::class);
     }
 
     public function dungeonRoutePlayerRaces(): BelongsToMany
     {
-        return $this->belongsToMany(DungeonRoutePlayerRace::class, 'dungeon_route_player_races');
+        return $this->belongsToMany(DungeonRoutePlayerRace::class);
     }
 }
