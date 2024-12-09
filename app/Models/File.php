@@ -29,6 +29,8 @@ class File extends Model
      */
     public $appends = ['url', 'icon_url'];
 
+    protected $fillable = ['model_id', 'model_class', 'disk', 'path'];
+
     /**
      * @return bool|null|void
      *

@@ -1,5 +1,11 @@
 <?php
-/** @var $dungeonRoute \App\Models\DungeonRoute\DungeonRoute|null */
+
+use App\Models\DungeonRoute\DungeonRoute;
+
+/**
+ * @var  DungeonRoute|null $dungeonRoute
+ */
+
 $challengeModeRun = $dungeonRoute->getChallengeModeRun();
 ?>
 <h3 class="card-title">{{ __('view_common.modal.routeadminsettings.title') }}</h3>
@@ -31,7 +37,7 @@ $challengeModeRun = $dungeonRoute->getChallengeModeRun();
             <a href="{{ route('admin.floor.edit.mapping', [
                 'dungeon' => $dungeonRoute->dungeon,
                 'floor' => $dungeonRoute->dungeon->floors->first(),
-                'mapping_version' => $dungeonRoute->mapping_version_id
+                'mapping_version' => $dungeonRoute->mapping_version_id,
             ]) }}">
                 {{ __('view_common.modal.routeadminsettings.edit_mapping_version') }}
             </a>

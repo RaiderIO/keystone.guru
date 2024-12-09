@@ -1,5 +1,9 @@
 <?php
-/** @var $mappingVersion App\Models\Mapping\MappingVersion|null */
+use App\Models\Mapping\MappingVersion;
+
+/**
+ * @var MappingVersion|null $mappingVersion
+ **/
 ?>
 
 @include('common.general.inline', ['path' => 'common/dungeon/mappingversion'])

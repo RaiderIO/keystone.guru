@@ -19,7 +19,6 @@ use App\Models\CombatLog\CombatLogSpellUpdate;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell as SpellModel;
-use App\Models\Spell\SpellConstants;
 use App\Models\Spell\SpellDungeon;
 use App\Service\CombatLog\DataExtractors\Logging\SpellDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;

@@ -100,7 +100,7 @@ class CombatLogEntry
         }
 
         if ($mayParseEvent) {
-            $parameters = str_getcsv($eventData);
+            $parameters = CombatLogStringParser::parseCombatLogLine($eventData);
 
             $eventName = array_shift($parameters);
 

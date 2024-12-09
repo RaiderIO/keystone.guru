@@ -47,7 +47,10 @@ class DatabaseSeeder extends Seeder
         TimewalkingEventSeeder::class,
 
         //  Depends on Factions
-        CharacterInfoSeeder::class,
+        CharacterRacesSeeder::class,
+        CharacterClassesSeeder::class,
+        CharacterRaceClassesSeeder::class,
+        CharacterClassSpecializationsSeeder::class,
 
         // Depends on Expansions
         DungeonDataSeeder::class,

@@ -18,7 +18,6 @@ use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\Range;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\Term;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class CombatLogEventFilter implements Arrayable

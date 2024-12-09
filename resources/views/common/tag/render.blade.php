@@ -1,5 +1,12 @@
 <?php
-/** @var \App\Models\Tags\Tag[]|\Illuminate\Support\Collection $tags */
+
+use App\Models\Tags\Tag;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection<Tag> $tags
+ **/
+
 $edit ??= false;
 ?>
 @foreach($tags as $tag)

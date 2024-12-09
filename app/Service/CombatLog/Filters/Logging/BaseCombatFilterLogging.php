@@ -81,6 +81,11 @@ class BaseCombatFilterLogging extends RollbarStructuredLogging implements BaseCo
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function parsePlayerDeath(int $lineNr, string $playerGuid): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
     public function getEnemyEngagedEventUsingFirstSightedEvent(string $guid): void
     {
         $this->debug(__METHOD__, get_defined_vars());

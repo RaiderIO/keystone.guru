@@ -19,8 +19,8 @@ class APICombatLogControllerCorrectEventsAlgetharAcademyTest extends APICombatLo
     }
 
     #[Test]
-    public function create_givenAlgetharAcademyBunten16Json_shouldReturnCorrectedJsonData(): void
+    public function create_givenAlgetharAcademyBuntenNoRoster16Json_shouldReturnCorrectedJsonData(): void
     {
-        $this->executeTest('DF/df_s4_algethar_academy_bunten_16');
+        $this->executeTest('DF/df_s4_algethar_academy_bunten_no_roster_16');
     }
 }
