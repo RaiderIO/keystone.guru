@@ -1,16 +1,20 @@
 <?php
-/** @var $menuModels \Illuminate\Database\Eloquent\Model[] */
-/** @var $viewName string */
-/** @var $isProduction string */
-/** @var $isMobile boolean */
-/** @var $nameAndVersion string */
-/** @var $theme string */
-
-/** @var $menuModelEdit \Illuminate\Database\Eloquent\Model */
 
 use App\Models\Laratrust\Role;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
-$user = \Illuminate\Support\Facades\Auth::user();
+/**
+ * @var Model[] $menuModels
+ * @var string  $viewName
+ * @var string  $isProduction
+ * @var boolean $isMobile
+ * @var string  $nameAndVersion
+ * @var string  $theme
+ * @var Model   $menuModelEdit
+ */
+
+$user = Auth::user();
 // Custom content or not
 $custom ??= false;
 // Wide mode or not (only relevant if custom = false)

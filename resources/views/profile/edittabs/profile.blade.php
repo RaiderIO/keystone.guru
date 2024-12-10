@@ -1,6 +1,13 @@
 <?php
-/** @var \App\Models\User $user */
-/** @var \App\Models\CharacterClass[]|\Illuminate\Support\Collection $allClasses */
+
+use App\Models\CharacterClass;
+use App\Models\User;
+use Illuminate\Support\Collection;
+
+/**
+ * @var User                       $user
+ * @var Collection<CharacterClass> $allClasses
+ */
 ?>
 <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
     {{ Form::model($user, ['route' => ['profile.update', $user->id], 'method' => 'patch', 'files' => true]) }}

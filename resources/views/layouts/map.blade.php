@@ -1,9 +1,13 @@
 <?php
+
+use Illuminate\Support\Facades\Auth;
+
 /**
- * @var $isProduction string
- * @var $isMobile boolean
+ * @var string  $isProduction
+ * @var boolean $isMobile
  */
-$user = \Illuminate\Support\Facades\Auth::user();
+
+$user = Auth::user();
 // Show ads if not set
 $showAds ??= true;
 // Any class to add to the root div

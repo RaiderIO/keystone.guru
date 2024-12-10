@@ -1,5 +1,9 @@
 <?php
-/** @var \Illuminate\Support\Collection $floors */
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection $floors
+ **/
 ?>
 <div class="row no-gutters">
     <div class="col btn-group dropright">

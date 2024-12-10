@@ -1,5 +1,5 @@
 <?php
-/** @var $isMobile bool */
+/** @var bool $isMobile */
 ?>
 <script>
     /** Instance that handles all inline code for specific pages */

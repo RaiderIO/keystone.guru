@@ -1,6 +1,8 @@
 <?php
+use App\Models\Release;
+
 /**
- * @var \App\Models\Release $latestRelease
+ * @var Release $latestRelease
  */
 ?>
     <!--suppress ALL -->

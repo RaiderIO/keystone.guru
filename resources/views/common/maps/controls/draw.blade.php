@@ -1,7 +1,14 @@
 <?php
-/** @var boolean $isAdmin */
-/** @var \Illuminate\Support\Collection $floors */
-/** @var \App\Models\DungeonRoute\DungeonRoute $dungeonroute */
+
+use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Floor\Floor;
+use Illuminate\Support\Collection;
+
+/**
+ * @var boolean           $isAdmin
+ * @var Collection<Floor> $floors
+ * @var DungeonRoute      $dungeonroute
+ */
 ?>
 <nav
     class="route_sidebar route_manipulation_tools left h-100 row no-gutters map_fade_out {{ $isMobile ? 'mobile' : '' }}">

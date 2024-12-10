@@ -1,5 +1,9 @@
 <?php
-/** @var \App\Models\DungeonRoute\Dungeonroute $dungeonroute */
+use App\Models\DungeonRoute\Dungeonroute;
+
+/**
+ * @var Dungeonroute $dungeonroute
+ */
 ?>
 <div class="row no-gutters">
     <div class="col">

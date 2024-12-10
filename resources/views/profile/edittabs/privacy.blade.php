@@ -1,5 +1,11 @@
 <?php
-/** @var $user \App\Models\User */
+
+use App\Models\User;
+use App\Models\UserReport;
+
+/**
+ * @var User $user
+ */
 ?>
     <!--suppress HtmlDeprecatedAttribute -->
 <div class="tab-pane fade" id="privacy" role="tabpanel" aria-labelledby="privacy-tab">
@@ -36,7 +42,7 @@
 
         <tbody>
         @foreach ($user->reports()->orderByDesc('id')->get() as $report)
-                <?php /** @var $user \App\Models\UserReport */ ?>
+                <?php /** @var UserReport $report */ ?>
             <tr>
                 <td>{{ $report->id }}</td>
                 <td>{{ $report->category }}</td>

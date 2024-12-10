@@ -1,3 +1,7 @@
+<?php
+    use App\Models\Npc\Npc;
+    use Illuminate\Support\Collection;
+?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.npc.list.title')])
 
 @section('header-title')
@@ -10,7 +14,7 @@
 @endsection
 
 <?php
-/** @var $models \Illuminate\Support\Collection<\App\Models\Npc\Npc> */
+/** @var  Collection<Npc> $models */
 // eager load the classification
 ?>
 
