@@ -129,6 +129,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         return $builder->getCombatLogEvents();
     }
 
+    /**
+     * @throws DungeonNotSupportedException
+     * @throws Exception
+     */
     public function correctCombatLogRoute(CombatLogRouteRequestModel $combatLogRoute): CombatLogRouteRequestModel
     {
         $builder = new CombatLogRouteCorrectionBuilder(

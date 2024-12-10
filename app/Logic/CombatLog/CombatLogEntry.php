@@ -71,7 +71,7 @@ class CombatLogEntry
      *
      * @throws Exception
      */
-    public function parseEvent(array $eventWhiteList = [], int $combatLogVersion = CombatLogVersion::RETAIL_10_1_0): ?BaseEvent
+    public function parseEvent(array $eventWhiteList = [], int $combatLogVersion = CombatLogVersion::RETAIL_11_0_5): ?BaseEvent
     {
         $matches = [];
         if (!preg_match('/(\d*\/\d*(?:\/\d*)? \d*:\d*:\d*.\d*(?:-\d*)?)\s\s(.+)/', $this->rawEvent, $matches)) {

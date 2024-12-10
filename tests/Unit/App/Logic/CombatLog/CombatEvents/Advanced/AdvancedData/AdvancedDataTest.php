@@ -5,6 +5,7 @@ namespace Tests\Unit\App\Logic\CombatLog\CombatEvents\Advanced\AdvancedData;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatLogEntry;
+use App\Logic\CombatLog\CombatLogVersion;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -28,13 +29,16 @@ final class AdvancedDataTest extends PublicTestCase
 
         // Act
         /** @var AdvancedCombatLogEvent $parseEventResult */
-        $parseEventResult = $combatLogEntry->parseEvent();
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_10_1_0);
 
         // Assert
         Assert::assertInstanceOf(AdvancedCombatLogEvent::class, $combatLogEntry->getParsedEvent());
         Assert::assertInstanceOf(AdvancedDataInterface::class, $parseEventResult->getAdvancedData());
     }
 
+    /**
+     * @throws \Exception
+     */
     #[Test]
     #[Group('CombatLog')]
     #[Group('AdvancedData')]
@@ -64,7 +68,7 @@ final class AdvancedDataTest extends PublicTestCase
 
         // Act
         /** @var AdvancedCombatLogEvent $parseEventResult */
-        $parseEventResult = $combatLogEntry->parseEvent();
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_10_1_0);
         $advancedData     = $parseEventResult->getAdvancedData();
 
         // Assert

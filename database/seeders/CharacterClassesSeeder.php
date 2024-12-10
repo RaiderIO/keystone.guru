@@ -3,9 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\CharacterClass;
-use App\Models\CharacterClassSpecialization;
-use App\Models\CharacterRace;
-use App\Models\CharacterRaceClassCoupling;
 use App\Models\Faction;
 use App\Models\File;
 use Exception;
@@ -126,7 +123,6 @@ class CharacterClassesSeeder extends Seeder implements TableSeederInterface
         // Set icons for each inserted class
         /** @var Collection<CharacterClass> $characterClasses */
         $characterClasses = CharacterClass::from(DatabaseSeeder::getTempTableName(CharacterClass::class))->get();
-        dump($characterClasses);
         foreach ($characterClasses as $characterClass) {
             $icon = File::create([
                 'model_id'    => $characterClass->id,
@@ -134,8 +130,6 @@ class CharacterClassesSeeder extends Seeder implements TableSeederInterface
                 'disk'        => 'public',
                 'path'        => sprintf('images/classes/%s.png', strtolower(str_replace(' ', '', $characterClass->key))),
             ]);
-
-            dump($icon);
 
             // Update the class with the icon ID
             $characterClass->setTable(DatabaseSeeder::getTempTableName(CharacterClass::class))->update(['icon_file_id' => $icon->id]);

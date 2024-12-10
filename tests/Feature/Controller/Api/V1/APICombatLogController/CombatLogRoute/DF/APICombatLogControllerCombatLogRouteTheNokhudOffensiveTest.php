@@ -25,7 +25,7 @@ class APICombatLogControllerCombatLogRouteTheNokhudOffensiveTest extends APIComb
     public function create_givenTheNokhudOffensive14Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('DF/df_s4_the_nokhud_offensive_14', self::FIXTURES_ROOT_DIR);
+        $postBody = $this->getJsonData('DF/df_s4_the_nokhud_offensive_no_roster_14', self::FIXTURES_ROOT_DIR);
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
@@ -45,7 +45,7 @@ class APICombatLogControllerCombatLogRouteTheNokhudOffensiveTest extends APIComb
     public function create_givenTheNokhudOffensive8Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('DF/df_s4_the_nokhud_offensive_8', self::FIXTURES_ROOT_DIR);
+        $postBody = $this->getJsonData('DF/df_s4_the_nokhud_offensive_no_roster_8', self::FIXTURES_ROOT_DIR);
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);

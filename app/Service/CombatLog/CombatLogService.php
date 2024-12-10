@@ -43,7 +43,7 @@ class CombatLogService implements CombatLogServiceInterface
     {
         $events = new Collection();
 
-        $this->parseCombatLog($filePath, function (int $combatLogVersion, string $rawEvent) use ($events) {
+        $this->parseCombatLog($filePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) use ($events) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
 
             if ($parsedEvent !== null) {
@@ -63,7 +63,7 @@ class CombatLogService implements CombatLogServiceInterface
      */
     public function parseCombatLogStreaming(string $filePath, callable $callable): void
     {
-        $this->parseCombatLog($filePath, function (int $combatLogVersion, string $rawEvent, int $lineNr) use ($callable) {
+        $this->parseCombatLog($filePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent, int $lineNr) use ($callable) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
 
             if ($parsedEvent !== null) {
@@ -85,7 +85,7 @@ class CombatLogService implements CombatLogServiceInterface
     {
         $events = new Collection();
 
-        $this->parseCombatLog($filePath, static function (int $combatLogVersion, string $rawEvent) use ($events) {
+        $this->parseCombatLog($filePath, static function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) use ($events) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent(
                 [SpecialEvent::SPECIAL_EVENT_CHALLENGE_MODE_START], $combatLogVersion
             );
@@ -120,7 +120,7 @@ class CombatLogService implements CombatLogServiceInterface
     {
         $result = new Collection();
 
-        $this->parseCombatLog($filePath, static function (int $combatLogVersion, string $rawEvent) use ($result) {
+        $this->parseCombatLog($filePath, static function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) use ($result) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([SpecialEvent::SPECIAL_EVENT_MAP_CHANGE], $combatLogVersion);
             if ($parsedEvent instanceof MapChangeEvent) {
                 $result->put($parsedEvent->getUiMapID(), $parsedEvent->getUiMapName());
@@ -275,12 +275,14 @@ class CombatLogService implements CombatLogServiceInterface
         $rawEvent = '';
         try {
             $this->log->parseCombatLogParseEventsStart();
-            $combatLogVersion = CombatLogVersion::RETAIL_10_1_0;
+            $combatLogVersion         = CombatLogVersion::RETAIL_11_0_5;
+            $isAdvancedLoggingEnabled = true;
             while (($rawEvent = fgets($handle)) !== false) {
-                $parsedEvent = $callback($combatLogVersion, $rawEvent, ++$lineNr);
+                $parsedEvent = $callback($combatLogVersion, $isAdvancedLoggingEnabled, $rawEvent, ++$lineNr);
                 if ($parsedEvent instanceof CombatLogVersionEvent) {
-                    $combatLogVersion = $parsedEvent->getVersion();
-                    $this->log->parseCombatLogParseEventsChangedCombatLogVersion($combatLogVersion);
+                    $combatLogVersion         = $parsedEvent->getVersion();
+                    $isAdvancedLoggingEnabled = $parsedEvent->isAdvancedLogEnabled();
+                    $this->log->parseCombatLogParseEventsChangedCombatLogVersion($combatLogVersion, $isAdvancedLoggingEnabled);
                 }
             }
         } catch (Exception $exception) {

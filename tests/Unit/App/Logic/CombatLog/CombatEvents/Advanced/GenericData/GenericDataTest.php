@@ -5,6 +5,7 @@ namespace Tests\Unit\App\Logic\CombatLog\CombatEvents\Advanced\GenericData;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
 use App\Logic\CombatLog\CombatLogEntry;
+use App\Logic\CombatLog\CombatLogVersion;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -28,13 +29,16 @@ final class GenericDataTest extends PublicTestCase
 
         // Act
         /** @var AdvancedCombatLogEvent $parseEventResult */
-        $parseEventResult = $combatLogEntry->parseEvent();
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_10_1_0);
 
         // Assert
         Assert::assertInstanceOf(AdvancedCombatLogEvent::class, $combatLogEntry->getParsedEvent());
         Assert::assertInstanceOf(GenericDataInterface::class, $parseEventResult->getGenericData());
     }
 
+    /**
+     * @throws \Exception
+     */
     #[Test]
     #[Group('CombatLog')]
     #[Group('GenericDataAll')]
@@ -55,7 +59,7 @@ final class GenericDataTest extends PublicTestCase
 
         // Act
         /** @var AdvancedCombatLogEvent $parseEventResult */
-        $parseEventResult = $combatLogEntry->parseEvent();
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_10_1_0);
         $genericData      = $parseEventResult->getGenericData();
 
         // Assert

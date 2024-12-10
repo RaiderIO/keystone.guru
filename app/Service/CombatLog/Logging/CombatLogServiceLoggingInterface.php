@@ -24,7 +24,7 @@ interface CombatLogServiceLoggingInterface
 
     public function parseCombatLogParseEventsStart(): void;
 
-    public function parseCombatLogParseEventsChangedCombatLogVersion(int $combatLogVersion): void;
+    public function parseCombatLogParseEventsChangedCombatLogVersion(int $combatLogVersion, bool $advancedLoggingEnabled): void;
 
     public function parseCombatLogParseEventsException(string $rawEvent, Exception $exception): void;
 

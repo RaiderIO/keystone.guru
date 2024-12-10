@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Logic\CombatLog\CombatEvents\Suffixes;
+namespace App\Logic\CombatLog\CombatEvents\Suffixes\Damage\V20;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\DamageInterface;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
 
-class Damage extends Suffix
+class DamageV20 extends Suffix implements DamageInterface
 {
     private int $amount;
 

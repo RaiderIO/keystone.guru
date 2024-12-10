@@ -6,8 +6,9 @@ use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Range;
-use App\Logic\CombatLog\CombatEvents\Suffixes\Damage;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\DamageInterface;
 use App\Logic\CombatLog\CombatLogEntry;
+use App\Logic\CombatLog\CombatLogVersion;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -31,13 +32,13 @@ final class RangeDamageTest extends PublicTestCase
 
         // Act
         /** @var AdvancedCombatLogEvent $parseEventResult */
-        $parseEventResult = $combatLogEntry->parseEvent();
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_10_1_0);
 
         // Assert
         Assert::assertInstanceOf(AdvancedCombatLogEvent::class, $combatLogEntry->getParsedEvent());
         Assert::assertInstanceOf(GenericDataInterface::class, $parseEventResult->getGenericData());
         Assert::assertInstanceOf(Range::class, $parseEventResult->getPrefix());
-        Assert::assertInstanceOf(Damage::class, $parseEventResult->getSuffix());
+        Assert::assertInstanceOf(DamageInterface::class, $parseEventResult->getSuffix());
         Assert::assertInstanceOf(AdvancedDataInterface::class, $parseEventResult->getAdvancedData());
     }
 
@@ -59,7 +60,7 @@ final class RangeDamageTest extends PublicTestCase
 
         // Act
         /** @var AdvancedCombatLogEvent $parseEventResult */
-        $parseEventResult = $combatLogEntry->parseEvent();
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_10_1_0);
         /** @var Range $rangeEvent */
         $rangeEvent = $parseEventResult->getPrefix();
 
@@ -94,8 +95,8 @@ final class RangeDamageTest extends PublicTestCase
 
         // Act
         /** @var AdvancedCombatLogEvent $parseEventResult */
-        $parseEventResult = $combatLogEntry->parseEvent();
-        /** @var Damage $damageEvent */
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_10_1_0);
+        /** @var DamageInterface $damageEvent */
         $damageEvent = $parseEventResult->getSuffix();
 
         // Assert

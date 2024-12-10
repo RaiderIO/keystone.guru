@@ -52,7 +52,7 @@ class CombatLogServiceLogging extends RollbarStructuredLogging implements Combat
         $this->start(__METHOD__);
     }
 
-    public function parseCombatLogParseEventsChangedCombatLogVersion(int $combatLogVersion): void
+    public function parseCombatLogParseEventsChangedCombatLogVersion(int $combatLogVersion, bool $advancedLoggingEnabled): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
