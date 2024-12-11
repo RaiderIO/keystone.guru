@@ -10,6 +10,11 @@ use App\Logic\CombatLog\CombatLogVersion;
 
 class DamageBuilder implements SuffixBuilderInterface
 {
+    public function __construct(
+        public int $combatLogVersion
+    ) {
+    }
+
     public static function create(int $combatLogVersion): Suffix
     {
         return match ($combatLogVersion) {
