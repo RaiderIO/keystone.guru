@@ -8,11 +8,11 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\V20\DamageV20;
 class DamageV22 extends DamageV20
 {
     /**
-     * @var string "AOE" or "ST"
+     * @var string|null "AOE" or "ST"
      */
-    private string $damageType;
+    private ?string $damageType;
 
-    public function getDamageType(): string
+    public function getDamageType(): ?string
     {
         return $this->damageType;
     }
@@ -21,7 +21,7 @@ class DamageV22 extends DamageV20
     {
         parent::setParameters($parameters);
 
-        $this->damageType = $parameters[10];
+        $this->damageType = $parameters[10] ?? null;
 
         return $this;
     }
@@ -29,5 +29,10 @@ class DamageV22 extends DamageV20
     public function getParameterCount(): int
     {
         return 11;
+    }
+
+    public function getOptionalParameterCount(): int
+    {
+        return 1;
     }
 }

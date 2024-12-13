@@ -10,7 +10,7 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBase;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBroken;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBrokenSpell;
-use App\Logic\CombatLog\CombatEvents\Suffixes\Missed;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\MissedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Summon;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Player;
@@ -289,9 +289,9 @@ class SpellDataExtractor implements DataExtractorInterface
         ($suffix instanceof AuraApplied && $suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF &&
             $combatLogEvent->getGenericData()->getDestGuid() instanceof Player) ? 1 : 0;
         // If a spell was missed somehow, write it to the miss_types_mask field
-        if ($suffix instanceof Missed) {
+        if ($suffix instanceof MissedInterface) {
             $spell->miss_types_mask |=
-                SpellModel::ALL_MISS_TYPES[ucfirst(strtolower($suffix->getMissType()))] ?? 0;
+                SpellModel::GUID_MISS_TYPE_MAPPING[get_class($suffix->getMissType())] ?? 0;
         }
 
         if ($spell->isDirty() && $spell->save()) {

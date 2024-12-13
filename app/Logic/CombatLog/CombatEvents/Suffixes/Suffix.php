@@ -7,6 +7,7 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\DamageBuilder;
 use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLanded\DamageLandedBuilder;
 use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLandedSupport\DamageLandedSupportBuilder;
 use App\Logic\CombatLog\CombatEvents\Suffixes\DamageSupport\DamageSupportBuilder;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\MissedBuilder;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
 use Exception;
 use Illuminate\Support\Str;
@@ -96,7 +97,7 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_DURABILITY_DAMAGE_ALL => DurabilityDamageAll::class,
         self::SUFFIX_DURABILITY_DAMAGE     => DurabilityDamage::class,
         self::SUFFIX_DAMAGE                => DamageBuilder::class,
-        self::SUFFIX_MISSED                => Missed::class,
+        self::SUFFIX_MISSED                => MissedBuilder::class,
         self::SUFFIX_HEAL_ABSORBED         => HealAbsorbed::class,
         self::SUFFIX_HEAL_SUPPORT          => HealSupport::class,
         self::SUFFIX_HEAL                  => Heal::class,

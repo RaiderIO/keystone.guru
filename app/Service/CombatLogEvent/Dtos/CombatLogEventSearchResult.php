@@ -53,6 +53,11 @@ class CombatLogEventSearchResult
                     default => throw new InvalidArgumentException('Invalid data type'),
                 };
 
+                // If the XY is null, we can't calculate a map location
+                if ($ingameXY === null) {
+                    return null;
+                }
+
                 $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
                     $ingameXY->setFloor($floors->get($combatLogEvent->ui_map_id))
                 );
@@ -65,7 +70,7 @@ class CombatLogEventSearchResult
                 $latLngArray['lng'] = round($latLngArray['lng'], 2);
 
                 return $latLngArray;
-            })->toArray(),
+            })->filter()->toArray(),
             'dungeon_route_count' => $this->dungeonRouteCount,
         ];
     }

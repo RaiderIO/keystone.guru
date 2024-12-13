@@ -20,6 +20,7 @@ use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
+use Random\RandomException;
 
 /**
  * @author Wouter
@@ -32,6 +33,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
 
     /**
      * @throws DungeonNotSupportedException
+     * @throws RandomException
      */
     public function __construct(
         private readonly SeasonServiceInterface   $seasonService,

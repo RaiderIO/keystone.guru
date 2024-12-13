@@ -88,12 +88,6 @@ PUT _index_template/combat_log_events-template
         "pos_y": {
           "type": "float"
         },
-        "pos_enemy_x": {
-          "type": "float"
-        },
-        "pos_enemy_y": {
-          "type": "float"
-        },
         "event_type": {
           "type": "keyword"
         },
@@ -127,6 +121,12 @@ PUT _index_template/combat_log_events-template
             },
             "npc_id": {
               "type": "integer"
+            },
+            "pos_enemy_x": {
+              "type": "float"
+            },
+            "pos_enemy_y": {
+              "type": "float"
             }
           }
         }
@@ -339,11 +339,21 @@ PUT /combat_log_events-000001
         "type": "nested",
         "dynamic": true,
         "properties": {
+          "@timestamp": {
+            "format": "epoch_second",
+            "type": "date"
+          },
           "spell_id": {
             "type": "integer"
           },
           "npc_id": {
             "type": "integer"
+          },
+          "pos_enemy_x": {
+            "type": "float"
+          },
+          "pos_enemy_y": {
+            "type": "float"
           }
         }
       }

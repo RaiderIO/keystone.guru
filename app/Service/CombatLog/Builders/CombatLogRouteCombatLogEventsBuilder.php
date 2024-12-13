@@ -38,7 +38,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
         KillZoneRepositoryInterface               $killZoneRepository,
         KillZoneEnemyRepositoryInterface          $killZoneEnemyRepository,
         KillZoneSpellRepositoryInterface          $killZoneSpellRepository,
-        CombatLogRouteRequestModel $combatLogRoute
+        CombatLogRouteRequestModel                $combatLogRoute
     ) {
         /** @var CombatLogRouteCombatLogEventsBuilderLoggingInterface $log */
         $log       = App::make(CombatLogRouteCombatLogEventsBuilderLoggingInterface::class);
@@ -94,10 +94,10 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
                         'pos_y'      => round($npc->coord->y, 2),
                         'event_type' => CombatLogEvent::EVENT_TYPE_ENEMY_KILLED,
                         'context'    => json_encode([
+                            '@timestamp'  => $npc->getDiedAt(),
                             // Resolved enemy location
                             'pos_enemy_x' => $ingameXY->getX(2),
                             'pos_enemy_y' => $ingameXY->getY(2),
-                            'died_at'     => $npc->getDiedAt(),
                         ]),
                     ]
                 )));
@@ -115,8 +115,8 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
                         'pos_y'      => round($spell->coord->y, 2),
                         'event_type' => CombatLogEvent::EVENT_TYPE_SPELL_CAST,
                         'context'    => json_encode([
-                            'spell_id' => $spell->spellId,
-                            'cast_at'  => $spell->getCastAt(),
+                            '@timestamp' => $spell->getCastAt(),
+                            'spell_id'   => $spell->spellId,
                         ]),
                     ]
                 )));
@@ -134,11 +134,11 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
                         'pos_y'      => round($playerDeath->coord->y, 2),
                         'event_type' => CombatLogEvent::EVENT_TYPE_PLAYER_DEATH,
                         'context'    => json_encode([
+                            '@timestamp'   => $playerDeath->getDiedAt(),
                             'character_id' => $playerDeath->characterId,
                             'class_id'     => $playerDeath->classId,
                             'spec_id'      => $playerDeath->specId,
                             'item_level'   => $playerDeath->itemLevel,
-                            'died_at'      => $playerDeath->getDiedAt(),
                         ]),
                     ]
                 )));

@@ -35,7 +35,13 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
 
         return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogRouteBodyDungeonRouteService) {
             if (!str_contains($filePath, '.zip')) {
-                $this->comment(sprintf('- Skipping file %s', $filePath));
+                $this->comment(sprintf('- Skipping file %s (not a .zip)', $filePath));
+
+                return 0;
+            }
+
+            if (file_exists(str_replace('.zip', '.json', $filePath))) {
+                $this->comment(sprintf('- Skipping file %s (already generated .json)', $filePath));
 
                 return 0;
             }

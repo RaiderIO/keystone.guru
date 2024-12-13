@@ -21,7 +21,9 @@ use Illuminate\Support\Collection;
  * @property bool                      $success
  * @property int                       $total_time_ms
  * @property bool                      $duplicate
+ *
  * @property Carbon                    $created_at
+ *
  * @property Dungeon                   $dungeon
  * @property DungeonRoute              $dungeonRoute
  * @property ChallengeModeRunData      $challengeModeRunData
