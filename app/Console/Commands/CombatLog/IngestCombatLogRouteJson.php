@@ -3,9 +3,11 @@
 namespace App\Console\Commands\CombatLog;
 
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Logging\StructuredLogging;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use Exception;
 use Illuminate\Console\Command;
+use Str;
 
 class IngestCombatLogRouteJson extends Command
 {
@@ -36,7 +38,7 @@ class IngestCombatLogRouteJson extends Command
         $filePath = $this->argument('filePath');
 
         return $this->parseCreateRouteCombatLogJsonRecursively($filePath, function (string $filePath) use ($combatLogRouteBodyDungeonRouteService) {
-            if (!str_contains($filePath, '.zip')) {
+            if (!Str::endsWith($filePath, '.json')) {
                 $this->comment(sprintf('- Skipping file %s', $filePath));
 
                 return 0;
@@ -54,11 +56,15 @@ class IngestCombatLogRouteJson extends Command
         $this->info(sprintf('Parsing file %s', $filePath));
 
         try {
+            StructuredLogging::disable();
+
             $dungeonRoute = $combatLogRouteDungeonRouteService->convertCombatLogRouteToDungeonRoute(
                 CombatLogRouteRequestModel::createFromArray(
                     json_decode(file_get_contents($filePath), true)
                 )
             );
+
+            StructuredLogging::enable();
 
             $this->info(
                 sprintf(
