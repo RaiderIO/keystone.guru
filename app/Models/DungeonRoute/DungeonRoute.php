@@ -223,11 +223,17 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     ];
 
     protected $casts = [
-        'enemy_forces' => 'integer',
-        'demo'         => 'integer',
-        'level_min'    => 'integer',
-        'level_max'    => 'integer',
-        'rating'       => 'float',
+        'thumbnail_refresh_queued_at' => 'date',
+        'thumbnail_updated_at'        => 'date',
+        'published_at'                => 'date',
+        'expires_at'                  => 'date',
+        'created_at'                  => 'date',
+        'updated_at'                  => 'date',
+        'enemy_forces'                => 'integer',
+        'demo'                        => 'integer',
+        'level_min'                   => 'integer',
+        'level_max'                   => 'integer',
+        'rating'                      => 'float',
     ];
 
     /**
