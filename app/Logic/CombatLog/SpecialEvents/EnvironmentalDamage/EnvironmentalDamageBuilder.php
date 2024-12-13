@@ -3,8 +3,8 @@
 namespace App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage;
 
 use App\Logic\CombatLog\CombatLogVersion;
-use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\Versions\EnvironmentalDamageV20;
-use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\Versions\EnvironmentalDamageV9;
+use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\Versions\V20\EnvironmentalDamageV20;
+use App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\Versions\V9\EnvironmentalDamageV9;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEventBuilderInterface;
 use Illuminate\Support\Carbon;

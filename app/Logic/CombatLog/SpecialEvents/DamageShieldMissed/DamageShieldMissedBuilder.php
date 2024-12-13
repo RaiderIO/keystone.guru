@@ -3,8 +3,8 @@
 namespace App\Logic\CombatLog\SpecialEvents\DamageShieldMissed;
 
 use App\Logic\CombatLog\CombatLogVersion;
-use App\Logic\CombatLog\SpecialEvents\DamageShieldMissed\Versions\DamageShieldMissedV20;
-use App\Logic\CombatLog\SpecialEvents\DamageShieldMissed\Versions\DamageShieldMissedV9;
+use App\Logic\CombatLog\SpecialEvents\DamageShieldMissed\Versions\V20\DamageShieldMissedV20;
+use App\Logic\CombatLog\SpecialEvents\DamageShieldMissed\Versions\V9\DamageShieldMissedV9;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEventBuilderInterface;
 use Illuminate\Support\Carbon;

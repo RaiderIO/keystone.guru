@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\CombatLog\SpecialEvents\DamageShieldMissed\Versions;
+namespace App\Logic\CombatLog\SpecialEvents\DamageShieldMissed\Versions\V20;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\SpecialEvents\DamageShield\DamageShieldInterface;
@@ -13,7 +13,7 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
  *
  * @since 31/08/2023
  */
-class DamageShieldMissedV9 extends SpecialEvent implements DamageShieldInterface
+class DamageShieldMissedV20 extends SpecialEvent implements DamageShieldInterface
 {
     /**
      * @return HasParameters|$this

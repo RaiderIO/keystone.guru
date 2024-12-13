@@ -3,6 +3,7 @@
 namespace Tests\Unit\App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 
 use App\Logic\CombatLog\CombatLogEntry;
+use App\Logic\CombatLog\CombatLogVersion;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -29,7 +30,7 @@ final class ChallengeModeStartTest extends PublicTestCase
 
         // Act
         /** @var ChallengeModeStart $parseEventResult */
-        $parseEventResult = $combatLogEntry->parseEvent();
+        $parseEventResult = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_10_1_0);
 
         // Assert
         Assert::assertInstanceOf(ChallengeModeStart::class, $combatLogEntry->getParsedEvent());

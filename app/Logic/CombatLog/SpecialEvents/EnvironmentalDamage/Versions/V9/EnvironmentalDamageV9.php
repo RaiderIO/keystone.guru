@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\Versions;
+namespace App\Logic\CombatLog\SpecialEvents\EnvironmentalDamage\Versions\V9;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;

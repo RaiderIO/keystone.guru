@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\CombatLog\SpecialEvents\DamageShield\Versions;
+namespace App\Logic\CombatLog\SpecialEvents\DamageShield\Versions\V9;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\SpecialEvents\DamageShield\DamageShieldInterface;
@@ -13,7 +13,7 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
  *
  * @since 31/08/2023
  */
-class DamageShieldV20 extends SpecialEvent implements DamageShieldInterface
+class DamageShieldV9 extends SpecialEvent implements DamageShieldInterface
 {
     /**
      * @return HasParameters|$this
@@ -27,6 +27,6 @@ class DamageShieldV20 extends SpecialEvent implements DamageShieldInterface
 
     public function getParameterCount(): int
     {
-        return 38;
+        return 37;
     }
 }
