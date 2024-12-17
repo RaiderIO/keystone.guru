@@ -240,6 +240,10 @@ class CombatLogEvent extends OpensearchModel
             $context['@timestamp'] = Carbon::parse($context['@timestamp'])->getTimestamp();
         }
 
+        /**
+         * success may be a boolean, but it's actually an int, so we need to convert it to a boolean explicitly
+         * @noinspection PhpTernaryExpressionCanBeReplacedWithConditionInspection
+         */
         return [
             '@timestamp'         => $this->created_at->getTimestamp(),
             'id'                 => $this->id,
@@ -254,7 +258,7 @@ class CombatLogEvent extends OpensearchModel
             'challenge_mode_id'  => $this->challenge_mode_id,
             'level'              => $this->level,
             'affix_id'           => json_decode($this->affix_ids, true),
-            'success'            => $this->success ? true: false,
+            'success'            => $this->success ? true : false,
             'start'              => Carbon::parse($this->start)->getTimestamp(),
             'end'                => Carbon::parse($this->end)->getTimestamp(),
             'duration_ms'        => $this->duration_ms,

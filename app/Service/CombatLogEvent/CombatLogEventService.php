@@ -192,8 +192,8 @@ readonly class CombatLogEventService implements CombatLogEventServiceInterface
                                    float stepX = width / sizeX;
                                    float stepY = height / sizeY;
 
-                                   double docPosX = :player ? doc[\'pos_x\'].value : doc[\'context\'][\'pos_enemy_x\'].value;
-                                   double docPosY = :player ? doc[\'pos_y\'].value : doc[\'context\'][\'pos_enemy_y\'].value;
+                                   double docPosX = :player ? doc[\'pos_x\'].value : params[\'_source\'][\'context\'][\'pos_enemy_x\'];
+                                   double docPosY = :player ? doc[\'pos_y\'].value : params[\'_source\'][\'context\'][\'pos_enemy_y\'];
 
                                    int gx = ((docPosX - minX) / width * sizeX).intValue();
                                    int gy = ((docPosY - minY) / height * sizeY).intValue();
