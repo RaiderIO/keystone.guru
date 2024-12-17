@@ -205,7 +205,7 @@ class CombatLogEvent extends OpensearchModel
                             'class_id' => [
                                 'type' => 'integer',
                             ],
-                            'spec_id' => [
+                            'spec_id'  => [
                                 'type' => 'integer',
                             ],
                         ],
@@ -214,10 +214,10 @@ class CombatLogEvent extends OpensearchModel
                         'type'       => 'nested',
                         'dynamic'    => true,
                         'properties' => [
-                            'spell_id' => [
+                            'spell_id'    => [
                                 'type' => 'integer',
                             ],
-                            'npc_id'   => [
+                            'npc_id'      => [
                                 'type' => 'integer',
                             ],
                             'pos_enemy_x' => [
@@ -235,6 +235,11 @@ class CombatLogEvent extends OpensearchModel
 
     public function openSearchArray(): array
     {
+        $context = json_decode($this->context, true);
+        if (isset($context['@timestamp'])) {
+            $context['@timestamp'] = Carbon::parse($context['@timestamp'])->getTimestamp();
+        }
+
         return [
             '@timestamp'         => $this->created_at->getTimestamp(),
             'id'                 => $this->id,
@@ -249,7 +254,7 @@ class CombatLogEvent extends OpensearchModel
             'challenge_mode_id'  => $this->challenge_mode_id,
             'level'              => $this->level,
             'affix_id'           => json_decode($this->affix_ids, true),
-            'success'            => $this->success ? 'true' : 'false',
+            'success'            => $this->success ? true: false,
             'start'              => Carbon::parse($this->start)->getTimestamp(),
             'end'                => Carbon::parse($this->end)->getTimestamp(),
             'duration_ms'        => $this->duration_ms,
@@ -264,7 +269,7 @@ class CombatLogEvent extends OpensearchModel
             'average_item_level' => $this->average_item_level,
             'event_type'         => $this->event_type,
             'characters'         => json_decode($this->characters, true),
-            'context'            => json_decode($this->context, true),
+            'context'            => $context,
         ];
     }
 

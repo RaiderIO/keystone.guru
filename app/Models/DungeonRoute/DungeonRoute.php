@@ -56,6 +56,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -367,13 +368,14 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     }
 
     /**
-     * @throws Exception
+     * WARNING: requires you to set ->setConnection('combatlog') on the model before calling this method!
+     * You then also need to call ->setConnection(null) to reset the connection to the default one.
+     *
+     * @return HasOne
      */
-    public function challengeModeRun(): BelongsTo
+    public function challengeModeRun(): HasOne
     {
-        throw new Exception('Not implemented');
-        // This doesn't work because it's on a different connection - strange stuff
-        //        return $this->setConnection('combatlog')->belongsTo(ChallengeModeRun::class);
+        return $this->hasOne(ChallengeModeRun::class);
     }
 
     public function ratings(): HasMany
@@ -1599,6 +1601,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 // @ because we don't care if it fails
                 @unlink($dungeonRoute->getAbsoluteThumbnailPath($floor->index));
             }
+
+            $dungeonRoute->setConnection('combatlog')->challengeModeRun()->delete();
+            $dungeonRoute->setConnection(null);
 
             // Delete all API thumbnail jobs/thumbnails generated for it
             foreach ($dungeonRoute->dungeonRouteThumbnailJobs as $dungeonRouteThumbnailJob) {

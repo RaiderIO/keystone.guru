@@ -62,7 +62,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
         $result = collect();
 
         try {
-            $this->log->getCombatLogEventsStart();
+            $this->log->getCombatLogEventsStart($this->combatLogRoute->metadata->runId);
 
             $now   = Carbon::now();
             $start = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $this->combatLogRoute->challengeMode->start);
@@ -105,7 +105,12 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
 
             foreach ($this->combatLogRoute->spells as $spell) {
                 /** @var CombatLogRouteSpellRequestModel $spell */
-                $floor = $floorsByUiMapId->get($spell->coord->uiMapId);
+                $floor = $floorsByUiMapId->get(Floor::UI_MAP_ID_MAPPING[$spell->coord->uiMapId] ?? $spell->coord->uiMapId);
+
+                if ($floor === null) {
+                    $this->log->getCombatLogEventsSpellFloorCouldNotBeResolved($spell->coord->uiMapId);
+                    continue;
+                }
 
                 $result->push(new CombatLogEvent(array_merge(
                     $this->getBaseCombatLogEventAttributes($now, $start, $end, $floor),
@@ -124,7 +129,12 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
 
             foreach ($this->combatLogRoute->playerDeaths as $playerDeath) {
                 /** @var CombatLogRoutePlayerDeathRequestModel $playerDeath */
-                $floor = $floorsByUiMapId->get($playerDeath->coord->uiMapId);
+                $floor = $floorsByUiMapId->get(Floor::UI_MAP_ID_MAPPING[$playerDeath->coord->uiMapId] ?? $playerDeath->coord->uiMapId);
+
+                if ($floor === null) {
+                    $this->log->getCombatLogEventsPlayerDeathFloorCouldNotBeResolved($playerDeath->coord->uiMapId);
+                    continue;
+                }
 
                 $result->push(new CombatLogEvent(array_merge(
                     $this->getBaseCombatLogEventAttributes($now, $start, $end, $floor),

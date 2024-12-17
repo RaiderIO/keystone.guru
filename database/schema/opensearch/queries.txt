@@ -42,7 +42,7 @@ PUT _index_template/combat_log_events-template
           "type": "integer"
         },
         "realm_type": {
-          "type": "integer"
+          "type": "keyword"
         },
         "wow_instance_id": {
           "type": "integer"
@@ -259,7 +259,7 @@ PUT /combat_log_events-000001
         "type": "integer"
       },
       "realm_type": {
-        "type": "integer"
+        "type": "keyword"
       },
       "wow_instance_id": {
         "type": "integer"

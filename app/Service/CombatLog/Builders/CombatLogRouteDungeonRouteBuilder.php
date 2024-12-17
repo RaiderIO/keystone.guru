@@ -36,14 +36,14 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
      * @throws RandomException
      */
     public function __construct(
-        private readonly SeasonServiceInterface   $seasonService,
-        CoordinatesServiceInterface               $coordinatesService,
-        DungeonRouteRepositoryInterface           $dungeonRouteRepository,
-        DungeonRouteAffixGroupRepositoryInterface $dungeonRouteAffixGroupRepository,
-        AffixGroupRepositoryInterface             $affixGroupRepository,
-        KillZoneRepositoryInterface               $killZoneRepository,
-        KillZoneEnemyRepositoryInterface          $killZoneEnemyRepository,
-        KillZoneSpellRepositoryInterface          $killZoneSpellRepository,
+        private readonly SeasonServiceInterface       $seasonService,
+        CoordinatesServiceInterface                   $coordinatesService,
+        DungeonRouteRepositoryInterface               $dungeonRouteRepository,
+        DungeonRouteAffixGroupRepositoryInterface     $dungeonRouteAffixGroupRepository,
+        AffixGroupRepositoryInterface                 $affixGroupRepository,
+        KillZoneRepositoryInterface                   $killZoneRepository,
+        KillZoneEnemyRepositoryInterface              $killZoneEnemyRepository,
+        KillZoneSpellRepositoryInterface              $killZoneSpellRepository,
         protected readonly CombatLogRouteRequestModel $combatLogRoute
     ) {
         $log = App::make(CombatLogRouteDungeonRouteBuilderLoggingInterface::class);

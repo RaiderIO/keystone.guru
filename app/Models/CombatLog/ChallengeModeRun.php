@@ -107,4 +107,14 @@ class ChallengeModeRun extends Model
             return sprintf('%02d:%02d.%02d', $interval->minutes, $interval->seconds, $interval->microseconds);
         }
     }
+
+    public static function boot(): void
+    {
+        parent::boot();
+
+        static::deleting(function (ChallengeModeRun $challengeModeRun) {
+            $challengeModeRun->enemyPositions()->delete();
+            $challengeModeRun->challengeModeRunData()->delete();
+        });
+    }
 }

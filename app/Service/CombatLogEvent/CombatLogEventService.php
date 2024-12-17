@@ -27,11 +27,11 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
-class CombatLogEventService implements CombatLogEventServiceInterface
+readonly class CombatLogEventService implements CombatLogEventServiceInterface
 {
     public function __construct(
-        private readonly CoordinatesServiceInterface           $coordinatesService,
-        private readonly CombatLogEventServiceLoggingInterface $log
+        private CoordinatesServiceInterface           $coordinatesService,
+        private CombatLogEventServiceLoggingInterface $log
     ) {
     }
 
