@@ -4,6 +4,7 @@ namespace App\Service\CombatLogEvent\Dtos;
 
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\GameServerRegion;
@@ -43,7 +44,7 @@ class CombatLogEventFilter implements Arrayable
         private readonly SeasonServiceInterface  $seasonService,
         private readonly Dungeon                 $dungeon,
         private readonly CombatLogEventEventType $eventType,
-        private readonly string                  $dataType
+        private readonly CombatLogEventDataType $dataType
     ) {
         $this->affixGroups = collect();
         $this->affixes     = collect();
@@ -59,7 +60,7 @@ class CombatLogEventFilter implements Arrayable
         return $this->eventType;
     }
 
-    public function getDataType(): string
+    public function getDataType(): CombatLogEventDataType
     {
         return $this->dataType;
     }
@@ -289,7 +290,7 @@ class CombatLogEventFilter implements Arrayable
             seasonService: $seasonService,
             dungeon: Dungeon::firstWhere('id', $requestArray['dungeon_id']),
             eventType: CombatLogEventEventType::from($requestArray['event_type']),
-            dataType: $requestArray['data_type']
+            dataType: CombatLogEventDataType::from($requestArray['data_type'])
         );
 
         if (isset($requestArray['level'])) {

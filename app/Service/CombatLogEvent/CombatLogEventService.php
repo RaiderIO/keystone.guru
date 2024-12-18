@@ -4,6 +4,7 @@ namespace App\Service\CombatLogEvent;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEvent;
+use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\Enemy;
@@ -26,12 +27,11 @@ use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use InvalidArgumentException;
 
 class CombatLogEventService implements CombatLogEventServiceInterface
 {
     public function __construct(
-        private readonly CoordinatesServiceInterface  $coordinatesService,
+        private readonly CoordinatesServiceInterface $coordinatesService,
         private readonly CombatLogEventServiceLoggingInterface $log
     ) {
     }
@@ -149,21 +149,20 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             // #2641
             $dataType = $filters->getDataType();
             if ($filters->getEventType() === CombatLogEventEventType::PlayerDeath) {
-                $dataType = CombatLogEvent::DATA_TYPE_PLAYER_POSITION;
+                $dataType = CombatLogEventDataType::PlayerPosition;
             }
 
             $size = match ($dataType) {
-                CombatLogEvent::DATA_TYPE_PLAYER_POSITION => [
+                CombatLogEventDataType::PlayerPosition => [
                     ':sizeX'  => config('keystoneguru.heatmap.service.data.player.sizeX'),
                     ':sizeY'  => config('keystoneguru.heatmap.service.data.player.sizeY'),
                     ':player' => 'true',
                 ],
-                CombatLogEvent::DATA_TYPE_ENEMY_POSITION => [
+                CombatLogEventDataType::EnemyPosition => [
                     ':sizeX'  => config('keystoneguru.heatmap.service.data.enemy.sizeX'),
                     ':sizeY'  => config('keystoneguru.heatmap.service.data.enemy.sizeY'),
                     ':player' => 'false',
-                ],
-                default => throw new InvalidArgumentException('Invalid data type'),
+                ]
             };
 
             // Repeat this query for each floor

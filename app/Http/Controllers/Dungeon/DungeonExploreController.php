@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Dungeon;
 
 use App\Features\Heatmap;
 use App\Http\Controllers\Controller;
-use App\Models\CombatLog\CombatLogEvent;
+use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
@@ -82,7 +82,7 @@ class DungeonExploreController extends Controller
                 $seasonService,
                 $dungeon,
                 CombatLogEventEventType::EnemyKilled,
-                CombatLogEvent::DATA_TYPE_PLAYER_POSITION,
+                CombatLogEventDataType::PlayerPosition,
             );
 
             $mostRecentSeason = $dungeon->getActiveSeason($seasonService);

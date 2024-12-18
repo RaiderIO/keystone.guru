@@ -3,11 +3,11 @@
 namespace App\Service\CombatLogEvent\Dtos;
 
 use App\Models\CombatLog\CombatLogEvent;
+use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\Floor\Floor;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
-use InvalidArgumentException;
 
 class CombatLogEventSearchResult
 {
@@ -48,9 +48,8 @@ class CombatLogEventSearchResult
             'data'                => $this->combatLogEvents->map(function (CombatLogEvent $combatLogEvent)
             use ($dungeon, $floors, $useFacade) {
                 $ingameXY = match ($this->combatLogEventFilter->getDataType()) {
-                    CombatLogEvent::DATA_TYPE_PLAYER_POSITION => $combatLogEvent->getIngameXY(),
-                    CombatLogEvent::DATA_TYPE_ENEMY_POSITION => $combatLogEvent->getIngameXYNpc(),
-                    default => throw new InvalidArgumentException('Invalid data type'),
+                    CombatLogEventDataType::PlayerPosition => $combatLogEvent->getIngameXY(),
+                    CombatLogEventDataType::EnemyPosition => $combatLogEvent->getIngameXYNpc()
                 };
 
                 // If the XY is null, we can't calculate a map location

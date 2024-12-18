@@ -5,6 +5,7 @@ namespace App\Service\RaiderIO\Dtos;
 
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use Illuminate\Contracts\Support\Arrayable;
@@ -30,7 +31,7 @@ class HeatmapDataFilter implements Arrayable
     public function __construct(
         private readonly Dungeon                 $dungeon,
         private readonly CombatLogEventEventType $eventType,
-        private readonly string                  $dataType
+        private readonly CombatLogEventDataType $dataType
     ) {
         $this->affixGroups = collect();
         $this->affixes     = collect();
@@ -46,7 +47,7 @@ class HeatmapDataFilter implements Arrayable
         return $this->eventType;
     }
 
-    public function getDataType(): string
+    public function getDataType(): CombatLogEventDataType
     {
         return $this->dataType;
     }
@@ -196,7 +197,7 @@ class HeatmapDataFilter implements Arrayable
         $heatmapDataFilter = new HeatmapDataFilter(
             dungeon: Dungeon::firstWhere('id', $requestArray['dungeon_id']),
             eventType: CombatLogEventEventType::from($requestArray['event_type']),
-            dataType: $requestArray['data_type']
+            dataType: CombatLogEventDataType::from($requestArray['data_type'])
         );
 
         if (isset($requestArray['level'])) {

@@ -4,6 +4,7 @@ use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\CombatLog\CombatLogEventEventType;
+use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\Dungeon;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
@@ -173,14 +174,14 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                          data-toggle="buttons">
                         <label class="btn btn-secondary">
                             <input type="radio" name="data_type"
-                                   class="{{ CombatLogEvent::DATA_TYPE_ENEMY_POSITION }}"
-                                   value="{{ CombatLogEvent::DATA_TYPE_ENEMY_POSITION }}">
+                                   class="{{ CombatLogEventDataType::EnemyPosition->value }}"
+                                   value="{{ CombatLogEventDataType::EnemyPosition->value }}">
                             <i class="fas fa-map-marked-alt"></i> {{ __('combatlogdatatypes.enemy_position') }}
                         </label>
                         <label class="btn btn-secondary active">
                             <input type="radio" name="data_type"
-                                   class="{{ CombatLogEvent::DATA_TYPE_PLAYER_POSITION }}"
-                                   value="{{ CombatLogEvent::DATA_TYPE_PLAYER_POSITION }}"
+                                   class="{{ CombatLogEventDataType::PlayerPosition->value }}"
+                                   value="{{ CombatLogEventDataType::PlayerPosition->value }}"
                                    checked>
                             <i class="fas fa-map"></i> {{ __('combatlogdatatypes.player_position') }}
                         </label>
