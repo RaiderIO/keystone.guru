@@ -4,6 +4,7 @@ namespace Database\Factories\CombatLog;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEvent;
+use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
@@ -76,7 +77,7 @@ class CombatLogEventFactory extends Factory
             'ui_map_id'         => $floor->ui_map_id,
             'pos_x'             => $this->faker->numberBetween($floor->ingame_min_x, $floor->ingame_max_x),
             'pos_y'             => $this->faker->numberBetween($floor->ingame_min_y, $floor->ingame_max_y),
-            'event_type'        => CombatLogEvent::ALL_EVENT_TYPE[$this->faker->numberBetween(0, count(CombatLogEvent::ALL_EVENT_TYPE))],
+            'event_type'        => CombatLogEventEventType::cases()[$this->faker->numberBetween(0, count(CombatLogEventEventType::cases()))],
             'characters'        => [],
             'context'           => [],
         ];

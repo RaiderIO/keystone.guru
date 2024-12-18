@@ -7,6 +7,7 @@ use App\Http\Models\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestMode
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Models\CombatLog\CombatLogEvent;
+use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
@@ -92,7 +93,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
                         // Original event location
                         'pos_x'      => round($npc->coord->x, 2),
                         'pos_y'      => round($npc->coord->y, 2),
-                        'event_type' => CombatLogEvent::EVENT_TYPE_ENEMY_KILLED,
+                        'event_type' => CombatLogEventEventType::EnemyKilled->value,
                         'context'    => json_encode([
                             '@timestamp'  => $npc->getDiedAt(),
                             // Resolved enemy location
@@ -118,7 +119,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
                         // Original event location
                         'pos_x'      => round($spell->coord->x, 2),
                         'pos_y'      => round($spell->coord->y, 2),
-                        'event_type' => CombatLogEvent::EVENT_TYPE_SPELL_CAST,
+                        'event_type' => CombatLogEventEventType::SpellCast->value,
                         'context'    => json_encode([
                             '@timestamp' => $spell->getCastAt(),
                             'spell_id'   => $spell->spellId,
@@ -142,7 +143,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
                         // Original event location
                         'pos_x'      => round($playerDeath->coord->x, 2),
                         'pos_y'      => round($playerDeath->coord->y, 2),
-                        'event_type' => CombatLogEvent::EVENT_TYPE_PLAYER_DEATH,
+                        'event_type' => CombatLogEventEventType::PlayerDeath->value,
                         'context'    => json_encode([
                             '@timestamp'   => $playerDeath->getDiedAt(),
                             'character_id' => $playerDeath->characterId,

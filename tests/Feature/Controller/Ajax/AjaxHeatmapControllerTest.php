@@ -4,6 +4,7 @@ namespace Tests\Feature\Controller\Ajax;
 
 use App;
 use App\Models\CombatLog\CombatLogEvent;
+use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
@@ -19,7 +20,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 {
     use CreatesCombatLogEvent;
 
-    const EVENT_TYPE = CombatLogEvent::EVENT_TYPE_ENEMY_KILLED;
+    const EVENT_TYPE = CombatLogEventEventType::EnemyKilled;
     const DATA_TYPE  = CombatLogEvent::DATA_TYPE_PLAYER_POSITION;
 
     #[Test]
@@ -35,7 +36,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 
         // Act
         $response = $this->post(route('ajax.heatmap.data'), [
-            'event_type' => self::EVENT_TYPE,
+            'event_type' => self::EVENT_TYPE->value,
             'data_type'  => self::DATA_TYPE,
             'dungeon_id' => $dungeon->id,
         ]);
@@ -65,7 +66,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 
         // Act
         $response = $this->post(route('ajax.heatmap.data'), [
-            'event_type' => self::EVENT_TYPE,
+            'event_type' => self::EVENT_TYPE->value,
             'data_type'  => self::DATA_TYPE,
             'dungeon_id' => $dungeon->id,
         ]);

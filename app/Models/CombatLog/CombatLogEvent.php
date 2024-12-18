@@ -49,16 +49,6 @@ class CombatLogEvent extends OpensearchModel
 {
     use HasFactory, HasOpenSearchDocuments;
 
-    public const EVENT_TYPE_PLAYER_DEATH = 'player_death';
-    public const EVENT_TYPE_ENEMY_KILLED = 'enemy_killed';
-    public const EVENT_TYPE_SPELL_CAST   = 'spell_cast';
-
-    public const ALL_EVENT_TYPE = [
-        self::EVENT_TYPE_PLAYER_DEATH,
-        self::EVENT_TYPE_ENEMY_KILLED,
-        self::EVENT_TYPE_SPELL_CAST,
-    ];
-
     public const DATA_TYPE_PLAYER_POSITION = 'player_position';
     public const DATA_TYPE_ENEMY_POSITION  = 'enemy_position';
 

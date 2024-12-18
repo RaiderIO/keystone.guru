@@ -1,9 +1,10 @@
-<?php
+<?php /** @noinspection PhpClassCanBeReadonlyInspection */
 
 namespace App\Service\CombatLogEvent;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEvent;
+use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
@@ -27,11 +28,11 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
-readonly class CombatLogEventService implements CombatLogEventServiceInterface
+class CombatLogEventService implements CombatLogEventServiceInterface
 {
     public function __construct(
-        private CoordinatesServiceInterface           $coordinatesService,
-        private CombatLogEventServiceLoggingInterface $log
+        private readonly CoordinatesServiceInterface  $coordinatesService,
+        private readonly CombatLogEventServiceLoggingInterface $log
     ) {
     }
 
@@ -145,7 +146,13 @@ readonly class CombatLogEventService implements CombatLogEventServiceInterface
 
             $gridResult = [];
 
-            $size = match ($filters->getDataType()) {
+            // #2641
+            $dataType = $filters->getDataType();
+            if ($filters->getEventType() === CombatLogEventEventType::PlayerDeath) {
+                $dataType = CombatLogEvent::DATA_TYPE_PLAYER_POSITION;
+            }
+
+            $size = match ($dataType) {
                 CombatLogEvent::DATA_TYPE_PLAYER_POSITION => [
                     ':sizeX'  => config('keystoneguru.heatmap.service.data.player.sizeX'),
                     ':sizeY'  => config('keystoneguru.heatmap.service.data.player.sizeY'),

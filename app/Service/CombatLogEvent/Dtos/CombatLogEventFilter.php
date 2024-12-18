@@ -4,6 +4,7 @@ namespace App\Service\CombatLogEvent\Dtos;
 
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\GameServerRegion;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
@@ -39,10 +40,10 @@ class CombatLogEventFilter implements Arrayable
     private ?int $durationMax = null;
 
     public function __construct(
-        private readonly SeasonServiceInterface $seasonService,
-        private readonly Dungeon                $dungeon,
-        private readonly string                 $eventType,
-        private readonly string                 $dataType
+        private readonly SeasonServiceInterface  $seasonService,
+        private readonly Dungeon                 $dungeon,
+        private readonly CombatLogEventEventType $eventType,
+        private readonly string                  $dataType
     ) {
         $this->affixGroups = collect();
         $this->affixes     = collect();
@@ -53,7 +54,7 @@ class CombatLogEventFilter implements Arrayable
         return $this->dungeon;
     }
 
-    public function getEventType(): string
+    public function getEventType(): CombatLogEventEventType
     {
         return $this->eventType;
     }
@@ -165,7 +166,7 @@ class CombatLogEventFilter implements Arrayable
     {
         return [
             'challenge_mode_id'   => $this->dungeon->challenge_mode_id,
-            'event_type'          => $this->eventType,
+            'event_type'          => $this->eventType->value,
             'data_type'           => $this->dataType,
             'level_min'           => $this->levelMin,
             'level_max'           => $this->levelMax,
@@ -186,7 +187,7 @@ class CombatLogEventFilter implements Arrayable
         $dungeon = $this->getDungeon();
 
         $must[] = MatchOne::make('challenge_mode_id', $dungeon->challenge_mode_id);
-        $must[] = MatchOne::make('event_type', $this->eventType);
+        $must[] = MatchOne::make('event_type', $this->eventType->value);
 
 //        /** @var Floor $firstFloor */
 //        $firstFloor = $dungeon->floors->first();
@@ -287,7 +288,7 @@ class CombatLogEventFilter implements Arrayable
         $combatLogEventFilter = new CombatLogEventFilter(
             seasonService: $seasonService,
             dungeon: Dungeon::firstWhere('id', $requestArray['dungeon_id']),
-            eventType: $requestArray['event_type'],
+            eventType: CombatLogEventEventType::from($requestArray['event_type']),
             dataType: $requestArray['data_type']
         );
 
@@ -309,7 +310,7 @@ class CombatLogEventFilter implements Arrayable
             $combatLogEventFilter->setAffixGroups(AffixGroup::whereIn('id', $requestArray['affix_groups'])->get());
         }
 
-        if(isset($requestArray['weekly_affix_groups'])) {
+        if (isset($requestArray['weekly_affix_groups'])) {
             $combatLogEventFilter->setWeeklyAffixGroups($requestArray['weekly_affix_groups']);
         }
 
