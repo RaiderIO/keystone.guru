@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Trait;
+namespace Tests\Unit\App\Models\Trait;
 
 use App\Models\Traits\BitMasks;
 use PHPUnit\Framework\Attributes\Group;

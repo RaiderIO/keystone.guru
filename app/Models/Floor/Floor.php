@@ -102,6 +102,10 @@ class Floor extends CacheModel implements MappingModelInterface
         1978 => 2095,
         // Nokhud Offensive
         2023 => 2093,
+        // The Dawnbreaker
+        2215 => 2359, // Harrowfall -> The Dawnbreaker
+        // Grim Batol
+        241  => 293, // Twilight Highlands -> Grim Batol
     ];
 
     protected $fillable = [

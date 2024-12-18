@@ -12,15 +12,15 @@ class ChallengeModeEnd extends BaseResultEvent
 {
     private Dungeon $dungeon;
 
-    public function __construct(ChallengeModeStartEvent $challengeModeStart, ChallengeModeEndEvent $challengeModeEnd)
+    public function __construct(ChallengeModeStartEvent $combatantInfoEvent, ChallengeModeEndEvent $challengeModeEnd)
     {
         parent::__construct($challengeModeEnd);
 
         try {
-            $this->dungeon = Dungeon::where('challenge_mode_id', $challengeModeStart->getChallengeModeID())->firstOrFail();
+            $this->dungeon = Dungeon::where('challenge_mode_id', $combatantInfoEvent->getChallengeModeID())->firstOrFail();
         } catch (Exception) {
             throw new DungeonNotSupportedException(
-                sprintf('Dungeon with challenge mode ID %d not found', $challengeModeStart->getChallengeModeID())
+                sprintf('Dungeon with challenge mode ID %d not found', $combatantInfoEvent->getChallengeModeID())
             );
         }
     }

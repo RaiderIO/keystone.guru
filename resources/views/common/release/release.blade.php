@@ -1,6 +1,15 @@
 <?php
-/** @var $categories \App\Models\ReleaseChangelogCategory[]|\Illuminate\Support\Collection $categories */
-/** @var $release \App\Models\Release */
+
+use App\Models\Release;
+use App\Models\ReleaseChangelogCategory;
+use App\Models\ReleaseChangelogChange;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection<ReleaseChangelogCategory> $categories
+ * @var Release                              $release
+ */
+
 $showHeader ??= true;
 ?>
 <div class="form-group">
@@ -28,11 +37,11 @@ $showHeader ??= true;
         </div>
     @endisset
     <?php
-    /** @var \App\Models\ReleaseChangelogCategory $category */
+    /** @var ReleaseChangelogCategory $category */
     ?>
     @foreach ($release->changelog->changes->groupBy('release_changelog_category_id') as $categoryId => $groupedChange)
         <p>
-                <?php /** @var $change \App\Models\ReleaseChangelogChange */ ?>
+                <?php /** @var ReleaseChangelogChange $change */ ?>
             {{ __($categories->where('id', $categoryId)->first()->name) }}:
         </p>
         <ul>

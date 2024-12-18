@@ -1,5 +1,10 @@
 <?php
-/** @var $user \App\Models\User */
+
+use App\Models\User;
+
+/**
+ * @var User $user
+ */
 ?>
 <div class="tab-pane fade" id="change-password" role="tabpanel" aria-labelledby="change-password-tab">
     <h4>

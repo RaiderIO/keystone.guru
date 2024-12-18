@@ -1,5 +1,11 @@
 <?php
-/** @var $allRegions \Illuminate\Support\Collection<\App\Models\GameServerRegion> */
+
+use App\Models\GameServerRegion;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection<GameServerRegion> $allRegions
+ **/
 
 $modal      ??= false;
 $modalClass = $modal ? 'modal-' : '';
@@ -68,7 +74,7 @@ $errors   ??= collect();
                 <div class="col-md-{{ $width }}">
                     {!! Form::select('region', array_merge(
                     ['-1' => __('view_common.forms.register.select_region')],
-                    $allRegions->mapWithKeys(function (\App\Models\GameServerRegion $region){
+                    $allRegions->mapWithKeys(function (GameServerRegion $region){
                         return [$region->id => __($region->name)];
                     })->toArray()), null, ['class' => 'form-control']) !!}
                 </div>

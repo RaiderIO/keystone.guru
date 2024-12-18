@@ -5,11 +5,11 @@ use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Support\Collection;
 
 /**
- * @var DungeonRoute[]|Collection $dungeonroutes
- * @var AffixGroup|null $affixgroup
- * @var AffixGroup|null $currentAffixGroup
- * @var array $__env
- * @var string $orientation
+ * @var Collection<DungeonRoute> $dungeonroutes
+ * @var AffixGroup|null          $affixgroup
+ * @var AffixGroup|null          $currentAffixGroup
+ * @var array                    $__env
+ * @var string                   $orientation
  */
 
 $cols             ??= 1;

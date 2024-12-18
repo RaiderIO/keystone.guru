@@ -19,8 +19,17 @@ trait ValidatesParameterCount
     {
         $parameterCount = count($parameters);
 
-        if ($parameterCount < $this->getParameterCount() - $this->getOptionalParameterCount() ||
-            $parameterCount > $this->getParameterCount()) {
+        if ($parameterCount < $this->getParameterCount() - $this->getOptionalParameterCount()) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Invalid parameter count for %s - wanted %d-%d, got %d',
+                    $this::class,
+                    $this->getParameterCount() - $this->getOptionalParameterCount(),
+                    $this->getParameterCount(),
+                    $parameterCount
+                )
+            );
+        } else if ($parameterCount > $this->getParameterCount()) {
             throw new InvalidArgumentException(
                 sprintf('Invalid parameter count for %s - wanted %d, got %d', $this::class, $this->getParameterCount(), $parameterCount)
             );

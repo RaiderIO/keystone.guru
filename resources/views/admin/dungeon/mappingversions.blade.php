@@ -1,6 +1,10 @@
 <?php
-/** @var $dungeon \App\Models\Dungeon */
-/** @var $hasUnmergedMappingVersion bool */
+use App\Models\Dungeon;
+
+/**
+ * @var  Dungeon      $dungeon
+ * @var  bool $hasUnmergedMappingVersion
+ */
 ?>
 
 @section('scripts')

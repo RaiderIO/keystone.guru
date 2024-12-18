@@ -17,6 +17,7 @@ use App\Service\CombatLog\Interfaces\CombatLogParserInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Support\Carbon;
+use Random\RandomException;
 
 class DungeonRouteFilter implements CombatLogParserInterface
 {
@@ -31,6 +32,7 @@ class DungeonRouteFilter implements CombatLogParserInterface
      *
      * @throws AdvancedLogNotEnabledException
      * @throws DungeonNotSupportedException
+     * @throws RandomException
      */
     public function parse(BaseEvent $combatLogEvent, int $lineNr, bool $waitForChallengeModeStart = true): bool
     {
@@ -57,7 +59,7 @@ class DungeonRouteFilter implements CombatLogParserInterface
                 'season_id'          => $this->seasonService->getMostRecentSeasonForDungeon($dungeon)?->id,
                 'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
                 'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
-                'title'              => __($dungeon->name),
+                'title'              => __($dungeon->name, [], 'en_US'),
                 'level_min'          => $combatLogEvent->getKeystoneLevel(),
                 'level_max'          => $combatLogEvent->getKeystoneLevel(),
                 'expires_at'         => Carbon::now()->addHours(

@@ -6,6 +6,7 @@ use App\Models\Traits\HasGenericModelRelation;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int    $id
@@ -17,6 +18,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $message
  * @property bool   $contact_ok
  * @property string $status
+ *
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
  * @property User   $user
  *

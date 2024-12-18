@@ -3,6 +3,11 @@
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\DamageBuilder;
+use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLanded\DamageLandedBuilder;
+use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLandedSupport\DamageLandedSupportBuilder;
+use App\Logic\CombatLog\CombatEvents\Suffixes\DamageSupport\DamageSupportBuilder;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\MissedBuilder;
 use App\Logic\CombatLog\CombatEvents\Traits\ValidatesParameterCount;
 use Exception;
 use Illuminate\Support\Str;
@@ -12,74 +17,40 @@ abstract class Suffix implements HasParameters
     use ValidatesParameterCount;
 
     public const SUFFIX_DAMAGE_LANDED_SUPPORT = 'DAMAGE_LANDED_SUPPORT';
-
-    public const SUFFIX_DAMAGE_LANDED = 'DAMAGE_LANDED';
-
+    public const SUFFIX_DAMAGE_LANDED  = 'DAMAGE_LANDED';
     public const SUFFIX_DAMAGE_SUPPORT = 'DAMAGE_SUPPORT';
-
-    public const SUFFIX_DAMAGE = 'DAMAGE';
-
-    public const SUFFIX_MISSED = 'MISSED';
-
-    public const SUFFIX_HEAL_ABSORBED = 'HEAL_ABSORBED';
-
-    public const SUFFIX_HEAL_SUPPORT = 'HEAL_SUPPORT';
-
-    public const SUFFIX_HEAL = 'HEAL';
-
-    public const SUFFIX_ABSORBED = 'ABSORBED';
-
-    public const SUFFIX_ENERGIZE = 'ENERGIZE';
-
-    public const SUFFIX_DRAIN = 'DRAIN';
-
-    public const SUFFIX_LEECH = 'LEECH';
-
+    public const SUFFIX_DAMAGE         = 'DAMAGE';
+    public const SUFFIX_MISSED         = 'MISSED';
+    public const SUFFIX_HEAL_ABSORBED  = 'HEAL_ABSORBED';
+    public const SUFFIX_HEAL_SUPPORT   = 'HEAL_SUPPORT';
+    public const SUFFIX_HEAL           = 'HEAL';
+    public const SUFFIX_ABSORBED       = 'ABSORBED';
+    public const SUFFIX_ENERGIZE       = 'ENERGIZE';
+    public const SUFFIX_DRAIN          = 'DRAIN';
+    public const SUFFIX_LEECH          = 'LEECH';
     public const SUFFIX_EMPOWER_INTERRUPT = 'EMPOWER_INTERRUPT';
-
-    public const SUFFIX_INTERRUPT = 'INTERRUPT';
-
-    public const SUFFIX_DISPEL_FAILED = 'DISPEL_FAILED';
-
-    public const SUFFIX_DISPEL = 'DISPEL';
-
-    public const SUFFIX_STOLEN = 'STOLEN';
-
-    public const SUFFIX_EXTRA_ATTACKS = 'EXTRA_ATTACKS';
-
-    public const SUFFIX_AURA_APPLIED = 'AURA_APPLIED';
-
-    public const SUFFIX_AURA_REMOVED = 'AURA_REMOVED';
-
+    public const SUFFIX_INTERRUPT      = 'INTERRUPT';
+    public const SUFFIX_DISPEL_FAILED  = 'DISPEL_FAILED';
+    public const SUFFIX_DISPEL         = 'DISPEL';
+    public const SUFFIX_STOLEN         = 'STOLEN';
+    public const SUFFIX_EXTRA_ATTACKS  = 'EXTRA_ATTACKS';
+    public const SUFFIX_AURA_APPLIED   = 'AURA_APPLIED';
+    public const SUFFIX_AURA_REMOVED   = 'AURA_REMOVED';
     public const SUFFIX_AURA_APPLIED_DOSE = 'AURA_APPLIED_DOSE';
-
     public const SUFFIX_AURA_REMOVED_DOSE = 'AURA_REMOVED_DOSE';
-
-    public const SUFFIX_AURA_REFRESH = 'AURA_REFRESH';
-
+    public const SUFFIX_AURA_REFRESH   = 'AURA_REFRESH';
     public const SUFFIX_AURA_BROKEN_SPELL = 'AURA_BROKEN_SPELL';
-
-    public const SUFFIX_AURA_BROKEN = 'AURA_BROKEN';
-
-    public const SUFFIX_CAST_START = 'CAST_START';
-
-    public const SUFFIX_CAST_SUCCESS = 'CAST_SUCCESS';
-
-    public const SUFFIX_CAST_FAILED = 'CAST_FAILED';
-
-    public const SUFFIX_INSTAKILL = 'INSTAKILL';
-
+    public const SUFFIX_AURA_BROKEN    = 'AURA_BROKEN';
+    public const SUFFIX_CAST_START     = 'CAST_START';
+    public const SUFFIX_CAST_SUCCESS   = 'CAST_SUCCESS';
+    public const SUFFIX_CAST_FAILED    = 'CAST_FAILED';
+    public const SUFFIX_INSTAKILL      = 'INSTAKILL';
     public const SUFFIX_DURABILITY_DAMAGE = 'DURABILITY_DAMAGE';
-
     public const SUFFIX_DURABILITY_DAMAGE_ALL = 'DURABILITY_DAMAGE_ALL';
-
-    public const SUFFIX_CREATE = 'CREATE';
-
-    public const SUFFIX_SUMMON = 'SUMMON';
-
-    public const SUFFIX_EMPOWER_START = 'EMPOWER_START';
-
-    public const SUFFIX_EMPOWER_END = 'EMPOWER_END';
+    public const SUFFIX_CREATE         = 'CREATE';
+    public const SUFFIX_SUMMON         = 'SUMMON';
+    public const SUFFIX_EMPOWER_START  = 'EMPOWER_START';
+    public const SUFFIX_EMPOWER_END    = 'EMPOWER_END';
 
     public const SUFFIX_ALL = [
         self::SUFFIX_DAMAGE_LANDED_SUPPORT,
@@ -120,13 +91,13 @@ abstract class Suffix implements HasParameters
     ];
 
     private const SUFFIX_CLASS_MAPPING = [
-        self::SUFFIX_DAMAGE_LANDED_SUPPORT => DamageLandedSupport::class,
-        self::SUFFIX_DAMAGE_LANDED         => DamageLanded::class,
-        self::SUFFIX_DAMAGE_SUPPORT        => DamageSupport::class,
+        self::SUFFIX_DAMAGE_LANDED_SUPPORT => DamageLandedSupportBuilder::class,
+        self::SUFFIX_DAMAGE_LANDED         => DamageLandedBuilder::class,
+        self::SUFFIX_DAMAGE_SUPPORT        => DamageSupportBuilder::class,
         self::SUFFIX_DURABILITY_DAMAGE_ALL => DurabilityDamageAll::class,
         self::SUFFIX_DURABILITY_DAMAGE     => DurabilityDamage::class,
-        self::SUFFIX_DAMAGE                => Damage::class,
-        self::SUFFIX_MISSED                => Missed::class,
+        self::SUFFIX_DAMAGE                => DamageBuilder::class,
+        self::SUFFIX_MISSED                => MissedBuilder::class,
         self::SUFFIX_HEAL_ABSORBED         => HealAbsorbed::class,
         self::SUFFIX_HEAL_SUPPORT          => HealSupport::class,
         self::SUFFIX_HEAL                  => Heal::class,
@@ -178,7 +149,12 @@ abstract class Suffix implements HasParameters
     {
         foreach (self::SUFFIX_CLASS_MAPPING as $prefix => $className) {
             if (Str::endsWith($eventName, $prefix)) {
-                return new $className($combatLogVersion);
+                $suffix = new $className($combatLogVersion);
+                if ($suffix instanceof SuffixBuilderInterface) {
+                    return $suffix::create($combatLogVersion);
+                }
+
+                return $suffix;
             }
         }
 

@@ -1,5 +1,11 @@
 <?php
-/** @var $teams \Illuminate\Support\Collection<\App\Models\Team> */
+
+use App\Models\Team;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection<Team> $teams
+ **/
 
 $id         ??= 'team_id_select';
 $name       ??= 'team_id';

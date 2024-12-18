@@ -6,7 +6,6 @@ use App;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
-use App\Models\Affix;
 use App\Models\Npc\Npc;
 use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\DataExtractors\Logging\NpcUpdateDataExtractorLoggingInterface;
@@ -54,7 +53,7 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
             }
 
             // @TODO Disabled for now since I think it's calculated incorrectly - we also don't need it now
-//            $this->extractBaseHealth($result, $currentDungeon, $parsedEvent, $npc);
+            $this->extractBaseHealth($result, $currentDungeon, $parsedEvent, $npc);
 
             $this->checkedNpcIds->push($npc->id);
         }
@@ -90,7 +89,7 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
 
             $result->updatedNpc();
 
-            $this->log->extractDataUpdatedNpc($baseHealth, $newBaseHealth);
+            $this->log->extractDataUpdatedNpc($npc->id, $baseHealth, $newBaseHealth);
         }
     }
 }

@@ -5,15 +5,22 @@
     'breadcrumbsParams' => $breadcrumbsParams,
     'title' => __('view_dungeonroute.discover.discover.title'),
 ])
-
 <?php
+
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\Dungeon;
+use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
+use Illuminate\Support\Collection;
+
 /**
- * @var $currentUserGameVersion \App\Models\GameVersion\GameVersion
- * @var $expansion \App\Models\Expansion
- * @var $season \App\Models\Season|null
- * @var $gridDungeons \App\Models\Dungeon[]|\Illuminate\Support\Collection
- * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
- * @var $nextAffixGroup \App\Models\AffixGroup\AffixGroup
+ * @var GameVersion         $currentUserGameVersion
+ * @var Expansion           $expansion
+ * @var Season|null         $season
+ * @var Collection<Dungeon> $gridDungeons
+ * @var AffixGroup          $currentAffixGroup
+ * @var AffixGroup          $nextAffixGroup
  */
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
@@ -31,7 +38,7 @@
             'currentAffixGroup' => $currentAffixGroup,
             'nextAffixGroup' => $nextAffixGroup,
             'colCount' => 4,
-            'links' => $gridDungeons->map(function(\App\Models\Dungeon $dungeon) use($expansion) {
+            'links' => $gridDungeons->map(function(Dungeon $dungeon) use($expansion) {
                 return ['dungeon' => $dungeon->key, 'link' => route('dungeonroutes.discoverdungeon', ['expansion' => $expansion, 'dungeon' => $dungeon->slug])];
             }),
         ])

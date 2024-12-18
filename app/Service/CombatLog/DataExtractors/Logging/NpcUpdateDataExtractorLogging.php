@@ -11,7 +11,7 @@ class NpcUpdateDataExtractorLogging extends RollbarStructuredLogging implements 
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function extractDataUpdatedNpc(int $baseHealth, int $newBaseHealth): void
+    public function extractDataUpdatedNpc(int $npcId, int $baseHealth, int $newBaseHealth): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }

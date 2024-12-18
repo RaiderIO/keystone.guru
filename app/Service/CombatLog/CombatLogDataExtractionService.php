@@ -63,9 +63,14 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             $dataExtractor->beforeExtract($result, $filePath);
         }
 
-        $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, string $rawEvent, int $lineNr)
+        $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent, int $lineNr)
         use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds, $onProcessLine) {
             $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => trim($rawEvent), 'lineNr' => $lineNr]);
+
+            // We don't care if there's no advanced logging enabled!
+            if (!$advancedLoggingEnabled) {
+                return null;
+            }
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
 
@@ -170,7 +175,7 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
             $totalLines = 0;
             try {
-                $this->combatLogService->parseCombatLog($filePath, function (int $combatLogVersion, string $rawEvent) use (&$totalLines) {
+                $this->combatLogService->parseCombatLog($filePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) use (&$totalLines) {
                     $totalLines++;
 
                     return (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);

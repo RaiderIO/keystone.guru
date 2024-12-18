@@ -1,17 +1,19 @@
-<?php
+<?php /** @noinspection PhpClassCanBeReadonlyInspection */
 
 namespace App\Service\CombatLogEvent;
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEvent;
+use App\Models\CombatLog\CombatLogEventDataType;
+use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Season;
-use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventSearchResult;
+use App\Service\CombatLogEvent\Logging\CombatLogEventServiceLoggingInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Carbon\CarbonPeriod;
 use Codeart\OpensearchLaravel\Aggregations\Aggregation;
@@ -20,15 +22,16 @@ use Codeart\OpensearchLaravel\Aggregations\Types\Maximum;
 use Codeart\OpensearchLaravel\Aggregations\Types\Minimum;
 use Codeart\OpensearchLaravel\Aggregations\Types\ScriptedMetric;
 use Codeart\OpensearchLaravel\Aggregations\Types\Terms;
+use Codeart\OpensearchLaravel\Exceptions\OpenSearchCreateException;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use InvalidArgumentException;
 
 class CombatLogEventService implements CombatLogEventServiceInterface
 {
     public function __construct(
-        private readonly CoordinatesServiceInterface           $coordinatesService,
+        private readonly CoordinatesServiceInterface $coordinatesService,
         private readonly CombatLogEventServiceLoggingInterface $log
     ) {
     }
@@ -49,7 +52,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 ->get();
 
             $combatLogEvents = CombatLogEvent::openSearchResultToModels($combatLogEvents);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->log->getCombatLogEventsException($e);
         } finally {
             $this->log->getCombatLogEventsEnd();
@@ -59,7 +62,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function getGridAggregation(CombatLogEventFilter $filters): ?CombatLogEventGridAggregationResult
     {
@@ -143,18 +146,23 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
             $gridResult = [];
 
-            $size = match ($filters->getDataType()) {
-                CombatLogEvent::DATA_TYPE_PLAYER_POSITION => [
+            // #2641
+            $dataType = $filters->getDataType();
+            if ($filters->getEventType() === CombatLogEventEventType::PlayerDeath) {
+                $dataType = CombatLogEventDataType::PlayerPosition;
+            }
+
+            $size = match ($dataType) {
+                CombatLogEventDataType::PlayerPosition => [
                     ':sizeX'  => config('keystoneguru.heatmap.service.data.player.sizeX'),
                     ':sizeY'  => config('keystoneguru.heatmap.service.data.player.sizeY'),
                     ':player' => 'true',
                 ],
-                CombatLogEvent::DATA_TYPE_ENEMY_POSITION => [
+                CombatLogEventDataType::EnemyPosition => [
                     ':sizeX'  => config('keystoneguru.heatmap.service.data.enemy.sizeX'),
                     ':sizeY'  => config('keystoneguru.heatmap.service.data.enemy.sizeY'),
                     ':player' => 'false',
-                ],
-                default => throw new InvalidArgumentException('Invalid data type'),
+                ]
             };
 
             // Repeat this query for each floor
@@ -190,8 +198,8 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                                    float stepX = width / sizeX;
                                    float stepY = height / sizeY;
 
-                                   double docPosX = :player ? doc[\'pos_x\'].value : doc[\'pos_enemy_x\'].value;
-                                   double docPosY = :player ? doc[\'pos_y\'].value : doc[\'pos_enemy_y\'].value;
+                                   double docPosX = :player ? doc[\'pos_x\'].value : params[\'_source\'][\'context\'][\'pos_enemy_x\'];
+                                   double docPosY = :player ? doc[\'pos_y\'].value : params[\'_source\'][\'context\'][\'pos_enemy_y\'];
 
                                    int gx = ((docPosX - minX) / width * sizeX).intValue();
                                    int gy = ((docPosY - minY) / height * sizeY).intValue();
@@ -246,7 +254,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 $gridResult,
                 $runCount
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->log->getGeotileGridAggregationException($e);
 
             throw $e;
@@ -289,7 +297,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
             $result = $runCountSearchResult['aggregations']['run_count']['value'];
             $this->log->getRunCountResult($result);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->log->getRunCountException($e);
         }
 
@@ -356,7 +364,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             }
 
             $this->log->getRunCountPerDungeonResult($result->toArray());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->log->getRunCountPerDungeonException($e);
         }
 
@@ -416,13 +424,21 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 Carbon::createFromTimestamp((int)$runCountSearchResult['aggregations']['max_date']['value_as_string'])->toDate()
             );
             $this->log->getAvailableDateRangeResult($result->start->getTimestamp(), $result->end->getTimestamp());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->log->getAvailableDateRangeException($e);
         }
 
         return $result;
     }
 
+    /**
+     * @param Season $season
+     * @param string $type
+     * @param int    $count
+     * @param int    $eventsPerRun
+     * @return Collection
+     * @throws OpenSearchCreateException
+     */
     public function generateCombatLogEvents(Season $season, string $type, int $count = 1, int $eventsPerRun = 5): Collection
     {
         $combatLogEventAttributes = collect();
@@ -463,6 +479,8 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             // instead of randomly somewhere on the map, which may be way out of dungeon bounds.
             $enemyIngameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($enemy->getLatLng());
 
+            // @TODO This uses old format - needs to use new format IF you were to use this again, right now this function appears not to be used
+            // See #2632
             $combatLogEventAttributes->push([
                 '@timestamp'        => $now->unix(),
                 'run_id'            => $runId,

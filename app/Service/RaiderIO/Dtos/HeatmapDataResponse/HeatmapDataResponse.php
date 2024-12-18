@@ -2,6 +2,7 @@
 
 namespace App\Service\RaiderIO\Dtos\HeatmapDataResponse;
 
+use App\Models\CombatLog\CombatLogEventDataType;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
@@ -9,7 +10,7 @@ class HeatmapDataResponse implements Arrayable
 {
     private Collection $data;
 
-    private string $dataType;
+    private CombatLogEventDataType $dataType;
 
     private int $runCount;
 
@@ -23,7 +24,7 @@ class HeatmapDataResponse implements Arrayable
         return $this->data;
     }
 
-    public function getDataType(): string
+    public function getDataType(): CombatLogEventDataType
     {
         return $this->dataType;
     }
@@ -39,7 +40,7 @@ class HeatmapDataResponse implements Arrayable
             'data'      => $this->data->map(
                 fn(HeatmapDataFloorData $floorData) => $floorData->toArray()
             )->values()->toArray(),
-            'data_type' => $this->dataType,
+            'data_type' => $this->dataType->value,
             'run_count' => $this->runCount,
         ];
     }
