@@ -22048,5 +22048,765 @@
         "raw_event": "10\/22\/2024 21:25:07.1451  SPELL_MISSED,Creature-0-4244-2286-835-173016-0000180989,\"Corpse Collector\",0x10a48,0x2,Player-1084-090F3F88,\"Roguemo-TarrenMill-EU\",0x512,0x0,334748,\"Drain Fluids\",0x28,MISS,nil\r\n",
         "created_at": "2024-12-10T11:31:02+00:00",
         "updated_at": "2024-12-10T11:31:02+00:00"
+    },
+    {
+        "id": 2206,
+        "spell_id": 99913,
+        "before": null,
+        "after": "{\"id\": 99913, \"name\": \"Unbreakable Shell\", \"duration\": 3600000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:12.062534Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:29:49.52510  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53732-0002751B19,\"Unbound Smoldering Elemental\",0xa48,0x0,Creature-0-3766-720-18158-53732-0002751B19,\"Unbound Smoldering Elemental\",0xa48,0x0,99913,\"Unbreakable Shell\",0x8,BUFF\n",
+        "created_at": "2024-12-18T11:51:12+00:00",
+        "updated_at": "2024-12-18T11:51:12+00:00"
+    },
+    {
+        "id": 2207,
+        "spell_id": 99913,
+        "before": "{\"id\": 99913, \"name\": \"Unbreakable Shell\", \"duration\": 3600000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:12.062534Z\"}",
+        "after": "{\"id\": 99913, \"aura\": 1, \"name\": \"Unbreakable Shell\", \"debuff\": 0, \"duration\": 3600000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 8, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:12.062534Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:29:49.52510  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53732-0002751B19,\"Unbound Smoldering Elemental\",0xa48,0x0,Creature-0-3766-720-18158-53732-0002751B19,\"Unbound Smoldering Elemental\",0xa48,0x0,99913,\"Unbreakable Shell\",0x8,BUFF\n",
+        "created_at": "2024-12-18T11:51:12+00:00",
+        "updated_at": "2024-12-18T11:51:12+00:00"
+    },
+    {
+        "id": 2208,
+        "spell_id": 99532,
+        "before": null,
+        "after": "{\"id\": 99532, \"name\": \"Melt Armor\", \"duration\": 15000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:14.638394Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:29:52.55410  SPELL_CAST_SUCCESS,Creature-0-3766-720-18158-53115-0000751B18,\"Molten Lord\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99532,\"Melt Armor\",0x4,Creature-0-3766-720-18158-53115-0000751B18,0000000000000000,220500,220500,0,0,314,0,1,0,0,0,-421.53,252.89,367,2.3205,35\n",
+        "created_at": "2024-12-18T11:51:14+00:00",
+        "updated_at": "2024-12-18T11:51:14+00:00"
+    },
+    {
+        "id": 2209,
+        "spell_id": 99532,
+        "before": "{\"id\": 99532, \"name\": \"Melt Armor\", \"duration\": 15000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:14.638394Z\"}",
+        "after": "{\"id\": 99532, \"aura\": 0, \"name\": \"Melt Armor\", \"debuff\": 0, \"duration\": 15000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:14.638394Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:29:52.55410  SPELL_CAST_SUCCESS,Creature-0-3766-720-18158-53115-0000751B18,\"Molten Lord\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99532,\"Melt Armor\",0x4,Creature-0-3766-720-18158-53115-0000751B18,0000000000000000,220500,220500,0,0,314,0,1,0,0,0,-421.53,252.89,367,2.3205,35\n",
+        "created_at": "2024-12-18T11:51:14+00:00",
+        "updated_at": "2024-12-18T11:51:14+00:00"
+    },
+    {
+        "id": 2210,
+        "spell_id": 99532,
+        "before": "{\"id\": 99532, \"aura\": 0, \"name\": \"Melt Armor\", \"debuff\": 0, \"duration\": 15000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:14.638394Z\"}",
+        "after": "{\"id\": 99532, \"aura\": 0, \"name\": \"Melt Armor\", \"debuff\": 0, \"duration\": 15000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:14.638394Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:29:52.55410  SPELL_MISSED,Creature-0-3766-720-18158-53115-0000751B18,\"Molten Lord\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99532,\"Melt Armor\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:51:14+00:00",
+        "updated_at": "2024-12-18T11:51:14+00:00"
+    },
+    {
+        "id": 2211,
+        "spell_id": 78660,
+        "before": null,
+        "after": "{\"id\": 78660, \"name\": \"Devastate\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:17.281680Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:00.28610  SPELL_CAST_SUCCESS,Creature-0-3766-720-18158-53119-0003751B1A,\"Flamewaker Forward Guard\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,78660,\"Devastate\",0x1,Creature-0-3766-720-18158-53119-0003751B1A,0000000000000000,88200,88200,0,0,314,0,1,0,0,0,-382.63,185.74,367,2.3371,35\n",
+        "created_at": "2024-12-18T11:51:17+00:00",
+        "updated_at": "2024-12-18T11:51:17+00:00"
+    },
+    {
+        "id": 2212,
+        "spell_id": 78660,
+        "before": "{\"id\": 78660, \"name\": \"Devastate\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:17.281680Z\"}",
+        "after": "{\"id\": 78660, \"aura\": 0, \"name\": \"Devastate\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:17.281680Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:00.28610  SPELL_CAST_SUCCESS,Creature-0-3766-720-18158-53119-0003751B1A,\"Flamewaker Forward Guard\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,78660,\"Devastate\",0x1,Creature-0-3766-720-18158-53119-0003751B1A,0000000000000000,88200,88200,0,0,314,0,1,0,0,0,-382.63,185.74,367,2.3371,35\n",
+        "created_at": "2024-12-18T11:51:17+00:00",
+        "updated_at": "2024-12-18T11:51:17+00:00"
+    },
+    {
+        "id": 2213,
+        "spell_id": 78660,
+        "before": "{\"id\": 78660, \"aura\": 0, \"name\": \"Devastate\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:17.281680Z\"}",
+        "after": "{\"id\": 78660, \"aura\": 0, \"name\": \"Devastate\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:17.281680Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:00.28610  SPELL_MISSED,Creature-0-3766-720-18158-53119-0003751B1A,\"Flamewaker Forward Guard\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,78660,\"Devastate\",0x1,MISS,nil\n",
+        "created_at": "2024-12-18T11:51:17+00:00",
+        "updated_at": "2024-12-18T11:51:17+00:00"
+    },
+    {
+        "id": 2214,
+        "spell_id": 99993,
+        "before": null,
+        "after": "{\"id\": 99993, \"name\": \"Fiery Blood\", \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:19.878340Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:10.11510  SPELL_MISSED,Creature-0-3766-720-18158-53127-0008F51B18,\"Fire Scorpion\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99993,\"Fiery Blood\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:51:19+00:00",
+        "updated_at": "2024-12-18T11:51:19+00:00"
+    },
+    {
+        "id": 2215,
+        "spell_id": 99993,
+        "before": "{\"id\": 99993, \"name\": \"Fiery Blood\", \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:19.878340Z\"}",
+        "after": "{\"id\": 99993, \"aura\": 0, \"name\": \"Fiery Blood\", \"debuff\": 0, \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:19.878340Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:10.11510  SPELL_MISSED,Creature-0-3766-720-18158-53127-0008F51B18,\"Fire Scorpion\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99993,\"Fiery Blood\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:51:19+00:00",
+        "updated_at": "2024-12-18T11:51:19+00:00"
+    },
+    {
+        "id": 2216,
+        "spell_id": 99993,
+        "before": "{\"id\": 99993, \"aura\": 0, \"name\": \"Fiery Blood\", \"debuff\": 0, \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:19.878340Z\", \"miss_types_mask\": 64}",
+        "after": "{\"id\": 99993, \"aura\": 1, \"name\": \"Fiery Blood\", \"debuff\": 0, \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:19.878340Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:10.11610  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53127-000A751B18,\"Fire Scorpion\",0x10a48,0x0,Creature-0-3766-720-18158-53127-000A751B18,\"Fire Scorpion\",0x10a48,0x0,99993,\"Fiery Blood\",0x4,BUFF\n",
+        "created_at": "2024-12-18T11:51:19+00:00",
+        "updated_at": "2024-12-18T11:51:19+00:00"
+    },
+    {
+        "id": 2217,
+        "spell_id": 99993,
+        "before": "{\"id\": 99993, \"aura\": 1, \"name\": \"Fiery Blood\", \"debuff\": 0, \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:19.878340Z\", \"miss_types_mask\": 64}",
+        "after": "{\"id\": 99993, \"aura\": 1, \"name\": \"Fiery Blood\", \"debuff\": 0, \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:19.878340Z\", \"miss_types_mask\": 65}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:10.14710  SPELL_MISSED,Creature-0-3766-720-18158-53127-0007F51B18,\"Fire Scorpion\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99993,\"Fiery Blood\",0x4,ABSORB,nil,2,2,nil\n",
+        "created_at": "2024-12-18T11:51:19+00:00",
+        "updated_at": "2024-12-18T11:51:19+00:00"
+    },
+    {
+        "id": 2218,
+        "spell_id": 99993,
+        "before": "{\"id\": 99993, \"aura\": 1, \"name\": \"Fiery Blood\", \"debuff\": 0, \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:19.878340Z\", \"miss_types_mask\": 65}",
+        "after": "{\"id\": 99993, \"aura\": 1, \"name\": \"Fiery Blood\", \"debuff\": 1, \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:19.878340Z\", \"miss_types_mask\": 65}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:10.14710  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53127-0007F51B18,\"Fire Scorpion\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99993,\"Fiery Blood\",0x4,DEBUFF\n",
+        "created_at": "2024-12-18T11:51:19+00:00",
+        "updated_at": "2024-12-18T11:51:19+00:00"
+    },
+    {
+        "id": 2219,
+        "spell_id": 100057,
+        "before": null,
+        "after": "{\"id\": 100057, \"name\": \"Rend Flesh\", \"duration\": 12000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:22.756839Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:47.50210  SPELL_CAST_SUCCESS,Creature-0-3766-720-18158-53206-0006751B19,\"Hell Hound\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,100057,\"Rend Flesh\",0x1,Creature-0-3766-720-18158-53206-0006751B19,0000000000000000,66150,66150,0,0,314,0,1,0,0,0,-225.39,21.07,367,2.8100,35\n",
+        "created_at": "2024-12-18T11:51:22+00:00",
+        "updated_at": "2024-12-18T11:51:22+00:00"
+    },
+    {
+        "id": 2220,
+        "spell_id": 100057,
+        "before": "{\"id\": 100057, \"name\": \"Rend Flesh\", \"duration\": 12000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:22.756839Z\"}",
+        "after": "{\"id\": 100057, \"aura\": 0, \"name\": \"Rend Flesh\", \"debuff\": 0, \"duration\": 12000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:22.756839Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:47.50210  SPELL_CAST_SUCCESS,Creature-0-3766-720-18158-53206-0006751B19,\"Hell Hound\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,100057,\"Rend Flesh\",0x1,Creature-0-3766-720-18158-53206-0006751B19,0000000000000000,66150,66150,0,0,314,0,1,0,0,0,-225.39,21.07,367,2.8100,35\n",
+        "created_at": "2024-12-18T11:51:22+00:00",
+        "updated_at": "2024-12-18T11:51:22+00:00"
+    },
+    {
+        "id": 2221,
+        "spell_id": 100057,
+        "before": "{\"id\": 100057, \"aura\": 0, \"name\": \"Rend Flesh\", \"debuff\": 0, \"duration\": 12000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:22.756839Z\"}",
+        "after": "{\"id\": 100057, \"aura\": 0, \"name\": \"Rend Flesh\", \"debuff\": 0, \"duration\": 12000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:22.756839Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:47.50210  SPELL_MISSED,Creature-0-3766-720-18158-53206-0006751B19,\"Hell Hound\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,100057,\"Rend Flesh\",0x1,MISS,nil\n",
+        "created_at": "2024-12-18T11:51:22+00:00",
+        "updated_at": "2024-12-18T11:51:22+00:00"
+    },
+    {
+        "id": 2222,
+        "spell_id": 100057,
+        "before": "{\"id\": 100057, \"aura\": 0, \"name\": \"Rend Flesh\", \"debuff\": 0, \"duration\": 12000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:22.756839Z\", \"miss_types_mask\": 64}",
+        "after": "{\"id\": 100057, \"aura\": 0, \"name\": \"Rend Flesh\", \"debuff\": 1, \"duration\": 12000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:22.756839Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:47.53910  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53206-0008751B19,\"Hell Hound\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,100057,\"Rend Flesh\",0x1,DEBUFF\n",
+        "created_at": "2024-12-18T11:51:22+00:00",
+        "updated_at": "2024-12-18T11:51:22+00:00"
+    },
+    {
+        "id": 2223,
+        "spell_id": 101166,
+        "before": null,
+        "after": "{\"id\": 101166, \"name\": \"Ignite\", \"duration\": 10000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:25.397953Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:55.00010  SPELL_CAST_SUCCESS,Creature-0-3766-720-18158-53167-0002751B19,\"Unbound Pyrelord\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,101166,\"Ignite\",0x4,Creature-0-3766-720-18158-53167-0002751B19,0000000000000000,132300,132300,0,0,314,0,1,0,0,0,-210.42,66.67,367,5.9770,35\n",
+        "created_at": "2024-12-18T11:51:25+00:00",
+        "updated_at": "2024-12-18T11:51:25+00:00"
+    },
+    {
+        "id": 2224,
+        "spell_id": 101166,
+        "before": "{\"id\": 101166, \"name\": \"Ignite\", \"duration\": 10000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:25.397953Z\"}",
+        "after": "{\"id\": 101166, \"aura\": 0, \"name\": \"Ignite\", \"debuff\": 0, \"duration\": 10000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:25.397953Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:55.00010  SPELL_CAST_SUCCESS,Creature-0-3766-720-18158-53167-0002751B19,\"Unbound Pyrelord\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,101166,\"Ignite\",0x4,Creature-0-3766-720-18158-53167-0002751B19,0000000000000000,132300,132300,0,0,314,0,1,0,0,0,-210.42,66.67,367,5.9770,35\n",
+        "created_at": "2024-12-18T11:51:25+00:00",
+        "updated_at": "2024-12-18T11:51:25+00:00"
+    },
+    {
+        "id": 2225,
+        "spell_id": 101166,
+        "before": "{\"id\": 101166, \"aura\": 0, \"name\": \"Ignite\", \"debuff\": 0, \"duration\": 10000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:25.397953Z\"}",
+        "after": "{\"id\": 101166, \"aura\": 0, \"name\": \"Ignite\", \"debuff\": 0, \"duration\": 10000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:25.397953Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:30:55.00010  SPELL_MISSED,Creature-0-3766-720-18158-53167-0002751B19,\"Unbound Pyrelord\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,101166,\"Ignite\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:51:25+00:00",
+        "updated_at": "2024-12-18T11:51:25+00:00"
+    },
+    {
+        "id": 2226,
+        "spell_id": 99916,
+        "before": null,
+        "after": "{\"id\": 99916, \"name\": \"Ignite Elemental\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:28.095809Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:31:01.24310  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53167-0002F51B19,\"Unbound Pyrelord\",0xa48,0x0,Creature-0-3766-720-18158-53732-0007751B19,\"Unbound Smoldering Elemental\",0xa48,0x0,99916,\"Ignite Elemental\",0x4,BUFF\n",
+        "created_at": "2024-12-18T11:51:28+00:00",
+        "updated_at": "2024-12-18T11:51:28+00:00"
+    },
+    {
+        "id": 2227,
+        "spell_id": 99916,
+        "before": "{\"id\": 99916, \"name\": \"Ignite Elemental\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:28.095809Z\"}",
+        "after": "{\"id\": 99916, \"aura\": 1, \"name\": \"Ignite Elemental\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:28.095809Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:31:01.24310  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53167-0002F51B19,\"Unbound Pyrelord\",0xa48,0x0,Creature-0-3766-720-18158-53732-0007751B19,\"Unbound Smoldering Elemental\",0xa48,0x0,99916,\"Ignite Elemental\",0x4,BUFF\n",
+        "created_at": "2024-12-18T11:51:28+00:00",
+        "updated_at": "2024-12-18T11:51:28+00:00"
+    },
+    {
+        "id": 2228,
+        "spell_id": 99918,
+        "before": null,
+        "after": "{\"id\": 99918, \"name\": \"Blazing Flame\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:30.724475Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:31:01.72710  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53732-0007751B19,\"Unbound Smoldering Elemental\",0xa48,0x0,Creature-0-3766-720-18158-53732-0007751B19,\"Unbound Smoldering Elemental\",0xa48,0x0,99918,\"Blazing Flame\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:51:30+00:00",
+        "updated_at": "2024-12-18T11:51:30+00:00"
+    },
+    {
+        "id": 2229,
+        "spell_id": 99918,
+        "before": "{\"id\": 99918, \"name\": \"Blazing Flame\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:30.724475Z\"}",
+        "after": "{\"id\": 99918, \"aura\": 1, \"name\": \"Blazing Flame\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:30.724475Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:31:01.72710  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53732-0007751B19,\"Unbound Smoldering Elemental\",0xa48,0x0,Creature-0-3766-720-18158-53732-0007751B19,\"Unbound Smoldering Elemental\",0xa48,0x0,99918,\"Blazing Flame\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:51:30+00:00",
+        "updated_at": "2024-12-18T11:51:30+00:00"
+    },
+    {
+        "id": 2230,
+        "spell_id": 100556,
+        "before": null,
+        "after": "{\"id\": 100556, \"name\": \"Smouldering Roots\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:33.360414Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:31:05.37710  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-54019-0000751B19,\"Captive Druid of the Talon\",0xa18,0x0,Creature-0-3766-720-18158-54019-0000751B19,\"Captive Druid of the Talon\",0xa18,0x0,100556,\"Smouldering Roots\",0x4,BUFF\n",
+        "created_at": "2024-12-18T11:51:33+00:00",
+        "updated_at": "2024-12-18T11:51:33+00:00"
+    },
+    {
+        "id": 2231,
+        "spell_id": 100556,
+        "before": "{\"id\": 100556, \"name\": \"Smouldering Roots\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:33.360414Z\"}",
+        "after": "{\"id\": 100556, \"aura\": 1, \"name\": \"Smouldering Roots\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:33.360414Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:31:05.37710  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-54019-0000751B19,\"Captive Druid of the Talon\",0xa18,0x0,Creature-0-3766-720-18158-54019-0000751B19,\"Captive Druid of the Talon\",0xa18,0x0,100556,\"Smouldering Roots\",0x4,BUFF\n",
+        "created_at": "2024-12-18T11:51:33+00:00",
+        "updated_at": "2024-12-18T11:51:33+00:00"
+    },
+    {
+        "id": 2232,
+        "spell_id": 100263,
+        "before": null,
+        "after": "{\"id\": 100263, \"name\": \"Shell Spin\", \"duration\": 10000, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:36.080010Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:32:17.10510  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53096-0000F51B18,\"Fire Turtle Hatchling\",0x10a48,0x0,Creature-0-3766-720-18158-53096-0000F51B18,\"Fire Turtle Hatchling\",0x10a48,0x0,100263,\"Shell Spin\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:51:36+00:00",
+        "updated_at": "2024-12-18T11:51:36+00:00"
+    },
+    {
+        "id": 2233,
+        "spell_id": 100263,
+        "before": "{\"id\": 100263, \"name\": \"Shell Spin\", \"duration\": 10000, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:36.080010Z\"}",
+        "after": "{\"id\": 100263, \"aura\": 1, \"name\": \"Shell Spin\", \"debuff\": 0, \"duration\": 10000, \"mechanic\": null, \"cast_time\": 2000, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:36.080010Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:32:17.10510  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53096-0000F51B18,\"Fire Turtle Hatchling\",0x10a48,0x0,Creature-0-3766-720-18158-53096-0000F51B18,\"Fire Turtle Hatchling\",0x10a48,0x0,100263,\"Shell Spin\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:51:36+00:00",
+        "updated_at": "2024-12-18T11:51:36+00:00"
+    },
+    {
+        "id": 2234,
+        "spell_id": 100273,
+        "before": null,
+        "after": "{\"id\": 100273, \"name\": \"Shell Spin\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:38.723290Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:32:17.10510  SPELL_MISSED,Creature-0-3766-720-18158-53096-0000F51B18,\"Fire Turtle Hatchling\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,100273,\"Shell Spin\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:51:38+00:00",
+        "updated_at": "2024-12-18T11:51:38+00:00"
+    },
+    {
+        "id": 2235,
+        "spell_id": 100273,
+        "before": "{\"id\": 100273, \"name\": \"Shell Spin\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:38.723290Z\"}",
+        "after": "{\"id\": 100273, \"aura\": 0, \"name\": \"Shell Spin\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:38.723290Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:32:17.10510  SPELL_MISSED,Creature-0-3766-720-18158-53096-0000F51B18,\"Fire Turtle Hatchling\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,100273,\"Shell Spin\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:51:38+00:00",
+        "updated_at": "2024-12-18T11:51:38+00:00"
+    },
+    {
+        "id": 2236,
+        "spell_id": 101166,
+        "before": "{\"id\": 101166, \"aura\": 0, \"name\": \"Ignite\", \"debuff\": 0, \"duration\": 10000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:25.397953Z\", \"miss_types_mask\": 64}",
+        "after": "{\"id\": 101166, \"aura\": 0, \"name\": \"Ignite\", \"debuff\": 1, \"duration\": 10000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:25.397953Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:32:40.06310  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53167-0001751B18,\"Unbound Pyrelord\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,101166,\"Ignite\",0x4,DEBUFF\n",
+        "created_at": "2024-12-18T11:51:38+00:00",
+        "updated_at": "2024-12-18T11:51:38+00:00"
+    },
+    {
+        "id": 2237,
+        "spell_id": 101166,
+        "before": "{\"id\": 101166, \"aura\": 0, \"name\": \"Ignite\", \"debuff\": 1, \"duration\": 10000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:25.397953Z\", \"miss_types_mask\": 64}",
+        "after": "{\"id\": 101166, \"aura\": 0, \"name\": \"Ignite\", \"debuff\": 1, \"duration\": 10000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:25.397953Z\", \"miss_types_mask\": 65}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:32:42.05310  SPELL_PERIODIC_MISSED,Creature-0-3766-720-18158-53167-0001751B18,\"Unbound Pyrelord\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,101166,\"Ignite\",0x4,ABSORB,nil,2,2,nil\n",
+        "created_at": "2024-12-18T11:51:38+00:00",
+        "updated_at": "2024-12-18T11:51:38+00:00"
+    },
+    {
+        "id": 2238,
+        "spell_id": 100012,
+        "before": null,
+        "after": "{\"id\": 100012, \"name\": \"Surge\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:41.596758Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:32:57.22910  SPELL_CAST_SUCCESS,Creature-0-3766-720-18158-53141-0000F51B18,\"Molten Surger\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,100012,\"Surge\",0x1,Creature-0-3766-720-18158-53141-0000F51B18,0000000000000000,132300,132300,0,0,314,0,1,0,0,0,-340.88,-109.19,367,3.9121,35\n",
+        "created_at": "2024-12-18T11:51:41+00:00",
+        "updated_at": "2024-12-18T11:51:41+00:00"
+    },
+    {
+        "id": 2239,
+        "spell_id": 100012,
+        "before": "{\"id\": 100012, \"name\": \"Surge\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:41.596758Z\"}",
+        "after": "{\"id\": 100012, \"aura\": 0, \"name\": \"Surge\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:41.596758Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:32:57.22910  SPELL_CAST_SUCCESS,Creature-0-3766-720-18158-53141-0000F51B18,\"Molten Surger\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,100012,\"Surge\",0x1,Creature-0-3766-720-18158-53141-0000F51B18,0000000000000000,132300,132300,0,0,314,0,1,0,0,0,-340.88,-109.19,367,3.9121,35\n",
+        "created_at": "2024-12-18T11:51:41+00:00",
+        "updated_at": "2024-12-18T11:51:41+00:00"
+    },
+    {
+        "id": 2240,
+        "spell_id": 100012,
+        "before": "{\"id\": 100012, \"aura\": 0, \"name\": \"Surge\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:41.596758Z\"}",
+        "after": "{\"id\": 100012, \"aura\": 0, \"name\": \"Surge\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:41.596758Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:33:13.93810  SPELL_MISSED,Creature-0-3766-720-18158-53141-0000751B1A,\"Molten Surger\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,100012,\"Surge\",0x1,MISS,nil\n",
+        "created_at": "2024-12-18T11:51:41+00:00",
+        "updated_at": "2024-12-18T11:51:41+00:00"
+    },
+    {
+        "id": 2241,
+        "spell_id": 100742,
+        "before": null,
+        "after": "{\"id\": 100742, \"name\": \"Defensive Casting\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:44.232036Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:35:24.95810  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53187-0000751B18,\"Flamewaker Animator\",0x10a48,0x0,Creature-0-3766-720-18158-53187-0000751B18,\"Flamewaker Animator\",0x10a48,0x0,100742,\"Defensive Casting\",0x4,BUFF\n",
+        "created_at": "2024-12-18T11:51:44+00:00",
+        "updated_at": "2024-12-18T11:51:44+00:00"
+    },
+    {
+        "id": 2242,
+        "spell_id": 100742,
+        "before": "{\"id\": 100742, \"name\": \"Defensive Casting\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:44.232036Z\"}",
+        "after": "{\"id\": 100742, \"aura\": 1, \"name\": \"Defensive Casting\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:44.232036Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:35:24.95810  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53187-0000751B18,\"Flamewaker Animator\",0x10a48,0x0,Creature-0-3766-720-18158-53187-0000751B18,\"Flamewaker Animator\",0x10a48,0x0,100742,\"Defensive Casting\",0x4,BUFF\n",
+        "created_at": "2024-12-18T11:51:44+00:00",
+        "updated_at": "2024-12-18T11:51:44+00:00"
+    },
+    {
+        "id": 2243,
+        "spell_id": 100094,
+        "before": null,
+        "after": "{\"id\": 100094, \"name\": \"Fieroblast\", \"duration\": 12000, \"mechanic\": null, \"cast_time\": 3000, \"icon_name\": \"\", \"dispel_type\": \"Magic\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:47.009749Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:36:51.33110  SPELL_CAST_SUCCESS,Creature-0-3766-720-18158-53793-0000F51B18,\"Harbinger of Flame\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,100094,\"Fieroblast\",0x4,Creature-0-3766-720-18158-53793-0000F51B18,0000000000000000,26070,26070,0,0,260,0,0,27630,27630,100,-58.50,-259.24,367,3.0803,36\n",
+        "created_at": "2024-12-18T11:51:47+00:00",
+        "updated_at": "2024-12-18T11:51:47+00:00"
+    },
+    {
+        "id": 2244,
+        "spell_id": 100094,
+        "before": "{\"id\": 100094, \"name\": \"Fieroblast\", \"duration\": 12000, \"mechanic\": null, \"cast_time\": 3000, \"icon_name\": \"\", \"dispel_type\": \"Magic\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:47.009749Z\"}",
+        "after": "{\"id\": 100094, \"aura\": 0, \"name\": \"Fieroblast\", \"debuff\": 0, \"duration\": 12000, \"mechanic\": null, \"cast_time\": 3000, \"icon_name\": \"\", \"dispel_type\": \"Magic\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:47.009749Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:36:51.33110  SPELL_CAST_SUCCESS,Creature-0-3766-720-18158-53793-0000F51B18,\"Harbinger of Flame\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,100094,\"Fieroblast\",0x4,Creature-0-3766-720-18158-53793-0000F51B18,0000000000000000,26070,26070,0,0,260,0,0,27630,27630,100,-58.50,-259.24,367,3.0803,36\n",
+        "created_at": "2024-12-18T11:51:47+00:00",
+        "updated_at": "2024-12-18T11:51:47+00:00"
+    },
+    {
+        "id": 2245,
+        "spell_id": 100093,
+        "before": null,
+        "after": "{\"id\": 100093, \"name\": \"Fire It Up!\", \"duration\": 30000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:49.646378Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:36:51.33110  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53793-0000F51B18,\"Harbinger of Flame\",0xa48,0x0,Creature-0-3766-720-18158-53793-0000F51B18,\"Harbinger of Flame\",0xa48,0x0,100093,\"Fire It Up!\",0x4,BUFF\n",
+        "created_at": "2024-12-18T11:51:49+00:00",
+        "updated_at": "2024-12-18T11:51:49+00:00"
+    },
+    {
+        "id": 2246,
+        "spell_id": 100093,
+        "before": "{\"id\": 100093, \"name\": \"Fire It Up!\", \"duration\": 30000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:49.646378Z\"}",
+        "after": "{\"id\": 100093, \"aura\": 1, \"name\": \"Fire It Up!\", \"debuff\": 0, \"duration\": 30000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:49.646378Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:36:51.33110  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53793-0000F51B18,\"Harbinger of Flame\",0xa48,0x0,Creature-0-3766-720-18158-53793-0000F51B18,\"Harbinger of Flame\",0xa48,0x0,100093,\"Fire It Up!\",0x4,BUFF\n",
+        "created_at": "2024-12-18T11:51:49+00:00",
+        "updated_at": "2024-12-18T11:51:49+00:00"
+    },
+    {
+        "id": 2247,
+        "spell_id": 100094,
+        "before": "{\"id\": 100094, \"aura\": 0, \"name\": \"Fieroblast\", \"debuff\": 0, \"duration\": 12000, \"mechanic\": null, \"cast_time\": 3000, \"icon_name\": \"\", \"dispel_type\": \"Magic\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:47.009749Z\"}",
+        "after": "{\"id\": 100094, \"aura\": 0, \"name\": \"Fieroblast\", \"debuff\": 0, \"duration\": 12000, \"mechanic\": null, \"cast_time\": 3000, \"icon_name\": \"\", \"dispel_type\": \"Magic\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:47.009749Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:36:52.32910  SPELL_MISSED,Creature-0-3766-720-18158-53793-0000751B18,\"Harbinger of Flame\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,100094,\"Fieroblast\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:51:49+00:00",
+        "updated_at": "2024-12-18T11:51:49+00:00"
+    },
+    {
+        "id": 2248,
+        "spell_id": 100522,
+        "before": null,
+        "after": "{\"id\": 100522, \"name\": \"Frenzy\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:52.711651Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:38:28.13310  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53695-0000751C3A,\"Rageface\",0x10a48,0x0,Creature-0-3766-720-18158-53691-0000751C3A,\"Shannox\",0xa48,0x0,100522,\"Frenzy\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:51:52+00:00",
+        "updated_at": "2024-12-18T11:51:52+00:00"
+    },
+    {
+        "id": 2249,
+        "spell_id": 100522,
+        "before": "{\"id\": 100522, \"name\": \"Frenzy\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:52.711651Z\"}",
+        "after": "{\"id\": 100522, \"aura\": 1, \"name\": \"Frenzy\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:52.711651Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:38:28.13310  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53695-0000751C3A,\"Rageface\",0x10a48,0x0,Creature-0-3766-720-18158-53691-0000751C3A,\"Shannox\",0xa48,0x0,100522,\"Frenzy\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:51:52+00:00",
+        "updated_at": "2024-12-18T11:51:52+00:00"
+    },
+    {
+        "id": 2250,
+        "spell_id": 100797,
+        "before": null,
+        "after": "{\"id\": 100797, \"name\": \"Fiery Torment\", \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:55.286873Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:38:44.18910  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-54161-0000F51B18,\"Flame Archon\",0x10a48,0x0,Creature-0-3766-720-18158-54161-0000F51B18,\"Flame Archon\",0x10a48,0x0,100797,\"Fiery Torment\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:51:55+00:00",
+        "updated_at": "2024-12-18T11:51:55+00:00"
+    },
+    {
+        "id": 2251,
+        "spell_id": 100797,
+        "before": "{\"id\": 100797, \"name\": \"Fiery Torment\", \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:55.286873Z\"}",
+        "after": "{\"id\": 100797, \"aura\": 1, \"name\": \"Fiery Torment\", \"debuff\": 0, \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:55.286873Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:38:44.18910  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-54161-0000F51B18,\"Flame Archon\",0x10a48,0x0,Creature-0-3766-720-18158-54161-0000F51B18,\"Flame Archon\",0x10a48,0x0,100797,\"Fiery Torment\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:51:55+00:00",
+        "updated_at": "2024-12-18T11:51:55+00:00"
+    },
+    {
+        "id": 2252,
+        "spell_id": 99603,
+        "before": null,
+        "after": "{\"id\": 99603, \"name\": \"Molten Boulder\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:57.924180Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:40:54.33510  SPELL_MISSED,Creature-0-3766-720-18158-53986-0002751D0E,\"Firestorm\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99603,\"Molten Boulder\",0x4,ABSORB,nil,8,8,nil\n",
+        "created_at": "2024-12-18T11:51:57+00:00",
+        "updated_at": "2024-12-18T11:51:57+00:00"
+    },
+    {
+        "id": 2253,
+        "spell_id": 99603,
+        "before": "{\"id\": 99603, \"name\": \"Molten Boulder\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:57.924180Z\"}",
+        "after": "{\"id\": 99603, \"aura\": 0, \"name\": \"Molten Boulder\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:57.924180Z\", \"miss_types_mask\": 1}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:40:54.33510  SPELL_MISSED,Creature-0-3766-720-18158-53986-0002751D0E,\"Firestorm\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99603,\"Molten Boulder\",0x4,ABSORB,nil,8,8,nil\n",
+        "created_at": "2024-12-18T11:51:57+00:00",
+        "updated_at": "2024-12-18T11:51:57+00:00"
+    },
+    {
+        "id": 2254,
+        "spell_id": 98837,
+        "before": null,
+        "after": "{\"id\": 98837, \"name\": \"Burning Feet\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:00.742478Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:42:24.45310  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-52577-0000751B18,\"Left Foot\",0xa48,0x0,Creature-0-3766-720-18158-52577-0000751B18,\"Left Foot\",0xa48,0x0,98837,\"Burning Feet\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:52:00+00:00",
+        "updated_at": "2024-12-18T11:52:00+00:00"
+    },
+    {
+        "id": 2255,
+        "spell_id": 98837,
+        "before": "{\"id\": 98837, \"name\": \"Burning Feet\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:00.742478Z\"}",
+        "after": "{\"id\": 98837, \"aura\": 1, \"name\": \"Burning Feet\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:00.742478Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:42:24.45310  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-52577-0000751B18,\"Left Foot\",0xa48,0x0,Creature-0-3766-720-18158-52577-0000751B18,\"Left Foot\",0xa48,0x0,98837,\"Burning Feet\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:52:00+00:00",
+        "updated_at": "2024-12-18T11:52:00+00:00"
+    },
+    {
+        "id": 2256,
+        "spell_id": 100974,
+        "before": null,
+        "after": "{\"id\": 100974, \"name\": \"Unleashed Flame\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:03.301537Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:42:26.66110  SPELL_MISSED,Creature-0-3766-720-18158-54347-0000751E73,\"Unleashed Flame\",0x2248,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,100974,\"Unleashed Flame\",0x4,ABSORB,nil,1,0,nil\n",
+        "created_at": "2024-12-18T11:52:03+00:00",
+        "updated_at": "2024-12-18T11:52:03+00:00"
+    },
+    {
+        "id": 2257,
+        "spell_id": 100974,
+        "before": "{\"id\": 100974, \"name\": \"Unleashed Flame\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:03.301537Z\"}",
+        "after": "{\"id\": 100974, \"aura\": 0, \"name\": \"Unleashed Flame\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:03.301537Z\", \"miss_types_mask\": 1}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:42:26.66110  SPELL_MISSED,Creature-0-3766-720-18158-54347-0000751E73,\"Unleashed Flame\",0x2248,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,100974,\"Unleashed Flame\",0x4,ABSORB,nil,1,0,nil\n",
+        "created_at": "2024-12-18T11:52:03+00:00",
+        "updated_at": "2024-12-18T11:52:03+00:00"
+    },
+    {
+        "id": 2258,
+        "spell_id": 99532,
+        "before": "{\"id\": 99532, \"aura\": 0, \"name\": \"Melt Armor\", \"debuff\": 0, \"duration\": 15000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:14.638394Z\", \"miss_types_mask\": 64}",
+        "after": "{\"id\": 99532, \"aura\": 0, \"name\": \"Melt Armor\", \"debuff\": 1, \"duration\": 15000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:14.638394Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:43:53.41910  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53115-0000F51B1A,\"Molten Lord\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99532,\"Melt Armor\",0x4,DEBUFF\n",
+        "created_at": "2024-12-18T11:52:03+00:00",
+        "updated_at": "2024-12-18T11:52:03+00:00"
+    },
+    {
+        "id": 2259,
+        "spell_id": 99532,
+        "before": "{\"id\": 99532, \"aura\": 0, \"name\": \"Melt Armor\", \"debuff\": 1, \"duration\": 15000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:14.638394Z\", \"miss_types_mask\": 64}",
+        "after": "{\"id\": 99532, \"aura\": 0, \"name\": \"Melt Armor\", \"debuff\": 1, \"duration\": 15000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:51:14.638394Z\", \"miss_types_mask\": 65}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:43:55.41910  SPELL_PERIODIC_MISSED,Creature-0-3766-720-18158-53115-0000F51B1A,\"Molten Lord\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99532,\"Melt Armor\",0x4,ABSORB,nil,1,0,nil\n",
+        "created_at": "2024-12-18T11:52:03+00:00",
+        "updated_at": "2024-12-18T11:52:03+00:00"
+    },
+    {
+        "id": 2260,
+        "spell_id": 99695,
+        "before": null,
+        "after": "{\"id\": 99695, \"name\": \"Flaming Spear\", \"duration\": 9000, \"mechanic\": null, \"cast_time\": 2500, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:06.003093Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:45:09.24710  SPELL_MISSED,Creature-0-3766-720-18158-53640-0000751B19,\"Flamewaker Sentinel\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99695,\"Flaming Spear\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:52:06+00:00",
+        "updated_at": "2024-12-18T11:52:06+00:00"
+    },
+    {
+        "id": 2261,
+        "spell_id": 99695,
+        "before": "{\"id\": 99695, \"name\": \"Flaming Spear\", \"duration\": 9000, \"mechanic\": null, \"cast_time\": 2500, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:06.003093Z\"}",
+        "after": "{\"id\": 99695, \"aura\": 0, \"name\": \"Flaming Spear\", \"debuff\": 0, \"duration\": 9000, \"mechanic\": null, \"cast_time\": 2500, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:06.003093Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:45:09.24710  SPELL_MISSED,Creature-0-3766-720-18158-53640-0000751B19,\"Flamewaker Sentinel\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99695,\"Flaming Spear\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:52:06+00:00",
+        "updated_at": "2024-12-18T11:52:06+00:00"
+    },
+    {
+        "id": 2262,
+        "spell_id": 99574,
+        "before": null,
+        "after": "{\"id\": 99574, \"name\": \"Cat Form\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:08.675223Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:49:35.47810  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53619-0000F51F30,\"Druid of the Flame\",0xa48,0x0,Creature-0-3766-720-18158-53619-0000F51F30,\"Druid of the Flame\",0xa48,0x0,99574,\"Cat Form\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:52:08+00:00",
+        "updated_at": "2024-12-18T11:52:08+00:00"
+    },
+    {
+        "id": 2263,
+        "spell_id": 99574,
+        "before": "{\"id\": 99574, \"name\": \"Cat Form\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:08.675223Z\"}",
+        "after": "{\"id\": 99574, \"aura\": 1, \"name\": \"Cat Form\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:08.675223Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:49:35.47810  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53619-0000F51F30,\"Druid of the Flame\",0xa48,0x0,Creature-0-3766-720-18158-53619-0000F51F30,\"Druid of the Flame\",0xa48,0x0,99574,\"Cat Form\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:52:08+00:00",
+        "updated_at": "2024-12-18T11:52:08+00:00"
+    },
+    {
+        "id": 2264,
+        "spell_id": 99649,
+        "before": null,
+        "after": "{\"id\": 99649, \"name\": \"Reactive Flames\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:11.331182Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:49:35.47810  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53619-0000F51F30,\"Druid of the Flame\",0xa48,0x0,Creature-0-3766-720-18158-53619-0000F51F30,\"Druid of the Flame\",0xa48,0x0,99649,\"Reactive Flames\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:52:11+00:00",
+        "updated_at": "2024-12-18T11:52:11+00:00"
+    },
+    {
+        "id": 2265,
+        "spell_id": 99649,
+        "before": "{\"id\": 99649, \"name\": \"Reactive Flames\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:11.331182Z\"}",
+        "after": "{\"id\": 99649, \"aura\": 1, \"name\": \"Reactive Flames\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:11.331182Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:49:35.47810  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53619-0000F51F30,\"Druid of the Flame\",0xa48,0x0,Creature-0-3766-720-18158-53619-0000F51F30,\"Druid of the Flame\",0xa48,0x0,99649,\"Reactive Flames\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:52:11+00:00",
+        "updated_at": "2024-12-18T11:52:11+00:00"
+    },
+    {
+        "id": 2266,
+        "spell_id": 99705,
+        "before": null,
+        "after": "{\"id\": 99705, \"name\": \"Kneel to the Flame!\", \"duration\": null, \"mechanic\": null, \"cast_time\": 5000, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:14.244774Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:49:49.19310  SPELL_MISSED,Creature-0-3766-720-18158-53619-0000751F30,\"Druid of the Flame\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99705,\"Kneel to the Flame!\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:52:14+00:00",
+        "updated_at": "2024-12-18T11:52:14+00:00"
+    },
+    {
+        "id": 2267,
+        "spell_id": 99705,
+        "before": "{\"id\": 99705, \"name\": \"Kneel to the Flame!\", \"duration\": null, \"mechanic\": null, \"cast_time\": 5000, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:14.244774Z\"}",
+        "after": "{\"id\": 99705, \"aura\": 0, \"name\": \"Kneel to the Flame!\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 5000, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:14.244774Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:49:49.19310  SPELL_MISSED,Creature-0-3766-720-18158-53619-0000751F30,\"Druid of the Flame\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99705,\"Kneel to the Flame!\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:52:14+00:00",
+        "updated_at": "2024-12-18T11:52:14+00:00"
+    },
+    {
+        "id": 2268,
+        "spell_id": 99626,
+        "before": null,
+        "after": "{\"id\": 99626, \"name\": \"Sunfire\", \"duration\": 3000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"Magic\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:17.039280Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:49:57.07610  SPELL_MISSED,Creature-0-3766-720-18158-53619-0000751F30,\"Druid of the Flame\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99626,\"Sunfire\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:52:17+00:00",
+        "updated_at": "2024-12-18T11:52:17+00:00"
+    },
+    {
+        "id": 2269,
+        "spell_id": 99626,
+        "before": "{\"id\": 99626, \"name\": \"Sunfire\", \"duration\": 3000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"Magic\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:17.039280Z\"}",
+        "after": "{\"id\": 99626, \"aura\": 0, \"name\": \"Sunfire\", \"debuff\": 0, \"duration\": 3000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"Magic\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:17.039280Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:49:57.07610  SPELL_MISSED,Creature-0-3766-720-18158-53619-0000751F30,\"Druid of the Flame\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99626,\"Sunfire\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:52:17+00:00",
+        "updated_at": "2024-12-18T11:52:17+00:00"
+    },
+    {
+        "id": 2270,
+        "spell_id": 99646,
+        "before": null,
+        "after": "{\"id\": 99646, \"name\": \"Reckless Leap\", \"duration\": 10000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"Magic\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:19.651419Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:50:00.56910  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53619-0002F51F30,\"Druid of the Flame\",0x10a48,0x0,Creature-0-3766-720-18158-53619-0002F51F30,\"Druid of the Flame\",0x10a48,0x0,99646,\"Reckless Leap\",0x4,BUFF\n",
+        "created_at": "2024-12-18T11:52:19+00:00",
+        "updated_at": "2024-12-18T11:52:19+00:00"
+    },
+    {
+        "id": 2271,
+        "spell_id": 99646,
+        "before": "{\"id\": 99646, \"name\": \"Reckless Leap\", \"duration\": 10000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"Magic\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:19.651419Z\"}",
+        "after": "{\"id\": 99646, \"aura\": 1, \"name\": \"Reckless Leap\", \"debuff\": 0, \"duration\": 10000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"Magic\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:19.651419Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:50:00.56910  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-53619-0002F51F30,\"Druid of the Flame\",0x10a48,0x0,Creature-0-3766-720-18158-53619-0002F51F30,\"Druid of the Flame\",0x10a48,0x0,99646,\"Reckless Leap\",0x4,BUFF\n",
+        "created_at": "2024-12-18T11:52:19+00:00",
+        "updated_at": "2024-12-18T11:52:19+00:00"
+    },
+    {
+        "id": 2272,
+        "spell_id": 98374,
+        "before": null,
+        "after": "{\"id\": 98374, \"name\": \"Cat Form\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:22.313227Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:50:15.65510  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-52571-0000751F30,\"Majordomo Staghelm\",0x10a48,0x0,Creature-0-3766-720-18158-52571-0000751F30,\"Majordomo Staghelm\",0x10a48,0x0,98374,\"Cat Form\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:52:22+00:00",
+        "updated_at": "2024-12-18T11:52:22+00:00"
+    },
+    {
+        "id": 2273,
+        "spell_id": 98374,
+        "before": "{\"id\": 98374, \"name\": \"Cat Form\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:22.313227Z\"}",
+        "after": "{\"id\": 98374, \"aura\": 1, \"name\": \"Cat Form\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 1, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:22.313227Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:50:15.65510  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-52571-0000751F30,\"Majordomo Staghelm\",0x10a48,0x0,Creature-0-3766-720-18158-52571-0000751F30,\"Majordomo Staghelm\",0x10a48,0x0,98374,\"Cat Form\",0x1,BUFF\n",
+        "created_at": "2024-12-18T11:52:22+00:00",
+        "updated_at": "2024-12-18T11:52:22+00:00"
+    },
+    {
+        "id": 2274,
+        "spell_id": 99399,
+        "before": null,
+        "after": "{\"id\": 99399, \"name\": \"Burning Wound\", \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:24.960718Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:51:13.25810  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-52409-0000751B1B,\"Ragnaros\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99399,\"Burning Wound\",0x4,DEBUFF\n",
+        "created_at": "2024-12-18T11:52:24+00:00",
+        "updated_at": "2024-12-18T11:52:24+00:00"
+    },
+    {
+        "id": 2275,
+        "spell_id": 99399,
+        "before": "{\"id\": 99399, \"name\": \"Burning Wound\", \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:24.960718Z\"}",
+        "after": "{\"id\": 99399, \"aura\": 0, \"name\": \"Burning Wound\", \"debuff\": 1, \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:24.960718Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:51:13.25810  SPELL_AURA_APPLIED,Creature-0-3766-720-18158-52409-0000751B1B,\"Ragnaros\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99399,\"Burning Wound\",0x4,DEBUFF\n",
+        "created_at": "2024-12-18T11:52:24+00:00",
+        "updated_at": "2024-12-18T11:52:24+00:00"
+    },
+    {
+        "id": 2276,
+        "spell_id": 99399,
+        "before": "{\"id\": 99399, \"aura\": 0, \"name\": \"Burning Wound\", \"debuff\": 1, \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:24.960718Z\"}",
+        "after": "{\"id\": 99399, \"aura\": 0, \"name\": \"Burning Wound\", \"debuff\": 1, \"duration\": 20000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:24.960718Z\", \"miss_types_mask\": 1}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:51:15.21010  SPELL_PERIODIC_MISSED,Creature-0-3766-720-18158-52409-0000751B1B,\"Ragnaros\",0x10a48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99399,\"Burning Wound\",0x4,ABSORB,nil,1,0,nil\n",
+        "created_at": "2024-12-18T11:52:25+00:00",
+        "updated_at": "2024-12-18T11:52:25+00:00"
+    },
+    {
+        "id": 2277,
+        "spell_id": 98981,
+        "before": null,
+        "after": "{\"id\": 98981, \"name\": \"Lava Bolt\", \"duration\": 6000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:28.467335Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:51:31.89210  SPELL_MISSED,Creature-0-3766-720-18158-52409-0000751B1B,\"Ragnaros\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,98981,\"Lava Bolt\",0x4,ABSORB,nil,8,7,nil\n",
+        "created_at": "2024-12-18T11:52:28+00:00",
+        "updated_at": "2024-12-18T11:52:28+00:00"
+    },
+    {
+        "id": 2278,
+        "spell_id": 98981,
+        "before": "{\"id\": 98981, \"name\": \"Lava Bolt\", \"duration\": 6000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:28.467335Z\"}",
+        "after": "{\"id\": 98981, \"aura\": 0, \"name\": \"Lava Bolt\", \"debuff\": 0, \"duration\": 6000, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:28.467335Z\", \"miss_types_mask\": 1}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:51:31.89210  SPELL_MISSED,Creature-0-3766-720-18158-52409-0000751B1B,\"Ragnaros\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,98981,\"Lava Bolt\",0x4,ABSORB,nil,8,7,nil\n",
+        "created_at": "2024-12-18T11:52:28+00:00",
+        "updated_at": "2024-12-18T11:52:28+00:00"
+    },
+    {
+        "id": 2279,
+        "spell_id": 99112,
+        "before": null,
+        "after": "{\"id\": 99112, \"name\": \"Supernova\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:31.092721Z\"}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:51:32.25510  SPELL_MISSED,Creature-0-3766-720-18158-53140-0003752083,\"Son of Flame\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99112,\"Supernova\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:52:31+00:00",
+        "updated_at": "2024-12-18T11:52:31+00:00"
+    },
+    {
+        "id": 2280,
+        "spell_id": 99112,
+        "before": "{\"id\": 99112, \"name\": \"Supernova\", \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:31.092721Z\"}",
+        "after": "{\"id\": 99112, \"aura\": 0, \"name\": \"Supernova\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:31.092721Z\", \"miss_types_mask\": 64}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:51:32.25510  SPELL_MISSED,Creature-0-3766-720-18158-53140-0003752083,\"Son of Flame\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99112,\"Supernova\",0x4,MISS,nil\n",
+        "created_at": "2024-12-18T11:52:31+00:00",
+        "updated_at": "2024-12-18T11:52:31+00:00"
+    },
+    {
+        "id": 2281,
+        "spell_id": 99112,
+        "before": "{\"id\": 99112, \"aura\": 0, \"name\": \"Supernova\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:31.092721Z\", \"miss_types_mask\": 64}",
+        "after": "{\"id\": 99112, \"aura\": 0, \"name\": \"Supernova\", \"debuff\": 0, \"duration\": null, \"mechanic\": null, \"cast_time\": 0, \"icon_name\": \"\", \"dispel_type\": \"N\/A\", \"schools_mask\": 4, \"cooldown_group\": \"spells.cooldown_group.unknown\", \"fetched_data_at\": \"2024-12-18T11:52:31.092721Z\", \"miss_types_mask\": 65}",
+        "combat_log_path": "tmp\/firelands.zip",
+        "raw_event": "9\/26\/2024 18:51:46.26910  SPELL_MISSED,Creature-0-3766-720-18158-53140-0007F52083,\"Son of Flame\",0xa48,0x0,Player-3725-0AE540CC,\"Yoonahype-Frostmourne-US\",0x511,0x0,99112,\"Supernova\",0x4,ABSORB,nil,50,54,nil\n",
+        "created_at": "2024-12-18T11:52:31+00:00",
+        "updated_at": "2024-12-18T11:52:31+00:00"
     }
 ]

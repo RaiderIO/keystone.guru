@@ -89,7 +89,7 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
 
             $result->updatedNpc();
 
-            $this->log->extractDataUpdatedNpc($baseHealth, $newBaseHealth);
+            $this->log->extractDataUpdatedNpc($npc->id, $baseHealth, $newBaseHealth);
         }
     }
 }
