@@ -1,9 +1,16 @@
 <?php
-/** @var $affixGroup \App\Models\AffixGroup\AffixGroup */
-/** @var $season \App\Models\Season|null */
-/** @var $expansionKey string */
 
-$isTeeming  = $affixGroup->hasAffix(\App\Models\Affix::AFFIX_TEEMING);
+use App\Models\Affix;
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\Season;
+
+/**
+ * @var AffixGroup  $affixGroup
+ * @var Season|null $season
+ * @var string      $expansionKey
+ */
+
+$isTeeming  = $affixGroup->hasAffix(Affix::AFFIX_TEEMING);
 $cssClasses ??= '';
 ?>
 <div

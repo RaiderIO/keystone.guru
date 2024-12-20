@@ -7,5 +7,5 @@ interface NpcUpdateDataExtractorLoggingInterface
 
     public function extractDataNpcNotFound(int $npcId): void;
 
-    public function extractDataUpdatedNpc(int $baseHealth, int $newBaseHealth): void;
+    public function extractDataUpdatedNpc(int $npcId, int $baseHealth, int $newBaseHealth): void;
 }

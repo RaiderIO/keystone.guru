@@ -1,5 +1,7 @@
 <?php
-/** @var $mappingVersionsSelect array */
+/**
+ * @var array $mappingVersionsSelect
+ */
 ?>
 
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.mdt.dungeonmappingversiontomdtmapping.title')])

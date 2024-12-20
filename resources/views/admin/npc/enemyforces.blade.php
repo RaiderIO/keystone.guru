@@ -1,5 +1,11 @@
 <?php
-/** @var $npc \App\Models\Npc\Npc */
+
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcEnemyForces;
+
+/**
+ * @var Npc $npc
+ **/
 ?>
 
 @section('scripts')
@@ -27,7 +33,7 @@
 
     <tbody>
     @foreach ($npc->npcEnemyForces()->with(['mappingVersion'])->get() as $npcEnemyForces)
-            <?php /** @var $npcEnemyForces \App\Models\Npc\NpcEnemyForces */ ?>
+            <?php /** @var NpcEnemyForces $npcEnemyForces */ ?>
         <tr>
             <td>{{ $npcEnemyForces->id }}</td>
             <td>{{ $npcEnemyForces->mappingVersion->getPrettyName() }}</td>

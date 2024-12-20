@@ -1,16 +1,22 @@
 <?php
+
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\DungeonRoute\DungeonRoute;
+use Illuminate\Support\Collection;
+
 /**
- * @var $category string
- * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
- * @var $dungeonroutes \App\Models\DungeonRoute\DungeonRoute[]|\Illuminate\Support\Collection
+ * @var string                   $category
+ * @var AffixGroup               $currentAffixGroup
+ * @var Collection<DungeonRoute> $dungeonroutes
  */
+
 $affixgroup ??= null;
 ?>
 @extends('layouts.sitepage', [
     'rootClass' => 'discover col-xl-8 offset-xl-2',
     'disableDefaultRootClasses' => true,
     'title' => $title,
-    'breadcrumbsParams' => [$expansion]
+    'breadcrumbsParams' => [$expansion],
 ])
 
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])

@@ -1,6 +1,11 @@
 <?php
-/** @var $dungeonroute \App\Models\DungeonRoute\DungeonRoute */
-/** @var $edit bool */
+
+use App\Models\DungeonRoute\DungeonRoute;
+
+/**
+ * @var DungeonRoute $dungeonroute
+ * @var bool         $edit
+ **/
 ?>
 <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item">

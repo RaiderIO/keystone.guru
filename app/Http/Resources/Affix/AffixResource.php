@@ -9,6 +9,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use JsonSerializable;
 
 /**
+ * @OA\Schema ( schema="Affix" )
+ * @OA\Property ( property="id", type="integer", example="9" )
+ * @OA\Property ( property="name", type="string", example="Bolstering", description="The name of the affix in English" )
+ *
  * @mixin Affix
  */
 class AffixResource extends JsonResource

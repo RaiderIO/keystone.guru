@@ -26,6 +26,27 @@ PUT _index_template/combat_log_events-template
         "run_id": {
           "type": "keyword"
         },
+        "keystone_run_id": {
+          "type": "integer"
+        },
+        "logged_run_id": {
+          "type": "integer"
+        },
+        "period": {
+          "type": "integer"
+        },
+        "season": {
+          "type": "keyword"
+        },
+        "region_id": {
+          "type": "integer"
+        },
+        "realm_type": {
+          "type": "keyword"
+        },
+        "wow_instance_id": {
+          "type": "integer"
+        },
         "challenge_mode_id": {
           "type": "integer"
         },
@@ -49,6 +70,15 @@ PUT _index_template/combat_log_events-template
         "duration_ms": {
           "type": "integer"
         },
+        "par_time_ms": {
+          "type": "integer"
+        },
+        "timer_fraction": {
+          "type": "float"
+        },
+        "num_deaths": {
+            "type": "integer"
+        },
         "ui_map_id": {
           "type": "integer"
         },
@@ -58,26 +88,26 @@ PUT _index_template/combat_log_events-template
         "pos_y": {
           "type": "float"
         },
-        "pos_enemy_x": {
-          "type": "float"
-        },
-        "pos_enemy_y": {
-          "type": "float"
-        },
         "event_type": {
           "type": "keyword"
+        },
+        "num_members": {
+            "type": "integer"
+        },
+        "average_item_level": {
+            "type": "float"
         },
         "characters": {
           "type": "nested",
           "dynamic": false,
           "properties": {
             "id": {
-              "type": "keyword"
+              "type": "integer"
             },
             "class_id": {
               "type": "integer"
             },
-            "race_id": {
+            "spec_id": {
               "type": "integer"
             }
           }
@@ -91,6 +121,12 @@ PUT _index_template/combat_log_events-template
             },
             "npc_id": {
               "type": "integer"
+            },
+            "pos_enemy_x": {
+              "type": "float"
+            },
+            "pos_enemy_y": {
+              "type": "float"
             }
           }
         }
@@ -207,10 +243,31 @@ PUT /combat_log_events-000001
       "run_id": {
         "type": "keyword"
       },
+      "keystone_run_id": {
+        "type": "integer"
+      },
+      "logged_run_id": {
+        "type": "integer"
+      },
+      "period": {
+        "type": "integer"
+      },
+      "season": {
+        "type": "keyword"
+      },
+      "region_id": {
+        "type": "integer"
+      },
+      "realm_type": {
+        "type": "keyword"
+      },
+      "wow_instance_id": {
+        "type": "integer"
+      },
       "challenge_mode_id": {
         "type": "integer"
       },
-      "key_level": {
+      "level": {
         "type": "integer"
       },
       "affix_id": {
@@ -230,6 +287,15 @@ PUT /combat_log_events-000001
       "duration_ms": {
         "type": "integer"
       },
+      "par_time_ms": {
+        "type": "integer"
+      },
+      "timer_fraction": {
+        "type": "float"
+      },
+      "num_deaths": {
+          "type": "integer"
+      },
       "ui_map_id": {
         "type": "integer"
       },
@@ -248,17 +314,23 @@ PUT /combat_log_events-000001
       "event_type": {
         "type": "keyword"
       },
+      "num_members": {
+          "type": "integer"
+      },
+      "average_item_level": {
+          "type": "float"
+      },
       "characters": {
         "type": "nested",
         "dynamic": false,
         "properties": {
           "id": {
-            "type": "keyword"
+            "type": "integer"
           },
           "class_id": {
             "type": "integer"
           },
-          "race_id": {
+          "spec_id": {
             "type": "integer"
           }
         }
@@ -267,11 +339,21 @@ PUT /combat_log_events-000001
         "type": "nested",
         "dynamic": true,
         "properties": {
+          "@timestamp": {
+            "format": "epoch_second",
+            "type": "date"
+          },
           "spell_id": {
             "type": "integer"
           },
           "npc_id": {
             "type": "integer"
+          },
+          "pos_enemy_x": {
+            "type": "float"
+          },
+          "pos_enemy_y": {
+            "type": "float"
           }
         }
       }

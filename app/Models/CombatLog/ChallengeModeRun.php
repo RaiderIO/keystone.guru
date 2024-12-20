@@ -21,7 +21,9 @@ use Illuminate\Support\Collection;
  * @property bool                      $success
  * @property int                       $total_time_ms
  * @property bool                      $duplicate
+ *
  * @property Carbon                    $created_at
+ *
  * @property Dungeon                   $dungeon
  * @property DungeonRoute              $dungeonRoute
  * @property ChallengeModeRunData      $challengeModeRunData
@@ -104,5 +106,15 @@ class ChallengeModeRun extends Model
         } else {
             return sprintf('%02d:%02d.%02d', $interval->minutes, $interval->seconds, $interval->microseconds);
         }
+    }
+
+    public static function boot(): void
+    {
+        parent::boot();
+
+        static::deleting(function (ChallengeModeRun $challengeModeRun) {
+            $challengeModeRun->enemyPositions()->delete();
+            $challengeModeRun->challengeModeRunData()->delete();
+        });
     }
 }

@@ -3,42 +3,43 @@
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEvent;
+use App\Models\CombatLog\CombatLogEventEventType;
+use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\Dungeon;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
-use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 
 /**
- * @var bool $showAds
- * @var Dungeon $dungeon
- * @var bool $embed
- * @var string $embedStyle
- * @var bool $isMobile
- * @var integer $defaultState
- * @var bool $hideOnMove
- * @var bool $showAllEnabled
- * @var Collection<AffixGroup> $allAffixGroupsByActiveExpansion
- * @var Collection<Affix> $featuredAffixesByActiveExpansion
- * @var int $keyLevelMin
- * @var int $keyLevelMax
+ * @var bool                         $showAds
+ * @var Dungeon                      $dungeon
+ * @var bool                         $embed
+ * @var string                       $embedStyle
+ * @var bool                         $isMobile
+ * @var integer                      $defaultState
+ * @var bool                         $hideOnMove
+ * @var bool                         $showAllEnabled
+ * @var Collection<AffixGroup>       $allAffixGroupsByActiveExpansion
+ * @var Collection<Affix>            $featuredAffixesByActiveExpansion
+ * @var int                          $keyLevelMin
+ * @var int                          $keyLevelMax
  * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
  */
 
 // By default, show it if we're not mobile, but allow overrides
-$pullsSidebarState = (int)($_COOKIE['pulls_sidebar_state'] ?? 1);
-$defaultState ??= $isMobile ? 0 : $pullsSidebarState;
+$pullsSidebarState    = (int)($_COOKIE['pulls_sidebar_state'] ?? 1);
+$defaultState         ??= $isMobile ? 0 : $pullsSidebarState;
 $heatmapSearchEnabled = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
 
 $filterExpandedCookiePrefix = 'heatmap_search_expanded';
-$expandedDataType = (bool)($_COOKIE[sprintf('%s_data_type', $filterExpandedCookiePrefix)] ?? 0); // Hide by default
-$expandedKeyLevel = (bool)($_COOKIE[sprintf('%s_key_level', $filterExpandedCookiePrefix)] ?? 1);
-$expandedAffixes = (bool)($_COOKIE[sprintf('%s_affixes', $filterExpandedCookiePrefix)] ?? 1);
-$expandedAffixWeek = (bool)($_COOKIE[sprintf('%s_weekly_affix_groups', $filterExpandedCookiePrefix)] ?? 1);
-$expandedDuration = (bool)($_COOKIE[sprintf('%s_duration', $filterExpandedCookiePrefix)] ?? 1);
+$expandedDataType           = (bool)($_COOKIE[sprintf('%s_data_type', $filterExpandedCookiePrefix)] ?? 0); // Hide by default
+$expandedKeyLevel           = (bool)($_COOKIE[sprintf('%s_key_level', $filterExpandedCookiePrefix)] ?? 1);
+$expandedAffixes            = (bool)($_COOKIE[sprintf('%s_affixes', $filterExpandedCookiePrefix)] ?? 1);
+$expandedAffixWeek          = (bool)($_COOKIE[sprintf('%s_weekly_affix_groups', $filterExpandedCookiePrefix)] ?? 1);
+$expandedDuration           = (bool)($_COOKIE[sprintf('%s_duration', $filterExpandedCookiePrefix)] ?? 1);
 
 $shouldShowHeatmapSearchSidebar = $defaultState === 1;
-$hideOnMove ??= $isMobile;
-$showAds ??= true;
+$hideOnMove                     ??= $isMobile;
+$showAds                        ??= true;
 /** @var Collection<AffixGroup> $affixGroups */
 $affixGroups = $allAffixGroupsByActiveExpansion->get($dungeon->expansion->shortname);
 /** @var Collection<Affix> $featuredAffixes */
@@ -149,15 +150,15 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                          data-toggle="buttons">
                         <label class="btn btn-secondary active">
                             <input type="radio" name="event_type"
-                                   class="{{ CombatLogEvent::EVENT_TYPE_ENEMY_KILLED }}"
-                                   value="{{ CombatLogEvent::EVENT_TYPE_ENEMY_KILLED }}"
+                                   class="{{ CombatLogEventEventType::EnemyKilled->value }}"
+                                   value="{{ CombatLogEventEventType::EnemyKilled->value }}"
                                    checked>
                             <i class="fas fa-users"></i> {{ __('combatlogeventtypes.enemy_killed') }}
                         </label>
                         <label class="btn btn-secondary">
                             <input type="radio" name="event_type"
-                                   class="{{ CombatLogEvent::EVENT_TYPE_PLAYER_DEATH }}"
-                                   value="{{ CombatLogEvent::EVENT_TYPE_PLAYER_DEATH }}">
+                                   class="{{ CombatLogEventEventType::PlayerDeath->value }}"
+                                   value="{{ CombatLogEventEventType::PlayerDeath->value }}">
                             <i class="fas fa-skull-crossbones"></i> {{ __('combatlogeventtypes.player_death') }}
                         </label>
                     </div>
@@ -173,14 +174,14 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                          data-toggle="buttons">
                         <label class="btn btn-secondary">
                             <input type="radio" name="data_type"
-                                   class="{{ CombatLogEvent::DATA_TYPE_ENEMY_POSITION }}"
-                                   value="{{ CombatLogEvent::DATA_TYPE_ENEMY_POSITION }}">
+                                   class="{{ CombatLogEventDataType::EnemyPosition->value }}"
+                                   value="{{ CombatLogEventDataType::EnemyPosition->value }}">
                             <i class="fas fa-map-marked-alt"></i> {{ __('combatlogdatatypes.enemy_position') }}
                         </label>
                         <label class="btn btn-secondary active">
                             <input type="radio" name="data_type"
-                                   class="{{ CombatLogEvent::DATA_TYPE_PLAYER_POSITION }}"
-                                   value="{{ CombatLogEvent::DATA_TYPE_PLAYER_POSITION }}"
+                                   class="{{ CombatLogEventDataType::PlayerPosition->value }}"
+                                   value="{{ CombatLogEventDataType::PlayerPosition->value }}"
                                    checked>
                             <i class="fas fa-map"></i> {{ __('combatlogdatatypes.player_position') }}
                         </label>
@@ -211,13 +212,13 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                             @foreach($chunkedFeaturedAffixes as $affixRow)
                                 <div class="row mt-2 pl-2 featured_affixes">
                                     @foreach($affixRow as $affix)
-                                            <?php /** @var $affix Affix */ ?>
+                                            <?php /** @var Affix $affix */ ?>
                                         <div class="col px-xl-1">
                                             <div
-                                                    class="select_icon class_icon affix_icon_{{ $affix->image_name }} selectable"
-                                                    data-toggle="tooltip" data-id="{{ $affix->id }}"
-                                                    title="{{ __($affix->description) }}"
-                                                    style="height: 24px;">
+                                                class="select_icon class_icon affix_icon_{{ $affix->image_name }} selectable"
+                                                data-toggle="tooltip" data-id="{{ $affix->id }}"
+                                                title="{{ __($affix->description) }}"
+                                                style="height: 24px;">
                                             </div>
                                         </div>
                                     @endforeach

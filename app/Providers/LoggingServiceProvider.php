@@ -14,12 +14,12 @@ use App\Service\ChallengeModeRunData\Logging\ChallengeModeRunDataServiceLogging;
 use App\Service\ChallengeModeRunData\Logging\ChallengeModeRunDataServiceLoggingInterface;
 use App\Service\Cloudflare\Logging\CloudflareServiceLogging;
 use App\Service\Cloudflare\Logging\CloudflareServiceLoggingInterface;
-use App\Service\CombatLog\Builders\Logging\CreateRouteBodyCombatLogEventsBuilderLogging;
-use App\Service\CombatLog\Builders\Logging\CreateRouteBodyCombatLogEventsBuilderLoggingInterface;
-use App\Service\CombatLog\Builders\Logging\CreateRouteBodyCorrectionBuilderLogging;
-use App\Service\CombatLog\Builders\Logging\CreateRouteBodyCorrectionBuilderLoggingInterface;
-use App\Service\CombatLog\Builders\Logging\CreateRouteBodyDungeonRouteBuilderLogging;
-use App\Service\CombatLog\Builders\Logging\CreateRouteBodyDungeonRouteBuilderLoggingInterface;
+use App\Service\CombatLog\Builders\Logging\CombatLogRouteCombatLogEventsBuilderLogging;
+use App\Service\CombatLog\Builders\Logging\CombatLogRouteCombatLogEventsBuilderLoggingInterface;
+use App\Service\CombatLog\Builders\Logging\CombatLogRouteCorrectionBuilderLogging;
+use App\Service\CombatLog\Builders\Logging\CombatLogRouteCorrectionBuilderLoggingInterface;
+use App\Service\CombatLog\Builders\Logging\CombatLogRouteDungeonRouteBuilderLogging;
+use App\Service\CombatLog\Builders\Logging\CombatLogRouteDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLogging;
 use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Builders\Logging\ResultEventDungeonRouteBuilderLogging;
@@ -44,12 +44,12 @@ use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLogging;
 use App\Service\CombatLog\Logging\CombatLogDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLogging;
 use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLoggingInterface;
+use App\Service\CombatLog\Logging\CombatLogRouteDungeonRouteServiceLogging;
+use App\Service\CombatLog\Logging\CombatLogRouteDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogServiceLogging;
 use App\Service\CombatLog\Logging\CombatLogServiceLoggingInterface;
 use App\Service\CombatLog\Logging\CombatLogSplitServiceLogging;
 use App\Service\CombatLog\Logging\CombatLogSplitServiceLoggingInterface;
-use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLogging;
-use App\Service\CombatLog\Logging\CreateRouteDungeonRouteServiceLoggingInterface;
 use App\Service\CombatLog\Splitters\Logging\ChallengeModeSplitterLogging;
 use App\Service\CombatLog\Splitters\Logging\ChallengeModeSplitterLoggingInterface;
 use App\Service\CombatLog\Splitters\Logging\ZoneChangeSplitterLogging;
@@ -107,9 +107,9 @@ class LoggingServiceProvider extends ServiceProvider
         // Combat log
         /// Builders
         $this->app->bind(DungeonRouteBuilderLoggingInterface::class, DungeonRouteBuilderLogging::class);
-        $this->app->bind(CreateRouteBodyDungeonRouteBuilderLoggingInterface::class, CreateRouteBodyDungeonRouteBuilderLogging::class);
-        $this->app->bind(CreateRouteBodyCombatLogEventsBuilderLoggingInterface::class, CreateRouteBodyCombatLogEventsBuilderLogging::class);
-        $this->app->bind(CreateRouteBodyCorrectionBuilderLoggingInterface::class, CreateRouteBodyCorrectionBuilderLogging::class);
+        $this->app->bind(CombatLogRouteDungeonRouteBuilderLoggingInterface::class, CombatLogRouteDungeonRouteBuilderLogging::class);
+        $this->app->bind(CombatLogRouteCombatLogEventsBuilderLoggingInterface::class, CombatLogRouteCombatLogEventsBuilderLogging::class);
+        $this->app->bind(CombatLogRouteCorrectionBuilderLoggingInterface::class, CombatLogRouteCorrectionBuilderLogging::class);
         $this->app->bind(ResultEventDungeonRouteBuilderLoggingInterface::class, ResultEventDungeonRouteBuilderLogging::class);
         /// DataExtractors
         $this->app->bind(CreateMissingNpcDataExtractorLoggingInterface::class, CreateMissingNpcDataExtractorLogging::class);
@@ -126,7 +126,7 @@ class LoggingServiceProvider extends ServiceProvider
         /// Services
         $this->app->bind(CombatLogServiceLoggingInterface::class, CombatLogServiceLogging::class);
         $this->app->bind(CombatLogDungeonRouteServiceLoggingInterface::class, CombatLogDungeonRouteServiceLogging::class);
-        $this->app->bind(CreateRouteDungeonRouteServiceLoggingInterface::class, CreateRouteDungeonRouteServiceLogging::class);
+        $this->app->bind(CombatLogRouteDungeonRouteServiceLoggingInterface::class, CombatLogRouteDungeonRouteServiceLogging::class);
         $this->app->bind(CombatLogSplitServiceLoggingInterface::class, CombatLogSplitServiceLogging::class);
         $this->app->bind(CombatLogMappingVersionServiceLoggingInterface::class, CombatLogMappingVersionServiceLogging::class);
         $this->app->bind(CombatLogDataExtractionServiceLoggingInterface::class, CombatLogDataExtractionServiceLogging::class);

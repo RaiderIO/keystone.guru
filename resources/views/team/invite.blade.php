@@ -1,5 +1,10 @@
 <?php
-/** @var \App\Models\Team $team */
+
+use App\Models\Team;
+
+/**
+ * @var Team $team
+ */
 
 $title  = isset($team) ? sprintf(__('view_team.invite.title'), $team->name) : __('view_team.invite.invalid_team');
 $header = isset($team) ? sprintf(__('view_team.invite.header'), $team->name) : __('view_team.invite.invalid_team');

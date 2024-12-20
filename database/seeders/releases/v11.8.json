@@ -1,0 +1,49 @@
+{
+    "id": 264,
+    "release_changelog_id": 271,
+    "version": "v11.8",
+    "title": "Added Blackwing Lair for Classic Era, Firelands for Classic Cataclysm",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2024-12-20T14:13:34+00:00",
+    "updated_at": "2024-12-20T14:13:34+00:00",
+    "changelog": {
+        "id": 271,
+        "release_id": 264,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 271,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2527,
+                "change": "Added Blackwing Lair raid."
+            },
+            {
+                "release_changelog_id": 271,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2496,
+                "change": "Added Firelands raid."
+            },
+            {
+                "release_changelog_id": 271,
+                "release_changelog_category_id": 11,
+                "ticket_id": 2632,
+                "change": "Added support to ingest a lot of additional information. Nothing of note publicly yet, but more soon!"
+            },
+            {
+                "release_changelog_id": 271,
+                "release_changelog_category_id": 12,
+                "ticket_id": 2633,
+                "change": "There's now a separation between internal and public API docs."
+            },
+            {
+                "release_changelog_id": 271,
+                "release_changelog_category_id": 12,
+                "ticket_id": 2630,
+                "change": "Added a new endpoint to retrieve dungeons and their details."
+            }
+        ]
+    }
+}

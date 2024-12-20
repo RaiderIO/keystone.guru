@@ -76,7 +76,7 @@ class RouteServiceProvider extends ServiceProvider
             return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE ?? 60)->by($this->userKey($request));
         });
         RateLimiter::for('create-user', function (Request $request) {
-            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE ?? 5)->by($this->userKey($request));
+            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE ?? 10)->by($this->userKey($request));
         });
 
         // Heavy GET requests

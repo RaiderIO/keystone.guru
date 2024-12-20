@@ -1,6 +1,8 @@
 <?php
-/** @var $name string */
-/** @var $type string Can be warning, info, danger */
+/**
+ * @var string $name
+ * @var string $type Can be warning, info, danger
+ */
 $name      ??= 'default';
 $type      ??= '';
 $dismiss   ??= true;

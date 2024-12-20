@@ -22,7 +22,7 @@ class SimpleColumnHandler extends DatatablesColumnHandler
         'title',
         'public_key',
         'name',
-        'email'
+        'email',
     ];
 
     public function __construct(DatatablesHandler $dtHandler, $columnName, $columnData = null)
@@ -33,7 +33,7 @@ class SimpleColumnHandler extends DatatablesColumnHandler
     protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch): void
     {
         // If the column name is not valid, ignore it entirely
-        if( !in_array($this->getColumnName(), self::VALID_COLUMN_NAMES) ) {
+        if (!in_array($this->getColumnName(), self::VALID_COLUMN_NAMES)) {
             return;
         }
 

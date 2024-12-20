@@ -1,5 +1,9 @@
 <?php
-/** @var $mappingVersionUsage \Illuminate\Support\Collection */
+use Illuminate\Support\Collection;
+
+/**
+ * @var Collection $mappingVersionUsage
+ */
 ?>
 
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.dungeonroute.mappingversions.title')])

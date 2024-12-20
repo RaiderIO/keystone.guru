@@ -1,0 +1,31 @@
+{
+    "id": 263,
+    "release_changelog_id": 270,
+    "version": "v11.7.3",
+    "title": "Re-enabled rate limiting",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2024-11-25T10:54:22+00:00",
+    "updated_at": "2024-11-25T10:54:22+00:00",
+    "changelog": {
+        "id": 270,
+        "release_id": 263,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 270,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2613,
+                "change": "Rate limiting has been re-enabled after fixing the issues that arose last time. Again, you really should not run into any limits with normal use of the site. This is only to prevent abuse."
+            },
+            {
+                "release_changelog_id": 270,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2631,
+                "change": "Floor selection no longer sometimes shows up on embed pages for dungeons which only have 1 floor."
+            }
+        ]
+    }
+}

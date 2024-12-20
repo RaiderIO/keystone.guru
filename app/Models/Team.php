@@ -24,8 +24,8 @@ use Illuminate\Support\Facades\Auth;
  * @property string                   $invite_code
  * @property string                   $default_role
  *
- * @property Carbon $updated_at
- * @property Carbon $created_at
+ * @property Carbon                   $updated_at
+ * @property Carbon                   $created_at
  *
  * @property Collection<TeamUser>     $teamUsers
  * @property Collection<User>         $members
@@ -262,6 +262,7 @@ class Team extends Model
     public function isUserCollaborator(User $user): bool
     {
         $userRole = $this->getUserRole($user);
+
         return $userRole !== null && $this->getUserRole($user) !== TeamUser::ROLE_MEMBER;
     }
 
@@ -382,7 +383,7 @@ class Team extends Model
                 ));
         }
 
-        $roles    = TeamUser::ALL_ROLES;
+        $roles = TeamUser::ALL_ROLES;
         /** @var TeamUser|null $newOwner */
         $newOwner = $this->teamUsers->where('user_id', '!=', $user->id)
             ->sortByDesc(static fn($obj, $key) => $roles[$obj->role])

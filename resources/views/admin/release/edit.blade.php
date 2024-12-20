@@ -1,7 +1,16 @@
 <?php
-/** @var \App\Models\Release $release */
-/** @var \App\Models\ReleaseChangelogCategory[]|\Illuminate\Support\Collection $categories */
-$changelog = isset($release) ? $release->changelog : new \App\Models\ReleaseChangelog();
+
+use App\Models\Release;
+use App\Models\ReleaseChangelog;
+use App\Models\ReleaseChangelogCategory;
+use Illuminate\Support\Collection;
+
+/**
+ * @var Release                               $release
+ * @var Collection<ReleaseChangelogCategory> $categories
+ */
+
+$changelog = isset($release) ? $release->changelog : new ReleaseChangelog();
 ?>
 
 @extends('layouts.sitepage', [

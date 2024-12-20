@@ -1,6 +1,8 @@
 <?php
-/** @var $rating int */
-/** @var $count int */
+/**
+ * @var int $rating
+ * @var int $count
+ */
 ?>
 <span title="{{ sprintf(__('view_common.dungeonroute.rating.nr_of_votes'), $count) }}" data-toggle="tooltip">
     <?php for ($i = 1;

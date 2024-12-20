@@ -1,7 +1,15 @@
 <?php
-/** @var \App\Models\User $user */
-/** @var \App\Models\CharacterClass[]|\Illuminate\Support\Collection $allClasses */
-/** @var \App\Models\GameServerRegion[]|\Illuminate\Support\Collection $allRegions */
+
+use App\Models\CharacterClass;
+use App\Models\GameServerRegion;
+use App\Models\User;
+use Illuminate\Support\Collection;
+
+/**
+ * @var User                         $user
+ * @var Collection<CharacterClass>   $allClasses
+ * @var Collection<GameServerRegion> $allRegions
+ */
 
 $user      = Auth::getUser();
 $isOAuth   = $user->password === '';
@@ -24,7 +32,7 @@ $menuTitle = sprintf(__('view_profile.edit.menu_title'), $user->name);
     'title' => __('view_profile.edit.title'),
     'menuTitle' => $menuTitle,
     'menuItems' => $menuItems,
-    'menuModelEdit' => $user
+    'menuModelEdit' => $user,
 ])
 
 @include('common.general.inline', ['path' => 'profile/edit', 'options' => [

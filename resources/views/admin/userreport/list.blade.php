@@ -5,7 +5,11 @@
 @endsection
 
 <?php
-/** @var $models \Illuminate\Support\Collection */
+
+use App\Models\UserReport;
+use Illuminate\Support\Collection;
+
+/** @var Collection $models */
 // eager load the classification
 //dd($models);
 ?>
@@ -59,7 +63,7 @@
 
         <tbody>
         @foreach ($models as $report)
-                <?php /** @var $user \App\Models\UserReport */ ?>
+                <?php /** @var UserReport $user */ ?>
             <tr>
                 <td>{{ $report->id }}</td>
                 <td>{{ $report->user->name }}</td>

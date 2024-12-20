@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @property int                                      $id
+ * @property int                                      $class_id Blizzard class ID
  * @property string                                   $key
  * @property string                                   $name
  * @property string                                   $color
@@ -32,7 +33,7 @@ class CharacterClass extends CacheModel
 
     public $hidden = ['icon_file_id', 'pivot'];
 
-    public $fillable = ['key', 'name', 'color'];
+    public $fillable = ['class_id', 'key', 'name', 'color', 'icon_file_id'];
 
     public const CHARACTER_CLASS_WARRIOR      = 'warrior';
     public const CHARACTER_CLASS_HUNTER       = 'hunter';
@@ -77,11 +78,11 @@ class CharacterClass extends CacheModel
 
     public function dungeonRoutePlayerClasses(): BelongsToMany
     {
-        return $this->belongsToMany(DungeonRoutePlayerClass::class, 'dungeon_route_player_classes');
+        return $this->belongsToMany(DungeonRoutePlayerClass::class);
     }
 
     public function dungeonRoutePlayerRaces(): BelongsToMany
     {
-        return $this->belongsToMany(DungeonRoutePlayerRace::class, 'dungeon_route_player_races');
+        return $this->belongsToMany(DungeonRoutePlayerRace::class);
     }
 }

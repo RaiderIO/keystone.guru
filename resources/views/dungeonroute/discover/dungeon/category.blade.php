@@ -1,9 +1,15 @@
 <?php
 /**
- * @var $currentAffixGroup \App\Models\AffixGroup\AffixGroup
- * @var $dungeon \App\Models\Dungeon
- * @var $dungeonroutes \App\Models\DungeonRoute\DungeonRoute[]|\Illuminate\Support\Collection
+ * @var AffixGroup               $currentAffixGroup
+ * @var Dungeon                  $dungeon
+ * @var Collection<DungeonRoute> $dungeonroutes
  */
+
+use App\Models\AffixGroup\AffixGroup;
+use App\Models\Dungeon;
+use App\Models\DungeonRoute\DungeonRoute;
+use Illuminate\Support\Collection;
+
 $title      ??= sprintf('%s routes', __($dungeon->name));
 $affixgroup ??= null;
 ?>
@@ -11,12 +17,12 @@ $affixgroup ??= null;
     'rootClass' => 'discover col-xl-8 offset-xl-2',
     'disableDefaultRootClasses' => true,
     'breadcrumbsParams' => [$dungeon],
-    'title' => $title
+    'title' => $title,
 ])
 
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
         'options' =>  [
-        ]
+        ],
 ])
 
 @section('content')

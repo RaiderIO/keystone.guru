@@ -42,6 +42,18 @@ abstract class Guid implements Stringable
     private const GUID_TYPE_REFLECT = 'REFLECT';
     private const GUID_TYPE_RESIST  = 'RESIST';
 
+    public const GUID_MISS_TYPES = [
+        self::GUID_TYPE_ABSORB  => Absorb::class,
+        self::GUID_TYPE_BLOCK   => Block::class,
+        self::GUID_TYPE_DEFLECT => Deflect::class,
+        self::GUID_TYPE_DODGE   => Dodge::class,
+        self::GUID_TYPE_EVADE   => Evade::class,
+        self::GUID_TYPE_IMMUNE  => Immune::class,
+        self::GUID_TYPE_MISS    => Miss::class,
+        self::GUID_TYPE_PARRY   => Parry::class,
+        self::GUID_TYPE_REFLECT => Reflect::class,
+        self::GUID_TYPE_RESIST  => Resist::class,
+    ];
 
     private const GUID_TYPE_CLASS_MAPPING = [
         self::GUID_TYPE_BATTLE_PET    => BattlePet::class,
