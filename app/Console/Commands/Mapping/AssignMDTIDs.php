@@ -33,7 +33,7 @@ class AssignMDTIDs extends Command
         $mappingVersions = MappingVersion::with(['enemies', 'dungeon'])->get();
 
         $dungeonWhitelist = [
-            Dungeon::RAID_BLACKWING_LAIR,
+            Dungeon::RAID_FIRELANDS,
         ];
 
         foreach ($mappingVersions as $mappingVersion) {
