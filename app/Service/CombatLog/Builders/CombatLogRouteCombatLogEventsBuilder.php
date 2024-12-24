@@ -128,7 +128,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
                 )));
             }
 
-            foreach ($this->combatLogRoute->playerDeaths as $playerDeath) {
+            foreach ($this->combatLogRoute->playerDeaths ?? [] as $playerDeath) {
                 /** @var CombatLogRoutePlayerDeathRequestModel $playerDeath */
                 $floor = $floorsByUiMapId->get(Floor::UI_MAP_ID_MAPPING[$playerDeath->coord->uiMapId] ?? $playerDeath->coord->uiMapId);
 
@@ -188,8 +188,8 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
             'timer_fraction'     => $this->combatLogRoute->challengeMode->timerFraction,
             'num_deaths'         => $this->combatLogRoute->challengeMode->numDeaths,
             'ui_map_id'          => $floor->ui_map_id,
-            'num_members'        => $this->combatLogRoute->roster->numMembers,
-            'average_item_level' => $this->combatLogRoute->roster->averageItemLevel,
+            'num_members'        => $this->combatLogRoute->roster?->numMembers ?? 0,
+            'average_item_level' => $this->combatLogRoute->roster?->averageItemLevel ?? 0,
             'characters'         => $this->getCharactersJsonFromRoster(),
             'context'            => "[]",
             'created_at'         => $now,
@@ -201,7 +201,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
     {
         $result = [];
 
-        for ($i = 0; $i < $this->combatLogRoute->roster->numMembers; $i++) {
+        for ($i = 0; $i < $this->combatLogRoute->roster?->numMembers ?? 0; $i++) {
             $result[] = [
                 'id'    => $this->combatLogRoute->roster->characterIds[$i],
                 'class' => $this->combatLogRoute->roster->classIds[$i],

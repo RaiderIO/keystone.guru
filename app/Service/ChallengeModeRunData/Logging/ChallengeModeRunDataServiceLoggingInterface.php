@@ -8,7 +8,7 @@ interface ChallengeModeRunDataServiceLoggingInterface
 
     public function convertEnd(): void;
 
-    public function convertChallengeModeRunDataStart(): void;
+    public function convertChallengeModeRunDataStart(int $challengeModeRunDataId): void;
 
     public function convertChallengeModeRunDataNoChallengeModeIdSet(): void;
 

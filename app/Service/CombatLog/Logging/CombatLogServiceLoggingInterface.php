@@ -3,16 +3,23 @@
 namespace App\Service\CombatLog\Logging;
 
 use Exception;
+use Throwable;
 
 interface CombatLogServiceLoggingInterface
 {
     public function parseCombatLogToEventsUnableToParseRawEvent(string $rawEvent): void;
 
-    public function getResultEventsStart(string $combatLogFilePath): void;
+    public function getResultEventsForChallengeModeStart(string $combatLogFilePath): void;
 
-    public function getResultEventsAdvancedLogNotEnabled(string $message): void;
+    public function getResultEventsForChallengeModeFilterParseError(string $rawEvent, int $lineNr, Throwable $throwable): void;
 
-    public function getResultEventsEnd(): void;
+    public function getResultEventsForChallengeModeAdvancedLogNotEnabled(string $message): void;
+
+    public function getResultEventsForChallengeModeEnd(): void;
+
+    public function getResultEventsForDungeonOrRaidStart(string $combatLogFilePath): void;
+
+    public function getResultEventsForDungeonOrRaidEnd(): void;
 
     public function extractCombatLogExtractingArchiveStart(): void;
 

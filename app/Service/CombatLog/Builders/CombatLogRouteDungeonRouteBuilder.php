@@ -3,8 +3,8 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
@@ -119,8 +119,21 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             /** @var $event array{type: string, timestamp: Carbon, npc: CombatLogRouteNpcRequestModel} */
             $realUiMapId = Floor::UI_MAP_ID_MAPPING[$event['npc']->coord->uiMapId] ?? $event['npc']->coord->uiMapId;
             if ($this->currentFloor === null || $realUiMapId !== $this->currentFloor->ui_map_id) {
-                $this->currentFloor = Floor::findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id);
-                $this->log->buildKillZonesNewCurrentFloor($this->currentFloor->id, $this->currentFloor->ui_map_id);
+                $newFloor = Floor::findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id);
+                if ($newFloor === null) {
+                    // Floor not found = we stay on the current floor
+                    $this->log->buildKillZonesFloorNotFound($this->currentFloor?->id, $event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id);
+
+                    // First floor ever, can't find it? Assign the default floor
+                    if ($this->currentFloor === null) {
+                        $this->currentFloor = $this->dungeonRoute->dungeon->floors()->where('default', 1)->first();
+
+                        $this->log->buildKillZonesFloorAssigningDefaultFloor($this->currentFloor->id);
+                    }
+                } else {
+                    $this->currentFloor = $newFloor;
+                    $this->log->buildKillZonesNewCurrentFloor($this->currentFloor->id, $this->currentFloor->ui_map_id);
+                }
             }
 
             $uniqueUid = $event['npc']->getUniqueId();

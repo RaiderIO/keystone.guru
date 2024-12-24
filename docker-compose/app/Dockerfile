@@ -113,11 +113,11 @@ COPY etc/ /etc/
 
 RUN chmod -R 440 /etc/sudoers.d/
 
+COPY .env /tmp/.env
+
 COPY root/ /root/
 
 COPY var/ /var/
-
-COPY .env /tmp/.env
 
 # Import .env file and apply it to the current environment
 RUN cd /tmp && \

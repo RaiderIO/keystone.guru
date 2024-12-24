@@ -10,7 +10,6 @@ use App\Models\Floor\Floor;
 use App\Service\CombatLog\DataExtractors\Logging\FloorDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class FloorDataExtractor implements DataExtractorInterface
 {
@@ -46,8 +45,8 @@ class FloorDataExtractor implements DataExtractorInterface
 
 //        $this->previousFloor = $this->currentFloor;
 
-        try {
-            $this->currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID(), $currentDungeon->dungeon->id);
+        $this->currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID(), $currentDungeon->dungeon->id);
+        if ($this->currentFloor !== null) {
 
             $newIngameMinX = round($parsedEvent->getXMin(), 2);
             $newIngameMinY = round($parsedEvent->getYMin(), 2);
@@ -73,8 +72,9 @@ class FloorDataExtractor implements DataExtractorInterface
                     $newIngameMaxY
                 );
             }
+        }
 
-            // This doesn't always give me the correct results, so I'm disabling it for now
+        // This doesn't always give me the correct results, so I'm disabling it for now
 //            if ($this->previousFloor !== null && $this->previousFloor !== $this->currentFloor) {
 //                $assignedFloor = $this->previousFloor->ensureConnectionToFloor($this->currentFloor);
 //                $assignedFloor = $this->currentFloor->ensureConnectionToFloor($this->previousFloor) || $assignedFloor;
@@ -88,10 +88,6 @@ class FloorDataExtractor implements DataExtractorInterface
 //                    );
 //                }
 //            }
-        } catch (ModelNotFoundException $exception) {
-            // We're now on an unknown floor - so don't try to connect floors to floors that aren't actually connected
-            $this->currentFloor = null;
-        }
     }
 
     public function afterExtract(ExtractedDataResult $result, string $combatLogFilePath): void

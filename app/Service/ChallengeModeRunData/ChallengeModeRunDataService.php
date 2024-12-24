@@ -62,7 +62,7 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
     {
         $combatLogEventsAttributes = collect();
         try {
-            $this->log->convertChallengeModeRunDataStart();
+            $this->log->convertChallengeModeRunDataStart($challengeModeRunData->id);
 
             $decoded = json_decode($challengeModeRunData->post_body, true);
 

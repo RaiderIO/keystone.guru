@@ -4,6 +4,10 @@ namespace App\Service\CombatLog\Builders\Logging;
 
 interface CombatLogRouteDungeonRouteBuilderLoggingInterface extends DungeonRouteBuilderLoggingInterface
 {
+    public function buildKillZonesFloorNotFound(?int $currentFloorId, int $uiMapId, int $dungeonId): void;
+
+    public function buildKillZonesFloorAssigningDefaultFloor(int $currentFloorId): void;
+
     public function buildKillZonesNewCurrentFloor(int $floorId, int $uiMapId): void;
 
     public function buildKillZonesCreateNewActivePull(): void;
