@@ -53,7 +53,7 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
             }
 
             // @TODO Disabled for now since I think it's calculated incorrectly - we also don't need it now
-            $this->extractBaseHealth($result, $currentDungeon, $parsedEvent, $npc);
+//            $this->extractBaseHealth($result, $currentDungeon, $parsedEvent, $npc);
 
             $this->checkedNpcIds->push($npc->id);
         }
