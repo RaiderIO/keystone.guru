@@ -41,7 +41,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
             // Give some additional space since we're refreshing ALL floors - the first floor may get processed,
             // but the floors after that will otherwise think "oh the thumbnail is up-to-date" and not refresh.
             if ($this->dungeonRoute->thumbnail_updated_at->isBefore($this->dungeonRoute->updated_at->addHour()) ||
-                $this->dungeonRoute->thumbnail_updated_at->addDays(config('keystoneguru.thumbnail.refresh_days'))->isBefore(now())) {
+                $this->dungeonRoute->thumbnail_updated_at->addDays(config('keystoneguru.thumbnail.refresh_anyways_days'))->isPast()) {
                 $result = $this->thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts);
 
                 if (!$result) {

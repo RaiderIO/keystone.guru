@@ -16,6 +16,8 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
     private static int $GROUPED_CONTEXT_COUNT = 0;
 
+    private static ?string $CHANNEL = null;
+
     /** @var array Every begin call that was made, a new key => [] is added to this array. */
     private array $groupedContexts = [];
 
@@ -31,10 +33,6 @@ abstract class StructuredLogging implements StructuredLoggingInterface
     {
         /** @var Application|Container $app */
         $app = app();
-
-        if ($app->runningInConsole() && !$app->runningUnitTests()) {
-            $this->setChannel('stderr');
-        }
 
         foreach ($this->getDefaultLoggers() as $defaultLogger) {
             $this->addLogger($defaultLogger);
@@ -64,13 +62,6 @@ abstract class StructuredLogging implements StructuredLoggingInterface
     protected function getChannel(): ?string
     {
         return $this->channel;
-    }
-
-    protected function setChannel(?string $channel): StructuredLogging
-    {
-        $this->channel = $channel;
-
-        return $this;
     }
 
     protected function start(string $functionName, array $context = [], bool $addContext = true): void
@@ -198,6 +189,11 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         foreach ($this->groupedContexts as $key => $context) {
             $this->cachedContext = array_merge($this->cachedContext, $context);
         }
+    }
+
+    public static function setChannel(?string $channel): void
+    {
+        self::$CHANNEL = $channel;
     }
 
     public static function enable(): void

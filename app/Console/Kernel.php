@@ -74,6 +74,7 @@ use App\Console\Commands\Wowhead\FetchMissingSpellIcons;
 use App\Console\Commands\Wowhead\FetchSpellData;
 use App\Console\Commands\Wowhead\RefreshDisplayIds as RefreshDisplayIdsWowhead;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
+use App\Logging\StructuredLogging;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -223,58 +224,64 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        Log::channel('scheduler')->debug('Starting scheduler');
+        try {
+            Log::channel('scheduler')->debug('Starting scheduler');
 
-        $debug   = config('app.debug');
-        $appType = config('app.type');
+            if ($this->app->runningInConsole() && !$this->app->runningUnitTests()) {
+                StructuredLogging::setChannel('stderr');
+            }
 
-        $schedule->command('dungeonroute:updatepopularity')->hourly();
-        $schedule->command('dungeonroute:updaterating')->everyFifteenMinutes();
+            $debug   = config('app.debug');
+            $appType = config('app.type');
 
-        $schedule->command('dungeonroute:refreshoutdatedthumbnails')->everyFifteenMinutes();
-        $schedule->command('dungeonroute:deleteexpired')->hourly();
+            $schedule->command('dungeonroute:updatepopularity')->hourly();
+            $schedule->command('dungeonroute:updaterating')->everyFifteenMinutes();
 
-        if (in_array($appType, ['mapping', 'local'])) {
-            $schedule->command('mapping:sync')->everyFiveMinutes();
+            $schedule->command('dungeonroute:refreshoutdatedthumbnails')->everyFifteenMinutes();
+            $schedule->command('dungeonroute:deleteexpired')->hourly();
 
-            // Ensure display IDs are set
-            $schedule->command('wowhead:refreshdisplayids')->hourly();
+            if (in_array($appType, ['mapping', 'local'])) {
+                $schedule->command('mapping:sync')->everyFiveMinutes();
+
+                // Ensure display IDs are set
+                $schedule->command('wowhead:refreshdisplayids')->hourly();
+            }
+
+            $schedule->command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours
+
+            // https://laravel.com/docs/8.x/horizon
+            $schedule->command('horizon:snapshot')->everyFiveMinutes();
+
+            if ($appType === 'live') {
+                $schedule->command('scheduler:telemetry')->everyFiveMinutes();
+            }
+
+            // https://laravel.com/docs/8.x/telescope#data-pruning
+            $schedule->command('telescope:prune --hours=48')->daily();
+
+            // Refresh any membership status - if they're unsubbed, revoke their access. If they're subbed, add access
+            $schedule->command('patreon:refreshmembers')->hourly();
+
+            // We don't want the cache when we're debugging to ensure fresh data every time
+            if (!$debug) {
+                $schedule->command('discover:cache')->hourly();
+                $schedule->command('keystoneguru:view cache')->everyTenMinutes();
+            }
+
+            // Ensure redis remains healthy
+            $schedule->command('redis:clearidlekeys 900')->everyFifteenMinutes();
+
+            // Aggregate all metrics so they're nice and snappy to load
+            $schedule->command('metric:aggregate')->everyFiveMinutes();
+
+            // Sync ads.txt
+            $schedule->command('adprovider:syncadstxt')->everyFifteenMinutes();
+
+            // Cleanup the generated custom thumbnails
+            $schedule->command('thumbnail:deleteexpiredjobs')->everyFifteenMinutes();
+        } finally {
+            Log::channel('scheduler')->debug('Finished scheduler');
         }
-
-        $schedule->command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours
-
-        // https://laravel.com/docs/8.x/horizon
-        $schedule->command('horizon:snapshot')->everyFiveMinutes();
-
-        if ($appType === 'live') {
-            $schedule->command('scheduler:telemetry')->everyFiveMinutes();
-        }
-
-        // https://laravel.com/docs/8.x/telescope#data-pruning
-        $schedule->command('telescope:prune --hours=48')->daily();
-
-        // Refresh any membership status - if they're unsubbed, revoke their access. If they're subbed, add access
-        $schedule->command('patreon:refreshmembers')->hourly();
-
-        // We don't want the cache when we're debugging to ensure fresh data every time
-        if (!$debug) {
-            $schedule->command('discover:cache')->hourly();
-            $schedule->command('keystoneguru:view cache')->everyTenMinutes();
-        }
-
-        // Ensure redis remains healthy
-        $schedule->command('redis:clearidlekeys 900')->everyFifteenMinutes();
-
-        // Aggregate all metrics so they're nice and snappy to load
-        $schedule->command('metric:aggregate')->everyFiveMinutes();
-
-        // Sync ads.txt
-        $schedule->command('adprovider:syncadstxt')->everyFifteenMinutes();
-
-        // Cleanup the generated custom thumbnails
-        $schedule->command('thumbnail:deleteexpiredjobs')->everyFifteenMinutes();
-
-        Log::channel('scheduler')->debug('Finished scheduler');
     }
 
     /**

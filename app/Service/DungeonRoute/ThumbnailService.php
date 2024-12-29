@@ -7,6 +7,7 @@ use App\Jobs\ProcessRouteFloorThumbnailCustom;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use App\Models\Floor\Floor;
+use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -22,6 +23,11 @@ class ThumbnailService implements ThumbnailServiceInterface
 
     public const THUMBNAIL_CUSTOM_FOLDER_PATH = '/images/route_thumbnails_custom';
 
+    public function __construct(
+        private ThumbnailServiceLoggingInterface $log
+    ) {
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -30,11 +36,17 @@ class ThumbnailService implements ThumbnailServiceInterface
         int          $floorIndex,
         int          $attempts = 0): bool
     {
-        return $this->doCreateThumbnail(
-            $dungeonRoute,
-            $floorIndex,
-            self::THUMBNAIL_FOLDER_PATH,
-        );
+        try {
+            $this->log->createThumbnailStart($dungeonRoute->public_key, $floorIndex, $attempts);
+
+            return $this->doCreateThumbnail(
+                $dungeonRoute,
+                $floorIndex,
+                self::THUMBNAIL_FOLDER_PATH,
+            );
+        } finally {
+            $this->log->createThumbnailEnd();
+        }
     }
 
     /**
@@ -51,17 +63,23 @@ class ThumbnailService implements ThumbnailServiceInterface
         ?int         $zoomLevel = null,
         ?int         $quality = null): bool
     {
-        return $this->doCreateThumbnail(
-            $dungeonRoute,
-            $floorIndex,
-            self::THUMBNAIL_CUSTOM_FOLDER_PATH,
-            $viewportWidth,
-            $viewportHeight,
-            $imageWidth,
-            $imageHeight,
-            $zoomLevel,
-            $quality ?? config('keystoneguru.api.dungeon_route.thumbnail.default_quality')
-        );
+        try {
+            $this->log->createThumbnailCustomStart($dungeonRoute->public_key, $floorIndex, $attempts, $viewportWidth, $viewportHeight, $imageWidth, $imageHeight, $zoomLevel, $quality);
+
+            return $this->doCreateThumbnail(
+                $dungeonRoute,
+                $floorIndex,
+                self::THUMBNAIL_CUSTOM_FOLDER_PATH,
+                $viewportWidth,
+                $viewportHeight,
+                $imageWidth,
+                $imageHeight,
+                $zoomLevel,
+                $quality ?? config('keystoneguru.api.dungeon_route.thumbnail.default_quality')
+            );
+        } finally {
+            $this->log->createThumbnailCustomEnd();
+        }
     }
 
     private function doCreateThumbnail(
@@ -76,7 +94,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         ?int         $quality = null): bool
     {
         if (app()->isDownForMaintenance()) {
-            Log::channel('scheduler')->info('Not generating thumbnail - app is down for maintenance');
+            $this->log->doCreateThumbnailMaintenanceMode();
 
             return false;
         }
@@ -116,13 +134,13 @@ class ThumbnailService implements ThumbnailServiceInterface
             $viewportHeight,
         ]);
 
-        Log::channel('scheduler')->info($process->getCommandLine());
+        $this->log->doCreateThumbnailProcessStart($process->getCommandLine());
 
         $process->run();
 
         if ($process->isSuccessful()) {
             if (!file_exists($tmpFile)) {
-                Log::channel('scheduler')->error('Unable to find generated thumbnail; did puppeteer download Chromium?');
+                $this->log->doCreateThumbnailFileNotFoundDidPuppeteerDownloadChromium($tmpFile);
             } else {
                 try {
                     // We've updated the thumbnail; make sure the route is updated, so it doesn't get updated anymore
@@ -137,7 +155,7 @@ class ThumbnailService implements ThumbnailServiceInterface
                     }
 
                     // Rescale it
-                    Log::channel('scheduler')->info(sprintf('Scaling and moving image from %s to %s', $tmpFile, $target));
+                    $this->log->doCreateThumbnailRescale($tmpFile, $target);
                     (new ImageManager(new ImagickDriver()))
                         ->read($tmpFile)
                         ->resize($imageWidth, $imageHeight)
@@ -146,12 +164,10 @@ class ThumbnailService implements ThumbnailServiceInterface
                     // Remove any old .png file that may be there
                     $oldPngFilePath = str_replace('.jpg', '.png', $target);
                     if (file_exists($oldPngFilePath) && unlink($oldPngFilePath)) {
-                        Log::channel('scheduler')->info('Removed old .png file');
+                        $this->log->doCreateThumbnailRemovedOldPngFile();
                     }
 
-                    Log::channel('scheduler')->info(
-                        sprintf('Check if %s exists: %s', $target, var_export(file_exists($target), true))
-                    );
+                    $this->log->doCreateThumbnailSuccess($target, file_exists($target));
                     // Image now exists in target location; compress it and move it to the target location
                     // Log::channel('scheduler')->info('Compressing image..');
                     // $this->compressPng($tmpScaledFile, $target);
@@ -159,9 +175,9 @@ class ThumbnailService implements ThumbnailServiceInterface
                     // Cleanup
                     if (file_exists($tmpFile)) {
                         if (unlink($tmpFile)) {
-                            Log::channel('scheduler')->info('Removing tmp file success');
+                            $this->log->doCreateThumbnailRemovedTmpFileSuccess();
                         } else {
-                            Log::channel('scheduler')->warning('Removing tmp file failure!');
+                            $this->log->doCreateThumbnailRemovedTmpFileFailure();
                         }
                     }
 
@@ -173,10 +189,7 @@ class ThumbnailService implements ThumbnailServiceInterface
         // Log any errors that may have occurred
         $errors = $process->getErrorOutput();
         if (!empty($errors)) {
-            Log::channel('scheduler')->error($errors, [
-                'dungeonRoute' => $dungeonRoute->public_key,
-                'floor'        => $floorIndex,
-            ]);
+            $this->log->doCreateThumbnailError($errors);
 
             return false;
         }
@@ -279,6 +292,7 @@ class ThumbnailService implements ThumbnailServiceInterface
 
         // Copy over all thumbnails
         foreach ($sourceDungeonRoute->dungeon->floors()->where('facade', 0)->get() as $floor) {
+            /** @var Floor $floor */
             $sourcePath = static::getTargetFilePath($sourceDungeonRoute, $floor->index, self::THUMBNAIL_FOLDER_PATH);
             $targetPath = static::getTargetFilePath($targetDungeonRoute, $floor->index, self::THUMBNAIL_FOLDER_PATH);
 
@@ -291,9 +305,7 @@ class ThumbnailService implements ThumbnailServiceInterface
             } catch (Exception $exception) {
                 $result = false;
 
-                logger()->error($exception->getMessage(), [
-                    'exception' => $exception,
-                ]);
+                $this->log->copyThumbnailsError($sourceDungeonRoute->public_key, $targetDungeonRoute->public_key, $floor->id, $exception);
             }
         }
 
