@@ -180,11 +180,6 @@ return [
         'refresh_min'            => 30,
 
         /**
-         * The amount of days when the thumbnail gets refreshed anyway regardless of other rules.
-         */
-        'refresh_anyways_days'   => 180,
-
-        /**
          * The amount of hours when a thumbnail refresh must be in the queue for before it is re-queued
          */
         'refresh_requeue_hours'  => 12,
