@@ -38,6 +38,7 @@ use Illuminate\Support\Collection;
  * @property string|null                          $mdt_mapping_hash
  * @property bool                                 $facade_enabled True if this mapping version uses facades, false if it does not.
  * @property bool                                 $merged Not saved in the database
+ *
  * @property Carbon                               $updated_at
  * @property Carbon                               $created_at
  *

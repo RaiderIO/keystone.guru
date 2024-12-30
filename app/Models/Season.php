@@ -101,7 +101,7 @@ class Season extends CacheModel
     protected $appends = ['name', 'name_long'];
 
     protected $casts = [
-        'start'         => 'date',
+        'start'         => 'datetime',
         'key_level_min' => 'integer',
         'key_level_max' => 'integer',
     ];

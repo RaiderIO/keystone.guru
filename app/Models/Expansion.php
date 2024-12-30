@@ -54,9 +54,9 @@ class Expansion extends CacheModel
     ];
 
 //    protected $casts = [
-//        'released_at' => 'date',
-//        'created_at'  => 'date',
-//        'updated_at'  => 'date',
+//        'released_at' => 'datetime',
+//        'created_at'  => 'datetime',
+//        'updated_at'  => 'datetime',
 //    ];
 
     public const EXPANSION_CLASSIC      = 'classic';

@@ -87,7 +87,7 @@ class Spell extends CacheModel implements MappingModelInterface
         'duration'        => 'integer',
         'selectable'      => 'boolean',
         'hidden_on_map'   => 'boolean',
-        'fetched_data_at' => 'date',
+        'fetched_data_at' => 'datetime',
     ];
 
     public function setFetchedDataAtAttribute($value): void

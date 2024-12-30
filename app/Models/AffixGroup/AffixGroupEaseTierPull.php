@@ -34,7 +34,7 @@ class AffixGroupEaseTierPull extends CacheModel
     ];
 
     protected $casts = [
-        'last_updated_at' => 'date',
+        'last_updated_at' => 'datetime',
     ];
 
     public function affixGroup(): BelongsTo
