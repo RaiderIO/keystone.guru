@@ -204,11 +204,17 @@ class ThumbnailService implements ThumbnailServiceInterface
     {
         $result = false;
 
-        foreach ($dungeonRoute->dungeon->floorsForMapFacade($dungeonRoute->mappingVersion, true)->active()->get() as $floor) {
-            /** @var Floor $floor */
-            // Set it for processing in a queue
-            ProcessRouteFloorThumbnail::dispatch($this, $dungeonRoute, $floor->index);
-            $result = true;
+        if ($dungeonRoute->mappingVersion === null) {
+            $this->log->queueThumbnailRefreshMappingVersionNull($dungeonRoute->public_key);
+            // Do not return - we just assume the thumbnail is generated. Otherwise this will keep spamming
+            // the logs with this error when it really isn't that important.
+        } else {
+            foreach ($dungeonRoute->dungeon->floorsForMapFacade($dungeonRoute->mappingVersion, true)->active()->get() as $floor) {
+                /** @var Floor $floor */
+                // Set it for processing in a queue
+                ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index);
+                $result = true;
+            }
         }
 
         // Temporarily disable timestamps since we don't want this action to update the updated_at

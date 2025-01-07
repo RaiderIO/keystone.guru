@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Jobs\Logging\ProcessRouteFloorThumbnailLoggingInterface;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use Exception;
@@ -10,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class ProcessRouteFloorThumbnail implements ShouldQueue
 {
@@ -19,12 +19,21 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    protected ThumbnailServiceInterface $thumbnailService;
+
     /**
      * Create a new job instance.
      */
-    public function __construct(protected ThumbnailServiceInterface $thumbnailService, protected DungeonRoute $dungeonRoute, protected int $floorIndex, protected int $attempts = 0)
-    {
-        $this->queue = sprintf('%s-%s-thumbnail', config('app.type'), config('app.env'));
+    public function __construct(
+        protected DungeonRoute                              $dungeonRoute,
+        protected int                                       $floorIndex,
+        protected int                                       $attempts = 0,
+        private ?ProcessRouteFloorThumbnailLoggingInterface $log = null
+    ) {
+        // Not passed as a constructor parameter since it's not serializable
+        $this->thumbnailService = app()->make(ThumbnailServiceInterface::class);
+        $this->queue            = sprintf('%s-%s-thumbnail', config('app.type'), config('app.env'));
+        $this->log              = $log ?? app()->make(ProcessRouteFloorThumbnailLoggingInterface::class);
     }
 
     /**
@@ -32,32 +41,37 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::channel('scheduler')->info(
-            sprintf('Started processing %s:%s (%d)', $this->dungeonRoute->public_key, $this->floorIndex, $this->dungeonRoute->id)
-        );
-
         $result = false;
-        if ((int)config('keystoneguru.thumbnail.max_attempts') > $this->attempts) {
-            // Give some additional space since we're refreshing ALL floors - the first floor may get processed,
-            // but the floors after that will otherwise think "oh the thumbnail is up-to-date" and not refresh.
-            if ($this->dungeonRoute->thumbnail_updated_at->isBefore($this->dungeonRoute->updated_at->addHour())) {
-                $result = $this->thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts);
 
-                if (!$result) {
-                    Log::channel('scheduler')->warning(sprintf('Error refreshing thumbnail, attempt %d', $this->attempts));
+        try {
+            $this->log->handleStart(
+                $this->dungeonRoute->public_key,
+                $this->dungeonRoute->id,
+                $this->dungeonRoute->mapping_version_id,
+                $this->floorIndex,
+                $this->attempts
+            );
 
-                    // If there were errors, try again
-                    ProcessRouteFloorThumbnail::dispatch($this->thumbnailService, $this->dungeonRoute, $this->floorIndex, ++$this->attempts);
+            if ((int)config('keystoneguru.thumbnail.max_attempts') > $this->attempts) {
+                // Give some additional space since we're refreshing ALL floors - the first floor may get processed,
+                // but the floors after that will otherwise think "oh the thumbnail is up-to-date" and not refresh.
+                if ($this->dungeonRoute->thumbnail_updated_at->isBefore($this->dungeonRoute->updated_at->addHour())) {
+                    $result = $this->thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts);
+
+                    if (!$result) {
+                        $this->log->handleCreateThumbnailError();
+
+                        // If there were errors, try again
+                        ProcessRouteFloorThumbnail::dispatch($this->dungeonRoute, $this->floorIndex, ++$this->attempts);
+                    }
+                } else {
+                    $this->log->handleThumbnailAlreadyUpToDate();
                 }
             } else {
-                Log::channel('scheduler')->warning('Not refreshing thumbnail - thumbnail is already up-to-date');
+                $this->log->handleMaxAttemptsReached();
             }
-        } else {
-            Log::channel('scheduler')->warning(sprintf('Not refreshing thumbnail - max attempts of %d reached', $this->attempts));
+        } finally {
+            $this->log->handleEnd($result);
         }
-
-        Log::channel('scheduler')->info(
-            sprintf('Finished processing %s:%s (%d) -> %d', $this->dungeonRoute->public_key, $this->floorIndex, $this->dungeonRoute->id, (int)$result)
-        );
     }
 }

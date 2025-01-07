@@ -59,11 +59,6 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         }
     }
 
-    protected function getChannel(): ?string
-    {
-        return $this->channel;
-    }
-
     protected function start(string $functionName, array $context = [], bool $addContext = true): void
     {
         $targetKey = Str::replaceEnd('start', '', strtolower($functionName));
@@ -171,7 +166,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
         foreach ($this->loggers as $logger) {
             if ($logger instanceof LogManager) {
-                $logger = $logger->channel($this->channel);
+                $logger = $logger->channel(self::$CHANNEL);
             }
 
             $logger->log(
@@ -194,6 +189,11 @@ abstract class StructuredLogging implements StructuredLoggingInterface
     public static function setChannel(?string $channel): void
     {
         self::$CHANNEL = $channel;
+    }
+
+    public static function getChannel(): ?string
+    {
+        return self::$CHANNEL;
     }
 
     public static function enable(): void

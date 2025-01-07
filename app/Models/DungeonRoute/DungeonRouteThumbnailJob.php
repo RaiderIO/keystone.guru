@@ -18,8 +18,8 @@ use Illuminate\Support\Carbon;
  * @property int|null     $viewport_height
  * @property int|null     $image_width
  * @property int|null     $image_height
- * @property float        $zoom_level
- * @property int          $quality
+ * @property float|null   $zoom_level
+ * @property int|null     $quality
  *
  * @property DungeonRoute $dungeonRoute
  * @property Floor        $floor
