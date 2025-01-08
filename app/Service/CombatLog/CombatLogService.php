@@ -140,22 +140,29 @@ class CombatLogService implements CombatLogServiceInterface
         ?DungeonRoute &$dungeonRoute = null
     ): Collection {
         try {
-            $this->log->getResultEventsStart($combatLogFilePath);
+            $this->log->getResultEventsForChallengeModeStart($combatLogFilePath);
             $dungeonRouteFilter          = (new DungeonRouteFilter($this->seasonService));
             $combatLogDungeonRouteFilter = new CombatLogDungeonRouteFilter();
 
             try {
                 $this->parseCombatLogStreaming($combatLogFilePath,
-                    static function (BaseEvent $baseEvent, int $lineNr) use (&$dungeonRouteFilter, &$combatLogDungeonRouteFilter) {
+                    function (BaseEvent $baseEvent, int $lineNr) use (&$dungeonRouteFilter, &$combatLogDungeonRouteFilter) {
                         // If parsing was successful, it generated a dungeonroute, so then construct our filter
                         if ($dungeonRouteFilter->parse($baseEvent, $lineNr)) {
                             $combatLogDungeonRouteFilter->setDungeonRoute($dungeonRouteFilter->getDungeonRoute());
                         }
-                        $combatLogDungeonRouteFilter->parse($baseEvent, $lineNr);
+
+                        try {
+                            $combatLogDungeonRouteFilter->parse($baseEvent, $lineNr);
+                        } catch (\Throwable $throwable) {
+                            $this->log->getResultEventsForChallengeModeFilterParseError($baseEvent->getRawEvent(), $lineNr, $throwable);
+
+                            throw $throwable;
+                        }
                     }
                 );
             } catch (AdvancedLogNotEnabledException $e) {
-                $this->log->getResultEventsAdvancedLogNotEnabled($e->getMessage());
+                $this->log->getResultEventsForChallengeModeAdvancedLogNotEnabled($e->getMessage());
             }
 
             // Output the dungeon route as well
@@ -163,7 +170,7 @@ class CombatLogService implements CombatLogServiceInterface
 
             return $combatLogDungeonRouteFilter->getResultEvents();
         } finally {
-            $this->log->getResultEventsEnd();
+            $this->log->getResultEventsForChallengeModeEnd();
         }
     }
 
@@ -174,7 +181,7 @@ class CombatLogService implements CombatLogServiceInterface
         string $combatLogFilePath
     ): Collection {
         try {
-            $this->log->getResultEventsStart($combatLogFilePath);
+            $this->log->getResultEventsForDungeonOrRaidStart($combatLogFilePath);
             $combatLogDungeonOrRaidFilter = new CombatLogDungeonOrRaidFilter();
 
             $this->parseCombatLogStreaming($combatLogFilePath,
@@ -185,7 +192,7 @@ class CombatLogService implements CombatLogServiceInterface
 
             return $combatLogDungeonOrRaidFilter->getResultEvents();
         } finally {
-            $this->log->getResultEventsEnd();
+            $this->log->getResultEventsForDungeonOrRaidEnd();
         }
     }
 

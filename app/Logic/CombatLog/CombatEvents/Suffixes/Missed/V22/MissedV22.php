@@ -6,6 +6,8 @@ use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\MissedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
 use App\Logic\CombatLog\Guid\Guid;
+use App\Logic\CombatLog\Guid\MissType\Block;
+use App\Logic\CombatLog\Guid\MissType\Resist;
 
 /**
  * Two versions!! One where there's an immunity of sorts, and one where there's not.
@@ -73,6 +75,11 @@ class MissedV22 extends Suffix implements MissedInterface
             $this->amountTotal  = 0;
             $this->critical     = false;
             $this->damageType   = $parameters[2] ?? null;
+        } else if ($this->missType instanceof Block || $this->missType instanceof Resist) {
+            $this->amountMissed = $parameters[2];
+            $this->amountTotal  = 0;
+            $this->critical     = false;
+            $this->damageType   = $parameters[3] ?? null;
         } else {
             $this->amountMissed = $parameters[2];
             $this->amountTotal  = $parameters[3];

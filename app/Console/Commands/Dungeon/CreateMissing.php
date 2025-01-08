@@ -34,7 +34,7 @@ class CreateMissing extends Command
         foreach (Dungeon::ALL as $expansionKey => $dungeonKeys) {
 
             // Temp, I just want classic dungeons for now
-            if ($expansionKey !== Expansion::EXPANSION_CLASSIC) {
+            if ($expansionKey !== Expansion::EXPANSION_MOP) {
                 continue;
             }
 

@@ -6,6 +6,10 @@ use App\Exceptions\Logging\HandlerLogging;
 use App\Exceptions\Logging\HandlerLoggingInterface;
 use App\Http\Middleware\Logging\DebugInfoContextLoggerLogging;
 use App\Http\Middleware\Logging\DebugInfoContextLoggerLoggingInterface;
+use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLogging;
+use App\Jobs\Logging\ProcessRouteFloorThumbnailLogging;
+use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLoggingInterface;
+use App\Jobs\Logging\ProcessRouteFloorThumbnailLoggingInterface;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLogging;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
 use App\Service\Cache\Logging\CacheServiceLogging;
@@ -60,6 +64,8 @@ use App\Service\Dungeon\Logging\DungeonServiceLogging;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteServiceLogging;
 use App\Service\DungeonRoute\Logging\DungeonRouteServiceLoggingInterface;
+use App\Service\DungeonRoute\Logging\ThumbnailServiceLogging;
+use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTImportStringServiceLogging;
 use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
 use App\Service\MDT\Logging\MDTMappingExportServiceLogging;
@@ -139,6 +145,11 @@ class LoggingServiceProvider extends ServiceProvider
 
         // DungeonRoute
         $this->app->bind(DungeonRouteServiceLoggingInterface::class, DungeonRouteServiceLogging::class);
+        $this->app->bind(ThumbnailServiceLoggingInterface::class, ThumbnailServiceLogging::class);
+
+        // Jobs
+        $this->app->bind(ProcessRouteFloorThumbnailLoggingInterface::class, ProcessRouteFloorThumbnailLogging::class);
+        $this->app->bind(ProcessRouteFloorThumbnailCustomLoggingInterface::class, ProcessRouteFloorThumbnailCustomLogging::class);
 
         // MDT
         $this->app->bind(MDTImportStringServiceLoggingInterface::class, MDTImportStringServiceLogging::class);

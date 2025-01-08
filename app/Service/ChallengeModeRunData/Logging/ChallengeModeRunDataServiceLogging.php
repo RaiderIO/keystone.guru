@@ -16,9 +16,9 @@ class ChallengeModeRunDataServiceLogging extends StructuredLogging implements Ch
         $this->end(__METHOD__);
     }
 
-    public function convertChallengeModeRunDataStart(): void
+    public function convertChallengeModeRunDataStart(int $challengeModeRunDataId): void
     {
-        $this->start(__METHOD__);
+        $this->start(__METHOD__, get_defined_vars());
     }
 
     public function convertChallengeModeRunDataNoChallengeModeIdSet(): void

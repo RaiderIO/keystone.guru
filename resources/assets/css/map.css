@@ -597,6 +597,18 @@ html, body, #map, #app, .wrapper {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
+.snackbar_footer {
+    max-width: 728px !important;
+    margin-bottom: 72px !important;
+}
+
+@media (max-width: 1200px) {
+    .snackbar_footer {
+        max-width: 500px !important;
+        margin-bottom: 30px !important;
+    }
+}
+
 #snackbar_container .leaflet-draw-actions {
     position: unset;
 }

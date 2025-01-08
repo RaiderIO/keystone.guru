@@ -75,6 +75,9 @@ $id ??= 'affixes';
                 $el.parent().append($ours);
                 $el.remove();
             });
+            // Fix the layout so there's no longer a huge gap at the bottom
+            $('.affixselect.bootstrap-select .dropdown-menu.show').css('min-height', 'unset');
+            $('.affixselect.bootstrap-select .inner.show').css('min-height', 'unset');
 
             if (typeof $affixSelect.attr('readonly') !== 'undefined') {
                 $affixSelect.find('option').attr('disabled', true);

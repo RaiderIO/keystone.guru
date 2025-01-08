@@ -373,6 +373,11 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
         $advancedData = $combatLogEvent->getAdvancedData();
 
+        // Assume the enemy is immortal? (e.g. a boss that doesn't have a max HP)
+        if ($advancedData->getMaxHP() === 0) {
+            return false;
+        }
+
         return ($advancedData->getCurrentHP() / $advancedData->getMaxHP()) <= self::DEFEATED_PERCENTAGE[$destGuid->getId()];
     }
 }

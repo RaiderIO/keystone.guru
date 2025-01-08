@@ -4,6 +4,7 @@ namespace App\Service\CombatLog\Logging;
 
 use App\Logging\RollbarStructuredLogging;
 use Exception;
+use Throwable;
 
 class CombatLogServiceLogging extends RollbarStructuredLogging implements CombatLogServiceLoggingInterface
 {
@@ -12,17 +13,32 @@ class CombatLogServiceLogging extends RollbarStructuredLogging implements Combat
         $this->warning(__METHOD__, get_defined_vars());
     }
 
-    public function getResultEventsStart(string $combatLogFilePath): void
+    public function getResultEventsForChallengeModeStart(string $combatLogFilePath): void
     {
         $this->start(__METHOD__, get_defined_vars());
     }
 
-    public function getResultEventsAdvancedLogNotEnabled(string $message): void
+    public function getResultEventsForChallengeModeFilterParseError(string $rawEvent, int $lineNr, Throwable $throwable): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }
 
-    public function getResultEventsEnd(): void
+    public function getResultEventsForChallengeModeAdvancedLogNotEnabled(string $message): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function getResultEventsForChallengeModeEnd(): void
+    {
+        $this->end(__METHOD__);
+    }
+
+    public function getResultEventsForDungeonOrRaidStart(string $combatLogFilePath): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
+
+    public function getResultEventsForDungeonOrRaidEnd(): void
     {
         $this->end(__METHOD__);
     }

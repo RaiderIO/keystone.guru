@@ -237,6 +237,33 @@ class MissedTest extends PublicTestCase
                 'critical'      => false,
                 'damageType'    => null,
             ],
+            'ST Spell blocked'                 => [
+                'combatLogLine' => '12/1/2024 18:09:26.2060  SPELL_MISSED,Creature-0-3767-2286-7825-163128-00004CA603,"Zolramus Sorcerer",0xa48,0x1,Player-1084-0AD81BAD,"Crabix-TarrenMill-EU",0x511,0x0,320462,"Necrotic Bolt",0x20,BLOCK,nil,524669,ST',
+                'missType'      => Guid::createFromGuidString('BLOCK'),
+                'offhand'       => false,
+                'amountMissed'  => 524669,
+                'amountTotal'   => 0,
+                'critical'      => false,
+                'damageType'    => 'ST',
+            ],
+            'AoE Spell blocked' => [
+                'combatLogLine' => '12/16/2024 22:06:47.0250  SPELL_MISSED,Creature-0-3893-2286-23755-165137-0000E0A455,"Zolramus Gatekeeper",0xa48,0x0,Player-1084-0AD81BAD,"Crabix-TarrenMill-EU",0x511,0x0,322757,"Wrath of Zolramus",0x20,BLOCK,nil,25094,AOE',
+                'missType'      => Guid::createFromGuidString('BLOCK'),
+                'offhand'       => false,
+                'amountMissed'  => 25094,
+                'amountTotal'   => 0,
+                'critical'      => false,
+                'damageType'    => 'AOE',
+            ],
+            'Resist' => [
+                'combatLogLine' => '12/21/2024 16:24:36.6390  SPELL_MISSED,Creature-0-3889-2652-5511-217194-000066EBC2,"Sacred Weapon",0x2111,0x0,Creature-0-3889-2652-5511-212405-000366E88D,"Aspiring Forgehand",0xa48,0x0,447258,"Forge\'s Reckoning",0x2,RESIST,nil,0,AOE',
+                'missType'      => Guid::createFromGuidString('RESIST'),
+                'offhand'       => false,
+                'amountMissed'  => 0,
+                'amountTotal'   => 0,
+                'critical'      => false,
+                'damageType'    => 'AOE',
+            ],
         ]);
     }
 }

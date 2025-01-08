@@ -39,6 +39,10 @@ foreach ($seasonService->getDisplayedAffixGroups($offset) as $affixGroupArr) {
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover'])
 
+<?php
+
+try {
+    ?>
 @section('content')
     @include('dungeonroute.discover.wallpaper', ['expansion' => $expansion])
 
@@ -140,3 +144,19 @@ foreach ($seasonService->getDisplayedAffixGroups($offset) as $affixGroupArr) {
         @include('common.modal.userreport.dungeonroute')
     @endcomponent
 @endsection
+
+<?php
+} catch (ErrorException $throwable) {
+    logger()->error('Error in affixes page!', [
+        'user' => Auth::id(),
+        'url' => request()->url(),
+        'currentAffixGroup' => $currentAffixGroup?->id,
+        'nextAffixGroup' => $nextAffixGroup?->id,
+        'offset' => $offset,
+        'expansion' => $expansion->id,
+        'gameServerRegion' => $userOrDefaultRegion->id,
+    ]);
+
+    throw $throwable;
+}
+?>

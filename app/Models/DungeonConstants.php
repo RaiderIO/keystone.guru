@@ -7,10 +7,15 @@ trait DungeonConstants
     public const DIFFICULTY_10_MAN = 1;
 
     public const DIFFICULTY_25_MAN = 2;
+    public const DIFFICULTY_20_MAN = 3;
+
+    public const DIFFICULTY_40_MAN = 4;
 
     public const DIFFICULTY_ALL = [
         self::DIFFICULTY_10_MAN,
         self::DIFFICULTY_25_MAN,
+        self::DIFFICULTY_20_MAN,
+        self::DIFFICULTY_40_MAN,
     ];
 
     // @formatter:off
@@ -31,7 +36,7 @@ trait DungeonConstants
     public const DUNGEON_SCARLET_MONASTERY_CATHEDRAL = 'scarlet_monastery_cathedral'; //scarletmonastery
     public const DUNGEON_SCARLET_MONASTERY_LIBRARY   = 'scarlet_monastery_library';   //scarletmonastery
     public const DUNGEON_SCARLET_MONASTERY_GRAVEYARD = 'scarlet_monastery_graveyard'; //scarletmonastery
-    public const DUNGEON_SCHOLOMANCE                 = 'scholomance';
+    public const DUNGEON_SCHOLOMANCE                 = 'scholomance'; //scholomanceold
     public const DUNGEON_SHADOWFANG_KEEP             = 'shadowfang_keep'; //shadowfangkeep
     public const DUNGEON_STRATHOLME                  = 'stratholme';
     public const DUNGEON_THE_STOCKADE                = 'the_stockade';              //thestockade
@@ -42,14 +47,16 @@ trait DungeonConstants
     public const DUNGEON_ZUL_FARRAK                  = 'zul_farrak';            //zulfarrak
 
     // Classic: Season of Discovery
-    public const DUNGEON_GNOMEREGAN_SOD = 'gnomeregan_sod';                     //gnomeregan
+    public const RAID_GNOMEREGAN_SOD          = 'gnomeregan_sod'; //gnomeregan
+    public const RAID_RUINS_OF_AHN_QIRAJ_SOD  = 'ruins_of_ahnqiraj_sod';  // 20-man (classic)
+    public const RAID_TEMPLE_OF_AHN_QIRAJ_SOD = 'temple_of_ahnqiraj_sod'; // 40-man (classic)
 
     public const RAID_ZUL_GURUB           = 'zulgurub';
-    public const RAID_ONYXIAS_LAIR        = 'onyxiaslair_classic';
+    public const RAID_ONYXIAS_LAIR        = 'onyxias_lair_classic';
     public const RAID_MOLTEN_CORE         = 'moltencore';
     public const RAID_BLACKWING_LAIR      = 'blackwinglair';
-    public const RAID_RUINS_OF_AHN_QIRAJ  = 'ruinsofahnqiraj';  // 10-man
-    public const RAID_TEMPLE_OF_AHN_QIRAJ = 'templeofahnqiraj'; // 25-man
+    public const RAID_RUINS_OF_AHN_QIRAJ  = 'ruins_of_ahnqiraj_classic';  // 20-man (classic)
+    public const RAID_TEMPLE_OF_AHN_QIRAJ = 'temple_of_ahnqiraj_classic'; // 40-man (classic)
     public const RAID_NAXXRAMAS           = 'naxxramas_classic';
 
 
@@ -92,7 +99,7 @@ trait DungeonConstants
     // Wrath of the Lich King Raid
     public const RAID_ICECROWN_CITADEL                         = 'icecrowncitadel';
     public const RAID_NAXXRAMAS_WOTLK                          = 'naxxramas';
-    public const RAID_ONYXIAS_LAIR_WOTLK                       = 'onyxiaslair';
+    public const RAID_ONYXIAS_LAIR_WOTLK                       = 'onyxias_lair';
     public const RAID_CRUSADERS_COLISEUM_TRIAL_OF_THE_CRUSADER = 'theargentcoliseum';
     public const RAID_THE_EYE_OF_ETERNITY                      = 'theeyeofeternity';
     public const RAID_THE_OBSIDIAN_SANCTUM                     = 'theobsidiansanctum';
@@ -121,12 +128,12 @@ trait DungeonConstants
     public const RAID_DRAGON_SOUL = 'dragonsoul';
 
     // Mists of Pandaria
-    public const DUNGEON_GATE_OF_THE_SETTING_SUN    = 'gate_of_the_setting_sun';
-    public const DUNGEON_MOGU_SHAN_PALACE           = 'mogu_shan palace';
+    public const DUNGEON_GATE_OF_THE_SETTING_SUN    = 'gate_of_the_setting_sun'; // TheGreatWall
+    public const DUNGEON_MOGU_SHAN_PALACE           = 'mogu_shan_palace';
     public const DUNGEON_SCARLET_HALLS_MOP          = 'scarlet_halls_mop';
-    public const DUNGEON_SCARLET_MONASTERY_MOP      = 'scarlet_monastery_mop';
-    public const DUNGEON_SCHOLOMANCE_MOP            = 'scholomance_mop';
-    public const DUNGEON_SHADO_PAN_MONASTERY        = 'shado_pan_monastery';
+    public const DUNGEON_SCARLET_MONASTERY_MOP      = 'scarlet_monastery_mop'; // scarletcathedral
+    public const DUNGEON_SCHOLOMANCE_MOP            = 'scholomance_mop'; // scholomance
+    public const DUNGEON_SHADO_PAN_MONASTERY        = 'shado_pan_monastery'; // shadowpanhideout
     public const DUNGEON_SIEGE_OF_NIUZAO_TEMPLE     = 'siege_of_niu_zao_temple';
     public const DUNGEON_STORMSTOUT_BREWERY         = 'stormstout_brewery';
     public const DUNGEON_TEMPLE_OF_THE_JADE_SERPENT = 'templeofthejadeserpent';
@@ -213,7 +220,6 @@ trait DungeonConstants
             self::DUNGEON_DIRE_MAUL_NORTH,
             self::DUNGEON_DIRE_MAUL_EAST,
             self::DUNGEON_GNOMEREGAN,
-            self::DUNGEON_GNOMEREGAN_SOD,
             self::DUNGEON_LOWER_BLACKROCK_SPIRE,
             self::DUNGEON_MARAUDON,
             self::DUNGEON_RAGEFIRE_CHASM,
@@ -372,12 +378,15 @@ trait DungeonConstants
 
     public const ALL_RAID = [
         Expansion::EXPANSION_CLASSIC => [
+            self::RAID_GNOMEREGAN_SOD,
             self::RAID_ZUL_GURUB,
             self::RAID_ONYXIAS_LAIR,
             self::RAID_MOLTEN_CORE,
             self::RAID_BLACKWING_LAIR,
             self::RAID_RUINS_OF_AHN_QIRAJ,
             self::RAID_TEMPLE_OF_AHN_QIRAJ,
+            self::RAID_RUINS_OF_AHN_QIRAJ_SOD,
+            self::RAID_TEMPLE_OF_AHN_QIRAJ_SOD,
             self::RAID_NAXXRAMAS,
         ],
         Expansion::EXPANSION_WOTLK   => [

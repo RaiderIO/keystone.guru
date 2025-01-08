@@ -42,6 +42,9 @@ class CreateMissingFloors extends Command
 
             $this->info(sprintf('- %s', __($dungeon->name, [], 'en_US')));
             $index = 1;
+            if (!is_array($translatedFloors)) {
+                throw new \Exception(sprintf('Translated floors should be an array for %s', $dungeon->name));
+            }
             foreach ($translatedFloors as $key => $value) {
                 $floorKey = sprintf('%s.%s', $floorsTranslationKey, $key);
 

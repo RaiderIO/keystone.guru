@@ -5,6 +5,8 @@ return [
     'difficulty'   => [
         '1' => '10-man',
         '2' => '25-man',
+        '3' => '20-man',
+        '4' => '40-man',
     ],
     'classic'      => [
         'blackfathom_deeps'           => [
@@ -104,6 +106,18 @@ return [
                 'razorfen_kraul' => 'Razorfen Kraul',
             ],
         ],
+        'ruins_of_ahnqiraj_sod'          => [
+            'name'   => 'Ruins of Ahn\'Qiraj',
+            'floors' => [
+                'ruins_of_ahnqiraj' => 'Ruins of Ahn\'Qiraj',
+            ],
+        ],
+        'ruins_of_ahnqiraj_classic'          => [
+            'name'   => 'Ruins of Ahn\'Qiraj',
+            'floors' => [
+                'ruins_of_ahnqiraj' => 'Ruins of Ahn\'Qiraj',
+            ],
+        ],
         'scarlet_monastery_armory'    => [
             'name'   => 'Scarlet Monastery Armory',
             'floors' => [
@@ -154,6 +168,22 @@ return [
             'floors' => [
                 'crusaders_square' => 'Crusader\'s Square',
                 'the_gauntlet'     => 'The Gauntlet',
+            ],
+        ],
+        'temple_of_ahnqiraj_sod'         => [
+            'name'   => 'Temple of Ahn\'Qiraj',
+            'floors' => [
+                'the_hive_undergrounds' => 'The Hive Undergrounds',
+                'the_temple_gates'      => 'The Temple Gates',
+                'vault_of_cthun'        => 'Vault of C\'Thun',
+            ],
+        ],
+        'temple_of_ahnqiraj_classic'         => [
+            'name'   => 'Temple of Ahn\'Qiraj',
+            'floors' => [
+                'the_hive_undergrounds' => 'The Hive Undergrounds',
+                'the_temple_gates'      => 'The Temple Gates',
+                'vault_of_cthun'        => 'Vault of C\'Thun',
             ],
         ],
         'the_stockade'                => [
@@ -472,6 +502,70 @@ return [
         ],
     ],
     'mop'          => [
+        'gate_of_the_setting_sun'    => [
+            'name'   => 'Gate of the Setting Sun',
+            'floors' => [
+                'gate_of_the_setting_sun' => 'Gate of the Setting Sun',
+                'gate_watch_tower'        => 'Gate Watch Tower',
+            ],
+        ],
+        'mogu_shan_palace'           => [
+            'name'   => 'Mogu\'shan Palace',
+            'floors' => [
+                'the_crimson_assembly_hall'    => 'The Crimson Assembly Hall',
+                'vaults_of_kings_past'         => 'Vaults of Kings Past',
+                'throne_of_ancient_conquerors' => 'Throne of Ancient Conquerors',
+            ],
+        ],
+        'scarlet_halls_mop'          => [
+            'name'   => 'Scarlet Halls',
+            'floors' => [
+                'training_grounds' => 'Training Grounds',
+                'athenaeum'        => 'Athenaeum',
+            ],
+        ],
+        'scarlet_monastery_mop'      => [
+            'name'   => 'Scarlet Monastery (MoP)',
+            'floors' => [
+                'forlorn_cloister' => 'Forlorn Cloister',
+                'crusaders_chapel' => 'Crusaders\' Chapel',
+            ],
+        ],
+        'scholomance_mop'            => [
+            'name'   => 'Scholomance',
+            'floors' => [
+                'the_reliquary'        => 'The Reliquary',
+                'chamber_of_summoning' => 'Chamber of Summoning',
+                'the_upper_study'      => 'The Upper Study',
+                'headmasters_study'    => 'Headmaster\'s Study',
+            ],
+        ],
+        'shado_pan_monastery'        => [
+            'name'   => 'Shado-Pan Monastery',
+            'floors' => [
+                'shado_pan_monastery' => 'Shado-Pan Monastery',
+                'cloudstrike_dojo'    => 'Cloudstrike Dojo',
+                'snowdrift_dojo'      => 'Snowdrift Dojo',
+                'sealed_chambers'     => 'Sealed Chambers',
+            ],
+        ],
+        'siege_of_niu_zao_temple'    => [
+            'name'   => 'Siege of Niuzao Temple',
+            'floors' => [
+                'siege_of_niu_zao_temple' => 'Siege of Niuzao Temple',
+                'the_hollowed_out_tree'   => 'The Hollowed Out Tree',
+                'upper_tree_ring'         => 'Upper Tree Ring',
+            ],
+        ],
+        'stormstout_brewery'         => [
+            'name'   => 'Stormstout Brewery',
+            'floors' => [
+                'grain_cellar'        => 'Grain Cellar',
+                'stormstout_brewhall' => 'Stormstout Brewhall',
+                'the_great_wheel'     => 'The Great Wheel',
+                'the_tasting_room'    => 'The Tasting Room',
+            ],
+        ],
         'temple_of_the_jade_serpent' => [
             'name'   => 'Temple of the Jade Serpent',
             'floors' => [

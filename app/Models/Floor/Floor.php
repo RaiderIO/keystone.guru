@@ -92,8 +92,13 @@ class Floor extends CacheModel implements MappingModelInterface
         // Court of Stars
         762  => 761,
         763  => 761,
+        // Siege of Boralus
+        895 => 1162, // Tiragarde Sound -> Siege of Boralus
+//        1533 => 1162, // Bastion -> Siege of Boralus ????
         // Brackenhide Hollow
         2106 => 2096,
+        // Mists of Tirna Scithe
+        1565 => 1669, // Ardenweald -> Mists of Tirna Scithe
         // Temple of the Jade Serpent
         430  => 429,
         // Algeth'ar Academy
@@ -102,6 +107,8 @@ class Floor extends CacheModel implements MappingModelInterface
         1978 => 2095,
         // Nokhud Offensive
         2023 => 2093,
+        // City of Threads,
+        2216 => 2357, // City of Threads (Lower) -> City of Echoes
         // The Dawnbreaker
         2215 => 2359, // Harrowfall -> The Dawnbreaker
         // Grim Batol
@@ -353,11 +360,11 @@ class Floor extends CacheModel implements MappingModelInterface
     /**
      * @param int|null $dungeonId Can be passed in case the uiMapIds are not unique
      */
-    public static function findByUiMapId(int $uiMapId, ?int $dungeonId = null): Floor
+    public static function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor
     {
         return Floor::where('ui_map_id', self::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
             ->when($dungeonId !== null, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
-            ->firstOrFail();
+            ->first();
     }
 
     public function ensureConnectionToFloor(Floor $targetFloor): bool

@@ -1,0 +1,37 @@
+{
+    "id": 265,
+    "release_changelog_id": 272,
+    "version": "v11.8.1",
+    "title": "Bugfixes",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-01-02T16:07:28+00:00",
+    "updated_at": "2025-01-02T16:07:28+00:00",
+    "changelog": {
+        "id": 272,
+        "release_id": 265,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 272,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2640,
+                "change": "Thumbnail processing queue should no longer rise unexpectedly high."
+            },
+            {
+                "release_changelog_id": 272,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2612,
+                "change": "Affix dropdown no longer has a lot of empty space at the bottom."
+            },
+            {
+                "release_changelog_id": 272,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2628,
+                "change": "Snackbars (the bars that show some buttons when editing route elements) now display properly on mobile."
+            }
+        ]
+    }
+}

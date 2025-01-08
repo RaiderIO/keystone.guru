@@ -5,19 +5,20 @@ namespace App\Service\CombatLog\ResultEvents;
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeEvent;
 use App\Models\Floor\Floor;
 use App\Service\CombatLog\Exceptions\FloorNotSupportedException;
-use Exception;
 
 class MapChange extends BaseResultEvent
 {
     private ?Floor $floor = null;
 
+    /**
+     * @throws FloorNotSupportedException
+     */
     public function __construct(MapChangeEvent $baseEvent)
     {
         parent::__construct($baseEvent);
 
-        try {
-            $this->floor = Floor::findByUiMapId($baseEvent->getUiMapID());
-        } catch (Exception) {
+        $this->floor = Floor::findByUiMapId($baseEvent->getUiMapID());
+        if ($this->floor === null) {
             throw new FloorNotSupportedException(
                 sprintf('Floor with ui MAP ID %d not found', $baseEvent->getUiMapID())
             );

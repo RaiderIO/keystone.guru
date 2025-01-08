@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Models\Release;
 use App\Models\User;
 use App\Overrides\CustomRateLimiter;
-use App\Service\Cloudflare\CloudflareServiceInterface;
 use Auth;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Database\Eloquent\Model;
@@ -18,9 +17,8 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(
-        CloudflareServiceInterface $cloudflareService
-    ): void {
+    public function boot(): void
+    {
 
         Model::preventLazyLoading(!app()->isProduction());
 
