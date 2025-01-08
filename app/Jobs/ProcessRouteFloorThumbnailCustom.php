@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLoggingInterface;
-use App\Jobs\Logging\ProcessRouteFloorThumbnailLoggingInterface;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
@@ -20,22 +19,17 @@ class ProcessRouteFloorThumbnailCustom
     use Queueable;
     use SerializesModels;
 
-    protected ThumbnailServiceInterface $thumbnailService;
-
     /**
      * Create a new job instance.
      */
     public function __construct(
-        private readonly DungeonRouteThumbnailJob                 $dungeonRouteThumbnailJob,
-        protected DungeonRoute                                    $dungeonRoute,
-        protected int                                             $floorIndex,
-        protected int                                             $attempts = 0,
-        private ?ProcessRouteFloorThumbnailCustomLoggingInterface $log = null
+        private readonly DungeonRouteThumbnailJob $dungeonRouteThumbnailJob,
+        protected DungeonRoute                    $dungeonRoute,
+        protected int                             $floorIndex,
+        protected int                             $attempts = 0
     ) {
         // Not passed as a constructor parameter since it's not serializable
-        $this->thumbnailService = app()->make(ThumbnailServiceInterface::class);
         $this->queue            = sprintf('%s-%s-thumbnail-api', config('app.type'), config('app.env'));
-        $this->log              = $log ?? app()->make(ProcessRouteFloorThumbnailLoggingInterface::class);
     }
 
     /**
@@ -43,8 +37,12 @@ class ProcessRouteFloorThumbnailCustom
      */
     public function handle(): void
     {
+        // Cannot serialize these objects - so we have to create them here
+        $thumbnailService = app()->make(ThumbnailServiceInterface::class);
+        $log              = app()->make(ProcessRouteFloorThumbnailCustomLoggingInterface::class);
+
         try {
-            $this->log->handleStart(
+            $log->handleStart(
                 $this->dungeonRoute->public_key,
                 $this->floorIndex,
                 $this->dungeonRoute->id,
@@ -58,7 +56,7 @@ class ProcessRouteFloorThumbnailCustom
             );
 
             if ((int)config('keystoneguru.thumbnail.max_attempts') > $this->attempts) {
-                $result = $this->thumbnailService->createThumbnailCustom(
+                $result = $thumbnailService->createThumbnailCustom(
                     $this->dungeonRoute,
                     $this->floorIndex,
                     $this->attempts,
@@ -71,7 +69,7 @@ class ProcessRouteFloorThumbnailCustom
                 );
 
                 if (!$result) {
-                    $this->log->handleCreateCustomThumbnailError();
+                    $log->handleCreateCustomThumbnailError();
 
                     // If there were errors, try again
                     ProcessRouteFloorThumbnailCustom::dispatch(
@@ -81,18 +79,18 @@ class ProcessRouteFloorThumbnailCustom
                         ++$this->attempts
                     );
                 } else {
-                    $this->log->handleFinishedProcessing();
+                    $log->handleFinishedProcessing();
 
                     $this->dungeonRouteThumbnailJob->update(['status' => DungeonRouteThumbnailJob::STATUS_COMPLETED]);
                 }
             } else {
-                $this->log->handleMaxAttemptsReached();
+                $log->handleMaxAttemptsReached();
 
                 $this->dungeonRouteThumbnailJob->update(['status' => DungeonRouteThumbnailJob::STATUS_ERROR]);
             }
 
         } finally {
-            $this->log->handleEnd();
+            $log->handleEnd();
         }
     }
 }

@@ -19,21 +19,15 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    protected ThumbnailServiceInterface $thumbnailService;
-
     /**
      * Create a new job instance.
      */
     public function __construct(
-        protected DungeonRoute                              $dungeonRoute,
-        protected int                                       $floorIndex,
-        protected int                                       $attempts = 0,
-        private ?ProcessRouteFloorThumbnailLoggingInterface $log = null
+        protected DungeonRoute $dungeonRoute,
+        protected int          $floorIndex,
+        protected int          $attempts = 0
     ) {
-        // Not passed as a constructor parameter since it's not serializable
-        $this->thumbnailService = app()->make(ThumbnailServiceInterface::class);
-        $this->queue            = sprintf('%s-%s-thumbnail', config('app.type'), config('app.env'));
-        $this->log              = $log ?? app()->make(ProcessRouteFloorThumbnailLoggingInterface::class);
+        $this->queue = sprintf('%s-%s-thumbnail', config('app.type'), config('app.env'));
     }
 
     /**
@@ -43,8 +37,12 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     {
         $result = false;
 
+        // Cannot serialize these objects - so we have to create them here
+        $thumbnailService = app()->make(ThumbnailServiceInterface::class);
+        $log              = app()->make(ProcessRouteFloorThumbnailLoggingInterface::class);
+
         try {
-            $this->log->handleStart(
+            $log->handleStart(
                 $this->dungeonRoute->public_key,
                 $this->dungeonRoute->id,
                 $this->dungeonRoute->mapping_version_id,
@@ -56,22 +54,22 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
                 // Give some additional space since we're refreshing ALL floors - the first floor may get processed,
                 // but the floors after that will otherwise think "oh the thumbnail is up-to-date" and not refresh.
                 if ($this->dungeonRoute->thumbnail_updated_at->isBefore($this->dungeonRoute->updated_at->addHour())) {
-                    $result = $this->thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts);
+                    $result = $thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts);
 
                     if (!$result) {
-                        $this->log->handleCreateThumbnailError();
+                        $log->handleCreateThumbnailError();
 
                         // If there were errors, try again
                         ProcessRouteFloorThumbnail::dispatch($this->dungeonRoute, $this->floorIndex, ++$this->attempts);
                     }
                 } else {
-                    $this->log->handleThumbnailAlreadyUpToDate();
+                    $log->handleThumbnailAlreadyUpToDate();
                 }
             } else {
-                $this->log->handleMaxAttemptsReached();
+                $log->handleMaxAttemptsReached();
             }
         } finally {
-            $this->log->handleEnd($result);
+            $log->handleEnd($result);
         }
     }
 }
