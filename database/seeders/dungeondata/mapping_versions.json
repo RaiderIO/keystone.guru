@@ -5533,5 +5533,20 @@
         "created_at": "2025-01-14T09:09:44.000000Z",
         "updated_at": "2025-01-14T09:09:44.000000Z",
         "merged": false
+    },
+    {
+        "id": 431,
+        "dungeon_id": 126,
+        "version": 2,
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": null,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": null,
+        "facade_enabled": 0,
+        "created_at": "2025-01-14T12:05:48.000000Z",
+        "updated_at": "2025-01-14T12:05:48.000000Z",
+        "merged": false
     }
 ]

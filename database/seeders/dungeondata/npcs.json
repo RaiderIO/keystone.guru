@@ -83,7 +83,7 @@
         "display_id": 2177,
         "encounter_id": null,
         "name": "Roach",
-        "base_health": 12345,
+        "base_health": 8,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,

@@ -52,8 +52,7 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
                 return;
             }
 
-            // @TODO Disabled for now since I think it's calculated incorrectly - we also don't need it now
-//            $this->extractBaseHealth($result, $currentDungeon, $parsedEvent, $npc);
+            $this->extractBaseHealth($result, $currentDungeon, $parsedEvent, $npc);
 
             $this->checkedNpcIds->push($npc->id);
         }
@@ -73,11 +72,13 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
         if ($currentDungeon->keyLevel === null) {
             $newBaseHealth = $parsedEvent->getAdvancedData()->getMaxHP();
         } else {
+            // @TODO Disabled for now since I think it's calculated incorrectly - we also don't need it now
+            $newBaseHealth = $npc->base_health;
             // Calculate the base health based on the current key level + current max hp
-            $newBaseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
-                    $currentDungeon->keyLevel,
-                    $currentDungeon->affixGroup->affixes->pluck('key')->toArray()
-                ));
+//            $newBaseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
+//                    $currentDungeon->keyLevel,
+//                    $currentDungeon->affixGroup->affixes->pluck('key')->toArray()
+//                ));
         }
 
         if ($npc->base_health !== $newBaseHealth) {
