@@ -107,13 +107,13 @@ return [
             ],
         ],
         'ruins_of_ahnqiraj_sod'          => [
-            'name'   => 'Ruins of Ahn\'Qiraj',
+            'name'   => 'Ruins of Ahn\'Qiraj (SoD)',
             'floors' => [
                 'ruins_of_ahnqiraj' => 'Ruins of Ahn\'Qiraj',
             ],
         ],
         'ruins_of_ahnqiraj_classic'          => [
-            'name'   => 'Ruins of Ahn\'Qiraj',
+            'name'   => 'Ruins of Ahn\'Qiraj (Classic)',
             'floors' => [
                 'ruins_of_ahnqiraj' => 'Ruins of Ahn\'Qiraj',
             ],
@@ -171,7 +171,7 @@ return [
             ],
         ],
         'temple_of_ahnqiraj_sod'         => [
-            'name'   => 'Temple of Ahn\'Qiraj',
+            'name'   => 'Temple of Ahn\'Qiraj (SoD)',
             'floors' => [
                 'the_hive_undergrounds' => 'The Hive Undergrounds',
                 'the_temple_gates'      => 'The Temple Gates',
@@ -179,7 +179,7 @@ return [
             ],
         ],
         'temple_of_ahnqiraj_classic'         => [
-            'name'   => 'Temple of Ahn\'Qiraj',
+            'name'   => 'Temple of Ahn\'Qiraj (Classic)',
             'floors' => [
                 'the_hive_undergrounds' => 'The Hive Undergrounds',
                 'the_temple_gates'      => 'The Temple Gates',
@@ -254,18 +254,6 @@ return [
                 'halls_of_strife'      => 'Halls of Strife',
                 'crimson_laboratories' => 'Crimson Laboratories',
                 'nefarians_lair'       => 'Nefarian\'s Lair',
-            ],
-        ],
-        'ruinsofahnqiraj'             => [
-            'name'   => 'Ruins of Ahn\'Qiraj',
-            'floors' => [
-                'ruinsofahnqiraj' => 'Ruins of Ahn\'Qiraj',
-            ],
-        ],
-        'templeofahnqiraj'            => [
-            'name'   => 'Temple of Ahn\'Qiraj',
-            'floors' => [
-                'templeofahnqiraj' => 'Temple of Ahn\'Qiraj',
             ],
         ],
         'naxxramas_classic'           => [

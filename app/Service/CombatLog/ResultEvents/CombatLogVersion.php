@@ -12,8 +12,8 @@ class CombatLogVersion extends BaseResultEvent
     {
         parent::__construct($baseEvent);
 
-        if (!isset(CombatLogVersionConstant::ALL[$baseEvent->getVersion()])) {
-            throw new Exception(sprintf('Unable to find combat log version %d!', $baseEvent->getVersion()));
+        if (!isset(CombatLogVersionConstant::ALL[$baseEvent->getVersionLong()])) {
+            throw new Exception(sprintf('Unable to find combat log version %d!', $baseEvent->getVersionLong()));
         }
     }
 }

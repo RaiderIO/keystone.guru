@@ -18,6 +18,8 @@ interface CombatantInfoInterface
 
     public function getIntellect(): int;
 
+    public function getSpirit(): int;
+
     public function getDodge(): int;
 
     public function getParry(): int;

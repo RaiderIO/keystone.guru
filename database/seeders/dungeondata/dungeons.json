@@ -13968,7 +13968,7 @@
     {
         "id": 122,
         "expansion_id": 4,
-        "game_version_id": 1,
+        "game_version_id": 2,
         "zone_id": 123,
         "map_id": 123,
         "instance_id": null,
@@ -14011,7 +14011,7 @@
     {
         "id": 123,
         "expansion_id": 4,
-        "game_version_id": 1,
+        "game_version_id": 2,
         "zone_id": 123,
         "map_id": 123,
         "instance_id": null,
@@ -14054,7 +14054,7 @@
     {
         "id": 124,
         "expansion_id": 4,
-        "game_version_id": 1,
+        "game_version_id": 2,
         "zone_id": 123,
         "map_id": 123,
         "instance_id": null,
@@ -14145,7 +14145,7 @@
     {
         "id": 125,
         "expansion_id": 4,
-        "game_version_id": 1,
+        "game_version_id": 2,
         "zone_id": 123,
         "map_id": 123,
         "instance_id": null,
@@ -14188,7 +14188,7 @@
     {
         "id": 126,
         "expansion_id": 4,
-        "game_version_id": 1,
+        "game_version_id": 2,
         "zone_id": 123,
         "map_id": 123,
         "instance_id": null,
@@ -14279,7 +14279,7 @@
     {
         "id": 127,
         "expansion_id": 4,
-        "game_version_id": 1,
+        "game_version_id": 2,
         "zone_id": 123,
         "map_id": 123,
         "instance_id": null,
@@ -14742,7 +14742,7 @@
         "mdt_id": 123,
         "key": "scholomance_mop",
         "name": "dungeons.mop.scholomance_mop.name",
-        "slug": "scholomance",
+        "slug": "scholomance-mop",
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Logic\CombatLog\SpecialEvents\CombatantInfo\Versions\V21;
+namespace App\Logic\CombatLog\SpecialEvents\CombatantInfo\Versions\V9SoD;
 
 use App\Logic\CombatLog\CombatLogStringParser;
 use App\Logic\CombatLog\Guid\Guid;
@@ -8,40 +8,39 @@ use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\CombatantInfo\CombatantInfoInterface;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 
-class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
+class CombatantInfoV9SoD extends SpecialEvent implements CombatantInfoInterface
 {
     private Player $playerGuid;
-    private int   $faction;
-    private int   $strength;
-    private int   $agility;
-    private int   $stamina;
-    private int   $intellect;
-    private int   $dodge;
-    private int   $parry;
-    private int   $block;
-    private int   $critMelee;
-    private int   $critRanged;
-    private int   $critSpell;
-    private int   $speed;
-    private int   $lifesteal;
-    private int   $hasteMelee;
-    private int   $hasteRanged;
-    private int   $hasteSpell;
-    private int   $avoidance;
-    private int   $mastery;
-    private int   $versatilityDamageDone;
-    private int   $versatilityHealingDone;
-    private int   $versatilityDamageTaken;
-    private int   $armor;
-    private int   $currentSpecId;
-    private array $talents;
-    private array $pvpTalents;
-    private array $equippedItems;
-    private array $interestingAuras;
-    private int   $honorLevel;
-    private int   $season;
-    private int   $rating;
-    private int   $tier;
+    private int    $faction;
+    private int    $strength;
+    private int    $agility;
+    private int    $stamina;
+    private int    $intellect;
+    private int    $spirit;
+    private int    $dodge;
+    private int    $parry;
+    private int    $block;
+    private int    $critMelee;
+    private int    $critRanged;
+    private int    $critSpell;
+    private int    $speed;
+    private int    $lifesteal;
+    private int    $hasteMelee;
+    private int    $hasteRanged;
+    private int    $hasteSpell;
+    private int    $avoidance;
+    private int    $versatilityDamageDone;
+    private int    $versatilityHealingDone;
+    private int    $versatilityDamageTaken;
+    private int    $armor;
+    private int    $currentSpecId;
+    private array  $talents;
+    private array  $pvpTalents;
+    private array  $equippedItems;
+    private array  $interestingAuras;
+    private int    $honorLevel;
+    private int    $season;
+    private int    $rating;
 
 
     public function getPlayerGuid(): ?Player
@@ -76,7 +75,7 @@ class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
 
     public function getSpirit(): int
     {
-        return 0;
+        return $this->spirit;
     }
 
     public function getDodge(): int
@@ -141,7 +140,7 @@ class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
 
     public function getMastery(): int
     {
-        return $this->mastery;
+        return 0;
     }
 
     public function getVersatilityDamageDone(): int
@@ -206,7 +205,7 @@ class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
 
     public function getTier(): int
     {
-        return $this->tier;
+        return 0;
     }
 
     public function setParameters(array $parameters): self
@@ -218,25 +217,25 @@ class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
         if (!($playerGuid instanceof Player)) {
             throw new \Exception('PlayerGuid is not a Player');
         }
-        $this->playerGuid = $playerGuid;
+        $this->playerGuid             = $playerGuid;
         $this->faction                = (int)$parameters[1];
         $this->strength               = (int)$parameters[2];
         $this->agility                = (int)$parameters[3];
         $this->stamina                = (int)$parameters[4];
         $this->intellect              = (int)$parameters[5];
-        $this->dodge                  = (int)$parameters[6];
-        $this->parry                  = (int)$parameters[7];
-        $this->block                  = (int)$parameters[8];
-        $this->critMelee              = (int)$parameters[9];
-        $this->critRanged             = (int)$parameters[10];
-        $this->critSpell              = (int)$parameters[11];
-        $this->speed                  = (int)$parameters[12];
-        $this->lifesteal              = (int)$parameters[13];
-        $this->hasteMelee             = (int)$parameters[14];
-        $this->hasteRanged            = (int)$parameters[15];
-        $this->hasteSpell             = (int)$parameters[16];
-        $this->avoidance              = (int)$parameters[17];
-        $this->mastery                = (int)$parameters[18];
+        $this->spirit                 = (int)$parameters[6];
+        $this->dodge                  = (int)$parameters[7];
+        $this->parry                  = (int)$parameters[8];
+        $this->block                  = (int)$parameters[9];
+        $this->critMelee              = (int)$parameters[10];
+        $this->critRanged             = (int)$parameters[11];
+        $this->critSpell              = (int)$parameters[12];
+        $this->speed                  = (int)$parameters[13];
+        $this->lifesteal              = (int)$parameters[14];
+        $this->hasteMelee             = (int)$parameters[15];
+        $this->hasteRanged            = (int)$parameters[16];
+        $this->hasteSpell             = (int)$parameters[17];
+        $this->avoidance              = (int)$parameters[18];
         $this->versatilityDamageDone  = (int)$parameters[19];
         $this->versatilityHealingDone = (int)$parameters[20];
         $this->versatilityDamageTaken = (int)$parameters[21];
@@ -249,7 +248,6 @@ class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
         $this->honorLevel             = (int)$parameters[28];
         $this->season                 = (int)$parameters[29];
         $this->rating                 = (int)$parameters[30];
-        $this->tier                   = (int)$parameters[31];
 
         return $this;
     }
@@ -272,6 +270,6 @@ class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
 
     public function getParameterCount(): int
     {
-        return 32;
+        return 31;
     }
 }

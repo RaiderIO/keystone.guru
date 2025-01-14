@@ -22,7 +22,7 @@ class SpellAbsorbedSupportBuilder implements SpecialEventBuilderInterface
         string $rawEvent
     ): SpecialEvent {
         return match ($combatLogVersion) {
-            CombatLogVersion::CLASSIC => new SpellAbsorbedSupportV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
+            CombatLogVersion::CLASSIC, CombatLogVersion::CLASSIC_SOD_1_15_5 => new SpellAbsorbedSupportV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
             default => new SpellAbsorbedSupportV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
         };
     }

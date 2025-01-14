@@ -287,7 +287,7 @@ class CombatLogService implements CombatLogServiceInterface
             while (($rawEvent = fgets($handle)) !== false) {
                 $parsedEvent = $callback($combatLogVersion, $isAdvancedLoggingEnabled, $rawEvent, ++$lineNr);
                 if ($parsedEvent instanceof CombatLogVersionEvent) {
-                    $combatLogVersion         = $parsedEvent->getVersion();
+                    $combatLogVersion         = $parsedEvent->getVersionLong();
                     $isAdvancedLoggingEnabled = $parsedEvent->isAdvancedLogEnabled();
                     $this->log->parseCombatLogParseEventsChangedCombatLogVersion($combatLogVersion, $isAdvancedLoggingEnabled);
                 }
