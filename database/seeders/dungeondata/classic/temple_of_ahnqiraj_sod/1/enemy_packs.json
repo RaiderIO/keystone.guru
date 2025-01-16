@@ -300,18 +300,6 @@
         "vertices_json": "[{\"lat\":-207.818726,\"lng\":171.683835},{\"lat\":-212.507654,\"lng\":171.652588},{\"lat\":-211.726166,\"lng\":176.152061},{\"lat\":-207.881245,\"lng\":176.339539}]"
     },
     {
-        "id": 13010,
-        "mapping_version_id": 442,
-        "floor_id": 331,
-        "group": null,
-        "teeming": null,
-        "faction": "any",
-        "color": "#5993D2",
-        "color_animated": null,
-        "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-201.412067,\"lng\":161.715637},{\"lat\":-204.937443,\"lng\":158.062452},{\"lat\":-207.789009,\"lng\":161.090711},{\"lat\":-204.531317,\"lng\":164.187518}]"
-    },
-    {
         "id": 13011,
         "mapping_version_id": 442,
         "floor_id": 331,
