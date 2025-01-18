@@ -1,0 +1,31 @@
+{
+    "id": 266,
+    "release_changelog_id": 273,
+    "version": "v11.9",
+    "title": "Temple of Ahn'Qiraj Classic\/SoD",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-01-18T15:10:10+00:00",
+    "updated_at": "2025-01-18T15:10:10+00:00",
+    "changelog": {
+        "id": 273,
+        "release_id": 266,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 273,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2650,
+                "change": "Added Temple of Ahn'Qiraj Classic and SoD versions. Thank you nuk, nonno_ and Bob!"
+            },
+            {
+                "release_changelog_id": 273,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2656,
+                "change": "[Hotfixed] Fixed crash when regenerating thumbnails."
+            }
+        ]
+    }
+}
