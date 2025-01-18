@@ -14069,50 +14069,13 @@
         "mdt_supported": false,
         "floors": [
             {
-                "id": 327,
+                "id": 328,
                 "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": 123,
                 "map_name": "AhnQiraj2",
-                "name": "dungeons.classic.temple_of_ahnqiraj_classic.floors.the_hive_undergrounds",
-                "default": 1,
-                "facade": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
-                "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": -138.07,
-                "ingame_min_y": -9510.98,
-                "ingame_max_x": -2915.62,
-                "ingame_max_y": -7659.28,
-                "percentage_display_zoom": null,
-                "zoom_max": null,
-                "active": 1,
-                "floorcouplings": [
-                    {
-                        "id": 1011,
-                        "floor1_id": 327,
-                        "floor2_id": 328,
-                        "direction": "up"
-                    },
-                    {
-                        "id": 1012,
-                        "floor1_id": 327,
-                        "floor2_id": 329,
-                        "direction": "up"
-                    }
-                ],
-                "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
-            },
-            {
-                "id": 328,
-                "index": 2,
-                "mdt_sub_level": null,
-                "ui_map_id": 123,
-                "map_name": "AhnQiraj2",
                 "name": "dungeons.classic.temple_of_ahnqiraj_classic.floors.the_temple_gates",
-                "default": 0,
+                "default": 1,
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -14127,10 +14090,47 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1013,
+                        "id": 1027,
                         "floor1_id": 328,
                         "floor2_id": 327,
                         "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 327,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": 123,
+                "map_name": "AhnQiraj2",
+                "name": "dungeons.classic.temple_of_ahnqiraj_classic.floors.the_hive_undergrounds",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": -138.07,
+                "ingame_min_y": -9510.98,
+                "ingame_max_x": -2915.62,
+                "ingame_max_y": -7659.28,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1028,
+                        "floor1_id": 327,
+                        "floor2_id": 328,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1029,
+                        "floor1_id": 327,
+                        "floor2_id": 329,
+                        "direction": "up"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -14236,50 +14236,13 @@
         "mdt_supported": false,
         "floors": [
             {
-                "id": 331,
-                "index": 1,
-                "mdt_sub_level": null,
-                "ui_map_id": 319,
-                "map_name": "AhnQiraj2",
-                "name": "dungeons.classic.temple_of_ahnqiraj_sod.floors.the_hive_undergrounds",
-                "default": 1,
-                "facade": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
-                "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": -138.07,
-                "ingame_min_y": -9510.98,
-                "ingame_max_x": -2915.62,
-                "ingame_max_y": -7659.28,
-                "percentage_display_zoom": null,
-                "zoom_max": null,
-                "active": 1,
-                "floorcouplings": [
-                    {
-                        "id": 1007,
-                        "floor1_id": 331,
-                        "floor2_id": 332,
-                        "direction": "up"
-                    },
-                    {
-                        "id": 1008,
-                        "floor1_id": 331,
-                        "floor2_id": 333,
-                        "direction": "up"
-                    }
-                ],
-                "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
-            },
-            {
                 "id": 332,
-                "index": 2,
+                "index": 1,
                 "mdt_sub_level": null,
                 "ui_map_id": 320,
                 "map_name": "AhnQiraj2",
                 "name": "dungeons.classic.temple_of_ahnqiraj_sod.floors.the_temple_gates",
-                "default": 0,
+                "default": 1,
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -14294,16 +14257,191 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1003,
-                        "floor1_id": 332,
-                        "floor2_id": 331,
-                        "direction": "down"
-                    },
-                    {
-                        "id": 1004,
+                        "id": 1030,
                         "floor1_id": 332,
                         "floor2_id": 333,
                         "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": [
+                    {
+                        "id": 110,
+                        "floor_id": 332,
+                        "npc_id": 15262,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 3
+                    },
+                    {
+                        "id": 111,
+                        "floor_id": 332,
+                        "npc_id": 15264,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 8
+                    },
+                    {
+                        "id": 112,
+                        "floor_id": 332,
+                        "npc_id": 15247,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 6
+                    },
+                    {
+                        "id": 113,
+                        "floor_id": 332,
+                        "npc_id": 15233,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 29
+                    },
+                    {
+                        "id": 114,
+                        "floor_id": 332,
+                        "npc_id": 15230,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 6
+                    },
+                    {
+                        "id": 115,
+                        "floor_id": 332,
+                        "npc_id": 15240,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 6
+                    },
+                    {
+                        "id": 116,
+                        "floor_id": 332,
+                        "npc_id": 15235,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 6
+                    },
+                    {
+                        "id": 117,
+                        "floor_id": 332,
+                        "npc_id": 234830,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 5
+                    },
+                    {
+                        "id": 118,
+                        "floor_id": 332,
+                        "npc_id": 234800,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 14
+                    },
+                    {
+                        "id": 119,
+                        "floor_id": 332,
+                        "npc_id": 234798,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 6
+                    },
+                    {
+                        "id": 120,
+                        "floor_id": 332,
+                        "npc_id": 234814,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 1
+                    },
+                    {
+                        "id": 121,
+                        "floor_id": 332,
+                        "npc_id": 15311,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 4
+                    },
+                    {
+                        "id": 122,
+                        "floor_id": 332,
+                        "npc_id": 234762,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 6
+                    }
+                ]
+            },
+            {
+                "id": 331,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": 319,
+                "map_name": "AhnQiraj2",
+                "name": "dungeons.classic.temple_of_ahnqiraj_sod.floors.the_hive_undergrounds",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": -138.07,
+                "ingame_min_y": -9510.98,
+                "ingame_max_x": -2915.62,
+                "ingame_max_y": -7659.28,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1023,
+                        "floor1_id": 331,
+                        "floor2_id": 332,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1024,
+                        "floor1_id": 331,
+                        "floor2_id": 333,
+                        "direction": "up"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
