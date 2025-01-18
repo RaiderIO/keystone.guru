@@ -1580,7 +1580,7 @@
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
-        "display_id": null,
+        "display_id": 15340,
         "encounter_id": null,
         "name": "Qiraji Champion",
         "base_health": 416375,
