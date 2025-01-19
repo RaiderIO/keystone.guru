@@ -8,6 +8,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Teapot\StatusCode;
+use Teapot\StatusCode\RFC\RFC6585;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -82,8 +84,12 @@ class Handler extends ExceptionHandler
                 ], StatusCode::NOT_FOUND);
             } else if ($e instanceof NotFoundHttpException) {
                 return response()->json(['message' => __('exceptions.handler.api_route_not_found')], StatusCode::NOT_FOUND);
+            } else if ($e instanceof ThrottleRequestsException) {
+                return response()->json(['message' => __('exceptions.handler.too_many_requests')], RFC6585::TOO_MANY_REQUESTS);
             } else if (!config('app.debug')) {
                 return response()->json(['message' => __('exceptions.handler.internal_server_error')], StatusCode::INTERNAL_SERVER_ERROR);
+            } else {
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
             }
         }
 
