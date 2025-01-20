@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\Api\ApiMetrics;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -57,7 +58,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes(): void
     {
         Route::prefix('api')
-            ->middleware(['api', 'throttle:api-general'])
+            ->middleware(['api', 'throttle:api-general', ApiMetrics::class])
             ->group(base_path('routes/api.php'));
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\ApiAuthentication;
+use App\Http\Middleware\Api\ApiAuthentication;
 use App\Http\Middleware\DebugBarMessageLogger;
 use App\Http\Middleware\DebugInfoContextLogger;
 use App\Http\Middleware\EncryptCookies;
