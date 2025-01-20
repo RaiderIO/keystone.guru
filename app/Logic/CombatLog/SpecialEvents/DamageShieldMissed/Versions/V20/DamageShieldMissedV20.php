@@ -25,8 +25,13 @@ class DamageShieldMissedV20 extends SpecialEvent implements DamageShieldInterfac
         return $this;
     }
 
+    public function getOptionalParameterCount(): int
+    {
+        return 1;
+    }
+
     public function getParameterCount(): int
     {
-        return 14;
+        return 15;
     }
 }

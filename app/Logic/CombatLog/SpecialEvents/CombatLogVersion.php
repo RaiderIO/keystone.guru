@@ -44,6 +44,18 @@ class CombatLogVersion extends SpecialEvent
     }
 
     /**
+     * Get the version as a long integer that incorporates the combat log version, major, minor and patch version
+     * @return int
+     */
+    public function getVersionLong(): int
+    {
+        [$major, $minor, $patch] = explode('.', $this->buildVersion);
+
+        return ($this->version * 1_000_000_000) +
+            ((int)$major * 1_000_000) + ((int)($minor ?? 0) * 1_000) + (int)($patch ?? 0);
+    }
+
+    /**
      * @throws Exception
      */
     public function setParameters(array $parameters): self
@@ -55,7 +67,8 @@ class CombatLogVersion extends SpecialEvent
         $this->buildVersion       = $parameters[4];
         $this->projectID          = $parameters[6];
 
-        if (!isset(CombatLogVersionConstant::ALL[$this->version])) {
+
+        if (!isset(CombatLogVersionConstant::ALL[$this->getVersionLong()])) {
             throw new Exception(sprintf('Unable to find combat log version %d!', $this->version));
         }
 

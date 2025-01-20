@@ -74,6 +74,11 @@ class CombatantInfoV21 extends SpecialEvent implements CombatantInfoInterface
         return $this->intellect;
     }
 
+    public function getSpirit(): int
+    {
+        return 0;
+    }
+
     public function getDodge(): int
     {
         return $this->dodge;

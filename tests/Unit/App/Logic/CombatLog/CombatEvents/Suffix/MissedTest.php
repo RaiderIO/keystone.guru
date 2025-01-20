@@ -6,6 +6,7 @@ use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\MissedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\V20\MissedV20;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\V22\MissedV22;
+use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\V9SoD\MissedV9SoD;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\CombatLogVersion;
@@ -43,6 +44,10 @@ class MissedTest extends PublicTestCase
             [
                 'combatLogVersion'  => CombatLogVersion::CLASSIC,
                 'expectedClassName' => MissedV20::class,
+            ],
+            [
+                'combatLogVersion'  => CombatLogVersion::CLASSIC_SOD_1_15_5,
+                'expectedClassName' => MissedV9SoD::class,
             ],
             [
                 'combatLogVersion'  => CombatLogVersion::RETAIL_10_1_0,
@@ -263,6 +268,60 @@ class MissedTest extends PublicTestCase
                 'amountTotal'   => 0,
                 'critical'      => false,
                 'damageType'    => 'AOE',
+            ],
+        ]);
+    }
+
+
+
+
+
+    #[Test]
+    #[Group('CombatLog')]
+    #[Group('Suffix')]
+    #[Group('Missed')]
+    #[DataProvider('setParameters_givenCombatLogLineV9SoD_shouldParseParametersCorrectly_dataProvider')]
+    public function setParameters_givenCombatLogLineV9SoD_shouldParseParametersCorrectly(
+        string  $combatLogLine,
+        Guid    $missType,
+        bool    $offhand,
+        int     $amountMissed,
+        int     $amountTotal,
+        bool    $critical,
+        ?string $damageType
+    ): void {
+        // Arrange
+
+        // Act
+        /** @var AdvancedCombatLogEvent $missedEvent */
+        $missedEvent = (new CombatLogEntry($combatLogLine))->parseEvent([], CombatLogVersion::CLASSIC_SOD_1_15_5);
+
+        // Assert
+        $this->assertInstanceOf(MissedV9SoD::class, $missedEvent->getSuffix());
+        $this->assertInstanceOf(MissedInterface::class, $missedEvent->getSuffix());
+        /** @var MissedInterface $missedSuffix */
+        $missedSuffix = $missedEvent->getSuffix();
+        $this->assertEquals($missType, $missedSuffix->getMissType());
+        $this->assertEquals($offhand, $missedSuffix->isOffhand());
+        $this->assertEquals($amountMissed, $missedSuffix->getAmountMissed());
+        $this->assertEquals($amountTotal, $missedSuffix->getAmountTotal());
+        $this->assertEquals($critical, $missedSuffix->isCritical());
+        $this->assertEquals($damageType, $missedSuffix->getDamageType());
+    }
+
+    public static function setParameters_givenCombatLogLineV9SoD_shouldParseParametersCorrectly_dataProvider(): array
+    {
+        $guidChecks = [];
+
+        return array_merge($guidChecks, [
+            'Miss'              => [
+                'combatLogLine' => '12/9/2024 19:07:25.3510  SWING_MISSED,Player-5827-02477156,"Shineqt-LivingFlame-EU",0x514,0x0,Creature-0-5208-531-679-15262-0001573C0B,"Obsidian Eradicator",0x10a48,0x0,MISS,1',
+                'missType'      => Guid::createFromGuidString('MISS'),
+                'offhand'       => true,
+                'amountMissed'  => 0,
+                'amountTotal'   => 0,
+                'critical'      => false,
+                'damageType'    => null,
             ],
         ]);
     }

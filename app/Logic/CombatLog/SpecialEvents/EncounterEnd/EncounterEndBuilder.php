@@ -22,7 +22,7 @@ class EncounterEndBuilder implements SpecialEventBuilderInterface
         string $rawEvent
     ): SpecialEvent {
         return match ($combatLogVersion) {
-            CombatLogVersion::CLASSIC => new EncounterEndV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
+            CombatLogVersion::CLASSIC, CombatLogVersion::CLASSIC_SOD_1_15_5 => new EncounterEndV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
             default => new EncounterEndV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
         };
     }

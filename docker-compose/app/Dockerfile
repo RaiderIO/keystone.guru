@@ -84,8 +84,8 @@ RUN /root/.cargo/bin/cargo install --git https://github.com/Zireael-N/cli-weakau
 # Install actual LUA language
 RUN apt-get update && apt-get install -y lua5.3 liblua5.3 && \
     ln -s /usr/include/lua5.3/ /usr/include/lua && \
-    cp /usr/lib/x86_64-linux-gnu/liblua5.3.a /usr/lib/liblua.a && \
-    cp /usr/lib/x86_64-linux-gnu/liblua5.3.so.0.0.0 /usr/lib/liblua.so && \
+    cp /usr/lib/*-linux-gnu/liblua5.3.a /usr/lib/liblua.a && \
+    cp /usr/lib/*-linux-gnu/liblua5.3.so.0.0.0 /usr/lib/liblua.so && \
     ln /usr/include/lua5.3/lua.h /usr/include/lauxlib.h && \
     ln /usr/include/lua5.3/lua.h /usr/include/lua.h && \
     ln /usr/include/lua5.3/lua.h /usr/include/luaconf.h

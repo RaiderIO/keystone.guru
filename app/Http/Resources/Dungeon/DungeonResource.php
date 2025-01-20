@@ -23,6 +23,7 @@ use JsonSerializable;
  * @OA\Property(type="boolean",property="speedrunEnabled",example="0",description="Whether speedrun is enabled for this dungeon")
  * @OA\Property(type="boolean",property="speedrunDifficulty10ManEnabled",example="0",description="Whether 10-man difficulty is enabled for speedrunning")
  * @OA\Property(type="boolean",property="speedrunDifficulty25ManEnabled",example="0",description="Whether 25-man difficulty is enabled for speedrunning")
+ * @OA\Property(type="array",property="floors",@OA\Items(ref="#/components/schemas/Floor"))
  *
  * @mixin Dungeon
  */

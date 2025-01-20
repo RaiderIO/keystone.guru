@@ -4,6 +4,13 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 
+/**
+ * @TODO This seems to be a SpecialEvent that behaves like a regular SPELL_ event with a LEECH suffix. But in V22
+ * two new unknown fields were added to AdvancedData but only 1 was added to this event? So this suffix is offset by 1
+ * in that regard - since this is only for SoD I'm not fixing it _now_ but for SoD this event is broken. See the below combat log.
+ *
+ * SPELL_LEECH,Creature-0-5208-531-679-15262-0001573C0B,"Obsidian Eradicator",0x10a48,0x0,Player-5827-01CB5FED,"Manta-LivingFlame-EU",0x514,0x0,1215781,"Drain Mana",0x20,Player-5827-01CB5FED,0000000000000000,97,100,0,0,0,0,0,-1,0,0,0,-8204.26,2063.29,0,1.1711,73,125,0,250,3527
+ */
 class Leech extends Suffix
 {
     private float $amount;
@@ -48,6 +55,6 @@ class Leech extends Suffix
 
     public function getParameterCount(): int
     {
-        return 3;
+        return 4;
     }
 }

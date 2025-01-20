@@ -487,13 +487,13 @@ class Enemy extends VersionableMapObject {
                 })
             });
 
-            if (mapContext.getGameVersion().key === GAME_VERSION_RETAIL) {
-                // Defined in sitescripts
-                // noinspection JSUnresolvedReference
-                if (isUserAdmin) {
-                    result.info.push({key: lang.get('messages.sidebar_enemy_npc_id_label'), value: this.npc.id});
-                }
+            // Defined in sitescripts
+            // noinspection JSUnresolvedReference
+            if (isUserAdmin) {
+                result.info.push({key: lang.get('messages.sidebar_enemy_npc_id_label'), value: this.npc.id});
+            }
 
+            if (mapContext.getGameVersion().key === GAME_VERSION_RETAIL) {
                 // These affixes have been removed
                 // result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
                 // result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});

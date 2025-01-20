@@ -14,10 +14,10 @@ use JsonSerializable;
  * @OA\Property(type="integer", property="uiMapId", example="259")
  * @OA\Property(type="string", property="name", example="The Stonevault", description="The English name of the floor")
  * @OA\Property(type="boolean", property="default", example="true", description="True if this is the floor any route for the dungeon opens up to")
- * @OA\Property(type="number",format="float", property="ingameMinX", example="true", description="In-game coordinates of the minimum X value of the floor")
- * @OA\Property(type="number",format="float", property="ingameMinY", example="true", description="In-game coordinates of the minimum Y value of the floor")
- * @OA\Property(type="number",format="float", property="ingameMaxX", example="true", description="In-game coordinates of the maximum X value of the floor")
- * @OA\Property(type="number",format="float", property="ingameMaxY", example="true", description="In-game coordinates of the maximum Y value of the floor")
+ * @OA\Property(type="number", format="float", property="ingameMinX", example="437.19", description="In-game coordinates of the minimum X value of the floor")
+ * @OA\Property(type="number", format="float", property="ingameMinY", example="-397.08", description="In-game coordinates of the minimum Y value of the floor")
+ * @OA\Property(type="number", format="float", property="ingameMaxX", example="-503.44", description="In-game coordinates of the maximum X value of the floor")
+ * @OA\Property(type="number", format="float", property="ingameMaxY", example="230", description="In-game coordinates of the maximum Y value of the floor")
  *
  * @mixin Floor
  */
