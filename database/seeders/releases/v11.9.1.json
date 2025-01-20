@@ -1,0 +1,25 @@
+{
+    "id": 267,
+    "release_changelog_id": 274,
+    "version": "v11.9.1",
+    "title": "Added API metrics tracking",
+    "backup_db": 1,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-01-20T21:38:53+00:00",
+    "updated_at": "2025-01-20T21:38:53+00:00",
+    "changelog": {
+        "id": 274,
+        "release_id": 267,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 274,
+                "release_changelog_category_id": 12,
+                "ticket_id": 2664,
+                "change": "API calls are now tracked and graphed so I can get some insight in how it's being used."
+            }
+        ]
+    }
+}

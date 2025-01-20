@@ -27,13 +27,14 @@ class Metric extends Model
     use HasGenericModelRelation;
 
     public const CATEGORY_DUNGEON_ROUTE_MDT_COPY = 1;
+    public const CATEGORY_API_CALL               = 10;
 
     public const ALL_CATEGORIES = [
         self::CATEGORY_DUNGEON_ROUTE_MDT_COPY,
+        self::CATEGORY_API_CALL,
     ];
 
-    public const TAG_MDT_COPY_VIEW = 'view';
-
+    public const TAG_MDT_COPY_VIEW  = 'view';
     public const TAG_MDT_COPY_EMBED = 'embed';
 
     public const ALL_TAGS = [

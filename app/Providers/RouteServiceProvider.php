@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\Api\ApiMetrics;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -57,7 +58,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes(): void
     {
         Route::prefix('api')
-            ->middleware(['api', 'throttle:api-general'])
+            ->middleware(['api', 'throttle:api-general', ApiMetrics::class])
             ->group(base_path('routes/api.php'));
     }
 
@@ -108,7 +109,7 @@ class RouteServiceProvider extends ServiceProvider
             return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 120)->by($this->userKey($request));
         });
         RateLimiter::for('api-combatlog-correct-event', function (Request $request) {
-            return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 5)->by($this->userKey($request));
+            return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 240)->by($this->userKey($request));
         });
         RateLimiter::for('api-create-dungeonroute-thumbnail', function (Request $request) {
             return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 30)->by($this->userKey($request));
