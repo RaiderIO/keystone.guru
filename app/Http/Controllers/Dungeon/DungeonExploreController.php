@@ -27,8 +27,14 @@ class DungeonExploreController extends Controller
         ]);
     }
 
-    public function viewDungeon(Request $request, CombatLogEventServiceInterface $combatLogEventService, Dungeon $dungeon): RedirectResponse
+    public function viewDungeon(Request $request, Dungeon $dungeon): RedirectResponse
     {
+        $dungeon->load(['currentMappingVersion']);
+
+        if (!$dungeon->active || $dungeon->currentMappingVersion === null) {
+            return redirect()->route('dungeon.explore.list');
+        }
+
         $dungeon->load(['currentMappingVersion']);
 
         /** @var Floor $defaultFloor */
@@ -50,10 +56,15 @@ class DungeonExploreController extends Controller
         Dungeon                        $dungeon,
         string                         $floorIndex = '1'): View|RedirectResponse
     {
+        $dungeon->load(['currentMappingVersion']);
+
+        if (!$dungeon->active || $dungeon->currentMappingVersion === null) {
+            return redirect()->route('dungeon.explore.list');
+        }
+
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
         }
-        $dungeon->load(['currentMappingVersion']);
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
@@ -87,7 +98,9 @@ class DungeonExploreController extends Controller
 
             $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
 
-            $heatmapActive = Feature::active(Heatmap::class) && $dungeon->gameVersion->has_seasons;
+            $heatmapActive = Feature::active(Heatmap::class) &&
+                $dungeon->gameVersion->has_seasons &&
+                $dungeon->challenge_mode_id !== null;
 
             $dungeon->trackPageView();
 
