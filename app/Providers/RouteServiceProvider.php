@@ -80,7 +80,7 @@ class RouteServiceProvider extends ServiceProvider
             return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 60)->by($this->userKey($request));
         });
         RateLimiter::for('create-user', function (Request $request) {
-            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 10)->by($this->userKey($request));
+            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 50)->by($this->userKey($request));
         });
 
         // Heavy GET requests
@@ -109,7 +109,7 @@ class RouteServiceProvider extends ServiceProvider
             return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 120)->by($this->userKey($request));
         });
         RateLimiter::for('api-combatlog-correct-event', function (Request $request) {
-            return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 240)->by($this->userKey($request));
+            return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 480)->by($this->userKey($request));
         });
         RateLimiter::for('api-create-dungeonroute-thumbnail', function (Request $request) {
             return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 30)->by($this->userKey($request));
