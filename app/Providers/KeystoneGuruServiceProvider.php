@@ -231,6 +231,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 return;
             }
 
+            // API requests don't need to load this in at all! We don't use the view cache since there's no view
+            if (Str::startsWith(request()->getRequestUri(), ['/api', '/benchmark'])) {
+                return;
+            }
+
             session_set_cookie_params([
                 'secure'   => true,
                 'httponly' => false,

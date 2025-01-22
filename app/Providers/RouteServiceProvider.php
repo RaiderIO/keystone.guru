@@ -109,7 +109,7 @@ class RouteServiceProvider extends ServiceProvider
             return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 120)->by($this->userKey($request));
         });
         RateLimiter::for('api-combatlog-correct-event', function (Request $request) {
-            return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 480)->by($this->userKey($request));
+            return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 500)->by($this->userKey($request));
         });
         RateLimiter::for('api-create-dungeonroute-thumbnail', function (Request $request) {
             return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 30)->by($this->userKey($request));
