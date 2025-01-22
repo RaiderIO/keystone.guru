@@ -141,9 +141,12 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     // Explore dungeons (just show me the mapping but don't allow me to create routes)
     Route::prefix('explore')->group(static function () {
         Route::get('/', (new DungeonExploreController())->get(...))->name('dungeon.explore.list');
-        Route::prefix('{dungeon}')->group(static function () {
-            Route::get('/', (new DungeonExploreController())->viewDungeon(...))->name('dungeon.explore.view');
-            Route::get('/{floorIndex}', (new DungeonExploreController())->viewDungeonFloor(...))->name('dungeon.explore.view.floor');
+        Route::prefix('{gameVersion}')->group(static function () {
+            Route::get('/', (new DungeonExploreController())->getByGameVersion(...))->name('dungeon.explore.gameversion.list');
+            Route::prefix('{dungeon}')->group(static function () {
+                Route::get('/', (new DungeonExploreController())->viewDungeon(...))->name('dungeon.explore.gameversion.view');
+                Route::get('/{floorIndex}', (new DungeonExploreController())->viewDungeonFloor(...))->name('dungeon.explore.gameversion.view.floor');
+            });
         });
     });
     // May be accessed without being logged in

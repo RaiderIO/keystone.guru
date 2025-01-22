@@ -1,15 +1,18 @@
 <?php
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
  * @var Collection<int> $runCountPerDungeon
+ * @var GameVersion     $gameVersion
  */
 ?>
 @extends('layouts.sitepage', [
     'rootClass' => 'discover',
     'title' => __('view_dungeon.explore.list.title'),
+    'breadcrumbsParams' => [$gameVersion],
 ])
 
 @section('header-title', __('view_dungeon.explore.list.header'))
@@ -18,7 +21,8 @@ use Illuminate\Support\Collection;
     @include('common.dungeon.gridtabs', [
         'id' => 'explore_dungeon',
         'tabsId' => 'explore_dungeon_select_tabs',
-        'route' => 'dungeon.explore.view',
+        'route' => 'dungeon.explore.gameversion.view',
+        'routeParams' => ['gameVersion' => $gameVersion],
         'subtextFn' => function(Dungeon $dungeon) use ($runCountPerDungeon) {
             $result = '';
 

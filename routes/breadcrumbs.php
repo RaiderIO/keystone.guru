@@ -7,6 +7,7 @@
 use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Release;
@@ -43,9 +44,10 @@ Breadcrumbs::for('misc.changelog', static function (Generator $trail) {
 /**
  * Explore page
  */
-Breadcrumbs::for('dungeon.explore.list', static function (Generator $trail) {
+Breadcrumbs::for('dungeon.explore.gameversion.list', static function (Generator $trail, GameVersion $gameVersion) {
     $trail->parent('home');
-    $trail->push(__('breadcrumbs.home.dungeon.explore'), route('dungeon.explore.list'));
+    $trail->push(__('breadcrumbs.home.gameversion.update', ['gameVersion' => __($gameVersion->description)]), route('gameversion.update', ['gameVersion' => $gameVersion]));
+    $trail->push(__('breadcrumbs.home.gameversion.dungeon.explore'), route('dungeon.explore.gameversion.list', ['gameVersion' => $gameVersion]));
 });
 
 /**

@@ -9,6 +9,7 @@ use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\MapContext\MapContextServiceInterface;
@@ -20,14 +21,28 @@ use Laravel\Pennant\Feature;
 
 class DungeonExploreController extends Controller
 {
-    public function get(Request $request, CombatLogEventServiceInterface $combatLogEventService): View
+    public function get(Request $request): RedirectResponse
     {
-        return view('dungeon.explore.list', [
-            'runCountPerDungeon' => Feature::active(Heatmap::class) ? $combatLogEventService->getRunCountPerDungeon() : collect(),
+        return redirect()->route('dungeon.explore.gameversion.list', [
+            'gameVersion' => GameVersion::getUserOrDefaultGameVersion(),
         ]);
     }
 
-    public function viewDungeon(Request $request, Dungeon $dungeon): RedirectResponse
+    public function getByGameVersion(Request $request, GameVersion $gameVersion, CombatLogEventServiceInterface $combatLogEventService): View|RedirectResponse
+    {
+        if ($gameVersion->id !== GameVersion::getUserOrDefaultGameVersion()->id) {
+            return redirect()->route('dungeon.explore.gameversion.list', [
+                'gameVersion' => GameVersion::getUserOrDefaultGameVersion(),
+            ]);
+        }
+
+        return view('dungeon.explore.gameversion.list', [
+            'runCountPerDungeon' => Feature::active(Heatmap::class) ? $combatLogEventService->getRunCountPerDungeon() : collect(),
+            'gameVersion'        => $gameVersion,
+        ]);
+    }
+
+    public function viewDungeon(Request $request, GameVersion $gameVersion, Dungeon $dungeon): RedirectResponse
     {
         $dungeon->load(['currentMappingVersion']);
 
@@ -42,9 +57,10 @@ class DungeonExploreController extends Controller
             ->defaultOrFacade($dungeon->currentMappingVersion)
             ->first();
 
-        return redirect()->route('dungeon.explore.view.floor', [
-            'dungeon'    => $dungeon,
-            'floorIndex' => $defaultFloor?->index ?? '1',
+        return redirect()->route('dungeon.explore.gameversion.view.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => $defaultFloor?->index ?? '1',
         ]);
     }
 
@@ -53,6 +69,7 @@ class DungeonExploreController extends Controller
         MapContextServiceInterface     $mapContextService,
         CombatLogEventServiceInterface $combatLogEventService,
         SeasonServiceInterface         $seasonService,
+        GameVersion $gameVersion,
         Dungeon                        $dungeon,
         string                         $floorIndex = '1'): View|RedirectResponse
     {
@@ -77,15 +94,17 @@ class DungeonExploreController extends Controller
                 ->defaultOrFacade($dungeon->currentMappingVersion)
                 ->first();
 
-            return redirect()->route('dungeon.explore.view.floor', [
-                'dungeon'    => $dungeon,
-                'floorIndex' => $defaultFloor?->index ?? '1',
+            return redirect()->route('dungeon.explore.gameversion.view.floor', [
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+                'floorIndex'  => $defaultFloor?->index ?? '1',
             ]);
         } else {
             if ($floor->index !== (int)$floorIndex) {
-                return redirect()->route('dungeon.explore.view.floor', [
-                    'dungeon'    => $dungeon,
-                    'floorIndex' => $floor->index,
+                return redirect()->route('dungeon.explore.gameversion.view.floor', [
+                    'gameVersion' => $gameVersion,
+                    'dungeon'     => $dungeon,
+                    'floorIndex'  => $floor->index,
                 ]);
             }
 
@@ -104,7 +123,8 @@ class DungeonExploreController extends Controller
 
             $dungeon->trackPageView();
 
-            return view('dungeon.explore.view', [
+            return view('dungeon.explore.gameversion.view', [
+                'gameVersion' => $gameVersion,
                 'dungeon'                 => $dungeon,
                 'floor'                   => $floor,
                 'title'                   => __($dungeon->name),

@@ -3,11 +3,11 @@
 return [
     'retail'  => [
         'name'        => 'Retail',
-        'description' => 'Retail',
+        'description' => 'The War Within',
     ],
     'wotlk'   => [
         'name'        => 'Wrath',
-        'description' => 'Wrath',
+        'description' => 'Wrath of the Lich King',
     ],
     'classic' => [
         'name'        => 'Classic Era',
@@ -19,6 +19,6 @@ return [
     ],
     'cata'   => [
         'name'        => 'Cata',
-        'description' => 'Cata',
+        'description' => 'Cataclysm',
     ],
 ];
