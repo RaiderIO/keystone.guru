@@ -107,6 +107,8 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public $timestamps = false;
 
+    private $activeSeasonCache = null;
+
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
@@ -340,9 +342,14 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
      * Get the season that is active for this dungeon right now (preferring upcoming seasons if current and next season overlap)
      * @TODO business logic should not be in a model - move to service
      */
-    public function getActiveSeason(SeasonServiceInterface $seasonService): ?Season
+    public function getActiveSeason(SeasonServiceInterface $seasonService, bool $useCache = true): ?Season
     {
-        return $seasonService->getUpcomingSeasonForDungeon($this) ??
+        if ($useCache && $this->activeSeasonCache !== null) {
+            return $this->activeSeasonCache;
+        }
+
+        return $this->activeSeasonCache =
+            $seasonService->getUpcomingSeasonForDungeon($this) ??
             $seasonService->getMostRecentSeasonForDungeon($this) ??
             // Timewalking fallback
             $seasonService->getCurrentSeason($this->expansion);
@@ -404,76 +411,72 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     {
         return Npc::select('npcs.*')
             ->leftJoin('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')
-            ->where(fn(Builder $builder) => $builder->where('npcs.dungeon_id', $this->id)
-                ->orWhere('npcs.dungeon_id', -1))
             ->where(function (Builder $builder) {
-                $builder->where(function (Builder $builder) {
+                $builder->where(fn(Builder $builder) => $builder->where('npcs.dungeon_id', $this->id)
+                    ->orWhere('npcs.dungeon_id', -1)
+                )->where(function (Builder $builder) {
                     // Enemy forces may be not set, that means that we assume 0. They MAY be missing entirely for bosses
                     // or for other exceptions listed below
                     $builder->where('npc_enemy_forces.mapping_version_id', $this->currentMappingVersion->id)
-                        ->whereNotNull('npc_enemy_forces.enemy_forces');
-                })->orWhereIn('npcs.classification_id', [
-                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
-                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
-                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
-                ])->orWhereIn('npcs.id', [
-                    // Neltharion's Lair:
-                    // Burning Geodes are in the mapping but give 0 enemy forces.
-                    // They're in the mapping because they're dangerous af
-                    101437,
+                        ->orWhereNull('npc_enemy_forces.id');
+                });
+            })->orWhereIn('npcs.id', [
+                // Neltharion's Lair:
+                // Burning Geodes are in the mapping but give 0 enemy forces.
+                // They're in the mapping because they're dangerous af
+                101437,
 
-                    // Necrotic Wake:
-                    // Brittlebone Warrior is in the mapping but gives 0 enemy forces.
-                    163122,
-                    // Brittlebone Mage
-                    163126,
-                    // Brittlebone Crossbowman
-                    166079,
-                    // Spare Parts
-                    166264,
-                    // Goregrind Bits
-                    163622,
-                    // Rotspew Leftovers
-                    163623,
+                // Necrotic Wake:
+                // Brittlebone Warrior is in the mapping but gives 0 enemy forces.
+                163122,
+                // Brittlebone Mage
+                163126,
+                // Brittlebone Crossbowman
+                166079,
+                // Spare Parts
+                166264,
+                // Goregrind Bits
+                163622,
+                // Rotspew Leftovers
+                163623,
 
-                    // Halls of Infusion:
-                    // Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
-                    // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
-                    190407,
+                // Halls of Infusion:
+                // Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
+                // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
+                190407,
 
-                    // Brackenhide Hollow:
-                    // Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
-                    194273,
-                    // Rotfang Hyena are part of Gutshot boss but, they are part of the mapping. They give 0 enemy forces.
-                    194745,
-                    // Wild Lashers give 0 enemy forces but are in the mapping regardless
-                    191243,
-                    // Wither Slashers give 0 enemy forces but are in the mapping regardless
-                    194469,
-                    // Gutstabbers give 0 enemy forces but are in the mapping regardless
-                    197857,
+                // Brackenhide Hollow:
+                // Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
+                194273,
+                // Rotfang Hyena are part of Gutshot boss but, they are part of the mapping. They give 0 enemy forces.
+                194745,
+                // Wild Lashers give 0 enemy forces but are in the mapping regardless
+                191243,
+                // Wither Slashers give 0 enemy forces but are in the mapping regardless
+                194469,
+                // Gutstabbers give 0 enemy forces but are in the mapping regardless
+                197857,
 
-                    // Nokhud Offensive:
-                    // War Ohuna gives 0 enemy forces but is in the mapping regardless
-                    192803,
-                    // Stormsurge Totem gives 0 enemy forces but is in the mapping regardless
-                    194897,
-                    // Unstable Squall gives 0 enemy forces but is in the mapping regardless
-                    194895,
-                    // Primal Gust gives 0 enemy forces but is in the mapping regardless
-                    195579,
+                // Nokhud Offensive:
+                // War Ohuna gives 0 enemy forces but is in the mapping regardless
+                192803,
+                // Stormsurge Totem gives 0 enemy forces but is in the mapping regardless
+                194897,
+                // Unstable Squall gives 0 enemy forces but is in the mapping regardless
+                194895,
+                // Primal Gust gives 0 enemy forces but is in the mapping regardless
+                195579,
 
-                    // Dawn of the Infinite:
-                    // Temporal Deviation gives 0 enemy forces but is in the mapping regardless
-                    206063,
-                    // Iridikron's Creation
-                    204918,
+                // Dawn of the Infinite:
+                // Temporal Deviation gives 0 enemy forces but is in the mapping regardless
+                206063,
+                // Iridikron's Creation
+                204918,
 
-                    // City of Threads:
-                    // Eye of the Queen gives 0 enemy forces but is in the mapping regardless
-                    220003,
-                ]);
-            })
+                // City of Threads:
+                // Eye of the Queen gives 0 enemy forces but is in the mapping regardless
+                220003,
+            ])
             ->get();
     }
 

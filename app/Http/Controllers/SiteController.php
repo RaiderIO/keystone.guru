@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Logic\Utils\Stopwatch;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\Release;
 use App\Models\Season;
 use App\Models\User;
+use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Service\DungeonRoute\CoverageServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\Expansion\ExpansionService;
@@ -57,6 +60,25 @@ class SiteController extends Controller
         } else {
             return view('home');
         }
+    }
+
+    /**
+     * @return RedirectResponse|Redirector
+     */
+    public function benchmark(
+        Request $request,
+        CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService
+    ) {
+        $validated = json_decode(file_get_contents(app()->basePath('tmp/combatlog.json')), true);
+
+        Stopwatch::start('SiteController::benchmark');
+        $result = $combatLogRouteDungeonRouteService->correctCombatLogRoute(
+            CombatLogRouteRequestModel::createFromArray($validated)
+        );
+        Stopwatch::pause('SiteController::benchmark');
+
+        dump('hey');
+//        return view('misc.credits');
     }
 
     /**
