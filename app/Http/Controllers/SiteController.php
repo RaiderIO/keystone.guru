@@ -66,9 +66,9 @@ class SiteController extends Controller
      * @return RedirectResponse|Redirector
      */
     public function benchmark(
-        Request $request,
+        Request                                    $request,
         CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService
-    ) {
+    ): View {
         $validated = json_decode(file_get_contents(app()->basePath('tmp/combatlog.json')), true);
 
         Stopwatch::start('SiteController::benchmark');
@@ -77,8 +77,8 @@ class SiteController extends Controller
         );
         Stopwatch::pause('SiteController::benchmark');
 
-        dump('hey');
-//        return view('misc.credits');
+//        dump('hey');
+        return view('misc.credits');
     }
 
     /**
