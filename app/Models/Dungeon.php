@@ -420,63 +420,78 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
                     $builder->where('npc_enemy_forces.mapping_version_id', $this->currentMappingVersion->id)
                         ->orWhereNull('npc_enemy_forces.id');
                 });
-            })->orWhereIn('npcs.id', [
-                // Neltharion's Lair:
-                // Burning Geodes are in the mapping but give 0 enemy forces.
-                // They're in the mapping because they're dangerous af
-                101437,
-
-                // Necrotic Wake:
-                // Brittlebone Warrior is in the mapping but gives 0 enemy forces.
-                163122,
-                // Brittlebone Mage
-                163126,
-                // Brittlebone Crossbowman
-                166079,
-                // Spare Parts
-                166264,
-                // Goregrind Bits
-                163622,
-                // Rotspew Leftovers
-                163623,
-
-                // Halls of Infusion:
-                // Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
-                // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
-                190407,
-
-                // Brackenhide Hollow:
-                // Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
-                194273,
-                // Rotfang Hyena are part of Gutshot boss but, they are part of the mapping. They give 0 enemy forces.
-                194745,
-                // Wild Lashers give 0 enemy forces but are in the mapping regardless
-                191243,
-                // Wither Slashers give 0 enemy forces but are in the mapping regardless
-                194469,
-                // Gutstabbers give 0 enemy forces but are in the mapping regardless
-                197857,
-
-                // Nokhud Offensive:
-                // War Ohuna gives 0 enemy forces but is in the mapping regardless
-                192803,
-                // Stormsurge Totem gives 0 enemy forces but is in the mapping regardless
-                194897,
-                // Unstable Squall gives 0 enemy forces but is in the mapping regardless
-                194895,
-                // Primal Gust gives 0 enemy forces but is in the mapping regardless
-                195579,
-
-                // Dawn of the Infinite:
-                // Temporal Deviation gives 0 enemy forces but is in the mapping regardless
-                206063,
-                // Iridikron's Creation
-                204918,
-
-                // City of Threads:
-                // Eye of the Queen gives 0 enemy forces but is in the mapping regardless
-                220003,
-            ])
+            })
+            ->when($this->key === self::DUNGEON_NELTHARIONS_LAIR, function (Builder $builder) {
+                $builder->orWhereIn('npcs.id', [
+                    // Burning Geodes are in the mapping but give 0 enemy forces.
+                    // They're in the mapping because they're dangerous af
+                    101437,
+                ]);
+            })
+            ->when($this->key === self::DUNGEON_THE_NECROTIC_WAKE, function (Builder $builder) {
+                $builder->orWhereIn('npcs.id', [
+                    // Necrotic Wake:
+                    // Brittlebone Warrior is in the mapping but gives 0 enemy forces.
+                    163122,
+                    // Brittlebone Mage
+                    163126,
+                    // Brittlebone Crossbowman
+                    166079,
+                    // Spare Parts
+                    166264,
+                    // Goregrind Bits
+                    163622,
+                    // Rotspew Leftovers
+                    163623,
+                ]);
+            })
+            ->when($this->key === self::DUNGEON_HALLS_OF_INFUSION, function (Builder $builder) {
+                $builder->orWhereIn('npcs.id', [
+                    // Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
+                    // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
+                    190407,
+                ]);
+            })
+            ->when($this->key === self::DUNGEON_BRACKENHIDE_HOLLOW, function (Builder $builder) {
+                $builder->orWhereIn('npcs.id', [
+                    // Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
+                    194273,
+                    // Rotfang Hyena are part of Gutshot boss but, they are part of the mapping. They give 0 enemy forces.
+                    194745,
+                    // Wild Lashers give 0 enemy forces but are in the mapping regardless
+                    191243,
+                    // Wither Slashers give 0 enemy forces but are in the mapping regardless
+                    194469,
+                    // Gutstabbers give 0 enemy forces but are in the mapping regardless
+                    197857,
+                ]);
+            })
+            ->when($this->key === self::DUNGEON_THE_NOKHUD_OFFENSIVE, function (Builder $builder) {
+                $builder->orWhereIn('npcs.id', [
+                    // War Ohuna gives 0 enemy forces but is in the mapping regardless
+                    192803,
+                    // Stormsurge Totem gives 0 enemy forces but is in the mapping regardless
+                    194897,
+                    // Unstable Squall gives 0 enemy forces but is in the mapping regardless
+                    194895,
+                    // Primal Gust gives 0 enemy forces but is in the mapping regardless
+                    195579,
+                ]);
+            })
+            ->when(in_array($this->key, [self::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL, self::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE]), function (Builder $builder) {
+                $builder->orWhereIn('npcs.id', [
+                    // Temporal Deviation gives 0 enemy forces but is in the mapping regardless
+                    206063,
+                    // Iridikron's Creation
+                    204918,
+                ]);
+            })
+            ->when($this->key === self::DUNGEON_CITY_OF_THREADS, function (Builder $builder) {
+                $builder->orWhereIn('npcs.id', [
+                    // Eye of the Queen gives 0 enemy forces but is in the mapping regardless
+                    220003,
+                ]);
+            })
             ->get();
     }
 
