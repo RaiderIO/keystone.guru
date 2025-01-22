@@ -146,8 +146,8 @@ try {
 @endsection
 
 <?php
-} catch (ErrorException $throwable) {
-    logger()->error('Error in affixes page!', [
+} catch (Throwable $throwable) {
+    Log::withContext([
         'user' => Auth::id(),
         'url' => request()->url(),
         'currentAffixGroup' => $currentAffixGroup?->id,

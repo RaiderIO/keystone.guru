@@ -5,8 +5,11 @@ namespace App\Service\CombatLog\Builders;
 use App;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
+use App\Logic\Utils\Stopwatch;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
@@ -20,6 +23,7 @@ use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Random\RandomException;
 
 /**
@@ -30,6 +34,9 @@ use Random\RandomException;
 class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
 {
     private CombatLogRouteDungeonRouteBuilderLoggingInterface $log;
+
+    /** @var Collection<int> */
+    protected Collection $validSpellIds;
 
     /**
      * @throws DungeonNotSupportedException
@@ -61,6 +68,10 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             ),
             $log
         );
+
+        $this->validSpellIds = Spell::whereIn('id',
+            $combatLogRoute->spells->map(fn(CombatLogRouteSpellRequestModel $spell) => $spell->spellId)
+        )->get()->keyBy('id');
 
         /** @var CombatLogRouteDungeonRouteBuilderLoggingInterface $log */
         $this->log = $log;
@@ -114,12 +125,21 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         //            return $event;
         //        }));
 
+        $floorCache = collect();
         $firstEngagedAt = null;
         foreach ($npcEngagedAndDiedEvents as $event) {
             /** @var $event array{type: string, timestamp: Carbon, npc: CombatLogRouteNpcRequestModel} */
             $realUiMapId = Floor::UI_MAP_ID_MAPPING[$event['npc']->coord->uiMapId] ?? $event['npc']->coord->uiMapId;
             if ($this->currentFloor === null || $realUiMapId !== $this->currentFloor->ui_map_id) {
-                $newFloor = Floor::findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id);
+                $newFloor = $floorCache->get($event['npc']->coord->uiMapId);
+
+                if ($newFloor === null) {
+                    $floorCache->put(
+                        $event['npc']->coord->uiMapId,
+                        $newFloor = Floor::findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id)
+                    );
+                }
+
                 if ($newFloor === null) {
                     // Floor not found = we stay on the current floor
                     $this->log->buildKillZonesFloorNotFound($this->currentFloor?->id, $event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id);
@@ -231,7 +251,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         foreach ($this->combatLogRoute->spells as $spell) {
             if ($lastDiedAt !== null) {
                 if ($spell->getCastAt()->between($firstEngagedAt, $lastDiedAt)) {
-                    if ($this->validSpellIds->search($spell->spellId) === false) {
+                    if (!$this->validSpellIds->has($spell->spellId)) {
                         $this->log->determineSpellsCastBetweenInvalidSpellIdBetween($spell->spellId);
 
                         continue;
@@ -239,7 +259,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                     $activePull->addSpell($spell->spellId);
                 }
             } else if ($spell->getCastAt()->isAfter($firstEngagedAt)) {
-                if ($this->validSpellIds->search($spell->spellId) === false) {
+                if (!$this->validSpellIds->has($spell->spellId)) {
                     $this->log->determineSpellsCastBetweenInvalidSpellIdAfter($spell->spellId);
 
                     continue;

@@ -107,6 +107,8 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public $timestamps = false;
 
+    private $activeSeasonCache = null;
+
     /**
      * https://stackoverflow.com/a/34485411/771270
      */
@@ -340,9 +342,14 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
      * Get the season that is active for this dungeon right now (preferring upcoming seasons if current and next season overlap)
      * @TODO business logic should not be in a model - move to service
      */
-    public function getActiveSeason(SeasonServiceInterface $seasonService): ?Season
+    public function getActiveSeason(SeasonServiceInterface $seasonService, bool $useCache = true): ?Season
     {
-        return $seasonService->getUpcomingSeasonForDungeon($this) ??
+        if ($useCache && $this->activeSeasonCache !== null) {
+            return $this->activeSeasonCache;
+        }
+
+        return $this->activeSeasonCache =
+            $seasonService->getUpcomingSeasonForDungeon($this) ??
             $seasonService->getMostRecentSeasonForDungeon($this) ??
             // Timewalking fallback
             $seasonService->getCurrentSeason($this->expansion);
@@ -404,24 +411,25 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     {
         return Npc::select('npcs.*')
             ->leftJoin('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')
-            ->where(fn(Builder $builder) => $builder->where('npcs.dungeon_id', $this->id)
-                ->orWhere('npcs.dungeon_id', -1))
             ->where(function (Builder $builder) {
-                $builder->where(function (Builder $builder) {
+                $builder->where(fn(Builder $builder) => $builder->where('npcs.dungeon_id', $this->id)
+                    ->orWhere('npcs.dungeon_id', -1)
+                )->where(function (Builder $builder) {
                     // Enemy forces may be not set, that means that we assume 0. They MAY be missing entirely for bosses
                     // or for other exceptions listed below
                     $builder->where('npc_enemy_forces.mapping_version_id', $this->currentMappingVersion->id)
-                        ->whereNotNull('npc_enemy_forces.enemy_forces');
-                })->orWhereIn('npcs.classification_id', [
-                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
-                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
-                    NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_RARE],
-                ])->orWhereIn('npcs.id', [
-                    // Neltharion's Lair:
+                        ->orWhereNull('npc_enemy_forces.id');
+                });
+            })
+            ->when($this->key === self::DUNGEON_NELTHARIONS_LAIR, function (Builder $builder) {
+                $builder->orWhereIn('npcs.id', [
                     // Burning Geodes are in the mapping but give 0 enemy forces.
                     // They're in the mapping because they're dangerous af
                     101437,
-
+                ]);
+            })
+            ->when($this->key === self::DUNGEON_THE_NECROTIC_WAKE, function (Builder $builder) {
+                $builder->orWhereIn('npcs.id', [
                     // Necrotic Wake:
                     // Brittlebone Warrior is in the mapping but gives 0 enemy forces.
                     163122,
@@ -435,13 +443,17 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
                     163622,
                     // Rotspew Leftovers
                     163623,
-
-                    // Halls of Infusion:
+                ]);
+            })
+            ->when($this->key === self::DUNGEON_HALLS_OF_INFUSION, function (Builder $builder) {
+                $builder->orWhereIn('npcs.id', [
                     // Aqua Ragers are in the mapping but give 0 enemy forces - so would be excluded.
                     // They're in the mapping because they are a significant drain on time and excluding them would raise questions about why they're gone
                     190407,
-
-                    // Brackenhide Hollow:
+                ]);
+            })
+            ->when($this->key === self::DUNGEON_BRACKENHIDE_HOLLOW, function (Builder $builder) {
+                $builder->orWhereIn('npcs.id', [
                     // Witherlings that are a significant nuisance to be included in the mapping. They give 0 enemy forces.
                     194273,
                     // Rotfang Hyena are part of Gutshot boss but, they are part of the mapping. They give 0 enemy forces.
@@ -452,8 +464,10 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
                     194469,
                     // Gutstabbers give 0 enemy forces but are in the mapping regardless
                     197857,
-
-                    // Nokhud Offensive:
+                ]);
+            })
+            ->when($this->key === self::DUNGEON_THE_NOKHUD_OFFENSIVE, function (Builder $builder) {
+                $builder->orWhereIn('npcs.id', [
                     // War Ohuna gives 0 enemy forces but is in the mapping regardless
                     192803,
                     // Stormsurge Totem gives 0 enemy forces but is in the mapping regardless
@@ -462,14 +476,18 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
                     194895,
                     // Primal Gust gives 0 enemy forces but is in the mapping regardless
                     195579,
-
-                    // Dawn of the Infinite:
+                ]);
+            })
+            ->when(in_array($this->key, [self::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL, self::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE]), function (Builder $builder) {
+                $builder->orWhereIn('npcs.id', [
                     // Temporal Deviation gives 0 enemy forces but is in the mapping regardless
                     206063,
                     // Iridikron's Creation
                     204918,
-
-                    // City of Threads:
+                ]);
+            })
+            ->when($this->key === self::DUNGEON_CITY_OF_THREADS, function (Builder $builder) {
+                $builder->orWhereIn('npcs.id', [
                     // Eye of the Queen gives 0 enemy forces but is in the mapping regardless
                     220003,
                 ]);

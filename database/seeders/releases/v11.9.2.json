@@ -1,0 +1,25 @@
+{
+    "id": 268,
+    "release_changelog_id": 275,
+    "version": "v11.9.2",
+    "title": "Further optimizations to API calls",
+    "backup_db": 1,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-01-22T11:31:41+00:00",
+    "updated_at": "2025-01-22T11:31:41+00:00",
+    "changelog": {
+        "id": 275,
+        "release_id": 268,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 275,
+                "release_changelog_category_id": 12,
+                "ticket_id": 2668,
+                "change": "API endpoints are now quicker to load."
+            }
+        ]
+    }
+}
