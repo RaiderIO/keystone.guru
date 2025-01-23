@@ -7,8 +7,8 @@ use App\Exceptions\Logging\HandlerLoggingInterface;
 use App\Http\Middleware\Logging\DebugInfoContextLoggerLogging;
 use App\Http\Middleware\Logging\DebugInfoContextLoggerLoggingInterface;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLogging;
-use App\Jobs\Logging\ProcessRouteFloorThumbnailLogging;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailCustomLoggingInterface;
+use App\Jobs\Logging\ProcessRouteFloorThumbnailLogging;
 use App\Jobs\Logging\ProcessRouteFloorThumbnailLoggingInterface;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLogging;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
@@ -76,6 +76,8 @@ use App\Service\Patreon\Logging\PatreonApiServiceLogging;
 use App\Service\Patreon\Logging\PatreonApiServiceLoggingInterface;
 use App\Service\Patreon\Logging\PatreonServiceLogging;
 use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
+use App\Service\RaiderIO\Logging\RaiderIOApiServiceLogging;
+use App\Service\RaiderIO\Logging\RaiderIOApiServiceLoggingInterface;
 use App\Service\Spell\Logging\SpellServiceLogging;
 use App\Service\Spell\Logging\SpellServiceLoggingInterface;
 use App\Service\StructuredLogging\Logging\StructuredLoggingServiceLogging;
@@ -159,6 +161,9 @@ class LoggingServiceProvider extends ServiceProvider
         // Patreon
         $this->app->bind(PatreonServiceLoggingInterface::class, PatreonServiceLogging::class);
         $this->app->bind(PatreonApiServiceLoggingInterface::class, PatreonApiServiceLogging::class);
+
+        // RaiderIO
+        $this->app->bind(RaiderIOApiServiceLoggingInterface::class, RaiderIOApiServiceLogging::class);
 
         // Spell
         $this->app->bind(SpellServiceLoggingInterface::class, SpellServiceLogging::class);
