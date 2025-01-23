@@ -40,6 +40,12 @@ $gameVersionsSelect = GameVersion::all()
                 @include('common.forms.form-error', ['key' => 'active'])
             </div>
 
+            <div class="col {{ $errors->has('raid') ? ' has-error' : '' }}">
+                {!! Form::label('raid', __('view_admin.dungeon.edit.raid')) !!}
+                {!! Form::checkbox('raid', 1, $dungeon?->raid ?? 0, ['class' => 'form-control left_checkbox']) !!}
+                @include('common.forms.form-error', ['key' => 'raid'])
+            </div>
+
             <div class="col {{ $errors->has('speedrun_enabled') ? ' has-error' : '' }}">
                 {!! Form::label('speedrun_enabled', __('view_admin.dungeon.edit.speedrun_enabled')) !!}
                 {!! Form::checkbox('speedrun_enabled', 1, $dungeon?->speedrun_enabled ?? 0, ['class' => 'form-control left_checkbox']) !!}

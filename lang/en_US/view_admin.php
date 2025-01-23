@@ -8,6 +8,7 @@ return [
             'header_new'                         => 'New dungeon',
             'header_edit'                        => 'Edit dungeon',
             'active'                             => 'Active',
+            'raid'                               => 'Raid',
             'speedrun_enabled'                   => 'Speedrun enabled',
             'speedrun_difficulty_10_man_enabled' => 'Speedrun 10-man enabled',
             'speedrun_difficulty_25_man_enabled' => 'Speedrun 25-man enabled',

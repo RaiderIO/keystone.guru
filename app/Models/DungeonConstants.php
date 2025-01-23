@@ -400,5 +400,9 @@ trait DungeonConstants
             self::RAID_ULDUAR,
             self::RAID_VAULT_OF_ARCHAVON,
         ],
+        Expansion::EXPANSION_CATACLYSM => [
+            self::RAID_FIRELANDS,
+            self::RAID_DRAGON_SOUL,
+        ],
     ];
 }

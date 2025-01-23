@@ -268,7 +268,7 @@ class DungeonRouteDiscoverController extends Controller
         return view('dungeonroute.discover.discover', [
             'breadcrumbs'       => 'dungeonroutes.expansion',
             'breadcrumbsParams' => [$expansion],
-            'gridDungeons'      => $expansion->dungeons()->active()->get(),
+            'gridDungeons'      => $expansion->dungeonsAndRaids()->active()->get(),
             'expansion'         => $expansion,
             'dungeonroutes'     => [
                 'thisweek' => $currentAffixGroup === null ? collect() : $discoverService->popularGroupedByDungeonByAffixGroup($currentAffixGroup),

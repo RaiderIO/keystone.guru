@@ -63,7 +63,7 @@ class Cache extends SchedulerCommand
                 /** @var Expansion $expansion */
                 $this->info(sprintf('- %s', $expansion->shortname));
 
-                $expansion->load('dungeons');
+                $expansion->load('dungeonsAndRaids');
 
                 // First we will parse all pages for a certain expansion (just let me see all dungeons for an expansion)
                 $discoverService = $discoverService->withExpansion($expansion);

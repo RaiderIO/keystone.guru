@@ -35,7 +35,7 @@ class ExportMapping extends Command
         $targetFolder        = $this->argument('targetFolder');
         $excludeTranslations = $this->option('excludeTranslations');
 
-        foreach ($expansion->dungeons as $dungeon) {
+        foreach ($expansion->dungeonsAndRaids as $dungeon) {
             if (!$dungeon->enemies()->exists()) {
                 $this->comment(sprintf('Skipping %s, no enemies found', __($dungeon->name)));
 

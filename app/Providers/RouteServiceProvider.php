@@ -103,7 +103,7 @@ class RouteServiceProvider extends ServiceProvider
     private function configureApiRateLimiting(): void
     {
         RateLimiter::for('api-general', function (Request $request) {
-            return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 600)->by($this->userKey($request));
+            return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 900)->by($this->userKey($request));
         });
         RateLimiter::for('api-combatlog-create-dungeonroute', function (Request $request) {
             return $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::RATE_LIMIT_OVERRIDE_PER_MINUTE_API ?? 120)->by($this->userKey($request));

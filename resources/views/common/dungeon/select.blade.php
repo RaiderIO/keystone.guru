@@ -9,7 +9,9 @@ use Illuminate\Support\Collection;
 /**
  * @var GameVersion           $currentUserGameVersion
  * @var Collection<Dungeon>   $allDungeons
+ * @var Collection<Dungeon>   $allRaids
  * @var Collection<Dungeon>   $allActiveDungeons
+ * @var Collection<Dungeon>   $allActiveRaids
  * @var Collection<Expansion> $allExpansions
  * @var Dungeon               $siegeOfBoralus
  * @var Season                $currentSeason
@@ -37,7 +39,7 @@ if (!isset($dungeons)) {
     }
 
     // Build a list of seasons that we use to make selections of
-    $seasons = [];
+    $seasons      = [];
     $showLongName = false;
     if ($nextSeason !== null) {
         $seasons[] = $nextSeason;
@@ -82,7 +84,7 @@ if (!isset($dungeons)) {
         }
     }
 
-    $dungeons = $activeOnly ? $allActiveDungeons : $allDungeons;
+    $dungeons = $activeOnly ? $allActiveDungeons->merge($allActiveRaids) : $allDungeons->merge($allRaids);
 }
 
 $dungeonsByExpansion = $dungeons->groupBy('expansion_id');
@@ -97,11 +99,18 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
 
     if ($expansion->active || !$activeOnly) {
         $dungeonsOfExpansionFiltered = $dungeonsOfExpansion
-            ->when(!$ignoreGameVersion, static fn(Collection $collection) => $collection->filter(static fn(Dungeon $dungeon) => $dungeon->game_version_id === $currentUserGameVersion->id));
+            ->when(!$ignoreGameVersion, static fn(Collection $collection) =>
+                $collection->filter(static fn(Dungeon $dungeon) => $dungeon->game_version_id === $currentUserGameVersion->id)
+            );
 
         // Only if there's something to display for this expansion
         if ($dungeonsOfExpansionFiltered->isNotEmpty()) {
             $dungeonsSelect[__($expansion->name)] = $dungeonsOfExpansionFiltered
+                ->filter(static fn(Dungeon $dungeon) => !$dungeon->raid)
+                ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => __($dungeon->name)]);
+
+            $dungeonsSelect[sprintf('%s (%s)', __($expansion->name), __('view_common.dungeon.select.raid'))] = $dungeonsOfExpansionFiltered
+                ->filter(static fn(Dungeon $dungeon) => $dungeon->raid)
                 ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => __($dungeon->name)]);
         }
     }

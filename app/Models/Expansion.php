@@ -29,6 +29,9 @@ use Illuminate\Support\Collection;
  * @property Carbon                $updated_at
  *
  * @property Collection<Dungeon>   $dungeons
+ * @property Collection<Dungeon>   $raids
+ * @property Collection<Dungeon>   $dungeonsAndRaids
+ *
  * @property TimewalkingEvent|null $timewalkingEvent
  *
  * @method static Builder active()
@@ -102,6 +105,16 @@ class Expansion extends CacheModel
     }
 
     public function dungeons(): HasMany
+    {
+        return $this->hasMany(Dungeon::class)->where('raid', 0)->orderBy('name');
+    }
+
+    public function raids(): HasMany
+    {
+        return $this->hasMany(Dungeon::class)->where('raid', 1)->orderBy('name');
+    }
+
+    public function dungeonsAndRaids(): HasMany
     {
         return $this->hasMany(Dungeon::class)->orderBy('name');
     }
@@ -188,6 +201,20 @@ class Expansion extends CacheModel
     public function hasTimewalkingEvent(): bool
     {
         return $this->timewalkingEvent instanceof TimewalkingEvent;
+    }
+
+    public function hasRaidForGameVersion(GameVersion $gameVersion): bool
+    {
+        $result = false;
+
+        foreach ($this->raids as $dungeon) {
+            if ($dungeon->game_version_id === $gameVersion->id) {
+                $result = true;
+                break;
+            }
+        }
+
+        return $result;
     }
 
     public function hasDungeonForGameVersion(GameVersion $gameVersion): bool

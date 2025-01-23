@@ -13,12 +13,16 @@ return [
             'next_week' => 'Next week',
             'new'       => 'New',
         ],
+        'gridtabs'     => [
+            'raid' => 'Raid',
+        ],
         'select'       => [
             'dungeon'                  => 'Dungeon',
             'all'                      => 'All',
             'all_dungeons'             => 'All dungeons',
             'all_expansion_dungeons'   => 'All :expansion dungeons',
             'seasons'                  => 'Seasons',
+            'raid'                     => 'Raid',
             'siege_of_boralus_warning' => 'Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.',
         ],
     ],

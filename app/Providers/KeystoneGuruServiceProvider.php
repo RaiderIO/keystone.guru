@@ -446,7 +446,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('nextSeason', $regionViewVariables['nextSeason']);
             $view->with('allExpansions', $globalViewVariables['allExpansions']);
             $view->with('allDungeons', $globalViewVariables['dungeonsByExpansionIdDesc']);
+            $view->with('allRaids', $globalViewVariables['raidsByExpansionIdDesc']);
             $view->with('allActiveDungeons', $globalViewVariables['activeDungeonsByExpansionIdDesc']);
+            $view->with('allActiveRaids', $globalViewVariables['activeRaidsByExpansionIdDesc']);
             $view->with('siegeOfBoralus', $globalViewVariables['siegeOfBoralus']);
         });
 

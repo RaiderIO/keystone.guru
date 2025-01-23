@@ -155,7 +155,7 @@ class DiscoverService extends BaseDiscoverService
                 $result = collect();
 
                 /** @var Collection<Dungeon> $activeDungeons */
-                $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeons())->active()->get();
+                $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeonsAndRaids())->active()->get();
                 foreach ($activeDungeons as $dungeon) {
                     // Limit the amount of results of our queries
                     $result = $result->merge(
@@ -196,7 +196,7 @@ class DiscoverService extends BaseDiscoverService
                 $result = collect();
 
                 /** @var Collection<Dungeon> $activeDungeons */
-                $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeons())->active()->get();
+                $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeonsAndRaids())->active()->get();
                 foreach ($activeDungeons as $dungeon) {
                     // Limit the amount of results of our queries
                     $result = $result->merge(
