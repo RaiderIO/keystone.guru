@@ -83,10 +83,10 @@ class ViewService implements ViewServiceInterface
                 )->latest()->first();
 
             $allRegions    = GameServerRegion::all();
-            $allExpansions = Expansion::with(['dungeonsAndRaids'])->orderBy('released_at', 'desc')->get();
+            $allExpansions = Expansion::with(['dungeons', 'raids'])->orderBy('released_at', 'desc')->get();
 
             /** @var Collection<Expansion> $activeExpansions */
-            $activeExpansions = Expansion::active()->with('dungeonsAndRaids')->orderBy('released_at', 'desc')->get();
+            $activeExpansions = Expansion::active()->with('dungeons', 'raids')->orderBy('released_at', 'desc')->get();
 
             // Spells
             $selectableSpellsByCategory = Spell::where('selectable', true)
