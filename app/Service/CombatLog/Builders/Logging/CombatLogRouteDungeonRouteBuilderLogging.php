@@ -49,6 +49,11 @@ class CombatLogRouteDungeonRouteBuilderLogging extends DungeonRouteBuilderLoggin
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function buildKillZonesNotAllSpellsAssigned(int $totalAssignedSpells, int $totalSpells): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
     public function buildKillZonesCreateNewFinalPull(array $guids): void
     {
         $this->debug(__METHOD__, get_defined_vars());

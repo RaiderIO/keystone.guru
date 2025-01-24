@@ -73,14 +73,14 @@ class CombatLogRouteRequest extends APIFormRequest
             'npcs.*.diedAt'                 => ['required', $dateFormat],
             'npcs.*.coord.x'                => ['required', 'numeric'],
             'npcs.*.coord.y'                => ['required', 'numeric'],
-            'npcs.*.coord.uiMapId'          => ['required', Rule::exists(Floor::class, 'ui_map_id')],
+            'npcs.*.coord.uiMapId'          => ['required', 'integer'], // 'Rule::exists(Floor::class, 'ui_map_id')'],
             'spells'                        => 'nullable|array',
             'spells.*.spellId'              => 'integer',
             'spells.*.playerUid'            => 'string|max:32',
             'spells.*.castAt'               => $dateFormat,
             'spells.*.coord.x'              => 'numeric',
             'spells.*.coord.y'              => 'numeric',
-            'spells.*.coord.uiMapId'        => Rule::exists(Floor::class, 'ui_map_id'),
+            'spells.*.coord.uiMapId'        => 'integer', // 'Rule::exists(Floor::class, 'ui_map_id')',
             'playerDeaths'                  => 'nullable|array', // @TODO make required after raider.io supports it
             'playerDeaths.*.characterId'    => 'integer', // @TODO make required after raider.io supports it
             'playerDeaths.*.classId'        => 'integer', // @TODO make required after raider.io supports it
@@ -89,7 +89,7 @@ class CombatLogRouteRequest extends APIFormRequest
             'playerDeaths.*.diedAt'         => $dateFormat, // @TODO make required after raider.io supports it
             'playerDeaths.*.coord.x'        => 'numeric', // @TODO make required after raider.io supports it
             'playerDeaths.*.coord.y'        => 'numeric', // @TODO make required after raider.io supports it
-            'playerDeaths.*.coord.uiMapId'  => Rule::exists(Floor::class, 'ui_map_id'), // @TODO make required after raider.io supports it
+            'playerDeaths.*.coord.uiMapId'  => 'integer', // 'Rule::exists(Floor::class, 'ui_map_id')', // @TODO make required after raider.io supports it
         ];
     }
 }

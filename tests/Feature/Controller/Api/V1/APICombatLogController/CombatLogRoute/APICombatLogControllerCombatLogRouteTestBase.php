@@ -36,9 +36,28 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
 
     protected function validatePulls(array $responseArr, int $pulls, int $enemyForces): void
     {
-        $this->assertEquals($pulls, $responseArr['data']['pulls']);
+        $this->assertCount($pulls, $responseArr['data']['pulls']);
         $this->assertEquals($enemyForces, $responseArr['data']['enemyForces']);
         $this->assertEquals($this->dungeon->currentMappingVersion->enemy_forces_required, $responseArr['data']['enemyForcesRequired']);
+    }
+
+    protected function validateSpells(array $responseArr, int $spellCount, array $mustHaveSpells = []): void
+    {
+        $responseSpellCount = 0;
+        foreach ($responseArr['data']['pulls'] as $pull) {
+            $responseSpellCount += count($pull['spells']);
+
+            foreach($pull['spells'] as $spellId) {
+                // Remove $spellId from $mustHaveSpells
+                $key = array_search($spellId, $mustHaveSpells);
+                if ($key !== false) {
+                    unset($mustHaveSpells[$key]);
+                }
+            }
+        }
+
+        $this->assertEquals($spellCount, $responseSpellCount);
+        $this->assertEmpty($mustHaveSpells, implode(', ', $mustHaveSpells));
     }
 
     protected function validateAffixes(array $responseArr, string ...$affixes): void

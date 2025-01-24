@@ -22,6 +22,8 @@ interface CombatLogRouteDungeonRouteBuilderLoggingInterface extends DungeonRoute
 
     public function buildKillZonesEnemyKilled(string $uniqueUid, string $timestamp): void;
 
+    public function buildKillZonesNotAllSpellsAssigned(int $totalAssignedSpells, int $totalSpells): void;
+
     public function buildKillZonesCreateNewFinalPull(array $guids): void;
 
     public function determineSpellsCastBetweenInvalidSpellIdBetween(int $spellId): void;

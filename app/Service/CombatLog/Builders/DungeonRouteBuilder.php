@@ -186,7 +186,7 @@ abstract class DungeonRouteBuilder
                 if ($killZoneSpellsAttributes->isNotEmpty()) {
                     $this->killZoneSpellRepository->insert($killZoneSpellsAttributes->toArray());
                     $spellCount = $killZoneSpellsAttributes->count();
-                    $this->log->createPullSpellsAttachedToKillZone($spellCount);
+                    $this->log->createPullSpellsAttachedToKillZone($killZone->id, $killZoneSpellsAttributes->pluck('spell_id')->toArray(), $spellCount);
                 }
 
                 $this->killZones->push($killZone);
