@@ -94,6 +94,7 @@ use App\Service\Patreon\PatreonService;
 use App\Service\Patreon\PatreonServiceInterface;
 use App\Service\RaiderIO\RaiderIOApiService;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
+use App\Service\RaiderIO\RaiderIOKeystoneGuruApiService;
 use App\Service\ReadOnlyMode\ReadOnlyModeService;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use App\Service\Reddit\RedditApiService;
@@ -207,8 +208,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
-        $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOApiService::class);
-//        $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
+        if (app()->runningUnitTests()) {
+            $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
+        } else {
+            $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOApiService::class);
+        }
+//
         $this->app->bind(CloudflareServiceInterface::class, CloudflareService::class);
 
         // Depends on CombatLogService, SeasonService, WowheadService
