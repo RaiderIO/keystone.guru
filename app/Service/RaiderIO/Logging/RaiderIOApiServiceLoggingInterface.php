@@ -8,5 +8,7 @@ interface RaiderIOApiServiceLoggingInterface
 
     public function getHeatmapDataResponse(string $response): void;
 
+    public function getHeatmapDataInvalidResponse(string $response): void;
+
     public function getHeatmapDataEnd(): void;
 }
