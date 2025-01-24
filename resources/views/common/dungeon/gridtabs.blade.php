@@ -150,7 +150,7 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
 
             @if($expansion->hasRaidForGameVersion($currentUserGameVersion))
                 <div id="{{ $expansion->shortname }}-raid-grid-content"
-                     class="tab-pane fade {{ $selectedSeasonId === null && $index === 0 ? 'active' : '' }}"
+                     class="tab-pane fade show {{ $selectedSeasonId === null && $index === 0 ? 'active' : '' }}"
                      role="tabpanel"
                      aria-labelledby="{{ $expansion->shortname }}-raid-grid-content">
                     @php($raids = $expansion->raids()->active()->get())

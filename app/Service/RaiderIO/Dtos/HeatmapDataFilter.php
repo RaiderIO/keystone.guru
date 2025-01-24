@@ -154,8 +154,8 @@ class HeatmapDataFilter implements Arrayable
     {
         $result = [
             'challenge_mode_id' => $this->dungeon->challenge_mode_id,
-            'event_type'        => $this->getEventType(),
-            'data_type'         => $this->getDataType(),
+            'event_type'        => $this->getEventType()->value,
+            'data_type'         => $this->getDataType()->value,
         ];
 
         if ($this->getLevelMin() !== null) {
