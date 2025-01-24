@@ -69,7 +69,7 @@ class DungeonExploreController extends Controller
         MapContextServiceInterface     $mapContextService,
         CombatLogEventServiceInterface $combatLogEventService,
         SeasonServiceInterface         $seasonService,
-        GameVersion $gameVersion,
+        GameVersion                    $gameVersion,
         Dungeon                        $dungeon,
         string                         $floorIndex = '1'): View|RedirectResponse
     {
@@ -124,7 +124,7 @@ class DungeonExploreController extends Controller
             $dungeon->trackPageView();
 
             return view('dungeon.explore.gameversion.view', [
-                'gameVersion' => $gameVersion,
+                'gameVersion'             => $gameVersion,
                 'dungeon'                 => $dungeon,
                 'floor'                   => $floor,
                 'title'                   => __($dungeon->name),

@@ -86,7 +86,7 @@ class ViewService implements ViewServiceInterface
             $allExpansions = Expansion::with(['dungeons', 'raids'])->orderBy('released_at', 'desc')->get();
 
             /** @var Collection<Expansion> $activeExpansions */
-            $activeExpansions = Expansion::active()->with('dungeons', 'raids')->orderBy('released_at', 'desc')->get();
+            $activeExpansions = Expansion::active()->with(['dungeons', 'raids'])->orderBy('released_at', 'desc')->get();
 
             // Spells
             $selectableSpellsByCategory = Spell::where('selectable', true)
