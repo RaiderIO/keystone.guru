@@ -1730,7 +1730,7 @@
     {
         "id": 3105,
         "mapping_version_id": 16,
-        "enemy_pack_id": 366,
+        "enemy_pack_id": null,
         "enemy_patrol_id": null,
         "npc_id": 134158,
         "floor_id": 44,
@@ -2234,7 +2234,7 @@
     {
         "id": 3348,
         "mapping_version_id": 16,
-        "enemy_pack_id": 364,
+        "enemy_pack_id": null,
         "enemy_patrol_id": null,
         "npc_id": 134174,
         "floor_id": 44,

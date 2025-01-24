@@ -98,7 +98,7 @@
     {
         "id": 1553,
         "mapping_version_id": 22,
-        "enemy_pack_id": 531,
+        "enemy_pack_id": null,
         "enemy_patrol_id": null,
         "npc_id": 127482,
         "floor_id": 54,
