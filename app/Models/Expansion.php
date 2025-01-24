@@ -70,8 +70,8 @@ class Expansion extends CacheModel
     public const EXPANSION_WOD          = 'wod';
     public const EXPANSION_LEGION       = 'legion';
     public const EXPANSION_BFA          = 'bfa';
-    public const EXPANSION_SHADOWLANDS  = 'shadowlands';
-    public const EXPANSION_DRAGONFLIGHT = 'dragonflight';
+    public const EXPANSION_SHADOWLANDS  = 'sl';
+    public const EXPANSION_DRAGONFLIGHT = 'df';
     public const EXPANSION_TWW          = 'tww';
     public const EXPANSION_MIDNIGHT     = 'midnight';
     public const EXPANSION_TLT          = 'tlt';

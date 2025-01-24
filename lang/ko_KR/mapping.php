@@ -13,7 +13,7 @@ return [
                 'hidden_pack_in_cave' => '',
             ],
         ],
-        'shadowlands' => [
+        'sl' => [
             'de_other_side'         => [
                 'start'                => '',
                 'graveyard_ardenweald' => '',

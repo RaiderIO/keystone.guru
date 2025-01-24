@@ -26,10 +26,10 @@ return [
     'battle_for_azeroth' => [
         'name' => '',
     ],
-    'shadowlands'        => [
+    'sl'        => [
         'name' => '',
     ],
-    'dragonflight'       => [
+    'df'       => [
         'name' => '',
     ],
     'tww'                => [

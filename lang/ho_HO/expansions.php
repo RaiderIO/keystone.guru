@@ -26,10 +26,10 @@ return [
     'battle_for_azeroth' => [
         'name' => 'Hodor',
     ],
-    'shadowlands'        => [
+    'sl'        => [
         'name' => 'Hodor',
     ],
-    'dragonflight'       => [
+    'df'       => [
         'name' => 'Hodor',
     ],
     'tww'                => [

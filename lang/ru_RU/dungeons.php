@@ -715,7 +715,7 @@ return [
             ],
         ],
     ],
-    'shadowlands'  => [
+    'sl'  => [
         'de_other_side'              => [
             'name'   => 'Та Сторона',
             'floors' => [
@@ -799,7 +799,7 @@ return [
             ],
         ],
     ],
-    'dragonflight' => [
+    'df' => [
         'algeth_ar_academy'                    => [
             'name'   => '',
             'floors' => [

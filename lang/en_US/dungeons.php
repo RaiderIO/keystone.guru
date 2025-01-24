@@ -820,7 +820,7 @@ return [
             ],
         ],
     ],
-    'shadowlands'  => [
+    'sl'  => [
         'de_other_side'              => [
             'name'   => 'De Other Side',
             'floors' => [
@@ -904,7 +904,7 @@ return [
             ],
         ],
     ],
-    'dragonflight' => [
+    'df' => [
         'algeth_ar_academy'                    => [
             'name'   => 'Algeth\'ar Academy',
             'floors' => [
