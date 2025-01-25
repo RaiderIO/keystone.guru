@@ -1,0 +1,31 @@
+{
+    "id": 269,
+    "release_changelog_id": 276,
+    "version": "v11.9.3",
+    "title": "Raids are displayed separately from dungeons",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-01-24T22:07:48+00:00",
+    "updated_at": "2025-01-24T22:07:48+00:00",
+    "changelog": {
+        "id": 276,
+        "release_id": 269,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 276,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2674,
+                "change": "Raids are now separated from dungeons in the dungeon selection dropdown and explore pages."
+            },
+            {
+                "release_changelog_id": 276,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2675,
+                "change": "Explore pages now contain the game's version in the URL (this is a SEO thing)."
+            }
+        ]
+    }
+}

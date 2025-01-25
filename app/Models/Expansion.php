@@ -29,6 +29,9 @@ use Illuminate\Support\Collection;
  * @property Carbon                $updated_at
  *
  * @property Collection<Dungeon>   $dungeons
+ * @property Collection<Dungeon>   $raids
+ * @property Collection<Dungeon>   $dungeonsAndRaids
+ *
  * @property TimewalkingEvent|null $timewalkingEvent
  *
  * @method static Builder active()
@@ -67,8 +70,8 @@ class Expansion extends CacheModel
     public const EXPANSION_WOD          = 'wod';
     public const EXPANSION_LEGION       = 'legion';
     public const EXPANSION_BFA          = 'bfa';
-    public const EXPANSION_SHADOWLANDS  = 'shadowlands';
-    public const EXPANSION_DRAGONFLIGHT = 'dragonflight';
+    public const EXPANSION_SHADOWLANDS  = 'sl';
+    public const EXPANSION_DRAGONFLIGHT = 'df';
     public const EXPANSION_TWW          = 'tww';
     public const EXPANSION_MIDNIGHT     = 'midnight';
     public const EXPANSION_TLT          = 'tlt';
@@ -102,6 +105,16 @@ class Expansion extends CacheModel
     }
 
     public function dungeons(): HasMany
+    {
+        return $this->hasMany(Dungeon::class)->where('raid', 0)->orderBy('name');
+    }
+
+    public function raids(): HasMany
+    {
+        return $this->hasMany(Dungeon::class)->where('raid', 1)->orderBy('name');
+    }
+
+    public function dungeonsAndRaids(): HasMany
     {
         return $this->hasMany(Dungeon::class)->orderBy('name');
     }
@@ -188,6 +201,20 @@ class Expansion extends CacheModel
     public function hasTimewalkingEvent(): bool
     {
         return $this->timewalkingEvent instanceof TimewalkingEvent;
+    }
+
+    public function hasRaidForGameVersion(GameVersion $gameVersion): bool
+    {
+        $result = false;
+
+        foreach ($this->raids as $dungeon) {
+            if ($dungeon->game_version_id === $gameVersion->id) {
+                $result = true;
+                break;
+            }
+        }
+
+        return $result;
     }
 
     public function hasDungeonForGameVersion(GameVersion $gameVersion): bool

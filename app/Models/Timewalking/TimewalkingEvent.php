@@ -35,7 +35,7 @@ class TimewalkingEvent extends CacheModel
 
     public const TIMEWALKING_EVENT_LEGION      = 'legion';
     public const TIMEWALKING_EVENT_BFA         = 'bfa';
-    public const TIMEWALKING_EVENT_SHADOWLANDS = 'shadowlands';
+    public const TIMEWALKING_EVENT_SHADOWLANDS = 'sl';
 
     public function expansion(): BelongsTo
     {

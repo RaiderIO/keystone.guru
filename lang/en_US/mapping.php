@@ -13,7 +13,7 @@ return [
                 'hidden_pack_in_cave' => 'Pack is in a cave below the water behind the waterfall.',
             ],
         ],
-        'shadowlands' => [
+        'sl' => [
             'de_other_side'         => [
                 'start'                => 'Start',
                 'graveyard_ardenweald' => 'Activates after entering Ardenweald',

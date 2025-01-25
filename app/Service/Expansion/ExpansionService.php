@@ -73,7 +73,7 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getActiveDungeons(Expansion $expansion): Collection
     {
-        return $expansion->dungeons;
+        return $expansion->dungeonsAndRaids;
     }
 
     /**

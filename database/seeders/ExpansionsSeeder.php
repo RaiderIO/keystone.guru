@@ -25,7 +25,7 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
                 'shortname'   => Expansion::EXPANSION_BFA,
                 'color'       => '#906554',
                 'released_at' => Carbon::make('2018-08-14 00:00:00'),
-            ]), 'expansions.shadowlands.name'        => new Expansion([
+            ]), 'expansions.sl.name'        => new Expansion([
                 'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_SHADOWLANDS,
                 'color'       => '#5832a8',
@@ -60,7 +60,7 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
                 'shortname'   => Expansion::EXPANSION_WOD,
                 'color'       => '#875f03',
                 'released_at' => Carbon::make('2014-11-13 00:00:00'),
-            ]), 'expansions.dragonflight.name'       => new Expansion([
+            ]), 'expansions.df.name'       => new Expansion([
                 'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_DRAGONFLIGHT,
                 'color'       => '#b0a497',

@@ -23,13 +23,13 @@ return [
     'legion'             => [
         'name' => 'Legion',
     ],
-    'battle_for_azeroth' => [
+    'bfa' => [
         'name' => 'Battle for Azeroth',
     ],
-    'shadowlands'        => [
+    'sl'        => [
         'name' => 'Shadowlands',
     ],
-    'dragonflight'       => [
+    'df'       => [
         'name' => 'Dragonflight',
     ],
     'tww'                => [

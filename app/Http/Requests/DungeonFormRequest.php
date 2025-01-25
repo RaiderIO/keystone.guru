@@ -35,6 +35,7 @@ class DungeonFormRequest extends FormRequest
             'instance_id'                        => 'nullable|int',
             'challenge_mode_id'                  => 'nullable|int',
             'mdt_id'                             => 'int',
+            'raid'                               => 'boolean',
             'name'                               => ['required', Rule::unique(Dungeon::class, 'name')->ignore($this->get('name'), 'name')],
             'key'                                => [
                 'required',

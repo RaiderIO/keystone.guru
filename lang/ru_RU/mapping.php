@@ -13,7 +13,7 @@ return [
                 'hidden_pack_in_cave' => 'Пак находится в пещере под водой за водопадом.',
             ],
         ],
-        'shadowlands' => [
+        'sl' => [
             'de_other_side'         => [
                 'start'                => 'Начало',
                 'graveyard_ardenweald' => 'Активируется после входа в Арденвальд',

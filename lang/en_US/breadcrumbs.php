@@ -8,8 +8,11 @@ return [
         'changelog'        => 'Changelog',
         'routes'           => 'Routes',
         'routes_expansion' => ':expansion routes',
-        'dungeon'          => [
-            'explore' => 'Explore',
+        'gameversion' => [
+            'update' => ':gameVersion',
+            'dungeon'          => [
+                'explore' => 'Explore',
+            ],
         ],
         'dungeonroute'     => [
             'new' => 'New route',

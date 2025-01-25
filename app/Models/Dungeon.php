@@ -36,6 +36,7 @@ use Mockery\Exception;
  * @property int|null                               $instance_id The ID of the instance (used internally in the game, used for MDT mapping export purposes)
  * @property int|null                               $challenge_mode_id The ID of the M+ for this dungeon (used internally in the game, used for ARC)
  * @property int                                    $mdt_id The ID that MDT has given this dungeon.
+ * @property boolean                                $raid True if the dungeon is actually a raid, false if it is not.
  * @property string                                 $name The name of the dungeon.
  * @property string                                 $slug The url friendly slug of the dungeon.
  * @property string                                 $key Shorthand key of the dungeon
@@ -87,6 +88,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         'expansion_id',
         'game_version_id',
         'active',
+        'raid',
         'speedrun_enabled',
         'speedrun_difficulty_10_man_enabled',
         'speedrun_difficulty_25_man_enabled',

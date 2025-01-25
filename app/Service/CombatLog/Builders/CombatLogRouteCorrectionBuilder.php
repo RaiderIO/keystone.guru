@@ -77,7 +77,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         try {
             $this->log->getCombatLogRouteStart();
 
-            $floors = $this->dungeonRoute->dungeon->floors->keyBy('id');
+            $floorsById = $this->dungeonRoute->dungeon->floors->keyBy('id');
 
             foreach ($this->combatLogRoute->npcs as $npc) {
                 $resolvedEnemy = $npc->getResolvedEnemy();
@@ -89,7 +89,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                 }
 
                 /** @var Floor $floor */
-                $floor = $floors->get($resolvedEnemy->floor_id);
+                $floor = $floorsById->get($resolvedEnemy->floor_id);
                 $resolvedEnemy->setRelation('floor', $floor);
 
                 $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(

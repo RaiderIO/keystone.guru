@@ -26,10 +26,10 @@ return [
     'battle_for_azeroth' => [
         'name' => 'Битва за Азерот',
     ],
-    'shadowlands'        => [
+    'sl'        => [
         'name' => 'Темные земли',
     ],
-    'dragonflight'       => [
+    'df'       => [
         'name' => '',
     ],
     'tww'                => [

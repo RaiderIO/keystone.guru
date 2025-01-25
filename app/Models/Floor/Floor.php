@@ -93,6 +93,7 @@ class Floor extends CacheModel implements MappingModelInterface
         762  => 761,
         763  => 761,
         // Siege of Boralus
+        876 => 1162, // Kul Tiras -> Siege of Boralus
         895 => 1162, // Tiragarde Sound -> Siege of Boralus
 //        1533 => 1162, // Bastion -> Siege of Boralus ????
         // Brackenhide Hollow

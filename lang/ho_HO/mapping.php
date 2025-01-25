@@ -13,7 +13,7 @@ return [
                 'hidden_pack_in_cave' => 'Hodor',
             ],
         ],
-        'shadowlands' => [
+        'sl' => [
             'de_other_side'         => [
                 'start'                => 'Hodor',
                 'graveyard_ardenweald' => 'Hodor',

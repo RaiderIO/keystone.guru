@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
  * @var callable|null       $subtextFn
  */
 
-$dungeons ??= $expansion->dungeons()->active()->get();
+$dungeons ??= $expansion->dungeonsAndRaids()->active()->get();
 $colCount = 4;
 $rowCount = (int)ceil($dungeons->count() / $colCount);
 

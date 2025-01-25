@@ -6,7 +6,6 @@ use App;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
-use App\Logic\Utils\Stopwatch;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Spell\Spell;
@@ -125,8 +124,9 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         //            return $event;
         //        }));
 
-        $floorCache = collect();
-        $firstEngagedAt = null;
+        $floorCache          = collect();
+        $firstEngagedAt      = null;
+        $totalSpellsAssigned = 0;
         foreach ($npcEngagedAndDiedEvents as $event) {
             /** @var $event array{type: string, timestamp: Carbon, npc: CombatLogRouteNpcRequestModel} */
             $realUiMapId = Floor::UI_MAP_ID_MAPPING[$event['npc']->coord->uiMapId] ?? $event['npc']->coord->uiMapId;
@@ -218,7 +218,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                             // chain pull but more like a delayed pull into a big one
                             $firstActivePull->merge($activePull);
                         } else {
-                            $this->determineSpellsCastBetween($activePull, $event['npc']->getDiedAt());
+                            $totalSpellsAssigned += $this->assignSpellsCastBetweenToActivePull($activePull, $event['npc']->getDiedAt());
 
                             $this->createPull($activePull);
                         }
@@ -233,13 +233,22 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         foreach ($this->activePullCollection as $activePull) {
             $this->log->buildKillZonesCreateNewFinalPull($activePull->getEnemiesKilled()->keys()->toArray());
 
-            $this->determineSpellsCastBetween($activePull);
+            $totalSpellsAssigned += $this->assignSpellsCastBetweenToActivePull($activePull);
             $this->createPull($activePull);
+        }
+
+        if ($totalSpellsAssigned !== $this->combatLogRoute->spells->count()) {
+            $this->log->buildKillZonesNotAllSpellsAssigned($totalSpellsAssigned, $this->combatLogRoute->spells->count());
         }
     }
 
-    private function determineSpellsCastBetween(ActivePull $activePull, ?Carbon $lastDiedAt = null): void
+    /**
+     * @return int Returns the amount of spells assigned to the pull.
+     */
+    private function assignSpellsCastBetweenToActivePull(ActivePull $activePull, ?Carbon $lastDiedAt = null): int
     {
+        $assignedSpells = 0;
+
         $firstEngagedAt = null;
         foreach ($activePull->getEnemiesKilled() as $killedEnemy) {
             if ($firstEngagedAt === null || $killedEnemy->getEngagedAt()->isBefore($firstEngagedAt)) {
@@ -257,6 +266,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                         continue;
                     }
                     $activePull->addSpell($spell->spellId);
+                    $assignedSpells++;
                 }
             } else if ($spell->getCastAt()->isAfter($firstEngagedAt)) {
                 if (!$this->validSpellIds->has($spell->spellId)) {
@@ -266,8 +276,11 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 }
 
                 $activePull->addSpell($spell->spellId);
+                $assignedSpells++;
             }
         }
+
+        return $assignedSpells;
     }
 
     private function createActivePullEnemy(CombatLogRouteNpcRequestModel $npc): ActivePullEnemy

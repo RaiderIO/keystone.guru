@@ -35,7 +35,7 @@ class TimewalkingEventSeeder extends Seeder implements TableSeederInterface
             //            ],
             //            [
             //                'expansion_id'         => Expansion::where('shortname', Expansion::EXPANSION_SHADOWLANDS)->first()->id,
-            //                'name'                 => 'timewalkingevent.shadowlands.name',
+            //                'name'                 => 'timewalkingevent.sl.name',
             //                'key'                  => TimewalkingEvent::TIMEWALKING_EVENT_SHADOWLANDS,
             //                'start'                => '2021-12-07 00:00:00',
             //                'start_duration_weeks' => 2,

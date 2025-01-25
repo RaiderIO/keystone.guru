@@ -51,11 +51,22 @@ class ViewService implements ViewServiceInterface
             $dungeonsSelectQuery = Dungeon::select('dungeons.*')
                 ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
                 ->orderByRaw('expansions.released_at DESC, dungeons.name');
+            $raidsSelectQuery = $dungeonsSelectQuery->clone()
+                ->where('dungeons.raid', true);
 
             $allDungeonsByExpansionId = $dungeonsSelectQuery
+                ->where('dungeons.raid', false)
+                ->get();
+
+            $allRaidsByExpansionId = $raidsSelectQuery
                 ->get();
 
             $activeDungeonsByExpansionId = $dungeonsSelectQuery
+                ->where('expansions.active', true)
+                ->where('dungeons.active', true)
+                ->get();
+
+            $activeRaidsByExpansionId = $raidsSelectQuery
                 ->where('expansions.active', true)
                 ->where('dungeons.active', true)
                 ->get();
@@ -72,10 +83,10 @@ class ViewService implements ViewServiceInterface
                 )->latest()->first();
 
             $allRegions    = GameServerRegion::all();
-            $allExpansions = Expansion::with(['dungeons'])->orderBy('released_at', 'desc')->get();
+            $allExpansions = Expansion::with(['dungeons', 'raids'])->orderBy('released_at', 'desc')->get();
 
             /** @var Collection<Expansion> $activeExpansions */
-            $activeExpansions = Expansion::active()->with('dungeons')->orderBy('released_at', 'desc')->get();
+            $activeExpansions = Expansion::active()->with(['dungeons', 'raids'])->orderBy('released_at', 'desc')->get();
 
             // Spells
             $selectableSpellsByCategory = Spell::where('selectable', true)
@@ -135,8 +146,10 @@ class ViewService implements ViewServiceInterface
                 'activeExpansions'                => $activeExpansions, // Show most recent expansions first
                 'allExpansions'                   => $allExpansions,
                 'dungeonsByExpansionIdDesc'       => $allDungeonsByExpansionId,
+                'raidsByExpansionIdDesc'          => $allRaidsByExpansionId,
                 // Take active expansions into account
                 'activeDungeonsByExpansionIdDesc' => $activeDungeonsByExpansionId,
+                'activeRaidsByExpansionIdDesc'    => $activeRaidsByExpansionId,
                 'siegeOfBoralus'                  => Dungeon::where('key', Dungeon::DUNGEON_SIEGE_OF_BORALUS)->first(),
 
                 // Discover
@@ -163,7 +176,7 @@ class ViewService implements ViewServiceInterface
                 $nextExpansion = $this->expansionService->getNextExpansion($gameServerRegion) ?? $currentExpansion;
                 $nextSeason    = $this->expansionService->getNextSeason($nextExpansion, $gameServerRegion);
 
-                $allExpansions = Expansion::with(['dungeons'])->orderBy('released_at', 'desc')->get();
+                $allExpansions = Expansion::with(['dungeonsAndRaids'])->orderBy('released_at', 'desc')->get();
 
                 /** @var Collection<ExpansionData> $expansionsData */
                 $expansionsData = collect();
@@ -172,7 +185,7 @@ class ViewService implements ViewServiceInterface
                 }
 
                 /** @var Collection<Expansion> $activeExpansions */
-                $activeExpansions = Expansion::active()->with('dungeons')->orderBy('released_at', 'desc')->get();
+                $activeExpansions = Expansion::active()->with('dungeonsAndRaids')->orderBy('released_at', 'desc')->get();
 
                 // Build a list of all valid affix groups we may select across all currently active seasons
                 $allAffixGroups    = collect();

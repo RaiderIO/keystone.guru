@@ -42,7 +42,7 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         $this->debug(__METHOD__);
     }
 
-    public function createPullSpellsAttachedToKillZone(int $spellCount): void
+    public function createPullSpellsAttachedToKillZone(int $killZoneId, array $spellIds, int $spellCount): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }

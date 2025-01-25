@@ -69,6 +69,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
             $start = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $this->combatLogRoute->challengeMode->start);
             $end   = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $this->combatLogRoute->challengeMode->end);
 
+            $defaultFloor    = $this->dungeonRoute->dungeon->floors->where('default', true)->first();
             $floorsById      = $this->dungeonRoute->dungeon->floors->keyBy('id');
             $floorsByUiMapId = $this->dungeonRoute->dungeon->floors->keyBy('ui_map_id');
 
@@ -104,14 +105,17 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
                 )));
             }
 
+            $previousFloor = null;
             foreach ($this->combatLogRoute->spells as $spell) {
                 /** @var CombatLogRouteSpellRequestModel $spell */
-                $floor = $floorsByUiMapId->get(Floor::UI_MAP_ID_MAPPING[$spell->coord->uiMapId] ?? $spell->coord->uiMapId);
+                // Fallback to the previous floor -> default floor if we can't resolve the floor of the spell
+                $floor = $floorsByUiMapId->get(Floor::UI_MAP_ID_MAPPING[$spell->coord->uiMapId] ?? $spell->coord->uiMapId) ?? $previousFloor ?? $defaultFloor;
 
                 if ($floor === null) {
                     $this->log->getCombatLogEventsSpellFloorCouldNotBeResolved($spell->coord->uiMapId);
                     continue;
                 }
+                $previousFloor = $floor;
 
                 $result->push(new CombatLogEvent(array_merge(
                     $this->getBaseCombatLogEventAttributes($now, $start, $end, $floor),
@@ -128,14 +132,17 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
                 )));
             }
 
+            $previousFloor = null;
             foreach ($this->combatLogRoute->playerDeaths ?? [] as $playerDeath) {
                 /** @var CombatLogRoutePlayerDeathRequestModel $playerDeath */
-                $floor = $floorsByUiMapId->get(Floor::UI_MAP_ID_MAPPING[$playerDeath->coord->uiMapId] ?? $playerDeath->coord->uiMapId);
+                // Fallback to the previous floor -> default floor if we can't resolve the floor of the death
+                $floor = $floorsByUiMapId->get(Floor::UI_MAP_ID_MAPPING[$playerDeath->coord->uiMapId] ?? $playerDeath->coord->uiMapId) ?? $previousFloor ?? $defaultFloor;
 
                 if ($floor === null) {
                     $this->log->getCombatLogEventsPlayerDeathFloorCouldNotBeResolved($playerDeath->coord->uiMapId);
                     continue;
                 }
+                $previousFloor = $floor;
 
                 $result->push(new CombatLogEvent(array_merge(
                     $this->getBaseCombatLogEventAttributes($now, $start, $end, $floor),
