@@ -153,39 +153,43 @@ class HeatmapDataFilter implements Arrayable
     public function toArray(): array
     {
         $result = [
-            'challenge_mode_id' => $this->dungeon->challenge_mode_id,
-            'event_type'        => $this->getEventType()->value,
-            'data_type'         => $this->getDataType()->value,
+            'challengeModeId' => $this->dungeon->challenge_mode_id,
+            'type'            => $this->getEventType()->value,
+            // @TODO Raider.io API does not support this
+            // 'eventType'        => $this->getEventType()->value,
+            // 'dataType'         => $this->getDataType()->value,
         ];
 
         if ($this->getLevelMin() !== null) {
-            $result['level_min'] = $this->getLevelMin();
+            $result['minMythicLevel'] = $this->getLevelMin();
         }
 
         if ($this->getLevelMax() !== null) {
-            $result['level_max'] = $this->getLevelMax();
+            $result['maxMythicLevel'] = $this->getLevelMax();
         }
 
         if ($this->getDurationMin() !== null) {
-            $result['duration_min'] = $this->getDurationMin();
+            $result['minTimerFraction'] = ($this->getDurationMin() * 60) / $this->dungeon->currentMappingVersion->timer_max_seconds;
         }
 
         if ($this->getDurationMax() !== null) {
-            $result['duration_max'] = $this->getDurationMax();
+            $result['maxTimerFraction'] = ($this->getDurationMax() * 60) / $this->dungeon->currentMappingVersion->timer_max_seconds;
         }
 
         if ($this->getAffixes()->isNotEmpty()) {
-            $result['affix_ids'] = $this->getAffixes()->map(fn(Affix $affix) => $affix->affix_id)->toArray();
+            $result['includeAffixIds'] = $this->getAffixes()->map(fn(Affix $affix) => $affix->affix_id)->toArray();
         }
 
         if ($this->getAffixGroups()->isNotEmpty()) {
-            $result['affix_groups'] = $this->getAffixGroups()->map(fn(AffixGroup $affixGroup) => [
-                $affixGroup->affixes->map(fn(Affix $affix) => $affix->affix_id)->toArray(),
-            ])->toArray();
+            // @TODO The raider.io API does not support this?
+//            $result['affixGroups'] = $this->getAffixGroups()->map(fn(AffixGroup $affixGroup) => [
+//                $affixGroup->affixes->map(fn(Affix $affix) => $affix->affix_id)->toArray(),
+//            ])->toArray();
         }
 
         if ($this->getWeeklyAffixGroups() !== null) {
-            $result['weekly_affix_groups'] = $this->getWeeklyAffixGroups();
+            $result['minPeriod'] = $this->getWeeklyAffixGroups();
+            $result['maxPeriod'] = $this->getWeeklyAffixGroups();
         }
 
         return $result;

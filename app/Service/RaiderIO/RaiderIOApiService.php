@@ -40,12 +40,10 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         ];
 
         foreach ($heatmapDataFilter->toArray() as $key => $value) {
-            $key = match ($key) {
-                'event_type' => 'type',
-                default => $key
-            };
             $parameters[] = sprintf('%s=%s', Str::camel($key), $value);
         }
+
+//        dd($parameters);
 
         $url = sprintf(
             '%s?%s',
