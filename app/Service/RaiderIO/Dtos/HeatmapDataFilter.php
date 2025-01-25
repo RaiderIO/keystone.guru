@@ -4,7 +4,6 @@ namespace App\Service\RaiderIO\Dtos;
 
 
 use App\Models\Affix;
-use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
@@ -16,9 +15,6 @@ class HeatmapDataFilter implements Arrayable
     private ?int $levelMin = null;
 
     private ?int $levelMax = null;
-
-    /** @var Collection<AffixGroup> */
-    private Collection $affixGroups;
 
     /** @var Collection<Affix> */
     private Collection $affixes;
@@ -33,7 +29,6 @@ class HeatmapDataFilter implements Arrayable
         private readonly CombatLogEventEventType $eventType,
         private readonly CombatLogEventDataType $dataType
     ) {
-        $this->affixGroups = collect();
         $this->affixes     = collect();
     }
 
@@ -72,25 +67,6 @@ class HeatmapDataFilter implements Arrayable
     public function setLevelMax(?int $levelMax): HeatmapDataFilter
     {
         $this->levelMax = $levelMax;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<AffixGroup>
-     */
-    public function getAffixGroups(): Collection
-    {
-        return $this->affixGroups;
-    }
-
-    /**
-     * @param Collection<AffixGroup> $affixGroups
-     * @return HeatmapDataFilter
-     */
-    public function setAffixGroups(Collection $affixGroups): HeatmapDataFilter
-    {
-        $this->affixGroups = $affixGroups;
 
         return $this;
     }
@@ -180,13 +156,6 @@ class HeatmapDataFilter implements Arrayable
             $result['includeAffixIds'] = $this->getAffixes()->map(fn(Affix $affix) => $affix->affix_id)->toArray();
         }
 
-        if ($this->getAffixGroups()->isNotEmpty()) {
-            // @TODO The raider.io API does not support this?
-//            $result['affixGroups'] = $this->getAffixGroups()->map(fn(AffixGroup $affixGroup) => [
-//                $affixGroup->affixes->map(fn(Affix $affix) => $affix->affix_id)->toArray(),
-//            ])->toArray();
-        }
-
         if ($this->getWeeklyAffixGroups() !== null) {
             $result['minPeriod'] = $this->getWeeklyAffixGroups();
             $result['maxPeriod'] = $this->getWeeklyAffixGroups();
@@ -218,10 +187,6 @@ class HeatmapDataFilter implements Arrayable
             $heatmapDataFilter->setAffixes(Affix::whereIn('id', $requestArray['affixes'])->get());
         }
 
-        if (isset($requestArray['affix_groups'])) {
-            $heatmapDataFilter->setAffixGroups(AffixGroup::whereIn('id', $requestArray['affix_groups'])->get());
-        }
-
         if (isset($requestArray['weekly_affix_groups'])) {
             $heatmapDataFilter->setWeeklyAffixGroups($requestArray['weekly_affix_groups']);
         }
@@ -234,7 +199,6 @@ class HeatmapDataFilter implements Arrayable
 //        $heatmapDataFilter = new HeatmapDataFilter($combatLogEventFilter->getDungeon(), $combatLogEventFilter->getEventType());
 //        $heatmapDataFilter->setLevelMin($combatLogEventFilter->getLevelMin());
 //        $heatmapDataFilter->setLevelMax($combatLogEventFilter->getLevelMax());
-//        $heatmapDataFilter->setAffixGroups($combatLogEventFilter->getAffixGroups());
 //        $heatmapDataFilter->setAffixes($combatLogEventFilter->getAffixes());
 //        $heatmapDataFilter->setDurationMin($combatLogEventFilter->getDurationMin());
 //        $heatmapDataFilter->setDurationMax($combatLogEventFilter->getDurationMax());

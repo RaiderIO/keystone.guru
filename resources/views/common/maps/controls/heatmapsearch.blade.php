@@ -65,7 +65,6 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'filterDataTypeContainerSelector' => '#filter_data_type_container',
     'filterDataTypeSelector' => 'input[name="data_type"]',
     'filterLevelSelector' => '#filter_level',
-    'filterAffixGroupsSelector' => '#filter_affixes',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
     'filterWeeklyAffixGroupsSelector' => '#filter_weekly_affix_groups',
     'filterDurationSelector' => '#filter_duration',
@@ -84,11 +83,6 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
 
 @section('scripts')
     @parent
-
-    @include('common.handlebars.affixgroupsselect', [
-        'id' => 'filter_affixes',
-        'affixgroups' => $affixGroups,
-    ])
 
     @include('common.handlebars.affixweekselect', [
         'id' => 'filter_weekly_affix_groups',
@@ -210,17 +204,6 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
 
                     @component('common.search.filter', ['key' => 'affixes', 'text' => __('view_common.maps.controls.heatmapsearch.affixes'), 'expanded' => $expandedAffixes])
                         <div class="filter_affix">
-                            <div class="row">
-                                <div class="col">
-                                    {!! Form::select('filter_affixes[]', $affixGroups->pluck('text', 'id'), [],
-                                        ['id' => 'filter_affixes',
-                                        'class' => 'form-control affixselect selectpicker',
-                                        'multiple' => 'multiple',
-                                        'title' => __('view_common.maps.controls.heatmapsearch.affixes_title'),
-                                        'data-selected-text-format' => 'count > 1',
-                                        'data-count-selected-text' => __('view_common.maps.controls.heatmapsearch.affixes_selected')]) !!}
-                                </div>
-                            </div>
                                 <?php
                                 $chunkedFeaturedAffixes = $featuredAffixes->chunk($featuredAffixes->count() < 9 ? 4 : (int)($featuredAffixes->count() / 2));
                                 ?>

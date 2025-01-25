@@ -28,9 +28,6 @@ class CombatLogEventFilter implements Arrayable
 
     private ?int $levelMax = null;
 
-    /** @var Collection<AffixGroup> */
-    private Collection $affixGroups;
-
     /** @var Collection<Affix> */
     private Collection $affixes;
 
@@ -46,7 +43,6 @@ class CombatLogEventFilter implements Arrayable
         private readonly CombatLogEventEventType $eventType,
         private readonly CombatLogEventDataType $dataType
     ) {
-        $this->affixGroups = collect();
         $this->affixes     = collect();
     }
 
@@ -85,25 +81,6 @@ class CombatLogEventFilter implements Arrayable
     public function setLevelMax(?int $levelMax): CombatLogEventFilter
     {
         $this->levelMax = $levelMax;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<AffixGroup>
-     */
-    public function getAffixGroups(): Collection
-    {
-        return $this->affixGroups;
-    }
-
-    /**
-     * @param Collection<AffixGroup> $affixGroups
-     * @return CombatLogEventFilter
-     */
-    public function setAffixGroups(Collection $affixGroups): CombatLogEventFilter
-    {
-        $this->affixGroups = $affixGroups;
 
         return $this;
     }
@@ -171,9 +148,6 @@ class CombatLogEventFilter implements Arrayable
             'data_type'           => $this->dataType,
             'level_min'           => $this->levelMin,
             'level_max'           => $this->levelMax,
-            'affix_groups'        => $this->affixGroups->map(function (AffixGroup $affixGroup) {
-                return $affixGroup->getTextAttribute();
-            })->toArray(),
             'affixes'             => $this->affixes->map(function (Affix $affix) {
                 return __($affix->name, [], 'en_US');
             }),
@@ -233,9 +207,6 @@ class CombatLogEventFilter implements Arrayable
             ]);
         }
 
-
-        $affixGroups = $this->getAffixGroups();
-
         if ($this->weeklyAffixGroups !== null) {
             // Add an AffixGroup filter
             /** @var Collection<WeeklyAffixGroup> $weeklyAffixGroupsSinceStart */
@@ -248,28 +219,11 @@ class CombatLogEventFilter implements Arrayable
             $weeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (WeeklyAffixGroup $weeklyAffixGroup) {
                 return $weeklyAffixGroup->week === $this->weeklyAffixGroups;
             });
-            $affixGroups->push($weeklyAffixGroup->affixGroup);
 
             // Add a date range filter
             $must[] = Range::make('start', [
                 'gte' => $weeklyAffixGroup->date->getTimestamp(),
                 'lte' => $weeklyAffixGroup->date->addWeek()->getTimestamp(),
-            ]);
-        }
-
-        if ($affixGroups->isNotEmpty()) {
-            $must[] = BoolQuery::make([
-                Should::make(
-                    $affixGroups->map(function (AffixGroup $affixGroup) {
-                        return BoolQuery::make([
-                            Filter::make(
-                                $affixGroup->affixes->map(function (Affix $affix) {
-                                    return Term::make('affix_id', $affix->affix_id);
-                                })->toArray()
-                            ),
-                        ]);
-                    })->toArray()
-                ),
             ]);
         }
 
@@ -307,10 +261,6 @@ class CombatLogEventFilter implements Arrayable
             $combatLogEventFilter->setAffixes(Affix::whereIn('id', $requestArray['affixes'])->get());
         }
 
-        if (isset($requestArray['affix_groups'])) {
-            $combatLogEventFilter->setAffixGroups(AffixGroup::whereIn('id', $requestArray['affix_groups'])->get());
-        }
-
         if (isset($requestArray['weekly_affix_groups'])) {
             $combatLogEventFilter->setWeeklyAffixGroups($requestArray['weekly_affix_groups']);
         }
@@ -329,7 +279,6 @@ class CombatLogEventFilter implements Arrayable
 
         $combatLogEventFilter->setLevelMin($heatmapDataFilter->getLevelMin());
         $combatLogEventFilter->setLevelMax($heatmapDataFilter->getLevelMax());
-        $combatLogEventFilter->setAffixGroups($heatmapDataFilter->getAffixGroups());
         $combatLogEventFilter->setAffixes($heatmapDataFilter->getAffixes());
         $combatLogEventFilter->setWeeklyAffixGroups($heatmapDataFilter->getWeeklyAffixGroups());
         $combatLogEventFilter->setDurationMin($heatmapDataFilter->getDurationMin());

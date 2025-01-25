@@ -28,12 +28,10 @@ class AjaxGetDataFormRequest extends FormRequest
         return [
             'dungeon_id'          => ['required', Rule::exists(Dungeon::class, 'id')],
             'event_type'          => ['required', Rule::in(CombatLogEventEventType::cases())],
-            'data_type' => ['required', Rule::in(CombatLogEventDataType::cases())],
+            'data_type'           => ['required', Rule::in(CombatLogEventDataType::cases())],
             'level'               => ['nullable', 'regex:/^\d*;\d*$/'],
             'affixes'             => ['nullable', 'array'],
             'affixes.*'           => ['integer', Rule::exists(Affix::class, 'id')],
-            'affix_groups'        => ['nullable', 'array'],
-            'affix_groups.*'      => ['integer', Rule::exists(AffixGroup::class, 'id')],
             'weekly_affix_groups' => ['integer'],
             'duration'            => ['nullable', 'regex:/^\d*;\d*$/'],
         ];
