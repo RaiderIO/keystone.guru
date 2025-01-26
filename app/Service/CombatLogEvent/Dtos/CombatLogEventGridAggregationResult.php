@@ -38,8 +38,8 @@ class CombatLogEventGridAggregationResult implements Arrayable
             $latLngs = [];
 
             if ($this->floorsAsArray) {
-                $rowCount = count($rows) / 3;
-                for ($i = 0; $i < $rowCount; $i++) {
+                $rowCount = count($rows);
+                for ($i = 0; $i < $rowCount; $i += 3) {
                     [$x, $y, $count] = [$rows[$i], $rows[$i + 1], $rows[$i + 2]];
 
                     $latLngArray           = $this->convertIngameLocationToLatLngArray(new IngameXY($x, $y, $floor));
