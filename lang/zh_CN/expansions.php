@@ -23,7 +23,7 @@ return [
     'legion'             => [
         'name' => '',
     ],
-    'battle_for_azeroth' => [
+    'bfa' => [
         'name' => '',
     ],
     'sl'        => [

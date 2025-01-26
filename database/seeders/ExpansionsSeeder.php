@@ -20,7 +20,7 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
                 'shortname'   => Expansion::EXPANSION_LEGION,
                 'color'       => '#27ff0f',
                 'released_at' => Carbon::make('2016-08-30 00:00:00'),
-            ]), 'expansions.battle_for_azeroth.name' => new Expansion([
+            ]), 'expansions.bfa.name' => new Expansion([
                 'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_BFA,
                 'color'       => '#906554',
