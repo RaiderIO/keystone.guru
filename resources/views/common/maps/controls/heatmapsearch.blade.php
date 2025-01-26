@@ -236,6 +236,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                                     }), [],
                                     ['id' => 'filter_weekly_affix_groups',
                                     'class' => 'form-control affixselect selectpicker',
+                                    'multiple' => 'multiple',
                                     'title' => __('view_common.maps.controls.heatmapsearch.weekly_affix_groups_title')]) !!}
                             </div>
                         </div>

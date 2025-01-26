@@ -75,7 +75,7 @@ class SiteController extends Controller
         $result = $combatLogRouteDungeonRouteService->correctCombatLogRoute(
             CombatLogRouteRequestModel::createFromArray($validated)
         );
-        Stopwatch::pause('SiteController::benchmark');
+        Stopwatch::stop('SiteController::benchmark');
 
 //        dump('hey');
         return view('misc.credits');

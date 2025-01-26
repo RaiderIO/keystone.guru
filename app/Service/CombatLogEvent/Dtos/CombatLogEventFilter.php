@@ -3,7 +3,6 @@
 namespace App\Service\CombatLogEvent\Dtos;
 
 use App\Models\Affix;
-use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
@@ -13,12 +12,10 @@ use App\Service\Season\Dtos\WeeklyAffixGroup;
 use App\Service\Season\SeasonServiceInterface;
 use Codeart\OpensearchLaravel\Search\Query;
 use Codeart\OpensearchLaravel\Search\SearchQueries\BoolQuery;
-use Codeart\OpensearchLaravel\Search\SearchQueries\Filter;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Must;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Should;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\Range;
-use Codeart\OpensearchLaravel\Search\SearchQueries\Types\Term;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
@@ -31,7 +28,7 @@ class CombatLogEventFilter implements Arrayable
     /** @var Collection<Affix> */
     private Collection $affixes;
 
-    private ?int $weeklyAffixGroups = null;
+    private Collection $weeklyAffixGroups;
 
     private ?int $durationMin = null;
 
@@ -41,9 +38,10 @@ class CombatLogEventFilter implements Arrayable
         private readonly SeasonServiceInterface  $seasonService,
         private readonly Dungeon                 $dungeon,
         private readonly CombatLogEventEventType $eventType,
-        private readonly CombatLogEventDataType $dataType
+        private readonly CombatLogEventDataType  $dataType
     ) {
-        $this->affixes     = collect();
+        $this->affixes           = collect();
+        $this->weeklyAffixGroups = collect();
     }
 
     public function getDungeon(): Dungeon
@@ -104,12 +102,12 @@ class CombatLogEventFilter implements Arrayable
         return $this;
     }
 
-    public function getWeeklyAffixGroups(): ?int
+    public function getWeeklyAffixGroups(): Collection
     {
         return $this->weeklyAffixGroups;
     }
 
-    public function setWeeklyAffixGroups(?int $weeklyAffixGroups): CombatLogEventFilter
+    public function setWeeklyAffixGroups(Collection $weeklyAffixGroups): CombatLogEventFilter
     {
         $this->weeklyAffixGroups = $weeklyAffixGroups;
 
@@ -207,7 +205,7 @@ class CombatLogEventFilter implements Arrayable
             ]);
         }
 
-        if ($this->weeklyAffixGroups !== null) {
+        if ($this->weeklyAffixGroups->isNotEmpty()) {
             // Add an AffixGroup filter
             /** @var Collection<WeeklyAffixGroup> $weeklyAffixGroupsSinceStart */
             $weeklyAffixGroupsSinceStart = $this->seasonService->getWeeklyAffixGroupsSinceStart(
@@ -215,15 +213,20 @@ class CombatLogEventFilter implements Arrayable
                 GameServerRegion::getUserOrDefaultRegion()
             );
 
-            /** @var WeeklyAffixGroup $weeklyAffixGroup */
-            $weeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (WeeklyAffixGroup $weeklyAffixGroup) {
-                return $weeklyAffixGroup->week === $this->weeklyAffixGroups;
+            /** @var WeeklyAffixGroup $minWeeklyAffixGroup */
+            $minWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (WeeklyAffixGroup $weeklyAffixGroup) {
+                return $weeklyAffixGroup->week === $this->weeklyAffixGroups->min();
             });
+            /** @var WeeklyAffixGroup $maxWeeklyAffixGroup */
+            $maxWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (WeeklyAffixGroup $weeklyAffixGroup) {
+                return $weeklyAffixGroup->week === $this->weeklyAffixGroups->max();
+            });
+
 
             // Add a date range filter
             $must[] = Range::make('start', [
-                'gte' => $weeklyAffixGroup->date->getTimestamp(),
-                'lte' => $weeklyAffixGroup->date->addWeek()->getTimestamp(),
+                'gte' => $minWeeklyAffixGroup->date->getTimestamp(),
+                'lte' => $maxWeeklyAffixGroup->date->addWeek()->getTimestamp(),
             ]);
         }
 
@@ -262,7 +265,7 @@ class CombatLogEventFilter implements Arrayable
         }
 
         if (isset($requestArray['weekly_affix_groups'])) {
-            $combatLogEventFilter->setWeeklyAffixGroups($requestArray['weekly_affix_groups']);
+            $combatLogEventFilter->setWeeklyAffixGroups(collect($requestArray['weekly_affix_groups']));
         }
 
         return $combatLogEventFilter;

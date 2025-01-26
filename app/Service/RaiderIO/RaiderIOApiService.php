@@ -40,7 +40,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             ),
         ];
 
-        foreach ($heatmapDataFilter->toArray() as $key => $value) {
+        foreach ($heatmapDataFilter->toArray($mostRecentSeason) as $key => $value) {
             $parameters[] = sprintf('%s=%s', Str::camel($key), $value);
         }
 

@@ -7,6 +7,8 @@ use App\Models\Affix;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
+use App\Models\GameServerRegion;
+use App\Models\Season;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
@@ -19,17 +21,19 @@ class HeatmapDataFilter implements Arrayable
     /** @var Collection<Affix> */
     private Collection $affixes;
 
-    private ?int $weeklyAffixGroups = null;
-    private ?int $durationMin       = null;
+    private Collection $weeklyAffixGroups;
+
+    private ?int $durationMin = null;
 
     private ?int $durationMax = null;
 
     public function __construct(
         private readonly Dungeon                 $dungeon,
         private readonly CombatLogEventEventType $eventType,
-        private readonly CombatLogEventDataType $dataType
+        private readonly CombatLogEventDataType  $dataType
     ) {
-        $this->affixes     = collect();
+        $this->affixes           = collect();
+        $this->weeklyAffixGroups = collect();
     }
 
     public function getDungeon(): Dungeon
@@ -90,12 +94,12 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
-    public function getWeeklyAffixGroups(): ?int
+    public function getWeeklyAffixGroups(): Collection
     {
         return $this->weeklyAffixGroups;
     }
 
-    public function setWeeklyAffixGroups(?int $weeklyAffixGroups): HeatmapDataFilter
+    public function setWeeklyAffixGroups(Collection $weeklyAffixGroups): HeatmapDataFilter
     {
         $this->weeklyAffixGroups = $weeklyAffixGroups;
 
@@ -126,7 +130,7 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
-    public function toArray(): array
+    public function toArray(Season $mostRecentSeason = null): array
     {
         $result = [
             'challengeModeId' => $this->dungeon->challenge_mode_id,
@@ -153,12 +157,18 @@ class HeatmapDataFilter implements Arrayable
         }
 
         if ($this->getAffixes()->isNotEmpty()) {
-            $result['includeAffixIds'] = $this->getAffixes()->map(fn(Affix $affix) => $affix->affix_id)->toArray();
+            $result['includeAffixIds'] = implode(',', $this->getAffixes()->map(fn(Affix $affix) => $affix->affix_id)->toArray());
         }
 
-        if ($this->getWeeklyAffixGroups() !== null) {
-            $result['minPeriod'] = $this->getWeeklyAffixGroups();
-            $result['maxPeriod'] = $this->getWeeklyAffixGroups();
+        if ($this->getWeeklyAffixGroups()->isNotEmpty()) {
+            $gameServerRegion = GameServerRegion::getUserOrDefaultRegion();
+
+            $periodStart = $mostRecentSeason !== null ? $gameServerRegion->getKeystoneLeaderboardPeriod(
+                $mostRecentSeason->start
+            ) : 0;
+
+            $result['minPeriod'] = $periodStart + $this->getWeeklyAffixGroups()->min();
+            $result['maxPeriod'] = $periodStart + $this->getWeeklyAffixGroups()->max();
         }
 
         return $result;
@@ -188,7 +198,7 @@ class HeatmapDataFilter implements Arrayable
         }
 
         if (isset($requestArray['weekly_affix_groups'])) {
-            $heatmapDataFilter->setWeeklyAffixGroups($requestArray['weekly_affix_groups']);
+            $heatmapDataFilter->setWeeklyAffixGroups(collect($requestArray['weekly_affix_groups']));
         }
 
         return $heatmapDataFilter;

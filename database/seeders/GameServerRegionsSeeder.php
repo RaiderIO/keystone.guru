@@ -17,6 +17,7 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
             [
                 'short'              => GameServerRegion::AMERICAS,
                 'name'               => 'gameserverregions.us',
+                'epoch_start'        => '2005-12-27 15:00:00',
                 'timezone'           => 'America/Los_Angeles',
                 'reset_day_offset'   => 1,
                 'reset_hours_offset' => 15,
@@ -25,6 +26,7 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
             [
                 'short'              => GameServerRegion::EUROPE,
                 'name'               => 'gameserverregions.eu',
+                'epoch_start'        => '2005-12-28 07:00:00',
                 'timezone'           => 'Europe/London',
                 'reset_day_offset'   => 2,
                 'reset_hours_offset' => 7,
@@ -33,6 +35,7 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
             [
                 'short'              => GameServerRegion::CHINA,
                 'name'               => 'gameserverregions.cn',
+                'epoch_start'        => '2005-12-28 23:00:00',
                 'timezone'           => 'Asia/Shanghai',
                 'reset_day_offset'   => 1,
                 'reset_hours_offset' => 15,
@@ -40,6 +43,7 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
             [
                 'short'              => GameServerRegion::TAIWAN,
                 'name'               => 'gameserverregions.tw',
+                'epoch_start'        => '2005-12-28 23:00:00',
                 'timezone'           => 'Asia/Taipei',
                 'reset_day_offset'   => 1,
                 'reset_hours_offset' => 15,
@@ -48,6 +52,7 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
             [
                 'short'              => GameServerRegion::KOREA,
                 'name'               => 'gameserverregions.kr',
+                'epoch_start'        => '2005-12-28 23:00:00',
                 'timezone'           => 'Asia/Seoul',
                 'reset_day_offset'   => 2,
                 'reset_hours_offset' => 23,
