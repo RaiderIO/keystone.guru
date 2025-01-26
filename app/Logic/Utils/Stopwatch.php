@@ -36,6 +36,8 @@ class Stopwatch
         else {
             self::$timers[$timerName] = ['start' => self::_getTime(), 'count' => 1];
         }
+
+        \Debugbar::startMeasure($timerName);
     }
 
     /**
@@ -52,6 +54,8 @@ class Stopwatch
         if (!isset(self::$timers[$timerName]['end'])) {
             self::$timers[$timerName]['end'] = $now;
         }
+
+        \Debugbar::stopMeasure($timerName);
     }
 
     /**
@@ -97,6 +101,7 @@ class Stopwatch
         $elapsed = self::elapsed($timerName);
 
         unset(self::$timers[$timerName]);
+        \Debugbar::stopMeasure($timerName);
 
         return $elapsed;
     }

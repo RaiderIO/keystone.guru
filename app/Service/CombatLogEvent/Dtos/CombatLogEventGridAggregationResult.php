@@ -3,6 +3,7 @@
 namespace App\Service\CombatLogEvent\Dtos;
 
 use App\Logic\Structs\IngameXY;
+use App\Logic\Utils\Stopwatch;
 use App\Models\Floor\Floor;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -17,7 +18,8 @@ class CombatLogEventGridAggregationResult implements Arrayable
         private readonly CoordinatesServiceInterface $coordinatesService,
         private readonly CombatLogEventFilter        $combatLogEventFilter,
         private readonly array                       $results,
-        private readonly int                         $runCount
+        private readonly int                         $runCount,
+        private readonly bool                        $floorsAsArray = false
     ) {
         $this->useFacade = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
     }
@@ -35,17 +37,29 @@ class CombatLogEventGridAggregationResult implements Arrayable
 
             $latLngs = [];
 
-            foreach ($rows as $xy => $count) {
-                /**
-                 * @var string $xy
-                 * @var int    $count
-                 */
-                [$x, $y] = explode(',', $xy);
+            if ($this->floorsAsArray) {
+                $rowCount = count($rows) / 3;
+                for ($i = 0; $i < $rowCount; $i++) {
+                    [$x, $y, $count] = [$rows[$i], $rows[$i + 1], $rows[$i + 2]];
 
-                $latLngArray           = $this->convertIngameLocationToLatLngArray(new IngameXY($x, $y, $floor));
-                $latLngArray['weight'] = $count;
+                    $latLngArray           = $this->convertIngameLocationToLatLngArray(new IngameXY($x, $y, $floor));
+                    $latLngArray['weight'] = $count;
 
-                $latLngs[] = $latLngArray;
+                    $latLngs[] = $latLngArray;
+                }
+            } else {
+                foreach ($rows as $xy => $count) {
+                    /**
+                     * @var string $xy
+                     * @var int    $count
+                     */
+                    [$x, $y] = explode(',', $xy);
+
+                    $latLngArray           = $this->convertIngameLocationToLatLngArray(new IngameXY($x, $y, $floor));
+                    $latLngArray['weight'] = $count;
+
+                    $latLngs[] = $latLngArray;
+                }
             }
 
             $data[$floorId] = [

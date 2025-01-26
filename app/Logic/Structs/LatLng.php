@@ -8,6 +8,8 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class LatLng implements Arrayable
 {
+    private const PI_OVER_180 = M_PI / 180;
+
     public function __construct(private float $lat = 0, private float $lng = 0, private ?Floor $floor = null)
     {
     }
@@ -74,10 +76,13 @@ class LatLng implements Arrayable
         $lng1 = $this->lng - $centerLatLng->lng;
         $lat1 = $this->lat - $centerLatLng->lat;
 
-        $angle = $degrees * (M_PI / 180);
+        $angle = $degrees * self::PI_OVER_180;
 
-        $lng2 = $lng1 * cos($angle) - $lat1 * sin($angle);
-        $lat2 = $lng1 * sin($angle) + $lat1 * cos($angle);
+        $cosAngle = cos($angle);
+        $sinAngle = sin($angle);
+
+        $lng2 = ($lng1 * $cosAngle) - ($lat1 * $sinAngle);
+        $lat2 = ($lng1 * $sinAngle) + ($lat1 * $cosAngle);
 
         $this->lng = $lng2 + $centerLatLng->lng;
         $this->lat = $lat2 + $centerLatLng->lat;
