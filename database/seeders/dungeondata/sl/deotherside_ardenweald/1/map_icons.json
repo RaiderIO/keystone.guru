@@ -59,7 +59,7 @@
         "map_icon_type_id": 12,
         "lat": -149.21875,
         "lng": 253.25,
-        "comment": "mapping.map_icons.shadowlands.de_other_side.graveyard_ardenweald",
+        "comment": "mapping.map_icons.sl.de_other_side.graveyard_ardenweald",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 58,
         "lat": -136.78125,
         "lng": 251.25,
-        "comment": "mapping.map_icons.shadowlands.de_other_side.haunted_urn",
+        "comment": "mapping.map_icons.sl.de_other_side.haunted_urn",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 58,
         "lat": -200.125,
         "lng": 157,
-        "comment": "mapping.map_icons.shadowlands.de_other_side.haunted_urn",
+        "comment": "mapping.map_icons.sl.de_other_side.haunted_urn",
         "permanent_tooltip": 0,
         "seasonal_index": 0,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 12,
         "lat": -212.72941598992,
         "lng": 194.46247835016,
-        "comment": "mapping.map_icons.shadowlands.de_other_side.graveyard_mechagon",
+        "comment": "mapping.map_icons.sl.de_other_side.graveyard_mechagon",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 12,
         "lat": -148.71875,
         "lng": 138.34375,
-        "comment": "mapping.map_icons.shadowlands.de_other_side.graveyard_zulgurub",
+        "comment": "mapping.map_icons.sl.de_other_side.graveyard_zulgurub",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

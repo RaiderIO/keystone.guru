@@ -7,7 +7,7 @@
         "map_icon_type_id": 69,
         "lat": -73.375,
         "lng": 262.125,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 67,
         "lat": -87.75,
         "lng": 282,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 66,
         "lat": -155.25,
         "lng": 86.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.malfunctioning_goliath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 67,
         "lat": -118.375,
         "lng": 149.625,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 69,
         "lat": -79.25,
         "lng": 136.6875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 65,
         "lat": -77.625,
         "lng": 51.125,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 9,
         "lat": -191.5,
         "lng": 158.1875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 68,
         "lat": -140.5,
         "lng": 264,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 9,
         "lat": -229.25,
         "lng": 202.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.anima_crystal_shard",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.anima_crystal_shard",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 41,
         "lat": -143.25,
         "lng": 63.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.grisly_curio",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.grisly_curio",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 9,
         "lat": -50.5,
         "lng": 143.75,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.anima_crystal_shard",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.anima_crystal_shard",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 66,
         "lat": -65,
         "lng": 233,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.malfunctioning_goliath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 65,
         "lat": -215.5,
         "lng": 227,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -189,7 +189,7 @@
         "map_icon_type_id": 9,
         "lat": -172.8125,
         "lng": 169.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -202,7 +202,7 @@
         "map_icon_type_id": 67,
         "lat": -191.5,
         "lng": 158.1875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -215,7 +215,7 @@
         "map_icon_type_id": 69,
         "lat": -172.8125,
         "lng": 169.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -228,7 +228,7 @@
         "map_icon_type_id": 68,
         "lat": -125.5625,
         "lng": 148.625,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -241,7 +241,7 @@
         "map_icon_type_id": 66,
         "lat": -179.625,
         "lng": 237.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.malfunctioning_goliath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -254,7 +254,7 @@
         "map_icon_type_id": 69,
         "lat": -73.375,
         "lng": 262.125,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -267,7 +267,7 @@
         "map_icon_type_id": 67,
         "lat": -87.75,
         "lng": 282,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -280,7 +280,7 @@
         "map_icon_type_id": 66,
         "lat": -155.25,
         "lng": 86.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.malfunctioning_goliath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -293,7 +293,7 @@
         "map_icon_type_id": 67,
         "lat": -118.375,
         "lng": 149.625,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -306,7 +306,7 @@
         "map_icon_type_id": 69,
         "lat": -79.25,
         "lng": 136.6875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -319,7 +319,7 @@
         "map_icon_type_id": 65,
         "lat": -77.625,
         "lng": 51.125,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -332,7 +332,7 @@
         "map_icon_type_id": 9,
         "lat": -191.5,
         "lng": 158.1875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -345,7 +345,7 @@
         "map_icon_type_id": 68,
         "lat": -140.5,
         "lng": 264,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -358,7 +358,7 @@
         "map_icon_type_id": 9,
         "lat": -229.25,
         "lng": 202.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.anima_crystal_shard",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.anima_crystal_shard",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -371,7 +371,7 @@
         "map_icon_type_id": 41,
         "lat": -143.25,
         "lng": 63.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.grisly_curio",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.grisly_curio",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -384,7 +384,7 @@
         "map_icon_type_id": 9,
         "lat": -50.5,
         "lng": 143.75,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.anima_crystal_shard",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.anima_crystal_shard",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -397,7 +397,7 @@
         "map_icon_type_id": 66,
         "lat": -65,
         "lng": 233,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.malfunctioning_goliath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -410,7 +410,7 @@
         "map_icon_type_id": 65,
         "lat": -215.5,
         "lng": 227,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -436,7 +436,7 @@
         "map_icon_type_id": 9,
         "lat": -172.8125,
         "lng": 169.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -449,7 +449,7 @@
         "map_icon_type_id": 67,
         "lat": -191.5,
         "lng": 158.1875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -462,7 +462,7 @@
         "map_icon_type_id": 69,
         "lat": -172.8125,
         "lng": 169.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -475,7 +475,7 @@
         "map_icon_type_id": 68,
         "lat": -125.5625,
         "lng": 148.625,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -488,7 +488,7 @@
         "map_icon_type_id": 66,
         "lat": -179.625,
         "lng": 237.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.malfunctioning_goliath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -501,7 +501,7 @@
         "map_icon_type_id": 69,
         "lat": -73.375,
         "lng": 262.125,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -514,7 +514,7 @@
         "map_icon_type_id": 67,
         "lat": -87.75,
         "lng": 282,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -527,7 +527,7 @@
         "map_icon_type_id": 66,
         "lat": -155.25,
         "lng": 86.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.malfunctioning_goliath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -540,7 +540,7 @@
         "map_icon_type_id": 67,
         "lat": -118.375,
         "lng": 149.625,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -553,7 +553,7 @@
         "map_icon_type_id": 69,
         "lat": -79.25,
         "lng": 136.6875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -566,7 +566,7 @@
         "map_icon_type_id": 65,
         "lat": -77.625,
         "lng": 51.125,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -579,7 +579,7 @@
         "map_icon_type_id": 9,
         "lat": -191.5,
         "lng": 158.1875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -592,7 +592,7 @@
         "map_icon_type_id": 68,
         "lat": -140.5,
         "lng": 264,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -605,7 +605,7 @@
         "map_icon_type_id": 9,
         "lat": -229.25,
         "lng": 202.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.anima_crystal_shard",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.anima_crystal_shard",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -618,7 +618,7 @@
         "map_icon_type_id": 41,
         "lat": -143.25,
         "lng": 63.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.grisly_curio",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.grisly_curio",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -631,7 +631,7 @@
         "map_icon_type_id": 9,
         "lat": -50.5,
         "lng": 143.75,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.anima_crystal_shard",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.anima_crystal_shard",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -644,7 +644,7 @@
         "map_icon_type_id": 66,
         "lat": -65,
         "lng": 233,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.malfunctioning_goliath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -657,7 +657,7 @@
         "map_icon_type_id": 65,
         "lat": -215.5,
         "lng": 227,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -683,7 +683,7 @@
         "map_icon_type_id": 9,
         "lat": -172.8125,
         "lng": 169.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -696,7 +696,7 @@
         "map_icon_type_id": 67,
         "lat": -191.5,
         "lng": 158.1875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -709,7 +709,7 @@
         "map_icon_type_id": 69,
         "lat": -172.8125,
         "lng": 169.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -722,7 +722,7 @@
         "map_icon_type_id": 68,
         "lat": -125.5625,
         "lng": 148.625,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -735,7 +735,7 @@
         "map_icon_type_id": 66,
         "lat": -179.625,
         "lng": 237.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.malfunctioning_goliath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -748,7 +748,7 @@
         "map_icon_type_id": 69,
         "lat": -73.375,
         "lng": 262.125,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -761,7 +761,7 @@
         "map_icon_type_id": 67,
         "lat": -87.75,
         "lng": 282,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -774,7 +774,7 @@
         "map_icon_type_id": 66,
         "lat": -155.25,
         "lng": 86.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.malfunctioning_goliath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -787,7 +787,7 @@
         "map_icon_type_id": 67,
         "lat": -118.375,
         "lng": 149.625,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -800,7 +800,7 @@
         "map_icon_type_id": 69,
         "lat": -79.25,
         "lng": 136.6875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -813,7 +813,7 @@
         "map_icon_type_id": 65,
         "lat": -77.625,
         "lng": 51.125,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -826,7 +826,7 @@
         "map_icon_type_id": 9,
         "lat": -191.5,
         "lng": 158.1875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -839,7 +839,7 @@
         "map_icon_type_id": 68,
         "lat": -140.5,
         "lng": 264,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -852,7 +852,7 @@
         "map_icon_type_id": 9,
         "lat": -229.25,
         "lng": 202.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.anima_crystal_shard",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.anima_crystal_shard",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -865,7 +865,7 @@
         "map_icon_type_id": 41,
         "lat": -143.25,
         "lng": 63.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.grisly_curio",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.grisly_curio",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -878,7 +878,7 @@
         "map_icon_type_id": 9,
         "lat": -50.5,
         "lng": 143.75,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.anima_crystal_shard",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.anima_crystal_shard",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -891,7 +891,7 @@
         "map_icon_type_id": 66,
         "lat": -65,
         "lng": 233,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.malfunctioning_goliath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -904,7 +904,7 @@
         "map_icon_type_id": 65,
         "lat": -215.5,
         "lng": 227,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -930,7 +930,7 @@
         "map_icon_type_id": 9,
         "lat": -172.8125,
         "lng": 169.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -943,7 +943,7 @@
         "map_icon_type_id": 67,
         "lat": -191.5,
         "lng": 158.1875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -956,7 +956,7 @@
         "map_icon_type_id": 69,
         "lat": -172.8125,
         "lng": 169.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -969,7 +969,7 @@
         "map_icon_type_id": 68,
         "lat": -125.5625,
         "lng": 148.625,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -982,7 +982,7 @@
         "map_icon_type_id": 66,
         "lat": -179.625,
         "lng": 237.5,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.malfunctioning_goliath",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.malfunctioning_goliath",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -995,7 +995,7 @@
         "map_icon_type_id": 69,
         "lat": -64.195132160238,
         "lng": 275.54133267188,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1008,7 +1008,7 @@
         "map_icon_type_id": 68,
         "lat": -87.75,
         "lng": 282,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1021,7 +1021,7 @@
         "map_icon_type_id": 65,
         "lat": -81.169192950122,
         "lng": 154.04279228113,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1034,7 +1034,7 @@
         "map_icon_type_id": 69,
         "lat": -68.534365745622,
         "lng": 61.38739278146,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1047,7 +1047,7 @@
         "map_icon_type_id": 9,
         "lat": -191.5,
         "lng": 158.1875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.forgotten_forgehammer",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.forgotten_forgehammer",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1060,7 +1060,7 @@
         "map_icon_type_id": 68,
         "lat": -140.5,
         "lng": 264,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1073,7 +1073,7 @@
         "map_icon_type_id": 9,
         "lat": -229.25,
         "lng": 202.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.anima_crystal_shard",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.anima_crystal_shard",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1086,7 +1086,7 @@
         "map_icon_type_id": 65,
         "lat": -215.5,
         "lng": 227,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1112,7 +1112,7 @@
         "map_icon_type_id": 9,
         "lat": -172.8125,
         "lng": 169.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1125,7 +1125,7 @@
         "map_icon_type_id": 68,
         "lat": -191.5,
         "lng": 158.1875,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1138,7 +1138,7 @@
         "map_icon_type_id": 65,
         "lat": -172.8125,
         "lng": 169.25,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1151,7 +1151,7 @@
         "map_icon_type_id": 68,
         "lat": -121.37091587353,
         "lng": 141.15271604219,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1164,7 +1164,7 @@
         "map_icon_type_id": 69,
         "lat": -150.39747605026,
         "lng": 86.60123381013,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1177,7 +1177,7 @@
         "map_icon_type_id": 69,
         "lat": -64.173449393162,
         "lng": 276.09947370907,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1190,7 +1190,7 @@
         "map_icon_type_id": 68,
         "lat": -88.286702540339,
         "lng": 280.61489663686,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1203,7 +1203,7 @@
         "map_icon_type_id": 65,
         "lat": -81.273589427225,
         "lng": 152.55621322164,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1216,7 +1216,7 @@
         "map_icon_type_id": 69,
         "lat": -72.052111412317,
         "lng": 61.291419509807,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1229,7 +1229,7 @@
         "map_icon_type_id": 68,
         "lat": -138.43339889007,
         "lng": 262.6501735283,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1242,7 +1242,7 @@
         "map_icon_type_id": 65,
         "lat": -226.82009132983,
         "lng": 212.50419990196,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1268,7 +1268,7 @@
         "map_icon_type_id": 68,
         "lat": -191.17636147883,
         "lng": 157.55176245541,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1281,7 +1281,7 @@
         "map_icon_type_id": 65,
         "lat": -172.82640038667,
         "lng": 179.06967463774,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1294,7 +1294,7 @@
         "map_icon_type_id": 68,
         "lat": -121.04564009441,
         "lng": 140.93183428023,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1307,7 +1307,7 @@
         "map_icon_type_id": 69,
         "lat": -147.65572566603,
         "lng": 86.269131907487,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1320,7 +1320,7 @@
         "map_icon_type_id": 69,
         "lat": -64.173449393162,
         "lng": 276.09947370907,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1333,7 +1333,7 @@
         "map_icon_type_id": 68,
         "lat": -88.286702540339,
         "lng": 280.61489663686,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1346,7 +1346,7 @@
         "map_icon_type_id": 65,
         "lat": -81.273589427225,
         "lng": 152.55621322164,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1359,7 +1359,7 @@
         "map_icon_type_id": 69,
         "lat": -72.052111412317,
         "lng": 61.291419509807,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1372,7 +1372,7 @@
         "map_icon_type_id": 68,
         "lat": -138.43339889007,
         "lng": 262.6501735283,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1385,7 +1385,7 @@
         "map_icon_type_id": 65,
         "lat": -226.82009132983,
         "lng": 212.50419990196,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1411,7 +1411,7 @@
         "map_icon_type_id": 68,
         "lat": -191.17636147883,
         "lng": 157.55176245541,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1424,7 +1424,7 @@
         "map_icon_type_id": 65,
         "lat": -172.82640038667,
         "lng": 179.06967463774,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1437,7 +1437,7 @@
         "map_icon_type_id": 68,
         "lat": -121.04564009441,
         "lng": 140.93183428023,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1450,7 +1450,7 @@
         "map_icon_type_id": 69,
         "lat": -147.65572566603,
         "lng": 86.269131907487,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1463,7 +1463,7 @@
         "map_icon_type_id": 69,
         "lat": -64.173449393162,
         "lng": 276.09947370907,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1476,7 +1476,7 @@
         "map_icon_type_id": 68,
         "lat": -88.286702540339,
         "lng": 280.61489663686,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1489,7 +1489,7 @@
         "map_icon_type_id": 65,
         "lat": -81.273589427225,
         "lng": 152.55621322164,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1502,7 +1502,7 @@
         "map_icon_type_id": 69,
         "lat": -72.052111412317,
         "lng": 61.291419509807,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1515,7 +1515,7 @@
         "map_icon_type_id": 68,
         "lat": -138.43339889007,
         "lng": 262.6501735283,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1528,7 +1528,7 @@
         "map_icon_type_id": 65,
         "lat": -226.82009132983,
         "lng": 212.50419990196,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1554,7 +1554,7 @@
         "map_icon_type_id": 68,
         "lat": -191.17636147883,
         "lng": 157.55176245541,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1567,7 +1567,7 @@
         "map_icon_type_id": 65,
         "lat": -172.82640038667,
         "lng": 179.06967463774,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discharged_anima",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discharged_anima",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1580,7 +1580,7 @@
         "map_icon_type_id": 68,
         "lat": -121.04564009441,
         "lng": 140.93183428023,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.discarded_shield",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.discarded_shield",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -1593,7 +1593,7 @@
         "map_icon_type_id": 69,
         "lat": -147.65572566603,
         "lng": 86.269131907487,
-        "comment": "mapping.map_icons.shadowlands.the_necrotic_wake.bloody_javelin",
+        "comment": "mapping.map_icons.sl.the_necrotic_wake.bloody_javelin",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true

@@ -106,7 +106,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             },
         }, {
             dungeon_id: getState().getMapContext().getDungeon().id
-        });
+        }, ['dungeon_id']);
     }
 
     /**

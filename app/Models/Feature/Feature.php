@@ -3,6 +3,7 @@
 namespace App\Models\Feature;
 
 use App\Models\User;
+use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -15,6 +16,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  *
+ * @mixin Eloquent
  */
 class Feature extends Model
 {

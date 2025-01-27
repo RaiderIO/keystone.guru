@@ -13,7 +13,6 @@ use Illuminate\Support\Collection;
  * @var string $title
  * @var MapContext $mapContext
  * @var boolean $showHeatmapSearch
- * @var CarbonPeriod $availableDateRange
  * @var int $keyLevelMin
  * @var int $keyLevelMax
  * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
@@ -51,7 +50,6 @@ use Illuminate\Support\Collection;
             ],
             'controlOptions' => [
                 'heatmapSearch' => [
-                    'availableDateRange' => $availableDateRange,
                     'keyLevelMin' => $keyLevelMin,
                     'keyLevelMax' => $keyLevelMax,
                     'seasonWeeklyAffixGroups' => $seasonWeeklyAffixGroups,

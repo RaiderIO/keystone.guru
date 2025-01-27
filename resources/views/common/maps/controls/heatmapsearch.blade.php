@@ -5,12 +5,14 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
+use App\Models\Season;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
 
 /**
  * @var bool                         $showAds
  * @var Dungeon                      $dungeon
+ * @var Season                       $season
  * @var bool                         $embed
  * @var string                       $embedStyle
  * @var bool                         $isMobile
@@ -40,9 +42,9 @@ $shouldShowHeatmapSearchSidebar = $defaultState === 1;
 $hideOnMove                     ??= $isMobile;
 $showAds                        ??= true;
 /** @var Collection<AffixGroup> $affixGroups */
-$affixGroups = $allAffixGroupsByActiveExpansion->get($dungeon->expansion->shortname);
+$affixGroups = $allAffixGroupsByActiveExpansion->get($season->expansion->shortname);
 /** @var Collection<Affix> $featuredAffixes */
-$featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->shortname);
+$featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->shortname);
 ?>
 @include('common.general.inline', ['path' => 'common/maps/heatmapsearchsidebar', 'options' => [
     'stateCookie' => 'heatmap_search_sidebar_state',
@@ -186,21 +188,21 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                 @endcomponent
 
                 @if($dungeon->gameVersion->has_seasons)
-{{--                    @component('common.search.filter', ['key' => 'season', 'text' => __('view_common.maps.controls.heatmapsearch.season'), 'expanded' => $expandedAffixWeek])--}}
-{{--                        <div class="filter_affix">--}}
-{{--                            <div class="row">--}}
-{{--                                <div class="col">--}}
-{{--                                    {!! Form::select('filter_season[]',--}}
-{{--                                        $seasonWeeklyAffixGroups->mapWithKeys(function(WeeklyAffixGroup $seasonWeeklyAffixGroup){--}}
-{{--                                            return [$seasonWeeklyAffixGroup->week => $seasonWeeklyAffixGroup->affixGroup->text];--}}
-{{--                                        }), [],--}}
-{{--                                        ['id' => 'filter_season',--}}
-{{--                                        'class' => 'form-control affixselect selectpicker',--}}
-{{--                                        'title' => __('view_common.maps.controls.heatmapsearch.season_title')]) !!}--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    @endcomponent--}}
+                    {{--                    @component('common.search.filter', ['key' => 'season', 'text' => __('view_common.maps.controls.heatmapsearch.season'), 'expanded' => $expandedAffixWeek])--}}
+                    {{--                        <div class="filter_affix">--}}
+                    {{--                            <div class="row">--}}
+                    {{--                                <div class="col">--}}
+                    {{--                                    {!! Form::select('filter_season[]',--}}
+                    {{--                                        $seasonWeeklyAffixGroups->mapWithKeys(function(WeeklyAffixGroup $seasonWeeklyAffixGroup){--}}
+                    {{--                                            return [$seasonWeeklyAffixGroup->week => $seasonWeeklyAffixGroup->affixGroup->text];--}}
+                    {{--                                        }), [],--}}
+                    {{--                                        ['id' => 'filter_season',--}}
+                    {{--                                        'class' => 'form-control affixselect selectpicker',--}}
+                    {{--                                        'title' => __('view_common.maps.controls.heatmapsearch.season_title')]) !!}--}}
+                    {{--                                </div>--}}
+                    {{--                            </div>--}}
+                    {{--                        </div>--}}
+                    {{--                    @endcomponent--}}
 
                     @component('common.search.filter', ['key' => 'affixes', 'text' => __('view_common.maps.controls.heatmapsearch.affixes'), 'expanded' => $expandedAffixes])
                         <div class="filter_affix">

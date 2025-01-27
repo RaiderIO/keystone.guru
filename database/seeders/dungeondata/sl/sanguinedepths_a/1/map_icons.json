@@ -7,7 +7,7 @@
         "map_icon_type_id": 10,
         "lat": -134.5,
         "lng": 41.75,
-        "comment": "mapping.map_icons.shadowlands.sanguine_depths.start",
+        "comment": "mapping.map_icons.sl.sanguine_depths.start",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -20,7 +20,7 @@
         "map_icon_type_id": 49,
         "lat": -92.757392166011,
         "lng": 265.70828824025,
-        "comment": "mapping.map_icons.shadowlands.sanguine_depths.anima_cage",
+        "comment": "mapping.map_icons.sl.sanguine_depths.anima_cage",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -33,7 +33,7 @@
         "map_icon_type_id": 49,
         "lat": -198.25,
         "lng": 256.375,
-        "comment": "mapping.map_icons.shadowlands.sanguine_depths.anima_cage",
+        "comment": "mapping.map_icons.sl.sanguine_depths.anima_cage",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -46,7 +46,7 @@
         "map_icon_type_id": 12,
         "lat": -165.5,
         "lng": 231.375,
-        "comment": "mapping.map_icons.shadowlands.sanguine_depths.graveyard_executor_tarvold",
+        "comment": "mapping.map_icons.sl.sanguine_depths.graveyard_executor_tarvold",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -59,7 +59,7 @@
         "map_icon_type_id": 12,
         "lat": -37.75,
         "lng": 190.625,
-        "comment": "mapping.map_icons.shadowlands.sanguine_depths.graveyard_kryxis_the_voracious",
+        "comment": "mapping.map_icons.sl.sanguine_depths.graveyard_kryxis_the_voracious",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -72,7 +72,7 @@
         "map_icon_type_id": 49,
         "lat": -152,
         "lng": 194.25,
-        "comment": "mapping.map_icons.shadowlands.sanguine_depths.anima_cage",
+        "comment": "mapping.map_icons.sl.sanguine_depths.anima_cage",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -85,7 +85,7 @@
         "map_icon_type_id": 42,
         "lat": -199.75,
         "lng": 243,
-        "comment": "mapping.map_icons.shadowlands.sanguine_depths.chamber_sentinel",
+        "comment": "mapping.map_icons.sl.sanguine_depths.chamber_sentinel",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -98,7 +98,7 @@
         "map_icon_type_id": 42,
         "lat": -220,
         "lng": 231.25,
-        "comment": "mapping.map_icons.shadowlands.sanguine_depths.chamber_sentinel",
+        "comment": "mapping.map_icons.sl.sanguine_depths.chamber_sentinel",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -111,7 +111,7 @@
         "map_icon_type_id": 42,
         "lat": -226.375,
         "lng": 204.625,
-        "comment": "mapping.map_icons.shadowlands.sanguine_depths.chamber_sentinel",
+        "comment": "mapping.map_icons.sl.sanguine_depths.chamber_sentinel",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -124,7 +124,7 @@
         "map_icon_type_id": 42,
         "lat": -199.875,
         "lng": 178.125,
-        "comment": "mapping.map_icons.shadowlands.sanguine_depths.chamber_sentinel",
+        "comment": "mapping.map_icons.sl.sanguine_depths.chamber_sentinel",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -137,7 +137,7 @@
         "map_icon_type_id": 42,
         "lat": -172.625,
         "lng": 185.25,
-        "comment": "mapping.map_icons.shadowlands.sanguine_depths.chamber_sentinel",
+        "comment": "mapping.map_icons.sl.sanguine_depths.chamber_sentinel",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -150,7 +150,7 @@
         "map_icon_type_id": 42,
         "lat": -160.875,
         "lng": 211.375,
-        "comment": "mapping.map_icons.shadowlands.sanguine_depths.chamber_sentinel",
+        "comment": "mapping.map_icons.sl.sanguine_depths.chamber_sentinel",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -163,7 +163,7 @@
         "map_icon_type_id": 49,
         "lat": -119.70070245322,
         "lng": 81.940571770248,
-        "comment": "mapping.map_icons.shadowlands.sanguine_depths.anima_cage",
+        "comment": "mapping.map_icons.sl.sanguine_depths.anima_cage",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
