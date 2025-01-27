@@ -37,8 +37,8 @@ class DungeonExploreController extends Controller
         }
 
         return view('dungeon.explore.gameversion.list', [
-            'runCountPerDungeon' => Feature::active(Heatmap::class) ? $combatLogEventService->getRunCountPerDungeon() : collect(),
-            'gameVersion'        => $gameVersion,
+            'showRunCountPerDungeon' => Feature::active(Heatmap::class),
+            'gameVersion'            => $gameVersion,
         ]);
     }
 

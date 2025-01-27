@@ -2,11 +2,10 @@
 
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
-use Illuminate\Support\Collection;
 
 /**
- * @var Collection<int> $runCountPerDungeon
- * @var GameVersion     $gameVersion
+ * @var boolean     $showRunCountPerDungeon
+ * @var GameVersion $gameVersion
  */
 ?>
 @extends('layouts.sitepage', [
@@ -23,17 +22,16 @@ use Illuminate\Support\Collection;
         'tabsId' => 'explore_dungeon_select_tabs',
         'route' => 'dungeon.explore.gameversion.view',
         'routeParams' => ['gameVersion' => $gameVersion],
-        'subtextFn' => function(Dungeon $dungeon) use ($runCountPerDungeon) {
+        'subtextFn' => function(Dungeon $dungeon) use ($showRunCountPerDungeon) {
             $result = '';
 
-            if( $runCountPerDungeon->has($dungeon->id) ) {
-                $runCount = $runCountPerDungeon->get($dungeon->id);
+            if( $showRunCountPerDungeon && $dungeon->heatmap_enabled ) {
                 echo '<div class="row no-gutters">
                     <div class="col">
                     </div>
                     <div class="col-auto px-2">
                         <i class="fas fa-fire text-danger" data-toggle="tooltip" title="'
-                        . __('view_dungeon.explore.list.heatmap_available', ['runCount' => $runCount]) .
+                        . __('view_dungeon.explore.list.heatmap_available') .
                         '"></i>
                     </div>
                 </div>';

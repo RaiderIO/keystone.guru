@@ -145,6 +145,8 @@ class Save extends Command
                 'key',
                 'name',
                 'slug',
+                'raid',
+                'heatmap_enabled',
                 'speedrun_enabled',
             ])
                 ->makeHidden(['floor_count'])

@@ -26,6 +26,7 @@ class DungeonFormRequest extends FormRequest
     {
         return [
             'active'                             => 'nullable|boolean',
+            'heatmap_enabled'                    => 'nullable|boolean',
             'speedrun_enabled'                   => 'nullable|boolean',
             'speedrun_difficulty_10_man_enabled' => 'nullable|boolean',
             'speedrun_difficulty_25_man_enabled' => 'nullable|boolean',
@@ -40,7 +41,7 @@ class DungeonFormRequest extends FormRequest
             'key'                                => [
                 'required',
                 Rule::unique(Dungeon::class, 'key')->ignore($this->get('key'), 'key'),
-                Rule::in(collect(array_merge(Dungeon::ALL, Dungeon::ALL_RAID))->flatten()),
+                Rule::in(collect(array_merge_recursive(Dungeon::ALL, Dungeon::ALL_RAID))->flatten()),
             ],
             'slug'                               => ['required', Rule::unique(Dungeon::class, 'slug')->ignore($this->get('slug'), 'slug')],
         ];

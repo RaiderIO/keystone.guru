@@ -40,6 +40,7 @@ use Mockery\Exception;
  * @property string                                 $name The name of the dungeon.
  * @property string                                 $slug The url friendly slug of the dungeon.
  * @property string                                 $key Shorthand key of the dungeon
+ * @property bool                                   $heatmap_enabled True if this dungeon has a heatmap enabled, false if it does not.
  * @property bool                                   $speedrun_enabled True if this dungeon has a speedrun enabled, false if it does not.
  * @property bool                                   $speedrun_difficulty_10_man_enabled True if this dungeon's speedrun is for 10-man.
  * @property bool                                   $speedrun_difficulty_25_man_enabled True if this dungeon's speedrun is for 25-man.
@@ -89,6 +90,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         'game_version_id',
         'active',
         'raid',
+        'heatmap_enabled',
         'speedrun_enabled',
         'speedrun_difficulty_10_man_enabled',
         'speedrun_difficulty_25_man_enabled',

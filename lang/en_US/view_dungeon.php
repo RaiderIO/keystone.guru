@@ -5,7 +5,7 @@ return [
         'list' => [
             'title'             => 'Explore',
             'header'            => 'Explore dungeon',
-            'heatmap_available' => 'Heatmap available with :runCount runs',
+            'heatmap_available' => 'Heatmap available for dungeon',
         ],
     ],
 ];
