@@ -27,9 +27,9 @@ use Illuminate\Support\Collection;
  */
 
 // By default, show it if we're not mobile, but allow overrides
-$pullsSidebarState    = (int)($_COOKIE['pulls_sidebar_state'] ?? 1);
-$defaultState         ??= $isMobile ? 0 : $pullsSidebarState;
-$heatmapSearchEnabled = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
+$heatmapSearchSidebarState = (int)($_COOKIE['heatmap_search_sidebar_state'] ?? 1);
+$defaultState              ??= $isMobile ? 0 : $heatmapSearchSidebarState;
+$heatmapSearchEnabled      = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
 
 $filterExpandedCookiePrefix = 'heatmap_search_expanded';
 $expandedDataType           = (bool)($_COOKIE[sprintf('%s_data_type', $filterExpandedCookiePrefix)] ?? 0); // Hide by default
@@ -73,6 +73,14 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
 
     'filterCollapseNames' => ['level', 'affixes', 'duration'],
     'filterCookiePrefix' => $filterExpandedCookiePrefix,
+
+    'leafletHeatOptionsMinOpacitySelector' => '#heatmap_heat_option_min_opacity',
+    'leafletHeatOptionsMaxZoomSelector' => '#heatmap_heat_option_max_zoom',
+    'leafletHeatOptionsMaxSelector' => '#heatmap_heat_option_max',
+    'leafletHeatOptionsRadiusSelector' => '#heatmap_heat_option_radius',
+    'leafletHeatOptionsBlurSelector' => '#heatmap_heat_option_blur',
+    'leafletHeatOptionsGradientSelector' => '#heatmap_heat_option_gradient',
+    'leafletHeatOptionsPaneSelector' => '#heatmap_heat_option_pane',
 
     'dependencies' => ['common/maps/map'],
     // Mobile sidebar options
@@ -248,6 +256,92 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
                 @component('common.search.filter', ['key' => 'duration', 'text' => __('view_common.maps.controls.heatmapsearch.duration'), 'expanded' => $expandedDuration])
                     <input id="filter_duration" type="text" name="duration" value="{{ old('duration') }}"/>
                 @endcomponent
+
+                @if(Auth::check() && Auth::user()->hasRole('admin'))
+                    @component('common.search.filter', ['key' => 'heatoptions', 'text' => __('view_common.maps.controls.heatmapsearch.heat_options'), 'expanded' => true])
+                        <div class="row">
+                            <div class="col">
+                                <label for="heatmap_heat_option_min_opacity">
+                                    {{ __('view_common.maps.controls.heatmapsearch.heat_option.min_opacity') }}
+                                </label>
+                            </div>
+                            <div class="col">
+                                <input id="heatmap_heat_option_min_opacity" type="text" name="min_opacity"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="heatmap_heat_option_max_zoom">
+                                    {{ __('view_common.maps.controls.heatmapsearch.heat_option.max_zoom') }}
+                                </label>
+                            </div>
+                            <div class="col">
+                                <input id="heatmap_heat_option_max_zoom" type="text" name="max_zoom" value="5"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="heatmap_heat_option_max">
+                                    {{ __('view_common.maps.controls.heatmapsearch.heat_option.max') }}
+                                </label>
+                            </div>
+                            <div class="col">
+                                <input id="heatmap_heat_option_max" type="text" name="max" value="1.0"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="heatmap_heat_option_radius">
+                                    {{ __('view_common.maps.controls.heatmapsearch.heat_option.radius') }}
+                                </label>
+                            </div>
+                            <div class="col">
+                                <input id="heatmap_heat_option_radius" type="text" name="radius" value="25"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="heatmap_heat_option_blur">
+                                    {{ __('view_common.maps.controls.heatmapsearch.heat_option.blur') }}
+                                </label>
+                            </div>
+                            <div class="col">
+                                <input id="heatmap_heat_option_blur" type="text" name="blur" value="15"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="heatmap_heat_option_gradient">
+                                    {{ __('view_common.maps.controls.heatmapsearch.heat_option.gradient') }}
+                                </label>
+                            </div>
+                            <div class="col">
+                                <input id="heatmap_heat_option_gradient" type="text" name="gradient"
+                                       value='{".4":"blue",".6":"cyan",".7":"lime",".8":"yellow","1":"red"}'/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="heatmap_heat_option_pane">
+                                    {{ __('view_common.maps.controls.heatmapsearch.heat_option.pane') }}
+                                </label>
+                            </div>
+                            <div class="col">
+                                {{ Form::select('pane',
+                                    ['overlayPane' => 'Overlay', 'markerPane' => 'Marker', 'tooltipPane' => 'Tooltip'],
+                                    'overlayPane',
+                                    ['id' => 'heatmap_heat_option_pane', 'class' => 'selectpicker']
+                                ) }}
+                            </div>
+                        </div>
+                    @endcomponent
+                @endif
 
                 <div class="row">
                     <div id="heatmap_search_result" class="col" style="visibility: hidden;">

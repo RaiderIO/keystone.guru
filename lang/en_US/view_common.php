@@ -333,6 +333,16 @@ return [
                 'date_range_from'           => 'From',
                 'date_range_to'             => 'To',
                 'duration'                  => 'Duration',
+                'heat_options'              => 'Leaflet.heat Options',
+                'heat_option'               => [
+                    'min_opacity' => 'Min opacity',
+                    'max_zoom'    => 'Max zoom',
+                    'max'         => 'Max',
+                    'radius'      => 'Radius',
+                    'blur'        => 'Blur',
+                    'gradient'    => 'Gradient',
+                    'pane'        => 'Pane',
+                ],
                 'data'                      => [
                     'dungeon_routes' => 'Showing data from :count runs',
                 ],

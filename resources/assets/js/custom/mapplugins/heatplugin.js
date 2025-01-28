@@ -68,6 +68,12 @@ class HeatPlugin extends MapPlugin {
         // });
     }
 
+    setOptions(options) {
+        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
+        this.heatLayer.setOptions(options);
+    }
+
     removeFromMap() {
         console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
 

@@ -23,6 +23,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         };
 
         this._setupFilterCollapseCookies();
+        this._setupLeafletHeatOptions();
     }
 
     _setupFilterCollapseCookies() {
@@ -47,6 +48,41 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
                 });
             }
         }
+    }
+
+    _setupLeafletHeatOptions() {
+
+        (new HeatOptionMinOpacityHandler(0, 1)).apply(this.options.leafletHeatOptionsMinOpacitySelector, {
+            onFinish: this._redrawHeatmap.bind(this)
+        });
+        (new HeatOptionMaxZoomHandler(1, 10)).apply(this.options.leafletHeatOptionsMaxZoomSelector, {
+            onFinish: this._redrawHeatmap.bind(this)
+        });
+        (new HeatOptionMaxHandler(0, 3)).apply(this.options.leafletHeatOptionsMaxSelector, {
+            onFinish: this._redrawHeatmap.bind(this)
+        });
+        (new HeatOptionRadiusHandler(0, 50)).apply(this.options.leafletHeatOptionsRadiusSelector, {
+            onFinish: this._redrawHeatmap.bind(this)
+        });
+        (new HeatOptionBlurHandler(0, 30)).apply(this.options.leafletHeatOptionsBlurSelector, {
+            onFinish: this._redrawHeatmap.bind(this)
+        });
+        $(this.options.leafletHeatOptionsGradientSelector).on('change', this._redrawHeatmap.bind(this));
+        $(this.options.leafletHeatOptionsPaneSelector).on('change', this._redrawHeatmap.bind(this));
+    }
+
+    _redrawHeatmap() {
+        let options = {
+            minOpacity: parseFloat($(this.options.leafletHeatOptionsMinOpacitySelector).val()),
+            maxZoom: parseFloat($(this.options.leafletHeatOptionsMaxZoomSelector).val()),
+            max: parseFloat($(this.options.leafletHeatOptionsMaxSelector).val()),
+            radius: parseInt($(this.options.leafletHeatOptionsRadiusSelector).val()),
+            blur: parseInt($(this.options.leafletHeatOptionsBlurSelector).val()),
+            gradient: JSON.parse($(this.options.leafletHeatOptionsGradientSelector).val()),
+            pane: $(this.options.leafletHeatOptionsPaneSelector).val(),
+        };
+        console.log('Redrawing heatmap', options);
+        getState().getDungeonMap().pluginHeat.setOptions(options);
     }
 
 
