@@ -55,10 +55,10 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         (new HeatOptionMinOpacityHandler(0, 1)).apply(this.options.leafletHeatOptionsMinOpacitySelector, {
             onFinish: this._redrawHeatmap.bind(this)
         });
-        (new HeatOptionMaxZoomHandler(1, 10)).apply(this.options.leafletHeatOptionsMaxZoomSelector, {
+        (new HeatOptionMaxZoomHandler(1, 30)).apply(this.options.leafletHeatOptionsMaxZoomSelector, {
             onFinish: this._redrawHeatmap.bind(this)
         });
-        (new HeatOptionMaxHandler(0, 3)).apply(this.options.leafletHeatOptionsMaxSelector, {
+        (new HeatOptionMaxHandler(0, 20)).apply(this.options.leafletHeatOptionsMaxSelector, {
             onFinish: this._redrawHeatmap.bind(this)
         });
         (new HeatOptionRadiusHandler(0, 50)).apply(this.options.leafletHeatOptionsRadiusSelector, {
@@ -97,11 +97,11 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
         this.map = getState().getDungeonMap();
 
-        let clearInputFn = function () {
-            $($(this).closest('.row')).find('input').val(null);
-
-            self._search();
-        };
+        // let clearInputFn = function () {
+        //     $($(this).closest('.row')).find('input').val(null);
+        //
+        //     self._search();
+        // };
 
         let $enabledState = $(this.options.enabledStateSelector);
         $enabledState.on('change', function () {
