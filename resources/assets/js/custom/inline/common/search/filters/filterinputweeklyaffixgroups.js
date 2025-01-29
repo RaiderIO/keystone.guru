@@ -5,10 +5,10 @@ class SearchFilterWeeklyAffixGroups extends SearchFilterInput {
         let self = this;
 
         // Grouped affixes
-        $(this.selector).off('change').change(function() {
-            refreshSelectPickers();
-
+        $(this.selector).off('change').on('change', function() {
             self.onChange();
+
+            refreshSelectPickers();
         });
     }
 

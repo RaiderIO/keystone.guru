@@ -6,6 +6,8 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             loaderSelector: options.loaderSelector,
         }, options)), options);
 
+        let self = this;
+
         this.sidebar = new Sidebar(options);
 
         this._draggable = null;
@@ -18,9 +20,23 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'data_type': new SearchFilterRadioDataType(this.options.filterDataTypeContainerSelector, this.options.filterDataTypeSelector, this._search.bind(this)),
             'level': new SearchFilterLevel(this.options.filterLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
             'affixes': new SearchFilterAffixes(this.options.filterAffixesSelector, this._search.bind(this)),
-            'weekly_affix_groups': new SearchFilterWeeklyAffixGroups(this.options.filterWeeklyAffixGroupsSelector, this._search.bind(this)),
+            'weekly_affix_groups': new SearchFilterWeeklyAffixGroups(this.options.filterWeeklyAffixGroupsSelector, function () {
+                // Make sure that if we select week 1 and 7, we select all weeks in between as well
+                let $select = $(self.options.filterWeeklyAffixGroupsSelector);
+                let val = $select.val();
+                let min = _.min(val), max = _.max(val);
+                let weeks = [];
+                for (let i = min; i <= max; i++) {
+                    weeks.push(i);
+                }
+                $select.val(weeks);
+
+                self._search.bind(self);
+            }),
             'duration': new SearchFilterDuration(this.options.filterDurationSelector, this._search.bind(this), this.options.durationMin, this.options.durationMax),
         };
+
+        console.log($(this.options.filterWeeklyAffixGroupsSelector).length);
 
         this._setupFilterCollapseCookies();
         this._setupLeafletHeatOptions();
