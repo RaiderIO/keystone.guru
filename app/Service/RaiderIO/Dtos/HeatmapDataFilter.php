@@ -182,8 +182,8 @@ class HeatmapDataFilter implements Arrayable
     {
         $heatmapDataFilter = new HeatmapDataFilter(
             dungeon: Dungeon::firstWhere('id', $requestArray['dungeonId']),
-            eventType: CombatLogEventEventType::from($requestArray['type']),
-            dataType: CombatLogEventDataType::from($requestArray['dataType'])
+            eventType: CombatLogEventEventType::from($requestArray['type'] ?? 'enemy_killed'),
+            dataType: CombatLogEventDataType::from($requestArray['dataType'] ?? 'player_position')
         );
 
         if (isset($requestArray['minMythicLevel'])) {

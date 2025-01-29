@@ -88,6 +88,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::get('mapping', (new SiteController())->mapping(...))->name('misc.mapping');
     Route::get('affixes', (new SiteController())->affixes(...))->name('misc.affixes');
     Route::get('timetest', (new SiteController())->timetest(...))->name('misc.timetest');
+    Route::get('embed/explore/{gameVersion}/{dungeon}', (new SiteController())->embedExplore(...))->name('misc.embed.explore');
     Route::get('embed/{dungeonRoute}', (new SiteController())->embed(...))->name('misc.embed');
     Route::get('status', (new SiteController())->status(...))->name('misc.status');
     Route::get('login/google', (new GoogleLoginController())->redirectToProvider(...))->name('login.google');
@@ -145,6 +146,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('/', (new DungeonExploreController())->getByGameVersion(...))->name('dungeon.explore.gameversion.list');
             Route::prefix('{dungeon}')->group(static function () {
                 Route::get('/', (new DungeonExploreController())->viewDungeon(...))->name('dungeon.explore.gameversion.view');
+                Route::get('/embed', (new DungeonExploreController())->embed(...))->name('dungeon.explore.gameversion.embed');
+                Route::get('/embed/{floorIndex}', (new DungeonExploreController())->embed(...))->name('dungeon.explore.gameversion.embed.floor');
                 Route::get('/{floorIndex}', (new DungeonExploreController())->viewDungeonFloor(...))->name('dungeon.explore.gameversion.view.floor');
             });
         });

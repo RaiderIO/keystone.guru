@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dungeon;
 
 use App\Features\Heatmap;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Heatmap\ExploreEmbedUrlFormRequest;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
@@ -71,8 +72,8 @@ class DungeonExploreController extends Controller
         SeasonServiceInterface         $seasonService,
         GameVersion                    $gameVersion,
         Dungeon                        $dungeon,
-        string                         $floorIndex = '1'): View|RedirectResponse
-    {
+        string                         $floorIndex = '1'
+    ): View|RedirectResponse {
         $dungeon->load(['currentMappingVersion']);
 
         if (!$dungeon->active || $dungeon->currentMappingVersion === null) {
@@ -136,6 +137,96 @@ class DungeonExploreController extends Controller
                 'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons ?
                     $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
+            ]);
+        }
+    }
+
+    public function embed(
+        ExploreEmbedUrlFormRequest $request,
+        MapContextServiceInterface $mapContextService,
+        SeasonServiceInterface     $seasonService,
+        GameVersion                $gameVersion,
+        Dungeon                    $dungeon,
+        string                     $floorIndex = '1'
+    ): View|RedirectResponse {
+        $dungeon->load(['currentMappingVersion']);
+
+        if (!$dungeon->active || $dungeon->currentMappingVersion === null) {
+            return redirect()->route('dungeon.explore.list');
+        }
+
+        if (!is_numeric($floorIndex)) {
+            $floorIndex = '1';
+        }
+
+        /** @var Floor $floor */
+        $floor = Floor::where('dungeon_id', $dungeon->id)
+            ->indexOrFacade($dungeon->currentMappingVersion, $floorIndex)
+            ->first();
+
+        if ($floor === null) {
+            /** @var Floor $defaultFloor */
+            $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
+                ->defaultOrFacade($dungeon->currentMappingVersion)
+                ->first();
+
+            return redirect()->route('dungeon.explore.gameversion.embed.floor', [
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+                'floorIndex'  => $defaultFloor?->index ?? '1',
+            ]);
+        } else {
+            if ($floor->index !== (int)$floorIndex) {
+                return redirect()->route('dungeon.explore.gameversion.embed.floor', [
+                    'gameVersion' => $gameVersion,
+                    'dungeon'     => $dungeon,
+                    'floorIndex'  => $floor->index,
+                ]);
+            }
+
+            $style                 = $request->get('style', 'compact');
+            $headerBackgroundColor = $request->get('headerBackgroundColor');
+            $mapBackgroundColor    = $request->get('mapBackgroundColor');
+            $showEnemyInfo         = $request->get('showEnemyInfo', false);
+            $showTitle             = $request->get('showTitle', true);
+
+            $parameters = [
+                'type'             => $request->get('type'),
+                'dataType'         => $request->get('dataType'),
+                'minMythicLevel'   => $request->get('minMythicLevel'),
+                'maxMythicLevel'   => $request->get('maxMythicLevel'),
+                'includeAffixIds'  => $request->get('includeAffixIds'),
+                'minPeriod'        => $request->get('minPeriod'),
+                'maxPeriod'        => $request->get('maxPeriod'),
+                'minTimerFraction' => $request->get('minTimerFraction'),
+                'maxTimerFraction' => $request->get('maxTimerFraction'),
+            ];
+
+            $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
+
+            return view('dungeon.explore.gameversion.embed', [
+                'gameVersion'             => $gameVersion,
+                'season'                  => $mostRecentSeason,
+                'dungeon'                 => $dungeon,
+                'floor'                   => $floor,
+                'title'                   => __($dungeon->name),
+                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
+                'keyLevelMin'             => $mostRecentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
+                'keyLevelMax'             => $mostRecentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+                'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons ?
+                    $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
+                    collect(),
+                'parameters'              => $parameters,
+                'embedOptions'            => [
+                    'style'                 => $style,
+                    'headerBackgroundColor' => $headerBackgroundColor,
+                    'mapBackgroundColor'    => $mapBackgroundColor,
+                    'show'                  => [
+                        'enemyInfo'      => (bool)$showEnemyInfo, // Default false - not available
+                        'title'          => $showTitle,
+                        'floorSelection' => true,                 // Always available, but can be overridden later if there's no floors to select
+                    ],
+                ],
             ]);
         }
     }

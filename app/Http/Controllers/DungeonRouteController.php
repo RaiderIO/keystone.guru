@@ -546,7 +546,7 @@ class DungeonRouteController extends Controller
         $showPresenterButton = $request->get('showPresenterButton', false);
 
         return view('dungeonroute.embed', [
-            'dungeon'      => $dungeonroute->dungeon,
+            'dungeon'      => $dungeonroute->dungeon->load(['expansion', 'floors']),
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
             'floor'        => $floor,

@@ -10,11 +10,11 @@ use App\Models\GameVersion\GameVersion;
 ?>
 @extends('layouts.sitepage', [
     'rootClass' => 'discover',
-    'title' => __('view_dungeon.explore.list.title'),
+    'title' => __('view_dungeon.explore.gameversion.list.title'),
     'breadcrumbsParams' => [$gameVersion],
 ])
 
-@section('header-title', __('view_dungeon.explore.list.header'))
+@section('header-title', __('view_dungeon.explore.gameversion.list.header'))
 
 @section('content')
     @include('common.dungeon.gridtabs', [
@@ -31,7 +31,7 @@ use App\Models\GameVersion\GameVersion;
                     </div>
                     <div class="col-auto px-2">
                         <i class="fas fa-fire text-danger" data-toggle="tooltip" title="'
-                        . __('view_dungeon.explore.list.heatmap_available') .
+                        . __('view_dungeon.explore.gameversion.list.heatmap_available') .
                         '"></i>
                     </div>
                 </div>';

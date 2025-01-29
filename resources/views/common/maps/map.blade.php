@@ -227,8 +227,8 @@ if ($isAdmin) {
     @if(isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])
         @include('common.maps.controls.heatmapsearch', array_merge($controlOptions['heatmapSearch'] ?? [], [
             'showAds' => $showAds && !$adFree,
-            'defaultState' => $show['controls']['pullsDefaultState'] ?? null,
-            'hideOnMove' => $show['controls']['pullsHideOnMove'] ?? null,
+            'defaultState' => $show['controls']['heatmapSearchDefaultState'] ?? null,
+            'hideOnMove' => $show['controls']['heatmapSearchHideOnMove'] ?? null,
         ]))
     @endif
 

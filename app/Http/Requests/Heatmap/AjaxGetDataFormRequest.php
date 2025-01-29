@@ -3,14 +3,13 @@
 namespace App\Http\Requests\Heatmap;
 
 use App\Models\Affix;
-use App\Models\AffixGroup\AffixGroup;
-use App\Models\CombatLog\CombatLogEventDataType;
-use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class AjaxGetDataFormRequest extends FormRequest
+/**
+ * Used when the heatmaps request data from the backend.
+ */
+class AjaxGetDataFormRequest extends ExploreUrlFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,19 +24,12 @@ class AjaxGetDataFormRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        return array_merge(parent::rules(), [
             'dungeonId'         => ['required', Rule::exists(Dungeon::class, 'id')],
-            'type'              => ['required', Rule::in(CombatLogEventEventType::cases())],
-            'dataType'          => ['required', Rule::in(CombatLogEventDataType::cases())],
-            'minMythicLevel'    => ['nullable', 'integer'],
-            'maxMythicLevel'    => ['nullable', 'integer'],
+            // These are overrides since it's easier to split the csv as an array for this endpoint
             'includeAffixIds'   => ['nullable', 'array'],
             'includeAffixIds.*' => ['integer', Rule::exists(Affix::class, 'affix_id')],
-            'minPeriod'         => ['nullable', 'integer'],
-            'maxPeriod'         => ['nullable', 'integer'],
-            'minTimerFraction'  => ['nullable', 'numeric'],
-            'maxTimerFraction'  => ['nullable', 'numeric'],
-        ];
+        ]);
     }
 }
 
