@@ -21,7 +21,9 @@ class HeatmapDataFilter implements Arrayable
     /** @var Collection<Affix> */
     private Collection $affixes;
 
-    private Collection $weeklyAffixGroups;
+    private ?int $minPeriod = null;
+
+    private ?int $maxPeriod = null;
 
     private ?int $timerFractionMin = null;
 
@@ -32,8 +34,7 @@ class HeatmapDataFilter implements Arrayable
         private readonly CombatLogEventEventType $eventType,
         private readonly CombatLogEventDataType  $dataType
     ) {
-        $this->affixes           = collect();
-        $this->weeklyAffixGroups = collect();
+        $this->affixes = collect();
     }
 
     public function getDungeon(): Dungeon
@@ -94,16 +95,24 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
-    public function getWeeklyAffixGroups(): Collection
+    public function getMinPeriod(): ?int
     {
-        return $this->weeklyAffixGroups;
+        return $this->minPeriod;
     }
 
-    public function setWeeklyAffixGroups(Collection $weeklyAffixGroups): HeatmapDataFilter
+    public function setMinPeriod(?int $minPeriod): void
     {
-        $this->weeklyAffixGroups = $weeklyAffixGroups;
+        $this->minPeriod = $minPeriod;
+    }
 
-        return $this;
+    public function getMaxPeriod(): ?int
+    {
+        return $this->maxPeriod;
+    }
+
+    public function setMaxPeriod(?int $maxPeriod): void
+    {
+        $this->maxPeriod = $maxPeriod;
     }
 
     public function getTimerFractionMin(): ?int
@@ -160,15 +169,9 @@ class HeatmapDataFilter implements Arrayable
             $result['includeAffixIds'] = implode(',', $this->getAffixes()->map(fn(Affix $affix) => $affix->affix_id)->toArray());
         }
 
-        if ($this->getWeeklyAffixGroups()->isNotEmpty()) {
-            $gameServerRegion = GameServerRegion::getUserOrDefaultRegion();
-
-            $periodStart = $mostRecentSeason !== null ? $gameServerRegion->getKeystoneLeaderboardPeriod(
-                $mostRecentSeason->start
-            ) : 0;
-
-            $result['minPeriod'] = $periodStart + $this->getWeeklyAffixGroups()->min();
-            $result['maxPeriod'] = $periodStart + $this->getWeeklyAffixGroups()->max();
+        if ($this->getMinPeriod() !== null && $this->getMaxPeriod() !== null) {
+            $result['minPeriod'] = $this->getMinPeriod();
+            $result['maxPeriod'] = $this->getMaxPeriod();
         }
 
         return $result;
@@ -203,8 +206,12 @@ class HeatmapDataFilter implements Arrayable
             $heatmapDataFilter->setAffixes(Affix::whereIn('id', $requestArray['affixes'])->get());
         }
 
-        if (isset($requestArray['weekly_affix_groups'])) {
-            $heatmapDataFilter->setWeeklyAffixGroups(collect($requestArray['weekly_affix_groups']));
+        if (isset($requestArray['minPeriod']) && (int)$requestArray['minPeriod'] > 0) {
+            $heatmapDataFilter->setMinPeriod($requestArray['minPeriod']);
+        }
+
+        if (isset($requestArray['maxPeriod']) && (int)$requestArray['maxPeriod'] > 0) {
+            $heatmapDataFilter->setMaxPeriod($requestArray['maxPeriod']);
         }
 
         return $heatmapDataFilter;

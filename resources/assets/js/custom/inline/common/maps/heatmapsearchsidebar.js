@@ -24,14 +24,14 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
                 // Make sure that if we select week 1 and 7, we select all weeks in between as well
                 let $select = $(self.options.filterWeeklyAffixGroupsSelector);
                 let val = $select.val();
-                let min = _.min(val), max = _.max(val);
+                let min = parseInt(val[0]), max = parseInt(val[val.length - 1]);
                 let weeks = [];
                 for (let i = min; i <= max; i++) {
                     weeks.push(i);
                 }
                 $select.val(weeks);
 
-                self._search.bind(self);
+                self._search();
             }),
             'duration': new SearchFilterDuration(this.options.filterDurationSelector, this._search.bind(this), this.options.durationMin, this.options.durationMax),
         };

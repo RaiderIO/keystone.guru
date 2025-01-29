@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Log;
  * @property string                    $name Dynamic attribute
  * @property string                    $name_med Dynamic attribute
  * @property string                    $name_long Dynamic attribute
+ * @property int                       $start_period Dynamic attribute
  *
  * @property Expansion                 $expansion
  *
@@ -98,7 +99,7 @@ class Season extends CacheModel
 
     public $timestamps = false;
 
-    protected $appends = ['name', 'name_long'];
+    protected $appends = ['name', 'name_long', 'start_period'];
 
     protected $casts = [
         'start'         => 'datetime',
@@ -117,6 +118,11 @@ class Season extends CacheModel
     public function getNameLongAttribute(): string
     {
         return __('seasons.name_long', ['expansion' => __($this->expansion->name), 'season' => $this->index]);
+    }
+
+    public function getStartPeriodAttribute(): int
+    {
+        return GameServerRegion::getUserOrDefaultRegion()->getKeystoneLeaderboardPeriod($this->start);
     }
 
     public function expansion(): BelongsTo
