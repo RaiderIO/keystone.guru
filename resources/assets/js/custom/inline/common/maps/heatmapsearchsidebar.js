@@ -139,6 +139,10 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
                 );
 
                 $(self.options.searchResultSelector).css('visibility', 'visible');
+
+                if( json.hasOwnProperty('url') ) {
+                    console.log(json.url);
+                }
             },
         }, {
             dungeon_id: getState().getMapContext().getDungeon().id
