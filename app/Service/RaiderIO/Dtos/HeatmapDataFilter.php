@@ -178,14 +178,17 @@ class HeatmapDataFilter implements Arrayable
     public static function fromArray(array $requestArray): HeatmapDataFilter
     {
         $heatmapDataFilter = new HeatmapDataFilter(
-            dungeon: Dungeon::firstWhere('id', $requestArray['dungeon_id']),
-            eventType: CombatLogEventEventType::from($requestArray['event_type']),
-            dataType: CombatLogEventDataType::from($requestArray['data_type'])
+            dungeon: Dungeon::firstWhere('id', $requestArray['dungeonId']),
+            eventType: CombatLogEventEventType::from($requestArray['type']),
+            dataType: CombatLogEventDataType::from($requestArray['dataType'])
         );
 
-        if (isset($requestArray['level'])) {
-            [$levelMin, $levelMax] = explode(';', $requestArray['level']);
-            $heatmapDataFilter->setLevelMin((int)$levelMin)->setLevelMax((int)$levelMax);
+        if (isset($requestArray['minMythicLevel'])) {
+            $heatmapDataFilter->setLevelMin((int)$requestArray['minMythicLevel']);
+        }
+
+        if (isset($requestArray['maxMythicLevel'])) {
+            $heatmapDataFilter->setLevelMax((int)$requestArray['maxMythicLevel']);
         }
 
         if (isset($requestArray['duration'])) {

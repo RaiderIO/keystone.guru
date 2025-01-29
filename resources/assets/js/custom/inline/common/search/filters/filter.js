@@ -28,4 +28,21 @@ class SearchFilter {
     setValue(value) {
 
     }
+
+    /**
+     * Allows you to override the params that are sent to the server - instead of being hard coded
+     * to name => value.
+     */
+    getParamsOverride() {
+        return null;
+    }
+
+    /**
+     * Called whenever we have a params override, and we want to restore a value based on the URL params that were overridden
+     * @param name
+     * @param value
+     */
+    setValueOverride(name, value) {
+
+    }
 }

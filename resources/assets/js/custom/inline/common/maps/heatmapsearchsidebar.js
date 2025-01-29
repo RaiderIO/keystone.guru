@@ -16,8 +16,8 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         this._previousSearchParams = null;
 
         this.filters = {
-            'event_type': new SearchFilterRadioEventType(this.options.filterEventTypeContainerSelector, this.options.filterEventTypeSelector, this._search.bind(this)),
-            'data_type': new SearchFilterRadioDataType(this.options.filterDataTypeContainerSelector, this.options.filterDataTypeSelector, this._search.bind(this)),
+            'type': new SearchFilterRadioEventType(this.options.filterEventTypeContainerSelector, this.options.filterEventTypeSelector, this._search.bind(this)),
+            'dataType': new SearchFilterRadioDataType(this.options.filterDataTypeContainerSelector, this.options.filterDataTypeSelector, this._search.bind(this)),
             'level': new SearchFilterLevel(this.options.filterLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
             'affixes': new SearchFilterAffixes(this.options.filterAffixesSelector, this._search.bind(this)),
             'weekly_affix_groups': new SearchFilterWeeklyAffixGroups(this.options.filterWeeklyAffixGroupsSelector, function () {
@@ -161,8 +161,8 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
                 }
             },
         }, {
-            dungeon_id: getState().getMapContext().getDungeon().id
-        }, ['dungeon_id']);
+            dungeonId: getState().getMapContext().getDungeon().id
+        }, ['dungeonId']);
     }
 
     /**

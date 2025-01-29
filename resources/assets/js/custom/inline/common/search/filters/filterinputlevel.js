@@ -48,4 +48,23 @@ class SearchFilterLevel extends SearchFilterInput {
         this.levelHandler.update(min, max);
     }
 
+    getParamsOverride() {
+        let split = this.getValue().split(';');
+        return {
+            'minMythicLevel': split[0],
+            'maxMythicLevel': split[1],
+        }
+    }
+
+    setValueOverride(name, value) {
+        let split = this.getValue().split(';');
+
+        if (name === 'minMythicLevel') {
+            this.setValue(`${value};${split[1]}`);
+        } else if (name === 'maxMythicLevel') {
+            this.setValue(`${split[0]};${value}`);
+        } else {
+            console.error(`Invalid name ${name} for Level filter override`);
+        }
+    }
 }

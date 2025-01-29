@@ -28,7 +28,24 @@ class SearchInlineBase extends InlineCode {
         // Restore URL -> filters values
         for (let key in queryParams) {
             let filtersKey = key.replace('[]', '');
-            if (queryParams.hasOwnProperty(key) && this.filters.hasOwnProperty(filtersKey)) {
+            let valueAssigned = false;
+
+            // Check if we have a filter that claims this key by overriding it
+            for (let filterKey in this.filters) {
+                if (this.filters.hasOwnProperty(filterKey)) {
+                    let filter = this.filters[filterKey];
+                    let paramsOverride = filter.getParamsOverride();
+                    // Check if this filter wants to claim this key
+                    if (paramsOverride !== null && filter.getParamsOverride().hasOwnProperty(filtersKey)) {
+                        // It does! Set the value
+                        filter.setValueOverride(filtersKey, queryParams[key]);
+                        valueAssigned = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!valueAssigned && queryParams.hasOwnProperty(key) && this.filters.hasOwnProperty(filtersKey)) {
                 let value = queryParams[key];
 
                 this.filters[filtersKey].setValue(value);
