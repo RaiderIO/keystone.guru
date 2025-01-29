@@ -19,6 +19,9 @@ use Codeart\OpensearchLaravel\Search\SearchQueries\Types\Range;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
+/**
+ * This class is used as a filter to extract CombatLogEvents from Opensearch.
+ */
 class CombatLogEventFilter implements Arrayable
 {
     private ?int $levelMin = null;
@@ -284,8 +287,10 @@ class CombatLogEventFilter implements Arrayable
         $combatLogEventFilter->setLevelMax($heatmapDataFilter->getLevelMax());
         $combatLogEventFilter->setAffixes($heatmapDataFilter->getAffixes());
         $combatLogEventFilter->setWeeklyAffixGroups($heatmapDataFilter->getWeeklyAffixGroups());
-        $combatLogEventFilter->setDurationMin($heatmapDataFilter->getDurationMin());
-        $combatLogEventFilter->setDurationMax($heatmapDataFilter->getDurationMax());
+
+        $timerSeconds = $heatmapDataFilter->getDungeon()->currentMappingVersion->timer_max_seconds;
+        $combatLogEventFilter->setDurationMin(($heatmapDataFilter->getTimerFractionMin() * 60) / $timerSeconds);
+        $combatLogEventFilter->setDurationMax(($heatmapDataFilter->getTimerFractionMax() * 60) / $timerSeconds);
 
         return $combatLogEventFilter;
     }

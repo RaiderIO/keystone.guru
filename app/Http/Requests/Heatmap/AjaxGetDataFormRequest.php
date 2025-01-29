@@ -35,7 +35,8 @@ class AjaxGetDataFormRequest extends FormRequest
             'affixes.*'             => ['integer', Rule::exists(Affix::class, 'id')],
             'weekly_affix_groups'   => ['nullable', 'array'],
             'weekly_affix_groups.*' => ['integer'],
-            'duration'              => ['nullable', 'regex:/^\d*;\d*$/'],
+            'minTimerFraction'      => ['nullable', 'numeric'],
+            'maxTimerFraction'      => ['nullable', 'numeric'],
         ];
     }
 }

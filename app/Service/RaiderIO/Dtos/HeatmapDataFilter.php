@@ -23,9 +23,9 @@ class HeatmapDataFilter implements Arrayable
 
     private Collection $weeklyAffixGroups;
 
-    private ?int $durationMin = null;
+    private ?int $timerFractionMin = null;
 
-    private ?int $durationMax = null;
+    private ?int $timerFractionMax = null;
 
     public function __construct(
         private readonly Dungeon                 $dungeon,
@@ -106,26 +106,26 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
-    public function getDurationMin(): ?int
+    public function getTimerFractionMin(): ?int
     {
-        return $this->durationMin;
+        return $this->timerFractionMin;
     }
 
-    public function setDurationMin(?int $durationMin): HeatmapDataFilter
+    public function setTimerFractionMin(?int $timerFractionMin): HeatmapDataFilter
     {
-        $this->durationMin = $durationMin;
+        $this->timerFractionMin = $timerFractionMin;
 
         return $this;
     }
 
-    public function getDurationMax(): ?int
+    public function getTimerFractionMax(): ?int
     {
-        return $this->durationMax;
+        return $this->timerFractionMax;
     }
 
-    public function setDurationMax(?int $durationMax): HeatmapDataFilter
+    public function setTimerFractionMax(?int $timerFractionMAx): HeatmapDataFilter
     {
-        $this->durationMax = $durationMax;
+        $this->timerFractionMax = $timerFractionMAx;
 
         return $this;
     }
@@ -148,12 +148,12 @@ class HeatmapDataFilter implements Arrayable
             $result['maxMythicLevel'] = $this->getLevelMax();
         }
 
-        if ($this->getDurationMin() !== null) {
-            $result['minTimerFraction'] = ($this->getDurationMin() * 60) / $this->dungeon->currentMappingVersion->timer_max_seconds;
+        if ($this->getTimerFractionMin() !== null) {
+            $result['minTimerFraction'] = $this->getTimerFractionMin();
         }
 
-        if ($this->getDurationMax() !== null) {
-            $result['maxTimerFraction'] = ($this->getDurationMax() * 60) / $this->dungeon->currentMappingVersion->timer_max_seconds;
+        if ($this->getTimerFractionMax() !== null) {
+            $result['maxTimerFraction'] = $this->getTimerFractionMax();
         }
 
         if ($this->getAffixes()->isNotEmpty()) {
@@ -191,9 +191,12 @@ class HeatmapDataFilter implements Arrayable
             $heatmapDataFilter->setLevelMax((int)$requestArray['maxMythicLevel']);
         }
 
-        if (isset($requestArray['duration'])) {
-            [$durationMin, $durationMax] = explode(';', $requestArray['duration']);
-            $heatmapDataFilter->setDurationMin((int)$durationMin)->setDurationMax((int)$durationMax);
+        if (isset($requestArray['minTimerFraction'])) {
+            $heatmapDataFilter->setTimerFractionMin($requestArray['minTimerFraction']);
+        }
+
+        if (isset($requestArray['maxTimerFraction'])) {
+            $heatmapDataFilter->setTimerFractionMax($requestArray['maxTimerFraction']);
         }
 
         if (isset($requestArray['affixes'])) {

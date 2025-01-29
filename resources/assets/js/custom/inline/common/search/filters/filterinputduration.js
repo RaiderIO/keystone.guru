@@ -35,4 +35,38 @@ class SearchFilterDuration extends SearchFilterInput {
             to: value.split(';')[1],
         });
     }
+
+    getParamsOverride() {
+        let split = this.getValue().split(';');
+
+        // By default, include runs that go up to twice over time
+        let minTimerFraction = 0;
+        let maxTimerFraction = 2;
+
+        let timer = getState().getMapContext().getMappingVersion().timer_max_seconds;
+        if (timer > 0) {
+            minTimerFraction = (split[0] * 60) / timer;
+            maxTimerFraction = (split[1] * 60) / timer;
+        }
+
+        return {
+            'minTimerFraction': minTimerFraction,
+            'maxTimerFraction': maxTimerFraction,
+        }
+    }
+
+    setValueOverride(name, value) {
+        let split = this.getValue().split(';');
+
+        let timer = getState().getMapContext().getMappingVersion().timer_max_seconds;
+        let minutesValue = timer > 0 ? Math.floor((value * timer) / 60) : 0;
+
+        if (name === 'minTimerFraction') {
+            this.setValue(`${minutesValue};${split[1]}`);
+        } else if (name === 'maxTimerFraction') {
+            this.setValue(`${split[0]};${minutesValue}`);
+        } else {
+            console.error(`Invalid name ${name} for Level filter override`);
+        }
+    }
 }
