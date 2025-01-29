@@ -28,7 +28,7 @@ class SearchParams {
                         if (filter.options.array) {
                             this.params[`${name}[]`] = value;
                         } else {
-                            this.params[name] = value;
+                            this.params[name] = filter.options.csv && typeof value === 'object' ? value.join(',') : value;
                         }
                     }
                 }

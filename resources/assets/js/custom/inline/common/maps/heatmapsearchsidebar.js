@@ -9,6 +9,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         let self = this;
 
         this.sidebar = new Sidebar(options);
+        this.initializing = true;
 
         this._draggable = null;
 
@@ -19,8 +20,8 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'type': new SearchFilterRadioEventType(this.options.filterEventTypeContainerSelector, this.options.filterEventTypeSelector, this._search.bind(this)),
             'dataType': new SearchFilterRadioDataType(this.options.filterDataTypeContainerSelector, this.options.filterDataTypeSelector, this._search.bind(this)),
             'level': new SearchFilterLevel(this.options.filterLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
-            'affixes': new SearchFilterAffixes(this.options.filterAffixesSelector, this._search.bind(this)),
-            'weekly_affix_groups': new SearchFilterWeeklyAffixGroups(this.options.filterWeeklyAffixGroupsSelector, function () {
+            'includeAffixIds': new SearchFilterAffixes(this.options.filterAffixesSelector, this._search.bind(this)),
+            'weeklyAffixGroups': new SearchFilterWeeklyAffixGroups(this.options.filterWeeklyAffixGroupsSelector, function () {
                 // Make sure that if we select week 1 and 7, we select all weeks in between as well
                 let $select = $(self.options.filterWeeklyAffixGroupsSelector);
                 let val = $select.val();
@@ -133,6 +134,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             this.sidebar.showSidebar();
         }
 
+        this.initializing = false;
         this._search();
     }
 
@@ -145,6 +147,11 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
     _search(queryParameters, options) {
         console.assert(this instanceof CommonMapsHeatmapsearchsidebar, 'this is not a CommonMapsHeatmapsearchsidebar', this);
+
+        if (this.initializing) {
+            return;
+        }
+
         let self = this;
 
         super._search({
@@ -156,7 +163,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
                 $(self.options.searchResultSelector).css('visibility', 'visible');
 
-                if( json.hasOwnProperty('url') ) {
+                if (json.hasOwnProperty('url')) {
                     console.log(json.url);
                 }
             },

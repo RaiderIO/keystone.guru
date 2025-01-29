@@ -224,7 +224,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
                                         <div class="col px-xl-1">
                                             <div
                                                 class="select_icon class_icon affix_icon_{{ $affix->image_name }} selectable"
-                                                data-toggle="tooltip" data-id="{{ $affix->id }}"
+                                                data-toggle="tooltip" data-id="{{ $affix->affix_id }}"
                                                 title="{{ __($affix->description) }}"
                                                 style="height: 24px;">
                                             </div>

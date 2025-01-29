@@ -266,7 +266,7 @@ class CombatLogEventFilter implements Arrayable
 
         $combatLogEventFilter->setLevelMin($heatmapDataFilter->getLevelMin());
         $combatLogEventFilter->setLevelMax($heatmapDataFilter->getLevelMax());
-        $combatLogEventFilter->setAffixes($heatmapDataFilter->getAffixes());
+        $combatLogEventFilter->setAffixes($heatmapDataFilter->getIncludeAffixIds());
         $combatLogEventFilter->setPeriodMin($heatmapDataFilter->getMinPeriod());
         $combatLogEventFilter->setPeriodMax($heatmapDataFilter->getMaxPeriod());
 

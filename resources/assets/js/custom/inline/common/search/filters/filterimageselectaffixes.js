@@ -1,8 +1,6 @@
 class SearchFilterAffixes extends SearchFilterImageSelect {
     constructor(selector, onChange) {
-        super(selector, onChange, {
-            array: true,
-        });
+        super(selector, onChange);
     }
 
     getFilterHeaderText() {

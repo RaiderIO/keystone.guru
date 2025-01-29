@@ -26,17 +26,17 @@ class AjaxGetDataFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dungeonId'        => ['required', Rule::exists(Dungeon::class, 'id')],
-            'type'             => ['required', Rule::in(CombatLogEventEventType::cases())],
-            'dataType'         => ['required', Rule::in(CombatLogEventDataType::cases())],
-            'minMythicLevel'   => ['nullable', 'integer'],
-            'maxMythicLevel'   => ['nullable', 'integer'],
-            'affixes'          => ['nullable', 'array'],
-            'affixes.*'        => ['integer', Rule::exists(Affix::class, 'id')],
-            'minPeriod'        => ['nullable', 'integer'],
-            'maxPeriod'        => ['nullable', 'integer'],
-            'minTimerFraction' => ['nullable', 'numeric'],
-            'maxTimerFraction' => ['nullable', 'numeric'],
+            'dungeonId'         => ['required', Rule::exists(Dungeon::class, 'id')],
+            'type'              => ['required', Rule::in(CombatLogEventEventType::cases())],
+            'dataType'          => ['required', Rule::in(CombatLogEventDataType::cases())],
+            'minMythicLevel'    => ['nullable', 'integer'],
+            'maxMythicLevel'    => ['nullable', 'integer'],
+            'includeAffixIds'   => ['nullable', 'array'],
+            'includeAffixIds.*' => ['integer', Rule::exists(Affix::class, 'affix_id')],
+            'minPeriod'         => ['nullable', 'integer'],
+            'maxPeriod'         => ['nullable', 'integer'],
+            'minTimerFraction'  => ['nullable', 'numeric'],
+            'maxTimerFraction'  => ['nullable', 'numeric'],
         ];
     }
 }

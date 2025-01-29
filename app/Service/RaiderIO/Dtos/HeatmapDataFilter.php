@@ -19,7 +19,7 @@ class HeatmapDataFilter implements Arrayable
     private ?int $levelMax = null;
 
     /** @var Collection<Affix> */
-    private Collection $affixes;
+    private Collection $includeAffixIds;
 
     private ?int $minPeriod = null;
 
@@ -34,7 +34,7 @@ class HeatmapDataFilter implements Arrayable
         private readonly CombatLogEventEventType $eventType,
         private readonly CombatLogEventDataType  $dataType
     ) {
-        $this->affixes = collect();
+        $this->includeAffixIds = collect();
     }
 
     public function getDungeon(): Dungeon
@@ -79,18 +79,18 @@ class HeatmapDataFilter implements Arrayable
     /**
      * @return Collection<Affix>
      */
-    public function getAffixes(): Collection
+    public function getIncludeAffixIds(): Collection
     {
-        return $this->affixes;
+        return $this->includeAffixIds;
     }
 
     /**
-     * @param Collection<Affix> $affixes
+     * @param Collection<Affix> $includeAffixIds
      * @return HeatmapDataFilter
      */
-    public function setAffixes(Collection $affixes): HeatmapDataFilter
+    public function setIncludeAffixIds(Collection $includeAffixIds): HeatmapDataFilter
     {
-        $this->affixes = $affixes;
+        $this->includeAffixIds = $includeAffixIds;
 
         return $this;
     }
@@ -165,8 +165,8 @@ class HeatmapDataFilter implements Arrayable
             $result['maxTimerFraction'] = $this->getTimerFractionMax();
         }
 
-        if ($this->getAffixes()->isNotEmpty()) {
-            $result['includeAffixIds'] = implode(',', $this->getAffixes()->map(fn(Affix $affix) => $affix->affix_id)->toArray());
+        if ($this->getIncludeAffixIds()->isNotEmpty()) {
+            $result['includeAffixIds'] = implode(',', $this->getIncludeAffixIds()->map(fn(Affix $affix) => $affix->affix_id)->toArray());
         }
 
         if ($this->getMinPeriod() !== null && $this->getMaxPeriod() !== null) {
@@ -202,8 +202,8 @@ class HeatmapDataFilter implements Arrayable
             $heatmapDataFilter->setTimerFractionMax($requestArray['maxTimerFraction']);
         }
 
-        if (isset($requestArray['affixes'])) {
-            $heatmapDataFilter->setAffixes(Affix::whereIn('id', $requestArray['affixes'])->get());
+        if (isset($requestArray['includeAffixIds'])) {
+            $heatmapDataFilter->setIncludeAffixIds(Affix::whereIn('affix_id', $requestArray['includeAffixIds'])->get());
         }
 
         if (isset($requestArray['minPeriod']) && (int)$requestArray['minPeriod'] > 0) {
