@@ -93,7 +93,7 @@ use Illuminate\Support\Collection;
                     'pulls' => false,
                     'enemyInfo' => $embedOptions['show']['enemyInfo'],
                     'title' => $embedOptions['show']['enemyInfo'],
-                    'heatmapSearch' => true,
+                    'heatmapSearch' => $showHeatmapSearch,
                     'heatmapSearchDefaultState' => false,
                 ],
             ],

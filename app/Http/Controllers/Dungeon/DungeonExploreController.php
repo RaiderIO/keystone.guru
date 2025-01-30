@@ -109,18 +109,9 @@ class DungeonExploreController extends Controller
                 ]);
             }
 
-            $combatLogEventFilter = new CombatLogEventFilter(
-                $seasonService,
-                $dungeon,
-                CombatLogEventEventType::NpcDeath,
-                CombatLogEventDataType::PlayerPosition,
-            );
-
             $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
 
-            $heatmapActive = Feature::active(Heatmap::class) &&
-                $dungeon->gameVersion->has_seasons &&
-                $dungeon->challenge_mode_id !== null;
+            $heatmapActive = Feature::active(Heatmap::class) && $dungeon->heatmap_enabled;
 
             $dungeon->trackPageView();
 
@@ -208,6 +199,8 @@ class DungeonExploreController extends Controller
 
             $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
 
+            $heatmapActive = Feature::active(Heatmap::class) && $dungeon->heatmap_enabled;
+
             return view('dungeon.explore.gameversion.embed', [
                 'gameVersion'             => $gameVersion,
                 'season'                  => $mostRecentSeason,
@@ -215,6 +208,7 @@ class DungeonExploreController extends Controller
                 'floor'                   => $floor,
                 'title'                   => __($dungeon->name),
                 'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
+                'showHeatmapSearch'       => $heatmapActive,
                 'keyLevelMin'             => $mostRecentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
                 'keyLevelMax'             => $mostRecentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
                 'itemLevelMin'            => $mostRecentSeason?->item_level_min ?? 0,
