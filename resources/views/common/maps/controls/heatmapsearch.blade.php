@@ -23,6 +23,10 @@ use Illuminate\Support\Collection;
  * @var Collection<Affix>            $featuredAffixesByActiveExpansion
  * @var int                          $keyLevelMin
  * @var int                          $keyLevelMax
+ * @var int                          $itemLevelMin
+ * @var int                          $itemLevelMax
+ * @var int                          $playerDeathsMin
+ * @var int                          $playerDeathsMax
  * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
  */
 
@@ -34,6 +38,8 @@ $heatmapSearchEnabled      = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
 $filterExpandedCookiePrefix = 'heatmap_search_expanded';
 $expandedDataType           = (bool)($_COOKIE[sprintf('%s_data_type', $filterExpandedCookiePrefix)] ?? 0); // Hide by default
 $expandedKeyLevel           = (bool)($_COOKIE[sprintf('%s_key_level', $filterExpandedCookiePrefix)] ?? 1);
+$expandedItemLevel          = (bool)($_COOKIE[sprintf('%s_item_level', $filterExpandedCookiePrefix)] ?? 1);
+$expandedPlayerDeaths       = (bool)($_COOKIE[sprintf('%s_player_deaths', $filterExpandedCookiePrefix)] ?? 1);
 $expandedAffixes            = (bool)($_COOKIE[sprintf('%s_affixes', $filterExpandedCookiePrefix)] ?? 1);
 $expandedAffixWeek          = (bool)($_COOKIE[sprintf('%s_weekly_affix_groups', $filterExpandedCookiePrefix)] ?? 1);
 $expandedDuration           = (bool)($_COOKIE[sprintf('%s_duration', $filterExpandedCookiePrefix)] ?? 1);
@@ -57,6 +63,10 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
 
     'keyLevelMin' => $keyLevelMin,
     'keyLevelMax' => $keyLevelMax,
+    'itemLevelMin' => $itemLevelMin,
+    'itemLevelMax' => $itemLevelMax,
+    'playerDeathsMin' => $playerDeathsMin,
+    'playerDeathsMax' => $playerDeathsMax,
     'durationMin' => 5,
     'durationMax' => 60,
 
@@ -66,7 +76,9 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
     'filterEventTypeSelector' => 'input[name="event_type"]',
     'filterDataTypeContainerSelector' => '#filter_data_type_container',
     'filterDataTypeSelector' => 'input[name="data_type"]',
-    'filterLevelSelector' => '#filter_level',
+    'filterKeyLevelSelector' => '#filter_key_level',
+    'filterItemLevelSelector' => '#filter_item_level',
+    'filterPlayerDeathsSelector' => '#filter_player_deaths',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
     'filterWeeklyAffixGroupsSelector' => '#filter_weekly_affix_groups',
     'filterDurationSelector' => '#filter_duration',
@@ -168,7 +180,8 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
                             <input type="radio" name="event_type"
                                    class="{{ CombatLogEventEventType::SpellCast->value }}"
                                    value="{{ CombatLogEventEventType::SpellCast->value }}">
-                            <img src="{{ url('images/heatmap/bloodlust_smaller.png') }}" alt="{{ __('view_common.maps.controls.heatmapsearch.bloodlust_alt') }}">
+                            <img src="{{ url('images/heatmap/bloodlust_smaller.png') }}"
+                                 alt="{{ __('view_common.maps.controls.heatmapsearch.bloodlust_alt') }}">
                             {{ __('combatlogeventtypes.spell_cast') }}
                         </label>
                     </div>
@@ -198,8 +211,17 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
                     </div>
                 @endcomponent
 
-                @component('common.search.filter', ['key' => 'level', 'text' => __('view_common.maps.controls.heatmapsearch.key_level'), 'expanded' => $expandedKeyLevel])
-                    <input id="filter_level" type="text" name="level" value="{{ old('level') }}"/>
+                @component('common.search.filter', ['key' => 'key_level', 'text' => __('view_common.maps.controls.heatmapsearch.key_level'), 'expanded' => $expandedKeyLevel])
+                    <input id="filter_key_level" type="text" name="key_level" value="{{ old('key_level') }}"/>
+                @endcomponent
+
+                @component('common.search.filter', ['key' => 'item_level', 'text' => __('view_common.maps.controls.heatmapsearch.item_level'), 'expanded' => $expandedItemLevel])
+                    <input id="filter_item_level" type="text" name="item_level" value="{{ old('item_level') }}"/>
+                @endcomponent
+
+                @component('common.search.filter', ['key' => 'player_deaths', 'text' => __('view_common.maps.controls.heatmapsearch.player_deaths'), 'expanded' => $expandedPlayerDeaths])
+                    <input id="filter_player_deaths" type="text" name="player_deaths"
+                           value="{{ old('player_deaths') }}"/>
                 @endcomponent
 
                 @if($dungeon->gameVersion->has_seasons)
@@ -273,7 +295,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
                                 </label>
                             </div>
                             <div class="col">
-                                <input id="heatmap_heat_option_min_opacity" type="text" name="min_opacity"/>
+                                <input id="heatmap_heat_option_min_opacity" type="text" name="min_opacity" value="0.1"/>
                             </div>
                         </div>
 
@@ -306,7 +328,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
                                 </label>
                             </div>
                             <div class="col">
-                                <input id="heatmap_heat_option_radius" type="text" name="radius" value="25"/>
+                                <input id="heatmap_heat_option_radius" type="text" name="radius" value="35"/>
                             </div>
                         </div>
 

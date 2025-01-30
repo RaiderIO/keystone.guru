@@ -1,9 +1,9 @@
-class SearchFilterLevel extends SearchFilterInput {
-    constructor(selector, onChange, levelMin, levelMax) {
+class SearchFilterItemLevel extends SearchFilterInput {
+    constructor(selector, onChange, itemLevelMin, itemLevelMax) {
         super(selector, onChange);
 
-        this.levelMin = levelMin;
-        this.levelMax = levelMax;
+        this.itemLevelMin = itemLevelMin;
+        this.itemLevelMax = itemLevelMax;
         this.levelHandler = null;
     }
 
@@ -13,7 +13,7 @@ class SearchFilterLevel extends SearchFilterInput {
         let self = this;
 
         // Level
-        (this.levelHandler = new LevelHandler(this.levelMin, this.levelMax)).apply(this.selector, {
+        (this.levelHandler = new ItemLevelHandler(this.itemLevelMin, this.itemLevelMax)).apply(this.selector, {
             onFinish: function () {
                 self.onChange();
             }
@@ -21,7 +21,7 @@ class SearchFilterLevel extends SearchFilterInput {
     }
 
     getFilterHeaderText() {
-        return lang.get('messages.filter_input_level_header')
+        return lang.get('messages.filter_input_item_level_header')
             .replace(':value', this.getValue().replace(';', ' - '));
     }
 
@@ -41,9 +41,9 @@ class SearchFilterLevel extends SearchFilterInput {
      * @param min {Number}
      * @param max {Number}
      */
-    setLevel(min, max) {
-        this.levelMin = min;
-        this.levelMax = max;
+    setItemLevel(min, max) {
+        this.itemLevelMin = min;
+        this.itemLevelMax = max;
 
         this.levelHandler.update(min, max);
     }
@@ -51,20 +51,20 @@ class SearchFilterLevel extends SearchFilterInput {
     getParamsOverride() {
         let split = this.getValue().split(';');
         return {
-            'minMythicLevel': split[0],
-            'maxMythicLevel': split[1],
+            'minItemLevel': split[0],
+            'maxItemLevel': split[1],
         }
     }
 
     setValueOverride(name, value) {
         let split = this.getValue().split(';');
 
-        if (name === 'minMythicLevel') {
+        if (name === 'minItemLevel') {
             this.setValue(`${value};${split[1]}`);
-        } else if (name === 'maxMythicLevel') {
+        } else if (name === 'maxItemLevel') {
             this.setValue(`${split[0]};${value}`);
         } else {
-            console.error(`Invalid name ${name} for Level filter override`);
+            console.error(`Invalid name ${name} for Item level filter override`);
         }
     }
 }

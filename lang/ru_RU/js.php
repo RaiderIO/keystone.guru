@@ -432,7 +432,7 @@ return [
     'filter_image_select_dungeons_header'                                  => 'Подземелье: :number выбрано',
     'filter_image_select_weekly_affix_groups_header'                       => '',
     'filter_input_affix_group_header'                                      => 'Группы аффиксов: :number выбрано',
-    'filter_input_level_header'                                            => 'Уровень: :value',
+    'filter_input_key_level_header' => 'Уровень: :value',
     'filter_input_rating_header'                                           => 'Рейтинг: :value и выше',
     'filter_input_title_header'                                            => 'Название: :value',
     'filter_input_expansion_header'                                        => 'Дополнение: :value',

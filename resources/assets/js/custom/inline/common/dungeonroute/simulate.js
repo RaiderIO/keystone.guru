@@ -7,7 +7,7 @@
  */
 
 /**
- * @property {DungeonMapOptions} options
+ * @property {SimulateOptions} options
  */
 class CommonDungeonrouteSimulate extends InlineCode {
     /**

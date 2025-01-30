@@ -1,6 +1,63 @@
+/**
+ * @typedef {Object} HeatmapSearchOptions
+ * @property {String} stateCookie
+ * @property {Number} defaultState
+ * @property {Boolean} hideOnMove
+ * @property {String} currentFiltersSelector
+ * @property {String} loaderSelector
+ * @property {String} searchResultSelector
+ * @property {String} searchResultDataDungeonRoutesSelector
+ *
+ * @property {String} keyLevelSelector
+ * @property {Number} keyLevelMin
+ * @property {Number} keyLevelMax
+ * @property {Number} itemLevelMin
+ * @property {Number} itemLevelMax
+ * @property {Number} playerDeathsMin
+ * @property {Number} playerDeathsMax
+ * @property {Number} durationMin
+ * @property {Number} durationMax
+ *
+ * @property {String} enabledStateCookie
+ * @property {String} enabledStateSelector
+ *
+ * @property {String} filterEventTypeContainerSelector
+ * @property {String} filterEventTypeSelector
+ * @property {String} filterDataTypeContainerSelector
+ * @property {String} filterDataTypeSelector
+ * @property {String} filterKeyLevelSelector
+ * @property {String} filterItemLevelSelector
+ * @property {String} filterPlayerDeathsSelector
+ * @property {String} filterAffixesSelector
+ * @property {String} filterWeeklyAffixGroupsSelector
+ * @property {String} filterDurationSelector
+ *
+ * @property {String} filterCollapseNames
+ * @property {String} filterCookiePrefix
+ *
+ * @property {String} leafletHeatOptionsMinOpacitySelector
+ * @property {String} leafletHeatOptionsMaxZoomSelector
+ * @property {String} leafletHeatOptionsMaxSelector
+ * @property {String} leafletHeatOptionsRadiusSelector
+ * @property {String} leafletHeatOptionsBlurSelector
+ * @property {String} leafletHeatOptionsGradientSelector
+ * @property {String} leafletHeatOptionsPaneSelector
+ *
+ * @property {String} sidebarSelector
+ * @property {String} sidebarToggleSelector
+ * @property {String} sidebarScrollSelector
+ * @property {String} anchor
+ * @property {String} edit
+ *
+ * @property {String[]} filterCollapseNames
+ *
+ *
+ */
+
+/**
+ * @property {HeatmapSearchOptions} options
+ */
 class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
-
-
     constructor(options) {
         super(new SearchHandlerHeatmap($.extend({}, {
             loaderSelector: options.loaderSelector,
@@ -19,7 +76,9 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         this.filters = {
             'type': new SearchFilterRadioEventType(this.options.filterEventTypeContainerSelector, this.options.filterEventTypeSelector, this._search.bind(this)),
             'dataType': new SearchFilterRadioDataType(this.options.filterDataTypeContainerSelector, this.options.filterDataTypeSelector, this._search.bind(this)),
-            'level': new SearchFilterLevel(this.options.filterLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
+            'keyLevel': new SearchFilterKeyLevel(this.options.filterKeyLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
+            'itemLevel': new SearchFilterItemLevel(this.options.filterItemLevelSelector, this._search.bind(this), this.options.itemLevelMin, this.options.itemLevelMax),
+            'playerDeaths': new SearchFilterPlayerDeaths(this.options.filterPlayerDeathsSelector, this._search.bind(this), this.options.playerDeathsMin, this.options.playerDeathsMax),
             'includeAffixIds': new SearchFilterAffixes(this.options.filterAffixesSelector, this._search.bind(this)),
             'weeklyAffixGroups': new SearchFilterWeeklyAffixGroups(this.options.filterWeeklyAffixGroupsSelector, function () {
                 // Make sure that if we select week 1 and 7, we select all weeks in between as well

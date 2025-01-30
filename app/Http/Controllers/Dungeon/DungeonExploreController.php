@@ -134,6 +134,10 @@ class DungeonExploreController extends Controller
                 'showHeatmapSearch'       => $heatmapActive,
                 'keyLevelMin'             => $mostRecentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
                 'keyLevelMax'             => $mostRecentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+                'itemLevelMin'            => $mostRecentSeason?->item_level_min ?? 0,
+                'itemLevelMax'            => $mostRecentSeason?->item_level_max ?? 0,
+                'playerDeathsMin'         => 0,
+                'playerDeathsMax'         => 50,
                 'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons ?
                     $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
@@ -213,6 +217,10 @@ class DungeonExploreController extends Controller
                 'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
                 'keyLevelMin'             => $mostRecentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
                 'keyLevelMax'             => $mostRecentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+                'itemLevelMin'            => $mostRecentSeason?->item_level_min ?? 0,
+                'itemLevelMax'            => $mostRecentSeason?->item_level_max ?? 0,
+                'playerDeathsMin'         => 0,
+                'playerDeathsMax'         => 50,
                 'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons ?
                     $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),

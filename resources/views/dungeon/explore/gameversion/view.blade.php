@@ -8,13 +8,17 @@ use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 
 /**
- * @var Dungeon $dungeon
- * @var Floor $floor
- * @var string $title
- * @var MapContext $mapContext
- * @var boolean $showHeatmapSearch
- * @var int $keyLevelMin
- * @var int $keyLevelMax
+ * @var Dungeon                      $dungeon
+ * @var Floor                        $floor
+ * @var string                       $title
+ * @var MapContext                   $mapContext
+ * @var boolean                      $showHeatmapSearch
+ * @var int                          $keyLevelMin
+ * @var int                          $keyLevelMax
+ * @var int                          $itemLevelMin
+ * @var int                          $itemLevelMax
+ * @var int                          $playerDeathsMin
+ * @var int                          $playerDeathsMax
  * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
  */
 ?>
@@ -52,6 +56,10 @@ use Illuminate\Support\Collection;
                 'heatmapSearch' => [
                     'keyLevelMin' => $keyLevelMin,
                     'keyLevelMax' => $keyLevelMax,
+                    'itemLevelMin' => $itemLevelMin,
+                    'itemLevelMax' => $itemLevelMax,
+                    'playerDeathsMin' => $playerDeathsMin,
+                    'playerDeathsMax' => $playerDeathsMax,
                     'seasonWeeklyAffixGroups' => $seasonWeeklyAffixGroups,
                 ],
             ],

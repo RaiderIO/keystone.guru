@@ -24,20 +24,19 @@ use Illuminate\Support\Collection;
  */
 class CombatLogEventFilter implements Arrayable
 {
-    private ?int $levelMin = null;
-
-    private ?int $levelMax = null;
+    private ?int $keyLevelMin     = null;
+    private ?int $keyLevelMax     = null;
+    private ?int $itemLevelMin    = null;
+    private ?int $itemLevelMax    = null;
+    private ?int $playerDeathsMin = null;
+    private ?int $playerDeathsMax = null;
 
     /** @var Collection<Affix> */
     private Collection $affixes;
-
-    private ?int $periodMin = null;
-
-    private ?int $periodMax = null;
-
-    private ?int $durationMin = null;
-
-    private ?int $durationMax = null;
+    private ?int       $periodMin   = null;
+    private ?int       $periodMax   = null;
+    private ?int       $durationMin = null;
+    private ?int       $durationMax = null;
 
     public function __construct(
         private readonly SeasonServiceInterface  $seasonService,
@@ -63,26 +62,74 @@ class CombatLogEventFilter implements Arrayable
         return $this->dataType;
     }
 
-    public function getLevelMin(): ?int
+    public function getKeyLevelMin(): ?int
     {
-        return $this->levelMin;
+        return $this->keyLevelMin;
     }
 
-    public function setLevelMin(?int $levelMin): CombatLogEventFilter
+    public function setKeyLevelMin(?int $keyLevelMin): CombatLogEventFilter
     {
-        $this->levelMin = $levelMin;
+        $this->keyLevelMin = $keyLevelMin;
 
         return $this;
     }
 
-    public function getLevelMax(): ?int
+    public function getKeyLevelMax(): ?int
     {
-        return $this->levelMax;
+        return $this->keyLevelMax;
     }
 
-    public function setLevelMax(?int $levelMax): CombatLogEventFilter
+    public function setKeyLevelMax(?int $keyLevelMax): CombatLogEventFilter
     {
-        $this->levelMax = $levelMax;
+        $this->keyLevelMax = $keyLevelMax;
+
+        return $this;
+    }
+
+    public function getItemLevelMin(): ?int
+    {
+        return $this->itemLevelMin;
+    }
+
+    public function setItemLevelMin(?int $itemLevelMin): CombatLogEventFilter
+    {
+        $this->itemLevelMin = $itemLevelMin;
+
+        return $this;
+    }
+
+    public function getItemLevelMax(): ?int
+    {
+        return $this->itemLevelMax;
+    }
+
+    public function setItemLevelMax(?int $itemLevelMax): CombatLogEventFilter
+    {
+        $this->itemLevelMax = $itemLevelMax;
+
+        return $this;
+    }
+
+    public function getPlayerDeathsMin(): ?int
+    {
+        return $this->playerDeathsMin;
+    }
+
+    public function setPlayerDeathsMin(?int $playerDeathsMin): CombatLogEventFilter
+    {
+        $this->playerDeathsMin = $playerDeathsMin;
+
+        return $this;
+    }
+
+    public function getPlayerDeathsMax(): ?int
+    {
+        return $this->playerDeathsMax;
+    }
+
+    public function setPlayerDeathsMax(?int $playerDeathsMax): CombatLogEventFilter
+    {
+        $this->playerDeathsMax = $playerDeathsMax;
 
         return $this;
     }
@@ -156,8 +203,12 @@ class CombatLogEventFilter implements Arrayable
             'challenge_mode_id' => $this->dungeon->challenge_mode_id,
             'event_type'        => $this->eventType->value,
             'data_type'         => $this->dataType,
-            'level_min'         => $this->levelMin,
-            'level_max'         => $this->levelMax,
+            'key_level_min'     => $this->keyLevelMin,
+            'key_level_max'     => $this->keyLevelMax,
+            'item_level_min'    => $this->itemLevelMin,
+            'item_level_max'    => $this->itemLevelMax,
+            'player_deaths_min' => $this->playerDeathsMin,
+            'player_deaths_max' => $this->playerDeathsMax,
             'affixes'           => $this->affixes->map(function (Affix $affix) {
                 return __($affix->name, [], 'en_US');
             }),
@@ -194,10 +245,24 @@ class CombatLogEventFilter implements Arrayable
 //            ]),
 //        ]);
 
-        if ($this->levelMin !== null && $this->levelMax !== null) {
+        if ($this->keyLevelMin !== null && $this->keyLevelMax !== null) {
             $must[] = Range::make('level', [
-                'gte' => $this->levelMin,
-                'lte' => $this->levelMax,
+                'gte' => $this->keyLevelMin,
+                'lte' => $this->keyLevelMax,
+            ]);
+        }
+
+        if ($this->itemLevelMin !== null && $this->itemLevelMax !== null) {
+            $must[] = Range::make('average_item_level', [
+                'gte' => $this->keyLevelMin,
+                'lte' => $this->keyLevelMax,
+            ]);
+        }
+
+        if ($this->playerDeathsMin !== null && $this->playerDeathsMax !== null) {
+            $must[] = Range::make('num_deaths', [
+                'gte' => $this->playerDeathsMin,
+                'lte' => $this->playerDeathsMax,
             ]);
         }
 
@@ -264,8 +329,12 @@ class CombatLogEventFilter implements Arrayable
             $heatmapDataFilter->getDataType()
         );
 
-        $combatLogEventFilter->setLevelMin($heatmapDataFilter->getLevelMin());
-        $combatLogEventFilter->setLevelMax($heatmapDataFilter->getLevelMax());
+        $combatLogEventFilter->setKeyLevelMin($heatmapDataFilter->getKeyLevelMin());
+        $combatLogEventFilter->setKeyLevelMax($heatmapDataFilter->getKeyLevelMax());
+        $combatLogEventFilter->setItemLevelMin($heatmapDataFilter->getItemLevelMin());
+        $combatLogEventFilter->setItemLevelMax($heatmapDataFilter->getItemLevelMax());
+        $combatLogEventFilter->setPlayerDeathsMin($heatmapDataFilter->getPlayerDeathsMin());
+        $combatLogEventFilter->setPlayerDeathsMax($heatmapDataFilter->getPlayerDeathsMax());
         $combatLogEventFilter->setAffixes($heatmapDataFilter->getIncludeAffixIds());
         $combatLogEventFilter->setPeriodMin($heatmapDataFilter->getMinPeriod());
         $combatLogEventFilter->setPeriodMax($heatmapDataFilter->getMaxPeriod());

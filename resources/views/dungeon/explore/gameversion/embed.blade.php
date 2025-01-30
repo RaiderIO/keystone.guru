@@ -16,6 +16,10 @@ use Illuminate\Support\Collection;
  * @var boolean                      $showHeatmapSearch
  * @var int                          $keyLevelMin
  * @var int                          $keyLevelMax
+ * @var int                          $itemLevelMin
+ * @var int                          $itemLevelMax
+ * @var int                          $playerDeathsMin
+ * @var int                          $playerDeathsMax
  * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
  * @var array                        $embedOptions
  * @var array                        $parameters
@@ -75,6 +79,10 @@ use Illuminate\Support\Collection;
                 'heatmapSearch' => [
                     'keyLevelMin' => $keyLevelMin,
                     'keyLevelMax' => $keyLevelMax,
+                    'itemLevelMin' => $itemLevelMin,
+                    'itemLevelMax' => $itemLevelMax,
+                    'playerDeathsMin' => $playerDeathsMin,
+                    'playerDeathsMax' => $playerDeathsMax,
                     'seasonWeeklyAffixGroups' => $seasonWeeklyAffixGroups,
                 ],
             ],

@@ -1086,7 +1086,7 @@ js,filter_enemy_forces_header_complete,Enemy forces: complete,,,,,,,Отряд �
 js,filter_image_select_affixes_header,Affixes: :number selected,,,,,,,Аффиксы: :number выбрано,,
 js,filter_image_select_dungeons_header,Dungeons: :number selected,,,,,,,Подземелье: :number выбрано,,
 js,filter_input_affix_group_header,Affix groups: :number selected,,,,,,,Группы аффиксов: :number выбрано,,
-js,filter_input_level_header,Level: :value,,,,,,,Уровень: :value,,
+js,filter_input_key_level_header,Level: :value,,,,,,,Уровень: :value,,
 js,filter_input_rating_header,Rating: :value and higher,,,,,,,Рейтинг: :value и выше,,
 js,filter_input_title_header,Title: :value,,,,,,,Название: :value,,
 js,filter_input_expansion_header,Expansion: :value,,,,,,,Дополнение: :value,,

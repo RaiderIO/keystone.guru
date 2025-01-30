@@ -1,4 +1,4 @@
-class LevelHandler {
+class KeyLevelHandler {
     constructor(min, max) {
         this.min = min;
         this.max = max;

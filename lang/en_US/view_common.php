@@ -325,6 +325,8 @@ return [
                 'filter'                    => 'Filter',
                 'loading'                   => 'Loading',
                 'key_level'                 => 'Key level',
+                'item_level'    => 'Item level',
+                'player_deaths' => 'Player deaths',
                 'affixes'                   => 'Affixes',
                 'affixes_title'             => 'Affixes',
                 'affixes_selected'          => '{0} affixes selected',
