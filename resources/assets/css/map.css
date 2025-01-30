@@ -1323,3 +1323,9 @@ html, body, #map, #app, .wrapper {
 .spells_row {
     font-size: 12px;
 }
+
+/** Heatmap **/
+.filter_event_type_icon {
+    width: 16px;
+    height: 16px;
+}
