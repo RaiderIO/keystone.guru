@@ -4,7 +4,7 @@ namespace App\Models\CombatLog;
 
 enum CombatLogEventEventType: string
 {
-    case EnemyKilled = 'enemy_killed';
+    case NpcDeath    = 'npc_death';
     case PlayerDeath = 'player_death';
-    case SpellCast   = 'spell_cast';
+    case PlayerSpell = 'player_spell';
 }

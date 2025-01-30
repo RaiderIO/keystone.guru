@@ -21,7 +21,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 {
     use CreatesCombatLogEvent;
 
-    const EVENT_TYPE = CombatLogEventEventType::EnemyKilled;
+    const EVENT_TYPE = CombatLogEventEventType::NpcDeath;
     const DATA_TYPE = CombatLogEventDataType::PlayerPosition;
 
     /**

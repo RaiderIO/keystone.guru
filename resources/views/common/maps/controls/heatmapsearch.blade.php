@@ -83,7 +83,7 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
     'filterWeeklyAffixGroupsSelector' => '#filter_weekly_affix_groups',
     'filterDurationSelector' => '#filter_duration',
 
-    'filterCollapseNames' => ['level', 'affixes', 'duration'],
+    'filterCollapseNames' => ['keyLevel', 'includeAffixIds', 'duration'],
     'filterCookiePrefix' => $filterExpandedCookiePrefix,
 
     'leafletHeatOptionsMinOpacitySelector' => '#heatmap_heat_option_min_opacity',
@@ -165,10 +165,10 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
                          data-toggle="buttons">
                         <label class="btn btn-secondary active">
                             <input type="radio" name="event_type"
-                                   class="{{ CombatLogEventEventType::EnemyKilled->value }}"
-                                   value="{{ CombatLogEventEventType::EnemyKilled->value }}"
+                                   class="{{ CombatLogEventEventType::NpcDeath->value }}"
+                                   value="{{ CombatLogEventEventType::NpcDeath->value }}"
                                    checked>
-                            <i class="fas fa-users"></i> {{ __('combatlogeventtypes.enemy_killed') }}
+                            <i class="fas fa-users"></i> {{ __('combatlogeventtypes.npc_death') }}
                         </label>
                         <label class="btn btn-secondary">
                             <input type="radio" name="event_type"
@@ -178,11 +178,11 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
                         </label>
                         <label class="btn btn-secondary">
                             <input type="radio" name="event_type"
-                                   class="{{ CombatLogEventEventType::SpellCast->value }}"
-                                   value="{{ CombatLogEventEventType::SpellCast->value }}">
+                                   class="{{ CombatLogEventEventType::PlayerSpell->value }}"
+                                   value="{{ CombatLogEventEventType::PlayerSpell->value }}">
                             <img src="{{ url('images/heatmap/bloodlust_smaller.png') }}"
                                  alt="{{ __('view_common.maps.controls.heatmapsearch.bloodlust_alt') }}">
-                            {{ __('combatlogeventtypes.spell_cast') }}
+                            {{ __('combatlogeventtypes.player_spell') }}
                         </label>
                     </div>
                 </div>

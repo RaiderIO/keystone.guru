@@ -112,7 +112,7 @@ class DungeonExploreController extends Controller
             $combatLogEventFilter = new CombatLogEventFilter(
                 $seasonService,
                 $dungeon,
-                CombatLogEventEventType::EnemyKilled,
+                CombatLogEventEventType::NpcDeath,
                 CombatLogEventDataType::PlayerPosition,
             );
 

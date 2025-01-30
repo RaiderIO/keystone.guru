@@ -1,7 +1,7 @@
 <?php
 
 return [
+    'npc_death'    => 'Enemy death',
     'player_death' => 'Player death',
-    'enemy_killed' => 'Enemy killed',
-    'spell_cast'   => 'Bloodlust casts',
+    'player_spell' => 'Bloodlust casts',
 ];
