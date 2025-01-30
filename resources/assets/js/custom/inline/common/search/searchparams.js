@@ -14,6 +14,10 @@ class SearchParams {
             if (this.filters.hasOwnProperty(name)) {
                 let filter = this.filters[name];
 
+                if (!filter.isEnabled()) {
+                    continue;
+                }
+
                 let paramsOverride = filter.getParamsOverride();
                 if (paramsOverride !== null && paramsOverride.length !== null) {
                     for (let key in paramsOverride) {

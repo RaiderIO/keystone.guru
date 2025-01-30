@@ -3,10 +3,19 @@ class SearchFilter {
         this.selector = selector;
         this.onChange = onChange;
         this.options = options;
+        this.enabled = true;
     }
 
     activate() {
 
+    }
+
+    toggle(enabled) {
+        this.enabled = enabled;
+    }
+
+    isEnabled() {
+        return this.enabled;
     }
 
     getFilterHeaderText() {

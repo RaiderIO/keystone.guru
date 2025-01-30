@@ -74,7 +74,15 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         this._previousSearchParams = null;
 
         this.filters = {
-            'type': new SearchFilterRadioEventType(this.options.filterEventTypeContainerSelector, this.options.filterEventTypeSelector, this._search.bind(this)),
+            'type': new SearchFilterRadioEventType(this.options.filterEventTypeContainerSelector, this.options.filterEventTypeSelector, function () {
+                let $this = $(`${self.options.filterEventTypeSelector}:checked`);
+
+                let enabled = $this.val() === COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH;
+                $(self.options.filterDataTypeContainerSelector).toggle(enabled);
+                self.filters['dataType'].toggle(enabled);
+
+                self._search();
+            }),
             'dataType': new SearchFilterRadioDataType(this.options.filterDataTypeContainerSelector, this.options.filterDataTypeSelector, this._search.bind(this)),
             'keyLevel': new SearchFilterKeyLevel(this.options.filterKeyLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
             'itemLevel': new SearchFilterItemLevel(this.options.filterItemLevelSelector, this._search.bind(this), this.options.itemLevelMin, this.options.itemLevelMax),
