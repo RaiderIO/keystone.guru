@@ -25,6 +25,10 @@ class SearchFilterItemLevel extends SearchFilterInput {
             .replace(':value', this.getValue().replace(';', ' - '));
     }
 
+    getDefaultValue() {
+        return `${this.itemLevelMin};${this.itemLevelMax}`;
+    }
+
     /**
      *
      * @param value
@@ -51,8 +55,8 @@ class SearchFilterItemLevel extends SearchFilterInput {
     getParamsOverride() {
         let split = this.getValue().split(';');
         return {
-            'minItemLevel': split[0],
-            'maxItemLevel': split[1],
+            'minItemLevel': parseInt(split[0]),
+            'maxItemLevel': parseInt(split[1]),
         }
     }
 
@@ -66,5 +70,19 @@ class SearchFilterItemLevel extends SearchFilterInput {
         } else {
             console.error(`Invalid name ${name} for Item level filter override`);
         }
+    }
+
+    getDefaultValueOverride(name) {
+        let result = 0;
+
+        if (name === 'minItemLevel') {
+            result = this.itemLevelMin;
+        } else if (name === 'maxItemLevel') {
+            result = this.itemLevelMax;
+        } else {
+            console.error(`Invalid name ${name} for Item level filter override`);
+        }
+
+        return result;
     }
 }

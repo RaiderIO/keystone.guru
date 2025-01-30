@@ -25,6 +25,10 @@ class SearchFilterPlayerDeaths extends SearchFilterInput {
             .replace(':value', this.getValue().replace(';', ' - '));
     }
 
+    getDefaultValue() {
+        return `${this.playerDeathsMin};${this.playerDeathsMax}`;
+    }
+
     /**
      *
      * @param value
@@ -51,8 +55,8 @@ class SearchFilterPlayerDeaths extends SearchFilterInput {
     getParamsOverride() {
         let split = this.getValue().split(';');
         return {
-            'minPlayerDeaths': split[0],
-            'maxPlayerDeaths': split[1],
+            'minPlayerDeaths': parseInt(split[0]),
+            'maxPlayerDeaths': parseInt(split[1]),
         }
     }
 
@@ -66,5 +70,19 @@ class SearchFilterPlayerDeaths extends SearchFilterInput {
         } else {
             console.error(`Invalid name ${name} for Player deaths filter override`);
         }
+    }
+
+    getDefaultValueOverride(name) {
+        let result = 0;
+
+        if (name === 'minPlayerDeaths') {
+            result = this.playerDeathsMin;
+        } else if (name === 'maxPlayerDeaths') {
+            result = this.playerDeathsMax;
+        } else {
+            console.error(`Invalid name ${name} for Player deaths filter override`);
+        }
+
+        return result;
     }
 }

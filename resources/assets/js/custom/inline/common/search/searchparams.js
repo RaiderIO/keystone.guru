@@ -17,7 +17,7 @@ class SearchParams {
                 let paramsOverride = filter.getParamsOverride();
                 if (paramsOverride !== null && paramsOverride.length !== null) {
                     for (let key in paramsOverride) {
-                        if (paramsOverride.hasOwnProperty(key)) {
+                        if (paramsOverride.hasOwnProperty(key) && paramsOverride[key] !== filter.getDefaultValueOverride(key)) {
                             this.params[key] = paramsOverride[key];
                         }
                     }

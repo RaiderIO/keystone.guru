@@ -25,6 +25,10 @@ class SearchFilterKeyLevel extends SearchFilterInput {
             .replace(':value', this.getValue().replace(';', ' - '));
     }
 
+    getDefaultValue() {
+        return `${this.levelMin};${this.levelMax}`;
+    }
+
     /**
      *
      * @param value
@@ -51,8 +55,8 @@ class SearchFilterKeyLevel extends SearchFilterInput {
     getParamsOverride() {
         let split = this.getValue().split(';');
         return {
-            'minMythicLevel': split[0],
-            'maxMythicLevel': split[1],
+            'minMythicLevel': parseInt(split[0]),
+            'maxMythicLevel': parseInt(split[1]),
         }
     }
 
@@ -66,5 +70,19 @@ class SearchFilterKeyLevel extends SearchFilterInput {
         } else {
             console.error(`Invalid name ${name} for Key level filter override`);
         }
+    }
+
+    getDefaultValueOverride(name) {
+        let result = 0;
+
+        if (name === 'minMythicLevel') {
+            result = this.levelMin;
+        } else if (name === 'maxMythicLevel') {
+            result = this.levelMax;
+        } else {
+            console.error(`Invalid name ${name} for Key level filter override`);
+        }
+
+        return result;
     }
 }

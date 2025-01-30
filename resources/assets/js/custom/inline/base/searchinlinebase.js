@@ -69,7 +69,11 @@ class SearchInlineBase extends InlineCode {
                 let filter = this.filters[index];
                 let value = filter.getValue();
 
-                if (value !== null && value !== '' && (typeof value !== 'object' || value.length > 0)) {
+                if (value !== null &&
+                    value !== '' &&
+                    (typeof value !== 'object' || value.length > 0) &&
+                    value !== filter.getDefaultValue()
+                ) {
                     html += filter.getFilterHeaderHtml();
                 }
             }

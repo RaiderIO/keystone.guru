@@ -12,6 +12,10 @@ class SearchFilterWeeklyAffixGroups extends SearchFilterInput {
         });
     }
 
+    getDefaultValue() {
+        return [];
+    }
+
     getFilterHeaderText() {
         let value = this.getValue();
         let option = $(`${this.selector} option`).eq(value);
@@ -64,5 +68,9 @@ class SearchFilterWeeklyAffixGroups extends SearchFilterInput {
         }
 
         this.setValue(newVal);
+    }
+
+    getDefaultValueOverride(name) {
+        return 0;
     }
 }

@@ -25,6 +25,10 @@ class SearchFilter {
 
     }
 
+    getDefaultValue() {
+        return '';
+    }
+
     setValue(value) {
 
     }
@@ -44,5 +48,9 @@ class SearchFilter {
      */
     setValueOverride(name, value) {
 
+    }
+
+    getDefaultValueOverride(name) {
+        return null;
     }
 }

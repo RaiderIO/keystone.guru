@@ -20,6 +20,10 @@ class SearchFilterDuration extends SearchFilterInput {
         });
     }
 
+    getDefaultValue() {
+        return `${this.min};${this.max}`;
+    }
+
     getFilterHeaderText() {
         return lang.get('messages.filter_input_duration_header')
             .replace(':value', this.getValue().replace(';', ' - '));
@@ -66,7 +70,22 @@ class SearchFilterDuration extends SearchFilterInput {
         } else if (name === 'maxTimerFraction') {
             this.setValue(`${split[0]};${minutesValue}`);
         } else {
-            console.error(`Invalid name ${name} for Level filter override`);
+            console.error(`Invalid name ${name} for Duration filter override`);
         }
+    }
+
+    getDefaultValueOverride(name) {
+        let result = 0;
+
+        let timer = getState().getMapContext().getMappingVersion().timer_max_seconds;
+        if (name === 'minTimerFraction') {
+            result = (this.min * 60) / timer;
+        } else if (name === 'maxTimerFraction') {
+            result = (this.max * 60) / timer;
+        } else {
+            console.error(`Invalid name ${name} for Duration filter override`);
+        }
+
+        return result;
     }
 }
