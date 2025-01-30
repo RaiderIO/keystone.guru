@@ -35,14 +35,14 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         // Arrange
         $rowCountPerFloor = 10;
         $runCount         = 20;
-        $dungeon          = Dungeon::firstWhere('key', Dungeon::DUNGEON_FREEHOLD);
+        $dungeon          = Dungeon::firstWhere('key', Dungeon::DUNGEON_THE_STONEVAULT);
         $this->setUpTestForDungeon($dungeon, $rowCountPerFloor, $runCount);
 
         // Act
         $response = $this->post(route('ajax.heatmap.data'), [
-            'event_type' => self::EVENT_TYPE->value,
-            'data_type' => self::DATA_TYPE->value,
-            'dungeon_id' => $dungeon->id,
+            'type' => self::EVENT_TYPE->value,
+            'dataType' => self::DATA_TYPE->value,
+            'dungeonId' => $dungeon->id,
         ]);
 
         // Assert
@@ -68,14 +68,14 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         // Arrange
         $rowCountPerFloor = 10;
         $runCount         = 20;
-        $dungeon          = Dungeon::firstWhere('key', Dungeon::DUNGEON_HALLS_OF_INFUSION);
+        $dungeon          = Dungeon::firstWhere('key', Dungeon::DUNGEON_THE_NECROTIC_WAKE);
         $this->setUpTestForDungeon($dungeon, $rowCountPerFloor, $runCount, true);
 
         // Act
         $response = $this->post(route('ajax.heatmap.data'), [
-            'event_type' => self::EVENT_TYPE->value,
-            'data_type' => self::DATA_TYPE->value,
-            'dungeon_id' => $dungeon->id,
+            'type' => self::EVENT_TYPE->value,
+            'dataType' => self::DATA_TYPE->value,
+            'dungeonId' => $dungeon->id,
         ]);
 
         // Assert
