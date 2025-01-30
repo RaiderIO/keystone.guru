@@ -164,6 +164,13 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
                                    value="{{ CombatLogEventEventType::PlayerDeath->value }}">
                             <i class="fas fa-skull-crossbones"></i> {{ __('combatlogeventtypes.player_death') }}
                         </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="event_type"
+                                   class="{{ CombatLogEventEventType::SpellCast->value }}"
+                                   value="{{ CombatLogEventEventType::SpellCast->value }}">
+                            <img src="{{ url('images/heatmap/bloodlust_smaller.png') }}" alt="{{ __('view_common.maps.controls.heatmapsearch.bloodlust_alt') }}">
+                            {{ __('combatlogeventtypes.spell_cast') }}
+                        </label>
                     </div>
                 </div>
 

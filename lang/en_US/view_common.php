@@ -320,6 +320,7 @@ return [
                 'disabled'                  => 'Disabled',
                 'event_type'                => 'Event type',
                 'data_type'                 => 'Data type',
+                'bloodlust_alt'             => 'Bloodlust',
                 'data_type_title'           => 'Enemy position uses the original position of the enemy that was engaged (powered by Auto-Route Creator), player position uses the position of the player when an enemy was engaged (combat log position).',
                 'filter'                    => 'Filter',
                 'loading'                   => 'Loading',

@@ -48,7 +48,7 @@ class HeatPlugin extends MapPlugin {
             return;
         }
 
-        this.heatLayer = L.heatLayer([]);
+        this.heatLayer = L.heatLayer([], $.extend({}, c.map.heatmapSettings));
 
         this.heatLayer.addTo(this.map.leafletMap);
         // let self = this;

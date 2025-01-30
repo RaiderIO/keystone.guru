@@ -247,6 +247,10 @@ let c = {
             wheelDebounceTime: 100,
             wheelPxPerZoomLevel: 400
         },
+        heatmapSettings: {
+            minOpacity: 0.1,
+            radius: 30
+        },
         admin: {
             mapobject: {
                 colors: {
