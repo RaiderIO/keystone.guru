@@ -19,6 +19,12 @@
                 "release_changelog_category_id": 13,
                 "ticket_id": 2682,
                 "change": "Embedded heatmaps can now be controlled through postMessage."
+            },
+            {
+                "release_changelog_id": 279,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2660,
+                "change": "Added a filter for specializations."
             }
         ]
     }
