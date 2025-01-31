@@ -21,7 +21,7 @@ class SearchFilterWeeklyAffixGroups extends SearchFilterInput {
 
         let displayValue = value.length > 0 ? `${value[0]} - ${value[value.length - 1]}` : '';
 
-        return lang.get('messages.filter_image_select_weekly_affix_groups_header')
+        return lang.get('messages.filter_input_select_weekly_affix_groups_header')
             .replace(':week', '' + displayValue);
     }
 

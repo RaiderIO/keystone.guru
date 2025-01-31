@@ -4,6 +4,7 @@ namespace App\Logic\MapContext;
 
 use App\Http\Controllers\Traits\ListsEnemies;
 use App\Models\CharacterClass;
+use App\Models\CharacterClassSpecialization;
 use App\Models\Dungeon;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
@@ -117,6 +118,7 @@ abstract class MapContext
             'unknownMapIconType'                => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
             'awakenedObeliskGatewayMapIconType' => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),
             'classColors'                       => CharacterClass::all()->pluck('color'),
+            'characterClassSpecializations'     => CharacterClassSpecialization::all(),
             'raidMarkers'                       => RaidMarker::all(),
             'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
             'publishStates'                     => PublishedState::all(),

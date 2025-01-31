@@ -51,7 +51,7 @@ class ViewService implements ViewServiceInterface
             $dungeonsSelectQuery = Dungeon::select('dungeons.*')
                 ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
                 ->orderByRaw('expansions.released_at DESC, dungeons.name');
-            $raidsSelectQuery = $dungeonsSelectQuery->clone()
+            $raidsSelectQuery    = $dungeonsSelectQuery->clone()
                 ->where('dungeons.raid', true);
 
             $allDungeonsByExpansionId = $dungeonsSelectQuery
@@ -132,7 +132,7 @@ class ViewService implements ViewServiceInterface
                 'releaseChangelogCategories'      => ReleaseChangelogCategory::all(),
 
                 // Map
-                'characterClassSpecializations'   => CharacterClassSpecialization::all(),
+                'characterClassSpecializations'   => CharacterClassSpecialization::with('class')->get(),
                 'characterClasses'                => CharacterClass::with('specializations')->get(),
                 // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
                 'characterRacesClasses'           => CharacterRace::with(['classes:character_classes.id'])->orderBy('faction_id')->get(),

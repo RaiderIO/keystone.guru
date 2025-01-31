@@ -30,6 +30,7 @@
  * @property {String} filterPlayerDeathsSelector
  * @property {String} filterAffixesSelector
  * @property {String} filterWeeklyAffixGroupsSelector
+ * @property {String} filterSpecializationsSelector
  * @property {String} filterDurationSelector
  *
  * @property {String} filterCollapseNames
@@ -101,6 +102,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
                 self._search();
             }),
+            'includeSpecIds': new SearchFilterSpecializations(this.options.filterSpecializationsSelector, self._search.bind(this)),
             'duration': new SearchFilterDuration(this.options.filterDurationSelector, this._search.bind(this), this.options.durationMin, this.options.durationMax),
         };
 

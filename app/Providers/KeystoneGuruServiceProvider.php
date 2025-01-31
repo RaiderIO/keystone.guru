@@ -493,12 +493,14 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Maps
-        view()->composer('common.maps.controls.heatmapsearch', static function (View $view) use ($viewService, &$userOrDefaultRegion) {
+        view()->composer('common.maps.controls.heatmapsearch', static function (View $view) use ($viewService, $globalViewVariables, &$userOrDefaultRegion) {
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
             $view->with('allAffixGroupsByActiveExpansion', $regionViewVariables['allAffixGroupsByActiveExpansion']);
             $view->with('featuredAffixesByActiveExpansion', $regionViewVariables['featuredAffixesByActiveExpansion']);
+
+            $view->with('characterClassSpecializations', $globalViewVariables['characterClassSpecializations']);
         });
         view()->composer('common.maps.controls.pulls', static function (View $view) {
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');

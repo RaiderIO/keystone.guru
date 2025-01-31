@@ -430,7 +430,7 @@ return [
     'filter_enemy_forces_header_complete'                                  => 'Отряд противника: Завершенный',
     'filter_image_select_affixes_header'                                   => 'Аффиксы: :number выбрано',
     'filter_image_select_dungeons_header'                                  => 'Подземелье: :number выбрано',
-    'filter_image_select_weekly_affix_groups_header'                       => '',
+    'filter_input_select_weekly_affix_groups_header'                       => '',
     'filter_input_affix_group_header'                                      => 'Группы аффиксов: :number выбрано',
     'filter_input_key_level_header' => 'Уровень: :value',
     'filter_input_rating_header'                                           => 'Рейтинг: :value и выше',
