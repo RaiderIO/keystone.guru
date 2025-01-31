@@ -47,6 +47,16 @@ $showAds                        ??= true;
 $affixGroups = $allAffixGroupsByActiveExpansion->get($season->expansion->shortname);
 /** @var Collection<Affix> $featuredAffixes */
 $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->shortname);
+
+$allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion $b) {
+    // If one of them is "World", it comes first
+    if ($a->short === GameServerRegion::WORLD) return -1;
+    if ($b->short === GameServerRegion::WORLD) return 1;
+
+    // Otherwise, sort by ID ascending
+    return $a->id <=> $b->id;
+});
+
 ?>
 @include('common.general.inline', ['path' => 'common/maps/heatmapsearchsidebar', 'options' => [
     'stateCookie' => 'heatmap_search_sidebar_state',
@@ -201,18 +211,18 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
                 ])
                     <div class="btn-group btn-group-toggle w-100 mb-1"
                          data-toggle="buttons">
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="data_type"
-                                   class="{{ CombatLogEventDataType::EnemyPosition->value }}"
-                                   value="{{ CombatLogEventDataType::EnemyPosition->value }}">
-                            <i class="fas fa-map-marked-alt"></i> {{ __('combatlogdatatypes.enemy_position') }}
-                        </label>
                         <label class="btn btn-secondary active">
                             <input type="radio" name="data_type"
                                    class="{{ CombatLogEventDataType::PlayerPosition->value }}"
                                    value="{{ CombatLogEventDataType::PlayerPosition->value }}"
                                    checked>
                             <i class="fas fa-map"></i> {{ __('combatlogdatatypes.player_position') }}
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="data_type"
+                                   class="{{ CombatLogEventDataType::EnemyPosition->value }}"
+                                   value="{{ CombatLogEventDataType::EnemyPosition->value }}">
+                            <i class="fas fa-map-marked-alt"></i> {{ __('combatlogdatatypes.enemy_position') }}
                         </label>
                     </div>
                 @endcomponent
@@ -222,10 +232,11 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
                     <div id="filter_region_container" class="btn-group btn-group-toggle w-100"
                          data-toggle="buttons">
                         @foreach($allRegions as $region)
-                            <label class="btn btn-secondary">
+                            <label class="btn btn-secondary {{ $region->short === 'world' ? 'active' : '' }}">
                                 <input type="radio" name="region"
                                        class="{{ $region->short }}"
                                        value="{{ $region->short }}"
+                                        {{ $region->short === 'world' ? 'checked' : '' }}
                                 >
                                 <img src="{{ url(sprintf('images/flags/%s.png', $region->short)) }}"
                                      alt="{{ __($region->name) }}"
