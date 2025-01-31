@@ -8,7 +8,8 @@ class DungeonExploreGameversionEmbed extends InlineCode {
         let validHostnames = [
             'localhost',
             'keystone.guru',
-            'raider.io'
+            'raider.io',
+            'raiderio.dev',
         ];
 
         window.addEventListener('message', (event) => {
@@ -45,6 +46,8 @@ class DungeonExploreGameversionEmbed extends InlineCode {
 
                 console.log('Applying filters', event.data);
                 inlineCode.searchWithFilters(event.data);
+            } else {
+                console.warn('Unknown function', event.data.function);
             }
 
             return true;

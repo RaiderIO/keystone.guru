@@ -72,8 +72,8 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
     'filterEventTypeSelector' => 'input[name="event_type"]',
     'filterDataTypeContainerSelector' => '#filter_data_type_container',
     'filterDataTypeSelector' => 'input[name="data_type"]',
-    'filterRegionIdContainerSelector' => '#filter_region_id_container',
-    'filterRegionIdSelector' => 'input[name="region_id"]',
+    'filterRegionContainerSelector' => '#filter_region_container',
+    'filterRegionSelector' => 'input[name="region"]',
     'filterKeyLevelSelector' => '#filter_key_level',
     'filterItemLevelSelector' => '#filter_item_level',
     'filterPlayerDeathsSelector' => '#filter_player_deaths',
@@ -219,11 +219,11 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
 
 
                 <div class="form-group">
-                    <div id="filter_region_id_container" class="btn-group btn-group-toggle w-100"
+                    <div id="filter_region_container" class="btn-group btn-group-toggle w-100"
                          data-toggle="buttons">
                         @foreach($allRegions as $region)
                             <label class="btn btn-secondary">
-                                <input type="radio" name="region_id"
+                                <input type="radio" name="region"
                                        class="{{ $region->short }}"
                                        value="{{ $region->short }}"
                                 >

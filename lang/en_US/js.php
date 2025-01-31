@@ -454,7 +454,7 @@ return [
     'filter_input_user_header'                                             => 'User: :value',
     'filter_input_event_type_header'                                       => 'Event type: :value',
     'filter_input_data_type_header'                                        => 'Data type: :value',
-    'filter_input_region_id_header'                                        => 'Region: :value',
+    'filter_input_region_header'                                           => 'Region: :value',
     'filter_input_date_header'                                             => 'Date: :value',
     'filter_input_date_from_header'                                        => 'From date: :value',
     'filter_input_date_to_header'                                          => 'To date: :value',
