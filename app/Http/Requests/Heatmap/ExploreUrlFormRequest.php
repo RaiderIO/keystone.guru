@@ -5,6 +5,7 @@ namespace App\Http\Requests\Heatmap;
 use App\Http\Requests\DungeonRoute\DungeonRouteBaseUrlFormRequest;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
+use App\Models\GameServerRegion;
 use Illuminate\Validation\Rule;
 
 /**
@@ -28,6 +29,7 @@ class ExploreUrlFormRequest extends DungeonRouteBaseUrlFormRequest
         return array_merge(parent::rules(), [
             'type'             => ['nullable', Rule::in(CombatLogEventEventType::cases())],
             'dataType'         => ['nullable', Rule::in(CombatLogEventDataType::cases())],
+            'region'           => ['nullable', Rule::exists(GameServerRegion::class, 'short')],
             'minMythicLevel'   => ['nullable', 'integer'],
             'maxMythicLevel'   => ['nullable', 'integer'],
             'minItemLevel'     => ['nullable', 'integer'],

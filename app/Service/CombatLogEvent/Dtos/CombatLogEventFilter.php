@@ -25,12 +25,13 @@ use Illuminate\Support\Collection;
  */
 class CombatLogEventFilter implements Arrayable
 {
-    private ?int $keyLevelMin     = null;
-    private ?int $keyLevelMax     = null;
-    private ?int $itemLevelMin    = null;
-    private ?int $itemLevelMax    = null;
-    private ?int $playerDeathsMin = null;
-    private ?int $playerDeathsMax = null;
+    private ?string $region          = null;
+    private ?int    $keyLevelMin     = null;
+    private ?int    $keyLevelMax     = null;
+    private ?int    $itemLevelMin    = null;
+    private ?int    $itemLevelMax    = null;
+    private ?int    $playerDeathsMin = null;
+    private ?int    $playerDeathsMax = null;
 
     /** @var Collection<Affix> */
     private Collection $affixes;
@@ -65,6 +66,18 @@ class CombatLogEventFilter implements Arrayable
     public function getDataType(): CombatLogEventDataType
     {
         return $this->dataType;
+    }
+
+    public function getRegion(): ?string
+    {
+        return $this->region;
+    }
+
+    public function setRegion(?string $region): CombatLogEventFilter
+    {
+        $this->region = $region;
+
+        return $this;
     }
 
     public function getKeyLevelMin(): ?int
@@ -227,6 +240,7 @@ class CombatLogEventFilter implements Arrayable
             'challenge_mode_id' => $this->dungeon->challenge_mode_id,
             'event_type'        => $this->eventType->value,
             'data_type'         => $this->dataType,
+            'region'            => $this->region,
             'key_level_min'     => $this->keyLevelMin,
             'key_level_max'     => $this->keyLevelMax,
             'item_level_min'    => $this->itemLevelMin,
@@ -252,6 +266,17 @@ class CombatLogEventFilter implements Arrayable
 
         $must[] = MatchOne::make('challenge_mode_id', $dungeon->challenge_mode_id);
         $must[] = MatchOne::make('event_type', $this->eventType->value);
+        // These are raider.io region IDs
+        if ($this->region !== GameServerRegion::WORLD) {
+            $must[] = MatchOne::make('region_id', match ($this->region) {
+                GameServerRegion::EUROPE => 3,
+                GameServerRegion::AMERICAS => 2,
+                GameServerRegion::CHINA => 6,
+                GameServerRegion::KOREA => 4,
+                GameServerRegion::TAIWAN => 5,
+                default => 2, // US
+            });
+        }
 
 //        /** @var Floor $firstFloor */
 //        $firstFloor = $dungeon->floors->first();
@@ -367,6 +392,7 @@ class CombatLogEventFilter implements Arrayable
             $heatmapDataFilter->getDataType()
         );
 
+        $combatLogEventFilter->setRegion($heatmapDataFilter->getRegion());
         $combatLogEventFilter->setKeyLevelMin($heatmapDataFilter->getKeyLevelMin());
         $combatLogEventFilter->setKeyLevelMax($heatmapDataFilter->getKeyLevelMax());
         $combatLogEventFilter->setItemLevelMin($heatmapDataFilter->getItemLevelMin());

@@ -1329,3 +1329,8 @@ html, body, #map, #app, .wrapper {
     width: 16px;
     height: 16px;
 }
+
+.filter_region_icon {
+    width: 24px;
+    height: 16px;
+}

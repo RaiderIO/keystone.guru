@@ -18,12 +18,13 @@ use Illuminate\Support\Collection;
  */
 class HeatmapDataFilter implements Arrayable
 {
-    private ?int $keyLevelMin     = null;
-    private ?int $keyLevelMax     = null;
-    private ?int $itemLevelMin    = null;
-    private ?int $itemLevelMax    = null;
-    private ?int $playerDeathsMin = null;
-    private ?int $playerDeathsMax = null;
+    private ?string $region          = null;
+    private ?int    $keyLevelMin     = null;
+    private ?int    $keyLevelMax     = null;
+    private ?int    $itemLevelMin    = null;
+    private ?int    $itemLevelMax    = null;
+    private ?int    $playerDeathsMin = null;
+    private ?int    $playerDeathsMax = null;
     /** @var Collection<Affix> */
     private Collection $includeAffixIds;
     /** @var Collection<CharacterClassSpecialization> */
@@ -55,6 +56,18 @@ class HeatmapDataFilter implements Arrayable
     public function getDataType(): CombatLogEventDataType
     {
         return $this->dataType;
+    }
+
+    public function getRegion(): ?string
+    {
+        return $this->region;
+    }
+
+    public function setRegion(?string $region): HeatmapDataFilter
+    {
+        $this->region = $region;
+
+        return $this;
     }
 
     public function getKeyLevelMin(): ?int
@@ -225,6 +238,9 @@ class HeatmapDataFilter implements Arrayable
             'dataType'        => $this->getDataType()->value,
         ];
 
+        if ($this->getRegion() !== GameServerRegion::WORLD) {
+            $result['region'] = $this->getRegion();
+        }
         $result['minMythicLevel']   = $this->getKeyLevelMin();
         $result['maxMythicLevel']   = $this->getKeyLevelMax();
         $result['minItemLevel']     = $this->getItemLevelMin();
@@ -263,6 +279,7 @@ class HeatmapDataFilter implements Arrayable
             dataType: CombatLogEventDataType::from($requestArray['dataType'] ?? CombatLogEventDataType::PlayerPosition->value)
         );
 
+        $heatmapDataFilter->setRegion($requestArray['region'] ?? null);
         $heatmapDataFilter->setKeyLevelMin(isset($requestArray['minMythicLevel']) ? (int)$requestArray['minMythicLevel'] : null);
         $heatmapDataFilter->setKeyLevelMax(isset($requestArray['maxMythicLevel']) ? (int)$requestArray['maxMythicLevel'] : null);
         $heatmapDataFilter->setItemLevelMin(isset($requestArray['minItemLevel']) ? (int)$requestArray['minItemLevel'] : null);
