@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 /**
  * All options that a user can pass to the explore embed URL to generate a heatmap in an iframe.
  */
-class ExploreEmbedUrlFormRequest extends DungeonRouteBaseUrlFormRequest
+class ExploreEmbedUrlFormRequest extends ExploreUrlFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

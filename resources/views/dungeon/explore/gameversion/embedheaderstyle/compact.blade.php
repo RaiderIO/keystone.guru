@@ -54,10 +54,10 @@ $editHeatmapUrl = route('dungeon.explore.gameversion.view.floor', $routeParams);
             @endif
         </div>
         <div class="col-auto px-1">
-            <a class="btn btn btn-success float-right h-100"
+            <a class="btn btn btn-primary float-right"
                href="{{ $editHeatmapUrl }}"
                target="_blank">
-                <i class="fas fa-external-link-alt"></i> {{ __('view_dungeon.explore.gameversion.embed.edit_heatmap') }}
+                <i class="fas fa-external-link-alt"></i> {{ __('view_dungeon.explore.gameversion.embed.view_heatmap_fullscreen') }}
             </a>
         </div>
     </div>

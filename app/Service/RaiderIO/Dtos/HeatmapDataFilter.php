@@ -193,9 +193,7 @@ class HeatmapDataFilter implements Arrayable
         $result = [
             'challengeModeId' => $this->dungeon->challenge_mode_id,
             'type'            => $this->getEventType()->value,
-            // @TODO Raider.io API does not support this
-            // 'eventType'        => $this->getEventType()->value,
-            // 'dataType'         => $this->getDataType()->value,
+            'dataType'        => $this->getDataType()->value,
         ];
 
         $result['minMythicLevel']   = $this->getKeyLevelMin();

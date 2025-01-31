@@ -67,6 +67,10 @@ class SearchInlineBase extends InlineCode {
         for (let index in this.filters) {
             if (this.filters.hasOwnProperty(index)) {
                 let filter = this.filters[index];
+                if (!filter.isEnabled()) {
+                    continue;
+                }
+
                 let value = filter.getValue();
 
                 if (value !== null &&
