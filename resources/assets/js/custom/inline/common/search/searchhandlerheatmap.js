@@ -1,6 +1,10 @@
 class SearchHandlerHeatmap extends SearchHandler {
     constructor(options) {
-        super(options);
+        super($.extend({}, {
+            loaderFn: function(isLoading) {
+                console.log('loading', isLoading);
+            }
+        }, options));
     }
 
     getSearchUrl() {

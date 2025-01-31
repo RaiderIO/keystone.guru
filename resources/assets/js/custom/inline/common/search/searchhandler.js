@@ -39,7 +39,9 @@ class SearchHandler {
             data: searchParams.params,
             beforeSend: function () {
                 self.loading = true;
-                if (typeof self.options.loaderSelector !== 'undefined') {
+                if (typeof self.options.loaderFn === 'function') {
+                    self.options.loaderFn(true);
+                } else if (typeof self.options.loaderSelector !== 'undefined') {
                     $(self.options.loaderSelector).show();
                 }
 
@@ -54,7 +56,9 @@ class SearchHandler {
             },
             complete: function () {
                 self.loading = false;
-                if (typeof self.options.loaderSelector !== 'undefined') {
+                if (typeof self.options.loaderFn === 'function') {
+                    self.options.loaderFn(false);
+                } else if (typeof self.options.loaderSelector !== 'undefined') {
                     $(self.options.loaderSelector).hide();
                 }
 
