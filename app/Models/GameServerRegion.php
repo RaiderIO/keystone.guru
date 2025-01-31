@@ -115,6 +115,6 @@ class GameServerRegion extends CacheModel
             return Carbon::parse(self::EU_EPOCH_CHANGE_DATE);
         }
 
-        return $this->epoch_start;
+        return Carbon::parse($this->epoch_start);
     }
 }
