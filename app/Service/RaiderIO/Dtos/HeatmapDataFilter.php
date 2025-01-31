@@ -4,6 +4,7 @@ namespace App\Service\RaiderIO\Dtos;
 
 
 use App\Models\Affix;
+use App\Models\CharacterClassSpecialization;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
@@ -25,6 +26,8 @@ class HeatmapDataFilter implements Arrayable
     private ?int $playerDeathsMax = null;
     /** @var Collection<Affix> */
     private Collection $includeAffixIds;
+    /** @var Collection<CharacterClassSpecialization> */
+    private Collection $includeSpecIds;
     private ?int       $minPeriod        = null;
     private ?int       $maxPeriod        = null;
     private ?int       $timerFractionMin = null;
@@ -36,6 +39,7 @@ class HeatmapDataFilter implements Arrayable
         private readonly CombatLogEventDataType  $dataType
     ) {
         $this->includeAffixIds = collect();
+        $this->includeSpecIds  = collect();
     }
 
     public function getDungeon(): Dungeon
@@ -144,6 +148,25 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
+    /**
+     * @return Collection<CharacterClassSpecialization>
+     */
+    public function getIncludeSpecIds(): Collection
+    {
+        return $this->includeSpecIds;
+    }
+
+    /**
+     * @param Collection<CharacterClassSpecialization> $includeSpecIds
+     * @return HeatmapDataFilter
+     */
+    public function setIncludeSpecIds(Collection $includeSpecIds): HeatmapDataFilter
+    {
+        $this->includeSpecIds = $includeSpecIds;
+
+        return $this;
+    }
+
     public function getMinPeriod(): ?int
     {
         return $this->minPeriod;
@@ -188,6 +211,12 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
+    /**
+     * Converts the filter into an array that will be passed to the Raider.io API in the URL
+     *
+     * @param Season|null $mostRecentSeason
+     * @return array
+     */
     public function toArray(Season $mostRecentSeason = null): array
     {
         $result = [
@@ -206,7 +235,15 @@ class HeatmapDataFilter implements Arrayable
         $result['maxTimerFraction'] = $this->getTimerFractionMax();
 
         if ($this->getIncludeAffixIds()->isNotEmpty()) {
-            $result['includeAffixIds'] = implode(',', $this->getIncludeAffixIds()->map(fn(Affix $affix) => $affix->affix_id)->toArray());
+            $result['includeAffixIds'] = implode(',', $this->getIncludeAffixIds()->map(
+                fn(Affix $affix) => $affix->affix_id
+            )->toArray());
+        }
+
+        if ($this->getIncludeSpecIds()->isNotEmpty()) {
+            $result['includeSpecIds'] = implode(',', $this->getIncludeSpecIds()->map(
+                fn(CharacterClassSpecialization $characterClassSpecialization) => $characterClassSpecialization->specialization_id
+            )->toArray());
         }
 
         if ($this->getMinPeriod() !== null && $this->getMaxPeriod() !== null) {
@@ -237,6 +274,9 @@ class HeatmapDataFilter implements Arrayable
 
         $heatmapDataFilter->setIncludeAffixIds(isset($requestArray['includeAffixIds']) ?
             Affix::whereIn('affix_id', $requestArray['includeAffixIds'])->get() : collect());
+
+        $heatmapDataFilter->setIncludeSpecIds(isset($requestArray['includeSpecIds']) ?
+            CharacterClassSpecialization::whereIn('specialization_id', $requestArray['includeSpecIds'])->get() : collect());
 
         if (isset($requestArray['minPeriod']) && (int)$requestArray['minPeriod'] > 0) {
             $heatmapDataFilter->setMinPeriod($requestArray['minPeriod']);

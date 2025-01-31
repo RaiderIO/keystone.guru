@@ -34,7 +34,8 @@ class ExploreUrlFormRequest extends DungeonRouteBaseUrlFormRequest
             'maxItemLevel'     => ['nullable', 'integer'],
             'minPlayerDeaths'  => ['nullable', 'integer'],
             'maxPlayerDeaths'  => ['nullable', 'integer'],
-            'includeAffixIds'  => ['nullable', 'string'],
+            'includeAffixIds'  => ['nullable', 'string'], // csv
+            'includeSpecIds'   => ['nullable', 'string'], // csv
             'minPeriod'        => ['nullable', 'integer'],
             'maxPeriod'        => ['nullable', 'integer'],
             'minTimerFraction' => ['nullable', 'numeric'],
