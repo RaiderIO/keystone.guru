@@ -23,6 +23,7 @@ use Illuminate\Support\Collection;
  * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
  * @var array                        $embedOptions
  * @var array                        $parameters
+ * @var float                        $defaultZoom
  */
 ?>
 @extends('layouts.map', [
@@ -64,7 +65,7 @@ use Illuminate\Support\Collection;
 //            'embedStyle' => $embedOptions['style'],
             'edit' => false,
             'echo' => false,
-            'defaultZoom' => 1,
+            'defaultZoom' => $defaultZoom,
             'floor' => $floor,
             'showAttribution' => false,
             'parameters' => $parameters,

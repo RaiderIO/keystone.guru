@@ -29,6 +29,7 @@ class ExploreEmbedUrlFormRequest extends ExploreUrlFormRequest
             'mapBackgroundColor'    => ['nullable', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
             'showEnemyInfo'         => 'nullable|bool',
             'showTitle'             => 'nullable|bool',
+            'defaultZoom'           => 'nullable|numeric',
         ]);
     }
 }
