@@ -1,0 +1,25 @@
+{
+    "id": 272,
+    "release_changelog_id": 279,
+    "version": "v11.9.6",
+    "title": "Final heatmap push",
+    "backup_db": 1,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-01-31T13:23:59+00:00",
+    "updated_at": "2025-01-31T13:23:59+00:00",
+    "changelog": {
+        "id": 279,
+        "release_id": 272,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 279,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2682,
+                "change": "Embedded heatmaps can now be controlled through postMessage."
+            }
+        ]
+    }
+}
