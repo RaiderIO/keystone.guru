@@ -239,7 +239,7 @@ class HeatmapDataFilter implements Arrayable
         ];
 
         if ($this->getRegion() !== GameServerRegion::WORLD) {
-            $result['regionId'] = $this->getRegion();
+            $result['region'] = $this->getRegion();
         }
         $result['minMythicLevel']   = $this->getKeyLevelMin();
         $result['maxMythicLevel']   = $this->getKeyLevelMax();
