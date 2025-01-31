@@ -25,29 +25,19 @@ class ReleaseChangelogCategory extends CacheModel
 
     protected $fillable = ['id', 'key', 'name'];
 
-    public const GENERAL_CHANGES = 'general_changes';
-
-    public const ROUTE_CHANGES = 'route_changes';
-
-    public const MAP_CHANGES = 'map_changes';
-
-    public const MAPPING_CHANGES = 'mapping_changes';
-
-    public const BUGFIXES = 'bugfixes';
-
-    public const MDT_IMPORTER_CHANGES = 'mdt_importer_changes';
-
-    public const TEAM_CHANGES = 'team_changes';
-
-    public const MDT_EXPORTER_CHANGES = 'mdt_exporter_changes';
-
-    public const LIVE_SESSION_CHANGES = 'live_session_changes';
-
+    public const GENERAL_CHANGES          = 'general_changes';
+    public const ROUTE_CHANGES            = 'route_changes';
+    public const MAP_CHANGES              = 'map_changes';
+    public const MAPPING_CHANGES          = 'mapping_changes';
+    public const BUGFIXES                 = 'bugfixes';
+    public const MDT_IMPORTER_CHANGES     = 'mdt_importer_changes';
+    public const TEAM_CHANGES             = 'team_changes';
+    public const MDT_EXPORTER_CHANGES     = 'mdt_exporter_changes';
+    public const LIVE_SESSION_CHANGES     = 'live_session_changes';
     public const SIMULATION_CRAFT_CHANGES = 'simulation_craft_changes';
-
-    public const AUTO_ROUTE_CHANGES = 'auto_route_changes';
-
-    public const API_CHANGES = 'api_changes';
+    public const AUTO_ROUTE_CHANGES       = 'auto_route_changes';
+    public const API_CHANGES              = 'api_changes';
+    public const HEATMAP_CHANGES          = 'heatmap_changes';
 
     public const ALL = [
         self::GENERAL_CHANGES          => 1,
@@ -62,5 +52,6 @@ class ReleaseChangelogCategory extends CacheModel
         self::SIMULATION_CRAFT_CHANGES => 10,
         self::AUTO_ROUTE_CHANGES       => 11,
         self::API_CHANGES              => 12,
+        self::HEATMAP_CHANGES          => 13,
     ];
 }
