@@ -27,9 +27,12 @@ use Illuminate\Support\Facades\Log;
  * @property int                       $start_affix_group_index The index of the affix that was the first affix to be available upon season start
  * @property int                       $key_level_min
  * @property int                       $key_level_max
+ * @property int                       $item_level_min The minimum item level of items that can be obtained in this season
+ * @property int                       $item_level_max The maximum item level of items that can be obtained in this season
  * @property string                    $name Dynamic attribute
  * @property string                    $name_med Dynamic attribute
  * @property string                    $name_long Dynamic attribute
+ * @property int                       $start_period Dynamic attribute
  *
  * @property Expansion                 $expansion
  *
@@ -92,18 +95,22 @@ class Season extends CacheModel
         'start_affix_group_index',
         'key_level_min',
         'key_level_max',
+        'item_level_min',
+        'item_level_max',
     ];
 
     public $with = ['expansion', 'affixGroups', 'dungeons'];
 
     public $timestamps = false;
 
-    protected $appends = ['name', 'name_long'];
+    protected $appends = ['name', 'name_long', 'start_period'];
 
     protected $casts = [
-        'start'         => 'datetime',
-        'key_level_min' => 'integer',
-        'key_level_max' => 'integer',
+        'start'          => 'datetime',
+        'key_level_min'  => 'integer',
+        'key_level_max'  => 'integer',
+        'item_level_min' => 'integer',
+        'item_level_max' => 'integer',
     ];
 
     /** @var bool|null Cache for if we're a timewalking season or not */
@@ -117,6 +124,11 @@ class Season extends CacheModel
     public function getNameLongAttribute(): string
     {
         return __('seasons.name_long', ['expansion' => __($this->expansion->name), 'season' => $this->index]);
+    }
+
+    public function getStartPeriodAttribute(): int
+    {
+        return GameServerRegion::getUserOrDefaultRegion()->getKeystoneLeaderboardPeriod($this->start);
     }
 
     public function expansion(): BelongsTo

@@ -27,7 +27,7 @@ class APIDungeonController extends Controller
     public function get(Request $request): DungeonEnvelopeResource
     {
         return new DungeonEnvelopeResource(
-            Dungeon::active()->paginate(50)
+            Dungeon::active()->get()
         );
     }
     /**

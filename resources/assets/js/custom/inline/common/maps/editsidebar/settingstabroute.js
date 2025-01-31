@@ -9,7 +9,7 @@ class SettingsTabRoute extends SettingsTab {
 
         if (this.options.hasOwnProperty('dungeonroute') && this.options.dungeonroute !== null) {
             // Level
-            (new LevelHandler(this.options.levelMin, this.options.levelMax)
+            (new KeyLevelHandler(this.options.levelMin, this.options.levelMax)
                 .apply('#dungeon_route_level', {
                     from: this.options.dungeonroute.level_min,
                     to: this.options.dungeonroute.level_max,

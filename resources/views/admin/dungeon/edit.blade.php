@@ -46,6 +46,12 @@ $gameVersionsSelect = GameVersion::all()
                 @include('common.forms.form-error', ['key' => 'raid'])
             </div>
 
+            <div class="col {{ $errors->has('heatmap_enabled') ? ' has-error' : '' }}">
+                {!! Form::label('heatmap_enabled', __('view_admin.dungeon.edit.heatmap_enabled')) !!}
+                {!! Form::checkbox('heatmap_enabled', 1, $dungeon?->heatmap_enabled ?? 0, ['class' => 'form-control left_checkbox']) !!}
+                @include('common.forms.form-error', ['key' => 'heatmap_enabled'])
+            </div>
+
             <div class="col {{ $errors->has('speedrun_enabled') ? ' has-error' : '' }}">
                 {!! Form::label('speedrun_enabled', __('view_admin.dungeon.edit.speedrun_enabled')) !!}
                 {!! Form::checkbox('speedrun_enabled', 1, $dungeon?->speedrun_enabled ?? 0, ['class' => 'form-control left_checkbox']) !!}

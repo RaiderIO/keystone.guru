@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Logic\Utils\Stopwatch;
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Release;
 use App\Models\Season;
 use App\Models\User;
@@ -75,7 +77,7 @@ class SiteController extends Controller
         $result = $combatLogRouteDungeonRouteService->correctCombatLogRoute(
             CombatLogRouteRequestModel::createFromArray($validated)
         );
-        Stopwatch::pause('SiteController::benchmark');
+        Stopwatch::stop('SiteController::benchmark');
 
 //        dump('hey');
         return view('misc.credits');
@@ -223,6 +225,21 @@ class SiteController extends Controller
      */
     public function embed(Request $request, DungeonRoute $dungeonRoute): View
     {
-        return view('misc.embed', ['model' => $dungeonRoute, 'parameters' => $request->all()]);
+        return view('misc.embed', [
+            'model'      => $dungeonRoute,
+            'parameters' => $request->all(),
+        ]);
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function embedExplore(Request $request, GameVersion $gameVersion, Dungeon $dungeon): View
+    {
+        return view('misc.embedexplore', [
+            'gameVersion' => $gameVersion,
+            'model'       => $dungeon,
+            'parameters'  => $request->all(),
+        ]);
     }
 }

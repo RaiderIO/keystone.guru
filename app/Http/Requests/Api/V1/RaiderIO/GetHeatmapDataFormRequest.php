@@ -28,7 +28,7 @@ class GetHeatmapDataFormRequest extends FormRequest
         return [
             'dungeon_id'      => ['required', Rule::exists(Dungeon::class, 'id')],
             'event_type'      => ['required', Rule::in(CombatLogEventEventType::cases())],
-            'data_type' => ['required', Rule::in(CombatLogEventDataType::cases())],
+            'data_type'       => ['required', Rule::in(CombatLogEventDataType::cases())],
             'level'           => ['nullable', 'regex:/^\d*;\d*$/'],
             'affixes'         => ['nullable', 'array'],
             'affixes.*'       => ['integer', Rule::exists(Affix::class, 'id')],

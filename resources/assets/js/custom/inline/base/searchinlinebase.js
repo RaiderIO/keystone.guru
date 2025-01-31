@@ -28,7 +28,24 @@ class SearchInlineBase extends InlineCode {
         // Restore URL -> filters values
         for (let key in queryParams) {
             let filtersKey = key.replace('[]', '');
-            if (queryParams.hasOwnProperty(key) && this.filters.hasOwnProperty(filtersKey)) {
+            let valueAssigned = false;
+
+            // Check if we have a filter that claims this key by overriding it
+            for (let filterKey in this.filters) {
+                if (this.filters.hasOwnProperty(filterKey)) {
+                    let filter = this.filters[filterKey];
+                    let paramsOverride = filter.getParamsOverride();
+                    // Check if this filter wants to claim this key
+                    if (paramsOverride !== null && filter.getParamsOverride().hasOwnProperty(filtersKey)) {
+                        // It does! Set the value
+                        filter.setValueOverride(filtersKey, queryParams[key]);
+                        valueAssigned = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!valueAssigned && queryParams.hasOwnProperty(key) && this.filters.hasOwnProperty(filtersKey)) {
                 let value = queryParams[key];
 
                 this.filters[filtersKey].setValue(value);
@@ -50,9 +67,17 @@ class SearchInlineBase extends InlineCode {
         for (let index in this.filters) {
             if (this.filters.hasOwnProperty(index)) {
                 let filter = this.filters[index];
+                if (!filter.isEnabled()) {
+                    continue;
+                }
+
                 let value = filter.getValue();
 
-                if (value !== null && value !== '' && (typeof value !== 'object' || value.length > 0)) {
+                if (value !== null &&
+                    value !== '' &&
+                    (typeof value !== 'object' || value.length > 0) &&
+                    value !== filter.getDefaultValue()
+                ) {
                     html += filter.getFilterHeaderHtml();
                 }
             }
@@ -68,11 +93,15 @@ class SearchInlineBase extends InlineCode {
      * Updates the URL according to the passed searchParams (so users can press F5 and be where they left off, ish)
      *
      * @param searchParams {SearchParams}
+     * @param blacklist {Array}
      * @protected
      */
-    _updateUrl(searchParams) {
+    _updateUrl(searchParams, blacklist = []) {
         let urlParams = [];
-        let blacklist = ['offset', 'limit'];
+
+        blacklist.push('offset');
+        blacklist.push('limit');
+
         for (let index in searchParams.params) {
             if (searchParams.params.hasOwnProperty(index) && !blacklist.includes(index)) {
                 urlParams.push(`${index}=${encodeURIComponent(searchParams.params[index])}`);
@@ -92,13 +121,14 @@ class SearchInlineBase extends InlineCode {
     /**
      * @param options {Object}
      * @param queryParameters {Object}
+     * @param queryParametersUrlBlacklist
      * @protected
      */
-    _search(options = {}, queryParameters = {}) {
+    _search(options = {}, queryParameters = {}, queryParametersUrlBlacklist = []) {
         let searchParams = new SearchParams(this.filters, queryParameters);
 
         this._updateFilters();
-        this._updateUrl(searchParams);
+        this._updateUrl(searchParams, queryParametersUrlBlacklist);
 
         // Only search if the search parameters have changed
         if (this._previousSearchParams === null || !this._previousSearchParams.equals(searchParams)) {

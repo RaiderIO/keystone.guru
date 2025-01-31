@@ -52,10 +52,11 @@ class MapContextDungeonExplore extends MapContextMappingVersion
 
     public function getProperties(): array
     {
+        $activeSeason = $this->context->getActiveSeason($this->seasonService);
+
         return array_merge([
-            'featuredAffixes' => $this->context->getActiveSeason($this->seasonService)?->getFeaturedAffixes() ?? [],
+            'featuredAffixes'   => $activeSeason?->getFeaturedAffixes() ?? [],
+            'seasonStartPeriod' => $activeSeason?->start_period ?? 0,
         ], parent::getProperties());
     }
-
-
 }

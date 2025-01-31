@@ -112,8 +112,6 @@ abstract class MapContext
 
         $selectableSpells = Spell::where('selectable', true)->get();
         $static           = $this->cacheService->remember('static_data', static fn() => [
-            // @TODO remove this
-            'spells'                            => $selectableSpells,
             'selectableSpells'                  => $selectableSpells,
             'mapIconTypes'                      => MapIconType::all(),
             'unknownMapIconType'                => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),

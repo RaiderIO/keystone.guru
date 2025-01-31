@@ -96,8 +96,12 @@ class SeasonService implements SeasonServiceInterface
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
         /** @var Season $season */
-        $season = Season::whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) < ?',
-            [$region->reset_day_offset, $region->reset_hours_offset, $date]
+        $season = Season::whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) <= ?', [
+                $region->reset_day_offset,
+                $region->reset_hours_offset,
+                // Database stores everything in UTC, so we need to convert the date to UTC to compare it properly
+                $date->copy()->setTimezone('UTC')->toDateTimeString()
+            ]
         )
             ->where('expansion_id', $expansion->id)
             ->orderBy('start', 'desc')

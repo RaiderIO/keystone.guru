@@ -94,7 +94,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
                         // Original event location
                         'pos_x'      => round($npc->coord->x, 2),
                         'pos_y'      => round($npc->coord->y, 2),
-                        'event_type' => CombatLogEventEventType::EnemyKilled->value,
+                        'event_type' => CombatLogEventEventType::NpcDeath->value,
                         'context'    => json_encode([
                             '@timestamp'  => $npc->getDiedAt(),
                             // Resolved enemy location
@@ -123,7 +123,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
                         // Original event location
                         'pos_x'      => round($spell->coord->x, 2),
                         'pos_y'      => round($spell->coord->y, 2),
-                        'event_type' => CombatLogEventEventType::SpellCast->value,
+                        'event_type' => CombatLogEventEventType::PlayerSpell->value,
                         'context'    => json_encode([
                             '@timestamp' => $spell->getCastAt(),
                             'spell_id'   => $spell->spellId,

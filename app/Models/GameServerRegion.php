@@ -6,6 +6,7 @@ use App\Models\Traits\SeederModel;
 use App\Service\Cache\CacheServiceInterface;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
  * @property int        $id
  * @property string     $short
  * @property string     $name
+ * @property Carbon     $epoch_start
  * @property string     $timezone
  * @property int        $reset_day_offset ISO-8601 numeric representation of the day of the week
  * @property string     $reset_hours_offset
@@ -25,9 +27,19 @@ class GameServerRegion extends CacheModel
 {
     use SeederModel;
 
-    protected $fillable = ['short', 'name', 'timezone', 'reset_day_offset', 'reset_hours_offset'];
+    // Blizzard changed the reset time on November 16th:
+    //
+    // Weekly Reset Time Changing to 05:00 CET on 16 November
+    //
+    // https://eu.forums.blizzard.com/en/wow/t/weekly-reset-time-changing-to-0500-cet-on-16-november/398498
+    // the date at which the EU epoch change kicks in
+    const EU_EPOCH_CHANGE_STARTED_AT_DATE = '2022-11-16 04:00:00';
 
-    public $timestamps = false;
+    // The base date we return when requesting a date using the new epoch
+    const EU_EPOCH_CHANGE_DATE = '2005-12-28 04:00:00';
+
+    // The period that the EU epoch change started at
+    const EU_EPOCH_CHANGE_PERIOD = 881;
 
     public const AMERICAS = 'us';
     public const EUROPE   = 'eu';
@@ -44,6 +56,14 @@ class GameServerRegion extends CacheModel
         self::TAIWAN   => 4,
         self::KOREA    => 5,
     ];
+
+    protected $fillable = ['short', 'name', 'epoch_start', 'timezone', 'reset_day_offset', 'reset_hours_offset'];
+
+    protected $casts = [
+        'epoch_start' => 'datetime',
+    ];
+
+    public $timestamps = false;
 
     public function users(): HasMany
     {
@@ -68,5 +88,33 @@ class GameServerRegion extends CacheModel
         return $cacheService->remember('default_region',
             static fn() => GameServerRegion::where('short', self::DEFAULT_REGION)->first()
         );
+    }
+
+    /**
+     * Get the leaderboard period based on the region and a given date.
+     *
+     * @param Carbon $dateTime
+     * @return int
+     */
+    public function getKeystoneLeaderboardPeriod(Carbon $dateTime): int
+    {
+        $epoch = self::getRegionEpochByDate($dateTime);
+
+        return $epoch->diffInWeeks($dateTime);
+    }
+
+    /**
+     * Get the epoch date for a region based on the given date.
+     *
+     * @param Carbon $dateTime
+     * @return Carbon|null
+     */
+    public function getRegionEpochByDate(Carbon $dateTime): ?Carbon
+    {
+        if ($this->short === self::EUROPE && $dateTime >= Carbon::parse(self::EU_EPOCH_CHANGE_STARTED_AT_DATE)) {
+            return Carbon::parse(self::EU_EPOCH_CHANGE_DATE);
+        }
+
+        return $this->epoch_start;
     }
 }

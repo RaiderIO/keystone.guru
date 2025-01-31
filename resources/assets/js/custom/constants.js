@@ -193,6 +193,10 @@ const GAME_VERSION_RETAIL = 'retail';
 const MOVEMENT_SPEED_DEFAULT = 7;
 const MOVEMENT_SPEED_MOUNTED = 14;
 
+const COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH = 'npc_death';
+const COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH = 'player_death';
+const COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_SPELL = 'player_spell';
+
 // Leaflet constants
 const LEAFLET_PANE_MAP = 'mapPane';
 const LEAFLET_PANE_TILE = 'tilePane';
@@ -246,6 +250,10 @@ let c = {
             boxZoom: false,
             wheelDebounceTime: 100,
             wheelPxPerZoomLevel: 400
+        },
+        heatmapSettings: {
+            minOpacity: 0.1,
+            radius: 30
         },
         admin: {
             mapobject: {

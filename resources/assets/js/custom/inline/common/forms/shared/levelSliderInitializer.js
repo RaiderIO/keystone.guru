@@ -1,7 +1,7 @@
 class LevelSliderInitializer {
     constructor(options) {
         // Level
-        this.levelHandler = (new LevelHandler(options.levelMin, options.levelMax));
+        this.levelHandler = (new KeyLevelHandler(options.levelMin, options.levelMax));
 
 
         this.levelHandler.apply(options.levelSelector, {
@@ -9,7 +9,7 @@ class LevelSliderInitializer {
             max: options.keyLevelMaxDefault,
             from: options.levelFrom,
             to: options.levelTo,
-            onFinish: function (data) {
+            onFinish: function () {
                 Cookies.set('route_key_level', $(options.levelSelector).val());
             }
         });

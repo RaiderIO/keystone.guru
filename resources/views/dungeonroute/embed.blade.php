@@ -6,13 +6,12 @@ use App\Models\Floor\Floor;
 use App\Models\User;
 
 /**
+ * @var Dungeon      $dungeon
  * @var DungeonRoute $dungeonroute
  * @var Floor        $floor
  * @var array        $embedOptions
  * @var array        $parameters
  */
-
-$dungeon = Dungeon::findOrFail($dungeonroute->dungeon_id)->load(['expansion', 'floors']);
 
 $affixes         = $dungeonroute->affixes->pluck('text', 'id');
 $selectedAffixes = $dungeonroute->affixes->pluck('id');
@@ -23,7 +22,7 @@ if (count($affixes) == 0) {
 $mapFacadeStyle ??= User::getCurrentUserMapFacadeStyle();
 $useFacade      = $mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE;
 
-if( $dungeon->floorsForMapFacade($dungeonroute->mappingVersion, $useFacade)->active()->count() === 1) {
+if ($dungeon->floorsForMapFacade($dungeonroute->mappingVersion, $useFacade)->active()->count() === 1) {
     $embedOptions['show']['floorSelection'] = false;
 }
 ?>
@@ -75,7 +74,7 @@ if( $dungeon->floorsForMapFacade($dungeonroute->mappingVersion, $useFacade)->act
             'edit' => false,
             'echo' => false,
             'defaultZoom' => 1,
-            'floorId' => $floor->id,
+            'floor' => $floor,
             'showAttribution' => false,
             'parameters' => $parameters,
             'hiddenMapObjectGroups' => [

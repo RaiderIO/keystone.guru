@@ -20,7 +20,7 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
                 'shortname'   => Expansion::EXPANSION_LEGION,
                 'color'       => '#27ff0f',
                 'released_at' => Carbon::make('2016-08-30 00:00:00'),
-            ]), 'expansions.battle_for_azeroth.name' => new Expansion([
+            ]), 'expansions.bfa.name' => new Expansion([
                 'active'      => 1,
                 'shortname'   => Expansion::EXPANSION_BFA,
                 'color'       => '#906554',
@@ -75,7 +75,7 @@ class ExpansionsSeeder extends Seeder implements TableSeederInterface
                 'shortname'   => Expansion::EXPANSION_MIDNIGHT,
                 'color'       => '#4B0082',
                 'released_at' => Carbon::make('2028-08-26 00:00:00'),
-            ]), 'expansions.the_last_titan.name'     => new Expansion([
+            ]), 'expansions.tlt.name'     => new Expansion([
                 'active'      => 0,
                 'shortname'   => Expansion::EXPANSION_TLT,
                 'color'       => '#6D6E5C',

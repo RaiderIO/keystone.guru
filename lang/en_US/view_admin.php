@@ -9,6 +9,7 @@ return [
             'header_edit'                        => 'Edit dungeon',
             'active'                             => 'Active',
             'raid'                               => 'Raid',
+            'heatmap_enabled'                    => 'Heatmap enabled',
             'speedrun_enabled'                   => 'Speedrun enabled',
             'speedrun_difficulty_10_man_enabled' => 'Speedrun 10-man enabled',
             'speedrun_difficulty_25_man_enabled' => 'Speedrun 25-man enabled',

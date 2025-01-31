@@ -388,6 +388,25 @@ return [
                 ],
             ],
         ],
+        'api' => [
+            /*
+             * Exclude data points that fall below this factor of the max amount of points in the grid.
+             * Say that the top hot spot was 10000 entries, then in order to be included in this heatmap, a data point
+             * must have at least 10000 * factor entries in order to be returned. This cuts down on the amount of data
+             * being sent by the server to KSG, and KSG to the browser.
+             *
+             * Set to null to disable.
+             */
+            'min_required_sample_factor' => 0.0005,
+
+            /**
+             * Toggles between sending the floors as a continuous array or as key value pairs
+             * (["123.456,654.321" => 1234 (when false), ...] vs [123.456, 654.321, 1234, ...] (when true).
+             *
+             * Null or false disables this
+             */
+            'floors_as_array' => true,
+        ]
     ],
 
     'api' => [

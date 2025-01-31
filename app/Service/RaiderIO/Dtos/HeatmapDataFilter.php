@@ -4,37 +4,38 @@ namespace App\Service\RaiderIO\Dtos;
 
 
 use App\Models\Affix;
-use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
+use App\Models\GameServerRegion;
+use App\Models\Season;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
+/**
+ * Class that is used to represent the filter that is received from the browser.
+ */
 class HeatmapDataFilter implements Arrayable
 {
-    private ?int $levelMin = null;
-
-    private ?int $levelMax = null;
-
-    /** @var Collection<AffixGroup> */
-    private Collection $affixGroups;
-
+    private ?int $keyLevelMin     = null;
+    private ?int $keyLevelMax     = null;
+    private ?int $itemLevelMin    = null;
+    private ?int $itemLevelMax    = null;
+    private ?int $playerDeathsMin = null;
+    private ?int $playerDeathsMax = null;
     /** @var Collection<Affix> */
-    private Collection $affixes;
-
-    private ?int $weeklyAffixGroups = null;
-    private ?int $durationMin       = null;
-
-    private ?int $durationMax = null;
+    private Collection $includeAffixIds;
+    private ?int       $minPeriod        = null;
+    private ?int       $maxPeriod        = null;
+    private ?int       $timerFractionMin = null;
+    private ?int       $timerFractionMax = null;
 
     public function __construct(
         private readonly Dungeon                 $dungeon,
         private readonly CombatLogEventEventType $eventType,
-        private readonly CombatLogEventDataType $dataType
+        private readonly CombatLogEventDataType  $dataType
     ) {
-        $this->affixGroups = collect();
-        $this->affixes     = collect();
+        $this->includeAffixIds = collect();
     }
 
     public function getDungeon(): Dungeon
@@ -52,45 +53,74 @@ class HeatmapDataFilter implements Arrayable
         return $this->dataType;
     }
 
-    public function getLevelMin(): ?int
+    public function getKeyLevelMin(): ?int
     {
-        return $this->levelMin;
+        return $this->keyLevelMin;
     }
 
-    public function setLevelMin(?int $levelMin): HeatmapDataFilter
+    public function setKeyLevelMin(?int $keyLevelMin): HeatmapDataFilter
     {
-        $this->levelMin = $levelMin;
+        $this->keyLevelMin = $keyLevelMin;
 
         return $this;
     }
 
-    public function getLevelMax(): ?int
+    public function getKeyLevelMax(): ?int
     {
-        return $this->levelMax;
+        return $this->keyLevelMax;
     }
 
-    public function setLevelMax(?int $levelMax): HeatmapDataFilter
+    public function setKeyLevelMax(?int $keyLevelMax): HeatmapDataFilter
     {
-        $this->levelMax = $levelMax;
+        $this->keyLevelMax = $keyLevelMax;
 
         return $this;
     }
 
-    /**
-     * @return Collection<AffixGroup>
-     */
-    public function getAffixGroups(): Collection
+    public function getPlayerDeathsMax(): ?int
     {
-        return $this->affixGroups;
+        return $this->playerDeathsMax;
     }
 
-    /**
-     * @param Collection<AffixGroup> $affixGroups
-     * @return HeatmapDataFilter
-     */
-    public function setAffixGroups(Collection $affixGroups): HeatmapDataFilter
+    public function setPlayerDeathsMax(?int $playerDeathsMax): HeatmapDataFilter
     {
-        $this->affixGroups = $affixGroups;
+        $this->playerDeathsMax = $playerDeathsMax;
+
+        return $this;
+    }
+
+    public function getPlayerDeathsMin(): ?int
+    {
+        return $this->playerDeathsMin;
+    }
+
+    public function setPlayerDeathsMin(?int $playerDeathsMin): HeatmapDataFilter
+    {
+        $this->playerDeathsMin = $playerDeathsMin;
+
+        return $this;
+    }
+
+    public function getItemLevelMax(): ?int
+    {
+        return $this->itemLevelMax;
+    }
+
+    public function setItemLevelMax(?int $itemLevelMax): HeatmapDataFilter
+    {
+        $this->itemLevelMax = $itemLevelMax;
+
+        return $this;
+    }
+
+    public function getItemLevelMin(): ?int
+    {
+        return $this->itemLevelMin;
+    }
+
+    public function setItemLevelMin(?int $itemLevelMin): HeatmapDataFilter
+    {
+        $this->itemLevelMin = $itemLevelMin;
 
         return $this;
     }
@@ -98,128 +128,122 @@ class HeatmapDataFilter implements Arrayable
     /**
      * @return Collection<Affix>
      */
-    public function getAffixes(): Collection
+    public function getIncludeAffixIds(): Collection
     {
-        return $this->affixes;
+        return $this->includeAffixIds;
     }
 
     /**
-     * @param Collection<Affix> $affixes
+     * @param Collection<Affix> $includeAffixIds
      * @return HeatmapDataFilter
      */
-    public function setAffixes(Collection $affixes): HeatmapDataFilter
+    public function setIncludeAffixIds(Collection $includeAffixIds): HeatmapDataFilter
     {
-        $this->affixes = $affixes;
+        $this->includeAffixIds = $includeAffixIds;
 
         return $this;
     }
 
-    public function getWeeklyAffixGroups(): ?int
+    public function getMinPeriod(): ?int
     {
-        return $this->weeklyAffixGroups;
+        return $this->minPeriod;
     }
 
-    public function setWeeklyAffixGroups(?int $weeklyAffixGroups): HeatmapDataFilter
+    public function setMinPeriod(?int $minPeriod): void
     {
-        $this->weeklyAffixGroups = $weeklyAffixGroups;
+        $this->minPeriod = $minPeriod;
+    }
+
+    public function getMaxPeriod(): ?int
+    {
+        return $this->maxPeriod;
+    }
+
+    public function setMaxPeriod(?int $maxPeriod): void
+    {
+        $this->maxPeriod = $maxPeriod;
+    }
+
+    public function getTimerFractionMin(): ?int
+    {
+        return $this->timerFractionMin;
+    }
+
+    public function setTimerFractionMin(?int $timerFractionMin): HeatmapDataFilter
+    {
+        $this->timerFractionMin = $timerFractionMin;
 
         return $this;
     }
 
-    public function getDurationMin(): ?int
+    public function getTimerFractionMax(): ?int
     {
-        return $this->durationMin;
+        return $this->timerFractionMax;
     }
 
-    public function setDurationMin(?int $durationMin): HeatmapDataFilter
+    public function setTimerFractionMax(?int $timerFractionMAx): HeatmapDataFilter
     {
-        $this->durationMin = $durationMin;
+        $this->timerFractionMax = $timerFractionMAx;
 
         return $this;
     }
 
-    public function getDurationMax(): ?int
-    {
-        return $this->durationMax;
-    }
-
-    public function setDurationMax(?int $durationMax): HeatmapDataFilter
-    {
-        $this->durationMax = $durationMax;
-
-        return $this;
-    }
-
-    public function toArray(): array
+    public function toArray(Season $mostRecentSeason = null): array
     {
         $result = [
-            'challenge_mode_id' => $this->dungeon->challenge_mode_id,
-            'event_type'        => $this->getEventType()->value,
-            'data_type'         => $this->getDataType()->value,
+            'challengeModeId' => $this->dungeon->challenge_mode_id,
+            'type'            => $this->getEventType()->value,
+            'dataType'        => $this->getDataType()->value,
         ];
 
-        if ($this->getLevelMin() !== null) {
-            $result['level_min'] = $this->getLevelMin();
+        $result['minMythicLevel']   = $this->getKeyLevelMin();
+        $result['maxMythicLevel']   = $this->getKeyLevelMax();
+        $result['minItemLevel']     = $this->getItemLevelMin();
+        $result['maxItemLevel']     = $this->getItemLevelMax();
+        $result['minPlayerDeaths']  = $this->getPlayerDeathsMin();
+        $result['maxPlayerDeaths']  = $this->getPlayerDeathsMax();
+        $result['minTimerFraction'] = $this->getTimerFractionMin();
+        $result['maxTimerFraction'] = $this->getTimerFractionMax();
+
+        if ($this->getIncludeAffixIds()->isNotEmpty()) {
+            $result['includeAffixIds'] = implode(',', $this->getIncludeAffixIds()->map(fn(Affix $affix) => $affix->affix_id)->toArray());
         }
 
-        if ($this->getLevelMax() !== null) {
-            $result['level_max'] = $this->getLevelMax();
+        if ($this->getMinPeriod() !== null && $this->getMaxPeriod() !== null) {
+            $result['minPeriod'] = $this->getMinPeriod();
+            $result['maxPeriod'] = $this->getMaxPeriod();
         }
 
-        if ($this->getDurationMin() !== null) {
-            $result['duration_min'] = $this->getDurationMin();
-        }
-
-        if ($this->getDurationMax() !== null) {
-            $result['duration_max'] = $this->getDurationMax();
-        }
-
-        if ($this->getAffixes()->isNotEmpty()) {
-            $result['affix_ids'] = $this->getAffixes()->map(fn(Affix $affix) => $affix->affix_id)->toArray();
-        }
-
-        if ($this->getAffixGroups()->isNotEmpty()) {
-            $result['affix_groups'] = $this->getAffixGroups()->map(fn(AffixGroup $affixGroup) => [
-                $affixGroup->affixes->map(fn(Affix $affix) => $affix->affix_id)->toArray(),
-            ])->toArray();
-        }
-
-        if ($this->getWeeklyAffixGroups() !== null) {
-            $result['weekly_affix_groups'] = $this->getWeeklyAffixGroups();
-        }
-
-        return $result;
+        return array_filter($result);
     }
 
 
     public static function fromArray(array $requestArray): HeatmapDataFilter
     {
         $heatmapDataFilter = new HeatmapDataFilter(
-            dungeon: Dungeon::firstWhere('id', $requestArray['dungeon_id']),
-            eventType: CombatLogEventEventType::from($requestArray['event_type']),
-            dataType: CombatLogEventDataType::from($requestArray['data_type'])
+            dungeon: Dungeon::firstWhere('id', $requestArray['dungeonId']),
+            eventType: CombatLogEventEventType::from($requestArray['type'] ?? CombatLogEventEventType::NpcDeath->value),
+            dataType: CombatLogEventDataType::from($requestArray['dataType'] ?? CombatLogEventDataType::PlayerPosition->value)
         );
 
-        if (isset($requestArray['level'])) {
-            [$levelMin, $levelMax] = explode(';', $requestArray['level']);
-            $heatmapDataFilter->setLevelMin((int)$levelMin)->setLevelMax((int)$levelMax);
+        $heatmapDataFilter->setKeyLevelMin(isset($requestArray['minMythicLevel']) ? (int)$requestArray['minMythicLevel'] : null);
+        $heatmapDataFilter->setKeyLevelMax(isset($requestArray['maxMythicLevel']) ? (int)$requestArray['maxMythicLevel'] : null);
+        $heatmapDataFilter->setItemLevelMin(isset($requestArray['minItemLevel']) ? (int)$requestArray['minItemLevel'] : null);
+        $heatmapDataFilter->setItemLevelMax(isset($requestArray['maxItemLevel']) ? (int)$requestArray['maxItemLevel'] : null);
+        $heatmapDataFilter->setPlayerDeathsMin(isset($requestArray['minPlayerDeaths']) ? (int)$requestArray['minPlayerDeaths'] : null);
+        $heatmapDataFilter->setPlayerDeathsMax(isset($requestArray['maxPlayerDeaths']) ? (int)$requestArray['maxPlayerDeaths'] : null);
+        $heatmapDataFilter->setTimerFractionMin($requestArray['minTimerFraction'] ?? null);
+        $heatmapDataFilter->setTimerFractionMax($requestArray['maxTimerFraction'] ?? null);
+
+        $heatmapDataFilter->setIncludeAffixIds(isset($requestArray['includeAffixIds']) ?
+            Affix::whereIn('affix_id', $requestArray['includeAffixIds'])->get() : collect());
+
+        if (isset($requestArray['minPeriod']) && (int)$requestArray['minPeriod'] > 0) {
+            $heatmapDataFilter->setMinPeriod($requestArray['minPeriod']);
         }
 
-        if (isset($requestArray['duration'])) {
-            [$durationMin, $durationMax] = explode(';', $requestArray['duration']);
-            $heatmapDataFilter->setDurationMin((int)$durationMin)->setDurationMax((int)$durationMax);
-        }
-
-        if (isset($requestArray['affixes'])) {
-            $heatmapDataFilter->setAffixes(Affix::whereIn('id', $requestArray['affixes'])->get());
-        }
-
-        if (isset($requestArray['affix_groups'])) {
-            $heatmapDataFilter->setAffixGroups(AffixGroup::whereIn('id', $requestArray['affix_groups'])->get());
-        }
-
-        if (isset($requestArray['weekly_affix_groups'])) {
-            $heatmapDataFilter->setWeeklyAffixGroups($requestArray['weekly_affix_groups']);
+        if (isset($requestArray['maxPeriod']) && (int)$requestArray['maxPeriod'] > 0) {
+            $heatmapDataFilter->setMaxPeriod($requestArray['maxPeriod']);
         }
 
         return $heatmapDataFilter;
@@ -230,7 +254,6 @@ class HeatmapDataFilter implements Arrayable
 //        $heatmapDataFilter = new HeatmapDataFilter($combatLogEventFilter->getDungeon(), $combatLogEventFilter->getEventType());
 //        $heatmapDataFilter->setLevelMin($combatLogEventFilter->getLevelMin());
 //        $heatmapDataFilter->setLevelMax($combatLogEventFilter->getLevelMax());
-//        $heatmapDataFilter->setAffixGroups($combatLogEventFilter->getAffixGroups());
 //        $heatmapDataFilter->setAffixes($combatLogEventFilter->getAffixes());
 //        $heatmapDataFilter->setDurationMin($combatLogEventFilter->getDurationMin());
 //        $heatmapDataFilter->setDurationMax($combatLogEventFilter->getDurationMax());

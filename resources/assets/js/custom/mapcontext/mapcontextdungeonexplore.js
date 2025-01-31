@@ -36,4 +36,8 @@ class MapContextDungeonExplore extends MapContextMappingVersion {
     getFeaturedAffixes() {
         return this._options.featuredAffixes;
     }
+
+    getSeasonStartPeriod() {
+        return this._options.seasonStartPeriod;
+    }
 }

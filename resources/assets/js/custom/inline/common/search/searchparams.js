@@ -14,13 +14,26 @@ class SearchParams {
             if (this.filters.hasOwnProperty(name)) {
                 let filter = this.filters[name];
 
-                let value = filter.getValue();
-                // Prevent sending empty strings
-                if (value !== null && value !== '' && (typeof value !== 'object' || value.length > 0)) {
-                    if (filter.options.array) {
-                        this.params[`${name}[]`] = value;
-                    } else {
-                        this.params[name] = value;
+                if (!filter.isEnabled()) {
+                    continue;
+                }
+
+                let paramsOverride = filter.getParamsOverride();
+                if (paramsOverride !== null && paramsOverride.length !== null) {
+                    for (let key in paramsOverride) {
+                        if (paramsOverride.hasOwnProperty(key) && paramsOverride[key] !== filter.getDefaultValueOverride(key)) {
+                            this.params[key] = paramsOverride[key];
+                        }
+                    }
+                } else {
+                    let value = filter.getValue();
+                    // Prevent sending empty strings
+                    if (value !== null && value !== '' && (typeof value !== 'object' || value.length > 0)) {
+                        if (filter.options.array) {
+                            this.params[`${name}[]`] = value;
+                        } else {
+                            this.params[name] = filter.options.csv && typeof value === 'object' ? value.join(',') : value;
+                        }
                     }
                 }
             }

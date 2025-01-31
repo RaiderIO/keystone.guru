@@ -2,13 +2,13 @@
 
 return [
 
-    'difficulty'   => [
+    'difficulty' => [
         '1' => '10-man',
         '2' => '25-man',
         '3' => '20-man',
         '4' => '40-man',
     ],
-    'classic'      => [
+    'classic'    => [
         'blackfathom_deeps'           => [
             'name'   => 'Blackfathom Deeps',
             'floors' => [
@@ -106,13 +106,13 @@ return [
                 'razorfen_kraul' => 'Razorfen Kraul',
             ],
         ],
-        'ruins_of_ahnqiraj_sod'          => [
+        'ruins_of_ahnqiraj_sod'       => [
             'name'   => 'Ruins of Ahn\'Qiraj (SoD)',
             'floors' => [
                 'ruins_of_ahnqiraj' => 'Ruins of Ahn\'Qiraj',
             ],
         ],
-        'ruins_of_ahnqiraj_classic'          => [
+        'ruins_of_ahnqiraj_classic'   => [
             'name'   => 'Ruins of Ahn\'Qiraj (Classic)',
             'floors' => [
                 'ruins_of_ahnqiraj' => 'Ruins of Ahn\'Qiraj',
@@ -170,7 +170,7 @@ return [
                 'the_gauntlet'     => 'The Gauntlet',
             ],
         ],
-        'temple_of_ahnqiraj_sod'         => [
+        'temple_of_ahnqiraj_sod'      => [
             'name'   => 'Temple of Ahn\'Qiraj (SoD)',
             'floors' => [
                 'the_hive_undergrounds' => 'The Hive Undergrounds',
@@ -178,7 +178,7 @@ return [
                 'vault_of_cthun'        => 'Vault of C\'Thun',
             ],
         ],
-        'temple_of_ahnqiraj_classic'         => [
+        'temple_of_ahnqiraj_classic'  => [
             'name'   => 'Temple of Ahn\'Qiraj (Classic)',
             'floors' => [
                 'the_hive_undergrounds' => 'The Hive Undergrounds',
@@ -268,7 +268,7 @@ return [
             ],
         ],
     ],
-    'wotlk'        => [
+    'wotlk'      => [
         'ahn_kahet_the_old_kingdom'                => [
             'name'   => 'Ahn\'kahet: The Old Kingdom',
             'floors' => [
@@ -447,7 +447,7 @@ return [
             ],
         ],
     ],
-    'cata'         => [
+    'cata'       => [
         'grim_batol'          => [
             'name'   => 'Grim Batol',
             'floors' => [
@@ -489,7 +489,7 @@ return [
             ],
         ],
     ],
-    'mop'          => [
+    'mop'        => [
         'gate_of_the_setting_sun'    => [
             'name'   => 'Gate of the Setting Sun',
             'floors' => [
@@ -562,7 +562,7 @@ return [
             ],
         ],
     ],
-    'wod'          => [
+    'wod'        => [
         'auchindoun'                => [
             'name'   => 'Auchindoun',
             'floors' => [
@@ -606,7 +606,7 @@ return [
             ],
         ],
     ],
-    'legion'       => [
+    'legion'     => [
         'arcway'                      => [
             'name'   => 'The Arcway',
             'floors' => [
@@ -714,7 +714,7 @@ return [
             ],
         ],
     ],
-    'bfa'          => [
+    'bfa'        => [
         'atal_dazar'                => [
             'name'   => 'Atal\'Dazar',
             'floors' => [
@@ -820,7 +820,7 @@ return [
             ],
         ],
     ],
-    'sl'  => [
+    'sl'         => [
         'de_other_side'              => [
             'name'   => 'De Other Side',
             'floors' => [
@@ -904,7 +904,7 @@ return [
             ],
         ],
     ],
-    'df' => [
+    'df'         => [
         'algeth_ar_academy'                    => [
             'name'   => 'Algeth\'ar Academy',
             'floors' => [
@@ -994,7 +994,7 @@ return [
             ],
         ],
     ],
-    'tww'          => [
+    'tww'        => [
         'ara_kara_city_of_echoes'    => [
             'name'   => 'Ara-Kara: City of Echoes',
             'floors' => [

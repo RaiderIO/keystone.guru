@@ -23,7 +23,7 @@ return [
     'legion'             => [
         'name' => 'Легион',
     ],
-    'battle_for_azeroth' => [
+    'bfa' => [
         'name' => 'Битва за Азерот',
     ],
     'sl'        => [

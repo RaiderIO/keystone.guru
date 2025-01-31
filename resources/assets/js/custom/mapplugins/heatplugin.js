@@ -48,7 +48,7 @@ class HeatPlugin extends MapPlugin {
             return;
         }
 
-        this.heatLayer = L.heatLayer([]);
+        this.heatLayer = L.heatLayer([], $.extend({}, c.map.heatmapSettings));
 
         this.heatLayer.addTo(this.map.leafletMap);
         // let self = this;
@@ -66,6 +66,12 @@ class HeatPlugin extends MapPlugin {
         //         }
         //     }
         // });
+    }
+
+    setOptions(options) {
+        console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
+        this.heatLayer.setOptions(options);
     }
 
     removeFromMap() {

@@ -5,12 +5,14 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
+use App\Models\Season;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
 
 /**
  * @var bool                         $showAds
  * @var Dungeon                      $dungeon
+ * @var Season                       $season
  * @var bool                         $embed
  * @var string                       $embedStyle
  * @var bool                         $isMobile
@@ -21,17 +23,23 @@ use Illuminate\Support\Collection;
  * @var Collection<Affix>            $featuredAffixesByActiveExpansion
  * @var int                          $keyLevelMin
  * @var int                          $keyLevelMax
+ * @var int                          $itemLevelMin
+ * @var int                          $itemLevelMax
+ * @var int                          $playerDeathsMin
+ * @var int                          $playerDeathsMax
  * @var Collection<WeeklyAffixGroup> $seasonWeeklyAffixGroups
  */
 
 // By default, show it if we're not mobile, but allow overrides
-$pullsSidebarState    = (int)($_COOKIE['pulls_sidebar_state'] ?? 1);
-$defaultState         ??= $isMobile ? 0 : $pullsSidebarState;
-$heatmapSearchEnabled = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
+$heatmapSearchSidebarState = (int)($_COOKIE['heatmap_search_sidebar_state'] ?? 1);
+$defaultState              ??= $isMobile ? 0 : $heatmapSearchSidebarState;
+$heatmapSearchEnabled      = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
 
 $filterExpandedCookiePrefix = 'heatmap_search_expanded';
 $expandedDataType           = (bool)($_COOKIE[sprintf('%s_data_type', $filterExpandedCookiePrefix)] ?? 0); // Hide by default
 $expandedKeyLevel           = (bool)($_COOKIE[sprintf('%s_key_level', $filterExpandedCookiePrefix)] ?? 1);
+$expandedItemLevel          = (bool)($_COOKIE[sprintf('%s_item_level', $filterExpandedCookiePrefix)] ?? 1);
+$expandedPlayerDeaths       = (bool)($_COOKIE[sprintf('%s_player_deaths', $filterExpandedCookiePrefix)] ?? 1);
 $expandedAffixes            = (bool)($_COOKIE[sprintf('%s_affixes', $filterExpandedCookiePrefix)] ?? 1);
 $expandedAffixWeek          = (bool)($_COOKIE[sprintf('%s_weekly_affix_groups', $filterExpandedCookiePrefix)] ?? 1);
 $expandedDuration           = (bool)($_COOKIE[sprintf('%s_duration', $filterExpandedCookiePrefix)] ?? 1);
@@ -40,9 +48,9 @@ $shouldShowHeatmapSearchSidebar = $defaultState === 1;
 $hideOnMove                     ??= $isMobile;
 $showAds                        ??= true;
 /** @var Collection<AffixGroup> $affixGroups */
-$affixGroups = $allAffixGroupsByActiveExpansion->get($dungeon->expansion->shortname);
+$affixGroups = $allAffixGroupsByActiveExpansion->get($season->expansion->shortname);
 /** @var Collection<Affix> $featuredAffixes */
-$featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->shortname);
+$featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->shortname);
 ?>
 @include('common.general.inline', ['path' => 'common/maps/heatmapsearchsidebar', 'options' => [
     'stateCookie' => 'heatmap_search_sidebar_state',
@@ -55,6 +63,10 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
 
     'keyLevelMin' => $keyLevelMin,
     'keyLevelMax' => $keyLevelMax,
+    'itemLevelMin' => $itemLevelMin,
+    'itemLevelMax' => $itemLevelMax,
+    'playerDeathsMin' => $playerDeathsMin,
+    'playerDeathsMax' => $playerDeathsMax,
     'durationMin' => 5,
     'durationMax' => 60,
 
@@ -64,14 +76,23 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
     'filterEventTypeSelector' => 'input[name="event_type"]',
     'filterDataTypeContainerSelector' => '#filter_data_type_container',
     'filterDataTypeSelector' => 'input[name="data_type"]',
-    'filterLevelSelector' => '#filter_level',
-    'filterAffixGroupsSelector' => '#filter_affixes',
+    'filterKeyLevelSelector' => '#filter_key_level',
+    'filterItemLevelSelector' => '#filter_item_level',
+    'filterPlayerDeathsSelector' => '#filter_player_deaths',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
     'filterWeeklyAffixGroupsSelector' => '#filter_weekly_affix_groups',
     'filterDurationSelector' => '#filter_duration',
 
-    'filterCollapseNames' => ['level', 'affixes', 'duration'],
+    'filterCollapseNames' => ['keyLevel', 'includeAffixIds', 'duration'],
     'filterCookiePrefix' => $filterExpandedCookiePrefix,
+
+    'leafletHeatOptionsMinOpacitySelector' => '#heatmap_heat_option_min_opacity',
+    'leafletHeatOptionsMaxZoomSelector' => '#heatmap_heat_option_max_zoom',
+    'leafletHeatOptionsMaxSelector' => '#heatmap_heat_option_max',
+    'leafletHeatOptionsRadiusSelector' => '#heatmap_heat_option_radius',
+    'leafletHeatOptionsBlurSelector' => '#heatmap_heat_option_blur',
+    'leafletHeatOptionsGradientSelector' => '#heatmap_heat_option_gradient',
+    'leafletHeatOptionsPaneSelector' => '#heatmap_heat_option_pane',
 
     'dependencies' => ['common/maps/map'],
     // Mobile sidebar options
@@ -84,11 +105,6 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
 
 @section('scripts')
     @parent
-
-    @include('common.handlebars.affixgroupsselect', [
-        'id' => 'filter_affixes',
-        'affixgroups' => $affixGroups,
-    ])
 
     @include('common.handlebars.affixweekselect', [
         'id' => 'filter_weekly_affix_groups',
@@ -135,10 +151,10 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
         </div>
 
         <div class="data_container p-2" data-simplebar>
-            <div id="heatmap_search_options_container">
+            <div id="heatmap_search_options_container" class="px-1">
                 <div class="row">
                     <div class="col">
-                        <div id="heatmap_search_options_current_filters" class="pl-1">
+                        <div id="heatmap_search_options_current_filters">
 
                         </div>
                     </div>
@@ -149,27 +165,42 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                          data-toggle="buttons">
                         <label class="btn btn-secondary active">
                             <input type="radio" name="event_type"
-                                   class="{{ CombatLogEventEventType::EnemyKilled->value }}"
-                                   value="{{ CombatLogEventEventType::EnemyKilled->value }}"
+                                   class="{{ CombatLogEventEventType::NpcDeath->value }}"
+                                   value="{{ CombatLogEventEventType::NpcDeath->value }}"
                                    checked>
-                            <i class="fas fa-users"></i> {{ __('combatlogeventtypes.enemy_killed') }}
+                            <img src="{{ url('images/spells/achievement_bg_killxenemies_generalsroom.jpg') }}"
+                                 alt="{{ __('view_common.maps.controls.heatmapsearch.npc_death_alt') }}"
+                                 class="filter_event_type_icon">
+                            {{ __('combatlogeventtypes.npc_death') }}
                         </label>
                         <label class="btn btn-secondary">
                             <input type="radio" name="event_type"
                                    class="{{ CombatLogEventEventType::PlayerDeath->value }}"
                                    value="{{ CombatLogEventEventType::PlayerDeath->value }}">
-                            <i class="fas fa-skull-crossbones"></i> {{ __('combatlogeventtypes.player_death') }}
+                            <img src="{{ url('images/spells/ability_rogue_feigndeath.jpg') }}"
+                                 alt="{{ __('view_common.maps.controls.heatmapsearch.player_death_alt') }}"
+                                 class="filter_event_type_icon">
+                            {{ __('combatlogeventtypes.player_death') }}
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="event_type"
+                                   class="{{ CombatLogEventEventType::PlayerSpell->value }}"
+                                   value="{{ CombatLogEventEventType::PlayerSpell->value }}">
+                            <img src="{{ url('images/spells/spell_nature_bloodlust.jpg') }}"
+                                 alt="{{ __('view_common.maps.controls.heatmapsearch.bloodlust_alt') }}"
+                                 class="filter_event_type_icon">
+                            {{ __('combatlogeventtypes.player_spell') }}
                         </label>
                     </div>
                 </div>
 
-                @component('common.search.filter', [
-                    'key' => 'data_type',
-                    'text' => __('view_common.maps.controls.heatmapsearch.data_type'),
-                    'expanded' => $expandedDataType,
+                @component('common.forms.labelinput', [
+                    'id' => 'filter_data_type_container',
+                    'name' => 'filter_data_type',
+                    'label' => __('view_common.maps.controls.heatmapsearch.data_type'),
                     'title' => __('view_common.maps.controls.heatmapsearch.data_type_title'),
                 ])
-                    <div id="filter_data_type_container" class="btn-group btn-group-toggle w-100 mb-1"
+                    <div class="btn-group btn-group-toggle w-100 mb-1"
                          data-toggle="buttons">
                         <label class="btn btn-secondary">
                             <input type="radio" name="data_type"
@@ -187,40 +218,82 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                     </div>
                 @endcomponent
 
-                @component('common.search.filter', ['key' => 'level', 'text' => __('view_common.maps.controls.heatmapsearch.key_level'), 'expanded' => $expandedKeyLevel])
-                    <input id="filter_level" type="text" name="level" value="{{ old('level') }}"/>
+                @component('common.forms.labelinput', [
+                    'name' => 'key_level',
+                    'label' => __('view_common.maps.controls.heatmapsearch.key_level')
+                ])
+                    <input id="filter_key_level" type="text" name="key_level" value="{{ old('key_level') }}"/>
+                @endcomponent
+
+                @component('common.forms.labelinput', [
+                    'name' => 'item_level',
+                    'label' => __('view_common.maps.controls.heatmapsearch.item_level'),
+                ])
+                    <input id="filter_item_level" type="text" name="item_level" value="{{ old('item_level') }}"/>
+                @endcomponent
+
+                @component('common.forms.labelinput', [
+                    'name' => 'player_deaths',
+                    'label' => __('view_common.maps.controls.heatmapsearch.player_deaths')
+                ])
+                    <input id="filter_player_deaths" type="text" name="player_deaths"
+                           value="{{ old('player_deaths') }}"/>
+                @endcomponent
+
+                @component('common.forms.labelinput', [
+                    'name' => 'duration',
+                    'label' => __('view_common.maps.controls.heatmapsearch.duration'),
+                ])
+                    <input id="filter_duration" type="text" name="duration" value="{{ old('duration') }}"/>
+                @endcomponent
+
+                @component('common.forms.labelinput', [
+                    'name' => 'weekly_affix_groups',
+                    'label' => __('view_common.maps.controls.heatmapsearch.weekly_affix_groups'),
+                ])
+                    <div class="filter_affix">
+                        <div class="row">
+                            <div class="col">
+                                {!!
+                                    Form::select(
+                                        'filter_weekly_affix_groups[]',
+                                        $seasonWeeklyAffixGroups->mapWithKeys(function(WeeklyAffixGroup $seasonWeeklyAffixGroup){
+                                            return [$seasonWeeklyAffixGroup->week => $seasonWeeklyAffixGroup->affixGroup->text];
+                                        }), [],
+                                        ['id' => 'filter_weekly_affix_groups',
+                                        'name' => 'weekly_affix_groups',
+                                        'class' => 'form-control affixselect selectpicker',
+                                        'multiple' => 'multiple',
+                                        'title' => __('view_common.maps.controls.heatmapsearch.weekly_affix_groups_title')]
+                                    )
+                                 !!}
+                            </div>
+                        </div>
+                    </div>
                 @endcomponent
 
                 @if($dungeon->gameVersion->has_seasons)
-{{--                    @component('common.search.filter', ['key' => 'season', 'text' => __('view_common.maps.controls.heatmapsearch.season'), 'expanded' => $expandedAffixWeek])--}}
-{{--                        <div class="filter_affix">--}}
-{{--                            <div class="row">--}}
-{{--                                <div class="col">--}}
-{{--                                    {!! Form::select('filter_season[]',--}}
-{{--                                        $seasonWeeklyAffixGroups->mapWithKeys(function(WeeklyAffixGroup $seasonWeeklyAffixGroup){--}}
-{{--                                            return [$seasonWeeklyAffixGroup->week => $seasonWeeklyAffixGroup->affixGroup->text];--}}
-{{--                                        }), [],--}}
-{{--                                        ['id' => 'filter_season',--}}
-{{--                                        'class' => 'form-control affixselect selectpicker',--}}
-{{--                                        'title' => __('view_common.maps.controls.heatmapsearch.season_title')]) !!}--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    @endcomponent--}}
+                    {{--                    @component('common.forms.labelinput', ['key' => 'season', 'text' => __('view_common.maps.controls.heatmapsearch.season'), 'expanded' => $expandedAffixWeek])--}}
+                    {{--                        <div class="filter_affix">--}}
+                    {{--                            <div class="row">--}}
+                    {{--                                <div class="col">--}}
+                    {{--                                    {!! Form::select('filter_season[]',--}}
+                    {{--                                        $seasonWeeklyAffixGroups->mapWithKeys(function(WeeklyAffixGroup $seasonWeeklyAffixGroup){--}}
+                    {{--                                            return [$seasonWeeklyAffixGroup->week => $seasonWeeklyAffixGroup->affixGroup->text];--}}
+                    {{--                                        }), [],--}}
+                    {{--                                        ['id' => 'filter_season',--}}
+                    {{--                                        'class' => 'form-control affixselect selectpicker',--}}
+                    {{--                                        'title' => __('view_common.maps.controls.heatmapsearch.season_title')]) !!}--}}
+                    {{--                                </div>--}}
+                    {{--                            </div>--}}
+                    {{--                        </div>--}}
+                    {{--                    @endcomponent--}}
 
-                    @component('common.search.filter', ['key' => 'affixes', 'text' => __('view_common.maps.controls.heatmapsearch.affixes'), 'expanded' => $expandedAffixes])
+                    @component('common.forms.labelinput', [
+                        'name' => 'affixes',
+                        'label' => __('view_common.maps.controls.heatmapsearch.affixes'),
+                    ])
                         <div class="filter_affix">
-                            <div class="row">
-                                <div class="col">
-                                    {!! Form::select('filter_affixes[]', $affixGroups->pluck('text', 'id'), [],
-                                        ['id' => 'filter_affixes',
-                                        'class' => 'form-control affixselect selectpicker',
-                                        'multiple' => 'multiple',
-                                        'title' => __('view_common.maps.controls.heatmapsearch.affixes_title'),
-                                        'data-selected-text-format' => 'count > 1',
-                                        'data-count-selected-text' => __('view_common.maps.controls.heatmapsearch.affixes_selected')]) !!}
-                                </div>
-                            </div>
                                 <?php
                                 $chunkedFeaturedAffixes = $featuredAffixes->chunk($featuredAffixes->count() < 9 ? 4 : (int)($featuredAffixes->count() / 2));
                                 ?>
@@ -228,10 +301,10 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                                 <div class="row mt-2 pl-2 featured_affixes">
                                     @foreach($affixRow as $affix)
                                             <?php /** @var Affix $affix */ ?>
-                                        <div class="col px-xl-1">
+                                        <div class="col">
                                             <div
-                                                class="select_icon class_icon affix_icon_{{ $affix->image_name }} selectable"
-                                                data-toggle="tooltip" data-id="{{ $affix->id }}"
+                                                class="select_icon class_icon affix_icon_{{ $affix->image_name }} selectable m-auto"
+                                                data-toggle="tooltip" data-id="{{ $affix->affix_id }}"
                                                 title="{{ __($affix->description) }}"
                                                 style="height: 24px;">
                                             </div>
@@ -243,25 +316,91 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($dungeon->expansion->s
                     @endcomponent
                 @endif
 
-                @component('common.search.filter', ['key' => 'weekly_affix_groups', 'text' => __('view_common.maps.controls.heatmapsearch.weekly_affix_groups'), 'expanded' => $expandedAffixWeek])
-                    <div class="filter_affix">
+                @if(Auth::check() && Auth::user()->hasRole('admin'))
+                    @component('common.search.filter', ['key' => 'heatoptions', 'text' => __('view_common.maps.controls.heatmapsearch.heat_options'), 'expanded' => true])
                         <div class="row">
                             <div class="col">
-                                {!! Form::select('filter_weekly_affix_groups[]',
-                                    $seasonWeeklyAffixGroups->mapWithKeys(function(WeeklyAffixGroup $seasonWeeklyAffixGroup){
-                                        return [$seasonWeeklyAffixGroup->week => $seasonWeeklyAffixGroup->affixGroup->text];
-                                    }), [],
-                                    ['id' => 'filter_weekly_affix_groups',
-                                    'class' => 'form-control affixselect selectpicker',
-                                    'title' => __('view_common.maps.controls.heatmapsearch.weekly_affix_groups_title')]) !!}
+                                <label for="heatmap_heat_option_min_opacity">
+                                    {{ __('view_common.maps.controls.heatmapsearch.heat_option.min_opacity') }}
+                                </label>
+                            </div>
+                            <div class="col">
+                                <input id="heatmap_heat_option_min_opacity" type="text" name="min_opacity" value="0.1"/>
                             </div>
                         </div>
-                    </div>
-                @endcomponent
 
-                @component('common.search.filter', ['key' => 'duration', 'text' => __('view_common.maps.controls.heatmapsearch.duration'), 'expanded' => $expandedDuration])
-                    <input id="filter_duration" type="text" name="duration" value="{{ old('duration') }}"/>
-                @endcomponent
+                        <div class="row">
+                            <div class="col">
+                                <label for="heatmap_heat_option_max_zoom">
+                                    {{ __('view_common.maps.controls.heatmapsearch.heat_option.max_zoom') }}
+                                </label>
+                            </div>
+                            <div class="col">
+                                <input id="heatmap_heat_option_max_zoom" type="text" name="max_zoom" value="5"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="heatmap_heat_option_max">
+                                    {{ __('view_common.maps.controls.heatmapsearch.heat_option.max') }}
+                                </label>
+                            </div>
+                            <div class="col">
+                                <input id="heatmap_heat_option_max" type="text" name="max" value="1.0"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="heatmap_heat_option_radius">
+                                    {{ __('view_common.maps.controls.heatmapsearch.heat_option.radius') }}
+                                </label>
+                            </div>
+                            <div class="col">
+                                <input id="heatmap_heat_option_radius" type="text" name="radius" value="35"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="heatmap_heat_option_blur">
+                                    {{ __('view_common.maps.controls.heatmapsearch.heat_option.blur') }}
+                                </label>
+                            </div>
+                            <div class="col">
+                                <input id="heatmap_heat_option_blur" type="text" name="blur" value="15"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="heatmap_heat_option_gradient">
+                                    {{ __('view_common.maps.controls.heatmapsearch.heat_option.gradient') }}
+                                </label>
+                            </div>
+                            <div class="col">
+                                <input id="heatmap_heat_option_gradient" type="text" name="gradient"
+                                       value='{".4":"blue",".6":"cyan",".7":"lime",".8":"yellow","1":"red"}'/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="heatmap_heat_option_pane">
+                                    {{ __('view_common.maps.controls.heatmapsearch.heat_option.pane') }}
+                                </label>
+                            </div>
+                            <div class="col">
+                                {{ Form::select('pane',
+                                    ['overlayPane' => 'Overlay', 'markerPane' => 'Marker', 'tooltipPane' => 'Tooltip'],
+                                    'overlayPane',
+                                    ['id' => 'heatmap_heat_option_pane', 'class' => 'selectpicker']
+                                ) }}
+                            </div>
+                        </div>
+                    @endcomponent
+                @endif
 
                 <div class="row">
                     <div id="heatmap_search_result" class="col" style="visibility: hidden;">
