@@ -1,7 +1,10 @@
 class ItemLevelHandler {
-    constructor(min, max) {
-        this.min = min;
-        this.max = max;
+    constructor(from, to) {
+        this.min = 400;
+        this.max = 999;
+
+        this.from = from;
+        this.to = to;
 
         this.rangeSlider = null;
     }
@@ -13,8 +16,8 @@ class ItemLevelHandler {
             type: 'double',
             min: this.min,
             max: this.max,
-            from: this.min,
-            to: this.max,
+            from: this.from,
+            to: this.to,
         }, options)).data('ionRangeSlider');
     }
 
@@ -25,8 +28,8 @@ class ItemLevelHandler {
         this.rangeSlider.update({
             min: this.min,
             max: this.max,
-            from: this.min,
-            to: this.max,
+            from: this.from,
+            to: this.to,
         });
     }
 }

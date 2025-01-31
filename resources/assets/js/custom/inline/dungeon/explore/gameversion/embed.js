@@ -28,8 +28,8 @@ class DungeonExploreGameversionEmbed extends InlineCode {
                 return false;
             }
 
+            // Maybe this message is not for us?
             if (typeof event.data.function === 'undefined' || event.data.function === null) {
-                console.error(`Must pass a function to call!`);
                 return false;
             }
 
