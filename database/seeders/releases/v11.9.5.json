@@ -1,0 +1,61 @@
+{
+    "id": 271,
+    "release_changelog_id": 278,
+    "version": "v11.9.5",
+    "title": "Many more heatmap improvements",
+    "backup_db": 1,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-01-31T11:18:35+00:00",
+    "updated_at": "2025-01-31T11:18:35+00:00",
+    "changelog": {
+        "id": 278,
+        "release_id": 271,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 278,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2683,
+                "change": "Dungeons now have a setting to say if heatmaps are enabled, instead of fishing Opensearch for this data."
+            },
+            {
+                "release_changelog_id": 278,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2662,
+                "change": "Week selection now allows multi-select."
+            },
+            {
+                "release_changelog_id": 278,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2418,
+                "change": "Heatmap data now comes from Raider.io instead of the local cluster."
+            },
+            {
+                "release_changelog_id": 278,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2659,
+                "change": "Added min\/max ilvl filter."
+            },
+            {
+                "release_changelog_id": 278,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2663,
+                "change": "Added min\/max player deaths filter."
+            },
+            {
+                "release_changelog_id": 278,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2691,
+                "change": "URL\/filters no longer show up if they have the default values."
+            },
+            {
+                "release_changelog_id": 278,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2680,
+                "change": "Affixgroup filter removed (use individual affixes instead)."
+            }
+        ]
+    }
+}
