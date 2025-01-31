@@ -25,6 +25,8 @@
  * @property {String} filterEventTypeSelector
  * @property {String} filterDataTypeContainerSelector
  * @property {String} filterDataTypeSelector
+ * @property {String} filterRegionIdContainerSelector
+ * @property {String} filterRegionIdSelector
  * @property {String} filterKeyLevelSelector
  * @property {String} filterItemLevelSelector
  * @property {String} filterPlayerDeathsSelector
@@ -85,6 +87,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
                 self._search();
             }),
             'dataType': new SearchFilterRadioDataType(this.options.filterDataTypeContainerSelector, this.options.filterDataTypeSelector, this._search.bind(this)),
+            'regionId': new SearchFilterRadioRegionId(this.options.filterRegionIdContainerSelector, this.options.filterRegionIdSelector, this._search.bind(this)),
             'keyLevel': new SearchFilterKeyLevel(this.options.filterKeyLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
             'itemLevel': new SearchFilterItemLevel(this.options.filterItemLevelSelector, this._search.bind(this), this.options.itemLevelMin, this.options.itemLevelMax),
             'playerDeaths': new SearchFilterPlayerDeaths(this.options.filterPlayerDeathsSelector, this._search.bind(this), this.options.playerDeathsMin, this.options.playerDeathsMax),
