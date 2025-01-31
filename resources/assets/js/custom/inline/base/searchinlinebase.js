@@ -26,6 +26,17 @@ class SearchInlineBase extends InlineCode {
         let queryParams = getQueryParams();
 
         // Restore URL -> filters values
+        this._restoreFiltersFromQueryParams(queryParams);
+    }
+
+    /**
+     *
+     * @param queryParams
+     * @protected
+     */
+    _restoreFiltersFromQueryParams(queryParams) {
+        console.assert(this instanceof SearchInlineBase, 'this is not a SearchInlineBase!', this);
+
         for (let key in queryParams) {
             let filtersKey = key.replace('[]', '');
             let valueAssigned = false;
@@ -58,6 +69,8 @@ class SearchInlineBase extends InlineCode {
      * @protected
      */
     _updateFilters() {
+        console.assert(this instanceof SearchInlineBase, 'this is not a SearchInlineBase!', this);
+
         if (typeof this.options.currentFiltersSelector === 'undefined') {
             return;
         }
@@ -97,6 +110,8 @@ class SearchInlineBase extends InlineCode {
      * @protected
      */
     _updateUrl(searchParams, blacklist = []) {
+        console.assert(this instanceof SearchInlineBase, 'this is not a SearchInlineBase!', this);
+
         let urlParams = [];
 
         blacklist.push('offset');
@@ -125,6 +140,8 @@ class SearchInlineBase extends InlineCode {
      * @protected
      */
     _search(options = {}, queryParameters = {}, queryParametersUrlBlacklist = []) {
+        console.assert(this instanceof SearchInlineBase, 'this is not a SearchInlineBase!', this);
+
         let searchParams = new SearchParams(this.filters, queryParameters);
 
         this._updateFilters();

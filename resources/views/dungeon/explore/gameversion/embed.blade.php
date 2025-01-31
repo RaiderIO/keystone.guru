@@ -35,11 +35,15 @@ use Illuminate\Support\Collection;
     'cookieConsent' => false,
 ])
 
+@include('common.general.inline', ['path' => 'dungeon/explore/gameversion/embed', 'options' => [
+    'dependencies' => ['common/maps/map'],
+]])
+
 @include('common.general.inline', ['path' => 'common/maps/embedtopbar', 'options' => [
     'dependencies' => ['common/maps/map'],
     'switchDungeonFloorSelect' => '#map_floor_selection_dropdown',
     'defaultSelectedFloorId' => $floor->id,
-    'mdtStringCopyEnabled' => $dungeon->mdt_supported,
+    'mdtStringCopyEnabled' => false,
 ]])
 
 @section('content')
