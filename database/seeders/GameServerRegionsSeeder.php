@@ -57,6 +57,15 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
                 'reset_day_offset'   => 2,
                 'reset_hours_offset' => 23,
             ],
+            // https://www.reddit.com/r/wow/comments/9sbujc/korean_wow_user_back_brought_some_korean_wow/e8ntkck/?context=3
+            [
+                'short'              => GameServerRegion::WORLD,
+                'name'               => 'gameserverregions.world',
+                'epoch_start'        => '2005-12-28 23:00:00',
+                'timezone'           => 'Europe/London',
+                'reset_day_offset'   => 2,
+                'reset_hours_offset' => 7,
+            ],
         ];
 
         GameServerRegion::from(DatabaseSeeder::getTempTableName(GameServerRegion::class))->insert($gameServerRegionAttributes);

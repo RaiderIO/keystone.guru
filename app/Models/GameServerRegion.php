@@ -46,6 +46,7 @@ class GameServerRegion extends CacheModel
     public const CHINA    = 'cn';
     public const TAIWAN   = 'tw';
     public const KOREA    = 'kr';
+    public const WORLD    = 'world';
 
     public const DEFAULT_REGION = GameServerRegion::AMERICAS;
 
@@ -55,6 +56,7 @@ class GameServerRegion extends CacheModel
         self::CHINA    => 3,
         self::TAIWAN   => 4,
         self::KOREA    => 5,
+        self::WORLD    => 6,
     ];
 
     protected $fillable = ['short', 'name', 'epoch_start', 'timezone', 'reset_day_offset', 'reset_hours_offset'];

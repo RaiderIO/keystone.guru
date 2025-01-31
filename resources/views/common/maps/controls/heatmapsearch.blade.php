@@ -6,6 +6,7 @@ use App\Models\CharacterClassSpecialization;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
+use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
@@ -30,12 +31,13 @@ use Illuminate\Support\Collection;
  * @var int                                      $playerDeathsMax
  * @var Collection<WeeklyAffixGroup>             $seasonWeeklyAffixGroups
  * @var Collection<CharacterClassSpecialization> $characterClassSpecializations
+ * @var Collection<GameServerRegion>             $allRegions
  */
 
 // By default, show it if we're not mobile, but allow overrides
-$heatmapSearchSidebarState = (int)($_COOKIE['heatmap_search_sidebar_state'] ?? 1);
-$defaultState              ??= $isMobile ? 0 : $heatmapSearchSidebarState;
-$heatmapSearchEnabled      = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
+$heatmapSearchSidebarState  = (int)($_COOKIE['heatmap_search_sidebar_state'] ?? 1);
+$defaultState               ??= $isMobile ? 0 : $heatmapSearchSidebarState;
+$heatmapSearchEnabled       = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
 $filterExpandedCookiePrefix = 'heatmap_search_expanded';
 
 $shouldShowHeatmapSearchSidebar = $defaultState === 1;
@@ -70,6 +72,8 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
     'filterEventTypeSelector' => 'input[name="event_type"]',
     'filterDataTypeContainerSelector' => '#filter_data_type_container',
     'filterDataTypeSelector' => 'input[name="data_type"]',
+    'filterRegionContainerSelector' => '#filter_region_container',
+    'filterRegionSelector' => 'input[name="region"]',
     'filterKeyLevelSelector' => '#filter_key_level',
     'filterItemLevelSelector' => '#filter_item_level',
     'filterPlayerDeathsSelector' => '#filter_player_deaths',
@@ -212,6 +216,25 @@ $featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->sh
                         </label>
                     </div>
                 @endcomponent
+
+
+                <div class="form-group">
+                    <div id="filter_region_container" class="btn-group btn-group-toggle w-100"
+                         data-toggle="buttons">
+                        @foreach($allRegions as $region)
+                            <label class="btn btn-secondary">
+                                <input type="radio" name="region"
+                                       class="{{ $region->short }}"
+                                       value="{{ $region->short }}"
+                                >
+                                <img src="{{ url(sprintf('images/flags/%s.png', $region->short)) }}"
+                                     alt="{{ __($region->name) }}"
+                                     class="filter_region_icon">
+                                {{ __($region->name) }}
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
 
                 @component('common.forms.labelinput', [
                     'name' => 'key_level',

@@ -1,4 +1,4 @@
-class SearchFilterSpecializations extends SearchFilterInput {
+class SearchFilterSpecializations extends SearchFilterSelect {
     constructor(selector, onChange) {
         super(selector, onChange);
     }
@@ -14,10 +14,6 @@ class SearchFilterSpecializations extends SearchFilterInput {
 
             refreshSelectPickers();
         });
-    }
-
-    getDefaultValue() {
-        return [];
     }
 
     getFilterHeaderText() {

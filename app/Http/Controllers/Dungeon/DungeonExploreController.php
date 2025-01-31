@@ -182,6 +182,7 @@ class DungeonExploreController extends Controller
         $mapBackgroundColor    = $request->get('mapBackgroundColor');
         $showEnemyInfo         = $request->get('showEnemyInfo', false);
         $showTitle             = $request->get('showTitle', true);
+        $defaultZoom           = $request->get('defaultZoom', 1);
 
         $parameters = [
             'type'             => $request->get('type'),
@@ -217,6 +218,7 @@ class DungeonExploreController extends Controller
                 $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),
             'parameters'              => $parameters,
+            'defaultZoom'             => $defaultZoom,
             'embedOptions'            => [
                 'style'                 => $style,
                 'headerBackgroundColor' => $headerBackgroundColor,

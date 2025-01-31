@@ -1,0 +1,31 @@
+{
+    "id": 273,
+    "release_changelog_id": 280,
+    "version": "v11.9.7",
+    "title": "Even more heatmap changes",
+    "backup_db": 1,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-01-31T15:55:25+00:00",
+    "updated_at": "2025-01-31T15:55:25+00:00",
+    "changelog": {
+        "id": 280,
+        "release_id": 273,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 280,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2697,
+                "change": "You can now pass a defaultZoom to the explore embeds."
+            },
+            {
+                "release_changelog_id": 280,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2660,
+                "change": "Specialization filters now once again support multiple specs at once"
+            }
+        ]
+    }
+}

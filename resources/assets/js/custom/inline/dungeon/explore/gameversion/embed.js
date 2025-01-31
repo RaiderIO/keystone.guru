@@ -8,7 +8,8 @@ class DungeonExploreGameversionEmbed extends InlineCode {
         let validHostnames = [
             'localhost',
             'keystone.guru',
-            'raider.io'
+            'raider.io',
+            'raiderio.dev',
         ];
 
         window.addEventListener('message', (event) => {
@@ -28,8 +29,8 @@ class DungeonExploreGameversionEmbed extends InlineCode {
                 return false;
             }
 
+            // Maybe this message is not for us?
             if (typeof event.data.function === 'undefined' || event.data.function === null) {
-                console.error(`Must pass a function to call!`);
                 return false;
             }
 
@@ -45,6 +46,8 @@ class DungeonExploreGameversionEmbed extends InlineCode {
 
                 console.log('Applying filters', event.data);
                 inlineCode.searchWithFilters(event.data);
+            } else {
+                console.warn('Unknown function', event.data.function);
             }
 
             return true;

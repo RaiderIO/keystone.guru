@@ -501,6 +501,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('featuredAffixesByActiveExpansion', $regionViewVariables['featuredAffixesByActiveExpansion']);
 
             $view->with('characterClassSpecializations', $globalViewVariables['characterClassSpecializations']);
+            $view->with('allRegions', $globalViewVariables['allRegions']);
         });
         view()->composer('common.maps.controls.pulls', static function (View $view) {
             $view->with('showAllEnabled', $_COOKIE['dungeon_speedrun_required_npcs_show_all'] ?? '0');
