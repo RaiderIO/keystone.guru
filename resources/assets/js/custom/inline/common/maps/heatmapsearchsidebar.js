@@ -30,6 +30,7 @@
  * @property {String} filterPlayerDeathsSelector
  * @property {String} filterAffixesSelector
  * @property {String} filterWeeklyAffixGroupsSelector
+ * @property {String} filterSpecializationsSelector
  * @property {String} filterDurationSelector
  *
  * @property {String} filterCollapseNames
@@ -101,10 +102,9 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
                 self._search();
             }),
+            'includeSpecIds': new SearchFilterSpecializations(this.options.filterSpecializationsSelector, self._search.bind(this)),
             'duration': new SearchFilterDuration(this.options.filterDurationSelector, this._search.bind(this), this.options.durationMin, this.options.durationMax),
         };
-
-        console.log($(this.options.filterWeeklyAffixGroupsSelector).length);
 
         this._setupFilterCollapseCookies();
         this._setupLeafletHeatOptions();
@@ -205,6 +205,12 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         this._search();
     }
 
+    searchWithFilters(filters) {
+        this._restoreFiltersFromQueryParams(filters);
+
+        this._search();
+    }
+
     _toggleHeatmap(enabled) {
         console.assert(this instanceof CommonMapsHeatmapsearchsidebar, 'this is not a CommonMapsHeatmapsearchsidebar', this);
         this.map.pluginHeat.toggle(enabled);
@@ -212,7 +218,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         Cookies.set(this.options.enabledStateCookie, (enabled ? 1 : 0) + '', cookieDefaultAttributes);
     }
 
-    _search(queryParameters, options) {
+    _search() {
         console.assert(this instanceof CommonMapsHeatmapsearchsidebar, 'this is not a CommonMapsHeatmapsearchsidebar', this);
 
         if (this.initializing) {

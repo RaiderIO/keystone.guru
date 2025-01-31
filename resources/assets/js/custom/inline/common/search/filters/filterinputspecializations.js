@@ -1,0 +1,53 @@
+class SearchFilterSpecializations extends SearchFilterInput {
+    constructor(selector, onChange) {
+        super(selector, onChange);
+    }
+
+    activate() {
+        super.activate();
+
+        let self = this;
+
+        // Grouped affixes
+        $(this.selector).off('change').on('change', function () {
+            self.onChange();
+
+            refreshSelectPickers();
+        });
+    }
+
+    getDefaultValue() {
+        return [];
+    }
+
+    getFilterHeaderText() {
+        let value = this.getValue();
+
+        let specializationNames = [];
+
+        let characterClassSpecializations = getState().getMapContext().getStaticCharacterClassSpecializations();
+
+        for (let index in value) {
+            let specializationId = parseInt(value[index]);
+
+            let characterClassSpecialization = null;
+            for (let characterClassSpecializationsIndex in characterClassSpecializations) {
+                let characterClassSpecializationCandidate = characterClassSpecializations[characterClassSpecializationsIndex];
+                if (characterClassSpecializationCandidate.specialization_id === specializationId) {
+                    characterClassSpecialization = characterClassSpecializationCandidate;
+                    break;
+                }
+            }
+
+            if (characterClassSpecialization === null) {
+                console.error(`Unable to find character class specialization for ID ${specializationId}`, characterClassSpecializations);
+                continue;
+            }
+
+            specializationNames.push(lang.get(characterClassSpecialization.name))
+        }
+
+        return lang.get('messages.filter_input_select_specializations_header')
+            .replace(':specializations', specializationNames.join(', '));
+    }
+}

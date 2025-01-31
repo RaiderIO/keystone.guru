@@ -138,6 +138,14 @@ class MapContext extends Signalable {
      *
      * @returns {[]}
      */
+    getStaticCharacterClassSpecializations() {
+        return this._options.static.characterClassSpecializations;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
     getStaticRaidMarkers() {
         return this._options.static.raidMarkers;
     }

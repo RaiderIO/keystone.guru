@@ -19,13 +19,17 @@ $showStyle = 'regular';
     <div class="row justify-content-center">
         <div class="col-6">
             @if(!empty($parameters))
-                <iframe src="{{ route('dungeon.explore.gameversion.embed', array_merge([
+                <iframe
+                    id="ksg_iframe"
+                    src="{{ route('dungeon.explore.gameversion.embed', array_merge([
                         'gameVersion' => $gameVersion,
                         'dungeon' => $model
                     ], $parameters)) }}"
                         style="width: 800px; height: 600px; border: none;"></iframe>
             @elseif($showStyle === 'compact')
-                <iframe src="{{ route('dungeon.explore.gameversion.embed', [
+                <iframe
+                    id="ksg_iframe"
+                    src="{{ route('dungeon.explore.gameversion.embed', [
                         'gameVersion' => $gameVersion,
                         'dungeon' => $model,
                         'style' => 'compact',

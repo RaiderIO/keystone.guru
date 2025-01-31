@@ -429,7 +429,7 @@ return [
     'filter_enemy_forces_header_complete'                                  => 'Hodor',
     'filter_image_select_affixes_header'                                   => 'Hodor',
     'filter_image_select_dungeons_header'                                  => 'Hodor',
-    'filter_image_select_weekly_affix_groups_header'                       => 'Hodor',
+    'filter_input_select_weekly_affix_groups_header'                       => 'Hodor',
     'filter_input_affix_group_header'                                      => 'Hodor',
     'filter_input_key_level_header' => 'Hodor',
     'filter_input_rating_header'                                           => 'Hodor',
