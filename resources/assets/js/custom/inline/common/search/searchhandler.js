@@ -31,6 +31,7 @@ class SearchHandler {
         console.assert(searchParams instanceof SearchParams, 'searchParams was not null or a SearchParams', searchParams);
 
         let self = this;
+        let response = null;
 
         $.ajax($.extend({}, {
             type: 'GET',
@@ -40,7 +41,7 @@ class SearchHandler {
             beforeSend: function () {
                 self.loading = true;
                 if (typeof self.options.loaderFn === 'function') {
-                    self.options.loaderFn(true);
+                    self.options.loaderFn(true, null);
                 } else if (typeof self.options.loaderSelector !== 'undefined') {
                     $(self.options.loaderSelector).show();
                 }
@@ -50,6 +51,8 @@ class SearchHandler {
                 }
             },
             success: function (html, textStatus, xhr) {
+                response = html;
+
                 if (options.hasOwnProperty('success')) {
                     options.success(html, textStatus, xhr);
                 }
@@ -57,7 +60,7 @@ class SearchHandler {
             complete: function () {
                 self.loading = false;
                 if (typeof self.options.loaderFn === 'function') {
-                    self.options.loaderFn(false);
+                    self.options.loaderFn(false, response);
                 } else if (typeof self.options.loaderSelector !== 'undefined') {
                     $(self.options.loaderSelector).hide();
                 }
@@ -65,6 +68,8 @@ class SearchHandler {
                 if (options.hasOwnProperty('complete')) {
                     options.complete();
                 }
+                // Reset just in case
+                response = null;
             }
         }, this.getAjaxOptions()));
     }

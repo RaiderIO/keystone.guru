@@ -466,5 +466,6 @@ return [
     'toggle_spell_visibility_success'                                      => 'Spell visibility toggled successfully',
     'toggle_spell_visibility_error'                                        => 'Spell visibility toggle failed',
     'week_label'                                                           => 'Week',
-    'loading'                                                              => 'Loading',
+    'loading_label'                                                        => 'Loading',
+    'run_count_label'                                                      => 'Showing data from :count runs',
 ];

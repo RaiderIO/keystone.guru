@@ -347,9 +347,6 @@ return [
                     'gradient'    => 'Gradient',
                     'pane'        => 'Pane',
                 ],
-                'data'                => [
-                    'dungeon_routes' => 'Showing data from :count runs',
-                ],
             ],
             'header'         => [
                 'toggle_navigation'              => 'Toggle navigation',
