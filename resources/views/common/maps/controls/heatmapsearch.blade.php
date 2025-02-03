@@ -383,7 +383,7 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
                             'title' => __('view_common.maps.controls.heatmapsearch.advanced_option.min_samples_required_title'),
                         ])
                             <input id="filter_min_samples_required" type="text" name="filter_min_samples_required"
-                                   value="5"/>
+                                   value="50"/>
                         @endcomponent
 
                     @endcomponent

@@ -51,8 +51,8 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
          * being sent by the server to KSG, and KSG to the browser.
          */
 
-        $minRequiredSampleFactor = config('keystoneguru.heatmap.api.min_required_sample_factor');
-        if ($minRequiredSampleFactor !== null) {
+        $minRequiredSampleFactor = config('keystoneguru.heatmap.api.min_required_sample_factor_default');
+        if ($heatmapDataFilter->getMinSamplesRequired() === null && $minRequiredSampleFactor !== null) {
             $parameters[] = sprintf('minRequiredSampleFactor=%s', $minRequiredSampleFactor);
         }
 

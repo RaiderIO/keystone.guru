@@ -233,7 +233,7 @@ class DungeonExploreController extends Controller
             'playerDeathsMin'       => 0,
             'playerDeathsMax'       => 99,
             'minSamplesRequiredMin' => 1,
-            'minSamplesRequiredMax' => 10,
+            'minSamplesRequiredMax' => 100,
         ];
     }
 }

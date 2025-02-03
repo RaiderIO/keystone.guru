@@ -29,10 +29,11 @@ class HeatmapDataFilter implements Arrayable
     private Collection $includeAffixIds;
     /** @var Collection<CharacterClassSpecialization> */
     private Collection $includeSpecIds;
-    private ?int       $minPeriod        = null;
-    private ?int       $maxPeriod        = null;
-    private ?int       $timerFractionMin = null;
-    private ?int       $timerFractionMax = null;
+    private ?int       $minPeriod          = null;
+    private ?int       $maxPeriod          = null;
+    private ?int       $timerFractionMin   = null;
+    private ?int       $timerFractionMax   = null;
+    private ?int       $minSamplesRequired = null;
 
     public function __construct(
         private readonly Dungeon                 $dungeon,
@@ -225,6 +226,25 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
+     * @return int|null
+     */
+    public function getMinSamplesRequired(): ?int
+    {
+        return $this->minSamplesRequired;
+    }
+
+    /**
+     * @param int|null $minSamplesRequired
+     * @return HeatmapDataFilter
+     */
+    public function setMinSamplesRequired(?int $minSamplesRequired): HeatmapDataFilter
+    {
+        $this->minSamplesRequired = $minSamplesRequired;
+
+        return $this;
+    }
+
+    /**
      * Converts the filter into an array that will be passed to the Raider.io API in the URL
      *
      * @param Season|null $mostRecentSeason
@@ -241,14 +261,15 @@ class HeatmapDataFilter implements Arrayable
         if ($this->getRegion() !== GameServerRegion::WORLD) {
             $result['region'] = $this->getRegion();
         }
-        $result['minMythicLevel']   = $this->getKeyLevelMin();
-        $result['maxMythicLevel']   = $this->getKeyLevelMax();
-        $result['minItemLevel']     = $this->getItemLevelMin();
-        $result['maxItemLevel']     = $this->getItemLevelMax();
-        $result['minPlayerDeaths']  = $this->getPlayerDeathsMin();
-        $result['maxPlayerDeaths']  = $this->getPlayerDeathsMax();
-        $result['minTimerFraction'] = $this->getTimerFractionMin();
-        $result['maxTimerFraction'] = $this->getTimerFractionMax();
+        $result['minMythicLevel']           = $this->getKeyLevelMin();
+        $result['maxMythicLevel']           = $this->getKeyLevelMax();
+        $result['minItemLevel']             = $this->getItemLevelMin();
+        $result['maxItemLevel']             = $this->getItemLevelMax();
+        $result['minPlayerDeaths']          = $this->getPlayerDeathsMin();
+        $result['maxPlayerDeaths']          = $this->getPlayerDeathsMax();
+        $result['minTimerFraction']         = $this->getTimerFractionMin();
+        $result['maxTimerFraction']         = $this->getTimerFractionMax();
+        $result['minRequiredSamplesFactor'] = $this->getMinSamplesRequired() / 100000;
 
         if ($this->getIncludeAffixIds()->isNotEmpty()) {
             $result['includeAffixIds'] = implode(',', $this->getIncludeAffixIds()->map(
@@ -288,6 +309,7 @@ class HeatmapDataFilter implements Arrayable
         $heatmapDataFilter->setPlayerDeathsMax(isset($requestArray['maxPlayerDeaths']) ? (int)$requestArray['maxPlayerDeaths'] : null);
         $heatmapDataFilter->setTimerFractionMin($requestArray['minTimerFraction'] ?? null);
         $heatmapDataFilter->setTimerFractionMax($requestArray['maxTimerFraction'] ?? null);
+        $heatmapDataFilter->setMinSamplesRequired($requestArray['minSamplesRequired'] ?? null);
 
         $heatmapDataFilter->setIncludeAffixIds(isset($requestArray['includeAffixIds']) ?
             Affix::whereIn('affix_id', $requestArray['includeAffixIds'])->get() : collect());

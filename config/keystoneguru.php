@@ -397,7 +397,7 @@ return [
              *
              * Set to null to disable.
              */
-            'min_required_sample_factor' => 0.0005,
+            'min_required_sample_factor_default' => 0.0005,
 
             /**
              * Toggles between sending the floors as a continuous array or as key value pairs
