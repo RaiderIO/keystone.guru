@@ -111,7 +111,7 @@ class DungeonExploreController extends Controller
 
             $heatmapActive = Feature::active(Heatmap::class) && $dungeon->heatmap_enabled;
 
-            $dungeon->trackPageView();
+            $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
 
             return view('dungeon.explore.gameversion.view', [
                 'gameVersion'             => $gameVersion,
@@ -199,6 +199,8 @@ class DungeonExploreController extends Controller
         $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
 
         $heatmapActive = Feature::active(Heatmap::class) && $dungeon->heatmap_enabled;
+
+        $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED);
 
         return view('dungeon.explore.gameversion.embed', [
             'gameVersion'             => $gameVersion,

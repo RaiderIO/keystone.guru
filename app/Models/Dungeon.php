@@ -78,6 +78,9 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 {
     use DungeonConstants;
 
+    public const PAGE_VIEW_SOURCE_VIEW_DUNGEON       = 1;
+    public const PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED = 2;
+
     /**
      * The accessors to append to the model's array form.
      *
