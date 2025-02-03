@@ -64,8 +64,6 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     'hideOnMove' => $hideOnMove,
     'currentFiltersSelector' => '#heatmap_search_options_current_filters',
     'loaderSelector' => '#heatmap_search_loader',
-    'searchResultSelector' => '#heatmap_search_result',
-    'searchResultDataDungeonRoutesSelector' => '#heatmap_search_result_data_dungeonroutes',
 
     'keyLevelMin' => $keyLevelMin,
     'keyLevelMax' => $keyLevelMax,
@@ -141,12 +139,7 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
                         <i class='fas fa-cog'></i>
                     </button>
                 </div>
-                <div class="col pl-2 pr-2">
-                    <div id="heatmap_search_loader" class="w-100 text-center">
-                        <h5 class="pt-1">
-                            <i class="fas fa-stroopwafel fa-spin"></i> {{ __('view_common.maps.controls.heatmapsearch.loading') }}
-                        </h5>
-                    </div>
+                <div class="col">
                 </div>
                 <div class="col-auto">
                     <input id="heatmap_search_toggle" type="checkbox"
@@ -461,16 +454,6 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
                         </div>
                     @endcomponent
                 @endif
-
-                <div class="row">
-                    <div id="heatmap_search_result" class="col" style="visibility: hidden;">
-                        <div class="pl-1">
-                            {!! __('view_common.maps.controls.heatmapsearch.data.dungeon_routes', [
-                                'count' => '<span id="heatmap_search_result_data_dungeonroutes"> </span>',
-                            ]) !!}
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 

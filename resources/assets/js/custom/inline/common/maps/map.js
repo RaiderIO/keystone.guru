@@ -660,7 +660,9 @@ class CommonMapsMap extends InlineCode {
     _onSnackbarAdd(snackbarAddEvent) {
         console.assert(this instanceof CommonMapsMap, 'this is not a CommonMapsMap', this);
 
-        let template = Handlebars.templates['map_controls_snackbar_template'];
+        let template = Handlebars.templates[
+            snackbarAddEvent.data.compact ? 'map_controls_snackbar_compact' : 'map_controls_snackbar'
+        ];
 
         $('#snackbar_container').append(
             template($.extend({}, getHandlebarsDefaultVariables(), {

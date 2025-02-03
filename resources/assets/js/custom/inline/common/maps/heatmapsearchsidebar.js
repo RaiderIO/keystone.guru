@@ -5,8 +5,6 @@
  * @property {Boolean} hideOnMove
  * @property {String} currentFiltersSelector
  * @property {String} loaderSelector
- * @property {String} searchResultSelector
- * @property {String} searchResultDataDungeonRoutesSelector
  *
  * @property {String} keyLevelSelector
  * @property {Number} keyLevelMin
@@ -60,9 +58,7 @@
  */
 class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
     constructor(options) {
-        super(new SearchHandlerHeatmap($.extend({}, {
-            loaderSelector: options.loaderSelector,
-        }, options)), options);
+        super(new SearchHandlerHeatmap(options), options);
 
         let self = this;
 
@@ -231,11 +227,6 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         super._search({
             success: function (json) {
                 getState().getDungeonMap().pluginHeat.setRawLatLngsPerFloor(json.data);
-                $(self.options.searchResultDataDungeonRoutesSelector).html(
-                    json.run_count
-                );
-
-                $(self.options.searchResultSelector).css('visibility', 'visible');
 
                 if (json.hasOwnProperty('url')) {
                     console.log(json.url);
