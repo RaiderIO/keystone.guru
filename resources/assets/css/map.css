@@ -599,6 +599,10 @@ html, body, #map, #app, .wrapper {
 
 .snackbar_footer {
     max-width: 728px !important;
+    margin-bottom: 18px !important;
+}
+
+.snackbar_footer.ad_loaded {
     margin-bottom: 72px !important;
 }
 
