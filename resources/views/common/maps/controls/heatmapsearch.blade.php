@@ -29,6 +29,8 @@ use Illuminate\Support\Collection;
  * @var int                                      $itemLevelMax
  * @var int                                      $playerDeathsMin
  * @var int                                      $playerDeathsMax
+ * @var int                                      $minSamplesRequiredMin
+ * @var int                                      $minSamplesRequiredMax
  * @var Collection<WeeklyAffixGroup>             $seasonWeeklyAffixGroups
  * @var Collection<CharacterClassSpecialization> $characterClassSpecializations
  * @var Collection<GameServerRegion>             $allRegions
@@ -73,6 +75,8 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     'playerDeathsMax' => $playerDeathsMax,
     'durationMin' => 5,
     'durationMax' => 60,
+    'minSamplesRequiredMin' => $minSamplesRequiredMin,
+    'minSamplesRequiredMax' => $minSamplesRequiredMax,
 
     'enabledStateCookie' => 'heatmap_search_enabled',
     'enabledStateSelector' => '#heatmap_search_toggle',
@@ -89,6 +93,7 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     'filterWeeklyAffixGroupsSelector' => '#filter_weekly_affix_groups',
     'filterSpecializationsSelector' => '#filter_specializations',
     'filterDurationSelector' => '#filter_duration',
+    'filterMinSamplesRequiredSelector' => '#filter_min_samples_required',
 
     'filterCollapseNames' => ['keyLevel', 'includeAffixIds', 'duration'],
     'filterCookiePrefix' => $filterExpandedCookiePrefix,
@@ -229,7 +234,7 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
                                 <input type="radio" name="region"
                                        class="{{ $region->short }}"
                                        value="{{ $region->short }}"
-                                        {{ $region->short === 'world' ? 'checked' : '' }}
+                                    {{ $region->short === 'world' ? 'checked' : '' }}
                                 >
                                 <img src="{{ url(sprintf('images/flags/%s.png', $region->short)) }}"
                                      alt="{{ __($region->name) }}"
@@ -370,6 +375,19 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
                 @endif
 
                 @if(Auth::check() && Auth::user()->hasRole('admin'))
+                    @component('common.search.filter', ['key' => 'heatoptions', 'text' => __('view_common.maps.controls.heatmapsearch.advanced_options'), 'expanded' => true])
+
+                        @component('common.forms.labelinput', [
+                            'name' => 'min_samples_required',
+                            'label' => __('view_common.maps.controls.heatmapsearch.advanced_option.min_samples_required'),
+                            'title' => __('view_common.maps.controls.heatmapsearch.advanced_option.min_samples_required_title'),
+                        ])
+                            <input id="filter_min_samples_required" type="text" name="filter_min_samples_required"
+                                   value="5"/>
+                        @endcomponent
+
+                    @endcomponent
+
                     @component('common.search.filter', ['key' => 'heatoptions', 'text' => __('view_common.maps.controls.heatmapsearch.heat_options'), 'expanded' => true])
                         <div class="row">
                             <div class="col">

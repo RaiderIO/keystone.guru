@@ -10,6 +10,7 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Season;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -113,7 +114,7 @@ class DungeonExploreController extends Controller
 
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
 
-            return view('dungeon.explore.gameversion.view', [
+            return view('dungeon.explore.gameversion.view', array_merge($this->getFilterSettings($mostRecentSeason), [
                 'gameVersion'             => $gameVersion,
                 'season'                  => $mostRecentSeason,
                 'dungeon'                 => $dungeon,
@@ -121,16 +122,10 @@ class DungeonExploreController extends Controller
                 'title'                   => __($dungeon->name),
                 'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
                 'showHeatmapSearch'       => $heatmapActive,
-                'keyLevelMin'             => $mostRecentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
-                'keyLevelMax'             => $mostRecentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
-                'itemLevelMin'            => $mostRecentSeason?->item_level_min ?? 0,
-                'itemLevelMax'            => $mostRecentSeason?->item_level_max ?? 0,
-                'playerDeathsMin'         => 0,
-                'playerDeathsMax'         => 50,
                 'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons ?
                     $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
-            ]);
+            ]));
         }
     }
 
@@ -202,7 +197,7 @@ class DungeonExploreController extends Controller
 
         $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED);
 
-        return view('dungeon.explore.gameversion.embed', [
+        return view('dungeon.explore.gameversion.embed', array_merge($this->getFilterSettings($mostRecentSeason), [
             'gameVersion'             => $gameVersion,
             'season'                  => $mostRecentSeason,
             'dungeon'                 => $dungeon,
@@ -210,12 +205,6 @@ class DungeonExploreController extends Controller
             'title'                   => __($dungeon->name),
             'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
             'showHeatmapSearch'       => $heatmapActive,
-            'keyLevelMin'             => $mostRecentSeason?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
-            'keyLevelMax'             => $mostRecentSeason?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
-            'itemLevelMin'            => $mostRecentSeason?->item_level_min ?? 0,
-            'itemLevelMax'            => $mostRecentSeason?->item_level_max ?? 0,
-            'playerDeathsMin'         => 0,
-            'playerDeathsMax'         => 99,
             'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons ?
                 $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),
@@ -231,6 +220,20 @@ class DungeonExploreController extends Controller
                     'floorSelection' => true,                 // Always available, but can be overridden later if there's no floors to select
                 ],
             ],
-        ]);
+        ]));
+    }
+
+    private function getFilterSettings(?Season $season): array
+    {
+        return [
+            'keyLevelMin'           => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
+            'keyLevelMax'           => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
+            'itemLevelMin'          => $season?->item_level_min ?? 0,
+            'itemLevelMax'          => $season?->item_level_max ?? 0,
+            'playerDeathsMin'       => 0,
+            'playerDeathsMax'       => 99,
+            'minSamplesRequiredMin' => 1,
+            'minSamplesRequiredMax' => 10,
+        ];
     }
 }

@@ -445,6 +445,7 @@ return [
     'filter_input_affix_group_header'                                      => 'Affix groups: :number selected',
     'filter_input_select_specializations_header'                           => 'Specializations: :specializations',
     'filter_input_key_level_header'                                        => 'Key level: :value',
+    'filter_input_min_samples_required_header'                             => 'Min. samples required: :value',
     'filter_input_item_level_header'                                       => 'Item level: :value',
     'filter_input_player_deaths_header'                                    => 'Player deaths: :value',
     'filter_input_rating_header'                                           => 'Rating: :value and higher',

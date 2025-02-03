@@ -337,7 +337,12 @@ return [
                 'date_range_from'     => 'From',
                 'date_range_to'       => 'To',
                 'duration'            => 'Duration',
-                'heat_options'        => 'Leaflet.heat Options',
+                'advanced_options'    => 'Advanced options',
+                'advanced_option'     => [
+                    'min_samples_required'       => 'Min. samples required',
+                    'min_samples_required_title' => 'Decreases the threshold required for data to show up in the heatmap. Decreasing this value will lead to more data points being rendered.',
+                ],
+                'heat_options'        => 'Leaflet.heat options',
                 'heat_option'         => [
                     'min_opacity' => 'Min opacity',
                     'max_zoom'    => 'Max zoom',

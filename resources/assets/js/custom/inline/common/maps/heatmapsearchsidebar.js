@@ -32,6 +32,7 @@
  * @property {String} filterWeeklyAffixGroupsSelector
  * @property {String} filterSpecializationsSelector
  * @property {String} filterDurationSelector
+ * @property {String} filterMinSamplesRequiredSelector
  *
  * @property {String} filterCollapseNames
  * @property {String} filterCookiePrefix
@@ -101,6 +102,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             }),
             'includeSpecIds': new SearchFilterSpecializations(this.options.filterSpecializationsSelector, self._search.bind(this)),
             'duration': new SearchFilterDuration(this.options.filterDurationSelector, this._search.bind(this), this.options.durationMin, this.options.durationMax),
+            'minSamplesRequired': new SearchFilterMinSamplesRequired(this.options.filterMinSamplesRequiredSelector, this._search.bind(this), this.options.minSamplesRequiredMin, this.options.minSamplesRequiredMax),
         };
 
         this._setupFilterCollapseCookies();
