@@ -213,7 +213,7 @@ class DungeonExploreController extends Controller
             'itemLevelMin'            => $mostRecentSeason?->item_level_min ?? 0,
             'itemLevelMax'            => $mostRecentSeason?->item_level_max ?? 0,
             'playerDeathsMin'         => 0,
-            'playerDeathsMax'         => 50,
+            'playerDeathsMax'         => 99,
             'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons ?
                 $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),

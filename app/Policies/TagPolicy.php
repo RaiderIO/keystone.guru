@@ -40,7 +40,7 @@ class TagPolicy
                     /** @var DungeonRoute $dungeonRoute */
                     $dungeonRoute = $tag->model;
 
-                    $result = $dungeonRoute->mayUserEdit($user);
+                    $result = $dungeonRoute?->mayUserEdit($user) ?? false;
                     break;
             }
         } else {

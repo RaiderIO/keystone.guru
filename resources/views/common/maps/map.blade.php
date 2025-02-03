@@ -253,7 +253,7 @@ if ($isAdmin) {
     {{--            @include('common.thirdparty.adunit', ['id' => 'map_footer', 'type' => 'footer'])--}}
     {{--        @endif--}}
     {{--    @endif--}}
-    <footer class="fixed-bottom container p-0 snackbar_footer">
+    <footer class="fixed-bottom container p-0 snackbar_footer {{ !$adFree && $showAds ? 'ad_loaded' : '' }}">
         <div id="snackbar_container">
 
         </div>
