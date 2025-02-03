@@ -35,7 +35,7 @@ class CommonMapsMap extends InlineCode {
         // Make sure that navigating back actually moves the floor that we're on
         window.addEventListener('popstate', function (event) {
             // The popstate event is fired each time when the current history entry changes.
-            let urlParts = event.target.location.href.split('/');
+            let urlParts = event.target.location.pathname.split('/');
 
             // We start at 1 since it's possible there is no number found. We then default to the default floor
             let targetFloor = 1;
@@ -727,6 +727,8 @@ class CommonMapsMap extends InlineCode {
             }
             newUrl += `${pathname}/${getState().getCurrentFloor().index}`;
         }
+
+        newUrl += window.location.search;
 
         history.pushState({page: 1}, newUrl, newUrl);
 
