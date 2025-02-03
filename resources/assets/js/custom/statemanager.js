@@ -134,7 +134,7 @@ class StateManager extends Signalable {
         this.setUnkilledImportantEnemyOpacity(this._map.options.defaultUnkilledImportantEnemyOpacity);
         this.setEnemyAggressivenessBorder(this._map.options.defaultEnemyAggressivenessBorder);
         this.setMapFacadeStyle(this._map.options.mapFacadeStyle);
-        this.setFloorId(this.getMapContext().getFloorId());
+        this.setFloorId(this.getMapContext().getInitialFloorId());
 
         // Change defaults based on the hash if necessary
         if (window.location.hash.length > 0) {

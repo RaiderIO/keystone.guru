@@ -91,7 +91,7 @@ class HeatPlugin extends MapPlugin {
 
         this.hidden = !enabled;
 
-        this._applyLatLngsForFloor(enabled ? getState().getMapContext().getFloorId() : -1, true);
+        this._applyLatLngsForFloor(enabled ? getState().getCurrentFloor().id : -1, true);
     }
 
     /**
@@ -115,7 +115,7 @@ class HeatPlugin extends MapPlugin {
             }
         }
 
-        this._applyLatLngsForFloor(getState().getMapContext().getFloorId());
+        this._applyLatLngsForFloor(getState().getCurrentFloor().id);
     }
 
     clear() {

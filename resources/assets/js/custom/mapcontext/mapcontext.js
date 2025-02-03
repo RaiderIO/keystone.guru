@@ -213,7 +213,7 @@ class MapContext extends Signalable {
      *
      * @returns {null}
      */
-    getFloorId() {
+    getInitialFloorId() {
         return this._options.floorId;
     }
 
