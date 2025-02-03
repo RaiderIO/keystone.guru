@@ -1,0 +1,31 @@
+{
+    "id": 275,
+    "release_changelog_id": 282,
+    "version": "v12.0",
+    "title": "M+ Heatmaps are now officially released",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-02-03T09:34:24+00:00",
+    "updated_at": "2025-02-03T09:34:24+00:00",
+    "changelog": {
+        "id": 282,
+        "release_id": 275,
+        "description": "M+ heatmaps are now live! For more info, see https:\/\/raider.io\/events\/raiderio-great-eight-celebration\/day-8",
+        "changes": [
+            {
+                "release_changelog_id": 282,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2702,
+                "change": "When viewing a heatmap, switching floors and then refreshing the heatmap by changing a filter, no longer renders the heatmap for the previous floor on your current floor."
+            },
+            {
+                "release_changelog_id": 282,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2692,
+                "change": "Loading indicator is now moved to the bottom of the screen, along with the display of how many routes the current heatmap is based on."
+            }
+        ]
+    }
+}
