@@ -1,6 +1,29 @@
 class SearchHandlerHeatmap extends SearchHandler {
     constructor(options) {
-        super(options);
+
+        let currentSnackbarId = null;
+        super($.extend({}, {
+            loaderFn: function (isLoading, json) {
+                let state = getState();
+
+                state.removeSnackbar(currentSnackbarId);
+
+                let data = $.extend({}, getHandlebarsDefaultVariables());
+                let template;
+                if (isLoading) {
+                    template = Handlebars.templates['map_heatmapsearch_loader'];
+                } else {
+                    template = Handlebars.templates['map_heatmapsearch_run_count'];
+                    data.run_count = lang.get('messages.run_count_label', {count: json.run_count});
+                }
+
+                currentSnackbarId = getState().addSnackbar(
+                    template(data), {
+                        compact: true
+                    }
+                );
+            }
+        }, options));
     }
 
     getSearchUrl() {

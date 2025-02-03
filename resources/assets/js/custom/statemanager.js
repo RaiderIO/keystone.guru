@@ -634,6 +634,7 @@ class StateManager extends Signalable {
         this.signal('snackbar:add', {
             id: snackbarId,
             html: html,
+            compact: options.hasOwnProperty('compact') ? options.compact : false,
             onDomAdded: options.hasOwnProperty('onDomAdded') ? (typeof options.onDomAdded === 'function' ? options.onDomAdded : null) : null
         });
 
