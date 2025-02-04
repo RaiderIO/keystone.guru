@@ -320,9 +320,6 @@ class MapContext extends Signalable {
             }
         }
 
-        let MAP_MAX_LAT = -256;
-        let MAP_MAX_LNG = 384;
-
         let ingameMapSizeX = floor.ingame_max_x - floor.ingame_min_x;
         let ingameMapSizeY = floor.ingame_max_y - floor.ingame_min_y;
 

@@ -19,4 +19,9 @@ class Role extends LaratrustRole
         self::ROLE_INTERNAL_TEAM,
         self::ROLE_ADMIN,
     ];
+
+    public static function roles(array $roles): string
+    {
+        return implode('|', $roles);
+    }
 }

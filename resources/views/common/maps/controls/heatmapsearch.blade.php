@@ -7,6 +7,7 @@ use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\GameServerRegion;
+use App\Models\Laratrust\Role;
 use App\Models\Season;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
@@ -374,7 +375,7 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
                     @endcomponent
                 @endif
 
-                @if(Auth::check() && Auth::user()->hasRole('admin'))
+                @if(Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN))
                     @component('common.search.filter', ['key' => 'heatoptions', 'text' => __('view_common.maps.controls.heatmapsearch.advanced_options'), 'expanded' => true])
 
                         @component('common.forms.labelinput', [

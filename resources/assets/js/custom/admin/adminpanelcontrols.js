@@ -47,14 +47,11 @@ class AdminPanelControls extends MapControl {
             let ingameMapSizeX = floor.ingame_max_x - floor.ingame_min_x;
             let ingameMapSizeY = floor.ingame_max_y - floor.ingame_min_y;
 
-            let mapSizeLat = -256;
-            let mapSizeLng = 384;
+            let invertedLat = MAP_MAX_LAT - lat;
+            let invertedLng = MAP_MAX_LNG - lng;
 
-            let invertedLat = mapSizeLat - lat;
-            let invertedLng = mapSizeLng - lng;
-
-            let factorLat = (invertedLat / mapSizeLat);
-            let factorLng = (invertedLng / mapSizeLng);
+            let factorLat = (invertedLat / MAP_MAX_LAT);
+            let factorLng = (invertedLng / MAP_MAX_LNG);
 
             let ingameX = _.round((ingameMapSizeX * factorLng) + floor.ingame_min_x, 3);
             let ingameY = _.round((ingameMapSizeY * factorLat) + floor.ingame_min_y, 3);
@@ -131,9 +128,7 @@ class AdminPanelControls extends MapControl {
         let floor = getState().getCurrentFloor()
         let ingameMapSizeX = floor.ingame_max_x - floor.ingame_min_x;
 
-        let mapSizeLng = 384;
-
-        return ingameMapSizeX / mapSizeLng;
+        return ingameMapSizeX / MAP_MAX_LNG;
     }
 
     _getIngameYForLat() {
@@ -141,9 +136,8 @@ class AdminPanelControls extends MapControl {
 
         let floor = getState().getCurrentFloor()
         let ingameMapSizeY = floor.ingame_max_y - floor.ingame_min_y;
-        let mapSizeLat = -256;
 
-        return ingameMapSizeY / mapSizeLat;
+        return ingameMapSizeY / MAP_MAX_LAT;
     }
 
     _getAllMapObjects() {

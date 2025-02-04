@@ -228,7 +228,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
         super._search({
             success: function (json) {
-                getState().getDungeonMap().pluginHeat.setRawLatLngsPerFloor(json.data);
+                getState().getDungeonMap().pluginHeat.setRawLatLngsPerFloor(json.data, json.sizeX ?? null, json.sizeY ?? null);
 
                 if (json.hasOwnProperty('url')) {
                     console.log(json.url);

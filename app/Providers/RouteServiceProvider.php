@@ -121,7 +121,7 @@ class RouteServiceProvider extends ServiceProvider
         /** @var User|null $user */
         $user = $request->user();
 
-        if ($user?->hasRole(Role::ROLE_ADMIN) || $user?->hasRole(Role::ROLE_INTERNAL_TEAM)) {
+        if ($user?->hasRole(Role::roles([Role::ROLE_ADMIN, Role::ROLE_INTERNAL_TEAM]))) {
             return Limit::none();
         }
 
