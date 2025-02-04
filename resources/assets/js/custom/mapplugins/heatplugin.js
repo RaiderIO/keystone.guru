@@ -7,11 +7,20 @@ class HeatPlugin extends MapPlugin {
         this.hidden = false;
         this.heatLayer = null;
         this.draw = false;
+        /** A grid of weights for each coordinate for each floor - used for the tooltips */
         this.weightByFloorIdGrid = [];
+        /** The raw latLngs per floor */
         this.rawLatLngsByFloorId = [];
-        this.sizeX = 400;
-        this.sizeY = 300;
-        this.radius = 8;
+        this.sizeX = 300;
+        this.sizeY = 200;
+        /**
+         * The radius where we consider points around us when calculating weights for points that don't exist in the heatmap.
+         * We build a full grid of weights for each floor, so we don't have to do that on the fly.
+         **/
+        this.weightCacheRadius = 5;
+
+        /** The max weight that we have in the heatmap per floor, used for %-age calculations in the tooltip */
+        this.weightMaxByFloorId = [];
         this.mouseTooltip = null;
 
         getState().register('floorid:changed', this, function (floorIdChangedEvent) {
@@ -73,7 +82,6 @@ class HeatPlugin extends MapPlugin {
     }
 
 
-
     _onLeafletMapMouseMove(event) {
         console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
 
@@ -95,7 +103,8 @@ class HeatPlugin extends MapPlugin {
             }
 
             // Update tooltip position and content
-            this.mouseTooltip.setLatLng(latLng).setContent(`${weight}`);
+            let percent = Math.round(weight / this.weightMaxByFloorId[getState().getCurrentFloor().id] * 100);
+            this.mouseTooltip.setLatLng(latLng).setContent(`${percent}% - ${weight}`);
         } else if (this.mouseTooltip) {
             // Remove tooltip if no weight
             this.map.leafletMap.removeLayer(this.mouseTooltip);
@@ -193,12 +202,14 @@ class HeatPlugin extends MapPlugin {
 
         // Construct an easily referenced array that splits up the latLngs per floor
         this.rawLatLngsByFloorId = [];
+        this.weightMaxByFloorId = [];
         let weightByFloorIdGridCache = [];
         for (let index in rawLatLngsPerFloor) {
             let rawLatLngsOnFloor = rawLatLngsPerFloor[index];
 
             this.rawLatLngsByFloorId[rawLatLngsOnFloor.floor_id] = [];
             this.weightByFloorIdGrid[rawLatLngsOnFloor.floor_id] = [];
+            this.weightMaxByFloorId[rawLatLngsOnFloor.floor_id] = 0;
             for (let latLngIndex in rawLatLngsOnFloor.lat_lngs) {
                 this.rawLatLngsByFloorId[rawLatLngsOnFloor.floor_id].push([
                     rawLatLngsOnFloor.lat_lngs[latLngIndex].lat,
@@ -210,6 +221,10 @@ class HeatPlugin extends MapPlugin {
 
                 this.weightByFloorIdGrid[rawLatLngsOnFloor.floor_id][gridCoordinates.x] ??= [];
                 this.weightByFloorIdGrid[rawLatLngsOnFloor.floor_id][gridCoordinates.x][gridCoordinates.y] = rawLatLngsOnFloor.lat_lngs[latLngIndex].weight;
+
+                if (this.weightMaxByFloorId[rawLatLngsOnFloor.floor_id] < rawLatLngsOnFloor.lat_lngs[latLngIndex].weight) {
+                    this.weightMaxByFloorId[rawLatLngsOnFloor.floor_id] = rawLatLngsOnFloor.lat_lngs[latLngIndex].weight;
+                }
             }
 
             weightByFloorIdGridCache[rawLatLngsOnFloor.floor_id] = [];
@@ -217,7 +232,7 @@ class HeatPlugin extends MapPlugin {
             for (let x = 0; x < this.sizeX; x++) {
                 weightByFloorIdGridCache[rawLatLngsOnFloor.floor_id][x] ??= [];
                 for (let y = 0; y < this.sizeY; y++) {
-                    weightByFloorIdGridCache[rawLatLngsOnFloor.floor_id][x][y] = this._getWeightAt(rawLatLngsOnFloor.floor_id, x, y, this.radius); // Use radius=5 (adjust as needed)
+                    weightByFloorIdGridCache[rawLatLngsOnFloor.floor_id][x][y] = this._getWeightAt(rawLatLngsOnFloor.floor_id, x, y, this.weightCacheRadius); // Use radius=5 (adjust as needed)
                 }
             }
 
