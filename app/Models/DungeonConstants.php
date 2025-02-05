@@ -50,6 +50,7 @@ trait DungeonConstants
     public const RAID_GNOMEREGAN_SOD          = 'gnomeregan_sod'; //gnomeregan
     public const RAID_RUINS_OF_AHN_QIRAJ_SOD  = 'ruins_of_ahnqiraj_sod';  // 20-man (classic)
     public const RAID_TEMPLE_OF_AHN_QIRAJ_SOD = 'temple_of_ahnqiraj_sod'; // 40-man (classic)
+    public const DUNGEON_KARAZHAN_CRYPTS      = 'karazhan_crypts';
 
     public const RAID_ZUL_GURUB           = 'zulgurub';
     public const RAID_ONYXIAS_LAIR        = 'onyxias_lair_classic';
@@ -220,6 +221,7 @@ trait DungeonConstants
             self::DUNGEON_DIRE_MAUL_NORTH,
             self::DUNGEON_DIRE_MAUL_EAST,
             self::DUNGEON_GNOMEREGAN,
+            self::DUNGEON_KARAZHAN_CRYPTS,
             self::DUNGEON_LOWER_BLACKROCK_SPIRE,
             self::DUNGEON_MARAUDON,
             self::DUNGEON_RAGEFIRE_CHASM,
@@ -377,7 +379,7 @@ trait DungeonConstants
     ];
 
     public const ALL_RAID = [
-        Expansion::EXPANSION_CLASSIC => [
+        Expansion::EXPANSION_CLASSIC   => [
             self::RAID_GNOMEREGAN_SOD,
             self::RAID_ZUL_GURUB,
             self::RAID_ONYXIAS_LAIR,
@@ -389,7 +391,7 @@ trait DungeonConstants
             self::RAID_TEMPLE_OF_AHN_QIRAJ_SOD,
             self::RAID_NAXXRAMAS,
         ],
-        Expansion::EXPANSION_WOTLK   => [
+        Expansion::EXPANSION_WOTLK     => [
             self::RAID_ICECROWN_CITADEL,
             self::RAID_NAXXRAMAS_WOTLK,
             self::RAID_ONYXIAS_LAIR_WOTLK,

@@ -70,6 +70,15 @@ return [
                 'tinkers_court'     => 'Tinkers\' Court',
             ],
         ],
+        'karazhan_crypts'             => [
+            'name'   => 'Karazhan Crypts (SoD)',
+            'floors' => [
+                'karazhan_crypts'         => 'Karazhan Crypts',
+                'the_slough_of_dispair'   => 'The Slough of Dispair',
+                'tome_of_the_unrepentant' => 'Tome of the Unrepentant',
+                'the_pit_of_criminals'    => 'The Pit of Criminals',
+            ],
+        ],
         'lower_blackrock_spire'       => [
             'name'   => 'Lower Blackrock Spire',
             'floors' => [
