@@ -11,13 +11,17 @@ class HeatPlugin extends MapPlugin {
         this.weightByFloorIdGrid = [];
         /** The raw latLngs per floor */
         this.rawLatLngsByFloorId = [];
-        this.sizeX = 300;
-        this.sizeY = 200;
+        this.dataType = COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION;
+        this.runCount = 0;
+        this.gridSizeX = 300;
+        this.gridSizeY = 200;
         /**
          * The radius where we consider points around us when calculating weights for points that don't exist in the heatmap.
          * We build a full grid of weights for each floor, so we don't have to do that on the fly.
          **/
-        this.weightCacheRadius = 5;
+        this.weightCacheRadius = [];
+        this.weightCacheRadius[COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION] = 5;
+        this.weightCacheRadius[COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION] = 2;
 
         /** The max weight that we have in the heatmap per floor, used for %-age calculations in the tooltip */
         this.weightMaxByFloorId = [];
@@ -36,8 +40,8 @@ class HeatPlugin extends MapPlugin {
 
     _getGridPositionForLatLng(latLng) {
         return {
-            x: Math.floor((latLng.lat / MAP_MAX_LAT) * this.sizeX),
-            y: Math.floor((latLng.lng / MAP_MAX_LNG) * this.sizeY)
+            x: Math.floor((latLng.lat / MAP_MAX_LAT) * this.gridSizeX),
+            y: Math.floor((latLng.lng / MAP_MAX_LNG) * this.gridSizeY)
         }
     }
 
@@ -51,7 +55,7 @@ class HeatPlugin extends MapPlugin {
             return grid[x][y];
         }
 
-        const aspectRatio = this.sizeY / this.sizeX; // Adjust vertical distance scaling
+        const aspectRatio = this.gridSizeY / this.gridSizeX; // Adjust vertical distance scaling
         let weightedSum = 0;
         let weightTotal = 0;
 
@@ -60,7 +64,7 @@ class HeatPlugin extends MapPlugin {
                 const nx = x + dx;
                 const ny = y + dy;
 
-                if (nx < 0 || nx >= this.sizeX || ny < 0 || ny >= this.sizeY) continue; // Out of bounds
+                if (nx < 0 || nx >= this.gridSizeX || ny < 0 || ny >= this.gridSizeY) continue; // Out of bounds
                 if (grid[nx]?.[ny] === undefined) continue; // No weight assigned
 
                 // Adjust distance calculation
@@ -87,7 +91,7 @@ class HeatPlugin extends MapPlugin {
 
         let latLng = event.latlng;
         let gridPosition = this._getGridPositionForLatLng(latLng);
-        let weight = this._getWeightAt(getState().getCurrentFloor().id, gridPosition.x, gridPosition.y, 9);
+        let weight = this._getWeightAt(getState().getCurrentFloor().id, gridPosition.x, gridPosition.y, this.weightCacheRadius[this.dataType]);
 
         if (weight !== null && weight > 0) {
             if (!this.mouseTooltip) {
@@ -103,7 +107,10 @@ class HeatPlugin extends MapPlugin {
             }
 
             // Update tooltip position and content
-            let percent = Math.round(weight / this.weightMaxByFloorId[getState().getCurrentFloor().id] * 100);
+            let max = this.weightMax;
+            // This somehow doesn't work right, weightMax produces a better result
+            // let max = this.dataType === COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION ? this.weightMax : this.runCount;
+            let percent = Math.round(weight / max * 100);
             this.mouseTooltip.setLatLng(latLng).setContent(`${percent}% - ${weight}`);
         } else if (this.mouseTooltip) {
             // Remove tooltip if no weight
@@ -194,11 +201,20 @@ class HeatPlugin extends MapPlugin {
 
     /**
      * @param rawLatLngsPerFloor {Object}
-     * @param sizeX {Number|null}
-     * @param sizeY {Number|null}
+     * @param dataType {String}
+     * @param runCount {Number}
+     * @param weightMax {Number}
+     * @param gridSizeX {Number}
+     * @param gridSizeY {Number}
      */
-    setRawLatLngsPerFloor(rawLatLngsPerFloor, sizeX, sizeY) {
+    setRawLatLngsPerFloor(rawLatLngsPerFloor, dataType, runCount, weightMax, gridSizeX, gridSizeY) {
         console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
+
+        this.dataType = dataType;
+        this.runCount = runCount;
+        this.gridSizeX = gridSizeX;
+        this.gridSizeY = gridSizeY;
+        this.weightMax = weightMax ?? Math.max(this.weightMaxByFloorId);
 
         // Construct an easily referenced array that splits up the latLngs per floor
         this.rawLatLngsByFloorId = [];
@@ -229,10 +245,10 @@ class HeatPlugin extends MapPlugin {
 
             weightByFloorIdGridCache[rawLatLngsOnFloor.floor_id] = [];
             // Precompute missing weights for the entire grid
-            for (let x = 0; x < this.sizeX; x++) {
+            for (let x = 0; x < this.gridSizeX; x++) {
                 weightByFloorIdGridCache[rawLatLngsOnFloor.floor_id][x] ??= [];
-                for (let y = 0; y < this.sizeY; y++) {
-                    weightByFloorIdGridCache[rawLatLngsOnFloor.floor_id][x][y] = this._getWeightAt(rawLatLngsOnFloor.floor_id, x, y, this.weightCacheRadius); // Use radius=5 (adjust as needed)
+                for (let y = 0; y < this.gridSizeY; y++) {
+                    weightByFloorIdGridCache[rawLatLngsOnFloor.floor_id][x][y] = this._getWeightAt(rawLatLngsOnFloor.floor_id, x, y, this.weightCacheRadius[[this.dataType]]); // Use radius=5 (adjust as needed)
                 }
             }
 
@@ -240,9 +256,6 @@ class HeatPlugin extends MapPlugin {
         }
 
         this._applyLatLngsForFloor(getState().getCurrentFloor().id);
-
-        this.sizeX = sizeX ?? this.sizeX;
-        this.sizeY = sizeY ?? this.sizeY;
     }
 
     clear() {

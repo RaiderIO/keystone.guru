@@ -10,6 +10,9 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
+/**
+ * This class is used as a DTO to store the result of a CombatLogEvent aggregation (response from Opensearch).
+ */
 class CombatLogEventGridAggregationResult implements Arrayable
 {
     private bool $useFacade;
@@ -30,22 +33,17 @@ class CombatLogEventGridAggregationResult implements Arrayable
         /** @var Collection<Floor> $floors */
         $floors = $dungeon->floors->keyBy('id');
 
-        $data = [];
+        $weightMax = 0;
+        $data      = [];
         foreach ($this->results as $floorId => $rows) {
             /** @var Floor $floor */
             $floor = $floors->get($floorId);
 
-            $latLngs = [];
-
+            $rawData = [];
             if ($this->floorsAsArray) {
                 $rowCount = count($rows);
                 for ($i = 0; $i < $rowCount; $i += 3) {
-                    [$x, $y, $count] = [$rows[$i], $rows[$i + 1], $rows[$i + 2]];
-
-                    $latLngArray           = $this->convertIngameLocationToLatLngArray(new IngameXY($x, $y, $floor));
-                    $latLngArray['weight'] = $count;
-
-                    $latLngs[] = $latLngArray;
+                    $rawData[] = [$rows[$i], $rows[$i + 1], $rows[$i + 2]];
                 }
             } else {
                 foreach ($rows as $xy => $count) {
@@ -53,12 +51,23 @@ class CombatLogEventGridAggregationResult implements Arrayable
                      * @var string $xy
                      * @var int    $count
                      */
-                    [$x, $y] = explode(',', $xy);
+                    $row   = explode(',', $xy);
+                    $row[] = $count;
 
-                    $latLngArray           = $this->convertIngameLocationToLatLngArray(new IngameXY($x, $y, $floor));
-                    $latLngArray['weight'] = $count;
+                    $rawData[] = $row;
+                }
+            }
 
-                    $latLngs[] = $latLngArray;
+            $latLngs = [];
+            foreach ($rawData as $row) {
+                [$x, $y, $count] = $row;
+
+                $latLngArray           = $this->convertIngameLocationToLatLngArray(new IngameXY($x, $y, $floor));
+                $latLngArray['weight'] = $count;
+
+                $latLngs[] = $latLngArray;
+                if ($weightMax < $count) {
+                    $weightMax = $count;
                 }
             }
 
@@ -97,9 +106,12 @@ class CombatLogEventGridAggregationResult implements Arrayable
         }
 
         return [
-            'data'      => array_values($data),
-            'data_type' => $this->combatLogEventFilter->getDataType(),
-            'run_count' => $this->runCount,
+            'data'        => array_values($data),
+            'data_type'   => $this->combatLogEventFilter->getDataType(),
+            'weight_max'  => $weightMax,
+            'run_count'   => $this->runCount,
+            'grid_size_x' => config('keystoneguru.heatmap.service.data.player.size_x'),
+            'grid_size_y' => config('keystoneguru.heatmap.service.data.player.size_y'),
         ];
 
 

@@ -154,13 +154,13 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
             $size = match ($dataType) {
                 CombatLogEventDataType::PlayerPosition => [
-                    ':sizeX'  => config('keystoneguru.heatmap.service.data.player.sizeX'),
-                    ':sizeY'  => config('keystoneguru.heatmap.service.data.player.sizeY'),
+                    ':sizeX'  => config('keystoneguru.heatmap.service.data.player.size_x'),
+                    ':sizeY'  => config('keystoneguru.heatmap.service.data.player.size_y'),
                     ':player' => 'true',
                 ],
                 CombatLogEventDataType::EnemyPosition => [
-                    ':sizeX'  => config('keystoneguru.heatmap.service.data.enemy.sizeX'),
-                    ':sizeY'  => config('keystoneguru.heatmap.service.data.enemy.sizeY'),
+                    ':sizeX'  => config('keystoneguru.heatmap.service.data.enemy.size_x'),
+                    ':sizeY'  => config('keystoneguru.heatmap.service.data.enemy.size_y'),
                     ':player' => 'false',
                 ]
             };

@@ -86,6 +86,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
                     CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $heatmapDataFilter),
                     $json['gridsByFloor'],
                     $json['numRuns'],
+                    $json['maxSamplesInGrid'],
                     $url,
                     $floorsAsArray
                 ))->toArray()
