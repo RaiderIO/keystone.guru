@@ -8,8 +8,11 @@ return [
         'changelog'        => 'История изменений',
         'routes'           => 'Маршруты',
         'routes_expansion' => ':expansion маршруты',
-        'dungeon'          => [
-            'explore' => '',
+        'gameversion' => [
+            'update' => '',
+            'dungeon'          => [
+                'explore' => '',
+            ],
         ],
         'dungeonroute'     => [
             'new' => '',

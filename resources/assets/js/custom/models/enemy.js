@@ -30,6 +30,7 @@ L.Draw.Enemy = L.Draw.Marker.extend({
  * @property {Number} npc_id
  * @property {Number} mdt_id
  * @property {Number} mdt_npc_id
+ * @property {Number} exclusive_enemy_id
  * @property {String} seasonal_type
  * @property {Number} seasonal_index
  * @property {Number} enemy_forces_override
@@ -55,9 +56,11 @@ class Enemy extends VersionableMapObject {
         this.npc = null;
         /** @type {EnemyPatrol|null} May be set when loaded from server */
         this.enemyPatrol = null;
-        /** @type {Enemy} If we are an awakened NPC, we're linking it to another Awakened NPC that's next to the boss */
+        /** @type {Enemy|Null} If we are an awakened NPC, we're linking it to another Awakened NPC that's next to the boss */
         this.linked_awakened_enemy = null;
         this.active_auras = [];
+        /** @type {Enemy|null} If we have an enemy that we're sharing exclusivity with (Theater of Pain mini bosses) */
+        this.exclusive_enemy = null;
 
         // MDT
         this.mdt_id = null;
@@ -210,7 +213,6 @@ class Enemy extends VersionableMapObject {
                     self.is_mdt = value;
                 }
             }),
-            // // Whatever enemy this MDT enemy is linked to
             new Attribute({
                 name: 'enemy_id',
                 type: 'int',
@@ -238,22 +240,33 @@ class Enemy extends VersionableMapObject {
                 category: 'legacy'
             }),
             new Attribute({
+                name: 'exclusive_enemy_id',
+                type: 'int',
+                default: null,
+                setter: function (value) {
+                    let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                    self.setExclusiveEnemy(enemyMapObjectGroup.findMapObjectById(value));
+                },
+            }),
+            new Attribute({
                 name: 'seasonal_type',
                 type: 'select',
                 admin: true,
                 default: null,
                 values: [
-                    // @TODO Translate this
-                    {id: ENEMY_SEASONAL_TYPE_BEGUILING, name: 'Beguiling'},
-                    {id: ENEMY_SEASONAL_TYPE_AWAKENED, name: 'Awakened'},
-                    {id: ENEMY_SEASONAL_TYPE_INSPIRING, name: 'Inspiring'},
-                    {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: 'Prideful'},
-                    {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: 'Tormented'},
-                    {id: ENEMY_SEASONAL_TYPE_ENCRYPTED, name: 'Encrypted'},
-                    {id: ENEMY_SEASONAL_TYPE_SHROUDED, name: 'Shrouded'},
-                    {id: ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX, name: 'Shrouded Zul\'gamux'},
-                    {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: 'MDT Placeholder'},
-                    {id: ENEMY_SEASONAL_TYPE_NO_SHROUDED, name: 'Shrouded not active'}
+                    {id: ENEMY_SEASONAL_TYPE_BEGUILING, name: lang.get('enemies.seasonal_type.beguiling')},
+                    {id: ENEMY_SEASONAL_TYPE_AWAKENED, name: lang.get('enemies.seasonal_type.awakened')},
+                    {id: ENEMY_SEASONAL_TYPE_INSPIRING, name: lang.get('enemies.seasonal_type.inspiring')},
+                    {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: lang.get('enemies.seasonal_type.prideful')},
+                    {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: lang.get('enemies.seasonal_type.tormented')},
+                    {id: ENEMY_SEASONAL_TYPE_ENCRYPTED, name: lang.get('enemies.seasonal_type.encrypted')},
+                    {id: ENEMY_SEASONAL_TYPE_SHROUDED, name: lang.get('enemies.seasonal_type.shrouded')},
+                    {
+                        id: ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX,
+                        name: lang.get('enemies.seasonal_type.shrouded_zul_gamux')
+                    },
+                    {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: lang.get('enemies.seasonal_type.mdt_placeholder')},
+                    {id: ENEMY_SEASONAL_TYPE_NO_SHROUDED, name: lang.get('enemies.seasonal_type.no_shrouded')}
                 ],
                 setter: function (value) {
                     self.seasonal_type = value <= 0 ? null : value;
@@ -1091,6 +1104,21 @@ class Enemy extends VersionableMapObject {
         // console.warn('Setting linked awakened enemy', this.id, awakenedEnemy.id);
 
         this.linked_awakened_enemy = awakenedEnemy;
+    }
+
+    /**
+     * Sets this Enemy to be exclusive with another Enemy.
+     *
+     * @param exclusiveEnemy {Enemy}
+     */
+    setExclusiveEnemy(exclusiveEnemy) {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        console.assert(exclusiveEnemy.id !== this.id, 'exclusiveEnemy must have a different id as ourselves!', exclusiveEnemy, this);
+
+        // console.warn('Setting linked awakened enemy', this.id, awakenedEnemy.id);
+
+        this.exclusive_enemy = exclusiveEnemy;
+        this.exclusive_enemy_id = exclusiveEnemy?.id ?? null;
     }
 
     /**

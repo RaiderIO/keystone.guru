@@ -34,6 +34,7 @@ class APIEnemyFormRequest extends FormRequest
             'npc_id'                        => ['nullable', Rule::exists(Npc::class, 'id')],
             'mdt_id'                        => 'nullable|int',
             'mdt_npc_id'                    => 'nullable|int',
+            'exclusive_enemy_id'            => ['nullable', Rule::exists(Enemy::class, 'id')],
             'seasonal_index'                => 'nullable|int',
             'seasonal_type'                 => [Rule::in(array_merge(Enemy::SEASONAL_TYPE_ALL, ['', null]))],
             'teeming'                       => [Rule::in(array_merge(Enemy::TEEMING_ALL, ['', null]))],

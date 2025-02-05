@@ -27,6 +27,7 @@ return [
     'is_mdt_label'                                                         => 'MDT',
     'mdt_id_label'                                                         => 'MDT_ID',
     'mdt_npc_id_label'                                                     => 'MDT_NPC_ID',
+    'enemy_exclusive_enemy_id_label'                                       => 'Exclusive enemy ID',
     'preset_label'                                                         => 'Preset',
     'add_label'                                                            => 'Add',
     'color_label'                                                          => 'Color',

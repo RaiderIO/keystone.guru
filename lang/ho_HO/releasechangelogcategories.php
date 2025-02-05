@@ -14,5 +14,6 @@ return [
     'simulation_craft_changes' => 'Hodor',
     'auto_route_changes'       => 'Hodor',
     'api_changes'              => 'Hodor',
+    'heatmap_changes'          => 'Hodor',
 
 ];

@@ -30,6 +30,7 @@ return [
             'mists_of_tirna_scithe' => [
                 'start'                          => '',
                 'brambles'                       => '',
+                'overgrown_roots'                => '',
                 'depleted_anima_seed'            => '',
                 'map_missing_wall'               => '',
                 'savory_statshroom'              => '',
@@ -84,6 +85,11 @@ return [
                 'exit'                 => '',
             ],
         ],
+        'tww' => [
+            'the_stonevault' => [
+                'imbued_iron_energy' => '',
+            ],
+        ]
     ],
 
 ];

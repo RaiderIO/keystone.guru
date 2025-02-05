@@ -25,6 +25,7 @@ use Illuminate\Support\Collection;
  * @property int                         $floor_id
  * @property int|null                    $mdt_id The ID in MDT (clone index) that this enemy is coupled to
  * @property int|null                    $mdt_npc_id The ID of the NPC in MDT that this enemy is coupled to. Usually this will be the same - but MDT sometimes makes mistakes which will require a different NPC to be coupled.
+ * @property int|null                    $exclusive_enemy_id The ID of the enemy that this enemy is exclusive to. This means that this enemy will not be selectable if the exclusive enemy is selected in a pull.
  * @property int|null                    $mdt_scale The scale that MDT assigned to this particular enemy.
  * @property string|null                 $mdt_x The X position that MDT assigned to this enemy on import.
  * @property string|null                 $mdt_y The Y position that MDT assigned to this enemy on import.
@@ -44,10 +45,12 @@ use Illuminate\Support\Collection;
  * @property int|null                    $dungeon_difficulty Show this enemy only in this difficulty setting (null is show always)
  * @property float                       $lat
  * @property float                       $lng
+ *
  * @property EnemyPack|null              $enemyPack
  * @property Npc|null                    $npc
  * @property Floor                       $floor
  * @property EnemyPatrol|null            $enemyPatrol
+ * @property Enemy|null                  $exclusiveEnemy
  * @property MappingVersion              $mappingVersion
  * @property Collection<EnemyActiveAura> $enemyActiveAuras
  *
@@ -69,6 +72,7 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
         'npc_id',
         'mdt_id',
         'mdt_npc_id',
+        'exclusive_enemy_id',
         'mdt_scale',
         'mdt_x',
         'mdt_y',
@@ -122,25 +126,16 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
         'kill_priority'      => 'integer',
     ];
 
-    public const SEASONAL_TYPE_BEGUILING = 'beguiling';
-
-    public const SEASONAL_TYPE_AWAKENED = 'awakened';
-
-    public const SEASONAL_TYPE_INSPIRING = 'inspiring';
-
-    public const SEASONAL_TYPE_PRIDEFUL = 'prideful';
-
-    public const SEASONAL_TYPE_TORMENTED = 'tormented';
-
-    public const SEASONAL_TYPE_ENCRYPTED = 'encrypted';
-
-    public const SEASONAL_TYPE_MDT_PLACEHOLDER = 'mdt_placeholder';
-
-    public const SEASONAL_TYPE_SHROUDED = 'shrouded';
-
+    public const SEASONAL_TYPE_BEGUILING          = 'beguiling';
+    public const SEASONAL_TYPE_AWAKENED           = 'awakened';
+    public const SEASONAL_TYPE_INSPIRING          = 'inspiring';
+    public const SEASONAL_TYPE_PRIDEFUL           = 'prideful';
+    public const SEASONAL_TYPE_TORMENTED          = 'tormented';
+    public const SEASONAL_TYPE_ENCRYPTED          = 'encrypted';
+    public const SEASONAL_TYPE_MDT_PLACEHOLDER    = 'mdt_placeholder';
+    public const SEASONAL_TYPE_SHROUDED           = 'shrouded';
     public const SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
-
-    public const SEASONAL_TYPE_NO_SHROUDED = 'no_shrouded';
+    public const SEASONAL_TYPE_NO_SHROUDED        = 'no_shrouded';
 
     public const SEASONAL_TYPE_ALL = [
         self::SEASONAL_TYPE_BEGUILING,
@@ -156,8 +151,7 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
     ];
 
     public const TEEMING_VISIBLE = 'visible';
-
-    public const TEEMING_HIDDEN = 'hidden';
+    public const TEEMING_HIDDEN  = 'hidden';
 
     public const TEEMING_ALL = [
         self::TEEMING_VISIBLE,
@@ -209,6 +203,11 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
     public function enemyActiveAuras(): HasMany
     {
         return $this->hasMany(EnemyActiveAura::class);
+    }
+
+    public function exclusiveEnemy(): BelongsTo
+    {
+        return $this->belongsTo(Enemy::class, 'exclusive_enemy_id');
     }
 
     public function getDungeonId(): ?int
