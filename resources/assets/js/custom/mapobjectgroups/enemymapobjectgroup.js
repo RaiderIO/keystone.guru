@@ -148,6 +148,20 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                 enemy.register('pridefulenemy:unassigned', this, this._onPridefulEnemyUnassigned.bind(this));
             }
 
+            // Assign exclusive enemies
+            if (enemy.exclusive_enemy_id !== null) {
+
+                for (let nestedKey in this.objects) {
+                    let enemyCandidate = this.objects[nestedKey];
+
+                    // Don't check ourselves, only match those enemies with the same npc id and seasonal_index that are part of the final boss pack
+                    if (enemyCandidate.id === enemy.exclusive_enemy_id) {
+                        enemy.setExclusiveEnemy(enemyCandidate);
+                        break;
+                    }
+                }
+            }
+
             // Assign overpulled enemies from cache
             if (mapContext instanceof MapContextLiveSession) {
                 let overpulledEnemiesData = mapContext.getOverpulledEnemies();

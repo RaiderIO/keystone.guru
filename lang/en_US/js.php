@@ -18,6 +18,7 @@ return [
     'size_label'                                                           => 'Size',
     'faction_label'                                                        => 'Faction',
     'npc_id_label'                                                         => 'NPC_ID',
+    'exclusive_enemy_id_label'                                             => 'Exclusive enemy ID',
     'attached_to_pack_label'                                               => 'Pack',
     'attached_to_patrol_label'                                             => 'Patrol',
     'skippable_label'                                                      => 'Skippable',

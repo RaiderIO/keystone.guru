@@ -115,6 +115,7 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
         'npc_id'             => 'integer',
         'mdt_id'             => 'integer',
         'mdt_npc_id'         => 'integer',
+        'exclusive_enemy_id' => 'integer',
         'mdt_scale'          => 'double',
         'enemy_pack_id'      => 'integer',
         'enemy_patrol_id'    => 'integer',

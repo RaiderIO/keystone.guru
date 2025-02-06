@@ -717,7 +717,7 @@ class CommonMapsMap extends InlineCode {
             // Strip the last two elements (<number>/mapping)
             pathSplit.splice(-2);
             pathname = pathSplit.join('/');
-            newUrl += `${pathname}/${floorIdChangedEvent.data.floorId}/mapping?mapping_version=${getState().getMapContext().getMappingVersion().id}`;
+            newUrl += `${pathname}/${floorIdChangedEvent.data.floorId}/mapping`;
         } else {
             // Example url: https://keystone.test/bbzlbOX, https://keystone.test/bbzlbOX/2 (last integer is optional)
             if (isNumeric(pathSplit[pathSplit.length - 1])) {

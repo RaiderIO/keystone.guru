@@ -27,12 +27,10 @@ class AdminEnemy extends Enemy {
 
         // When we're synced, connect to our connected enemy
         this.register(['shown', 'hidden'], this, function (hiddenEvent) {
-            if (self.mdt_id !== null) {
-                if (hiddenEvent.data.visible && getState().getMdtMappingModeEnabled()) {
-                    self.redrawConnectionToMDTEnemy();
-                } else {
-                    self.removeExistingConnectionToEnemy();
-                }
+            if (hiddenEvent.data.visible) {
+                self.redrawConnectionsToEnemies();
+            } else {
+                self.removeExistingConnectionToEnemy();
             }
         });
 
@@ -141,7 +139,7 @@ class AdminEnemy extends Enemy {
 
     /**
      * Get the MDT enemy that is attached to this enemy. NOT the other way around.
-     * @return {Enemy}
+     * @return {AdminEnemy}
      */
     getConnectedMDTEnemy() {
         console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
@@ -159,7 +157,11 @@ class AdminEnemy extends Enemy {
             let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
             // We're an enemy, we need to find an MDT enemy instead
             if (!this.is_mdt && this.mdt_id !== null) {
+                let foundMDTEnemy = false;
                 $.each(enemyMapObjectGroup.objects, function (i, mdtEnemy) {
+                    // Keep track of if we even have MDT enemies on this dungeon (a lot of dungeons moved to legacy MDT)
+                    foundMDTEnemy = foundMDTEnemy || mdtEnemy.is_mdt;
+
                     // Only MDT enemies, mdtEnemy.mdt_id is actually the clone index for MDT, combined with npc_id this gives us
                     // a unique ID
                     if (mdtEnemy.floor_id === self.floor_id &&
@@ -169,8 +171,9 @@ class AdminEnemy extends Enemy {
                         return false;
                     }
                 });
-                if (result === null) {
-                    console.error('Unable to find MDT enemy when this enemy is coupled to one!', self);
+
+                if (foundMDTEnemy && result === null) {
+                    console.error(`Unable to find MDT enemy when this enemy is coupled to one! (is_mdt: ${this.is_mdt}, mdt_id: ${this.mdt_id})`, self);
                 }
             }
             // We're an MDT enemy and we're looking for our enemy
@@ -182,8 +185,9 @@ class AdminEnemy extends Enemy {
                         return false;
                     }
                 });
+
                 if (result === null) {
-                    console.error('Unable to find enemy when this MDT enemy is coupled to one!', self);
+                    console.error(`Unable to find enemy when this MDT enemy is coupled to one! (is_mdt: ${this.is_mdt}, mdt_id: ${this.mdt_id})`, self);
                 }
             }
         } else {
@@ -273,7 +277,7 @@ class AdminEnemy extends Enemy {
             let previousEnemy = enemyMapObjectGroup.findMapObjectById(this._previousConnectedEnemyId);
             previousEnemy.detachConnectedEnemy();
             // Remove its visual connection, probably better served using events but that'd add too much complexity for now
-            previousEnemy.redrawConnectionToMDTEnemy();
+            previousEnemy.redrawConnectionsToEnemies();
         }
 
         // We couple the enemy to ourselves (MDT enemy), not the other way around
@@ -288,7 +292,7 @@ class AdminEnemy extends Enemy {
         mdtEnemy.signal('mdt_connected', {target: this});
 
         // Redraw ourselves
-        this.redrawConnectionToMDTEnemy();
+        this.redrawConnectionsToEnemies();
         this.visual.refresh();
     }
 
@@ -308,41 +312,52 @@ class AdminEnemy extends Enemy {
     /**
      * Redraw connections to the enemy
      */
-    redrawConnectionToMDTEnemy() {
+    redrawConnectionsToEnemies() {
         console.assert(this instanceof AdminEnemy, 'this was not an AdminEnemy', this);
 
         this.removeExistingConnectionToEnemy();
 
         // If this enemy is connected to an MDT enemy
-        let connectedEnemy = this.getConnectedMDTEnemy();
+        let connectedEnemies = [{
+            enemy: this.getExclusiveEnemy(),
+            options: c.map.adminenemy.exclusiveEnemyOptions
+        }];
+
+        if (getState().getMdtMappingModeEnabled()) {
+            connectedEnemies.push({
+                enemy: this.getConnectedMDTEnemy(),
+                options: this.isMismatched() ?
+                    c.map.adminenemy.mdtPolylineMismatchOptions :
+                    c.map.adminenemy.mdtPolylineOptions
+            });
+        }
+
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
 
         // Only when we should..
-        if (connectedEnemy !== null) {
-            if (enemyMapObjectGroup.isMapObjectVisible(this) &&
-                enemyMapObjectGroup.isMapObjectVisible(connectedEnemy)) {
-                // Create & add new layer
-                this.enemyConnectionLayerGroup = new L.LayerGroup();
+        for (let index in connectedEnemies) {
+            let connectedEnemy = connectedEnemies[index];
 
-                // Add the layer to the map
-                let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
-                enemyMapObjectGroup.layerGroup.addLayer(this.enemyConnectionLayerGroup);
+            if (connectedEnemy.enemy !== null) {
+                if (enemyMapObjectGroup.isMapObjectVisible(this) &&
+                    enemyMapObjectGroup.isMapObjectVisible(connectedEnemy.enemy)) {
+                    // Create & add new layer
+                    this.enemyConnectionLayerGroup = new L.LayerGroup();
 
-                // Different options for different things
-                let options = c.map.adminenemy.mdtPolylineOptions;
-                if (this.isMismatched()) {
-                    options = c.map.adminenemy.mdtPolylineMismatchOptions;
+                    // Add the layer to the map
+                    let enemyMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+                    enemyMapObjectGroup.layerGroup.addLayer(this.enemyConnectionLayerGroup);
+
+                    // Draw a line to the MDT enemy
+                    let layer = L.polyline([
+                        connectedEnemy.enemy.layer.getLatLng(),
+                        this.layer.getLatLng()
+                    ], connectedEnemy.options);
+
+                    // do not prevent clicking on anything else
+                    this.enemyConnectionLayerGroup.setZIndex(-1000);
+                    this.enemyConnectionLayerGroup.addLayer(layer);
                 }
-
-                // Draw a line to the MDT enemy
-                let layer = L.polyline([
-                    connectedEnemy.layer.getLatLng(),
-                    this.layer.getLatLng()
-                ], options);
-
-                // do not prevent clicking on anything else
-                this.enemyConnectionLayerGroup.setZIndex(-1000);
-                this.enemyConnectionLayerGroup.addLayer(layer);
             }
         }
     }
@@ -411,11 +426,17 @@ class AdminEnemy extends Enemy {
 
         // When we're moved, keep drawing the connections anew
         self.layer.on('move', function () {
-            self.redrawConnectionToMDTEnemy();
+            self.redrawConnectionsToEnemies();
 
-            let connectedEnemy = self.getConnectedMDTEnemy();
-            if (connectedEnemy !== null) {
-                connectedEnemy.redrawConnectionToMDTEnemy();
+            let connectedMDTEnemy = self.getConnectedMDTEnemy();
+            if (connectedMDTEnemy !== null) {
+                connectedMDTEnemy.redrawConnectionsToEnemies();
+            }
+
+            /** @type AdminEnemy */
+            let connectedExclusiveEnemy = self.getExclusiveEnemy();
+            if (connectedExclusiveEnemy !== null) {
+                connectedExclusiveEnemy.redrawConnectionsToEnemies();
             }
         });
     }
@@ -460,6 +481,7 @@ class AdminEnemy extends Enemy {
             seasonal_index: this.seasonal_index,
             npc_id: this.npc_id,
             npc_id_type: typeof this.npc_id,
+            exclusive_enemy_id: this.exclusive_enemy_id,
             attached_to_pack: this.enemy_pack_id !== null ? `true (${this.enemy_pack_id})` : 'false',
             attached_to_patrol: this.enemy_patrol_id !== null ? `true (${this.enemy_patrol_id})` : 'false',
             skippable: this.skippable,

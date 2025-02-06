@@ -245,6 +245,8 @@ class Enemy extends VersionableMapObject {
                 default: null,
                 setter: function (value) {
                     let enemyMapObjectGroup = self.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);
+
+                    self.exclusive_enemy_id = value;
                     self.setExclusiveEnemy(enemyMapObjectGroup.findMapObjectById(value));
                 },
             }),
@@ -1107,18 +1109,27 @@ class Enemy extends VersionableMapObject {
     }
 
     /**
+     * Get the exclusive enemy that is linked to this enemy (if any).
+     *
+     * @returns {Enemy|null}
+     */
+    getExclusiveEnemy() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.exclusive_enemy;
+    }
+
+    /**
      * Sets this Enemy to be exclusive with another Enemy.
      *
      * @param exclusiveEnemy {Enemy}
      */
     setExclusiveEnemy(exclusiveEnemy) {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        console.assert(exclusiveEnemy.id !== this.id, 'exclusiveEnemy must have a different id as ourselves!', exclusiveEnemy, this);
+        console.assert(exclusiveEnemy?.id !== this.id, 'exclusiveEnemy must have a different id as ourselves!', exclusiveEnemy, this);
 
         // console.warn('Setting linked awakened enemy', this.id, awakenedEnemy.id);
 
         this.exclusive_enemy = exclusiveEnemy;
-        this.exclusive_enemy_id = exclusiveEnemy?.id ?? null;
     }
 
     /**

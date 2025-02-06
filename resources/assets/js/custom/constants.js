@@ -383,6 +383,10 @@ let c = {
             mdtPolylineMismatchOptions: {
                 color: '#FFA500',
                 weight: 1
+            },
+            exclusiveEnemyOptions: {
+                color: '#00ffe1',
+                weight: 2
             }
         },
         adminenemypatrol: {
