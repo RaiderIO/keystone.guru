@@ -52,7 +52,7 @@ class FetchDisplayIds extends Command
             $displayId = $wowheadService->getNpcDisplayId($dungeon->gameVersion, $npc);
 
             if ($displayId === null) {
-                $this->warn('- Unable to find display ID for npc!');
+                $this->warn('- Unable to find display ID for npc! Is the game version correct?');
             } else {
                 $npc->update(['display_id' => $displayId]);
 
