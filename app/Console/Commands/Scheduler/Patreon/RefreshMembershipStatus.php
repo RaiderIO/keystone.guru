@@ -25,12 +25,12 @@ class RefreshMembershipStatus extends SchedulerCommand
     /**
      * Execute the console command.
      */
-    public function handle(PatreonApiService $patreonApiService, PatreonServiceInterface $patreonService): int
+    public function handle(PatreonServiceInterface $patreonService): int
     {
-        return $this->trackTime(function () use ($patreonApiService, $patreonService) {
-            $campaignBenefits = $patreonService->loadCampaignBenefits($patreonApiService);
-            $campaignTiers    = $patreonService->loadCampaignTiers($patreonApiService);
-            $members          = $patreonService->loadCampaignMembers($patreonApiService);
+        return $this->trackTime(function () use ($patreonService) {
+            $campaignBenefits = $patreonService->loadCampaignBenefits();
+            $campaignTiers    = $patreonService->loadCampaignTiers();
+            $members          = $patreonService->loadCampaignMembers();
 
             if ($campaignBenefits === null ||
                 $campaignTiers === null ||

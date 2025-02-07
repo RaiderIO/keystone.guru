@@ -3,6 +3,8 @@
 namespace App\Service\Patreon\Logging;
 
 use App\Logging\RollbarStructuredLogging;
+use App\Service\Patreon\Dtos\LinkToUserIdResult;
+use Exception;
 
 class PatreonServiceLogging extends RollbarStructuredLogging implements PatreonServiceLoggingInterface
 {
@@ -127,6 +129,51 @@ class PatreonServiceLogging extends RollbarStructuredLogging implements PatreonS
         $this->end(__METHOD__);
     }
 
+    public function linkToUserAccountStart(int $id, string $code, string $redirectUri): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
+
+    public function linkToUserAccountTokens(array $tokens): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function linkToUserAccountAdminUser(): void
+    {
+        $this->debug(__METHOD__);
+    }
+
+    public function linkToUserAccountIdentityResponse(?array $identityResponse): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function linkToUserAccountIdentityError(array $errors): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function linkToUserAccountIdentityIncludedNotSet(): void
+    {
+        $this->error(__METHOD__);
+    }
+
+    public function linkToUserAccountSessionExpired(): void
+    {
+        $this->info(__METHOD__);
+    }
+
+    public function linkToUserAccountException(Exception $e): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function linkToUserAccountEnd(LinkToUserIdResult $result): void
+    {
+        $this->end(__METHOD__, get_defined_vars());
+    }
+
     public function loadAdminUserIsCached(int $id): void
     {
         $this->debug(__METHOD__, get_defined_vars());
@@ -180,5 +227,10 @@ class PatreonServiceLogging extends RollbarStructuredLogging implements PatreonS
     public function loadAdminUserEnd(): void
     {
         $this->end(__METHOD__);
+    }
+
+    public function createPatreonUserLinkSuccessful(int $userId, int $patreonUserLinkId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
     }
 }

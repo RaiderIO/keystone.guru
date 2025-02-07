@@ -2,6 +2,9 @@
 
 namespace App\Service\Patreon\Logging;
 
+use App\Service\Patreon\Dtos\LinkToUserIdResult;
+use Exception;
+
 interface PatreonServiceLoggingInterface
 {
     public function loadCampaignBenefitsAdminUserNull(): void;
@@ -52,6 +55,24 @@ interface PatreonServiceLoggingInterface
 
     public function applyPaidBenefitsForMemberEnd(): void;
 
+    public function linkToUserAccountStart(int $id, string $code, string $redirectUri): void;
+
+    public function linkToUserAccountTokens(array $tokens): void;
+
+    public function linkToUserAccountAdminUser(): void;
+
+    public function linkToUserAccountIdentityResponse(?array $identityResponse): void;
+
+    public function linkToUserAccountIdentityError(array $errors): void;
+
+    public function linkToUserAccountIdentityIncludedNotSet(): void;
+
+    public function linkToUserAccountSessionExpired(): void;
+
+    public function linkToUserAccountException(Exception $e): void;
+
+    public function linkToUserAccountEnd(LinkToUserIdResult $result): void;
+
     public function loadAdminUserIsCached(int $id): void;
 
     public function loadAdminUserStart(): void;
@@ -73,4 +94,6 @@ interface PatreonServiceLoggingInterface
     public function loadAdminUserUpdatedTokenSuccessfully(bool $date): void;
 
     public function loadAdminUserEnd(): void;
+
+    public function createPatreonUserLinkSuccessful(int $userId, int $patreonUserLinkId): void;
 }

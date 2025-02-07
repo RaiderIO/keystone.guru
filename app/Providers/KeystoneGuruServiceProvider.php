@@ -132,6 +132,21 @@ class KeystoneGuruServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // External communication - no dependencies
+        $this->app->bind(DiscordApiServiceInterface::class, DiscordApiService::class);
+        $this->app->bind(RedditApiServiceInterface::class, RedditApiService::class);
+        $this->app->bind(ArchonApiServiceInterface::class, ArchonApiService::class);
+        $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
+        $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
+        $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
+        $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
+        if (app()->runningUnitTests()) {
+            $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
+        } else {
+            $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOApiService::class);
+        }
+        $this->app->bind(CloudflareServiceInterface::class, CloudflareService::class);
+
         // Bind the interface to the actual service
         $this->app->bind(EchoServerHttpApiServiceInterface::class, EchoServerHttpApiService::class);
 
@@ -199,22 +214,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Depends on all of the above - pretty much
         $this->app->bind(ViewServiceInterface::class, ViewService::class);
-
-        // External communication
-        $this->app->bind(DiscordApiServiceInterface::class, DiscordApiService::class);
-        $this->app->bind(RedditApiServiceInterface::class, RedditApiService::class);
-        $this->app->bind(ArchonApiServiceInterface::class, ArchonApiService::class);
-        $this->app->bind(PatreonApiServiceInterface::class, PatreonApiService::class);
-        $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
-        $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
-        $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
-        if (app()->runningUnitTests()) {
-            $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
-        } else {
-            $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOApiService::class);
-        }
-//
-        $this->app->bind(CloudflareServiceInterface::class, CloudflareService::class);
 
         // Depends on CombatLogService, SeasonService, WowheadService
         $this->app->bind(CombatLogDataExtractionServiceInterface::class, CombatLogDataExtractionService::class);
