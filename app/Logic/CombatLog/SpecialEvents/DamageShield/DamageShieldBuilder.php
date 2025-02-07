@@ -21,7 +21,7 @@ class DamageShieldBuilder implements SpecialEventBuilderInterface
     ): SpecialEvent {
         return match ($combatLogVersion) {
             CombatLogVersion::CLASSIC => new DamageShieldV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
-            CombatLogVersion::CLASSIC_SOD_1_15_5 => new DamageShieldV9SoD($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
+            CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6 => new DamageShieldV9SoD($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
             default => new DamageShieldV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
         };
     }

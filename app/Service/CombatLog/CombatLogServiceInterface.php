@@ -3,6 +3,7 @@
 namespace App\Service\CombatLog;
 
 use App\Logic\CombatLog\BaseEvent;
+use App\Logic\Structs\MapBounds;
 use App\Service\CombatLog\Dtos\ChallengeMode;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use Illuminate\Support\Collection;
@@ -25,6 +26,8 @@ interface CombatLogServiceInterface
      * @return Collection<ChallengeMode>
      */
     public function getUiMapIds(string $filePath): Collection;
+
+    public function getBoundsFromEvents(string $filePath): MapBounds;
 
     /**
      * @return Collection<BaseResultEvent>

@@ -3,6 +3,7 @@
 namespace App\Models\Floor;
 
 use App\Logic\Structs\LatLng;
+use App\Logic\Structs\MapBounds;
 use App\Models\CacheModel;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
@@ -93,9 +94,9 @@ class Floor extends CacheModel implements MappingModelInterface
         762  => 761,
         763  => 761,
         // Siege of Boralus
-        876 => 1162, // Kul Tiras -> Siege of Boralus
-        895 => 1162, // Tiragarde Sound -> Siege of Boralus
-//        1533 => 1162, // Bastion -> Siege of Boralus ????
+        876  => 1162, // Kul Tiras -> Siege of Boralus
+        895  => 1162, // Tiragarde Sound -> Siege of Boralus
+        //        1533 => 1162, // Bastion -> Siege of Boralus ????
         // Brackenhide Hollow
         2106 => 2096,
         // Mists of Tirna Scithe
@@ -356,6 +357,11 @@ class Floor extends CacheModel implements MappingModelInterface
     public function getDungeonId(): ?int
     {
         return $this->dungeon_id;
+    }
+
+    public function getMapBounds(): MapBounds
+    {
+        return new MapBounds($this->ingame_min_x, $this->ingame_min_y, $this->ingame_max_x, $this->ingame_max_y);
     }
 
     /**
