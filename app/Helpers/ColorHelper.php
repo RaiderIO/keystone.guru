@@ -99,7 +99,7 @@ function pad($v)
  */
 function rgb2hex($r, $g, $b)
 {
-    return '#' . implode('', array_map('dechex', array_map('round', [$r, $g, $b])));
+    return sprintf('#%02x%02x%02x', round($r), round($g), round($b));
 }
 
 /**
@@ -122,4 +122,49 @@ function randomHexColorNoMapColors(): string
     } while (in_array(hex2name($result), ['orange', 'brown', 'vermillion']));
 
     return $result;
+}
+
+function pickHexFromHandlers(array $handlers, float $weight): string {
+    assert(count($handlers) > 1, 'Handlers.length <= 1!');
+
+    // If color is before the start or after the end of any gradients, return last known color
+    if ($handlers[0][0] >= $weight) {
+        return strtolower($handlers[0][1]);
+    } elseif ($handlers[count($handlers) - 1][0] <= $weight) {
+        return strtolower($handlers[count($handlers) - 1][1]);
+    } else {
+        // Color is in between gradients, determine which gradient it is
+        $color1 = null;
+        $color2 = null;
+        $scaledWeight = 0.0;
+
+        for ($i = 0; $i < count($handlers) - 1; $i++) {
+            $a = $handlers[$i];
+            $b = $handlers[$i + 1];
+
+            if ($weight >= $a[0] && $weight <= $b[0]) {
+                $color1 = hex2rgb($a[1]);
+                $color2 = hex2rgb($b[1]);
+
+                $gradientRange = $b[0] - $a[0];
+                $weightOnGradientRange = $weight - $a[0];
+                $scaledWeight = $weightOnGradientRange / $gradientRange;
+
+                break;
+            }
+        }
+
+        assert($color1 !== null, 'color1 === null!');
+        assert($color2 !== null, 'color2 === null!');
+
+        $invertedScaledWeight = 1 - $scaledWeight;
+
+        return strtolower(
+            rgb2hex(
+                round($color2[0] * $scaledWeight + $color1[0] * $invertedScaledWeight),
+                round($color2[1] * $scaledWeight + $color1[1] * $invertedScaledWeight),
+                round($color2[2] * $scaledWeight + $color1[2] * $invertedScaledWeight)
+            )
+        );
+    }
 }

@@ -10,13 +10,18 @@ use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\MapChange;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Logic\Structs\IngameXY;
+use App\Logic\Structs\LatLng;
 use App\Models\Dungeon;
 use App\Models\Enemy;
+use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcType;
+use App\Models\Path;
+use App\Models\Polyline;
 use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLoggingInterface;
+use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Support\Carbon;
@@ -67,7 +72,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         return $mappingVersion;
     }
 
-    public function createMappingVersionFromDungeonOrRaid(string $filePath, ?MappingVersion $mappingVersion = null): ?MappingVersion
+    public function createMappingVersionFromDungeonOrRaid(string $filePath, ?MappingVersion $mappingVersion = null, bool $enemyConnections = false): ?MappingVersion
     {
         $this->log->createMappingVersionFromDungeonOrRaidStart($filePath);
         try {
@@ -79,7 +84,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 }
 
                 return $dungeon;
-            }, $mappingVersion);
+            }, $mappingVersion, $enemyConnections);
         } finally {
             $this->log->createMappingVersionFromDungeonOrRaidEnd();
         }
@@ -90,7 +95,8 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
     private function createMappingVersionFromCombatLog(
         string          $filePath,
         callable        $extractDungeonCallable,
-        ?MappingVersion $mappingVersion = null
+        ?MappingVersion $mappingVersion = null,
+        bool            $enemyConnections = false
     ): ?MappingVersion {
         $targetFilePath = $this->combatLogService->extractCombatLog($filePath) ?? $filePath;
 
@@ -113,7 +119,16 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         /** @var Collection<Npc> $npcs */
         $npcs = collect();
 
-        $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent, int $lineNr) use ($extractDungeonCallable, $hasExistingMappingVersion, &$mappingVersion, &$dungeon, &$currentFloor, &$npcs) {
+        $enemiesAttributes          = [];
+        $enemyConnectionsAttributes = [];
+        /** @var LatLng|null $previousEnemyLatLng */
+        $previousEnemyLatLng = null;
+
+        $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent, int $lineNr)
+        use (
+            $extractDungeonCallable, $hasExistingMappingVersion, &$mappingVersion, &$dungeon, &$currentFloor, &$npcs,
+            &$enemiesAttributes, &$enemyConnectionsAttributes, &$previousEnemyLatLng
+        ) {
             $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => trim($rawEvent), 'lineNr' => $lineNr]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
@@ -212,13 +227,28 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                         )
                     );
 
-                    Enemy::create(array_merge([
+                    $enemiesAttributes[] = array_merge([
                         'floor_id'           => $currentFloor->id,
                         'mapping_version_id' => $mappingVersion->id,
                         'npc_id'             => $guid->getId(),
                         'required'           => 0,
                         'skippable'          => 0,
-                    ], $latLng->toArray()));
+                    ], $latLng->toArray());
+
+                    $enemyConnectionsAttributes[] = [
+                        'mapping_version_id' => $mappingVersion->id,
+                        'floor_id'           => $currentFloor->id,
+                        'polyline'           => [
+                            'model_id'    => -1,
+                            'model_class' => EnemyPatrol::class,
+                            'lat_lngs'    => [
+                                ['lat' => $previousEnemyLatLng?->getLat() ?? CoordinatesService::MAP_MAX_LAT, 'lng' => $previousEnemyLatLng?->getLng() ?? CoordinatesService::MAP_MAX_LNG],
+                                ['lat' => $latLng->getLat(), 'lng' => $latLng->getLng()],
+                            ],
+                        ],
+                    ];
+
+                    $previousEnemyLatLng = $latLng;
 
                     $this->log->createMappingVersionFromCombatLogNewEnemy($currentFloor->id, $guid->getId());
                 }
@@ -226,6 +256,45 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
             return $parsedEvent;
         });
+
+        Enemy::insert($enemiesAttributes);
+        if ($enemyConnections) {
+            $enemyConnectionsGradient = [
+                [0, '#00FF00'],
+                [50, '#0000BB'],
+                [100, '#FF0000'],
+            ];
+
+            $weightStep = 100 / count($enemiesAttributes);
+
+            // Save all polylines
+            $currentWeight = 0;
+            $polyLines     = [];
+            foreach ($enemyConnectionsAttributes as $enemyConnectionAttributes) {
+                $polyLineAttributes = array_merge($enemyConnectionAttributes['polyline'], [
+                    'color'         => pickHexFromHandlers($enemyConnectionsGradient, $currentWeight += $weightStep),
+                    'vertices_json' => json_encode($enemyConnectionAttributes['polyline']['lat_lngs']),
+                ]);
+
+                unset($polyLineAttributes['lat_lngs']);
+                $polyLines[] = Polyline::create($polyLineAttributes);
+            }
+
+            // Save all paths (as enemy patrols, so I can see them in the mapping version admin) and couple the polylines to them
+            $i = 0;
+            foreach ($enemyConnectionsAttributes as $enemyConnectionsAttribute) {
+                $polyline = $polyLines[$i];
+                $enemyConnectionsAttribute['polyline_id'] = $polyline->id;
+
+                $enemyPatrol = EnemyPatrol::create($enemyConnectionsAttribute);
+
+                $polyline->update([
+                    'model_id' => $enemyPatrol->id,
+                ]);
+
+                $i++;
+            }
+        }
 
         // Remove the lineNr context since we stopped parsing lines, don't let the last line linger in the context
         $this->log->removeContext('lineNr');
