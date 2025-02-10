@@ -15648,7 +15648,7 @@
                 "id": 364,
                 "index": 1,
                 "mdt_sub_level": null,
-                "ui_map_id": 0,
+                "ui_map_id": 10001,
                 "map_name": null,
                 "name": "dungeons.classic.karazhan_crypts.floors.karazhan_crypts",
                 "default": 1,
@@ -15664,7 +15664,14 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1032,
+                        "floor1_id": 364,
+                        "floor2_id": 365,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -15672,7 +15679,7 @@
                 "id": 365,
                 "index": 2,
                 "mdt_sub_level": null,
-                "ui_map_id": 0,
+                "ui_map_id": 10002,
                 "map_name": null,
                 "name": "dungeons.classic.karazhan_crypts.floors.the_slough_of_dispair",
                 "default": 0,
@@ -15681,14 +15688,27 @@
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": null,
                 "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": 1835.98,
+                "ingame_min_x": 1850.98,
                 "ingame_min_y": -11337.71,
-                "ingame_max_x": 1392.34,
+                "ingame_max_x": 1357.34,
                 "ingame_max_y": -10940.64,
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1033,
+                        "floor1_id": 365,
+                        "floor2_id": 364,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1034,
+                        "floor1_id": 365,
+                        "floor2_id": 366,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -15696,23 +15716,36 @@
                 "id": 366,
                 "index": 3,
                 "mdt_sub_level": null,
-                "ui_map_id": 0,
+                "ui_map_id": 10003,
                 "map_name": null,
-                "name": "dungeons.classic.karazhan_crypts.floors.tome_of_the_unrepentant",
+                "name": "dungeons.classic.karazhan_crypts.floors.the_pit_of_criminals",
                 "default": 0,
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": null,
                 "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": 1804.32,
+                "ingame_min_x": 1819.32,
                 "ingame_min_y": -11324.78,
-                "ingame_max_x": 1497.33,
+                "ingame_max_x": 1482.33,
                 "ingame_max_y": -11049.97,
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1035,
+                        "floor1_id": 366,
+                        "floor2_id": 365,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1036,
+                        "floor1_id": 366,
+                        "floor2_id": 367,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -15720,9 +15753,9 @@
                 "id": 367,
                 "index": 4,
                 "mdt_sub_level": null,
-                "ui_map_id": 0,
+                "ui_map_id": 10004,
                 "map_name": null,
-                "name": "dungeons.classic.karazhan_crypts.floors.the_pit_of_criminals",
+                "name": "dungeons.classic.karazhan_crypts.floors.tome_of_the_unrepentant",
                 "default": 0,
                 "facade": 0,
                 "min_enemy_size": null,
@@ -15736,7 +15769,14 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1037,
+                        "floor1_id": 367,
+                        "floor2_id": 366,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
