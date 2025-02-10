@@ -30,7 +30,10 @@
  * @property {String} filterPlayerDeathsSelector
  * @property {String} filterAffixesSelector
  * @property {String} filterWeeklyAffixGroupsSelector
+ * @property {String} filterClassesSelector
  * @property {String} filterSpecializationsSelector
+ * @property {String} filterClassesPlayerDeathsSelector
+ * @property {String} filterSpecializationsPlayerDeathsSelector
  * @property {String} filterDurationSelector
  * @property {String} filterMinSamplesRequiredSelector
  *
@@ -100,7 +103,10 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
                 self._search();
             }),
+            'includeClassIds': new SearchFilterClasses(this.options.filterClassesSelector, this._search.bind(this)),
             'includeSpecIds': new SearchFilterSpecializations(this.options.filterSpecializationsSelector, self._search.bind(this)),
+            'includePlayerDeathClassIds': new SearchFilterClassesPlayerDeaths(this.options.filterClassesPlayerDeathsSelector, this._search.bind(this)),
+            'includePlayerDeathSpecIds': new SearchFilterSpecializationsPlayerDeaths(this.options.filterSpecializationsPlayerDeathsSelector, self._search.bind(this)),
             'duration': new SearchFilterDuration(this.options.filterDurationSelector, this._search.bind(this), this.options.durationMin, this.options.durationMax),
             'minSamplesRequired': new SearchFilterMinSamplesRequired(this.options.filterMinSamplesRequiredSelector, this._search.bind(this), this.options.minSamplesRequiredMin, this.options.minSamplesRequiredMax),
         };
