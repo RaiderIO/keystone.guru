@@ -500,6 +500,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('featuredAffixesByActiveExpansion', $regionViewVariables['featuredAffixesByActiveExpansion']);
 
             $view->with('characterClassSpecializations', $globalViewVariables['characterClassSpecializations']);
+            $view->with('characterClasses', $globalViewVariables['characterClasses']);
             $view->with('allRegions', $globalViewVariables['allRegions']);
         });
         view()->composer('common.maps.controls.pulls', static function (View $view) {

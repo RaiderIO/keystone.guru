@@ -118,6 +118,7 @@ abstract class MapContext
             'unknownMapIconType'                => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
             'awakenedObeliskGatewayMapIconType' => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),
             'classColors'                       => CharacterClass::all()->pluck('color'),
+            'characterClasses'                  => CharacterClass::all(),
             'characterClassSpecializations'     => CharacterClassSpecialization::all(),
             'raidMarkers'                       => RaidMarker::all(),
             'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),

@@ -2,6 +2,7 @@
 
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
@@ -34,6 +35,7 @@ use Illuminate\Support\Collection;
  * @var int                                      $minSamplesRequiredMax
  * @var Collection<WeeklyAffixGroup>             $seasonWeeklyAffixGroups
  * @var Collection<CharacterClassSpecialization> $characterClassSpecializations
+ * @var Collection<CharacterClass>               $characterClasses
  * @var Collection<GameServerRegion>             $allRegions
  */
 
@@ -59,6 +61,24 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     // Otherwise, sort by ID ascending
     return $a->id <=> $b->id;
 });
+
+$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(function (CharacterClassSpecialization $characterClassSpecialization) {
+    return __($characterClassSpecialization->class->name);
+})->mapWithKeys(function (Collection $specializations, string $className) {
+    return [
+        $className => $specializations->mapWithKeys(function (CharacterClassSpecialization $characterClassSpecialization) {
+            return [
+                $characterClassSpecialization->specialization_id => __($characterClassSpecialization->name)
+            ];
+        })
+    ];
+})->toArray();
+
+$characterClassSelectOptions = $characterClasses->mapWithKeys(function (CharacterClass $characterClass) {
+    return [
+        $characterClass->class_id => __($characterClass->name)
+    ];
+})->toArray();
 
 ?>
 @include('common.general.inline', ['path' => 'common/maps/heatmapsearchsidebar', 'options' => [
@@ -92,6 +112,7 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     'filterPlayerDeathsSelector' => '#filter_player_deaths',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
     'filterWeeklyAffixGroupsSelector' => '#filter_weekly_affix_groups',
+    'filterClassesSelector' => '#filter_classes',
     'filterSpecializationsSelector' => '#filter_specializations',
     'filterDurationSelector' => '#filter_duration',
     'filterMinSamplesRequiredSelector' => '#filter_min_samples_required',
@@ -301,36 +322,6 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
                     </div>
                 @endcomponent
 
-                @component('common.forms.labelinput', [
-                    'name' => 'filter_specializations',
-                    'label' => __('view_common.maps.controls.heatmapsearch.specializations'),
-                ])
-                    {!!
-                        Form::select(
-                            'filter_specializations[]',
-                            $characterClassSpecializations->groupBy(function(CharacterClassSpecialization $characterClassSpecialization) {
-                                return __($characterClassSpecialization->class->name);
-                            })->mapWithKeys(function (Collection $specializations, string $className) {
-                                return [
-                                    $className => $specializations->mapWithKeys(function(CharacterClassSpecialization $characterClassSpecialization){
-                                        return [
-                                            // No translation is intended!
-                                            $characterClassSpecialization->specialization_id => __($characterClassSpecialization->name)
-                                        ];
-                                    })
-                                ];
-                            })->toArray(),
-                            [],
-                            [
-                                'id' => 'filter_specializations',
-                                'name' => 'specializations',
-                                'class' => 'form-control selectpicker',
-                                'multiple' => 'multiple'
-                            ]
-                        )
-                     !!}
-                @endcomponent
-
                 @if($dungeon->gameVersion->has_seasons)
                     {{--                    @component('common.forms.labelinput', ['key' => 'season', 'text' => __('view_common.maps.controls.heatmapsearch.season'), 'expanded' => $expandedAffixWeek])--}}
                     {{--                        <div class="filter_affix">--}}
@@ -375,8 +366,52 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
                     @endcomponent
                 @endif
 
+                @component('common.search.filter', ['key' => 'class_and_spec_options', 'text' => __('view_common.maps.controls.heatmapsearch.class_and_spec_options'), 'expanded' => true])
+
+                    @component('common.forms.labelinput', [
+                        'name' => 'filter_classes',
+                        'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes'),
+                        'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_title'),
+                    ])
+                        {!!
+                            Form::select(
+                                'filter_classes[]',
+                                $characterClassSelectOptions,
+                                [],
+                                [
+                                    'id' => 'filter_classes',
+                                    'name' => 'classes',
+                                    'class' => 'form-control selectpicker',
+                                    'multiple' => 'multiple'
+                                ]
+                            )
+                         !!}
+                    @endcomponent
+
+                    @component('common.forms.labelinput', [
+                        'name' => 'filter_specializations',
+                        'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations'),
+                        'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_title'),
+                    ])
+                        {!!
+                            Form::select(
+                                'filter_specializations[]',
+                                $characterClassSpecializationsSelectOptions,
+                                [],
+                                [
+                                    'id' => 'filter_specializations',
+                                    'name' => 'specializations',
+                                    'class' => 'form-control selectpicker',
+                                    'multiple' => 'multiple'
+                                ]
+                            )
+                         !!}
+                    @endcomponent
+
+                @endcomponent
+
                 @if(Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN))
-                    @component('common.search.filter', ['key' => 'heatoptions', 'text' => __('view_common.maps.controls.heatmapsearch.advanced_options'), 'expanded' => true])
+                    @component('common.search.filter', ['key' => 'advanced_search', 'text' => __('view_common.maps.controls.heatmapsearch.advanced_options'), 'expanded' => true])
 
                         @component('common.forms.labelinput', [
                             'name' => 'min_samples_required',
