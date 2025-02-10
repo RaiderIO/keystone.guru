@@ -16,7 +16,12 @@ class SearchFilterSpecializations extends SearchFilterSelect {
         });
     }
 
-    getFilterHeaderText() {
+    /**
+     *
+     * @returns {*[]}
+     * @protected
+     */
+    _getSpecializationNames() {
         let value = this.getValue();
 
         let specializationNames = [];
@@ -43,7 +48,11 @@ class SearchFilterSpecializations extends SearchFilterSelect {
             specializationNames.push(lang.get(characterClassSpecialization.name))
         }
 
+        return specializationNames;
+    }
+
+    getFilterHeaderText() {
         return lang.get('messages.filter_input_select_specializations_header')
-            .replace(':specializations', specializationNames.join(', '));
+            .replace(':specializations', this._getSpecializationNames().join(', '));
     }
 }

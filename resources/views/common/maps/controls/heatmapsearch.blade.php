@@ -114,6 +114,8 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
     'filterWeeklyAffixGroupsSelector' => '#filter_weekly_affix_groups',
     'filterClassesSelector' => '#filter_classes',
     'filterSpecializationsSelector' => '#filter_specializations',
+    'filterClassesPlayerDeathsSelector' => '#filter_classes_player_deaths',
+    'filterSpecializationsPlayerDeathsSelector' => '#filter_specializations_player_deaths',
     'filterDurationSelector' => '#filter_duration',
     'filterMinSamplesRequiredSelector' => '#filter_min_samples_required',
 
@@ -407,6 +409,47 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                             )
                          !!}
                     @endcomponent
+
+
+                        @component('common.forms.labelinput', [
+                            'name' => 'filter_classes_player_deaths',
+                            'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths'),
+                            'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths_title'),
+                        ])
+                            {!!
+                                Form::select(
+                                    'filter_classes_player_deaths[]',
+                                    $characterClassSelectOptions,
+                                    [],
+                                    [
+                                        'id' => 'filter_classes_player_deaths',
+                                        'name' => 'classes_player_deaths',
+                                        'class' => 'form-control selectpicker',
+                                        'multiple' => 'multiple'
+                                    ]
+                                )
+                             !!}
+                        @endcomponent
+
+                        @component('common.forms.labelinput', [
+                            'name' => 'filter_specializations_player_deaths',
+                            'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths'),
+                            'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths_title'),
+                        ])
+                            {!!
+                                Form::select(
+                                    'filter_specializations_player_deaths[]',
+                                    $characterClassSpecializationsSelectOptions,
+                                    [],
+                                    [
+                                        'id' => 'filter_specializations_player_deaths',
+                                        'name' => 'specializations_player_deaths',
+                                        'class' => 'form-control selectpicker',
+                                        'multiple' => 'multiple'
+                                    ]
+                                )
+                             !!}
+                        @endcomponent
 
                 @endcomponent
 

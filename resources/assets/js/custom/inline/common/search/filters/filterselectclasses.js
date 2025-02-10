@@ -16,7 +16,12 @@ class SearchFilterClasses extends SearchFilterSelect {
         });
     }
 
-    getFilterHeaderText() {
+    /**
+     *
+     * @returns {*[]}
+     * @protected
+     */
+    _getCharacterNames() {
         let value = this.getValue();
 
         let classNames = [];
@@ -43,7 +48,11 @@ class SearchFilterClasses extends SearchFilterSelect {
             classNames.push(lang.get(characterClass.name))
         }
 
+        return classNames;
+    }
+
+    getFilterHeaderText() {
         return lang.get('messages.filter_input_select_classes_header')
-            .replace(':classes', classNames.join(', '));
+            .replace(':classes', this._getCharacterNames().join(', '));
     }
 }
