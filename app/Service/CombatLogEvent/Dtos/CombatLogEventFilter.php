@@ -3,6 +3,7 @@
 namespace App\Service\CombatLogEvent\Dtos;
 
 use App\Models\Affix;
+use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
@@ -38,6 +39,9 @@ class CombatLogEventFilter implements Arrayable
 
     /** @var Collection<CharacterClassSpecialization> */
     private Collection $specializations;
+
+    /** @var Collection<CharacterClass> */
+    private Collection $classes;
     private ?int       $periodMin          = null;
     private ?int       $periodMax          = null;
     private ?int       $durationMin        = null;
@@ -52,6 +56,7 @@ class CombatLogEventFilter implements Arrayable
     ) {
         $this->affixes         = collect();
         $this->specializations = collect();
+        $this->classes         = collect();
     }
 
     public function getDungeon(): Dungeon
@@ -191,6 +196,25 @@ class CombatLogEventFilter implements Arrayable
         return $this;
     }
 
+    /**
+     * @return Collection<CharacterClass>
+     */
+    public function getClasses(): Collection
+    {
+        return $this->classes;
+    }
+
+    /**
+     * @param Collection<CharacterClass> $classes
+     * @return CombatLogEventFilter
+     */
+    public function setClasses(Collection $classes): CombatLogEventFilter
+    {
+        $this->classes = $classes;
+
+        return $this;
+    }
+
     public function getPeriodMin(): ?int
     {
         return $this->periodMin;
@@ -256,7 +280,7 @@ class CombatLogEventFilter implements Arrayable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'challenge_mode_id'    => $this->dungeon->challenge_mode_id,
             'event_type'           => $this->eventType->value,
             'data_type'            => $this->dataType,
@@ -274,11 +298,14 @@ class CombatLogEventFilter implements Arrayable
             'specializations'      => $this->specializations->map(function (CharacterClassSpecialization $characterClassSpecialization) {
                 return __($characterClassSpecialization->name, [], 'en_US');
             }),
+            'classes'      => $this->classes->map(function (CharacterClass $characterClass) {
+                return __($characterClass->name, [], 'en_US');
+            }),
             'period_min'           => $this->periodMin,
             'period_max'           => $this->periodMax,
             'duration_min'         => $this->durationMin,
             'duration_max'         => $this->durationMax,
-        ];
+        ]);
     }
 
     public function toOpensearchQuery(array $must = []): array
@@ -358,7 +385,7 @@ class CombatLogEventFilter implements Arrayable
             ]);
         }
 
-        // @TODO Add nested query for specializations - it's nested in the character data
+        // @TODO Add nested query for specializations and classes - it's nested in the character data
 //        if ($this->specializations->isNotEmpty()) {
 //            $must[] = BoolQuery::make([
 //                Should::make(
@@ -425,6 +452,7 @@ class CombatLogEventFilter implements Arrayable
         $combatLogEventFilter->setMinSamplesRequired($heatmapDataFilter->getMinSamplesRequired());
         $combatLogEventFilter->setAffixes($heatmapDataFilter->getIncludeAffixIds());
         $combatLogEventFilter->setSpecializations($heatmapDataFilter->getIncludeSpecIds());
+        $combatLogEventFilter->setClasses($heatmapDataFilter->getIncludeClassIds());
         $combatLogEventFilter->setPeriodMin($heatmapDataFilter->getMinPeriod());
         $combatLogEventFilter->setPeriodMax($heatmapDataFilter->getMaxPeriod());
 

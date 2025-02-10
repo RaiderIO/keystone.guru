@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Heatmap;
 
 use App\Models\Affix;
+use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\Dungeon;
 use Illuminate\Validation\Rule;
@@ -30,9 +31,10 @@ class AjaxGetDataFormRequest extends ExploreUrlFormRequest
             // These are overrides since it's easier to split the csv as an array for this endpoint
             'includeAffixIds'   => ['nullable', 'array'],
             'includeAffixIds.*' => ['integer', Rule::exists(Affix::class, 'affix_id')],
-            // These are overrides since it's easier to split the csv as an array for this endpoint
             'includeSpecIds'    => ['nullable', 'array'],
             'includeSpecIds.*'  => ['integer', Rule::exists(CharacterClassSpecialization::class, 'specialization_id')],
+            'includeClassIds'   => ['nullable', 'array'],
+            'includeClassIds.*' => ['integer', Rule::exists(CharacterClass::class, 'class_id')],
         ]);
     }
 }
