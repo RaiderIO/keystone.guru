@@ -78,18 +78,17 @@ $floor ??= null;
         @include('common.forms.form-error', ['key' => 'ui_map_id'])
     </div>
 
-    <div class="form-group{{ $errors->has('map_name') ? ' has-error' : '' }}">
-        {!! Form::label('map_name', __('view_admin.floor.edit.map_name'), ['class' => 'font-weight-bold']) !!}
-        <span class="form-required">*</span>
-        {!! Form::text('map_name', null, ['class' => 'form-control']) !!}
-        @include('common.forms.form-error', ['key' => 'map_name'])
-    </div>
-
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
         {!! Form::label('name', __('view_admin.floor.edit.name'), ['class' => 'font-weight-bold']) !!}
         <span class="form-required">*</span>
         {!! Form::text('name', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'name'])
+    </div>
+
+    <div class="form-group{{ $errors->has('map_name') ? ' has-error' : '' }}">
+        {!! Form::label('map_name', __('view_admin.floor.edit.map_name'), ['class' => 'font-weight-bold']) !!}
+        {!! Form::text('map_name', null, ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'map_name'])
     </div>
 
     <div class="form-group{{ $errors->has('min_enemy_size') ? ' has-error' : '' }}">
