@@ -28,10 +28,14 @@ class HeatmapDataFilter implements Arrayable
     private ?int    $playerDeathsMax = null;
     /** @var Collection<Affix> */
     private Collection $includeAffixIds;
+    /** @var Collection<CharacterClass> */
+    private Collection $includeClassIds;
     /** @var Collection<CharacterClassSpecialization> */
     private Collection $includeSpecIds;
     /** @var Collection<CharacterClass> */
-    private Collection $includeClassIds;
+    private Collection $includePlayerDeathClassIds;
+    /** @var Collection<CharacterClassSpecialization> */
+    private Collection $includePlayerDeathSpecIds;
     private ?int       $minPeriod          = null;
     private ?int       $maxPeriod          = null;
     private ?int       $timerFractionMin   = null;
@@ -43,9 +47,11 @@ class HeatmapDataFilter implements Arrayable
         private readonly CombatLogEventEventType $eventType,
         private readonly CombatLogEventDataType  $dataType
     ) {
-        $this->includeAffixIds = collect();
-        $this->includeSpecIds  = collect();
-        $this->includeClassIds = collect();
+        $this->includeAffixIds            = collect();
+        $this->includeClassIds            = collect();
+        $this->includeSpecIds             = collect();
+        $this->includePlayerDeathClassIds = collect();
+        $this->includePlayerDeathSpecIds  = collect();
     }
 
     public function getDungeon(): Dungeon
@@ -167,6 +173,25 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
+     * @return Collection<CharacterClass>
+     */
+    public function getIncludeClassIds(): Collection
+    {
+        return $this->includeClassIds;
+    }
+
+    /**
+     * @param Collection<CharacterClass> $includeClassIds
+     * @return HeatmapDataFilter
+     */
+    public function setIncludeClassIds(Collection $includeClassIds): HeatmapDataFilter
+    {
+        $this->includeClassIds = $includeClassIds;
+
+        return $this;
+    }
+
+    /**
      * @return Collection<CharacterClassSpecialization>
      */
     public function getIncludeSpecIds(): Collection
@@ -185,21 +210,41 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
+
     /**
      * @return Collection<CharacterClass>
      */
-    public function getIncludeClassIds(): Collection
+    public function getIncludePlayerDeathClassIds(): Collection
     {
-        return $this->includeClassIds;
+        return $this->includePlayerDeathClassIds;
     }
 
     /**
-     * @param Collection<CharacterClass> $includeClassIds
+     * @param Collection<CharacterClass> $includePlayerDeathClassIds
      * @return HeatmapDataFilter
      */
-    public function setIncludeClassIds(Collection $includeClassIds): HeatmapDataFilter
+    public function setIncludePlayerDeathClassIds(Collection $includePlayerDeathClassIds): HeatmapDataFilter
     {
-        $this->includeClassIds = $includeClassIds;
+        $this->includePlayerDeathClassIds = $includePlayerDeathClassIds;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<CharacterClassSpecialization>
+     */
+    public function getIncludePlayerDeathSpecIds(): Collection
+    {
+        return $this->includePlayerDeathSpecIds;
+    }
+
+    /**
+     * @param Collection<CharacterClassSpecialization> $includePlayerDeathSpecIds
+     * @return HeatmapDataFilter
+     */
+    public function setIncludePlayerDeathSpecIds(Collection $includePlayerDeathSpecIds): HeatmapDataFilter
+    {
+        $this->includePlayerDeathSpecIds = $includePlayerDeathSpecIds;
 
         return $this;
     }
@@ -300,15 +345,27 @@ class HeatmapDataFilter implements Arrayable
             )->toArray());
         }
 
+        if ($this->getIncludeClassIds()->isNotEmpty()) {
+            $result['includeClassIds'] = implode(',', $this->getIncludeClassIds()->map(
+                fn(CharacterClass $characterClass) => $characterClass->class_id
+            )->toArray());
+        }
+
         if ($this->getIncludeSpecIds()->isNotEmpty()) {
             $result['includeSpecIds'] = implode(',', $this->getIncludeSpecIds()->map(
                 fn(CharacterClassSpecialization $characterClassSpecialization) => $characterClassSpecialization->specialization_id
             )->toArray());
         }
 
-        if ($this->getIncludeClassIds()->isNotEmpty()) {
-            $result['includeClassIds'] = implode(',', $this->getIncludeClassIds()->map(
+        if ($this->getIncludePlayerDeathClassIds()->isNotEmpty()) {
+            $result['includePlayerDeathClassIds'] = implode(',', $this->getIncludePlayerDeathClassIds()->map(
                 fn(CharacterClass $characterClass) => $characterClass->class_id
+            )->toArray());
+        }
+
+        if ($this->getIncludePlayerDeathSpecIds()->isNotEmpty()) {
+            $result['includePlayerDeathSpecIds'] = implode(',', $this->getIncludePlayerDeathSpecIds()->map(
+                fn(CharacterClassSpecialization $characterClassSpecialization) => $characterClassSpecialization->specialization_id
             )->toArray());
         }
 
@@ -343,11 +400,16 @@ class HeatmapDataFilter implements Arrayable
         $heatmapDataFilter->setIncludeAffixIds(isset($requestArray['includeAffixIds']) ?
             Affix::whereIn('affix_id', $requestArray['includeAffixIds'])->get() : collect());
 
-        $heatmapDataFilter->setIncludeSpecIds(isset($requestArray['includeSpecIds']) ?
-            CharacterClassSpecialization::whereIn('specialization_id', $requestArray['includeSpecIds'])->get() : collect());
 
         $heatmapDataFilter->setIncludeClassIds(isset($requestArray['includeClassIds']) ?
             CharacterClass::whereIn('class_id', $requestArray['includeClassIds'])->get() : collect());
+        $heatmapDataFilter->setIncludeSpecIds(isset($requestArray['includeSpecIds']) ?
+            CharacterClassSpecialization::whereIn('specialization_id', $requestArray['includeSpecIds'])->get() : collect());
+
+        $heatmapDataFilter->setIncludePlayerDeathClassIds(isset($requestArray['includePlayerDeathClassIds']) ?
+            CharacterClass::whereIn('class_id', $requestArray['includePlayerDeathClassIds'])->get() : collect());
+        $heatmapDataFilter->setIncludePlayerDeathSpecIds(isset($requestArray['includePlayerDeathSpecIds']) ?
+            CharacterClassSpecialization::whereIn('specialization_id', $requestArray['includePlayerDeathSpecIds'])->get() : collect());
 
         if (isset($requestArray['minPeriod']) && (int)$requestArray['minPeriod'] > 0) {
             $heatmapDataFilter->setMinPeriod($requestArray['minPeriod']);

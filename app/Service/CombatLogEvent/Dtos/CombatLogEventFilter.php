@@ -37,11 +37,17 @@ class CombatLogEventFilter implements Arrayable
     /** @var Collection<Affix> */
     private Collection $affixes;
 
+    /** @var Collection<CharacterClass> */
+    private Collection $classes;
+
     /** @var Collection<CharacterClassSpecialization> */
     private Collection $specializations;
 
     /** @var Collection<CharacterClass> */
-    private Collection $classes;
+    private Collection $classesPlayerDeaths;
+
+    /** @var Collection<CharacterClassSpecialization> */
+    private Collection $specializationsPlayerDeaths;
     private ?int       $periodMin          = null;
     private ?int       $periodMax          = null;
     private ?int       $durationMin        = null;
@@ -54,9 +60,11 @@ class CombatLogEventFilter implements Arrayable
         private readonly CombatLogEventEventType $eventType,
         private readonly CombatLogEventDataType  $dataType
     ) {
-        $this->affixes         = collect();
-        $this->specializations = collect();
-        $this->classes         = collect();
+        $this->affixes                     = collect();
+        $this->classes                     = collect();
+        $this->specializations             = collect();
+        $this->classesPlayerDeaths         = collect();
+        $this->specializationsPlayerDeaths = collect();
     }
 
     public function getDungeon(): Dungeon
@@ -178,6 +186,25 @@ class CombatLogEventFilter implements Arrayable
     }
 
     /**
+     * @return Collection<CharacterClass>
+     */
+    public function getClasses(): Collection
+    {
+        return $this->classes;
+    }
+
+    /**
+     * @param Collection<CharacterClass> $classes
+     * @return CombatLogEventFilter
+     */
+    public function setClasses(Collection $classes): CombatLogEventFilter
+    {
+        $this->classes = $classes;
+
+        return $this;
+    }
+
+    /**
      * @return Collection<CharacterClassSpecialization>
      */
     public function getSpecializations(): Collection
@@ -196,21 +223,41 @@ class CombatLogEventFilter implements Arrayable
         return $this;
     }
 
+
     /**
      * @return Collection<CharacterClass>
      */
-    public function getClasses(): Collection
+    public function getClassesPlayerDeaths(): Collection
     {
-        return $this->classes;
+        return $this->classesPlayerDeaths;
     }
 
     /**
-     * @param Collection<CharacterClass> $classes
+     * @param Collection<CharacterClass> $classesPlayerDeaths
      * @return CombatLogEventFilter
      */
-    public function setClasses(Collection $classes): CombatLogEventFilter
+    public function setClassesPlayerDeaths(Collection $classesPlayerDeaths): CombatLogEventFilter
     {
-        $this->classes = $classes;
+        $this->classesPlayerDeaths = $classesPlayerDeaths;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<CharacterClassSpecialization>
+     */
+    public function getSpecializationsPlayerDeaths(): Collection
+    {
+        return $this->specializationsPlayerDeaths;
+    }
+
+    /**
+     * @param Collection<CharacterClassSpecialization> $specializationsPlayerDeaths
+     * @return CombatLogEventFilter
+     */
+    public function setSpecializationsPlayerDeaths(Collection $specializationsPlayerDeaths): CombatLogEventFilter
+    {
+        $this->specializationsPlayerDeaths = $specializationsPlayerDeaths;
 
         return $this;
     }
@@ -281,30 +328,36 @@ class CombatLogEventFilter implements Arrayable
     public function toArray(): array
     {
         return array_filter([
-            'challenge_mode_id'    => $this->dungeon->challenge_mode_id,
-            'event_type'           => $this->eventType->value,
-            'data_type'            => $this->dataType,
-            'region'               => $this->region,
-            'key_level_min'        => $this->keyLevelMin,
-            'key_level_max'        => $this->keyLevelMax,
-            'item_level_min'       => $this->itemLevelMin,
-            'item_level_max'       => $this->itemLevelMax,
-            'player_deaths_min'    => $this->playerDeathsMin,
-            'player_deaths_max'    => $this->playerDeathsMax,
-            'min_samples_required' => $this->minSamplesRequired,
-            'affixes'              => $this->affixes->map(function (Affix $affix) {
+            'challenge_mode_id'           => $this->dungeon->challenge_mode_id,
+            'event_type'                  => $this->eventType->value,
+            'data_type'                   => $this->dataType,
+            'region'                      => $this->region,
+            'key_level_min'               => $this->keyLevelMin,
+            'key_level_max'               => $this->keyLevelMax,
+            'item_level_min'              => $this->itemLevelMin,
+            'item_level_max'              => $this->itemLevelMax,
+            'player_deaths_min'           => $this->playerDeathsMin,
+            'player_deaths_max'           => $this->playerDeathsMax,
+            'min_samples_required'        => $this->minSamplesRequired,
+            'affixes'                     => $this->affixes->map(function (Affix $affix) {
                 return __($affix->name, [], 'en_US');
             }),
-            'specializations'      => $this->specializations->map(function (CharacterClassSpecialization $characterClassSpecialization) {
+            'specializations'             => $this->specializations->map(function (CharacterClassSpecialization $characterClassSpecialization) {
                 return __($characterClassSpecialization->name, [], 'en_US');
             }),
-            'classes'      => $this->classes->map(function (CharacterClass $characterClass) {
+            'classes'                     => $this->classes->map(function (CharacterClass $characterClass) {
                 return __($characterClass->name, [], 'en_US');
             }),
-            'period_min'           => $this->periodMin,
-            'period_max'           => $this->periodMax,
-            'duration_min'         => $this->durationMin,
-            'duration_max'         => $this->durationMax,
+            'specializationsPlayerDeaths' => $this->specializationsPlayerDeaths->map(function (CharacterClassSpecialization $characterClassSpecialization) {
+                return __($characterClassSpecialization->name, [], 'en_US');
+            }),
+            'classesPlayerDeaths'         => $this->classesPlayerDeaths->map(function (CharacterClass $characterClass) {
+                return __($characterClass->name, [], 'en_US');
+            }),
+            'period_min'                  => $this->periodMin,
+            'period_max'                  => $this->periodMax,
+            'duration_min'                => $this->durationMin,
+            'duration_max'                => $this->durationMax,
         ]);
     }
 
@@ -453,6 +506,8 @@ class CombatLogEventFilter implements Arrayable
         $combatLogEventFilter->setAffixes($heatmapDataFilter->getIncludeAffixIds());
         $combatLogEventFilter->setSpecializations($heatmapDataFilter->getIncludeSpecIds());
         $combatLogEventFilter->setClasses($heatmapDataFilter->getIncludeClassIds());
+        $combatLogEventFilter->setSpecializationsPlayerDeaths($heatmapDataFilter->getIncludePlayerDeathSpecIds());
+        $combatLogEventFilter->setClassesPlayerDeaths($heatmapDataFilter->getIncludePlayerDeathClassIds());
         $combatLogEventFilter->setPeriodMin($heatmapDataFilter->getMinPeriod());
         $combatLogEventFilter->setPeriodMax($heatmapDataFilter->getMaxPeriod());
 
