@@ -575,6 +575,23 @@ class StateManager extends Signalable {
         return this._userData;
     }
 
+    userHasRole(role) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        if (this._userData === null) {
+            return false;
+        }
+
+        let result = false;
+        for (let i = 0; i < this._userData.roles.length; i++) {
+            if (this._userData.roles[i].name === role) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
     /**
      * Checks if the current dungeon has facade enabled AND if we want to see it. False otherwise.
      * @returns {number|boolean}

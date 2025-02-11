@@ -196,12 +196,18 @@ const GAME_VERSION_RETAIL = 'retail';
 const MOVEMENT_SPEED_DEFAULT = 7;
 const MOVEMENT_SPEED_MOUNTED = 14;
 
+// Combat log
 const COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH = 'npc_death';
 const COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH = 'player_death';
 const COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_SPELL = 'player_spell';
 
 const COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION = 'player_position';
 const COMBAT_LOG_EVENT_DATA_TYPE_ENEMY_POSITION = 'enemy_position';
+
+// User roles
+const USER_ROLE_ADMIN = 'admin';
+const USER_ROLE_INTERNAL_TEAM = 'internal_team';
+const USER_ROLE_USER = 'user';
 
 // Leaflet constants
 const LEAFLET_PANE_MAP = 'mapPane';

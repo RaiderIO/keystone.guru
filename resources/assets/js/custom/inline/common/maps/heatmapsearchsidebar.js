@@ -117,7 +117,6 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'includePlayerDeathClassIds': new SearchFilterClassesPlayerDeaths(this.options.filterClassesPlayerDeathsSelector, this._search.bind(this)),
             'includePlayerDeathSpecIds': new SearchFilterSpecializationsPlayerDeaths(this.options.filterSpecializationsPlayerDeathsSelector, self._search.bind(this)),
             'duration': new SearchFilterDuration(this.options.filterDurationSelector, this._search.bind(this), this.options.durationMin, this.options.durationMax),
-            'minSamplesRequired': new SearchFilterMinSamplesRequired(this.options.filterMinSamplesRequiredSelector, this._search.bind(this), this.options.minSamplesRequiredMin, this.options.minSamplesRequiredMax),
 
             'excludeSpecIds': new SearchFilterPassThrough(),
             'excludeClassIds': new SearchFilterPassThrough(),
@@ -126,6 +125,11 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'excludePlayerDeathClassIds': new SearchFilterPassThrough(),
             'token': new SearchFilterPassThrough(),
         };
+
+        let state = getState();
+        if (state.userHasRole(USER_ROLE_ADMIN) || state.userHasRole(USER_ROLE_INTERNAL_TEAM)) {
+            this.filters['minSamplesRequired'] = new SearchFilterMinSamplesRequired(this.options.filterMinSamplesRequiredSelector, this._search.bind(this), this.options.minSamplesRequiredMin, this.options.minSamplesRequiredMax);
+        }
 
         this._setupFilterCollapseCookies();
         this._setupLeafletHeatOptions();
