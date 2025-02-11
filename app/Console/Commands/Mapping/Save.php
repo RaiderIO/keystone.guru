@@ -135,12 +135,28 @@ class Save extends Command
             ->with(['floors.floorcouplings', 'floors.dungeonSpeedrunRequiredNpcs10Man', 'floors.dungeonSpeedrunRequiredNpcs25Man'])
             ->get();
 
+        foreach ($dungeons as $dungeon) {
+            foreach ($dungeon->floors as $floor) {
+                $floor->makeVisible([
+                    'mdt_sub_level',
+                    'ui_map_id',
+                    'map_name',
+                    'active',
+                    'enemy_engagement_max_range',
+                    'enemy_engagement_max_range_patrols',
+                ]);
+            }
+        }
+
         $this->saveDataToJsonFile(
             $dungeons->makeVisible([
                 'id',
                 'expansion_id',
+                'game_version_id',
                 'zone_id',
+                'map_id',
                 'instance_id',
+                'challenge_mode_id',
                 'mdt_id',
                 'key',
                 'name',
@@ -148,8 +164,9 @@ class Save extends Command
                 'raid',
                 'heatmap_enabled',
                 'speedrun_enabled',
+                'speedrun_difficulty_10_man_enabled',
+                'speedrun_difficulty_25_man_enabled',
             ])
-                ->makeHidden(['floor_count'])
                 ->toArray(),
             $dungeonDataDir,
             'dungeons.json'

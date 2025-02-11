@@ -24,6 +24,12 @@ class GameVersion extends CacheModel
 {
     use SeederModel;
 
+    protected $hidden = [
+        'active',
+        'created_at',
+        'updated_at',
+    ];
+
     protected $fillable = [
         'id',
         'key',

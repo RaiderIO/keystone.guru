@@ -86,7 +86,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
      *
      * @var array
      */
-    protected $appends = ['floor_count', 'mdt_supported'];
+    protected $appends = ['mdt_supported'];
 
     protected $fillable = [
         'expansion_id',
@@ -110,7 +110,21 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public $with = ['expansion', 'gameVersion', 'floors'];
 
-    public $hidden = ['slug', 'views', 'active', 'mdt_id', 'zone_id', 'instance_id'];
+    public $hidden = [
+        'expansion_id',
+        'game_version_id',
+        'map_id',
+        'challenge_mode_id',
+        'heatmap_enabled',
+        'speedrun_enabled',
+        'speedrun_difficulty_10_man_enabled',
+        'speedrun_difficulty_25_man_enabled',
+        'views',
+        'active',
+        'mdt_id',
+        'zone_id',
+        'instance_id'
+    ];
 
     public $timestamps = false;
 
@@ -122,14 +136,6 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     public function getRouteKeyName(): string
     {
         return 'slug';
-    }
-
-    /**
-     * @return int The amount of floors this dungeon has.
-     */
-    public function getFloorCountAttribute(): int
-    {
-        return $this->floors->count();
     }
 
     public function getMdtSupportedAttribute(): bool

@@ -141,7 +141,15 @@ class Floor extends CacheModel implements MappingModelInterface
 
     public $timestamps = false;
 
-    public $hidden = ['dungeon', 'dungeon_id', 'created_at', 'updated_at'];
+    public $hidden = [
+        'dungeon_id',
+        'mdt_sub_level',
+        'ui_map_id',
+        'map_name',
+        'active',
+        'enemy_engagement_max_range',
+        'enemy_engagement_max_range_patrols',
+    ];
 
     public function dungeon(): BelongsTo
     {
