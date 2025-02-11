@@ -1,0 +1,55 @@
+{
+    "id": 276,
+    "release_changelog_id": 283,
+    "version": "v12.1",
+    "title": "Added various new filters for the heatmaps",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-02-11T12:43:26+00:00",
+    "updated_at": "2025-02-11T12:43:26+00:00",
+    "changelog": {
+        "id": 283,
+        "release_id": 276,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 283,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2713,
+                "change": "Patreon linking now works again (hotfixed)."
+            },
+            {
+                "release_changelog_id": 283,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2717,
+                "change": "Key level is now restored properly when editing a route's details."
+            },
+            {
+                "release_changelog_id": 283,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2661,
+                "change": "You can now filter on class presence in the group."
+            },
+            {
+                "release_changelog_id": 283,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2686,
+                "change": "A new tooltip shows the direct value on the heatmap when you mouse over it. You can disable this behaviour in the map settings, accessed from the sidebar."
+            },
+            {
+                "release_changelog_id": 283,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2715,
+                "change": "You can now filter on deaths by a specific class."
+            },
+            {
+                "release_changelog_id": 283,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2714,
+                "change": "You can now filter on deaths by a specific specialization."
+            }
+        ]
+    }
+}
