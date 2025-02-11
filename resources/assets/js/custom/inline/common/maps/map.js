@@ -138,6 +138,7 @@ class CommonMapsMap extends InlineCode {
             kill_zones_number_style: 'percentage',
             pulls_sidebar_floor_switch_visibility: 1,
             dungeon_speedrun_required_npcs_show_all: 0,
+            map_heatmap_show_tooltips: 1,
             map_unkilled_enemy_opacity: '50',
             map_unkilled_important_enemy_opacity: '80',
             map_enemy_aggressiveness_border: 0,

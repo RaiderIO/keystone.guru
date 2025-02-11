@@ -56,6 +56,7 @@ $show['controls']['live']          ??= false;
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;
 $enemyVisualType                  = $_COOKIE['enemy_display_type'] ?? 'enemy_portrait';
+$heatmapShowTooltips              = $_COOKIE['heatmap_show_tooltips'] ?? '1';
 $unkilledEnemyOpacity             = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $unkilledImportantEnemyOpacity    = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
 $defaultEnemyAggressivenessBorder = (int)($_COOKIE['map_enemy_aggressiveness_border'] ?? 0);
@@ -109,6 +110,7 @@ if ($isAdmin) {
     'readonly' => false, // May be set to true in the code though - but set a default here
     'sandbox' => $sandboxMode,
     'defaultEnemyVisualType' => $enemyVisualType,
+    'defaultHeatmapShowTooltips' => $heatmapShowTooltips,
     'defaultUnkilledEnemyOpacity' => $unkilledEnemyOpacity,
     'defaultUnkilledImportantEnemyOpacity' => $unkilledImportantEnemyOpacity,
     'defaultEnemyAggressivenessBorder' => $defaultEnemyAggressivenessBorder,

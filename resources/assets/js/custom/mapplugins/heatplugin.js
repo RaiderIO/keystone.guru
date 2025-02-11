@@ -26,15 +26,22 @@ class HeatPlugin extends MapPlugin {
         /** The max weight that we have in the heatmap per floor, used for %-age calculations in the tooltip */
         this.weightMaxByFloorId = [];
         this.mouseTooltip = null;
+        this.mouseTooltipEnabled = true;
 
-        getState().register('floorid:changed', this, function (floorIdChangedEvent) {
+        let state = getState();
+
+        state.register('floorid:changed', this, function (floorIdChangedEvent) {
             self._applyLatLngsForFloor(floorIdChangedEvent.data.floorId);
+        });
+        state.register('heatmapshowtooltips:changed', this, function (heatmapShowTooltipsChangedEvent) {
+            self.mouseTooltipEnabled = heatmapShowTooltipsChangedEvent.data.visible;
         });
 
         let fnRef = this._onLeafletMapMouseMove.bind(this);
         this.map.register('map:refresh', this, function () {
             self.map.leafletMap.off('mousemove', fnRef).on('mousemove', fnRef);
         });
+
 
     }
 
@@ -89,31 +96,36 @@ class HeatPlugin extends MapPlugin {
     _onLeafletMapMouseMove(event) {
         console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
 
-        let latLng = event.latlng;
-        let gridPosition = this._getGridPositionForLatLng(latLng);
-        let weight = this._getWeightAt(getState().getCurrentFloor().id, gridPosition.x, gridPosition.y, this.weightCacheRadius[this.dataType]);
+        let weight = 0;
+        if (this.mouseTooltipEnabled) {
+            let latLng = event.latlng;
+            let gridPosition = this._getGridPositionForLatLng(latLng);
+            weight = this._getWeightAt(getState().getCurrentFloor().id, gridPosition.x, gridPosition.y, this.weightCacheRadius[this.dataType]);
 
-        if (weight !== null && weight > 0) {
-            if (!this.mouseTooltip) {
-                // Create a new tooltip if it doesn't exist
-                this.mouseTooltip = L.tooltip({
-                    permanent: true,
-                    direction: "top",
-                    offset: L.point(0, -10), // Adjust position slightly
-                    className: "heatmap-tooltip", // Optional: Custom styling
-                }).setLatLng(latLng);
+            if (weight !== null && weight > 0) {
+                if (!this.mouseTooltip) {
+                    // Create a new tooltip if it doesn't exist
+                    this.mouseTooltip = L.tooltip({
+                        permanent: true,
+                        direction: "top",
+                        offset: L.point(0, -10), // Adjust position slightly
+                        className: "heatmap-tooltip", // Optional: Custom styling
+                    }).setLatLng(latLng);
 
-                this.map.leafletMap.addLayer(this.mouseTooltip);
+                    this.map.leafletMap.addLayer(this.mouseTooltip);
+                }
+
+                // Update tooltip position and content
+                let max = this.weightMax;
+                // This somehow doesn't work right, weightMax produces a better result
+                // let max = this.dataType === COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION ? this.weightMax : this.runCount;
+                let percent = Math.round(weight / max * 100);
+                this.mouseTooltip.setLatLng(latLng).setContent(`${percent}% - ${weight}`);
             }
+        }
 
-            // Update tooltip position and content
-            let max = this.weightMax;
-            // This somehow doesn't work right, weightMax produces a better result
-            // let max = this.dataType === COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION ? this.weightMax : this.runCount;
-            let percent = Math.round(weight / max * 100);
-            this.mouseTooltip.setLatLng(latLng).setContent(`${percent}% - ${weight}`);
-        } else if (this.mouseTooltip) {
-            // Remove tooltip if no weight
+        if (this.mouseTooltip && (!this.mouseTooltipEnabled || weight <= 0)) {
+            // Remove tooltip if no weight/not enabled
             this.map.leafletMap.removeLayer(this.mouseTooltip);
             this.mouseTooltip = null;
         }

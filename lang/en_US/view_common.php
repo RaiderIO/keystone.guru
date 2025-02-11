@@ -106,11 +106,16 @@ return [
             'login_through_oauth2' => 'Login through OAuth2',
         ],
         'mapsettings'          => [
+            'general'                                       => 'General',
             'map_facade_style'                              => 'Use combined floors',
             'map_facade_style_title'                        => 'With the introduction of Dragonflight Season 3, various dungeons have had their floors combined into a single map. Using this new map is optional and you can toggle between the combined map or the traditional split-floor style here.',
             'map_facade_style_facade_option'                => 'Use combined floors',
             'map_facade_style_split_floors_option'          => 'Use split floors',
             'map_facade_style_change_requires_page_refresh' => 'Note: Changing this setting requires a page reload before changes take effect',
+
+            'heatmap'                     => 'Heatmap',
+            'show_heatmap_tooltips'       => 'Show mouse over tooltips',
+            'show_heatmap_tooltips_title' => 'Enabling this setting will show tooltips when you mouse over the heatmap. This can be useful to see the exact values of the heatmap at a specific location.',
 
             'enemies'                                => 'Enemies',
             'enemy_number_style'                     => 'Enemy number style',
