@@ -58,7 +58,7 @@ class HeatmapDataResponse implements Arrayable
 
     public function toArray(): array
     {
-        return array_filter([
+        return [
             'data'        => $this->data->map(
                 fn(HeatmapDataFloorData $floorData) => $floorData->toArray()
             )->values()->toArray(),
@@ -68,7 +68,7 @@ class HeatmapDataResponse implements Arrayable
             'grid_size_x' => $this->gridSizeX,
             'grid_size_y' => $this->gridSizeY,
             'url'         => $this->url,
-        ]);
+        ];
     }
 
     public static function fromArray(array $response): HeatmapDataResponse

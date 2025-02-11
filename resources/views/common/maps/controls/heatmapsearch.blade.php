@@ -114,7 +114,9 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
     'filterWeeklyAffixGroupsSelector' => '#filter_weekly_affix_groups',
     'filterClassesSelector' => '#filter_classes',
     'filterSpecializationsSelector' => '#filter_specializations',
+    'filterClassesPlayerDeathsContainerSelector' => '#filter_classes_player_deaths_container',
     'filterClassesPlayerDeathsSelector' => '#filter_classes_player_deaths',
+    'filterSpecializationsPlayerDeathsContainerSelector' => '#filter_specializations_player_deaths_container',
     'filterSpecializationsPlayerDeathsSelector' => '#filter_specializations_player_deaths',
     'filterDurationSelector' => '#filter_duration',
     'filterMinSamplesRequiredSelector' => '#filter_min_samples_required',
@@ -413,6 +415,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
 
 
                         @component('common.forms.labelinput', [
+                            'id' => 'filter_classes_player_deaths_container',
                             'name' => 'filter_classes_player_deaths',
                             'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths'),
                             'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths_title'),
@@ -433,6 +436,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                         @endcomponent
 
                         @component('common.forms.labelinput', [
+                            'id' => 'filter_specializations_player_deaths_container',
                             'name' => 'filter_specializations_player_deaths',
                             'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths'),
                             'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths_title'),

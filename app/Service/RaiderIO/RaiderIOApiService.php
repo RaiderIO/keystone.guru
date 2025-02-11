@@ -44,23 +44,6 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             $parameters[] = sprintf('%s=%s', Str::camel($key), $value);
         }
 
-        /*
-         * Exclude data points that fall below this factor of the max amount of points in the grid.
-         * Say that the top hot spot was 10000 entries, then in order to be included in this heatmap, a data point
-         * must have at least 10000 * factor entries in order to be returned. This cuts down on the amount of data
-         * being sent by the server to KSG, and KSG to the browser.
-         */
-
-        $minRequiredSampleFactor = config('keystoneguru.heatmap.api.min_required_sample_factor_default');
-        if ($heatmapDataFilter->getMinSamplesRequired() === null && $minRequiredSampleFactor !== null) {
-            $parameters[] = sprintf('minRequiredSampleFactor=%s', $minRequiredSampleFactor);
-        }
-
-        $floorsAsArray = config('keystoneguru.heatmap.api.floors_as_array');
-        if ($floorsAsArray === true) {
-            $parameters[] = 'floorsAsArray=true';
-        }
-
         $url = sprintf(
             '%s?%s',
             sprintf('%s/live-tracking/heatmaps/grid', self::BASE_URL),
@@ -88,7 +71,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
                     $json['numRuns'],
                     $json['maxSamplesInGrid'],
                     $url,
-                    $floorsAsArray
+                    $heatmapDataFilter->getFloorsAsArray(),
                 ))->toArray()
             );
         } finally {

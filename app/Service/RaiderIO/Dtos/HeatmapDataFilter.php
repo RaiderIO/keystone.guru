@@ -392,6 +392,11 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
+    public function getFloorsAsArray(): ?bool
+    {
+        return config('keystoneguru.heatmap.api.floors_as_array');
+    }
+
     /**
      * Converts the filter into an array that will be passed to the Raider.io API in the URL
      *
@@ -458,6 +463,21 @@ class HeatmapDataFilter implements Arrayable
         if ($this->getMinPeriod() !== null && $this->getMaxPeriod() !== null) {
             $result['minPeriod'] = $this->getMinPeriod();
             $result['maxPeriod'] = $this->getMaxPeriod();
+        }
+
+        /*
+         * Exclude data points that fall below this factor of the max amount of points in the grid.
+         * Say that the top hot spot was 10000 entries, then in order to be included in this heatmap, a data point
+         * must have at least 10000 * factor entries in order to be returned. This cuts down on the amount of data
+         * being sent by the server to KSG, and KSG to the browser.
+         */
+        $minRequiredSampleFactor = config('keystoneguru.heatmap.api.min_required_sample_factor_default');
+        if ($this->getMinSamplesRequired() === null && $minRequiredSampleFactor !== null) {
+            $result['minRequiredSampleFactor'] = $minRequiredSampleFactor;
+        }
+
+        if ($this->getFloorsAsArray() === true) {
+            $result['floorsAsArray'] = 'true';
         }
 
         return array_filter($result);

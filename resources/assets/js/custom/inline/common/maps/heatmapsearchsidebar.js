@@ -32,7 +32,9 @@
  * @property {String} filterWeeklyAffixGroupsSelector
  * @property {String} filterClassesSelector
  * @property {String} filterSpecializationsSelector
+ * @property {String} filterClassesPlayerDeathsContainerSelector
  * @property {String} filterClassesPlayerDeathsSelector
+ * @property {String} filterSpecializationsPlayerDeathsContainerSelector
  * @property {String} filterSpecializationsPlayerDeathsSelector
  * @property {String} filterDurationSelector
  * @property {String} filterMinSamplesRequiredSelector
@@ -78,9 +80,16 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'type': new SearchFilterRadioEventType(this.options.filterEventTypeContainerSelector, this.options.filterEventTypeSelector, function () {
                 let $this = $(`${self.options.filterEventTypeSelector}:checked`);
 
-                let enabled = $this.val() === COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH;
-                $(self.options.filterDataTypeContainerSelector).toggle(enabled);
-                self.filters['dataType'].toggle(enabled);
+                let isNpcDeath = $this.val() === COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH;
+                $(self.options.filterDataTypeContainerSelector).toggle(isNpcDeath);
+                self.filters['dataType'].toggle(isNpcDeath);
+
+
+                let isPlayerDeath = $this.val() === COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH;
+                $(self.options.filterClassesPlayerDeathsContainerSelector).toggle(isPlayerDeath);
+                $(self.options.filterSpecializationsPlayerDeathsContainerSelector).toggle(isPlayerDeath);
+                self.filters['includePlayerDeathClassIds'].toggle(isPlayerDeath);
+                self.filters['includePlayerDeathSpecIds'].toggle(isPlayerDeath);
 
                 self._search();
             }),
