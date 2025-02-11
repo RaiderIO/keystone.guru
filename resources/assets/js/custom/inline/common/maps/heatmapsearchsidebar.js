@@ -109,6 +109,13 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'includePlayerDeathSpecIds': new SearchFilterSpecializationsPlayerDeaths(this.options.filterSpecializationsPlayerDeathsSelector, self._search.bind(this)),
             'duration': new SearchFilterDuration(this.options.filterDurationSelector, this._search.bind(this), this.options.durationMin, this.options.durationMax),
             'minSamplesRequired': new SearchFilterMinSamplesRequired(this.options.filterMinSamplesRequiredSelector, this._search.bind(this), this.options.minSamplesRequiredMin, this.options.minSamplesRequiredMax),
+
+            'excludeSpecIds': new SearchFilterPassThrough(),
+            'excludeClassIds': new SearchFilterPassThrough(),
+            'excludeAffixIds': new SearchFilterPassThrough(),
+            'excludePlayerDeathSpecIds': new SearchFilterPassThrough(),
+            'excludePlayerDeathClassIds': new SearchFilterPassThrough(),
+            'token': new SearchFilterPassThrough(),
         };
 
         this._setupFilterCollapseCookies();
@@ -229,8 +236,6 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         if (this.initializing) {
             return;
         }
-
-        let self = this;
 
         super._search({
             success: function (json) {

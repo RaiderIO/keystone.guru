@@ -42,6 +42,14 @@ class HeatmapDataFilter implements Arrayable
     private ?int       $timerFractionMax   = null;
     private ?int       $minSamplesRequired = null;
 
+    // Passthroughs
+    private ?string $excludeAffixIds;
+    private ?string $excludeClassIds;
+    private ?string $excludeSpecIds;
+    private ?string $excludePlayerDeathSpecIds;
+    private ?string $excludePlayerDeathClassIds;
+    private ?string $token;
+
     public function __construct(
         private readonly Dungeon                 $dungeon,
         private readonly CombatLogEventEventType $eventType,
@@ -312,6 +320,78 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
+    public function getExcludeAffixIds(): ?string
+    {
+        return $this->excludeAffixIds;
+    }
+
+    public function setExcludeAffixIds(?string $excludeAffixIds): HeatmapDataFilter
+    {
+        $this->excludeAffixIds = $excludeAffixIds;
+
+        return $this;
+    }
+
+    public function getExcludeClassIds(): ?string
+    {
+        return $this->excludeClassIds;
+    }
+
+    public function setExcludeClassIds(?string $excludeClassIds): HeatmapDataFilter
+    {
+        $this->excludeClassIds = $excludeClassIds;
+
+        return $this;
+    }
+
+    public function getExcludeSpecIds(): ?string
+    {
+        return $this->excludeSpecIds;
+    }
+
+    public function setExcludeSpecIds(?string $excludeSpecIds): HeatmapDataFilter
+    {
+        $this->excludeSpecIds = $excludeSpecIds;
+
+        return $this;
+    }
+
+    public function getExcludePlayerDeathSpecIds(): ?string
+    {
+        return $this->excludePlayerDeathSpecIds;
+    }
+
+    public function setExcludePlayerDeathSpecIds(?string $excludePlayerDeathSpecIds): HeatmapDataFilter
+    {
+        $this->excludePlayerDeathSpecIds = $excludePlayerDeathSpecIds;
+
+        return $this;
+    }
+
+    public function getExcludePlayerDeathClassIds(): ?string
+    {
+        return $this->excludePlayerDeathClassIds;
+    }
+
+    public function setExcludePlayerDeathClassIds(?string $excludePlayerDeathClassIds): HeatmapDataFilter
+    {
+        $this->excludePlayerDeathClassIds = $excludePlayerDeathClassIds;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): HeatmapDataFilter
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
     /**
      * Converts the filter into an array that will be passed to the Raider.io API in the URL
      *
@@ -321,23 +401,29 @@ class HeatmapDataFilter implements Arrayable
     public function toArray(Season $mostRecentSeason = null): array
     {
         $result = [
-            'challengeModeId' => $this->dungeon->challenge_mode_id,
-            'type'            => $this->getEventType()->value,
-            'dataType'        => $this->getDataType()->value,
+            'challengeModeId'            => $this->dungeon->challenge_mode_id,
+            'type'                       => $this->getEventType()->value,
+            'dataType'                   => $this->getDataType()->value,
+            'minMythicLevel'             => $this->getKeyLevelMin(),
+            'maxMythicLevel'             => $this->getKeyLevelMax(),
+            'minItemLevel'               => $this->getItemLevelMin(),
+            'maxItemLevel'               => $this->getItemLevelMax(),
+            'minPlayerDeaths'            => $this->getPlayerDeathsMin(),
+            'maxPlayerDeaths'            => $this->getPlayerDeathsMax(),
+            'minTimerFraction'           => $this->getTimerFractionMin(),
+            'maxTimerFraction'           => $this->getTimerFractionMax(),
+            'minRequiredSamplesFactor'   => sprintf('%.6f', $this->getMinSamplesRequired() / 100000),
+            // Passthroughs
+            'excludeAffixIds'            => $this->getExcludeAffixIds(),
+            'excludeClassIds'            => $this->getExcludeClassIds(),
+            'excludeSpecIds'             => $this->getExcludeSpecIds(),
+            'excludePlayerDeathSpecIds'  => $this->getExcludePlayerDeathSpecIds(),
+            'excludePlayerDeathClassIds' => $this->getExcludePlayerDeathClassIds(),
         ];
 
         if ($this->getRegion() !== GameServerRegion::WORLD) {
             $result['region'] = $this->getRegion();
         }
-        $result['minMythicLevel']           = $this->getKeyLevelMin();
-        $result['maxMythicLevel']           = $this->getKeyLevelMax();
-        $result['minItemLevel']             = $this->getItemLevelMin();
-        $result['maxItemLevel']             = $this->getItemLevelMax();
-        $result['minPlayerDeaths']          = $this->getPlayerDeathsMin();
-        $result['maxPlayerDeaths']          = $this->getPlayerDeathsMax();
-        $result['minTimerFraction']         = $this->getTimerFractionMin();
-        $result['maxTimerFraction']         = $this->getTimerFractionMax();
-        $result['minRequiredSamplesFactor'] = $this->getMinSamplesRequired() / 100000;
 
         if ($this->getIncludeAffixIds()->isNotEmpty()) {
             $result['includeAffixIds'] = implode(',', $this->getIncludeAffixIds()->map(
@@ -418,6 +504,14 @@ class HeatmapDataFilter implements Arrayable
         if (isset($requestArray['maxPeriod']) && (int)$requestArray['maxPeriod'] > 0) {
             $heatmapDataFilter->setMaxPeriod($requestArray['maxPeriod']);
         }
+
+        // Passthroughs
+        $heatmapDataFilter->setExcludeAffixIds($requestArray['excludeAffixIds'] ?? null);
+        $heatmapDataFilter->setExcludeClassIds($requestArray['excludeClassIds'] ?? null);
+        $heatmapDataFilter->setExcludeSpecIds($requestArray['excludeSpecIds'] ?? null);
+        $heatmapDataFilter->setExcludePlayerDeathSpecIds($requestArray['excludePlayerDeathSpecIds'] ?? null);
+        $heatmapDataFilter->setExcludePlayerDeathClassIds($requestArray['excludePlayerDeathClassIds'] ?? null);
+        $heatmapDataFilter->setToken($requestArray['token'] ?? null);
 
         return $heatmapDataFilter;
     }

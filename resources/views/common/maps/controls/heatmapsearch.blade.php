@@ -179,17 +179,18 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                            data-off="{{ __('view_common.maps.controls.heatmapsearch.disabled') }}">
                 </div>
             </div>
+
+            <div class="row px-2 pt-2 pb-0">
+                <div class="col">
+                    <div id="heatmap_search_options_current_filters">
+
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="data_container p-2" data-simplebar>
             <div id="heatmap_search_options_container" class="px-1">
-                <div class="row">
-                    <div class="col">
-                        <div id="heatmap_search_options_current_filters">
-
-                        </div>
-                    </div>
-                </div>
 
                 <div class="form-group">
                     <div id="filter_event_type_container" class="btn-group btn-group-toggle w-100"
