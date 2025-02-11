@@ -7,6 +7,7 @@ use App\Models\ReleaseChangelogCategory;
  * @var Release $model
  *
  **/
+// @formatter:off
 ?>
 [https://keystone.guru/release/{{ $model->version }}](https://keystone.guru/release/{{ $model->version }})
 @isset($model->changelog->description)
