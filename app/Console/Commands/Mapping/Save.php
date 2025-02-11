@@ -167,6 +167,7 @@ class Save extends Command
                 'speedrun_difficulty_10_man_enabled',
                 'speedrun_difficulty_25_man_enabled',
             ])
+                ->makeHidden(['floor_count'])
                 ->toArray(),
             $dungeonDataDir,
             'dungeons.json'

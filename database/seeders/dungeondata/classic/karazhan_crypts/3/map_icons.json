@@ -1,1 +1,93 @@
-[]
+[
+    {
+        "mapping_version_id": 482,
+        "floor_id": 366,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 1,
+        "lat": -146.04681112806,
+        "lng": 278.29444108602,
+        "comment": "Spider Nest",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 482,
+        "floor_id": 366,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 1,
+        "lat": -168.98702472586,
+        "lng": 233.34797535847,
+        "comment": "Spider Nest",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 482,
+        "floor_id": 366,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 1,
+        "lat": -168.52961182854,
+        "lng": 326.40965197161,
+        "comment": "Spider Nest",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 482,
+        "floor_id": 366,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 1,
+        "lat": -194.02774753798,
+        "lng": 277.69165337245,
+        "comment": "Spider Nest",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 482,
+        "floor_id": 366,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -172.03196543762,
+        "lng": 342.20333063067,
+        "comment": "Relic Location",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 482,
+        "floor_id": 366,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 95,
+        "lat": -214.20329790687,
+        "lng": 47.127848331368,
+        "comment": "Relic Location",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 482,
+        "floor_id": 366,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -218.7928614256,
+        "lng": 96.599837610338,
+        "comment": "Trap chest",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
