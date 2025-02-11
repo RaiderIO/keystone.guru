@@ -8,8 +8,11 @@ return [
         'changelog'        => 'Hodor',
         'routes'           => 'Hodor',
         'routes_expansion' => 'Hodor',
-        'dungeon'          => [
-            'explore' => 'Hodor',
+        'gameversion' => [
+            'update' => 'Hodor',
+            'dungeon'          => [
+                'explore' => 'Hodor',
+            ],
         ],
         'dungeonroute'     => [
             'new' => 'Hodor',

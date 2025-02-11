@@ -3,12 +3,14 @@
 namespace App\Service\CombatLog;
 
 use App\Logic\CombatLog\BaseEvent;
+use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\CombatLogVersion;
 use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartEvent;
 use App\Logic\CombatLog\SpecialEvents\CombatLogVersion as CombatLogVersionEvent;
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
+use App\Logic\Structs\MapBounds;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\CombatLog\Dtos\ChallengeMode;
@@ -131,6 +133,37 @@ class CombatLogService implements CombatLogServiceInterface
 
         return $result;
     }
+
+    public function getBoundsFromEvents(string $filePath): MapBounds
+    {
+        $ingameMinX = $ingameMinY = 9999999;
+        $ingameMaxX = $ingameMaxY = -9999999;
+
+        $this->parseCombatLog($filePath, static function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) use (
+            &$ingameMinX, &$ingameMinY, &$ingameMaxX, &$ingameMaxY
+        ) {
+            $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
+            if ($parsedEvent instanceof AdvancedCombatLogEvent) {
+                $advancedData = $parsedEvent->getAdvancedData();
+
+                // Skip events if they're the default due to some issue
+                if (abs($advancedData->getPositionX()) < PHP_FLOAT_EPSILON || abs($advancedData->getPositionY()) < PHP_FLOAT_EPSILON) {
+                    return $parsedEvent;
+                }
+
+                $ingameMinX = min($ingameMinX, $advancedData->getPositionX());
+                $ingameMinY = min($ingameMinY, $advancedData->getPositionY());
+                $ingameMaxX = max($ingameMaxX, $advancedData->getPositionX());
+                $ingameMaxY = max($ingameMaxY, $advancedData->getPositionY());
+            }
+
+
+            return $parsedEvent;
+        });
+
+        return new MapBounds($ingameMinX, $ingameMinY, $ingameMaxX, $ingameMaxY);
+    }
+
 
     /**
      * @throws Exception

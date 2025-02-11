@@ -29,6 +29,10 @@ use Throwable;
 class AjaxEnemyController extends AjaxMappingModelBaseController
 {
     /**
+     * @param APIEnemyFormRequest         $request
+     * @param CoordinatesServiceInterface $coordinatesService
+     * @param MappingVersion              $mappingVersion
+     * @param Enemy|null                  $enemy
      * @return Enemy|Model
      *
      * @throws Throwable
@@ -38,7 +42,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
         ?Enemy                      $enemy = null
-    ): Enemy {
+    ): Enemy|Model {
         $validated = $request->validated();
 
         $previousFloor = null;

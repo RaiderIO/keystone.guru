@@ -4,7 +4,7 @@ class SearchFilterKeyLevel extends SearchFilterInput {
 
         this.levelMin = levelMin;
         this.levelMax = levelMax;
-        this.levelHandler = null;
+        this.keyLevelHandler = null;
     }
 
     activate() {
@@ -13,7 +13,7 @@ class SearchFilterKeyLevel extends SearchFilterInput {
         let self = this;
 
         // Level
-        (this.levelHandler = new KeyLevelHandler(this.levelMin, this.levelMax)).apply(this.selector, {
+        (this.keyLevelHandler = new KeyLevelHandler(this.levelMin, this.levelMax)).apply(this.selector, {
             onFinish: function () {
                 self.onChange();
             }
@@ -49,7 +49,7 @@ class SearchFilterKeyLevel extends SearchFilterInput {
         this.levelMin = min;
         this.levelMax = max;
 
-        this.levelHandler.update(min, max);
+        this.keyLevelHandler.update(min, max);
     }
 
     getParamsOverride() {

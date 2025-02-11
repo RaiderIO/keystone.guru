@@ -54,8 +54,6 @@ class SettingsTabMap extends SettingsTab {
         $(`.view_dungeonroute_details_row .pickr .pcr-button`).addClass('h-100 w-100');
 
         // Map facade style
-
-
         $('#map_settings_map_facade_style').bind('change', function () {
             let newMapFacadeStyle = $(this).is(':checked') ? MAP_FACADE_STYLE_FACADE : MAP_FACADE_STYLE_SPLIT_FLOORS;
             getState().setMapFacadeStyle(newMapFacadeStyle);
@@ -73,6 +71,10 @@ class SettingsTabMap extends SettingsTab {
                 });
         });
 
+        // Heatmap show tooltips
+        $('#map_settings_heatmap_show_tooltips').bind('change', function () {
+            getState().setHeatmapShowTooltips($(this).is(':checked'));
+        });
 
         // Unkilled enemy opacity
         $('#map_settings_unkilled_enemy_opacity').bind('change', function () {

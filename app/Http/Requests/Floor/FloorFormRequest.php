@@ -25,7 +25,7 @@ class FloorFormRequest extends FormRequest
             'active'                             => ['nullable', 'bool'],
             'default'                            => ['nullable', 'bool'],
             'facade'                             => ['nullable', 'bool'],
-            'map_name'                           => ['required', 'string'],
+            'map_name'                           => ['nullable', 'string'],
             'name'                               => ['required', 'string'],
             'index'                              => ['required', 'integer'],
             'mdt_sub_level'                      => ['nullable', 'integer'],

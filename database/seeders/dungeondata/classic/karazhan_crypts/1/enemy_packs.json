@@ -1,0 +1,62 @@
+[
+    {
+        "id": 13056,
+        "mapping_version_id": 482,
+        "floor_id": 364,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-132.117831,\"lng\":229.655263},{\"lat\":-145.016262,\"lng\":225.594478},{\"lat\":-146.539698,\"lng\":233.00541},{\"lat\":-133.133456,\"lng\":236.457077}]"
+    },
+    {
+        "id": 13057,
+        "mapping_version_id": 482,
+        "floor_id": 364,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-138.264727,\"lng\":200.27313},{\"lat\":-145.580859,\"lng\":199.56082},{\"lat\":-146.340976,\"lng\":210.150491},{\"lat\":-137.694639,\"lng\":209.153257}]"
+    },
+    {
+        "id": 13058,
+        "mapping_version_id": 482,
+        "floor_id": 364,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-148.714028,\"lng\":196.996055},{\"lat\":-153.51227,\"lng\":197.186004},{\"lat\":-153.227226,\"lng\":203.834228},{\"lat\":-147.953911,\"lng\":202.836994}]"
+    },
+    {
+        "id": 13059,
+        "mapping_version_id": 482,
+        "floor_id": 364,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-111.280482,\"lng\":181.100279},{\"lat\":-118.290426,\"lng\":181.161209},{\"lat\":-118.107558,\"lng\":189.021221},{\"lat\":-110.85379,\"lng\":189.935176}]"
+    },
+    {
+        "id": 13060,
+        "mapping_version_id": 482,
+        "floor_id": 364,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-101.719423,\"lng\":116.665572},{\"lat\":-119.334203,\"lng\":119.019496},{\"lat\":-110.950698,\"lng\":142.276266},{\"lat\":-99.364506,\"lng\":135.308651}]"
+    }
+]

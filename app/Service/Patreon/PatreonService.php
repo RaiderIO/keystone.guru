@@ -6,22 +6,25 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
+use App\Service\Patreon\Dtos\LinkToUserIdResult;
 use App\Service\Patreon\Logging\PatreonServiceLoggingInterface;
 
 class PatreonService implements PatreonServiceInterface
 {
     private ?User $cachedAdminUser = null;
 
-    public function __construct(private readonly PatreonServiceLoggingInterface $log)
-    {
+    public function __construct(
+        private readonly PatreonApiServiceInterface     $patreonApiService,
+        private readonly PatreonServiceLoggingInterface $log
+    ) {
     }
 
     /**
      * @return array{array{id: int, type: string, attributes: array{title: string}}}|null
      */
-    public function loadCampaignBenefits(PatreonApiService $patreonApiService): ?array
+    public function loadCampaignBenefits(): ?array
     {
-        if (($adminUser = $this->loadAdminUser($patreonApiService)) === null) {
+        if (($adminUser = $this->loadAdminUser()) === null) {
             $this->log->loadCampaignBenefitsAdminUserNull();
 
             return null;
@@ -31,7 +34,7 @@ class PatreonService implements PatreonServiceInterface
             $this->log->loadCampaignBenefitsStart();
 
             // Fetch the tiers and benefits of a campaign
-            $tiersAndBenefitsResponse = $patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token);
+            $tiersAndBenefitsResponse = $this->patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token);
             if (isset($tiersAndBenefitsResponse['errors'])) {
                 $this->log->loadCampaignBenefitsRetrieveTiersErrors($tiersAndBenefitsResponse);
 
@@ -53,9 +56,9 @@ class PatreonService implements PatreonServiceInterface
     /**
      * @return array{array{id: int, type: string, relationships: array}}|null
      */
-    public function loadCampaignTiers(PatreonApiService $patreonApiService): ?array
+    public function loadCampaignTiers(): ?array
     {
-        if (($adminUser = $this->loadAdminUser($patreonApiService)) === null) {
+        if (($adminUser = $this->loadAdminUser()) === null) {
             $this->log->loadCampaignTiersAdminUserNull();
 
             return null;
@@ -65,7 +68,7 @@ class PatreonService implements PatreonServiceInterface
             $this->log->loadCampaignTiersStart();
 
             // Fetch the tiers and benefits of a campaign
-            $tiersAndBenefitsResponse = $patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token);
+            $tiersAndBenefitsResponse = $this->patreonApiService->getCampaignTiersAndBenefits($adminUser->patreonUserLink->access_token);
             if (isset($tiersAndBenefitsResponse['errors'])) {
                 $this->log->loadCampaignTiersRetrieveTiersAndBenefitsErrors($tiersAndBenefitsResponse);
 
@@ -84,9 +87,9 @@ class PatreonService implements PatreonServiceInterface
         }
     }
 
-    public function loadCampaignMembers(PatreonApiService $patreonApiService): ?array
+    public function loadCampaignMembers(): ?array
     {
-        if (($adminUser = $this->loadAdminUser($patreonApiService)) === null) {
+        if (($adminUser = $this->loadAdminUser()) === null) {
             $this->log->loadCampaignMembersAdminUserNull();
 
             return null;
@@ -96,7 +99,7 @@ class PatreonService implements PatreonServiceInterface
             $this->log->loadCampaignMembersStart();
 
             // Now that we have a valid token - perform the members request
-            $membersResponse = $patreonApiService->getCampaignMembers($adminUser->patreonUserLink->access_token);
+            $membersResponse = $this->patreonApiService->getCampaignMembers($adminUser->patreonUserLink->access_token);
             if (isset($membersResponse['errors'])) {
                 $this->log->loadCampaignTiersRetrieveMembersErrors($membersResponse);
 
@@ -197,7 +200,84 @@ class PatreonService implements PatreonServiceInterface
         return true;
     }
 
-    private function loadAdminUser(PatreonApiService $patreonApiService): ?User
+    public function linkToUserAccount(User $user, string $code, string $redirectUri): LinkToUserIdResult
+    {
+
+        $result = LinkToUserIdResult::LinkSuccessful;
+        try {
+            $this->log->linkToUserAccountStart($user->id, $code, $redirectUri);
+
+            $tokens = $this->patreonApiService->getAccessTokenFromCode($code, $redirectUri);
+            $this->log->linkToUserAccountTokens($tokens);
+
+            if (!isset($tokens['error'])) {
+                // Save new tokens to database
+                // Delete existing patreon data, if any
+                $user->patreonUserLink?->delete();
+
+                $patreonUserLinkAttributes = [
+                    'user_id'       => $user->id,
+                    'scope'         => $tokens['scope'],
+                    'access_token'  => $tokens['access_token'],
+                    'refresh_token' => $tokens['refresh_token'],
+                    'version'       => $tokens['version'] ?? 2,
+                    'expires_at'    => date('Y-m-d H:i:s', time() + $tokens['expires_in']),
+                ];
+
+                // Special case for the admin user - since the service needs this account to exist we need to just create
+                // the PatreonData for this user and ignore the paid benefits (admins get everything, anyways)
+                if ($user->id === 1) {
+                    $this->log->linkToUserAccountAdminUser();
+                    $patreonUserLinkAttributes['email'] = 'admin@app.com';
+                    $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
+                } else {
+                    // Fetch info we need to construct the PatreonData object/be able to link paid benefits
+                    $campaignBenefits = $this->loadCampaignBenefits();
+                    $campaignTiers    = $this->loadCampaignTiers();
+
+                    $identityResponse = $this->patreonApiService->getIdentity($tokens['access_token']);
+                    $this->log->linkToUserAccountIdentityResponse($identityResponse);
+                    if (isset($identityResponse['errors'])) {
+                        $result = LinkToUserIdResult::PatreonErrorOccurred;
+                        // Not sure if this is an array - make it so
+                        if (!is_array($identityResponse['errors'])) {
+                            $identityResponse['errors'] = [$identityResponse['errors']];
+                        }
+                        $this->log->linkToUserAccountIdentityError($identityResponse['errors']);
+                    } else if (!isset($identityResponse['included'])) {
+                        $result = LinkToUserIdResult::InternalErrorOccurred;
+                        $this->log->linkToUserAccountIdentityIncludedNotSet();
+                    } else {
+                        $member = collect($identityResponse['included'])->filter(static fn(array $included) => $included['type'] === 'member')->first();
+
+                        $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
+                        $this->createPatreonUserLink($patreonUserLinkAttributes, $user);
+
+                        // Now that the PatreonData object was created, apply the correct paid benefits to the account
+                        $this->applyPaidBenefitsForMember(
+                            $campaignBenefits,
+                            $campaignTiers,
+                            $member
+                        );
+                    }
+                }
+            } else {
+                $result = LinkToUserIdResult::PatreonSessionExpired;
+                $this->log->linkToUserAccountSessionExpired();
+            }
+        } catch (\Exception $e) {
+            $result = LinkToUserIdResult::InternalErrorOccurred;
+
+            $this->log->linkToUserAccountException($e);
+        } finally {
+            $this->log->linkToUserAccountEnd($result);
+        }
+
+        return $result;
+    }
+
+
+    private function loadAdminUser(): ?User
     {
         if (isset($this->cachedAdminUser)) {
             $this->log->loadAdminUserIsCached($this->cachedAdminUser->id);
@@ -228,7 +308,7 @@ class PatreonService implements PatreonServiceInterface
             // Check if token is expired, if so refresh it
             if ($adminUser->patreonUserLink->isExpired()) {
                 $this->log->loadAdminUserTokenExpired();
-                $tokens = $patreonApiService->getAccessTokenFromRefreshToken($adminUser->patreonUserLink->refresh_token);
+                $tokens = $this->patreonApiService->getAccessTokenFromRefreshToken($adminUser->patreonUserLink->refresh_token);
 
                 if (isset($tokens['errors'])) {
                     $this->log->loadAdminUserTokenRefreshError($tokens);
@@ -287,5 +367,28 @@ class PatreonService implements PatreonServiceInterface
         }
 
         return $result;
+    }
+
+    private function createPatreonUserLink(array $attributes, User $user): PatreonUserLink
+    {
+        $existingPatreonUserLink = PatreonUserLink::where('email', $attributes['email'])->first();
+
+        // If the link already exists, remove it entirely. Can't couple the same Patreon account to 2 Keystone.guru accounts
+        if ($existingPatreonUserLink !== null) {
+            $existingPatreonUserLink->user()->update(['patreon_user_link_id' => null]);
+
+            $existingPatreonUserLink->delete();
+        }
+
+        // Create a new PatreonData object and assign it to the user
+        $patreonUserLink = PatreonUserLink::create($attributes);
+        $user->update([
+            'patreon_user_link_id' => $patreonUserLink->id,
+        ]);
+        $user->patreonUserLink = $patreonUserLink;
+
+        $this->log->createPatreonUserLinkSuccessful($user->id, $patreonUserLink->id);
+
+        return $patreonUserLink;
     }
 }

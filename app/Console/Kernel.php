@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\ChallengeModeRunData\ConvertToEvents;
 use App\Console\Commands\CombatLog\CreateDungeonRoutes;
 use App\Console\Commands\CombatLog\CreateMappingVersion;
+use App\Console\Commands\CombatLog\DetermineBounds;
 use App\Console\Commands\CombatLog\EnsureChallengeMode;
 use App\Console\Commands\CombatLog\ExtractData;
 use App\Console\Commands\CombatLog\ExtractUiMapIds;
@@ -100,6 +101,7 @@ class Kernel extends ConsoleKernel
         // CombatLog
         CreateDungeonRoutes::class,
         CreateMappingVersion::class,
+        DetermineBounds::class,
         EnsureChallengeMode::class,
         ExtractData::class,
         ExtractUiMapIds::class,

@@ -96,5 +96,11 @@ return [
     'class_evoker'                      => '',
     'chest'                             => '',
     'chest_locked'                      => '',
+    'mists_statshroom'                  => '',
+    'mists_toughshroom'                 => '',
+    'mists_overgrown_roots'             => '',
+    'cot_shadecaster'                   => '',
+    'sv_imbued_iron_energy'             => '',
+    'ara_kara_silk_wrap'                => '',
 
 ];

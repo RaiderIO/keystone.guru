@@ -1,37 +1,49 @@
 <?php
 
 return [
-    'edit'   => [
-        'title'        => 'Команда %s',
-        'overview'     => 'Обзор',
-        'routes'       => 'Маршруты',
-        'members'      => 'Пользователи',
-        'team_tags'    => 'Мои теги',
-        'team_details' => 'Детали команды',
+    'edittabs' => [
+        'details'         => [
+            'title' => '',
+        ],
+        'members'         => [
+            'title' => '',
 
-        'menu_title'             => 'Команды',
-        'to_team_list'           => 'Список команд',
-        'team_header'            => 'Команда %s',
-        'icon_image_alt'         => 'Нет изображения',
-        'route_list'             => 'Список маршрутов',
-        'add_route'              => 'Добавить маршрут',
-        'add_route_no_moderator' => 'Вы должны быть модератором этой команды, чтобы добавлять маршруты',
-        'stop_adding_routes'     => 'Завершить добавление маршрута',
+            'invite_new_members'        => '',
+            'invite_code_share_warning' => '',
+            'copy_to_clipboard_title'   => '',
+            'refresh_invite_link_title' => '',
 
-        'invite_new_members'        => 'Пригласить новых участников',
-        'invite_code_share_warning' => 'Будьте осторожны с тем, с кем вы делитесь ссылкой для приглашения, каждый, у кого есть ссылка, может присоединиться к вашей команде!',
-        'copy_to_clipboard_title'   => 'Скопировать в буфер обмена',
-        'refresh_invite_link_title' => 'Обновить ссылку для приглашения',
+            'default_role' => '',
 
-        'ad_free_giveaway_description_not_available' => '',
-        'ad_free_giveaway_description_available'     => '',
+            'ad_free_giveaway_description_not_available' => '',
+            'ad_free_giveaway_description_available'     => '',
+        ],
+        'overview'        => [
+            'title' => '',
+        ],
+        'routepublishing' => [
+            'title' => '',
+        ],
+        'routes'          => [
+            'title'                  => '',
+            'add_route'              => '',
+            'add_route_no_moderator' => '',
+            'stop_adding_routes'     => '',
+        ],
+        'tags'            => [
+            'title'       => '',
+            'description' => '',
+        ],
 
-        'default_role' => 'Роль по умолчанию',
-
-        'team_tags_description' => 'Здесь вы можете управлять тегами для командных маршрутов. Каждый, кто является членом этой команды, может просматривать теги, прикрепленные к маршрутам.
-                         Персональные теги, которые могли быть прикреплены или не были прикреплены владельцем маршрута, не будут видны.',
     ],
-    'invite' => [
+    'edit'     => [
+        'title'          => 'Команда %s',
+        'menu_title'     => 'Команды',
+        'to_team_list'   => 'Список команд',
+        'team_header'    => 'Команда %s',
+        'icon_image_alt' => 'Нет изображения',
+    ],
+    'invite'   => [
         'linkpreview_title'       => '',
         'linkpreview_description' => '',
 
@@ -53,7 +65,7 @@ return [
         'invite_not_found' => 'Эту команду найти не удалось. Возможно, ссылка для приглашения была изменена или команда была удалена.',
         'back_to_homepage' => 'Вернуться на главную',
     ],
-    'list'   => [
+    'list'     => [
         'title'                => 'Мои команды',
         'header'               => 'Мои команды',
         'create_team'          => 'Создать команду',
@@ -61,7 +73,7 @@ return [
         'table_header_members' => 'Участники',
         'table_header_routes'  => 'Маршруты',
     ],
-    'new'    => [
+    'new'      => [
         'title'  => 'Новая команда',
         'header' => 'Новая команда',
     ],

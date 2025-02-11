@@ -133,7 +133,7 @@ class ViewService implements ViewServiceInterface
 
                 // Map
                 'characterClassSpecializations'   => CharacterClassSpecialization::with('class')->get(),
-                'characterClasses'                => CharacterClass::with('specializations')->get(),
+                'characterClasses'                => CharacterClass::with('specializations')->orderBy('name')->get(),
                 // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
                 'characterRacesClasses'           => CharacterRace::with(['classes:character_classes.id'])->orderBy('faction_id')->get(),
                 'allAffixes'                      => Affix::all(),

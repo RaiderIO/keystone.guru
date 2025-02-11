@@ -24,7 +24,7 @@ return [
     ],
     'hunter'       => [
         'beast_mastery' => 'Повелитель зверей',
-        'marksman'      => 'Стрельба',
+        'marksmanship'  => '',
         'survival'      => 'Выживание',
     ],
     'mage'         => [

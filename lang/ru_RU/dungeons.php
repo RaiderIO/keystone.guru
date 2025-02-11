@@ -2,11 +2,13 @@
 
 return [
 
-    'difficulty'   => [
+    'difficulty' => [
         '1' => '',
         '2' => '',
+        '3' => '',
+        '4' => '',
     ],
-    'classic'      => [
+    'classic'    => [
         'blackfathom_deeps'           => [
             'name'   => '',
             'floors' => [
@@ -104,6 +106,18 @@ return [
                 'razorfen_kraul' => '',
             ],
         ],
+        'ruins_of_ahnqiraj_sod'       => [
+            'name'   => '',
+            'floors' => [
+                'ruins_of_ahnqiraj' => '',
+            ],
+        ],
+        'ruins_of_ahnqiraj_classic'   => [
+            'name'   => '',
+            'floors' => [
+                'ruins_of_ahnqiraj' => '',
+            ],
+        ],
         'scarlet_monastery_armory'    => [
             'name'   => '',
             'floors' => [
@@ -156,6 +170,22 @@ return [
                 'the_gauntlet'     => '',
             ],
         ],
+        'temple_of_ahnqiraj_sod'      => [
+            'name'   => '',
+            'floors' => [
+                'the_hive_undergrounds' => '',
+                'the_temple_gates'      => '',
+                'vault_of_cthun'        => '',
+            ],
+        ],
+        'temple_of_ahnqiraj_classic'  => [
+            'name'   => '',
+            'floors' => [
+                'the_hive_undergrounds' => '',
+                'the_temple_gates'      => '',
+                'vault_of_cthun'        => '',
+            ],
+        ],
         'the_stockade'                => [
             'name'   => '',
             'floors' => [
@@ -202,7 +232,7 @@ return [
         'zulgurub'                    => [
             'name'   => '',
             'floors' => [
-                'zul_gurub' => '',
+                'zulgurub' => '',
             ],
         ],
         'onyxias_lair_classic'        => [
@@ -217,22 +247,13 @@ return [
                 'molten_core' => '',
             ],
         ],
-        'blackwinglair'                  => [
+        'blackwinglair'               => [
             'name'   => '',
             'floors' => [
-                'blackwinglair' => '',
-            ],
-        ],
-        'ruinsofahnqiraj'                  => [
-            'name'   => '',
-            'floors' => [
-                'ruinsofahnqiraj' => '',
-            ],
-        ],
-        'templeofahnqiraj'                  => [
-            'name'   => '',
-            'floors' => [
-                'templeofahnqiraj' => '',
+                'dragonmaw_garrison'   => '',
+                'halls_of_strife'      => '',
+                'crimson_laboratories' => '',
+                'nefarians_lair'       => '',
             ],
         ],
         'naxxramas_classic'           => [
@@ -247,7 +268,7 @@ return [
             ],
         ],
     ],
-    'wotlk'        => [
+    'wotlk'      => [
         'ahn_kahet_the_old_kingdom'                => [
             'name'   => '',
             'floors' => [
@@ -426,7 +447,7 @@ return [
             ],
         ],
     ],
-    'cata'         => [
+    'cata'       => [
         'grim_batol'          => [
             'name'   => '',
             'floors' => [
@@ -447,8 +468,92 @@ return [
                 'throne_of_the_tides' => '',
             ],
         ],
+        'firelands'           => [
+            'name'   => '',
+            'floors' => [
+                'firelands'              => '',
+                'anvil_of_conflagration' => '',
+                'sulfuron_keep'          => '',
+            ],
+        ],
+        'dragon_soul'         => [
+            'name'   => '',
+            'floors' => [
+                'the_dragonblight'   => '',
+                'maw_of_go_rath'     => '',
+                'maw_of_shu_ma'      => '',
+                'eye_of_eternity'    => '',
+                'skyfire_airship'    => '',
+                'spine_of_deathwing' => '',
+                'the_maelstrom'      => '',
+            ],
+        ],
     ],
-    'mop'          => [
+    'mop'        => [
+        'gate_of_the_setting_sun'    => [
+            'name'   => '',
+            'floors' => [
+                'gate_of_the_setting_sun' => '',
+                'gate_watch_tower'        => '',
+            ],
+        ],
+        'mogu_shan_palace'           => [
+            'name'   => '',
+            'floors' => [
+                'the_crimson_assembly_hall'    => '',
+                'vaults_of_kings_past'         => '',
+                'throne_of_ancient_conquerors' => '',
+            ],
+        ],
+        'scarlet_halls_mop'          => [
+            'name'   => '',
+            'floors' => [
+                'training_grounds' => '',
+                'athenaeum'        => '',
+            ],
+        ],
+        'scarlet_monastery_mop'      => [
+            'name'   => '',
+            'floors' => [
+                'forlorn_cloister' => '',
+                'crusaders_chapel' => '',
+            ],
+        ],
+        'scholomance_mop'            => [
+            'name'   => '',
+            'floors' => [
+                'the_reliquary'        => '',
+                'chamber_of_summoning' => '',
+                'the_upper_study'      => '',
+                'headmasters_study'    => '',
+            ],
+        ],
+        'shado_pan_monastery'        => [
+            'name'   => '',
+            'floors' => [
+                'shado_pan_monastery' => '',
+                'cloudstrike_dojo'    => '',
+                'snowdrift_dojo'      => '',
+                'sealed_chambers'     => '',
+            ],
+        ],
+        'siege_of_niu_zao_temple'    => [
+            'name'   => '',
+            'floors' => [
+                'siege_of_niu_zao_temple' => '',
+                'the_hollowed_out_tree'   => '',
+                'upper_tree_ring'         => '',
+            ],
+        ],
+        'stormstout_brewery'         => [
+            'name'   => '',
+            'floors' => [
+                'grain_cellar'        => '',
+                'stormstout_brewhall' => '',
+                'the_great_wheel'     => '',
+                'the_tasting_room'    => '',
+            ],
+        ],
         'temple_of_the_jade_serpent' => [
             'name'   => '',
             'floors' => [
@@ -457,7 +562,7 @@ return [
             ],
         ],
     ],
-    'wod'          => [
+    'wod'        => [
         'auchindoun'                => [
             'name'   => '',
             'floors' => [
@@ -501,7 +606,7 @@ return [
             ],
         ],
     ],
-    'legion'       => [
+    'legion'     => [
         'arcway'                      => [
             'name'   => 'Катакомбы Сурамара',
             'floors' => [
@@ -609,7 +714,7 @@ return [
             ],
         ],
     ],
-    'bfa'          => [
+    'bfa'        => [
         'atal_dazar'                => [
             'name'   => 'Атал\'Дазар',
             'floors' => [
@@ -715,7 +820,7 @@ return [
             ],
         ],
     ],
-    'sl'  => [
+    'sl'         => [
         'de_other_side'              => [
             'name'   => 'Та Сторона',
             'floors' => [
@@ -799,7 +904,7 @@ return [
             ],
         ],
     ],
-    'df' => [
+    'df'         => [
         'algeth_ar_academy'                    => [
             'name'   => '',
             'floors' => [
@@ -889,7 +994,7 @@ return [
             ],
         ],
     ],
-    'tww'          => [
+    'tww'        => [
         'ara_kara_city_of_echoes'    => [
             'name'   => '',
             'floors' => [

@@ -80,6 +80,12 @@ class RouteServiceProvider extends ServiceProvider
             return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 60)->by($this->userKey($request));
         });
         RateLimiter::for('create-user', function (Request $request) {
+            // Bots somehow trigger /register?redirect=someurl a lot, so we have to catch it and not have them trigger the rate limiter
+            // Besides, I only care about people creating new accounts, not "trying" to register
+            if ($request->method() === 'GET') {
+                return Limit::none();
+            }
+
             return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 50)->by($this->userKey($request));
         });
 
@@ -121,7 +127,7 @@ class RouteServiceProvider extends ServiceProvider
         /** @var User|null $user */
         $user = $request->user();
 
-        if ($user?->hasRole(Role::ROLE_ADMIN) || $user?->hasRole(Role::ROLE_INTERNAL_TEAM)) {
+        if ($user?->hasRole(Role::roles([Role::ROLE_ADMIN, Role::ROLE_INTERNAL_TEAM]))) {
             return Limit::none();
         }
 

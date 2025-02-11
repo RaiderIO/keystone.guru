@@ -1,3 +1,4 @@
+@php use App\Models\Laratrust\Role; @endphp
 <?php
 /** @var boolean $hasNewChangelog */
 ?>
@@ -17,7 +18,7 @@
                                 {{ __('view_common.layout.footer.api_documentation') }}
                             </a>
                         </li>
-                        @if(Auth::check() && Auth::user()->hasRole('internal_team|admin'))
+                        @if(Auth::check() && Auth::user()->hasRole(Role::roles([Role::ROLE_ADMIN, Role::ROLE_INTERNAL_TEAM])))
                             <li class="mbr-text item-wrap">
                                 <a href="{{ route('l5-swagger.internal_team.api') }}">
                                     {{ __('view_common.layout.footer.api_documentation_internal_team') }}

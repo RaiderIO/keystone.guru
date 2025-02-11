@@ -30,6 +30,7 @@ return [
             'mists_of_tirna_scithe' => [
                 'start'                          => 'Hodor',
                 'brambles'                       => 'Hodor',
+                'overgrown_roots'                => 'Hodor',
                 'depleted_anima_seed'            => 'Hodor',
                 'map_missing_wall'               => 'Hodor',
                 'savory_statshroom'              => 'Hodor',
@@ -84,6 +85,11 @@ return [
                 'exit'                 => 'Hodor',
             ],
         ],
+        'tww' => [
+            'the_stonevault' => [
+                'imbued_iron_energy' => 'Hodor',
+            ],
+        ]
     ],
 
 ];

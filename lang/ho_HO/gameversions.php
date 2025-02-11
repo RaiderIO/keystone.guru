@@ -17,4 +17,8 @@ return [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
+    'cata'   => [
+        'name'        => 'Hodor',
+        'description' => 'Hodor',
+    ],
 ];

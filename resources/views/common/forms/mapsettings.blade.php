@@ -4,12 +4,15 @@ use App\Models\User;
 
 $mapFacadeStyleChecked            = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
 $mapNumberStyleChecked            = ($_COOKIE['map_number_style'] ?? 'percentage') === 'percentage';
+$mapHeatmapShowTooltips           = $_COOKIE['map_heatmap_show_tooltips'] ?? 1;
 $mapUnkilledEnemyOpacity          = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
 $mapUnkilledImportantEnemyOpacity = $_COOKIE['map_unkilled_important_enemy_opacity'] ?? '80';
 $mapEnemyAggressivenessBorder     = $_COOKIE['map_enemy_aggressiveness_border'] ?? 0;
 $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
 ?>
 <div class="draw_settings_tools container">
+
+    <h4>{{ __('view_common.forms.mapsettings.general') }}</h4>
 
     <!-- Map facade style -->
     <div class="form-group">
@@ -35,6 +38,30 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         <div class="row">
             <div class="col">
                 {{ __('view_common.forms.mapsettings.map_facade_style_change_requires_page_refresh') }}
+            </div>
+        </div>
+    </div>
+
+    <h4>{{ __('view_common.forms.mapsettings.heatmap') }}</h4>
+
+    <!-- Heatmap tooltips -->
+    <div class="form-group">
+        <div class="row no-gutters">
+            <div class="col pr-2">
+                <label for="map_settings_heatmap_show_tooltips">
+                    {{ __('view_common.forms.mapsettings.show_heatmap_tooltips') }}
+                    <i class="fas fa-info-circle"
+                       data-toggle="tooltip"
+                       title="{{ __('view_common.forms.mapsettings.show_heatmap_tooltips_title') }}"></i>
+                </label>
+            </div>
+        </div>
+        <div class="row no-gutters">
+            <div class="col pr-2">
+                {!! Form::checkbox('map_settings_heatmap_show_tooltips', 1, $mapHeatmapShowTooltips, [
+                    'id' => 'map_settings_heatmap_show_tooltips',
+                    'class' => 'form-control left_checkbox'
+                    ]) !!}
             </div>
         </div>
     </div>

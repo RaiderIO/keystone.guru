@@ -14,7 +14,7 @@ class AdvancedDataBuilder
     {
         return match ($combatLogVersion) {
             CombatLogVersion::CLASSIC => new AdvancedDataV9(),
-            CombatLogVersion::CLASSIC_SOD_1_15_5 => new AdvancedDataV9SoD(),
+            CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6 => new AdvancedDataV9SoD(),
             CombatLogVersion::RETAIL_10_1_0, CombatLogVersion::RETAIL_11_0_2 => new AdvancedDataV20(),
             default => new AdvancedDataV22(),
         };

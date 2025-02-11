@@ -471,7 +471,9 @@ class AjaxDungeonRouteController extends Controller
 
         $this->dungeonRouteChanged($dungeonRoute, $beforeDungeonRoute, $dungeonRoute);
 
-        return $dungeonRoute;
+        return $dungeonRoute->makeHidden([
+            'dungeon',
+        ]);
     }
 
     /**

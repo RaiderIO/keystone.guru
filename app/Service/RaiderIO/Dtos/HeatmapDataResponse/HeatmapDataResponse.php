@@ -11,6 +11,9 @@ class HeatmapDataResponse implements Arrayable
     private Collection             $data;
     private CombatLogEventDataType $dataType;
     private int                    $runCount;
+    private int                    $weightMax;
+    private int                    $gridSizeX;
+    private int                    $gridSizeY;
     private ?string                $url = null;
 
     private function __construct()
@@ -33,6 +36,21 @@ class HeatmapDataResponse implements Arrayable
         return $this->runCount;
     }
 
+    public function getWeightMax(): int
+    {
+        return $this->weightMax;
+    }
+
+    public function getGridSizeX(): int
+    {
+        return $this->gridSizeX;
+    }
+
+    public function getGridSizeY(): int
+    {
+        return $this->gridSizeY;
+    }
+
     public function getUrl(): ?string
     {
         return $this->url;
@@ -40,14 +58,17 @@ class HeatmapDataResponse implements Arrayable
 
     public function toArray(): array
     {
-        return array_filter([
-            'data'      => $this->data->map(
+        return [
+            'data'        => $this->data->map(
                 fn(HeatmapDataFloorData $floorData) => $floorData->toArray()
             )->values()->toArray(),
-            'data_type' => $this->dataType->value,
-            'run_count' => $this->runCount,
-            'url'       => $this->url,
-        ]);
+            'data_type'   => $this->dataType->value,
+            'run_count'   => $this->runCount,
+            'weight_max'  => $this->weightMax,
+            'grid_size_x' => $this->gridSizeX,
+            'grid_size_y' => $this->gridSizeY,
+            'url'         => $this->url,
+        ];
     }
 
     public static function fromArray(array $response): HeatmapDataResponse
@@ -61,8 +82,11 @@ class HeatmapDataResponse implements Arrayable
             );
         }
 
-        $result->dataType = $response['data_type'];
-        $result->runCount = $response['run_count'];
+        $result->dataType  = $response['data_type'];
+        $result->runCount  = $response['run_count'];
+        $result->weightMax = $response['weight_max'];
+        $result->gridSizeX = $response['grid_size_x'] ?? config('keystoneguru.heatmap.service.data.player.size_x');
+        $result->gridSizeY = $response['grid_size_y'] ?? config('keystoneguru.heatmap.service.data.player.size_y');
         if (isset($response['url'])) {
             $result->url = $response['url'];
         }

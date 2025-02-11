@@ -138,6 +138,14 @@ class MapContext extends Signalable {
      *
      * @returns {[]}
      */
+    getStaticCharacterClasses() {
+        return this._options.static.characterClasses;
+    }
+
+    /**
+     *
+     * @returns {[]}
+     */
     getStaticCharacterClassSpecializations() {
         return this._options.static.characterClassSpecializations;
     }
@@ -319,9 +327,6 @@ class MapContext extends Signalable {
                 floor = foundFloor;
             }
         }
-
-        let MAP_MAX_LAT = -256;
-        let MAP_MAX_LNG = 384;
 
         let ingameMapSizeX = floor.ingame_max_x - floor.ingame_min_x;
         let ingameMapSizeY = floor.ingame_max_y - floor.ingame_min_y;

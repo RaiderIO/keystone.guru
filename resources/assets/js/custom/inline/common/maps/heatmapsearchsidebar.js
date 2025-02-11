@@ -30,8 +30,14 @@
  * @property {String} filterPlayerDeathsSelector
  * @property {String} filterAffixesSelector
  * @property {String} filterWeeklyAffixGroupsSelector
+ * @property {String} filterClassesSelector
  * @property {String} filterSpecializationsSelector
+ * @property {String} filterClassesPlayerDeathsContainerSelector
+ * @property {String} filterClassesPlayerDeathsSelector
+ * @property {String} filterSpecializationsPlayerDeathsContainerSelector
+ * @property {String} filterSpecializationsPlayerDeathsSelector
  * @property {String} filterDurationSelector
+ * @property {String} filterMinSamplesRequiredSelector
  *
  * @property {String} filterCollapseNames
  * @property {String} filterCookiePrefix
@@ -74,9 +80,16 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'type': new SearchFilterRadioEventType(this.options.filterEventTypeContainerSelector, this.options.filterEventTypeSelector, function () {
                 let $this = $(`${self.options.filterEventTypeSelector}:checked`);
 
-                let enabled = $this.val() === COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH;
-                $(self.options.filterDataTypeContainerSelector).toggle(enabled);
-                self.filters['dataType'].toggle(enabled);
+                let isNpcDeath = $this.val() === COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH;
+                $(self.options.filterDataTypeContainerSelector).toggle(isNpcDeath);
+                self.filters['dataType'].toggle(isNpcDeath);
+
+
+                let isPlayerDeath = $this.val() === COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH;
+                $(self.options.filterClassesPlayerDeathsContainerSelector).toggle(isPlayerDeath);
+                $(self.options.filterSpecializationsPlayerDeathsContainerSelector).toggle(isPlayerDeath);
+                self.filters['includePlayerDeathClassIds'].toggle(isPlayerDeath);
+                self.filters['includePlayerDeathSpecIds'].toggle(isPlayerDeath);
 
                 self._search();
             }),
@@ -99,8 +112,19 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
 
                 self._search();
             }),
+            'includeClassIds': new SearchFilterClasses(this.options.filterClassesSelector, this._search.bind(this)),
             'includeSpecIds': new SearchFilterSpecializations(this.options.filterSpecializationsSelector, self._search.bind(this)),
+            'includePlayerDeathClassIds': new SearchFilterClassesPlayerDeaths(this.options.filterClassesPlayerDeathsSelector, this._search.bind(this)),
+            'includePlayerDeathSpecIds': new SearchFilterSpecializationsPlayerDeaths(this.options.filterSpecializationsPlayerDeathsSelector, self._search.bind(this)),
             'duration': new SearchFilterDuration(this.options.filterDurationSelector, this._search.bind(this), this.options.durationMin, this.options.durationMax),
+            'minSamplesRequired': new SearchFilterMinSamplesRequired(this.options.filterMinSamplesRequiredSelector, this._search.bind(this), this.options.minSamplesRequiredMin, this.options.minSamplesRequiredMax),
+
+            'excludeSpecIds': new SearchFilterPassThrough(),
+            'excludeClassIds': new SearchFilterPassThrough(),
+            'excludeAffixIds': new SearchFilterPassThrough(),
+            'excludePlayerDeathSpecIds': new SearchFilterPassThrough(),
+            'excludePlayerDeathClassIds': new SearchFilterPassThrough(),
+            'token': new SearchFilterPassThrough(),
         };
 
         this._setupFilterCollapseCookies();
@@ -222,11 +246,16 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             return;
         }
 
-        let self = this;
-
         super._search({
             success: function (json) {
-                getState().getDungeonMap().pluginHeat.setRawLatLngsPerFloor(json.data);
+                getState().getDungeonMap().pluginHeat.setRawLatLngsPerFloor(
+                    json.data,
+                    json.data_type,
+                    json.run_count,
+                    json.weight_max,
+                    json.grid_size_x ?? null,
+                    json.grid_size_y ?? null,
+                );
 
                 if (json.hasOwnProperty('url')) {
                     console.log(json.url);

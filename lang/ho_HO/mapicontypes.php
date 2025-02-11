@@ -96,5 +96,11 @@ return [
     'class_evoker'                      => 'Hodor',
     'chest'                             => 'Hodor',
     'chest_locked'                      => 'Hodor',
+    'mists_statshroom'                  => 'Hodor',
+    'mists_toughshroom'                 => 'Hodor',
+    'mists_overgrown_roots'             => 'Hodor',
+    'cot_shadecaster'                   => 'Hodor',
+    'sv_imbued_iron_energy'             => 'Hodor',
+    'ara_kara_silk_wrap'                => 'Hodor',
 
 ];

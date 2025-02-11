@@ -35,7 +35,7 @@ class CommonMapsMap extends InlineCode {
         // Make sure that navigating back actually moves the floor that we're on
         window.addEventListener('popstate', function (event) {
             // The popstate event is fired each time when the current history entry changes.
-            let urlParts = event.target.location.href.split('/');
+            let urlParts = event.target.location.pathname.split('/');
 
             // We start at 1 since it's possible there is no number found. We then default to the default floor
             let targetFloor = 1;
@@ -138,6 +138,7 @@ class CommonMapsMap extends InlineCode {
             kill_zones_number_style: 'percentage',
             pulls_sidebar_floor_switch_visibility: 1,
             dungeon_speedrun_required_npcs_show_all: 0,
+            map_heatmap_show_tooltips: 1,
             map_unkilled_enemy_opacity: '50',
             map_unkilled_important_enemy_opacity: '80',
             map_enemy_aggressiveness_border: 0,
@@ -717,7 +718,7 @@ class CommonMapsMap extends InlineCode {
             // Strip the last two elements (<number>/mapping)
             pathSplit.splice(-2);
             pathname = pathSplit.join('/');
-            newUrl += `${pathname}/${floorIdChangedEvent.data.floorId}/mapping?mapping_version=${getState().getMapContext().getMappingVersion().id}`;
+            newUrl += `${pathname}/${floorIdChangedEvent.data.floorId}/mapping`;
         } else {
             // Example url: https://keystone.test/bbzlbOX, https://keystone.test/bbzlbOX/2 (last integer is optional)
             if (isNumeric(pathSplit[pathSplit.length - 1])) {
@@ -727,6 +728,8 @@ class CommonMapsMap extends InlineCode {
             }
             newUrl += `${pathname}/${getState().getCurrentFloor().index}`;
         }
+
+        newUrl += window.location.search;
 
         history.pushState({page: 1}, newUrl, newUrl);
 

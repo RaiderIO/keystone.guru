@@ -2,11 +2,13 @@
 
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\GameServerRegion;
+use App\Models\Laratrust\Role;
 use App\Models\Season;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
@@ -29,8 +31,11 @@ use Illuminate\Support\Collection;
  * @var int                                      $itemLevelMax
  * @var int                                      $playerDeathsMin
  * @var int                                      $playerDeathsMax
+ * @var int                                      $minSamplesRequiredMin
+ * @var int                                      $minSamplesRequiredMax
  * @var Collection<WeeklyAffixGroup>             $seasonWeeklyAffixGroups
  * @var Collection<CharacterClassSpecialization> $characterClassSpecializations
+ * @var Collection<CharacterClass>               $characterClasses
  * @var Collection<GameServerRegion>             $allRegions
  */
 
@@ -57,6 +62,24 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     return $a->id <=> $b->id;
 });
 
+$characterClassSpecializationsSelectOptions = $characterClassSpecializations->groupBy(function (CharacterClassSpecialization $characterClassSpecialization) {
+    return __($characterClassSpecialization->class->name);
+})->mapWithKeys(function (Collection $specializations, string $className) {
+    return [
+        $className => $specializations->mapWithKeys(function (CharacterClassSpecialization $characterClassSpecialization) {
+            return [
+                $characterClassSpecialization->specialization_id => __($characterClassSpecialization->name)
+            ];
+        })
+    ];
+})->toArray();
+
+$characterClassSelectOptions = $characterClasses->mapWithKeys(function (CharacterClass $characterClass) {
+    return [
+        $characterClass->class_id => __($characterClass->name)
+    ];
+})->toArray();
+
 ?>
 @include('common.general.inline', ['path' => 'common/maps/heatmapsearchsidebar', 'options' => [
     'stateCookie' => 'heatmap_search_sidebar_state',
@@ -73,6 +96,8 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     'playerDeathsMax' => $playerDeathsMax,
     'durationMin' => 5,
     'durationMax' => 60,
+    'minSamplesRequiredMin' => $minSamplesRequiredMin,
+    'minSamplesRequiredMax' => $minSamplesRequiredMax,
 
     'enabledStateCookie' => 'heatmap_search_enabled',
     'enabledStateSelector' => '#heatmap_search_toggle',
@@ -87,8 +112,14 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     'filterPlayerDeathsSelector' => '#filter_player_deaths',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
     'filterWeeklyAffixGroupsSelector' => '#filter_weekly_affix_groups',
+    'filterClassesSelector' => '#filter_classes',
     'filterSpecializationsSelector' => '#filter_specializations',
+    'filterClassesPlayerDeathsContainerSelector' => '#filter_classes_player_deaths_container',
+    'filterClassesPlayerDeathsSelector' => '#filter_classes_player_deaths',
+    'filterSpecializationsPlayerDeathsContainerSelector' => '#filter_specializations_player_deaths_container',
+    'filterSpecializationsPlayerDeathsSelector' => '#filter_specializations_player_deaths',
     'filterDurationSelector' => '#filter_duration',
+    'filterMinSamplesRequiredSelector' => '#filter_min_samples_required',
 
     'filterCollapseNames' => ['keyLevel', 'includeAffixIds', 'duration'],
     'filterCookiePrefix' => $filterExpandedCookiePrefix,
@@ -150,17 +181,18 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
                            data-off="{{ __('view_common.maps.controls.heatmapsearch.disabled') }}">
                 </div>
             </div>
+
+            <div class="row px-2 pt-2 pb-0">
+                <div class="col">
+                    <div id="heatmap_search_options_current_filters">
+
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="data_container p-2" data-simplebar>
             <div id="heatmap_search_options_container" class="px-1">
-                <div class="row">
-                    <div class="col">
-                        <div id="heatmap_search_options_current_filters">
-
-                        </div>
-                    </div>
-                </div>
 
                 <div class="form-group">
                     <div id="filter_event_type_container" class="btn-group btn-group-toggle w-100"
@@ -229,7 +261,7 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
                                 <input type="radio" name="region"
                                        class="{{ $region->short }}"
                                        value="{{ $region->short }}"
-                                        {{ $region->short === 'world' ? 'checked' : '' }}
+                                    {{ $region->short === 'world' ? 'checked' : '' }}
                                 >
                                 <img src="{{ url(sprintf('images/flags/%s.png', $region->short)) }}"
                                      alt="{{ __($region->name) }}"
@@ -295,36 +327,6 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
                     </div>
                 @endcomponent
 
-                @component('common.forms.labelinput', [
-                    'name' => 'filter_specializations',
-                    'label' => __('view_common.maps.controls.heatmapsearch.specializations'),
-                ])
-                    {!!
-                        Form::select(
-                            'filter_specializations[]',
-                            $characterClassSpecializations->groupBy(function(CharacterClassSpecialization $characterClassSpecialization) {
-                                return __($characterClassSpecialization->class->name);
-                            })->mapWithKeys(function (Collection $specializations, string $className) {
-                                return [
-                                    $className => $specializations->mapWithKeys(function(CharacterClassSpecialization $characterClassSpecialization){
-                                        return [
-                                            // No translation is intended!
-                                            $characterClassSpecialization->specialization_id => __($characterClassSpecialization->name)
-                                        ];
-                                    })
-                                ];
-                            })->toArray(),
-                            [],
-                            [
-                                'id' => 'filter_specializations',
-                                'name' => 'specializations',
-                                'class' => 'form-control selectpicker',
-                                'multiple' => 'multiple'
-                            ]
-                        )
-                     !!}
-                @endcomponent
-
                 @if($dungeon->gameVersion->has_seasons)
                     {{--                    @component('common.forms.labelinput', ['key' => 'season', 'text' => __('view_common.maps.controls.heatmapsearch.season'), 'expanded' => $expandedAffixWeek])--}}
                     {{--                        <div class="filter_affix">--}}
@@ -369,7 +371,107 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
                     @endcomponent
                 @endif
 
-                @if(Auth::check() && Auth::user()->hasRole('admin'))
+                @component('common.search.filter', ['key' => 'class_and_spec_options', 'text' => __('view_common.maps.controls.heatmapsearch.class_and_spec_options'), 'expanded' => true])
+
+                    @component('common.forms.labelinput', [
+                        'name' => 'filter_classes',
+                        'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes'),
+                        'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_title'),
+                    ])
+                        {!!
+                            Form::select(
+                                'filter_classes[]',
+                                $characterClassSelectOptions,
+                                [],
+                                [
+                                    'id' => 'filter_classes',
+                                    'name' => 'classes',
+                                    'class' => 'form-control selectpicker',
+                                    'multiple' => 'multiple'
+                                ]
+                            )
+                         !!}
+                    @endcomponent
+
+                    @component('common.forms.labelinput', [
+                        'name' => 'filter_specializations',
+                        'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations'),
+                        'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_title'),
+                    ])
+                        {!!
+                            Form::select(
+                                'filter_specializations[]',
+                                $characterClassSpecializationsSelectOptions,
+                                [],
+                                [
+                                    'id' => 'filter_specializations',
+                                    'name' => 'specializations',
+                                    'class' => 'form-control selectpicker',
+                                    'multiple' => 'multiple'
+                                ]
+                            )
+                         !!}
+                    @endcomponent
+
+
+                        @component('common.forms.labelinput', [
+                            'id' => 'filter_classes_player_deaths_container',
+                            'name' => 'filter_classes_player_deaths',
+                            'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths'),
+                            'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths_title'),
+                        ])
+                            {!!
+                                Form::select(
+                                    'filter_classes_player_deaths[]',
+                                    $characterClassSelectOptions,
+                                    [],
+                                    [
+                                        'id' => 'filter_classes_player_deaths',
+                                        'name' => 'classes_player_deaths',
+                                        'class' => 'form-control selectpicker',
+                                        'multiple' => 'multiple'
+                                    ]
+                                )
+                             !!}
+                        @endcomponent
+
+                        @component('common.forms.labelinput', [
+                            'id' => 'filter_specializations_player_deaths_container',
+                            'name' => 'filter_specializations_player_deaths',
+                            'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths'),
+                            'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths_title'),
+                        ])
+                            {!!
+                                Form::select(
+                                    'filter_specializations_player_deaths[]',
+                                    $characterClassSpecializationsSelectOptions,
+                                    [],
+                                    [
+                                        'id' => 'filter_specializations_player_deaths',
+                                        'name' => 'specializations_player_deaths',
+                                        'class' => 'form-control selectpicker',
+                                        'multiple' => 'multiple'
+                                    ]
+                                )
+                             !!}
+                        @endcomponent
+
+                @endcomponent
+
+                @if(Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN))
+                    @component('common.search.filter', ['key' => 'advanced_search', 'text' => __('view_common.maps.controls.heatmapsearch.advanced_options'), 'expanded' => true])
+
+                        @component('common.forms.labelinput', [
+                            'name' => 'min_samples_required',
+                            'label' => __('view_common.maps.controls.heatmapsearch.advanced_option.min_samples_required'),
+                            'title' => __('view_common.maps.controls.heatmapsearch.advanced_option.min_samples_required_title'),
+                        ])
+                            <input id="filter_min_samples_required" type="text" name="filter_min_samples_required"
+                                   value="50"/>
+                        @endcomponent
+
+                    @endcomponent
+
                     @component('common.search.filter', ['key' => 'heatoptions', 'text' => __('view_common.maps.controls.heatmapsearch.heat_options'), 'expanded' => true])
                         <div class="row">
                             <div class="col">

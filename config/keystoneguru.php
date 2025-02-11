@@ -375,16 +375,16 @@ return [
             'data' => [
                 // Player data can get away with less accurate positioning
                 'player' => [
-                    'sizeX' => 400,
-                    'sizeY' => 300,
+                    'size_x' => 300,
+                    'size_y' => 200,
                 ],
                 // Enemy requires precise positioning, this resolution is too much
                 // for raw since the buckets would be too small, but since the coordinates
                 // are equal to enemy positions this only just increases the accuracy of the
                 // points, while still having a low bucket count.
                 'enemy'  => [
-                    'sizeX' => 800,
-                    'sizeY' => 600,
+                    'size_x' => 800,
+                    'size_y' => 600,
                 ],
             ],
         ],
@@ -397,7 +397,7 @@ return [
              *
              * Set to null to disable.
              */
-            'min_required_sample_factor' => 0.0005,
+            'min_required_sample_factor_default' => 0.0005,
 
             /**
              * Toggles between sending the floors as a continuous array or as key value pairs

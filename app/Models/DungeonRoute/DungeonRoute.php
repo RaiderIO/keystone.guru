@@ -154,9 +154,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     use SerializesDates;
 
     public const PAGE_VIEW_SOURCE_VIEW_ROUTE = 1;
-
     public const PAGE_VIEW_SOURCE_VIEW_EMBED = 2;
-
     public const PAGE_VIEW_SOURCE_PRESENT_ROUTE = 3;
 
     /**

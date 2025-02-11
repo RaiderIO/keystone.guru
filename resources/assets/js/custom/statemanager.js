@@ -130,6 +130,7 @@ class StateManager extends Signalable {
         this._map = map;
 
         this.setEnemyDisplayType(this._map.options.defaultEnemyVisualType);
+        this.setHeatmapShowTooltips(this._map.options.defaultHeatmapShowTooltips);
         this.setUnkilledEnemyOpacity(this._map.options.defaultUnkilledEnemyOpacity);
         this.setUnkilledImportantEnemyOpacity(this._map.options.defaultUnkilledImportantEnemyOpacity);
         this.setEnemyAggressivenessBorder(this._map.options.defaultEnemyAggressivenessBorder);
@@ -178,6 +179,18 @@ class StateManager extends Signalable {
 
         // Let everyone know it's changed
         this.signal('enemydisplaytype:changed', {enemyDisplayType: this._enemyDisplayType});
+    }
+
+    /**
+     * Sets whether the heatmap feature should show tooltips or not.
+     * @param {Boolean} visible
+     */
+    setHeatmapShowTooltips(visible) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+        Cookies.set('map_heatmap_show_tooltips', visible ? 1 : 0, cookieDefaultAttributes);
+
+        // Let everyone know it's changed
+        this.signal('heatmapshowtooltips:changed', {visible: visible});
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 return [
+    'npc_death'    => 'Hodor',
     'player_death' => 'Hodor',
-    'enemy_killed' => 'Hodor',
-    'spell_cast'   => 'Hodor',
+    'player_spell' => 'Hodor',
 ];
