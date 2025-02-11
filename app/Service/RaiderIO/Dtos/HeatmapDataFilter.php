@@ -417,7 +417,6 @@ class HeatmapDataFilter implements Arrayable
             'maxPlayerDeaths'            => $this->getPlayerDeathsMax(),
             'minTimerFraction'           => $this->getTimerFractionMin(),
             'maxTimerFraction'           => $this->getTimerFractionMax(),
-            'minRequiredSamplesFactor'   => sprintf('%.6f', $this->getMinSamplesRequired() / 100000),
             // Passthroughs
             'excludeAffixIds'            => $this->getExcludeAffixIds(),
             'excludeClassIds'            => $this->getExcludeClassIds(),
@@ -473,7 +472,9 @@ class HeatmapDataFilter implements Arrayable
          */
         $minRequiredSampleFactor = config('keystoneguru.heatmap.api.min_required_sample_factor_default');
         if ($this->getMinSamplesRequired() === null && $minRequiredSampleFactor !== null) {
-            $result['minRequiredSampleFactor'] = $minRequiredSampleFactor;
+            $result['minRequiredSamplesFactor'] = $minRequiredSampleFactor;
+        } else {
+            $result['minRequiredSamplesFactor'] = sprintf('%.6f', $this->getMinSamplesRequired() / 100000);
         }
 
         if ($this->getFloorsAsArray() === true) {

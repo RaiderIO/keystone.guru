@@ -86,7 +86,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
      *
      * @var array
      */
-    protected $appends = ['mdt_supported'];
+    protected $appends = ['floor_count', 'mdt_supported'];
 
     protected $fillable = [
         'expansion_id',
@@ -141,6 +141,14 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     public function getMdtSupportedAttribute(): bool
     {
         return Conversion::hasMDTDungeonName($this->key);
+    }
+
+    /**
+     * @return int The amount of floors this dungeon has.
+     */
+    public function getFloorCountAttribute(): int
+    {
+        return $this->floors->count();
     }
 
     /**

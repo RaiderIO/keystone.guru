@@ -5,6 +5,8 @@ use App\Logic\MapContext\MapContextDungeonExplore;
 use App\Logic\MapContext\MapContextDungeonRoute;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
+use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\LiveSession;
 use App\Models\Mapping\MappingVersion;
@@ -30,7 +32,14 @@ use App\Models\User;
  * @var array|null        $parameters
  */
 
-$user               = Auth::user();
+$user = Auth::user();
+// Load the roles so we can use role-based checks in the JS
+$user?->load(['roles'])
+    ->makeVisible(['roles', 'map_facade_style']);
+$user?->setRelation('roles', $user->roles->map(function ($role) {
+    return $role->makeHidden(['id', 'pivot', 'created_at', 'updated_at']);
+}));
+
 $isAdmin            = isset($admin) && $admin;
 $embed              = isset($embed) && $embed;
 $embedStyle         ??= '';
@@ -92,14 +101,14 @@ if ($isAdmin) {
         // Display options for changing Teeming status for map objects
         'teemingOptions' => [
             ['key' => '', 'description' => __('view_common.maps.map.no_teeming')],
-            ['key' => \App\Models\Enemy::TEEMING_VISIBLE, 'description' => __('view_common.maps.map.visible_teeming')],
-            ['key' => \App\Models\Enemy::TEEMING_HIDDEN, 'description' => __('view_common.maps.map.hidden_teeming')],
+            ['key' => Enemy::TEEMING_VISIBLE, 'description' => __('view_common.maps.map.visible_teeming')],
+            ['key' => Enemy::TEEMING_HIDDEN, 'description' => __('view_common.maps.map.hidden_teeming')],
         ],
         // Display options for changing Faction status for map objects
         'factions'       => [
             ['key' => 'any', 'description' => __('view_common.maps.map.any')],
-            ['key' => \App\Models\Faction::FACTION_ALLIANCE, 'description' => __('factions.alliance')],
-            ['key' => \App\Models\Faction::FACTION_HORDE, 'description' => __('factions.horde')],
+            ['key' => Faction::FACTION_ALLIANCE, 'description' => __('factions.alliance')],
+            ['key' => Faction::FACTION_HORDE, 'description' => __('factions.horde')],
         ],
     ];
 }
@@ -136,7 +145,7 @@ if ($isAdmin) {
     @include('common.general.statemanager', [
         'echo' => $echo,
         'patreonBenefits' => $user?->getPatreonBenefits() ?? collect(),
-        'userData' => $user?->makeVisible('map_facade_style'),
+        'userData' => $user,
         'mapContext' => $mapContext->getProperties(),
     ])
     <script>
@@ -154,7 +163,7 @@ if ($isAdmin) {
         <script id="map_faction_display_controls_template" type="text/x-handlebars-template">
             <div id="map_faction_display_controls" class="leaflet-draw-section">
                 <div class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top">
-            @foreach(\App\Models\Faction::where('key', '<>', \App\Models\Faction::FACTION_UNSPECIFIED)->get() as $faction)
+            @foreach(Faction::where('key', '<>', Faction::FACTION_UNSPECIFIED)->get() as $faction)
                 <a class="map_faction_display_control map_controls_custom" href="#"
                    data-faction="{{ strtolower($faction->key) }}"
                            title="{{ __($faction->name) }}">
