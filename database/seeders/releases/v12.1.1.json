@@ -1,0 +1,25 @@
+{
+    "id": 277,
+    "release_changelog_id": 284,
+    "version": "v12.1.1",
+    "title": "Fixed minSamplesRequired",
+    "backup_db": 1,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-02-11T16:14:47+00:00",
+    "updated_at": "2025-02-11T16:14:47+00:00",
+    "changelog": {
+        "id": 284,
+        "release_id": 277,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 284,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2721,
+                "change": "minSamplesRequired is no longer rendered for non-admins."
+            }
+        ]
+    }
+}
