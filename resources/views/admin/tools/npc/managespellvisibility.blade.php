@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
@@ -49,18 +50,18 @@ use Illuminate\Support\Collection;
 @section('content')
 
     {{ Form::open(['route' => ['admin.tools.npc.managespellvisibility.submit']]) }}
-        @include('common.dungeon.select', [
-            'id' => 'spell_visibility_dungeon_select',
-            'activeOnly' => false,
-            'ignoreGameVersion' => true,
-            'selected' => isset($dungeon) ? optional($dungeon)->id : null,
-        ])
+    @include('common.dungeon.select', [
+        'id' => 'spell_visibility_dungeon_select',
+        'activeOnly' => false,
+        'ignoreGameVersion' => true,
+        'selected' => isset($dungeon) ? optional($dungeon)->id : null,
+    ])
 
-        <div class="form-group">
-            <button type="submit" class="btn btn-success">
-                {{ __('view_admin.tools.npc.managespellvisibility.submit') }}
-            </button>
-        </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">
+            {{ __('view_admin.tools.npc.managespellvisibility.submit') }}
+        </button>
+    </div>
 
     {{ Form::close() }}
 
@@ -93,7 +94,7 @@ use Illuminate\Support\Collection;
                         </div>
                         <div class="col">
                             <div class="form-element" style="line-height: 2.5">
-                                <a href="https://www.wowhead.com/spell={{$npcSpell->spell_id}}"
+                                <a href="https://www.wowhead.com/{{ $dungeon->gameVersion->key === GameVersion::GAME_VERSION_CLASSIC_ERA ? 'classic/' : '' }}spell={{$npcSpell->spell_id}}"
                                    data-wh-icon-size="medium"
                                 >
                                     <img src="{{$spell->icon_url}}" width="32px" alt="{{ __($spell->name) }}"/>
