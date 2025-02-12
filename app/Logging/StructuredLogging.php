@@ -34,6 +34,10 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         /** @var Application|Container $app */
         $app = app();
 
+        if ($app->runningInConsole() && config('app.type') === 'local') {
+            $this->setChannel('stderr');
+        }
+
         foreach ($this->getDefaultLoggers() as $defaultLogger) {
             $this->addLogger($defaultLogger);
         }

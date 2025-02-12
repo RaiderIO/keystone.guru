@@ -9,6 +9,7 @@ class SpellDataResult implements Arrayable
     public function __construct(
         private readonly int     $spellId,
         private readonly ?string $mechanic,
+        private readonly string  $category,
         private readonly string  $cooldownGroup,
         private readonly string  $dispelType,
         private readonly string  $iconName,
@@ -28,6 +29,11 @@ class SpellDataResult implements Arrayable
     public function getMechanic(): ?string
     {
         return $this->mechanic;
+    }
+
+    public function getCategory(): string
+    {
+        return $this->category;
     }
 
     public function getCooldownGroup(): string
@@ -70,6 +76,7 @@ class SpellDataResult implements Arrayable
         return [
             'spell_id'       => $this->spellId,
             'mechanic'       => $this->mechanic,
+            'category'       => $this->category,
             'cooldown_group' => $this->cooldownGroup,
             'dispel_type'    => $this->dispelType,
             'icon_name'      => $this->iconName,

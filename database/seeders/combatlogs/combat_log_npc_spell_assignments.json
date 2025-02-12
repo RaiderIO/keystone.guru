@@ -2464,5 +2464,959 @@
         "raw_event": "8\/27\/2024 20:30:27.2442  SPELL_CAST_SUCCESS,Creature-0-1471-2648-10637-211260-00004E1A3C,\"Stormrider Vokmar\",0xa18,0x0,Player-1084-0A59B96F,\"Dislexie-TarrenMill-EU\",0x511,0x0,458082,\"Stormrider's Charge\",0x8,Creature-0-1471-2648-10637-211260-00004E1A3C,0000000000000000,17175920,17175920,0,0,42857,0,3,0,100,0,2831.18,-1623.41,2320,1.5299,82\r\n",
         "created_at": "2024-08-28T07:55:29+00:00",
         "updated_at": "2024-08-28T07:55:29+00:00"
+    },
+    {
+        "id": 327,
+        "npc_id": 238644,
+        "spell_id": 8990,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:16:33.1710  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238644-00029CB105,\"Unrepentant Criminal\",0xa48,0x0,Creature-0-5252-2875-2195-238644-00029CB105,\"Unrepentant Criminal\",0xa48,0x0,8990,\"Retribution Aura\",0x2,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:13+00:00",
+        "updated_at": "2025-02-12T16:09:13+00:00"
+    },
+    {
+        "id": 328,
+        "npc_id": 238508,
+        "spell_id": 16592,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:19:18.6830  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238508-00001CB105,\"Abandoned Acolyte\",0xa48,0x0,Creature-0-5252-2875-2195-238508-00001CB105,\"Abandoned Acolyte\",0xa48,0x0,16592,\"Shadowform\",0x20,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:13+00:00",
+        "updated_at": "2025-02-12T16:09:13+00:00"
+    },
+    {
+        "id": 329,
+        "npc_id": 238206,
+        "spell_id": 12627,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:19:28.0350  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238206-00011CB105,\"Diseased Ghoul\",0xa48,0x0,Creature-0-5252-2875-2195-238206-00011CB105,\"Diseased Ghoul\",0xa48,0x0,12627,\"Disease Cloud\",0x8,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:13+00:00",
+        "updated_at": "2025-02-12T16:09:13+00:00"
+    },
+    {
+        "id": 330,
+        "npc_id": 239329,
+        "spell_id": 1222930,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:19:31.6390  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-239329-00009CB106,\"Tortured Student\",0xa48,0x0,Creature-0-5252-2875-2195-239329-00009CB106,\"Tortured Student\",0xa48,0x0,1222930,\"Immolation\",0x4,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:13+00:00",
+        "updated_at": "2025-02-12T16:09:13+00:00"
+    },
+    {
+        "id": 331,
+        "npc_id": 238191,
+        "spell_id": 16509,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:19:36.5340  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238191-00001CB105,\"Risen Warrior\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,16509,\"Rend\",0x1,Creature-0-5252-2875-2195-238191-00001CB105,0000000000000000,59741,74451,0,0,0,0,0,-1,0,0,0,-11090.24,-1689.18,0,3.4329,62\r\n",
+        "created_at": "2025-02-12T16:09:13+00:00",
+        "updated_at": "2025-02-12T16:09:13+00:00"
+    },
+    {
+        "id": 332,
+        "npc_id": 238192,
+        "spell_id": 17620,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:19:37.0070  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238192-00009CB105,\"Risen Warder\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,17620,\"Drain Life\",0x20,Creature-0-5252-2875-2195-238192-00009CB105,0000000000000000,30754,46620,0,0,0,0,0,-1,0,0,0,-11091.85,-1694.72,0,4.4803,62\r\n",
+        "created_at": "2025-02-12T16:09:13+00:00",
+        "updated_at": "2025-02-12T16:09:13+00:00"
+    },
+    {
+        "id": 333,
+        "npc_id": 239328,
+        "spell_id": 1222930,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:19:37.3190  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-239328-00001CB106,\"Burning Ghoul\",0xa48,0x0,Creature-0-5252-2875-2195-239328-00001CB106,\"Burning Ghoul\",0xa48,0x0,1222930,\"Immolation\",0x4,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:13+00:00",
+        "updated_at": "2025-02-12T16:09:13+00:00"
+    },
+    {
+        "id": 334,
+        "npc_id": 238191,
+        "spell_id": 14516,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:19:48.5920  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238191-00001CB105,\"Risen Warrior\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,14516,\"Strike\",0x1,Creature-0-5252-2875-2195-238191-00001CB105,0000000000000000,6864,74451,0,0,0,0,0,-1,0,0,0,-11090.51,-1689.37,0,3.7629,62\r\n",
+        "created_at": "2025-02-12T16:09:13+00:00",
+        "updated_at": "2025-02-12T16:09:13+00:00"
+    },
+    {
+        "id": 335,
+        "npc_id": 238681,
+        "spell_id": 1221586,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:19:51.5320  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238681-00001CB105,\"Mysterious Eidolon\",0xa18,0x0,Creature-0-5252-2875-2195-238681-00001CB105,\"Mysterious Eidolon\",0xa18,0x0,1221586,\"Mysterious Scythe\",0x1,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:13+00:00",
+        "updated_at": "2025-02-12T16:09:13+00:00"
+    },
+    {
+        "id": 336,
+        "npc_id": 239365,
+        "spell_id": 1223047,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:19:51.5320  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-239365-00001CB105,\"Blighted Apparition\",0xa18,0x0,Creature-0-5252-2875-2195-239365-00001CB105,\"Blighted Apparition\",0xa18,0x0,1223047,\"Blight\",0x1,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:13+00:00",
+        "updated_at": "2025-02-12T16:09:13+00:00"
+    },
+    {
+        "id": 337,
+        "npc_id": 238680,
+        "spell_id": 1221584,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:19:51.5480  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238680-00001CB105,\"Mysterious Eidolon\",0xa18,0x0,Creature-0-5252-2875-2195-238680-00001CB105,\"Mysterious Eidolon\",0xa18,0x0,1221584,\"Mysterious Sword\",0x1,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:13+00:00",
+        "updated_at": "2025-02-12T16:09:13+00:00"
+    },
+    {
+        "id": 338,
+        "npc_id": 238682,
+        "spell_id": 1221588,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:19:51.5490  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238682-00001CB105,\"Mysterious Eidolon\",0xa18,0x0,Creature-0-5252-2875-2195-238682-00001CB105,\"Mysterious Eidolon\",0xa18,0x0,1221588,\"Mysterious Staff\",0x1,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:13+00:00",
+        "updated_at": "2025-02-12T16:09:13+00:00"
+    },
+    {
+        "id": 339,
+        "npc_id": 238562,
+        "spell_id": 20829,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:20:00.1960  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238562-00009CB106,\"Bone Witch\",0xa48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x512,0x0,20829,\"Arcane Bolt\",0x40,Creature-0-5252-2875-2195-238562-00009CB106,0000000000000000,43748,44030,0,0,0,0,0,-1,0,0,0,-11102.63,-1646.44,0,4.8636,62\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 340,
+        "npc_id": 238562,
+        "spell_id": 17014,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:20:06.1640  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238562-00009CB106,\"Bone Witch\",0xa48,0x0,Creature-0-5252-2875-2195-238562-00009CB106,\"Bone Witch\",0xa48,0x0,17014,\"Bone Shards\",0x1,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 341,
+        "npc_id": 239328,
+        "spell_id": 1222931,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:20:17.4180  SPELL_DAMAGE,Creature-0-5252-2875-2195-239328-00001CB106,\"Burning Ghoul\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,1222931,\"Immolation\",0x4,Player-5827-02702356,0000000000000000,97,100,0,0,0,0,0,-1,0,0,0,-11104.40,-1651.90,0,0.4765,76,234,260,-1,4,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 342,
+        "npc_id": 238191,
+        "spell_id": 15588,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:20:27.1470  SPELL_DAMAGE,Creature-0-5252-2875-2195-238191-00001CB106,\"Risen Warrior\",0xa48,0x0,Player-5827-02ACCFD5,\"Shmurlock-LivingFlame-EU\",0x512,0x0,15588,\"Thunderclap\",0x8,Player-5827-02ACCFD5,0000000000000000,88,100,0,0,0,0,0,-1,0,0,0,-11106.82,-1659.93,0,0.9305,72,202,202,-1,8,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 343,
+        "npc_id": 238766,
+        "spell_id": 1221796,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:20:38.2250  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238766-00011CB105,\"Withering Iris\",0x10a18,0x0,Creature-0-5252-2875-2195-238766-00011CB105,\"Withering Iris\",0x10a18,0x0,1221796,\"Blossoming Starlight\",0x1,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 344,
+        "npc_id": 238563,
+        "spell_id": 11976,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:20:40.6020  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238563-00041CB106,\"Crypt Soldier\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,11976,\"Strike\",0x1,Creature-0-5252-2875-2195-238563-00041CB106,0000000000000000,9946,25152,0,0,0,0,0,-1,0,0,0,-11106.40,-1654.20,0,1.6660,61\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 345,
+        "npc_id": 238206,
+        "spell_id": 12626,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:21:31.7100  SPELL_MISSED,Creature-0-5252-2875-2195-238206-00001CB105,\"Diseased Ghoul\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,12626,\"Disease Cloud\",0x8,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 346,
+        "npc_id": 239329,
+        "spell_id": 1222933,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:22:22.1470  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-239329-00001CB106,\"Tortured Student\",0xa48,0x0,Creature-0-5252-2875-2195-239329-00001CB106,\"Tortured Student\",0xa48,0x0,1222933,\"Immolation\",0x4,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 347,
+        "npc_id": 238200,
+        "spell_id": 13445,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:22:27.1520  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238200-00011CB106,\"Crypt Ghoul\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,13445,\"Rend\",0x1,Creature-0-5252-2875-2195-238200-00011CB106,0000000000000000,41827,42081,0,0,0,0,0,-1,0,0,0,-11090.69,-1649.06,0,0.1651,62\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 348,
+        "npc_id": 238559,
+        "spell_id": 16791,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:22:30.2170  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238559-00001CB105,\"Crypt Dweller\",0xa48,0x0,Creature-0-5252-2875-2195-238559-00001CB105,\"Crypt Dweller\",0xa48,0x0,16791,\"Furious Anger\",0x1,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 349,
+        "npc_id": 238200,
+        "spell_id": 1223265,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:22:30.2290  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238200-00001CB106,\"Crypt Ghoul\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,1223265,\"Frailty\",0x20,DEBUFF\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 350,
+        "npc_id": 238559,
+        "spell_id": 14099,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:22:37.7110  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238559-00001CB105,\"Crypt Dweller\",0xa48,0x0,Player-5827-02703CAF,\"Kittyxo-LivingFlame-EU\",0x511,0x10,14099,\"Mighty Blow\",0x1,Creature-0-5252-2875-2195-238559-00001CB105,0000000000000000,81048,90636,0,0,0,0,0,-1,0,0,0,-11077.45,-1649.86,0,3.2644,62\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 351,
+        "npc_id": 238559,
+        "spell_id": 10887,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:22:38.0800  SPELL_DAMAGE,Creature-0-5252-2875-2195-238559-00001CB105,\"Crypt Dweller\",0xa48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x512,0x0,10887,\"Crowd Pummel\",0x1,Player-5827-027063DB,0000000000000000,37,100,0,0,0,0,0,-1,0,0,0,-11084.65,-1654.08,0,0.4469,70,3644,6922,-1,1,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 352,
+        "npc_id": 238559,
+        "spell_id": 16793,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:22:41.2000  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238559-00001CB105,\"Crypt Dweller\",0xa48,0x0,Player-5827-02ACCFD5,\"Shmurlock-LivingFlame-EU\",0x512,0x0,16793,\"Draining Blow\",0x20,Creature-0-5252-2875-2195-238559-00001CB105,0000000000000000,76241,90636,0,0,0,0,0,-1,0,0,0,-11096.64,-1653.10,0,3.5599,62\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 353,
+        "npc_id": 238192,
+        "spell_id": 16431,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:24:27.1980  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238192-00011CB105,\"Risen Warder\",0xa48,0x0,Creature-0-5252-2875-2195-238192-00011CB105,\"Risen Warder\",0xa48,0x0,16431,\"Bone Armor\",0x20,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 354,
+        "npc_id": 238192,
+        "spell_id": 17715,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:24:33.6850  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238192-00021CB105,\"Risen Warder\",0xa48,0x0,Creature-0-5252-2875-2195-238192-00021CB105,\"Risen Warder\",0xa48,0x0,17715,\"Consuming Shadows\",0x20,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 355,
+        "npc_id": 238192,
+        "spell_id": 17716,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:24:39.5280  SPELL_DAMAGE,Creature-0-5252-2875-2195-238192-00011CB105,\"Risen Warder\",0xa48,0x0,Player-5827-02ACCFD5,\"Shmurlock-LivingFlame-EU\",0x512,0x0,17716,\"Consuming Shadows\",0x20,Player-5827-02ACCFD5,0000000000000000,96,100,0,0,0,0,0,-1,0,0,0,-11081.80,-1608.91,0,4.6768,72,200,200,-1,32,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 356,
+        "npc_id": 238560,
+        "spell_id": 16431,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:25:33.2020  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238560-00001CB2E5,\"The Warden\",0x10a48,0x0,Creature-0-5252-2875-2195-238560-00001CB2E5,\"The Warden\",0x10a48,0x0,16431,\"Bone Armor\",0x20,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:14+00:00",
+        "updated_at": "2025-02-12T16:09:14+00:00"
+    },
+    {
+        "id": 357,
+        "npc_id": 238233,
+        "spell_id": 1222942,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:26:58.6010  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238233-00001CB105,\"Kaigy Maryla\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,1222942,\"Flame Shock\",0x4,Creature-0-5252-2875-2195-238233-00001CB105,0000000000000000,612903,626494,0,0,0,0,0,-1,0,0,0,-11095.49,-1590.18,0,1.6019,63\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 358,
+        "npc_id": 238233,
+        "spell_id": 1222943,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:27:04.0340  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238233-00001CB105,\"Kaigy Maryla\",0xa48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x512,0x0,1222943,\"Incendiary Boulder\",0x4,Creature-0-5252-2875-2195-238233-00001CB105,0000000000000000,592541,626494,0,0,0,0,0,-1,0,0,0,-11095.49,-1590.18,0,0.2011,63\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 359,
+        "npc_id": 238233,
+        "spell_id": 1220408,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:27:07.0680  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238233-00001CB105,\"Kaigy Maryla\",0xa48,0x0,Player-5827-02ACCFD5,\"Shmurlock-LivingFlame-EU\",0x512,0x0,1220408,\"Fireball\",0x4,Creature-0-5252-2875-2195-238233-00001CB105,0000000000000000,579282,626494,0,0,0,0,0,-1,0,0,0,-11095.49,-1590.18,0,2.0605,63\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 360,
+        "npc_id": 238206,
+        "spell_id": 3436,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:29:51.0840  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238206-00001CB42C,\"Diseased Ghoul\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,3436,\"Wandering Plague\",0x20,DEBUFF\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 361,
+        "npc_id": 238193,
+        "spell_id": 17439,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:31:11.0540  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238193-00001CB105,\"Risen Protector\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,17439,\"Shadow Shock\",0x20,Creature-0-5252-2875-2195-238193-00001CB105,0000000000000000,103014,106190,0,0,0,0,0,-1,0,0,0,-11043.61,-1692.88,0,1.8486,62\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 362,
+        "npc_id": 238193,
+        "spell_id": 15654,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:31:19.1550  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238193-00001CB105,\"Risen Protector\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,15654,\"Shadow Word: Pain\",0x20,Creature-0-5252-2875-2195-238193-00001CB105,0000000000000000,79613,106190,0,0,0,0,0,-1,0,0,0,-11043.61,-1692.88,0,0.9837,62\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 363,
+        "npc_id": 238645,
+        "spell_id": 17145,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:33:05.5500  SPELL_DAMAGE,Creature-0-5252-2875-2195-238645-00019CB105,\"Unrepentant Sorcerer\",0x10a48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x512,0x0,17145,\"Blast Wave\",0x4,Player-5827-027063DB,0000000000000000,89,100,0,0,0,0,0,-1,0,0,0,-11118.06,-1731.22,0,1.6712,70,608,607,-1,4,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 364,
+        "npc_id": 238644,
+        "spell_id": 17143,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:33:07.0700  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238644-00029CB105,\"Unrepentant Criminal\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,17143,\"Holy Strike\",0x2,Creature-0-5252-2875-2195-238644-00029CB105,0000000000000000,43668,59570,0,0,0,0,0,-1,0,0,0,-11118.62,-1726.88,0,5.2773,62\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 365,
+        "npc_id": 238644,
+        "spell_id": 14518,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:33:08.7890  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238644-00029CB105,\"Unrepentant Criminal\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,14518,\"Crusader Strike\",0x1,Creature-0-5252-2875-2195-238644-00029CB105,0000000000000000,38141,59570,0,0,0,0,0,-1,0,0,0,-11117.83,-1728.39,0,5.6941,62\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 366,
+        "npc_id": 238645,
+        "spell_id": 15253,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:33:10.2950  SPELL_DAMAGE,Creature-0-5252-2875-2195-238645-00019CB105,\"Unrepentant Sorcerer\",0x10a48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x512,0x0,15253,\"Arcane Explosion\",0x40,Player-5827-027063DB,0000000000000000,81,100,0,0,0,0,0,-1,0,0,0,-11118.06,-1731.22,0,0.9842,70,604,604,-1,64,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 367,
+        "npc_id": 238646,
+        "spell_id": 12674,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:33:10.4180  SPELL_MISSED,Creature-0-5252-2875-2195-238646-00029CB105,\"Unrepentant Conjuror\",0xa48,0x0,Player-5827-02703CC7,\"Nilze-LivingFlame-EU\",0x512,0x0,12674,\"Frost Nova\",0x10,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 368,
+        "npc_id": 238645,
+        "spell_id": 15732,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:33:14.9430  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238645-00019CB105,\"Unrepentant Sorcerer\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,15732,\"Immolate\",0x4,DEBUFF\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 369,
+        "npc_id": 238647,
+        "spell_id": 17194,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:33:17.7520  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238647-00011CB105,\"Failed Novice\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,17194,\"Mind Blast\",0x20,Creature-0-5252-2875-2195-238647-00011CB105,0000000000000000,1269,23310,0,0,0,0,0,-1,0,0,0,-11114.53,-1730.05,0,1.3046,62\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 370,
+        "npc_id": 238638,
+        "spell_id": 16565,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:33:46.0020  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238638-00001CB105,\"Echo of the Baroness\",0x10a48,0x0,Player-5827-02703CAF,\"Kittyxo-LivingFlame-EU\",0x511,0x10,16565,\"Banshee Wail\",0x20,Creature-0-5252-2875-2195-238638-00001CB105,0000000000000000,115542,116550,0,0,0,0,0,-1,0,0,0,-11089.39,-1663.99,0,4.5733,62\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 371,
+        "npc_id": 238641,
+        "spell_id": 15232,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:33:49.0570  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238641-00019CB105,\"Karazhan Shadowcaster\",0xa48,0x0,Player-5827-02703CAF,\"Kittyxo-LivingFlame-EU\",0x511,0x10,15232,\"Shadow Bolt\",0x20,Creature-0-5252-2875-2195-238641-00019CB105,0000000000000000,34246,34246,0,0,0,0,0,-1,0,0,0,-11097.29,-1660.00,0,4.9746,59\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 372,
+        "npc_id": 238638,
+        "spell_id": 16867,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:33:52.5300  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238638-00001CB105,\"Echo of the Baroness\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,16867,\"Banshee Curse\",0x20,DEBUFF\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 373,
+        "npc_id": 238641,
+        "spell_id": 11443,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:33:55.5400  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238641-00019CB105,\"Karazhan Shadowcaster\",0xa48,0x0,Player-5827-02ACCFD5,\"Shmurlock-LivingFlame-EU\",0x512,0x0,11443,\"Cripple\",0x20,Creature-0-5252-2875-2195-238641-00019CB105,0000000000000000,33906,34246,0,0,0,0,0,-1,0,0,0,-11097.29,-1660.00,0,5.2052,59\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 374,
+        "npc_id": 238641,
+        "spell_id": 16429,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:33:57.7620  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238641-00019CB105,\"Karazhan Shadowcaster\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,16429,\"Piercing Shadow\",0x20,Creature-0-5252-2875-2195-238641-00019CB105,0000000000000000,33906,34246,0,0,0,0,0,-1,0,0,0,-11097.29,-1660.00,0,5.4452,59\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 375,
+        "npc_id": 238638,
+        "spell_id": 17244,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:34:01.5380  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238638-00001CB105,\"Echo of the Baroness\",0xa48,0x0,Player-5827-02703CC7,\"Nilze-LivingFlame-EU\",0x512,0x0,17244,\"Possess\",0x20,DEBUFF\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 376,
+        "npc_id": 238640,
+        "spell_id": 16868,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:34:03.7400  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238640-00001CB106,\"Shrieking Banshee\",0xa48,0x0,Player-5827-02ACCFD5,\"Shmurlock-LivingFlame-EU\",0x512,0x0,16868,\"Banshee Wail\",0x20,Creature-0-5252-2875-2195-238640-00001CB106,0000000000000000,39439,42728,0,0,0,0,0,-1,0,0,0,-11110.08,-1648.46,0,5.5749,60\r\n",
+        "created_at": "2025-02-12T16:09:15+00:00",
+        "updated_at": "2025-02-12T16:09:15+00:00"
+    },
+    {
+        "id": 377,
+        "npc_id": 238639,
+        "spell_id": 17105,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:34:05.4900  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238639-00001CB106,\"Wailing Banshee\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,17105,\"Banshee Curse\",0x20,Creature-0-5252-2875-2195-238639-00001CB106,0000000000000000,40878,47376,0,0,0,0,0,-1,0,0,0,-11089.51,-1665.68,0,2.1061,59\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 378,
+        "npc_id": 238639,
+        "spell_id": 19645,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:34:15.6020  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238639-00001CB106,\"Wailing Banshee\",0xa48,0x0,Creature-0-5252-2875-2195-238639-00001CB106,\"Wailing Banshee\",0xa48,0x0,19645,\"Anti-Magic Shield\",0x20,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 379,
+        "npc_id": 238638,
+        "spell_id": 10890,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:34:21.0020  SPELL_AURA_REMOVED,Creature-0-5252-2875-2195-238638-00001CB105,\"Echo of the Baroness\",0xa48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x512,0x0,10890,\"Psychic Scream\",0x20,DEBUFF\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 380,
+        "npc_id": 238640,
+        "spell_id": 3589,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:34:28.1830  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238640-00001CB106,\"Shrieking Banshee\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,3589,\"Deafening Screech\",0x20,DEBUFF\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 381,
+        "npc_id": 238638,
+        "spell_id": 18327,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:34:39.4110  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238638-00001CB105,\"Echo of the Baroness\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,18327,\"Silence\",0x8,DEBUFF\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 382,
+        "npc_id": 239329,
+        "spell_id": 1222931,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:37:47.2700  SPELL_DAMAGE,Creature-0-5252-2875-2195-239329-00001CB106,\"Tortured Student\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,1222931,\"Immolation\",0x4,Player-5827-02702356,0000000000000000,97,100,0,0,0,0,0,-1,0,0,0,-11131.81,-1686.63,0,2.6506,76,215,239,-1,4,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 383,
+        "npc_id": 238643,
+        "spell_id": 16333,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:41:10.4520  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238643-00011CB105,\"Forgotten Denizen\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,16333,\"Debilitating Touch\",0x20,Creature-0-5252-2875-2195-238643-00011CB105,0000000000000000,14135,26397,0,0,0,0,0,-1,0,0,0,-11167.32,-1653.49,0,5.5184,58\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 384,
+        "npc_id": 238511,
+        "spell_id": 16431,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:41:13.1160  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238511-00001CB106,\"The Gravekeeper\",0xa48,0x0,Creature-0-5252-2875-2195-238511-00001CB106,\"The Gravekeeper\",0xa48,0x0,16431,\"Bone Armor\",0x20,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 385,
+        "npc_id": 238511,
+        "spell_id": 16430,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:41:13.1180  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238511-00001CB106,\"The Gravekeeper\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,16430,\"Soul Tap\",0x20,Creature-0-5252-2875-2195-238511-00001CB106,0000000000000000,65813,79288,0,0,0,0,0,-1,0,0,0,-11166.25,-1653.21,0,5.1910,63\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 386,
+        "npc_id": 238646,
+        "spell_id": 12675,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:41:21.8580  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238646-00001CB106,\"Unrepentant Conjuror\",0xa48,0x0,Player-5827-02703CAF,\"Kittyxo-LivingFlame-EU\",0x511,0x10,12675,\"Frostbolt\",0x10,Creature-0-5252-2875-2195-238646-00001CB106,0000000000000000,40584,40584,0,0,0,0,0,-1,0,0,0,-11158.43,-1635.90,0,4.2409,60\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 387,
+        "npc_id": 238646,
+        "spell_id": 403233,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:41:41.9570  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238646-00001CB106,\"Unrepentant Conjuror\",0xa48,0x0,Creature-0-5252-2875-2195-238646-00001CB106,\"Unrepentant Conjuror\",0xa48,0x0,403233,\"Meathook\",0x1,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 388,
+        "npc_id": 238252,
+        "spell_id": 17633,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:42:42.4840  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238252-00001CB105,\"Trapped Soul\",0x10a48,0x0,Creature-0-5252-2875-2195-238252-00001CB105,\"Trapped Soul\",0x10a48,0x0,17633,\"Arcane Focus\",0x40,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 389,
+        "npc_id": 238416,
+        "spell_id": 9532,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:44:04.2470  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238416-00001CB75F,\"Geenkle\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,9532,\"Lightning Bolt\",0x8,Creature-0-5252-2875-2195-238416-00001CB75F,0000000000000000,94681,94929,0,0,0,0,0,-1,0,0,0,-11214.13,-1804.94,0,1.5757,63\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 390,
+        "npc_id": 238420,
+        "spell_id": 15043,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:44:04.2480  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238420-00001CB75F,\"Weeshald Rustboot\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,15043,\"Frostbolt\",0x10,Creature-0-5252-2875-2195-238420-00001CB75F,0000000000000000,94531,94929,0,0,0,0,0,-1,0,0,0,-11207.38,-1800.82,0,2.8196,63\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 391,
+        "npc_id": 238419,
+        "spell_id": 27758,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:44:13.4900  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238419-00001CB75F,\"Gold Rustboot\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,27758,\"War Stomp\",0x1,DEBUFF\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 392,
+        "npc_id": 238418,
+        "spell_id": 12540,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:44:17.9070  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238418-00001CB75F,\"Jank\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,12540,\"Gouge\",0x1,Creature-0-5252-2875-2195-238418-00001CB75F,0000000000000000,100643,135596,0,0,0,0,0,-1,0,0,0,-11215.60,-1802.14,0,0.6493,63\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 393,
+        "npc_id": 238416,
+        "spell_id": 16170,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:44:19.9640  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238416-00001CB75F,\"Geenkle\",0xa48,0x0,Creature-0-5252-2875-2195-238418-00001CB75F,\"Jank\",0xa48,0x0,16170,\"Bloodlust\",0x8,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 394,
+        "npc_id": 238418,
+        "spell_id": 744,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:44:21.1460  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238418-00001CB75F,\"Jank\",0xa48,0x0,Player-5827-02ACCFD5,\"Shmurlock-LivingFlame-EU\",0x512,0x0,744,\"Poison\",0x8,Creature-0-5252-2875-2195-238418-00001CB75F,0000000000000000,96144,135596,0,0,0,0,0,-1,0,0,0,-11209.35,-1789.99,0,1.0955,63\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 395,
+        "npc_id": 238418,
+        "spell_id": 6434,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:44:31.2740  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238418-00001CB75F,\"Jank\",0xa48,0x0,Creature-0-5252-2875-2195-238418-00001CB75F,\"Jank\",0xa48,0x0,6434,\"Slice and Dice\",0x1,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 396,
+        "npc_id": 238419,
+        "spell_id": 27794,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:44:34.6970  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238419-00001CB75F,\"Gold Rustboot\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,27794,\"Cleave\",0x1,Creature-0-5252-2875-2195-238419-00001CB75F,0000000000000000,95734,135596,0,0,0,0,0,-1,0,0,0,-11214.79,-1798.92,0,4.3035,63\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 397,
+        "npc_id": 238418,
+        "spell_id": 7159,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:44:42.3710  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238418-00001CB75F,\"Jank\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,7159,\"Backstab\",0x1,Creature-0-5252-2875-2195-238418-00001CB75F,0000000000000000,70429,135596,0,0,0,0,0,-1,0,0,0,-11213.92,-1802.34,0,6.2232,63\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 398,
+        "npc_id": 238416,
+        "spell_id": 15305,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:44:56.9180  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238416-00001CB75F,\"Geenkle\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,15305,\"Chain Lightning\",0x8,Creature-0-5252-2875-2195-238416-00001CB75F,0000000000000000,13595,94929,0,0,0,0,0,-1,0,0,0,-11211.29,-1808.51,0,1.1780,63\r\n",
+        "created_at": "2025-02-12T16:09:16+00:00",
+        "updated_at": "2025-02-12T16:09:16+00:00"
+    },
+    {
+        "id": 399,
+        "npc_id": 237964,
+        "spell_id": 1219389,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:47:37.2860  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-237964-00001CB105,\"Harbinger of Sin\",0x10a48,0x0,Creature-0-5252-2875-2195-237964-00001CB105,\"Harbinger of Sin\",0x10a48,0x0,1219389,\"Immolation\",0x4,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:17+00:00",
+        "updated_at": "2025-02-12T16:09:17+00:00"
+    },
+    {
+        "id": 400,
+        "npc_id": 237964,
+        "spell_id": 1222776,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:47:52.7390  SPELL_MISSED,Creature-0-5252-2875-2195-237964-00001CB105,\"Harbinger of Sin\",0x10a48,0x0,Player-5827-02703CC7,\"Nilze-LivingFlame-EU\",0x512,0x0,1222776,\"Incendiary Crash\",0x4,RESIST,nil,0,ST\r\n",
+        "created_at": "2025-02-12T16:09:17+00:00",
+        "updated_at": "2025-02-12T16:09:17+00:00"
+    },
+    {
+        "id": 401,
+        "npc_id": 237964,
+        "spell_id": 1219388,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:47:55.2370  SPELL_MISSED,Creature-0-5252-2875-2195-237964-00001CB105,\"Harbinger of Sin\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,1219388,\"Flame Whirl\",0x4,ABSORB,nil,674,749,AOE\r\n",
+        "created_at": "2025-02-12T16:09:17+00:00",
+        "updated_at": "2025-02-12T16:09:17+00:00"
+    },
+    {
+        "id": 402,
+        "npc_id": 237964,
+        "spell_id": 1219420,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:48:10.6980  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-237964-00001CB105,\"Harbinger of Sin\",0x10a48,0x0,Creature-0-5252-2875-2195-237964-00001CB105,\"Harbinger of Sin\",0x10a48,0x0,1219420,\"Pull of the damned\",0x4,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:17+00:00",
+        "updated_at": "2025-02-12T16:09:17+00:00"
+    },
+    {
+        "id": 403,
+        "npc_id": 237964,
+        "spell_id": 1222775,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:48:48.5540  SPELL_MISSED,Creature-0-5252-2875-2195-237964-00001CB105,\"Harbinger of Sin\",0x10a48,0x0,Player-5827-02ACCFD5,\"Shmurlock-LivingFlame-EU\",0x512,0x0,1222775,\"Incendiary Crash\",0x4,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-02-12T16:09:17+00:00",
+        "updated_at": "2025-02-12T16:09:17+00:00"
+    },
+    {
+        "id": 404,
+        "npc_id": 238628,
+        "spell_id": 744,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:50:55.8930  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238628-00001CB107,\"Broodwidow\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,744,\"Poison\",0x8,Creature-0-5252-2875-2195-238628-00001CB107,0000000000000000,72935,74451,0,0,0,0,0,-1,0,0,0,-11219.16,-1663.05,0,0.8383,62\r\n",
+        "created_at": "2025-02-12T16:09:17+00:00",
+        "updated_at": "2025-02-12T16:09:17+00:00"
+    },
+    {
+        "id": 405,
+        "npc_id": 238629,
+        "spell_id": 744,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:50:55.8940  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238629-00081CB106,\"Deep Stalker\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,744,\"Poison\",0x8,Creature-0-5252-2875-2195-238629-00081CB106,0000000000000000,25856,28296,0,0,0,0,0,-1,0,0,0,-11217.75,-1663.08,0,6.0716,61\r\n",
+        "created_at": "2025-02-12T16:09:17+00:00",
+        "updated_at": "2025-02-12T16:09:17+00:00"
+    },
+    {
+        "id": 406,
+        "npc_id": 238628,
+        "spell_id": 24600,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:50:57.5200  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238628-00019CB106,\"Broodwidow\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,24600,\"Web Spin\",0x1,Creature-0-5252-2875-2195-238628-00019CB106,0000000000000000,63077,74451,0,0,0,0,0,-1,0,0,0,-11218.04,-1659.74,0,1.5408,62\r\n",
+        "created_at": "2025-02-12T16:09:17+00:00",
+        "updated_at": "2025-02-12T16:09:17+00:00"
+    },
+    {
+        "id": 407,
+        "npc_id": 238024,
+        "spell_id": 1220836,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:53:13.9030  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238024-00001CB106,\"Creeping Malison\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,1220836,\"Spectral Fangs\",0x40,Creature-0-5252-2875-2195-238024-00001CB106,0000000000000000,870761,875789,0,0,0,0,0,-1,0,0,0,-11212.40,-1735.45,0,1.8733,63\r\n",
+        "created_at": "2025-02-12T16:09:17+00:00",
+        "updated_at": "2025-02-12T16:09:17+00:00"
+    },
+    {
+        "id": 408,
+        "npc_id": 238024,
+        "spell_id": 1221325,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:53:33.3920  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238024-00001CB106,\"Creeping Malison\",0x10a48,0x0,Creature-0-5252-2875-2195-238024-00001CB106,\"Creeping Malison\",0x10a48,0x0,1221325,\"Burning\",0x4,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:17+00:00",
+        "updated_at": "2025-02-12T16:09:17+00:00"
+    },
+    {
+        "id": 409,
+        "npc_id": 238024,
+        "spell_id": 1220843,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:54:53.0260  SPELL_MISSED,Creature-0-5252-2875-2195-238024-00001CB106,\"Creeping Malison\",0x10a48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x512,0x0,1220843,\"Cursed Webbing\",0x40,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-02-12T16:09:17+00:00",
+        "updated_at": "2025-02-12T16:09:17+00:00"
+    },
+    {
+        "id": 410,
+        "npc_id": 238024,
+        "spell_id": 1220844,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:54:54.9420  SPELL_MISSED,Creature-0-5252-2875-2195-238024-00001CB106,\"Creeping Malison\",0x10a48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x512,0x0,1220844,\"Cursed Webbing\",0x40,RESIST,nil,0,ST\r\n",
+        "created_at": "2025-02-12T16:09:17+00:00",
+        "updated_at": "2025-02-12T16:09:17+00:00"
+    },
+    {
+        "id": 411,
+        "npc_id": 238657,
+        "spell_id": 16791,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:58:10.0300  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238657-00001CB106,\"Crypt Dweller\",0xa48,0x0,Creature-0-5252-2875-2195-238657-00001CB106,\"Crypt Dweller\",0xa48,0x0,16791,\"Furious Anger\",0x1,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 412,
+        "npc_id": 238642,
+        "spell_id": 16430,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:58:12.0500  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238642-00001CB105,\"Lost Necromancer\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,16430,\"Soul Tap\",0x20,Creature-0-5252-2875-2195-238642-00001CB105,0000000000000000,34176,34176,0,0,0,0,0,-1,0,0,0,-11141.12,-1689.61,0,0.1912,60\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 413,
+        "npc_id": 238657,
+        "spell_id": 16793,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:58:13.6680  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238657-00001CB106,\"Crypt Dweller\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,16793,\"Draining Blow\",0x20,Creature-0-5252-2875-2195-238657-00001CB106,0000000000000000,77724,80925,0,0,0,0,0,-1,0,0,0,-11135.78,-1691.16,0,6.0932,62\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 414,
+        "npc_id": 238657,
+        "spell_id": 14099,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:58:18.5510  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238657-00001CB106,\"Crypt Dweller\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,14099,\"Mighty Blow\",0x1,Creature-0-5252-2875-2195-238657-00001CB106,0000000000000000,70171,80925,0,0,0,0,0,-1,0,0,0,-11135.62,-1690.86,0,1.0832,62\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 415,
+        "npc_id": 238509,
+        "spell_id": 12542,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:58:20.0260  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238509-00001CB105,\"Lost Neophyte\",0xa48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x512,0x0,12542,\"Fear\",0x20,Creature-0-5252-2875-2195-238509-00001CB105,0000000000000000,32923,49852,0,0,0,0,0,-1,0,0,0,-11131.94,-1690.57,0,6.1976,62\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 416,
+        "npc_id": 238642,
+        "spell_id": 16431,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:58:23.3920  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238642-00001CB105,\"Lost Necromancer\",0xa48,0x0,Creature-0-5252-2875-2195-238657-00001CB106,\"Crypt Dweller\",0x10a48,0x0,16431,\"Bone Armor\",0x20,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 417,
+        "npc_id": 238657,
+        "spell_id": 10887,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:58:31.4370  SPELL_MISSED,Creature-0-5252-2875-2195-238657-00001CB106,\"Crypt Dweller\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,10887,\"Crowd Pummel\",0x1,PARRY,nil,AOE\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 418,
+        "npc_id": 238509,
+        "spell_id": 12739,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:58:32.8380  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238509-00001CB105,\"Lost Neophyte\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,12739,\"Shadow Bolt\",0x20,Creature-0-5252-2875-2195-238509-00001CB105,0000000000000000,9410,49852,0,0,0,0,0,-1,0,0,0,-11132.25,-1689.92,0,1.8235,62\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 419,
+        "npc_id": 238679,
+        "spell_id": 17143,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 11:59:01.7680  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238679-00001CB105,\"Fallen Praetorian\",0xa48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,17143,\"Holy Strike\",0x2,Creature-0-5252-2875-2195-238679-00001CB105,0000000000000000,74031,85470,0,0,0,0,0,-1,0,0,0,-11142.59,-1694.89,0,1.5075,62\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 420,
+        "npc_id": 238508,
+        "spell_id": 17615,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 12:01:33.6010  SPELL_CAST_SUCCESS,Creature-0-5252-2875-2195-238508-00009CB105,\"Abandoned Acolyte\",0xa48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x512,0x0,17615,\"Mana Burn\",0x20,Creature-0-5252-2875-2195-238508-00009CB105,0000000000000000,2299,25260,0,0,0,0,0,-1,0,0,0,-11136.92,-1689.43,0,2.7974,62\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 421,
+        "npc_id": 237439,
+        "spell_id": 1218092,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 12:05:09.3270  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-237439-00001CBC72,\"Kharon\",0x10a48,0x0,Creature-0-5252-2875-2195-237439-00001CBC72,\"Kharon\",0x10a48,0x0,1218092,\"Quietude\",0x1,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 422,
+        "npc_id": 237439,
+        "spell_id": 1218091,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 12:05:11.3240  SPELL_DAMAGE,Creature-0-5252-2875-2195-237439-00001CBC72,\"Kharon\",0x10a48,0x0,Player-5827-02ACCFD5,\"Shmurlock-LivingFlame-EU\",0x512,0x0,1218091,\"Quietude\",0x20,Player-5827-02ACCFD5,0000000000000000,96,100,0,0,0,0,0,-1,0,0,0,-11153.94,-1740.61,0,6.0303,72,200,200,-1,32,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 423,
+        "npc_id": 237439,
+        "spell_id": 1217694,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 12:05:34.4370  SPELL_DAMAGE,Creature-0-5252-2875-2195-237439-00001CBC72,\"Kharon\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,1217694,\"The Red Death\",0x20,Player-5827-02702356,0000000000000000,8,100,0,0,0,0,0,-1,0,0,0,-11143.68,-1741.18,0,5.6083,76,6181,6868,-1,32,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 424,
+        "npc_id": 237439,
+        "spell_id": 1217952,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 12:05:41.6530  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-237439-00001CBC72,\"Kharon\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,1217952,\"Dreadful Visage\",0x1,DEBUFF\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 425,
+        "npc_id": 237439,
+        "spell_id": 1218038,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 12:05:44.6570  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-237439-00001CBC72,\"Kharon\",0x10a48,0x0,Player-5827-02703CC7,\"Nilze-LivingFlame-EU\",0x512,0x0,1218038,\"Inhume\",0x1,DEBUFF\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 426,
+        "npc_id": 237439,
+        "spell_id": 1218089,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 12:05:51.3860  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-237439-00001CBC72,\"Kharon\",0xa48,0x0,Player-5827-02703CC7,\"Nilze-LivingFlame-EU\",0x512,0x0,1218089,\"Illimitable Dominion\",0x1,DEBUFF\r\n",
+        "created_at": "2025-02-12T16:09:18+00:00",
+        "updated_at": "2025-02-12T16:09:18+00:00"
+    },
+    {
+        "id": 427,
+        "npc_id": 239365,
+        "spell_id": 1223048,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 12:12:26.5160  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-239365-00001CB105,\"Blighted Apparition\",0xa18,0x0,Creature-0-5252-2875-2195-239365-00001CB105,\"Blighted Apparition\",0xa18,0x0,1223048,\"Last Rites\",0x20,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:19+00:00",
+        "updated_at": "2025-02-12T16:09:19+00:00"
+    },
+    {
+        "id": 428,
+        "npc_id": 238678,
+        "spell_id": 1221577,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 12:13:39.5470  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238678-00001CBE61,\"Unk'omon\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,1221577,\"Doom\",0x20,DEBUFF\r\n",
+        "created_at": "2025-02-12T16:09:19+00:00",
+        "updated_at": "2025-02-12T16:09:19+00:00"
+    },
+    {
+        "id": 429,
+        "npc_id": 238678,
+        "spell_id": 1220515,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 12:14:11.5380  SPELL_DAMAGE,Creature-0-5252-2875-2195-238678-00001CBE61,\"Unk'omon\",0x10a48,0x0,Player-5827-02702356,\"Deviw-LivingFlame-EU\",0x512,0x8,1220515,\"Shadow Bolt Volley\",0x20,Player-5827-02702356,0000000000000000,82,100,0,0,0,0,0,-1,0,0,0,-11116.72,-1555.24,0,5.0441,75,1350,1500,-1,32,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-02-12T16:09:19+00:00",
+        "updated_at": "2025-02-12T16:09:19+00:00"
+    },
+    {
+        "id": 430,
+        "npc_id": 238678,
+        "spell_id": 1221578,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 12:16:02.5330  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238678-00001CBE61,\"Unk'omon\",0x10a48,0x0,Creature-0-5252-2875-2195-238678-00001CBE61,\"Unk'omon\",0x10a48,0x0,1221578,\"Mark of the Master\",0x20,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:19+00:00",
+        "updated_at": "2025-02-12T16:09:19+00:00"
+    },
+    {
+        "id": 431,
+        "npc_id": 238499,
+        "spell_id": 1220939,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 12:17:46.0840  SPELL_AURA_APPLIED,Creature-0-5252-2875-2195-238499-00001CBF6A,\"Dark Rider\",0xa48,0x0,Creature-0-5252-2875-2195-238499-00001CBF6A,\"Dark Rider\",0xa48,0x0,1220939,\"Ethereal Charge\",0x1,BUFF\r\n",
+        "created_at": "2025-02-12T16:09:19+00:00",
+        "updated_at": "2025-02-12T16:09:19+00:00"
+    },
+    {
+        "id": 432,
+        "npc_id": 238055,
+        "spell_id": 412609,
+        "combat_log_path": "tmp\/karazhan_crypts.zip",
+        "raw_event": "1\/31\/2025 12:30:04.5040  SPELL_AURA_REMOVED,Creature-0-5252-2875-2195-238055-00001CBFF6,\"Dark Rider\",0xa28,0x0,Player-5827-02703CC7,\"Nilze-LivingFlame-EU\",0x512,0x0,412609,\"Deep Wound\",0x1,DEBUFF\r\n",
+        "created_at": "2025-02-12T16:09:19+00:00",
+        "updated_at": "2025-02-12T16:09:19+00:00"
     }
 ]

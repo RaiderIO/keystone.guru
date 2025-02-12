@@ -82,7 +82,7 @@ class EnemyPatrol extends Polyline {
      * @private
      */
     _getDecorator() {
-        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPatrol', this);
 
         return L.polylineDecorator(this.layer, {
             patterns: [
@@ -115,7 +115,7 @@ class EnemyPatrol extends Polyline {
      * @private
      */
     _getEnemiesLatLngs() {
-        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPatrol', this);
 
         let result = [];
         for (let index in this.enemies) {
@@ -132,7 +132,7 @@ class EnemyPatrol extends Polyline {
      * @returns {*}
      */
     getLayerLatLng() {
-        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPatrol', this);
 
         let vertices = this.getVertices();
 
@@ -152,7 +152,7 @@ class EnemyPatrol extends Polyline {
      * @param enemy
      */
     addEnemy(enemy) {
-        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPatrol', this);
 
         this.enemies.push(enemy);
     }
@@ -162,7 +162,7 @@ class EnemyPatrol extends Polyline {
      * @param enemy
      */
     removeEnemy(enemy) {
-        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPatrol', this);
 
         let newEnemies = [];
         for (let index in this.enemies) {
@@ -179,7 +179,7 @@ class EnemyPatrol extends Polyline {
      *
      */
     _onAttachedEnemyMouseOver() {
-        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPatrol', this);
 
         this.highlighted = true;
 
@@ -194,7 +194,7 @@ class EnemyPatrol extends Polyline {
      *
      */
     _onAttachedEnemyMouseOut() {
-        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPack', this);
+        console.assert(this instanceof EnemyPatrol, 'this was not an EnemyPatrol', this);
 
         this.highlighted = false;
 

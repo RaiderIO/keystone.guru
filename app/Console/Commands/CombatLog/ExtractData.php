@@ -12,7 +12,7 @@ class ExtractData extends BaseCombatLogCommand
      *
      * @var string
      */
-    protected $signature = 'combatlog:extractdata {filePath}';
+    protected $signature = 'combatlog:extractdata {filePath} {--force}';
 
     /**
      * The console command description.
@@ -29,8 +29,9 @@ class ExtractData extends BaseCombatLogCommand
     public function handle(CombatLogDataExtractionServiceInterface $combatLogDataExtractionService): int
     {
         $filePath = $this->argument('filePath');
+        $force    = (bool)$this->option('force');
 
-        $parseResult = $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->extractData($combatLogDataExtractionService, $filePath));
+        $parseResult = $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->extractData($combatLogDataExtractionService, $filePath, $force));
 
         $this->info('Total result:');
         foreach ($this->combinedDataResult as $key => $value) {
@@ -40,11 +41,11 @@ class ExtractData extends BaseCombatLogCommand
         return $parseResult;
     }
 
-    private function extractData(CombatLogDataExtractionServiceInterface $combatLogDataExtractionService, string $filePath): int
+    private function extractData(CombatLogDataExtractionServiceInterface $combatLogDataExtractionService, string $filePath, bool $force = false): int
     {
         $this->info(sprintf('Parsing file %s', $filePath));
 
-        if (ParsedCombatLog::where('combat_log_path', $filePath)->exists()) {
+        if (!$force && ParsedCombatLog::where('combat_log_path', $filePath)->exists()) {
             $this->warn(
                 '- Data already extracted for this file'
             );
@@ -69,12 +70,14 @@ class ExtractData extends BaseCombatLogCommand
             );
         }
 
-        ParsedCombatLog::insert([
-            'combat_log_path' => $filePath,
-            'extracted_data'  => true,
-            'created_at'      => now(),
-            'updated_at'      => now(),
-        ]);
+        if (!$force) {
+            ParsedCombatLog::insert([
+                'combat_log_path' => $filePath,
+                'extracted_data'  => true,
+                'created_at'      => now(),
+                'updated_at'      => now(),
+            ]);
+        }
 
         return 0;
     }

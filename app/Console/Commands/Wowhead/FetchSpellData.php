@@ -17,7 +17,7 @@ class FetchSpellData extends Command
      *
      * @var string
      */
-    protected $signature = 'wowhead:fetchspelldata {--dungeon=}';
+    protected $signature = 'wowhead:fetchspelldata {--dungeon=} {--spellId=}';
 
     /**
      * The console command description.
@@ -35,6 +35,7 @@ class FetchSpellData extends Command
     public function handle(WowheadServiceInterface $wowheadService): void
     {
         $dungeonKey = $this->option('dungeon');
+        $spellId    = (int)$this->option('spellId');
 
         /** @var Dungeon|null $dungeon */
         $dungeon = null;
@@ -42,8 +43,12 @@ class FetchSpellData extends Command
             $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
 
             $spells = $dungeon->spells;
+        } else if ($spellId > 0) {
+            $spells = collect([Spell::findOrFail($spellId)]);
         } else {
-            $spells = Spell::whereNull('fetched_data_at')->get();
+            $spells = Spell::whereNull('fetched_data_at')
+                ->orWhere('fetched_data_at', '<=', Carbon::now()->subDay())
+                ->get();
         }
 
         $this->info(sprintf('Fetching spell data for %d spells', $spells->count()));
