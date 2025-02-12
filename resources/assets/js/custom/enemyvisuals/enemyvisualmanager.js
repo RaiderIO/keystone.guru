@@ -49,13 +49,17 @@ class EnemyVisualManager extends Signalable {
                 if (addedEnemyPatrol.id > 0) {
                     let mouseOverFn = function (e) {
                         if (addedEnemyPatrol.enemies.length > 0) {
-                            addedEnemyPatrol.enemies[0].visual.forceMouseOver();
+                            for (let i = 0; i < addedEnemyPatrol.enemies.length; i++) {
+                                addedEnemyPatrol.enemies[i].visual.forceMouseOver();
+                            }
                         }
                     }
 
                     let mouseOutFn = function (e) {
                         if (addedEnemyPatrol.enemies.length > 0) {
-                            addedEnemyPatrol.enemies[0].visual.forceMouseOut();
+                            for (let i = 0; i < addedEnemyPatrol.enemies.length; i++) {
+                                addedEnemyPatrol.enemies[i].visual.forceMouseOut();
+                            }
                         }
                     };
 

@@ -69,10 +69,10 @@
         "floor_id": 364,
         "dungeon_route_id": null,
         "team_id": null,
-        "map_icon_type_id": 86,
+        "map_icon_type_id": 9,
         "lat": -87.915113180649,
         "lng": 174.77252661842,
-        "comment": "Mysterious Eidolon",
+        "comment": "Mysterious Relic",
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
@@ -126,32 +126,6 @@
         "lng": 335.66466860538,
         "comment": null,
         "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 482,
-        "floor_id": 364,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 1,
-        "lat": -133.33147660073,
-        "lng": 239.50199942729,
-        "comment": "Patrol?",
-        "permanent_tooltip": 1,
-        "seasonal_index": null,
-        "is_admin": true
-    },
-    {
-        "mapping_version_id": 482,
-        "floor_id": 364,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 1,
-        "lat": -134.4624179134,
-        "lng": 210.7200324657,
-        "comment": "Pat?",
-        "permanent_tooltip": 1,
         "seasonal_index": null,
         "is_admin": true
     },
@@ -230,6 +204,19 @@
         "lng": 197.66138235937,
         "comment": "Crypt terrors not seen in footage?",
         "permanent_tooltip": 1,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 482,
+        "floor_id": 364,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -58.331471205565,
+        "lng": 114.53882721317,
+        "comment": "Mysterious Relic",
+        "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
     }

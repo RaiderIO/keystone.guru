@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\CombatLog\CombatLogAnalyze;
+use App\Models\GameVersion\GameVersion;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\CombatLog\CombatLogDataExtractionService;
@@ -10,6 +11,7 @@ use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Image\ImageServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use App\Service\Wowhead\WowheadServiceInterface;
 use Illuminate\Console\Command;
 
 class Random extends Command
@@ -38,19 +40,22 @@ class Random extends Command
         CoordinatesServiceInterface          $coordinatesService,
         SeasonServiceInterface               $seasonService,
         DungeonRouteRepositoryInterface      $dungeonRouteRepository,
-        ImageServiceInterface                $imageService
+        ImageServiceInterface                $imageService,
+        WowheadServiceInterface              $wowheadService
     ): int {
 
-        $filePath = base_path('tmp/WoWCombatLog-100624_192349_6_ara-kara-city-of-echoes.zip');
+        $wowheadService->getSpellData(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL), 720);
 
-        $combatLogAnalyze = CombatLogAnalyze::create([
-            'combat_log_path' => $filePath,
-        ]);
-
-        $combatLogDataExtractionService->extractDataAsync(
-            $filePath,
-            $combatLogAnalyze
-        );
+//        $filePath = base_path('tmp/WoWCombatLog-100624_192349_6_ara-kara-city-of-echoes.zip');
+//
+//        $combatLogAnalyze = CombatLogAnalyze::create([
+//            'combat_log_path' => $filePath,
+//        ]);
+//
+//        $combatLogDataExtractionService->extractDataAsync(
+//            $filePath,
+//            $combatLogAnalyze
+//        );
 
 //        dd(
 //            $imageService->convertToItemImage(

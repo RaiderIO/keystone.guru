@@ -26,14 +26,15 @@ class WowheadService implements WowheadServiceInterface
     private const IDENTIFYING_TOKEN_DISPLAY_ID = 'linksButton.dataset.displayId =';
 
 
-    private const IDENTIFYING_TOKEN_SPELL_DOES_NOT_EXIST = 'Spell #%d doesn\'t exist. It may have been removed from the game.';
-    private const IDENTIFYING_TOKEN_SPELL_NAME           = '<meta property="og:title" content=';
-    private const IDENTIFYING_TOKEN_SPELL_ICON_NAME      = 'WeakAuraExport.setOptions(';
-    private const IDENTIFYING_TOKEN_SPELL_MECHANIC       = '<th>Mechanic</th>';
-    private const IDENTIFYING_TOKEN_SPELL_SCHOOL         = '<th>School</th>';
-    private const IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE    = '<th>Dispel type</th>';
-    private const IDENTIFYING_TOKEN_SPELL_CAST_TIME      = '<th>Cast time</th>';
-    private const IDENTIFYING_TOKEN_SPELL_DURATION       = '<th>Duration</th>';
+    private const IDENTIFYING_TOKEN_SPELL_DOES_NOT_EXIST    = 'Spell #%d doesn\'t exist. It may have been removed from the game.';
+    private const IDENTIFYING_TOKEN_SPELL_NAME              = '<meta property="og:title" content=';
+    private const IDENTIFYING_TOKEN_SPELL_ICON_NAME         = 'WeakAuraExport.setOptions(';
+    private const IDENTIFYING_REGEX_SPELL_ICON_NAME_CLASSIC = '/Icon\.create\("([^"]+)"/';
+    private const IDENTIFYING_TOKEN_SPELL_MECHANIC          = '<th>Mechanic</th>';
+    private const IDENTIFYING_TOKEN_SPELL_SCHOOL            = '<th>School</th>';
+    private const IDENTIFYING_TOKEN_SPELL_DISPEL_TYPE       = '<th>Dispel type</th>';
+    private const IDENTIFYING_TOKEN_SPELL_CAST_TIME         = '<th>Cast time</th>';
+    private const IDENTIFYING_TOKEN_SPELL_DURATION          = '<th>Duration</th>';
 
     public function __construct(
         private readonly WowheadServiceLoggingInterface $log
@@ -175,12 +176,12 @@ class WowheadService implements WowheadServiceInterface
             $line = trim($line);
 
             // Check if the spell was removed
-            if(str_contains($line, sprintf(self::IDENTIFYING_TOKEN_SPELL_DOES_NOT_EXIST, $spellId))){
+            if (str_contains($line, sprintf(self::IDENTIFYING_TOKEN_SPELL_DOES_NOT_EXIST, $spellId))) {
                 $this->log->getSpellDataSpellDoesNotExist($gameVersion->key, $spellId);
+
                 // Like, we're done, don't return anything
                 return null;
-            }
-            // Spell icon name
+            } // Spell icon name
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_ICON_NAME)) {
                 // WeakAuraExport.setOptions({"id":322486,"name":"Overgrowth","iconFilename":"inv_misc_herb_nightmarevine_stem","appliesABuff":true,"display":"progress-bar-medium","trigger":"player-has-debuff"});
                 if (preg_match('/{.*}/', $line, $matches)) {
@@ -200,7 +201,12 @@ class WowheadService implements WowheadServiceInterface
                     // I don't know the number of the first array key - convert it to 0 always
                     $iconName = $json['iconFilename'];
                 }
-            } // Mechanic
+            }
+            else if($gameVersion->key === GameVersion::GAME_VERSION_CLASSIC_ERA &&
+                preg_match(self::IDENTIFYING_REGEX_SPELL_ICON_NAME_CLASSIC, $line, $matches)) {
+                $iconName = $matches[1];
+            }
+            // Mechanic
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_MECHANIC)) {
                 $mechanicFound = true;
             } // Triggered on the next line
