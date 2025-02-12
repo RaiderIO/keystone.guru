@@ -102,5 +102,5 @@ return [
     'cot_shadecaster'                   => 'Queen Ansurek Shadecaster',
     'sv_imbued_iron_energy'             => 'Imbued Iron Energy',
     'ara_kara_silk_wrap'                => 'Silk Wrap',
-
+    'karazhan_crypts_spider_nest'       => 'Spider Nest',
 ];
