@@ -1,0 +1,25 @@
+{
+    "id": 278,
+    "release_changelog_id": 285,
+    "version": "v12.2",
+    "title": "Added Karazhan Crypts",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-02-12T21:04:32+00:00",
+    "updated_at": "2025-02-12T21:04:32+00:00",
+    "changelog": {
+        "id": 285,
+        "release_id": 278,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 285,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2712,
+                "change": "Karazhan Crypts is now added! Note: the mapping is a bit of an approximation - the darkness makes it hard to precisely map everything."
+            }
+        ]
+    }
+}
