@@ -6,6 +6,7 @@ use App\Models\GameVersion\GameVersion;
 /**
  * @var GameVersion $gameVersion
  * @var Dungeon     $model
+ * @var string      $floorIndex
  * @var array       $parameters
  */
 
@@ -23,21 +24,23 @@ $showStyle = 'regular';
                     id="ksg_iframe"
                     src="{{ route('dungeon.explore.gameversion.embed', array_merge([
                         'gameVersion' => $gameVersion,
-                        'dungeon' => $model
+                        'dungeon' => $model,
+                        'floorIndex' => $floorIndex,
                     ], $parameters)) }}"
-                        style="width: 800px; height: 600px; border: none;"></iframe>
+                    style="width: 800px; height: 600px; border: none;"></iframe>
             @elseif($showStyle === 'compact')
                 <iframe
                     id="ksg_iframe"
                     src="{{ route('dungeon.explore.gameversion.embed', [
                         'gameVersion' => $gameVersion,
                         'dungeon' => $model,
+                        'floorIndex' => $floorIndex,
                         'style' => 'compact',
                         'headerBackgroundColor' => '#0F0',
                         'mapBackgroundColor' => '#F00',
                         'showEnemyInfo' => 0,
                     ]) }}"
-                        style="width: 800px; height: 600px; border: none;"></iframe>
+                    style="width: 800px; height: 600px; border: none;"></iframe>
             @endif
         </div>
     </div>

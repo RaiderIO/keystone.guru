@@ -149,7 +149,7 @@ try {
 } catch (Throwable $throwable) {
     Log::withContext([
         'user' => Auth::id(),
-        'url' => request()->url(),
+        'url' => request()->fullUrl(),
         'currentAffixGroup' => $currentAffixGroup?->id,
         'nextAffixGroup' => $nextAffixGroup?->id,
         'offset' => $offset,

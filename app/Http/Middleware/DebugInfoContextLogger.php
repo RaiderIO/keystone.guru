@@ -29,6 +29,11 @@ class DebugInfoContextLogger
             'correlationId' => correlationId(),
         ];
 
+        // We don't want this on any other environment because it's just spam - I know the URLs on those environments
+        if (config('app.type') === 'live') {
+            $context['url'] = $request->fullUrl();
+        }
+
         if ($dungeonRoute instanceof DungeonRoute) {
             $context = array_merge($context, [
                 'publicKey'        => $dungeonRoute->public_key,

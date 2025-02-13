@@ -153,6 +153,8 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
 <!--suppress HtmlFormInputWithoutLabel -->
 <nav id="heatmap_search_sidebar"
      class="route_sidebar top right row no-gutters map_fade_out
+     {{ $embed ? 'embed' : '' }}
+     {{ $embedStyle }}
      {{ $isMobile ? 'mobile' : '' }}
      {{ $shouldShowHeatmapSearchSidebar ? 'active' : '' }}
      {{ $showAds ? 'ad_loaded' : '' }}
@@ -191,7 +193,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
             </div>
         </div>
 
-        <div class="data_container p-2" data-simplebar>
+        <div class="data_container explore p-2" data-simplebar>
             <div id="heatmap_search_options_container" class="px-1">
 
                 <div class="form-group">

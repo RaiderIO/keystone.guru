@@ -361,6 +361,16 @@ html, body, #map, #app, .wrapper {
     max-height: calc(100vh - 163px);
 }
 
+/** Heatmap section of the sidebar, adblock */
+#heatmap_search_sidebar .data_container.explore {
+    max-height: calc(100vh - 205px);
+}
+
+#heatmap_search_sidebar.ad_loaded .data_container.explore {
+    max-height: calc(100vh - (250px + 198px));
+}
+
+
 /** When embedding a route */
 .route_sidebar.right.embed.regular .data_container:not(.has_speedrun) {
     max-height: calc(100vh - 107px);
@@ -1337,4 +1347,16 @@ html, body, #map, #app, .wrapper {
 .filter_region_icon {
     width: 24px;
     height: 16px;
+}
+
+#heatmap_search_options_current_filters {
+    overflow-y: auto;
+}
+
+#heatmap_search_sidebar:not(.embed) #heatmap_search_options_current_filters {
+    height: 71px;
+}
+
+#heatmap_search_sidebar.embed #heatmap_search_options_current_filters {
+    height: 106px;
 }
