@@ -287,6 +287,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             // Don't include the viewName in the layouts - they must inherit from whatever calls it!
             if (!str_starts_with((string)$view->getName(), 'layouts')) {
                 $view->with('viewName', $view->getName());
+            } else if(!isset($view->getData()['viewName'])){
+                $view->with('viewName', 'home');
             }
             $view->with('theme', $_COOKIE['theme'] ?? 'darkly');
             $view->with('isUserAdmin', $isUserAdmin);

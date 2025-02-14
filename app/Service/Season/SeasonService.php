@@ -100,7 +100,7 @@ class SeasonService implements SeasonServiceInterface
                 $region->reset_day_offset,
                 $region->reset_hours_offset,
                 // Database stores everything in UTC, so we need to convert the date to UTC to compare it properly
-                $date->copy()->setTimezone('UTC')->toDateTimeString()
+                $date->copy()->setTimezone('UTC')->toDateTimeString(),
             ]
         )
             ->where('expansion_id', $expansion->id)
@@ -180,9 +180,9 @@ class SeasonService implements SeasonServiceInterface
      *
      * @param  $iterationOffset  int An optional offset to display affixes in the past or future.
      *
-     * @throws Exception
      * @return Collection<array{ date_start: string, affix_group: AffixGroup}>
      *
+     * @throws Exception
      * @todo This can be further improved with some mathy things, but for now it's quick enough
      */
     public function getDisplayedAffixGroups(int $iterationOffset): Collection
@@ -235,7 +235,7 @@ class SeasonService implements SeasonServiceInterface
                 // Append to the list of when we have which affix groups
                 // Don't use a key because date_start is a Carbon instance and that doesn't work as a key
                 $affixGroups->push([
-                    'date_start' => $simulatedTime->copy(),
+                    'date_start'  => $simulatedTime->copy(),
                     // $currentSeason->start_affix_group_index
                     'affix_group' => $currentSeason->affixGroups[$i % $currentSeason->affix_group_count],
                 ]);

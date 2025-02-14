@@ -1,0 +1,31 @@
+{
+    "id": 279,
+    "release_changelog_id": 286,
+    "version": "v12.2.1",
+    "title": "Fixed some annoying bugs",
+    "backup_db": 1,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-02-14T09:32:41+00:00",
+    "updated_at": "2025-02-14T09:32:41+00:00",
+    "changelog": {
+        "id": 286,
+        "release_id": 279,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 286,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2653,
+                "change": "Stopped the Legion season that was coupled to the timewalking season which _did_ get stopped. This caused a crash when going too far back in time on the affixes page."
+            },
+            {
+                "release_changelog_id": 286,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2726,
+                "change": "Sidebar on the explore page (for heatmaps) now once again allows you to scroll to the bottom."
+            }
+        ]
+    }
+}
