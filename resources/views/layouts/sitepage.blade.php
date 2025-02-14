@@ -31,7 +31,7 @@ $disableDefaultRootClasses ??= false;
 // Page title
 $title ??= null;
 // Breadcrumbs
-$breadcrumbs       ??= $viewName;
+$breadcrumbs       ??= $viewName ?? 'home';
 $breadcrumbsParams ??= [];
 ?>
 @extends('layouts.app', ['title' => $title])

@@ -187,7 +187,7 @@ class SiteController extends Controller
             'timewalkingEventService' => $timewalkingEventService,
             'expansion'               => $currentExpansion,
             'seasonService'           => $seasonService,
-            'offset'                  => max(min((int)$request->get('offset', 0), 10), -20),
+            'offset'                  => min((int)$request->get('offset', 0), 10),
             'dungeonroutes'           => [
                 'thisweek' => $discoverService
                     ->withLimit(config('keystoneguru.discover.limits.affix_overview'))
