@@ -393,36 +393,27 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         );
     }
 
-    private function getNpcsHealthBuilder(MappingVersion $mappingVersion): HasMany
+    public function getNpcsMinMaxHealth(MappingVersion $mappingVersion): array
     {
-        return $this->npcs(false)
+        $result = $this->npcs(false)
+            ->selectRaw('MIN(npcs.base_health) AS min_health, MAX(npcs.base_health) AS max_health')
             // Ensure that there's at least one enemy by having this join
             ->join('enemies', 'enemies.npc_id', 'npcs.id')
             ->where('enemies.mapping_version_id', $mappingVersion->id)
             ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('npc_type_id', '!=', NpcType::CRITTER)
             ->whereIn('aggressiveness', [Npc::AGGRESSIVENESS_AGGRESSIVE, Npc::AGGRESSIVENESS_UNFRIENDLY, Npc::AGGRESSIVENESS_AWAKENED])
-            ->when(!in_array($this->key, $this->getNpcsHealthBuilderEnemyForcesDungeonExclusionList()),
-                static fn(Builder $builder) => $builder
-                    ->join('npc_enemy_forces', 'npc_enemy_forces.npc_id', 'npcs.id')
-                    ->where('npc_enemy_forces.mapping_version_id', $mappingVersion->id))
-            ->groupBy('enemies.npc_id');
-    }
+            // If we don't show em - don't take em into account for health calculations
+            ->where(function ($query) {
+                $query->whereNull('enemies.seasonal_type')
+                    ->orWhere('enemies.seasonal_type', '!=', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER);
+            })
+            ->first();
 
-    /**
-     * Get the minimum amount of health of all NPCs in this dungeon.
-     */
-    public function getNpcsMinHealth(MappingVersion $mappingVersion): int
-    {
-        return $this->getNpcsHealthBuilder($mappingVersion)->orderBy('npcs.base_health')->min('base_health') ?? 10000;
-    }
-
-    /**
-     * Get the maximum amount of health of all NPCs in this dungeon.
-     */
-    public function getNpcsMaxHealth(MappingVersion $mappingVersion): int
-    {
-        return $this->getNpcsHealthBuilder($mappingVersion)->orderByDesc('npcs.base_health')->max('base_health') ?? 10000;
+        return [
+            $result->min_health > 0 ? $result->min_health : 10000,
+            $result->max_health > 0 ? $result->max_health : 10000,
+        ];
     }
 
     /**

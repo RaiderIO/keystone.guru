@@ -125,8 +125,7 @@ abstract class MapContext
             'publishStates'                     => PublishedState::all(),
         ], config('keystoneguru.cache.static_data.ttl'));
 
-        $npcMinHealth = $this->floor->dungeon->getNpcsMinHealth($this->mappingVersion);
-        $npcMaxHealth = $this->floor->dungeon->getNpcsMaxHealth($this->mappingVersion);
+        [$npcMinHealth, $npcMaxHealth] = $this->floor->dungeon->getNpcsMinMaxHealth($this->mappingVersion);
 
         // Prevent the values being exactly the same, which causes issues in the front end
         if ($npcMaxHealth <= $npcMinHealth) {
