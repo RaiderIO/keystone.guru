@@ -331,9 +331,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         view()->composer('common.layout.header', static function (View $view) use ($viewService, $globalViewVariables, &$userOrDefaultRegion) {
-            $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
+            $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
             $view->with('currentSeason', $regionViewVariables['currentSeason']);
             $view->with('nextSeason', $regionViewVariables['nextSeason']);
         });
