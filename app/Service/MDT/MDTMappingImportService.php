@@ -569,7 +569,14 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         continue;
                     }
 
-                    $savedEnemy = $this->findSavedEnemyFromCloneEnemy($savedEnemies, $mdtNPC->getId(), $mdtCloneIndex);
+                    try {
+                        $savedEnemy = $this->findSavedEnemyFromCloneEnemy($savedEnemies, $mdtNPC->getId(), $mdtCloneIndex);
+                    } catch (Exception $exception) {
+                        $this->log->importEnemyPatrolsUnableToFindAttachedEnemy($mdtCloneIndex, $mdtNpcClone, $mdtNPC->getId(), $mdtCloneIndex);
+
+                        throw $exception;
+                    }
+
                     $this->log->importEnemyPatrolsEnemyHasPatrol($savedEnemy->getUniqueKey());
 
                     if (empty($mdtNpcClone['patrol'])) {

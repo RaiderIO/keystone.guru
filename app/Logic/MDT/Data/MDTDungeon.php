@@ -314,9 +314,9 @@ class MDTDungeon
                         end
                         ' .
                 // Some files require LibStub
-                file_get_contents(base_path('app/Logic/MDT/Lua/LibStub.lua')) . PHP_EOL .
-                // file_get_contents(sprintf('%s/Locales/enUS.lua', $mdtHome)) . PHP_EOL .
-                file_get_contents($mdtDungeonNameFile) . PHP_EOL .
+                $this->getFileContentsWithoutBOM(base_path('app/Logic/MDT/Lua/LibStub.lua')) . PHP_EOL .
+                // $this->getFileContentsWithoutBOM(sprintf('%s/Locales/enUS.lua', $mdtHome)) . PHP_EOL .
+                $this->getFileContentsWithoutBOM($mdtDungeonNameFile) . PHP_EOL .
                 // Insert dummy function to get what we need
                 '
                         function GetDungeonTotalCount()
@@ -349,5 +349,17 @@ class MDTDungeon
         }
 
         return $lua;
+    }
+
+    private function getFileContentsWithoutBOM(string $filename): ?string
+    {
+        $contents = file_get_contents($filename) ?: null;
+
+        if ($contents !== null) {
+            // Remove BOM if present
+            $contents = preg_replace('/^\xEF\xBB\xBF/', '', $contents);
+        }
+
+        return $contents;
     }
 }

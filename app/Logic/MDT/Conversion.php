@@ -116,12 +116,12 @@ class Conversion
             Dungeon::DUNGEON_KINGS_REST           => 'KingsRest',
             Dungeon::DUNGEON_SHRINE_OF_THE_STORM  => 'ShrineoftheStorm',
             Dungeon::DUNGEON_TEMPLE_OF_SETHRALISS => 'TempleofSethraliss',
-            Dungeon::DUNGEON_THE_MOTHERLODE       => 'TheMotherlode',
+//            Dungeon::DUNGEON_THE_MOTHERLODE       => 'TheMotherlode',
             Dungeon::DUNGEON_THE_UNDERROT         => 'TheUnderrot',
             Dungeon::DUNGEON_TOL_DAGOR            => 'TolDagor',
             //            Dungeon::DUNGEON_WAYCREST_MANOR       => 'WaycrestManor',
             Dungeon::DUNGEON_MECHAGON_JUNKYARD    => 'MechagonIsland',
-            Dungeon::DUNGEON_MECHAGON_WORKSHOP    => 'MechagonCity',
+//            Dungeon::DUNGEON_MECHAGON_WORKSHOP    => 'MechagonCity',
         ],
 
         Expansion::EXPANSION_SHADOWLANDS => [
@@ -134,7 +134,7 @@ class Conversion
             Dungeon::DUNGEON_PLAGUEFALL                 => 'Plaguefall',
             Dungeon::DUNGEON_SANGUINE_DEPTHS            => 'SanguineDepths',
             Dungeon::DUNGEON_SPIRES_OF_ASCENSION        => 'SpiresOfAscension',
-            Dungeon::DUNGEON_THEATER_OF_PAIN            => 'TheaterOfPain',
+//            Dungeon::DUNGEON_THEATER_OF_PAIN            => 'TheaterOfPain',
             Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER => 'TazaveshLower',
             Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   => 'TazaveshUpper',
         ],
@@ -171,10 +171,13 @@ class Conversion
 
             // BFA
             Dungeon::DUNGEON_SIEGE_OF_BORALUS        => 'SiegeofBoralus',
+            Dungeon::DUNGEON_THE_MOTHERLODE          => 'TheMotherlode',
 
             // Shadowlands
             Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE   => 'MistsOfTirnaScithe',
             Dungeon::DUNGEON_THE_NECROTIC_WAKE       => 'TheNecroticWake',
+            Dungeon::DUNGEON_THEATER_OF_PAIN         => 'TheaterOfPain',
+            Dungeon::DUNGEON_MECHAGON_WORKSHOP       => 'MechagonWorkshop',
 
             // TWW
             Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES => 'AraKara',
@@ -191,10 +194,13 @@ class Conversion
 
         // BFA
         Dungeon::DUNGEON_SIEGE_OF_BORALUS,
+        Dungeon::DUNGEON_THE_MOTHERLODE,
+        Dungeon::DUNGEON_MECHAGON_WORKSHOP,
 
         // Shadowlands
         Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE,
         Dungeon::DUNGEON_THE_NECROTIC_WAKE,
+        Dungeon::DUNGEON_THEATER_OF_PAIN,
 
         // TWW
         Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES,

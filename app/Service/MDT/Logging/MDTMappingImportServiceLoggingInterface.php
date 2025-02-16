@@ -97,6 +97,8 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemyPatrolsStart(): void;
 
+    public function importEnemyPatrolsUnableToFindAttachedEnemy(int $mdtCloneIndex, array $mdtNpcClone, int $npcId, int $mdtId): void;
+
     public function importEnemyPatrolsEnemyHasPatrol(string $uniqueKey): void;
 
     public function importEnemyPatrolsFoundPatrolIsEmpty(string $uniqueKey): void;

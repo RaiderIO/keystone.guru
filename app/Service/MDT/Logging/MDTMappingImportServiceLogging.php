@@ -227,6 +227,11 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->start(__METHOD__);
     }
 
+    public function importEnemyPatrolsUnableToFindAttachedEnemy(int $mdtCloneIndex, array $mdtNpcClone, int $npcId, int $mdtId): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function importEnemyPatrolsEnemyHasPatrol(string $uniqueKey): void
     {
         $this->debug(__METHOD__, get_defined_vars());
