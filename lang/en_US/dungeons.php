@@ -1030,6 +1030,7 @@ return [
             'name'   => 'Darkflame Cleft',
             'floors' => [
                 'darkflame_cleft' => 'Darkflame Cleft',
+                'shadow_realm'    => 'Shadow Realm',
             ],
         ],
         'priory_of_the_sacred_flame' => [

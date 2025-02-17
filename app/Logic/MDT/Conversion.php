@@ -167,23 +167,28 @@ class Conversion
 
         Expansion::EXPANSION_TWW => [
             // Cata
-            Dungeon::DUNGEON_GRIM_BATOL              => 'GrimBatol',
+            Dungeon::DUNGEON_GRIM_BATOL                 => 'GrimBatol',
 
             // BFA
-            Dungeon::DUNGEON_SIEGE_OF_BORALUS        => 'SiegeofBoralus',
-            Dungeon::DUNGEON_THE_MOTHERLODE          => 'TheMotherlode',
+            Dungeon::DUNGEON_SIEGE_OF_BORALUS           => 'SiegeofBoralus',
+            Dungeon::DUNGEON_THE_MOTHERLODE             => 'TheMotherlode',
 
             // Shadowlands
-            Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE   => 'MistsOfTirnaScithe',
-            Dungeon::DUNGEON_THE_NECROTIC_WAKE       => 'TheNecroticWake',
-            Dungeon::DUNGEON_THEATER_OF_PAIN         => 'TheaterOfPain',
-            Dungeon::DUNGEON_MECHAGON_WORKSHOP       => 'MechagonWorkshop',
+            Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE      => 'MistsOfTirnaScithe',
+            Dungeon::DUNGEON_THE_NECROTIC_WAKE          => 'TheNecroticWake',
+            Dungeon::DUNGEON_THEATER_OF_PAIN            => 'TheaterOfPain',
+            Dungeon::DUNGEON_MECHAGON_WORKSHOP          => 'MechagonWorkshop',
 
             // TWW
-            Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES => 'AraKara',
-            Dungeon::DUNGEON_CITY_OF_THREADS         => 'CityOfThreads',
-            Dungeon::DUNGEON_THE_DAWNBREAKER         => 'TheDawnbreaker',
-            Dungeon::DUNGEON_THE_STONEVAULT          => 'TheStonevault',
+            Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES    => 'AraKara',
+            Dungeon::DUNGEON_CITY_OF_THREADS            => 'CityOfThreads',
+            Dungeon::DUNGEON_THE_DAWNBREAKER            => 'TheDawnbreaker',
+            Dungeon::DUNGEON_THE_STONEVAULT             => 'TheStonevault',
+            Dungeon::DUNGEON_CINDERBREW_MEADERY         => 'CinderbrewMeadery',
+            Dungeon::DUNGEON_DARKFLAME_CLEFT            => 'DarkflameCleft',
+            Dungeon::DUNGEON_PRIORY_OF_THE_SACRED_FLAME => 'PrioryOfTheSacredFlame',
+            Dungeon::DUNGEON_THE_ROOKERY                => 'TheRookery',
+
         ],
     ];
     // @formatter:on
@@ -207,6 +212,10 @@ class Conversion
         Dungeon::DUNGEON_CITY_OF_THREADS,
         Dungeon::DUNGEON_THE_DAWNBREAKER,
         Dungeon::DUNGEON_THE_STONEVAULT,
+        Dungeon::DUNGEON_CINDERBREW_MEADERY,
+        Dungeon::DUNGEON_DARKFLAME_CLEFT,
+        Dungeon::DUNGEON_PRIORY_OF_THE_SACRED_FLAME,
+        Dungeon::DUNGEON_THE_ROOKERY,
     ];
 
     /**

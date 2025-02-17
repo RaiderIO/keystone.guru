@@ -4485,36 +4485,6 @@
         "merged": false
     },
     {
-        "id": 341,
-        "dungeon_id": 109,
-        "version": 2,
-        "enemy_forces_required": 0,
-        "enemy_forces_required_teeming": null,
-        "enemy_forces_shrouded": null,
-        "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
-        "mdt_mapping_hash": null,
-        "facade_enabled": 0,
-        "created_at": "2024-07-05T21:11:30.000000Z",
-        "updated_at": "2024-07-05T21:11:30.000000Z",
-        "merged": false
-    },
-    {
-        "id": 343,
-        "dungeon_id": 111,
-        "version": 2,
-        "enemy_forces_required": 0,
-        "enemy_forces_required_teeming": null,
-        "enemy_forces_shrouded": null,
-        "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
-        "mdt_mapping_hash": null,
-        "facade_enabled": 0,
-        "created_at": "2024-07-05T21:17:23.000000Z",
-        "updated_at": "2024-07-05T21:17:23.000000Z",
-        "merged": false
-    },
-    {
         "id": 344,
         "dungeon_id": 112,
         "version": 2,
@@ -5847,6 +5817,36 @@
         "facade_enabled": 1,
         "created_at": "2025-02-16T20:47:36.000000Z",
         "updated_at": "2025-02-16T20:47:36.000000Z",
+        "merged": false
+    },
+    {
+        "id": 498,
+        "dungeon_id": 109,
+        "version": 2,
+        "enemy_forces_required": 587,
+        "enemy_forces_required_teeming": 1000,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "209ab75ef69c274ced3ca2b8bf01716d",
+        "facade_enabled": 0,
+        "created_at": "2025-02-17T10:03:48.000000Z",
+        "updated_at": "2025-02-17T10:03:48.000000Z",
+        "merged": false
+    },
+    {
+        "id": 503,
+        "dungeon_id": 111,
+        "version": 6,
+        "enemy_forces_required": 438,
+        "enemy_forces_required_teeming": 1000,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": "26094ef63eeb7248ea5ba0b0f520fa60",
+        "facade_enabled": 1,
+        "created_at": "2025-02-17T10:38:20.000000Z",
+        "updated_at": "2025-02-17T10:38:20.000000Z",
         "merged": false
     }
 ]

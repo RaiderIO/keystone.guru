@@ -427,9 +427,10 @@ return [
                 'submit'                  => 'Submit',
             ],
             'managespellvisibility' => [
-                'title'  => 'Manage NPC Spell Visibility',
-                'header' => 'Manage NPC Spell Visibility',
-                'submit' => 'Submit',
+                'title'           => 'Manage NPC Spell Visibility',
+                'header'          => 'Manage NPC Spell Visibility',
+                'submit'          => 'Submit',
+                'spell_not_found' => 'Spell not found',
             ],
         ],
         'list'         => [

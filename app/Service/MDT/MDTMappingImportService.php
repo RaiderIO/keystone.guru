@@ -79,6 +79,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             return $newMappingVersion;
         } else {
             $this->log->importDungeonMappingVersionFromMDTNoChangeDetected($dungeon->key, $latestMdtMappingHash);
+
             return $currentMappingVersion;
         }
     }
@@ -439,6 +440,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     foreach ($fields as $field) {
                         $mdtEnemy->$field      = $existingEnemy->$field;
                         $updatedFields[$field] = $existingEnemy->$field;
+                    }
+
+                    // Special case - if we manually assigned the MDT placeholder, we would want to migrate that over as well.
+                    // But all other seasonal types can be adjusted by MDT and we copy them back over.
+                    if ($existingEnemy->seasonal_type === Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER) {
+                        $mdtEnemy->seasonal_type        = Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER;
+                        $updatedFields['seasonal_type'] = Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER;
                     }
 
                     $this->log->importEnemiesRecoverPropertiesFromExistingEnemy($mdtEnemy->getUniqueKey(), $updatedFields);
