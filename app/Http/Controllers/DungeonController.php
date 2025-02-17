@@ -26,9 +26,15 @@ class DungeonController extends Controller
     {
         $validated = $request->validated();
 
-        $validated['expansion_id']     = Expansion::where('shortname', Dungeon::findExpansionByKey($validated['key']))->firstOrFail()->id;
-        $validated['active']           ??= 0;
-        $validated['speedrun_enabled'] ??= 0;
+        $validated['expansion_id']                       = Expansion::where('shortname',
+            Dungeon::findExpansionByKey($validated['key'])
+        )->firstOrFail()->id;
+        $validated['active']                             ??= 0;
+        $validated['raid']                               ??= 0;
+        $validated['heatmap_enabled']                    ??= 0;
+        $validated['speedrun_enabled']                   ??= 0;
+        $validated['speedrun_difficulty_10_man_enabled'] ??= 0;
+        $validated['speedrun_difficulty_25_man_enabled'] ??= 0;
 
         $beforeDungeon = null;
         if ($dungeon === null) {
