@@ -13196,7 +13196,7 @@
         "map_id": 2648,
         "instance_id": 1268,
         "challenge_mode_id": 500,
-        "mdt_id": 0,
+        "mdt_id": 118,
         "raid": 0,
         "key": "therookery",
         "name": "dungeons.tww.the_rookery.name",
@@ -13229,19 +13229,19 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 953,
+                        "id": 1042,
                         "floor1_id": 294,
                         "floor2_id": 295,
-                        "direction": "up"
+                        "direction": "left"
                     },
                     {
-                        "id": 960,
+                        "id": 1043,
                         "floor1_id": 294,
                         "floor2_id": 297,
                         "direction": "up"
                     },
                     {
-                        "id": 961,
+                        "id": 1044,
                         "floor1_id": 294,
                         "floor2_id": 298,
                         "direction": "up"
@@ -13272,16 +13272,22 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 954,
+                        "id": 1049,
                         "floor1_id": 295,
                         "floor2_id": 294,
-                        "direction": "up"
+                        "direction": "right"
                     },
                     {
-                        "id": 955,
+                        "id": 1050,
                         "floor1_id": 295,
                         "floor2_id": 296,
-                        "direction": "up"
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1051,
+                        "floor1_id": 295,
+                        "floor2_id": 297,
+                        "direction": "down"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -13309,16 +13315,16 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 956,
+                        "id": 1052,
                         "floor1_id": 296,
                         "floor2_id": 295,
                         "direction": "up"
                     },
                     {
-                        "id": 957,
+                        "id": 1053,
                         "floor1_id": 296,
                         "floor2_id": 297,
-                        "direction": "up"
+                        "direction": "down"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -13346,16 +13352,28 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 958,
+                        "id": 1054,
+                        "floor1_id": 297,
+                        "floor2_id": 294,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1055,
+                        "floor1_id": 297,
+                        "floor2_id": 295,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1056,
                         "floor1_id": 297,
                         "floor2_id": 296,
                         "direction": "up"
                     },
                     {
-                        "id": 959,
+                        "id": 1057,
                         "floor1_id": 297,
-                        "floor2_id": 294,
-                        "direction": "up"
+                        "floor2_id": 298,
+                        "direction": "down"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -13383,16 +13401,16 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 962,
+                        "id": 1058,
                         "floor1_id": 298,
-                        "floor2_id": 294,
+                        "floor2_id": 297,
                         "direction": "up"
                     },
                     {
-                        "id": 963,
+                        "id": 1059,
                         "floor1_id": 298,
                         "floor2_id": 299,
-                        "direction": "up"
+                        "direction": "down"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
