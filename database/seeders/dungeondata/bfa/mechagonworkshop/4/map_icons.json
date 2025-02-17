@@ -1,1 +1,54 @@
-[]
+[
+    {
+        "mapping_version_id": 504,
+        "floor_id": 69,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 21,
+        "lat": -81.531303316569,
+        "lng": 184.21683863608,
+        "comment": "Taxi",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 504,
+        "floor_id": 69,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 21,
+        "lat": -219.2493906897,
+        "lng": 121.49994141102,
+        "comment": "Taxi",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 505,
+        "floor_id": 69,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 21,
+        "lat": -81.531303316569,
+        "lng": 184.21683863608,
+        "comment": "Taxi",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 505,
+        "floor_id": 69,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 21,
+        "lat": -219.2493906897,
+        "lng": 121.49994141102,
+        "comment": "Taxi",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

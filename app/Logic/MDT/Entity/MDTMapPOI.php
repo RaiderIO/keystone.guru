@@ -38,6 +38,7 @@ class MDTMapPOI implements Arrayable
     public const TYPE_COT_ITEM             = 'cityOfThreadsItem';
     public const TYPE_CINDERBREW_ITEM_A    = 'brewItemA';
     public const TYPE_CINDERBREW_ITEM_B    = 'brewItemB';
+    public const TYPE_WORKSHOP_ITEM        = 'workshopItem';
 
     public const ALL_TYPES = [
         self::TYPE_MAP_LINK,
@@ -60,6 +61,7 @@ class MDTMapPOI implements Arrayable
         self::TYPE_COT_ITEM,
         self::TYPE_CINDERBREW_ITEM_A,
         self::TYPE_CINDERBREW_ITEM_B,
+        self::TYPE_WORKSHOP_ITEM,
     ];
 
     private readonly string $template;

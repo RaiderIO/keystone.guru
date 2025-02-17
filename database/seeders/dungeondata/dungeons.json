@@ -2722,7 +2722,7 @@
         "map_id": 2097,
         "instance_id": 1178,
         "challenge_mode_id": 370,
-        "mdt_id": 26,
+        "mdt_id": 122,
         "raid": 0,
         "key": "mechagonworkshop",
         "name": "dungeons.bfa.mechagon_workshop.name",
@@ -2834,7 +2834,7 @@
             },
             {
                 "id": 369,
-                "index": 4,
+                "index": 5,
                 "mdt_sub_level": 1,
                 "ui_map_id": 0,
                 "map_name": null,
