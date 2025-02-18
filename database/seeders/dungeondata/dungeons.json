@@ -13014,7 +13014,7 @@
         "map_id": 2649,
         "instance_id": 1267,
         "challenge_mode_id": 499,
-        "mdt_id": 0,
+        "mdt_id": 115,
         "raid": 0,
         "key": "prioryofthesacredflame",
         "name": "dungeons.tww.priory_of_the_sacred_flame.name",
@@ -13047,10 +13047,10 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 950,
+                        "id": 1060,
                         "floor1_id": 290,
                         "floor2_id": 291,
-                        "direction": "up"
+                        "direction": "left"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -13078,16 +13078,10 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 951,
+                        "id": 1061,
                         "floor1_id": 291,
                         "floor2_id": 290,
-                        "direction": "up"
-                    },
-                    {
-                        "id": 952,
-                        "floor1_id": 291,
-                        "floor2_id": 290,
-                        "direction": "up"
+                        "direction": "right"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
