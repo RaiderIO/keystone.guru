@@ -67,12 +67,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserReportController;
 use App\Http\Controllers\WebhookController;
 
-Auth::routes();
-
 // Webhooks
 Route::post('webhook/github', (new WebhookController())->github(...))->name('webhook.github');
 
 Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger', 'track_ip'])->group(static function () {
+    Auth::routes();
+
 //    Route::get('benchmark', (new SiteController())->benchmark(...));
     // Catch for hard-coded /home route in RedirectsUsers.php
     Route::get('home', (new SiteController())->home(...));
@@ -578,5 +578,3 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::get('preview/{floorIndex}', (new DungeonRouteLegacyController())->previewOld(...));
     });
 });
-
-Auth::routes();

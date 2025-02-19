@@ -54,10 +54,12 @@ class Handler extends ExceptionHandler
 
         if (app()->has(HandlerLoggingInterface::class)) {
             $handlerLogging = app()->make(HandlerLoggingInterface::class);
+            $user           = Auth::user();
 
             if ($e instanceof TooManyRequestsHttpException) {
-                $user = Auth::user();
-                $handlerLogging->tooManyRequests($request?->ip() ?? 'unknown IP', $request?->path(), $user?->id, $user?->name, $e);
+                $handlerLogging->tooManyRequests($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $e);
+            } else if (!in_array(get_class($e), $this->dontReport)) {
+                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $e);
             }
         }
 
