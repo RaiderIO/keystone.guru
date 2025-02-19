@@ -267,27 +267,32 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->end(__METHOD__);
     }
 
-    public function importDungeonFloorSwitchMarkersStart(): void
+    public function importMapPOIsStart(): void
     {
         $this->start(__METHOD__);
     }
 
-    public function importDungeonFloorSwitchMarkersImportFromMDT(): void
+    public function importMapPOIsImportFromMDT(): void
     {
         $this->debug(__METHOD__);
     }
 
-    public function importDungeonFloorSwitchMarkersNewDungeonFloorSwitchMarkerOK(int $dungeonFloorSwitchMarkerId, int $floorId, int $targetFloorId): void
+    public function importMapPOIsCreatedNewMapIcon(int $mapIconId, int $floorId, int $mapIconTypeId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function importDungeonFloorSwitchMarkersHaveExistingFloorSwitchMarkers(int $count): void
+    public function importMapPOIsNewDungeonFloorSwitchMarkerOK(int $dungeonFloorSwitchMarkerId, int $floorId, int $targetFloorId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function importMapPOIsHaveExistingFloorSwitchMarkers(int $count): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    public function importDungeonFloorSwitchMarkersEnd(): void
+    public function importMapPOIsEnd(): void
     {
         $this->end(__METHOD__);
     }

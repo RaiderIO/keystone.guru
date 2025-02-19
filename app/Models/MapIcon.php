@@ -30,7 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property MappingVersion|null $mappingVersion
  * @property Floor               $floor
  * @property DungeonRoute|null   $dungeonRoute
- * @property MapIconType         $mapicontype
+ * @property MapIconType         $mapIconType
  *
  * @mixin Eloquent
  */
@@ -84,7 +84,7 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
         'linked_awakened_obelisk_id' => 'integer',
     ];
 
-    protected $with = ['mapicontype', 'linkedawakenedobelisks'];
+    protected $with = ['mapIconType', 'linkedawakenedobelisks'];
 
     public function floor(): BelongsTo
     {
@@ -93,14 +93,12 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
 
     public function dungeonRoute(): BelongsTo
     {
-        return $this->belongsTo(DungeonRoute::class, 'dungeon_route_id');
+        return $this->belongsTo(DungeonRoute::class);
     }
 
-    public function mapicontype(): BelongsTo
+    public function mapIconType(): BelongsTo
     {
-        // Need the foreign key for some reason
-        // (later: because you didn't use camelCase for the function name doofus)
-        return $this->belongsTo(MapIconType::class, 'map_icon_type_id');
+        return $this->belongsTo(MapIconType::class);
     }
 
     public function mappingVersion(): BelongsTo

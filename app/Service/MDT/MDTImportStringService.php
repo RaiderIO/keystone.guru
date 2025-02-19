@@ -149,7 +149,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 if (isset($mdtXy['sublevel'])) {
                     throw new ImportWarning(__('services.mdt.io.import_string.category.awakened_obelisks'),
                         __('services.mdt.io.import_string.unable_to_find_awakened_obelisk_different_floor',
-                            ['name' => __($obeliskMapIcon->mapicontype->name)])
+                            ['name' => __($obeliskMapIcon->mapIconType->name)])
                     );
                 }
 
@@ -157,7 +157,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     'mapping_version_id' => null,
                     'floor_id'           => $enemy->floor_id,
                     'map_icon_type_id'   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY],
-                    'comment'            => __($obeliskMapIcon->mapicontype->name),
+                    'comment'            => __($obeliskMapIcon->mapIconType->name),
                     'obelisk_map_icon'   => $obeliskMapIcon,
                     // MDT has the x and y inverted here
                 ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']], $enemy->floor)->toArray());

@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
     {
         $request = request();
 
-        if (app()->has(HandlerLoggingInterface::class)) {
+        if (app()->has(HandlerLoggingInterface::class) && !app()->runningInConsole()) {
             $handlerLogging = app()->make(HandlerLoggingInterface::class);
             $user           = Auth::user();
 
