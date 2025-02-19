@@ -188,6 +188,7 @@ class Conversion
             Dungeon::DUNGEON_DARKFLAME_CLEFT            => 'DarkflameCleft',
             Dungeon::DUNGEON_PRIORY_OF_THE_SACRED_FLAME => 'PrioryOfTheSacredFlame',
             Dungeon::DUNGEON_THE_ROOKERY                => 'TheRookery',
+            Dungeon::DUNGEON_OPERATION_FLOODGATE        => 'OperationFloodgate',
 
         ],
     ];
@@ -216,6 +217,7 @@ class Conversion
         Dungeon::DUNGEON_DARKFLAME_CLEFT,
         Dungeon::DUNGEON_PRIORY_OF_THE_SACRED_FLAME,
         Dungeon::DUNGEON_THE_ROOKERY,
+        Dungeon::DUNGEON_OPERATION_FLOODGATE,
     ];
 
     /**

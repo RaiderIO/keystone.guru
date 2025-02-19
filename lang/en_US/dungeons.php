@@ -1064,6 +1064,14 @@ return [
                 'the_stonevault' => 'The Stonevault',
             ],
         ],
+        'operation_floodgate'        => [
+            'name'   => 'Operation: Floodgate',
+            'floors' => [
+                'the_waterworks'      => 'The Waterworks',
+                'the_grid'            => 'The G.R.I.D.',
+                'operation_floodgate' => 'Operation: Floodgate',
+            ],
+        ],
     ],
 
 ];

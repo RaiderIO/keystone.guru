@@ -278,6 +278,31 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                         Dungeon::DUNGEON_GRIM_BATOL,
                     ])->orderBy('expansions.released_at')
                     ->get(),
+            ], [
+                'expansion_id'            => $expansions->get(Expansion::EXPANSION_TWW),
+                'seasonal_affix_id'       => null,
+                'index'                   => 2,
+                'start'                   => '2025-03-03 00:00:00',
+                'presets'                 => 0,
+                'affix_group_count'       => 8,
+                'start_affix_group_index' => 3,
+                'key_level_min'           => 2,
+                'key_level_max'           => 25,
+                'item_level_min'          => 620,
+                'item_level_max'          => 680,
+                'dungeons'                => Dungeon::select('dungeons.*')
+                    ->join('expansions', 'dungeons.expansion_id', 'expansions.id')
+                    ->whereIn('dungeons.key', [
+                        Dungeon::DUNGEON_CINDERBREW_MEADERY,
+                        Dungeon::DUNGEON_DARKFLAME_CLEFT,
+                        Dungeon::DUNGEON_PRIORY_OF_THE_SACRED_FLAME,
+                        Dungeon::DUNGEON_THE_ROOKERY,
+                        Dungeon::DUNGEON_MECHAGON_WORKSHOP,
+                        Dungeon::DUNGEON_OPERATION_FLOODGATE,
+                        Dungeon::DUNGEON_THEATER_OF_PAIN,
+                        Dungeon::DUNGEON_THE_MOTHERLODE,
+                    ])->orderBy('expansions.released_at')
+                    ->get(),
             ],
         ];
 
