@@ -41,6 +41,7 @@ class MDTMapPOI implements Arrayable
     public const TYPE_WORKSHOP_ITEM        = 'workshopItem';
     public const TYPE_PRIORY_ITEM          = 'prioryItem';
     public const TYPE_MOTHERLODE_ITEM      = 'motherlodeItem';
+    public const TYPE_FLOODGATE_ITEM       = 'floodgateItem';
 
     public const ALL_TYPES = [
         self::TYPE_MAP_LINK,
@@ -66,6 +67,7 @@ class MDTMapPOI implements Arrayable
         self::TYPE_WORKSHOP_ITEM,
         self::TYPE_PRIORY_ITEM,
         self::TYPE_MOTHERLODE_ITEM,
+        self::TYPE_FLOODGATE_ITEM,
     ];
 
     private readonly string $template;

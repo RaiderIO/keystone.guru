@@ -679,6 +679,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     MDTMapPOI::TYPE_GRAVEYARD        => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD],
                     MDTMapPOI::TYPE_DUNGEON_ENTRANCE => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
                     MDTMapPOI::TYPE_PRIORY_ITEM      => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_PRIORY_BLESSING_OF_THE_SACRED_FLAME],
+                    MDTMapPOI::TYPE_FLOODGATE_ITEM   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION],
                 ];
 
                 foreach ($mdtMapPOIs as $mdtMapPOI) {
@@ -689,10 +690,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                     if (isset($mapIconTypeMapping[$mdtMapPOI->getType()])) {
                         $mapIcon = MapIcon::create(array_merge([
-                            'floor_id'           => $floor->id,
                             'mapping_version_id' => $newMappingVersion->id,
                             'map_icon_type_id'   => $mapIconTypeMapping[$mdtMapPOI->getType()],
-                        ], $latLng->toArray()));
+                        ], $latLng->toArrayWithFloor()));
 
                         $this->log->importMapPOIsCreatedNewMapIcon(
                             $mapIcon->id,

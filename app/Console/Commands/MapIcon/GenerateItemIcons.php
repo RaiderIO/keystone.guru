@@ -43,6 +43,7 @@ class GenerateItemIcons extends Command
             'inv_misc_web_02.jpg'                   => 'ara_kara_item_silk_wrap.png',
             'inv_egg_01.jpg'                        => 'karazhan_crypts_spider_nest.png',
             'spell_holy_rebuke.jpg'                 => 'priory_blessing_of_the_sacred_flame.png',
+            'inv_eng_crate.jpg'                     => 'floodgate_weapons_stockpile_explosion.png',
         ];
 
 

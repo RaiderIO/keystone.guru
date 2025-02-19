@@ -137,6 +137,7 @@ class MapIconTypesSeeder extends Seeder implements TableSeederInterface
             MapIconType::MAP_ICON_TYPE_KARAZHAN_CRYPTS_SPIDER_NEST => ['name' => 'mapicontypes.karazhan_crypts_spider_nest', 'width' => 32, 'height' => 32, 'admin_only' => true],
 
             MapIconType::MAP_ICON_TYPE_PRIORY_BLESSING_OF_THE_SACRED_FLAME => ['name' => 'mapicontypes.priory_blessing_of_the_sacred_flame', 'width' => 32, 'height' => 32, 'admin_only' => true],
+            MapIconType::MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION => ['name' => 'mapicontypes.floodgate_weapons_stockpile_explosion', 'width' => 32, 'height' => 32, 'admin_only' => true],
         ];
 
         $mapIconTypeAttributes = [];
