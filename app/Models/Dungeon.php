@@ -396,7 +396,8 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     public function getNpcsMinMaxHealth(MappingVersion $mappingVersion): array
     {
         $result = $this->npcs(false)
-            ->selectRaw('MIN(npcs.base_health) AS min_health, MAX(npcs.base_health) AS max_health')
+            ->selectRaw('MIN(npcs.base_health * (COALESCE(npcs.health_percentage, 100) / 100)) AS min_health,
+                                   MAX(npcs.base_health * (COALESCE(npcs.health_percentage, 100) / 100)) AS max_health')
             // Ensure that there's at least one enemy by having this join
             ->join('enemies', 'enemies.npc_id', 'npcs.id')
             ->where('enemies.mapping_version_id', $mappingVersion->id)
@@ -411,8 +412,8 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
             ->first();
 
         return [
-            $result->min_health > 0 ? $result->min_health : 10000,
-            $result->max_health > 0 ? $result->max_health : 10000,
+            (int)$result->min_health > 0 ? (int)$result->min_health : 10000,
+            (int)$result->max_health > 0 ? (int)$result->max_health : 10000,
         ];
     }
 

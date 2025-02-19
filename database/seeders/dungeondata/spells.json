@@ -96464,7 +96464,7 @@
         "cast_time": 0,
         "duration": 5000,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": "2025-02-12T15:53:37+00:00",
         "spell_dungeons": [
             {
@@ -96487,7 +96487,7 @@
         "cast_time": 0,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": "2025-02-12T15:53:38+00:00",
         "spell_dungeons": [
             {
@@ -96839,7 +96839,7 @@
         "cast_time": 0,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": "2025-02-12T15:53:45+00:00",
         "spell_dungeons": [
             {
@@ -99832,7 +99832,7 @@
         "cast_time": 0,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": "2025-02-12T15:54:11+00:00",
         "spell_dungeons": [
             {
@@ -100426,7 +100426,7 @@
         "cast_time": 0,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": "2025-02-12T15:54:16+00:00",
         "spell_dungeons": [
             {
@@ -100813,7 +100813,7 @@
         "cast_time": 0,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": "2025-02-12T15:54:20+00:00",
         "spell_dungeons": [
             {
@@ -109140,7 +109140,7 @@
         "cast_time": 2000,
         "duration": 12000,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": "2025-02-12T15:55:23+00:00",
         "spell_dungeons": [
             {
@@ -112932,7 +112932,7 @@
         "cast_time": 0,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": "2025-02-12T15:55:49+00:00",
         "spell_dungeons": [
             {
