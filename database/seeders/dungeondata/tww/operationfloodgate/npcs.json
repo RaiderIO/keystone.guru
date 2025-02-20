@@ -2,7 +2,7 @@
     {
         "id": 226396,
         "dungeon_id": 137,
-        "classification_id": 2,
+        "classification_id": 3,
         "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 124283,
@@ -13,7 +13,7 @@
         "level": 80,
         "mdt_scale": 2,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -25,50 +25,13 @@
                 "characteristic_id": 1
             }
         ],
-        "npc_spells": [
-            {
-                "spell_id": 469478
-            },
-            {
-                "spell_id": 469479
-            },
-            {
-                "spell_id": 469480
-            },
-            {
-                "spell_id": 470038
-            },
-            {
-                "spell_id": 472794
-            },
-            {
-                "spell_id": 472819
-            },
-            {
-                "spell_id": 472878
-            },
-            {
-                "spell_id": 473046
-            },
-            {
-                "spell_id": 473070
-            },
-            {
-                "spell_id": 473081
-            },
-            {
-                "spell_id": 473114
-            },
-            {
-                "spell_id": 473126
-            }
-        ],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
         "id": 226398,
         "dungeon_id": 137,
-        "classification_id": 2,
+        "classification_id": 3,
         "npc_type_id": 9,
         "npc_class_id": 1,
         "display_id": 122867,
@@ -79,7 +42,7 @@
         "level": 80,
         "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -87,50 +50,13 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [
-            {
-                "spell_id": 460156
-            },
-            {
-                "spell_id": 460158
-            },
-            {
-                "spell_id": 469981
-            },
-            {
-                "spell_id": 471585
-            },
-            {
-                "spell_id": 471652
-            },
-            {
-                "spell_id": 473220
-            },
-            {
-                "spell_id": 473224
-            },
-            {
-                "spell_id": 473240
-            },
-            {
-                "spell_id": 473287
-            },
-            {
-                "spell_id": 473351
-            },
-            {
-                "spell_id": 473836
-            },
-            {
-                "spell_id": 1215504
-            }
-        ],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
         "id": 226402,
         "dungeon_id": 137,
-        "classification_id": 2,
+        "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 122215,
@@ -141,7 +67,7 @@
         "level": 80,
         "mdt_scale": 1.7,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -153,29 +79,13 @@
                 "characteristic_id": 1
             }
         ],
-        "npc_spells": [
-            {
-                "spell_id": 459779
-            },
-            {
-                "spell_id": 459799
-            },
-            {
-                "spell_id": 460965
-            },
-            {
-                "spell_id": 470022
-            },
-            {
-                "spell_id": 470090
-            }
-        ],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
         "id": 226403,
         "dungeon_id": 137,
-        "classification_id": 2,
+        "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 123036,
@@ -186,7 +96,7 @@
         "level": 80,
         "mdt_scale": 1.7,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -198,50 +108,13 @@
                 "characteristic_id": 1
             }
         ],
-        "npc_spells": [
-            {
-                "spell_id": 460602
-            },
-            {
-                "spell_id": 460814
-            },
-            {
-                "spell_id": 460867
-            },
-            {
-                "spell_id": 461994
-            },
-            {
-                "spell_id": 470090
-            },
-            {
-                "spell_id": 472755
-            },
-            {
-                "spell_id": 473526
-            },
-            {
-                "spell_id": 473690
-            },
-            {
-                "spell_id": 473713
-            },
-            {
-                "spell_id": 473719
-            },
-            {
-                "spell_id": 1217653
-            },
-            {
-                "spell_id": 1217751
-            }
-        ],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
         "id": 226404,
         "dungeon_id": 137,
-        "classification_id": 2,
+        "classification_id": 3,
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 122475,
@@ -252,7 +125,7 @@
         "level": 80,
         "mdt_scale": 2,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -264,47 +137,7 @@
                 "characteristic_id": 1
             }
         ],
-        "npc_spells": [
-            {
-                "spell_id": 465462
-            },
-            {
-                "spell_id": 465463
-            },
-            {
-                "spell_id": 465982
-            },
-            {
-                "spell_id": 466124
-            },
-            {
-                "spell_id": 466188
-            },
-            {
-                "spell_id": 466189
-            },
-            {
-                "spell_id": 466190
-            },
-            {
-                "spell_id": 466197
-            },
-            {
-                "spell_id": 468604
-            },
-            {
-                "spell_id": 468813
-            },
-            {
-                "spell_id": 468815
-            },
-            {
-                "spell_id": 468841
-            },
-            {
-                "spell_id": 468846
-            }
-        ],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -1072,7 +905,7 @@
         "level": 80,
         "mdt_scale": 2,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 1,
         "bursting": 1,
         "bolstering": 1,
@@ -1084,29 +917,7 @@
                 "characteristic_id": 1
             }
         ],
-        "npc_spells": [
-            {
-                "spell_id": 465487
-            },
-            {
-                "spell_id": 469721
-            },
-            {
-                "spell_id": 469811
-            },
-            {
-                "spell_id": 469816
-            },
-            {
-                "spell_id": 469818
-            },
-            {
-                "spell_id": 469819
-            },
-            {
-                "spell_id": 1217496
-            }
-        ],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 17751,
