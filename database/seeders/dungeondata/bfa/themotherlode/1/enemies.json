@@ -10365,7 +10365,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -10390,7 +10390,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -10415,7 +10415,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -10440,7 +10440,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -10540,14 +10540,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -197.53154812894127,
         "lng": 218.24748313645205,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78203,
@@ -10572,7 +10572,7 @@
         "dungeon_difficulty": null,
         "lat": -156.7510167254896,
         "lng": 202.28131225079358,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78204,
@@ -10597,7 +10597,7 @@
         "dungeon_difficulty": null,
         "lat": -156.31360351912897,
         "lng": 200.53128661811388,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78205,
@@ -10622,7 +10622,7 @@
         "dungeon_difficulty": null,
         "lat": -158.2824031154943,
         "lng": 203.53128295630248,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78206,
@@ -10647,7 +10647,7 @@
         "dungeon_difficulty": null,
         "lat": -158.56325634457153,
         "lng": 199.56246338188612,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78207,
@@ -10672,7 +10672,7 @@
         "dungeon_difficulty": null,
         "lat": -160.00060755547548,
         "lng": 203.3124743673203,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78208,
@@ -10697,7 +10697,7 @@
         "dungeon_difficulty": null,
         "lat": -143.1874380045433,
         "lng": 187.12446171372616,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78209,
@@ -10722,7 +10722,7 @@
         "dungeon_difficulty": null,
         "lat": -168.09401038091806,
         "lng": 196.15585818618163,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78210,
@@ -10747,7 +10747,7 @@
         "dungeon_difficulty": null,
         "lat": -193.32706392754199,
         "lng": 213.10801545821658,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78211,
@@ -10772,7 +10772,7 @@
         "dungeon_difficulty": null,
         "lat": -195.11806903251622,
         "lng": 213.26374916029178,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78212,
@@ -10822,7 +10822,7 @@
         "dungeon_difficulty": null,
         "lat": -187.93747143857976,
         "lng": 214.96894407600348,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78214,
@@ -10847,7 +10847,7 @@
         "dungeon_difficulty": null,
         "lat": -175.40719628046764,
         "lng": 215.25104893995814,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78215,
@@ -10872,7 +10872,7 @@
         "dungeon_difficulty": null,
         "lat": -173.53244043200925,
         "lng": 214.7326258599382,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78216,
@@ -10897,7 +10897,7 @@
         "dungeon_difficulty": null,
         "lat": -141.1873264127213,
         "lng": 187.71822269916032,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78217,
@@ -10915,14 +10915,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -134.65540686178912,
         "lng": 195.50026365041984,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78218,
@@ -10940,14 +10940,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -135.87423125633714,
         "lng": 197.12529294491094,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78219,
@@ -10965,7 +10965,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -10990,7 +10990,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -11015,7 +11015,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -11040,7 +11040,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -11065,7 +11065,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -11090,7 +11090,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -11115,7 +11115,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -11140,7 +11140,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -11165,14 +11165,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -150.95401595517927,
         "lng": 227.8873980065556,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78228,
@@ -11190,14 +11190,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -161.81377710640768,
         "lng": 222.37484254211037,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78229,
@@ -11215,14 +11215,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -161.78173356456213,
         "lng": 224.40578861176527,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78230,
@@ -11240,14 +11240,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -159.96970473003293,
         "lng": 224.4368115794593,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78231,
@@ -11265,14 +11265,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -199.4783644999804,
         "lng": 217.15718296565493,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78232,
@@ -11290,14 +11290,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -199.32258882189126,
         "lng": 219.3377924325976,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78233,
@@ -11372,7 +11372,7 @@
         "dungeon_difficulty": null,
         "lat": -186.1563547252075,
         "lng": 214.59383055985052,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78236,
@@ -11422,7 +11422,7 @@
         "dungeon_difficulty": null,
         "lat": -168.1565475781921,
         "lng": 199.12482423305343,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78238,
@@ -11440,14 +11440,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -149.46875,
         "lng": 179.84371704369752,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78239,
@@ -11472,7 +11472,7 @@
         "dungeon_difficulty": null,
         "lat": -143.5314855827354,
         "lng": 189.09324467002864,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78240,
@@ -11515,7 +11515,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -11540,7 +11540,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -11565,7 +11565,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -11590,7 +11590,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -11615,14 +11615,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -156.4558394859872,
         "lng": 228.61581026914357,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78246,
@@ -11647,7 +11647,7 @@
         "dungeon_difficulty": null,
         "lat": -194.7677932159997,
         "lng": 211.51148950219127,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78247,
@@ -11672,7 +11672,7 @@
         "dungeon_difficulty": null,
         "lat": -186.25016184804795,
         "lng": 216.37519407600348,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78248,
@@ -11697,7 +11697,7 @@
         "dungeon_difficulty": null,
         "lat": -158.56356632185495,
         "lng": 201.53122802913168,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78249,
@@ -11722,7 +11722,7 @@
         "dungeon_difficulty": null,
         "lat": -166.49995040363464,
         "lng": 197.31240113109254,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78250,
@@ -11765,14 +11765,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -151.6889506936864,
         "lng": 179.93717776059796,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78252,
@@ -11797,7 +11797,7 @@
         "dungeon_difficulty": null,
         "lat": -141.15625,
         "lng": 189.71829227357665,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78253,
@@ -11815,7 +11815,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -11840,14 +11840,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -151.64719879064893,
         "lng": 229.92770785631197,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78255,
@@ -11865,14 +11865,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -160.0331718591572,
         "lng": 222.56206424444497,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78256,
@@ -11890,14 +11890,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -155.47236787225197,
         "lng": 230.94707525335352,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78257,
@@ -11915,14 +11915,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -157.6942713039243,
         "lng": 230.69210321656453,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78258,
@@ -11965,14 +11965,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -182.46899753230863,
         "lng": 200.24952762633112,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78260,
@@ -11997,7 +11997,7 @@
         "dungeon_difficulty": null,
         "lat": -174.71914677092278,
         "lng": 203.6873571893559,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78261,
@@ -12022,7 +12022,7 @@
         "dungeon_difficulty": null,
         "lat": -176.68836793639358,
         "lng": 203.37487916022422,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78262,
@@ -12047,7 +12047,7 @@
         "dungeon_difficulty": null,
         "lat": -169.74987600908662,
         "lng": 197.37495605826336,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78263,
@@ -12072,7 +12072,7 @@
         "dungeon_difficulty": null,
         "lat": -153.00022318364407,
         "lng": 189.0000549271708,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78264,
@@ -12090,14 +12090,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -136.7807168390725,
         "lng": 195.18767576694657,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78265,
@@ -12140,7 +12140,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -12165,14 +12165,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -149.6062308239546,
         "lng": 229.59947628579545,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78268,
@@ -12197,7 +12197,7 @@
         "dungeon_difficulty": null,
         "lat": -175.00803024550572,
         "lng": 213.0973375096214,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78269,
@@ -12215,14 +12215,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -184.34366431573932,
         "lng": 199.8745862153133,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78270,
@@ -12247,7 +12247,7 @@
         "dungeon_difficulty": null,
         "lat": -154.18785957364875,
         "lng": 186.93749267637722,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78271,
@@ -12265,14 +12265,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -149.9077378909604,
         "lng": 182.06222170233463,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78272,
@@ -12315,7 +12315,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -12390,7 +12390,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -12465,7 +12465,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -12490,7 +12490,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -12522,7 +12522,7 @@
         "dungeon_difficulty": null,
         "lat": -190.67934004371196,
         "lng": 208.59096700609794,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78282,
@@ -12547,7 +12547,7 @@
         "dungeon_difficulty": null,
         "lat": -190.64041391817756,
         "lng": 210.8883083094841,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78283,
@@ -12622,7 +12622,7 @@
         "dungeon_difficulty": null,
         "lat": -152.68828114275422,
         "lng": 204.25010253071883,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78286,
@@ -12722,7 +12722,7 @@
         "dungeon_difficulty": null,
         "lat": -113.5924182013347,
         "lng": 156.61028857782745,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78290,
@@ -12797,7 +12797,7 @@
         "dungeon_difficulty": null,
         "lat": -123.86406403180575,
         "lng": 140.8947629101009,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78293,
@@ -12822,7 +12822,7 @@
         "dungeon_difficulty": null,
         "lat": -125.76491858007333,
         "lng": 142.0278214986705,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78294,
@@ -12847,7 +12847,7 @@
         "dungeon_difficulty": null,
         "lat": -109.09656349021638,
         "lng": 137.31254495158169,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78295,
@@ -12872,7 +12872,7 @@
         "dungeon_difficulty": null,
         "lat": -112.60539169130045,
         "lng": 136.5083627353447,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78296,
@@ -12890,14 +12890,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -121.04907691643895,
         "lng": 130.18564681393076,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78297,
@@ -12915,14 +12915,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -117.5761446345888,
         "lng": 124.95906412445484,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78298,
@@ -12940,14 +12940,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -121.7067320554309,
         "lng": 118.01475849856973,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78299,
@@ -12972,7 +12972,7 @@
         "dungeon_difficulty": null,
         "lat": -109.64460218868908,
         "lng": 131.53740956234094,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78300,
@@ -13047,7 +13047,7 @@
         "dungeon_difficulty": null,
         "lat": -111.43582579506281,
         "lng": 155.47729851208368,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78303,
@@ -13072,7 +13072,7 @@
         "dungeon_difficulty": null,
         "lat": -113.62866215355824,
         "lng": 154.19807169521587,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78304,
@@ -13097,7 +13097,7 @@
         "dungeon_difficulty": null,
         "lat": -117.24826690512702,
         "lng": 155.44068150816835,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78305,
@@ -13165,14 +13165,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -118.3078973306049,
         "lng": 130.11256269978165,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78308,
@@ -13190,14 +13190,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -115.09073190950821,
         "lng": 124.52052946082394,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78309,
@@ -13215,14 +13215,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -116.4429532029458,
         "lng": 122.58344711505211,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78310,
@@ -13240,14 +13240,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -119.3674697505845,
         "lng": 118.12440822451477,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78311,
@@ -13265,14 +13265,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -124.22870776297555,
         "lng": 117.97824856156981,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78312,
@@ -13297,7 +13297,7 @@
         "dungeon_difficulty": null,
         "lat": -119.0026084987962,
         "lng": 153.83258260164456,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78313,
@@ -13347,7 +13347,7 @@
         "dungeon_difficulty": null,
         "lat": -118.81901051224935,
         "lng": 140.16346780488874,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78315,
@@ -13372,7 +13372,7 @@
         "dungeon_difficulty": null,
         "lat": -120.7930780336924,
         "lng": 140.4557999788085,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78316,
@@ -13397,7 +13397,7 @@
         "dungeon_difficulty": null,
         "lat": -123.93689996924249,
         "lng": 143.34349401238902,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78317,
@@ -13422,7 +13422,7 @@
         "dungeon_difficulty": null,
         "lat": -110.41246832455761,
         "lng": 140.67508229999208,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78318,
@@ -13447,7 +13447,7 @@
         "dungeon_difficulty": null,
         "lat": -113.33660783645753,
         "lng": 139.46892674924356,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78319,
@@ -13465,14 +13465,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -124.74054601334839,
         "lng": 127.59031065032971,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78320,
@@ -13490,14 +13490,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -126.96982934331132,
         "lng": 127.07898737723616,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78321,
@@ -13522,7 +13522,7 @@
         "dungeon_difficulty": null,
         "lat": -112.0204854814978,
         "lng": 129.16191675056004,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78322,
@@ -13597,7 +13597,7 @@
         "dungeon_difficulty": null,
         "lat": -113.08165305267988,
         "lng": 159.7536378239398,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78325,
@@ -13622,7 +13622,7 @@
         "dungeon_difficulty": null,
         "lat": -119.33145782035403,
         "lng": 156.31788359840522,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78326,
@@ -13647,7 +13647,7 @@
         "dungeon_difficulty": null,
         "lat": -111.10719399412349,
         "lng": 138.59173322435996,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78327,
@@ -13665,14 +13665,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -119.80626904427668,
         "lng": 132.78062751537274,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78328,
@@ -13690,14 +13690,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -120.53684712895277,
         "lng": 115.71214851513705,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78329,
@@ -13715,14 +13715,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -123.09583536157305,
         "lng": 115.56595887345578,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78330,
@@ -13747,7 +13747,7 @@
         "dungeon_difficulty": null,
         "lat": -112.31246729172568,
         "lng": 131.86658143936,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78331,
@@ -13765,7 +13765,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -13790,7 +13790,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -13815,7 +13815,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -13840,7 +13840,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -13865,7 +13865,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -13890,7 +13890,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -13915,7 +13915,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -13940,7 +13940,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -13965,7 +13965,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -14397,7 +14397,7 @@
         "dungeon_difficulty": null,
         "lat": -52.37516118818738,
         "lng": 194.8752490031743,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78357,
@@ -14415,14 +14415,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -76.75931284364287,
         "lng": 185.42175595728295,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78358,
@@ -14447,7 +14447,7 @@
         "dungeon_difficulty": null,
         "lat": -54.43788437183143,
         "lng": 195.03148435592874,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78359,
@@ -14572,7 +14572,7 @@
         "dungeon_difficulty": null,
         "lat": -50.187648789096045,
         "lng": 194.90649167955152,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78364,
@@ -14590,7 +14590,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -14615,7 +14615,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -14640,7 +14640,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -14797,7 +14797,7 @@
         "dungeon_difficulty": null,
         "lat": -65.33759071928881,
         "lng": 181.85626209310593,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78373,
@@ -14822,7 +14822,7 @@
         "dungeon_difficulty": null,
         "lat": -56.46914677092278,
         "lng": 194.9689953413629,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78374,
@@ -14840,7 +14840,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -14890,14 +14890,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -73.41118362925933,
         "lng": 169.9970084354339,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78377,
@@ -14915,14 +14915,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -71.99413631319722,
         "lng": 172.17968965334262,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78378,
@@ -14940,7 +14940,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -14965,7 +14965,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -14990,14 +14990,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -79.85157948419234,
         "lng": 183.02072221475785,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78381,
@@ -15015,14 +15015,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -79.85166608798951,
         "lng": 187.38631484009946,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78382,
@@ -15040,7 +15040,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15072,7 +15072,7 @@
         "dungeon_difficulty": null,
         "lat": -56.46102744281581,
         "lng": 188.36843442767145,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78384,
@@ -15097,7 +15097,7 @@
         "dungeon_difficulty": null,
         "lat": -58.462080762997005,
         "lng": 187.02237975650885,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78385,
@@ -15122,7 +15122,7 @@
         "dungeon_difficulty": null,
         "lat": -56.35189167681279,
         "lng": 185.82188206770667,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78386,
@@ -15165,7 +15165,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15247,7 +15247,7 @@
         "dungeon_difficulty": null,
         "lat": -63.26363588211032,
         "lng": 180.47392261419296,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78391,
@@ -15272,7 +15272,7 @@
         "dungeon_difficulty": null,
         "lat": -63.00924557282811,
         "lng": 183.5660813371004,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78392,
@@ -15440,14 +15440,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -75.59498149678438,
         "lng": 187.53182493200117,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78399,
@@ -15465,14 +15465,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -75.15862607433283,
         "lng": 183.42079717195392,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78400,
@@ -15490,14 +15490,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -77.74134709610954,
         "lng": 187.60456079549172,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78401,
@@ -15515,14 +15515,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -77.37769111512856,
         "lng": 182.98430952393844,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78402,
@@ -15540,14 +15540,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -79.74266022768222,
         "lng": 185.23988006502046,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78403,
@@ -15565,7 +15565,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15590,7 +15590,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15615,7 +15615,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15640,7 +15640,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15665,7 +15665,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15690,7 +15690,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15715,7 +15715,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15740,7 +15740,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15765,7 +15765,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15790,7 +15790,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15815,7 +15815,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15840,7 +15840,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15865,7 +15865,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -15890,7 +15890,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -16190,7 +16190,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -16365,7 +16365,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -17235,12 +17235,12 @@
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": null,
-        "seasonal_type": null,
+        "seasonal_type": "requires_activation",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -17260,7 +17260,7 @@
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": null,
-        "seasonal_type": null,
+        "seasonal_type": "requires_activation",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
@@ -17285,19 +17285,19 @@
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": null,
-        "seasonal_type": null,
+        "seasonal_type": "requires_activation",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -152.59446914729753,
         "lng": 206.96893309056935,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78473,
@@ -17310,19 +17310,19 @@
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": null,
-        "seasonal_type": null,
+        "seasonal_type": "requires_activation",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -152.59448154638886,
         "lng": 201.81250366181138,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78474,
@@ -17335,12 +17335,12 @@
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": null,
-        "seasonal_type": null,
+        "seasonal_type": "requires_activation",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -17360,19 +17360,19 @@
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": null,
-        "seasonal_type": null,
+        "seasonal_type": "requires_activation",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -151.90623760090867,
         "lng": 196.0626647815124,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78476,
@@ -17385,19 +17385,19 @@
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": null,
-        "seasonal_type": null,
+        "seasonal_type": "requires_activation",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -156.6251363900047,
         "lng": 195.34389647245547,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 78477,
@@ -17410,12 +17410,12 @@
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": null,
-        "seasonal_type": null,
+        "seasonal_type": "requires_activation",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,

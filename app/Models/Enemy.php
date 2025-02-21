@@ -127,16 +127,17 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
         'kill_priority'      => 'integer',
     ];
 
-    public const SEASONAL_TYPE_BEGUILING          = 'beguiling';
-    public const SEASONAL_TYPE_AWAKENED           = 'awakened';
-    public const SEASONAL_TYPE_INSPIRING          = 'inspiring';
-    public const SEASONAL_TYPE_PRIDEFUL           = 'prideful';
-    public const SEASONAL_TYPE_TORMENTED          = 'tormented';
-    public const SEASONAL_TYPE_ENCRYPTED          = 'encrypted';
-    public const SEASONAL_TYPE_MDT_PLACEHOLDER    = 'mdt_placeholder';
-    public const SEASONAL_TYPE_SHROUDED           = 'shrouded';
-    public const SEASONAL_TYPE_SHROUDED_ZUL_GAMUX = 'shrouded_zul_gamux';
-    public const SEASONAL_TYPE_NO_SHROUDED        = 'no_shrouded';
+    public const SEASONAL_TYPE_BEGUILING           = 'beguiling';
+    public const SEASONAL_TYPE_AWAKENED            = 'awakened';
+    public const SEASONAL_TYPE_INSPIRING           = 'inspiring';
+    public const SEASONAL_TYPE_PRIDEFUL            = 'prideful';
+    public const SEASONAL_TYPE_TORMENTED           = 'tormented';
+    public const SEASONAL_TYPE_ENCRYPTED           = 'encrypted';
+    public const SEASONAL_TYPE_MDT_PLACEHOLDER     = 'mdt_placeholder';
+    public const SEASONAL_TYPE_SHROUDED            = 'shrouded';
+    public const SEASONAL_TYPE_SHROUDED_ZUL_GAMUX  = 'shrouded_zul_gamux';
+    public const SEASONAL_TYPE_NO_SHROUDED         = 'no_shrouded';
+    public const SEASONAL_TYPE_REQUIRES_ACTIVATION = 'requires_activation';
 
     public const SEASONAL_TYPE_ALL = [
         self::SEASONAL_TYPE_BEGUILING,
@@ -149,6 +150,7 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
         self::SEASONAL_TYPE_SHROUDED,
         self::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX,
         self::SEASONAL_TYPE_NO_SHROUDED,
+        self::SEASONAL_TYPE_REQUIRES_ACTIVATION
     ];
 
     public const TEEMING_VISIBLE = 'visible';

@@ -22,7 +22,7 @@
         "dungeon_difficulty": null,
         "lat": -185.98795208139,
         "lng": 205.04055405525,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77307,
@@ -47,7 +47,7 @@
         "dungeon_difficulty": null,
         "lat": -202.83803357183,
         "lng": 198.50795540602,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77308,
@@ -72,7 +72,7 @@
         "dungeon_difficulty": null,
         "lat": -197.32596782454,
         "lng": 194.57230364698,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77309,
@@ -97,7 +97,7 @@
         "dungeon_difficulty": null,
         "lat": -87.602045984937,
         "lng": 269.82052842987,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77310,
@@ -122,7 +122,7 @@
         "dungeon_difficulty": null,
         "lat": -90.388614653762,
         "lng": 272.64764330608,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77311,
@@ -147,7 +147,7 @@
         "dungeon_difficulty": null,
         "lat": -193.54912289519,
         "lng": 218.57887182109,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77312,
@@ -172,7 +172,7 @@
         "dungeon_difficulty": null,
         "lat": -188.35213834928,
         "lng": 221.41286315933,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77313,
@@ -197,7 +197,7 @@
         "dungeon_difficulty": null,
         "lat": -208.80671736471,
         "lng": 127.96458635538,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77314,
@@ -222,7 +222,7 @@
         "dungeon_difficulty": null,
         "lat": -137.01099498815,
         "lng": 131.2268983082,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77315,
@@ -247,7 +247,7 @@
         "dungeon_difficulty": null,
         "lat": -93.153196653611,
         "lng": 269.87100229715,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77316,
@@ -272,7 +272,7 @@
         "dungeon_difficulty": null,
         "lat": -132.98977118864,
         "lng": 138.91440493595,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77317,
@@ -297,7 +297,7 @@
         "dungeon_difficulty": null,
         "lat": -90.377611727047,
         "lng": 267.14598702845,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77318,
@@ -322,7 +322,7 @@
         "dungeon_difficulty": null,
         "lat": -210.12557860408,
         "lng": 124.94329712688,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77319,
@@ -347,7 +347,7 @@
         "dungeon_difficulty": null,
         "lat": -211.94045609676,
         "lng": 128.07402808222,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77320,
@@ -372,7 +372,7 @@
         "dungeon_difficulty": null,
         "lat": -135.03568049705,
         "lng": 135.17639842441,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77321,
@@ -397,7 +397,7 @@
         "dungeon_difficulty": null,
         "lat": -150.54643439997,
         "lng": 100.27199664177,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77322,
@@ -422,7 +422,7 @@
         "dungeon_difficulty": null,
         "lat": -84.714950143973,
         "lng": 272.64705316782,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77323,
@@ -447,7 +447,7 @@
         "dungeon_difficulty": null,
         "lat": -132.63647540754,
         "lng": 130.73343801884,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77324,
@@ -472,7 +472,7 @@
         "dungeon_difficulty": null,
         "lat": -130.02655818111,
         "lng": 134.47151063224,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77325,
@@ -497,7 +497,7 @@
         "dungeon_difficulty": null,
         "lat": -87.563216615237,
         "lng": 275.5206802104,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77326,
@@ -597,7 +597,7 @@
         "dungeon_difficulty": null,
         "lat": -202.91626524341,
         "lng": 192.1318737954,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77330,
@@ -622,7 +622,7 @@
         "dungeon_difficulty": null,
         "lat": -186.18021700834,
         "lng": 134.44459707601,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77331,
@@ -647,7 +647,7 @@
         "dungeon_difficulty": null,
         "lat": -176.6236772135,
         "lng": 140.87094878352,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77332,
@@ -672,7 +672,7 @@
         "dungeon_difficulty": null,
         "lat": -150.54646120784,
         "lng": 96.322306482699,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77333,
@@ -697,7 +697,7 @@
         "dungeon_difficulty": null,
         "lat": -154.35681202318,
         "lng": 98.931743923142,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77334,
@@ -722,7 +722,7 @@
         "dungeon_difficulty": null,
         "lat": -165.15938808508,
         "lng": 81.183115524756,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77368,
@@ -747,7 +747,7 @@
         "dungeon_difficulty": null,
         "lat": -176.65020097375,
         "lng": 64.848777239965,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77393,
@@ -772,7 +772,7 @@
         "dungeon_difficulty": null,
         "lat": -191.89506628322,
         "lng": 228.26106913922,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77394,
@@ -797,7 +797,7 @@
         "dungeon_difficulty": null,
         "lat": -196.69807963213,
         "lng": 224.63982570385,
-        "kill_priority": 0
+        "kill_priority": null
     },
     {
         "id": 77401,
