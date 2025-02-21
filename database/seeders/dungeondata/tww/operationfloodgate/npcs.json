@@ -732,7 +732,7 @@
         "level": 80,
         "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -744,23 +744,7 @@
                 "characteristic_id": 1
             }
         ],
-        "npc_spells": [
-            {
-                "spell_id": 465754
-            },
-            {
-                "spell_id": 474337
-            },
-            {
-                "spell_id": 474350
-            },
-            {
-                "spell_id": 474351
-            },
-            {
-                "spell_id": 474388
-            }
-        ],
+        "npc_spells": [],
         "npc_enemy_forces": [
             {
                 "id": 17721,

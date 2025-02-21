@@ -369,7 +369,7 @@
         "color": null,
         "color_animated": null,
         "label": "Imported from MDT - group 41",
-        "vertices_json": "[{\"lat\":-67.07,\"lng\":36.32},{\"lat\":-35.79,\"lng\":36.32},{\"lat\":-35.79,\"lng\":60.72},{\"lat\":-67.07,\"lng\":60.72}]"
+        "vertices_json": "[{\"lat\":-67.07,\"lng\":36.32},{\"lat\":-35.79,\"lng\":36.32},{\"lat\":-37.346084,\"lng\":102.239553},{\"lat\":-66.050536,\"lng\":102.527531}]"
     },
     {
         "id": 13691,
