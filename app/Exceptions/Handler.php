@@ -14,6 +14,7 @@ use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Teapot\StatusCode;
@@ -31,13 +32,14 @@ class Handler extends ExceptionHandler
         AuthenticationException::class,
         AuthorizationException::class,
         HttpException::class,
-        NotFoundHttpException::class,
         ModelNotFoundException::class,
         TokenMismatchException::class,
         ValidationException::class,
         // Added it to prevent spam from people trying to exploit the API
         // Now that I have better protection I want to see those exceptions again so I can ban their asses
         BadRequestException::class,
+        MethodNotAllowedHttpException::class,
+        NotFoundHttpException::class,
     ];
 
     /**
