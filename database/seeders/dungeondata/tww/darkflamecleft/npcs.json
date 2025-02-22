@@ -385,7 +385,7 @@
         "encounter_id": 2569,
         "name": "The Darkness",
         "base_health": 987391096,
-        "health_percentage": null,
+        "health_percentage": 55,
         "level": 82,
         "mdt_scale": 2,
         "aggressiveness": "aggressive",

@@ -370,17 +370,5 @@
         "color_animated": null,
         "label": "Imported from MDT - group 41",
         "vertices_json": "[{\"lat\":-67.07,\"lng\":36.32},{\"lat\":-35.79,\"lng\":36.32},{\"lat\":-37.346084,\"lng\":102.239553},{\"lat\":-66.050536,\"lng\":102.527531}]"
-    },
-    {
-        "id": 13691,
-        "mapping_version_id": 503,
-        "floor_id": 289,
-        "group": 40,
-        "teeming": null,
-        "faction": "any",
-        "color": null,
-        "color_animated": null,
-        "label": "Imported from MDT - group 40",
-        "vertices_json": "[{\"lat\":-204.38,\"lng\":327.29},{\"lat\":-178.29,\"lng\":327.29},{\"lat\":-178.29,\"lng\":342.05},{\"lat\":-204.38,\"lng\":342.05}]"
     }
 ]

@@ -12,7 +12,7 @@
         },
         "settings": {
             "temporary": true,
-            "debugIcons": true
+            "debugIcons": false
         },
         "challengeMode": {
             "start": "2024-09-19T17:19:18.600+00:00",

@@ -94,7 +94,7 @@ class Handler extends ExceptionHandler
             } else if (!config('app.debug')) {
                 return response()->json(['message' => __('exceptions.handler.internal_server_error')], StatusCode::INTERNAL_SERVER_ERROR);
             } else {
-                return response()->json(['message' => $e->getMessage()], $e->getCode());
+                return response()->json(['message' => $e->getMessage()], StatusCode::INTERNAL_SERVER_ERROR);
             }
         }
 

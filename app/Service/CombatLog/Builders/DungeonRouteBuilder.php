@@ -22,6 +22,7 @@ use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\CombatLog\Models\ClosestEnemy;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 abstract class DungeonRouteBuilder
@@ -79,7 +80,10 @@ abstract class DungeonRouteBuilder
             'floor.dungeon',
             'enemyPack',
             'enemyPatrol',
-        ])->get()
+        ])->where(function (Builder $builder){
+            $builder->whereNull('seasonal_type')
+                ->orWhereNot('seasonal_type', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER);
+        })->get()
             ->each(static function (Enemy $enemy) {
                 // Ensure that the kill priority is 0 if it wasn't set
                 $enemy->kill_priority ??= 0;
