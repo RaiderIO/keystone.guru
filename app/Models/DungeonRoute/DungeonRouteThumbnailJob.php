@@ -71,13 +71,17 @@ class DungeonRouteThumbnailJob extends Model
     public function expire(): bool
     {
         // Always try to delete the image, but always return OK if it wasn't successful (there may not be an image then).
-        $result = @unlink(
-                ThumbnailService::getTargetFilePath(
-                    $this->dungeonRoute,
-                    $this->floor->index,
-                    ThumbnailService::THUMBNAIL_CUSTOM_FOLDER_PATH
-                )
-            ) || $this->status !== self::STATUS_COMPLETED;
+        $result = true;
+
+        if ($this->dungeonRoute instanceof DungeonRoute) {
+            $result = @unlink(
+                    ThumbnailService::getTargetFilePath(
+                        $this->dungeonRoute,
+                        $this->floor->index,
+                        ThumbnailService::THUMBNAIL_CUSTOM_FOLDER_PATH
+                    )
+                ) || $this->status !== self::STATUS_COMPLETED;
+        }
 
         $this->update(['status' => self::STATUS_EXPIRED]);
 

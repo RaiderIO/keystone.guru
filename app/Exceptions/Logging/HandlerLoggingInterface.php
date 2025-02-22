@@ -6,5 +6,5 @@ interface HandlerLoggingInterface
 {
     public function tooManyRequests(string $ip, string $url, ?int $userId, ?string $username, \Throwable $throwable): void;
 
-    public function uncaughtException(string $ip, string $url, ?int $userId, ?string $username, \Throwable $throwable): void;
+    public function uncaughtException(string $ip, string $url, ?int $userId, ?string $username, string $exceptionClass, string $message): void;
 }
