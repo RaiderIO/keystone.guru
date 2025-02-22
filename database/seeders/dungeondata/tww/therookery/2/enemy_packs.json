@@ -1,1 +1,98 @@
-[]
+[
+    {
+        "id": 13752,
+        "mapping_version_id": 507,
+        "floor_id": 295,
+        "group": 11,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 11",
+        "vertices_json": "[{\"lat\":-190.72903225806,\"lng\":125.78193548387},{\"lat\":-175.61935483871,\"lng\":125.78193548387},{\"lat\":-175.61935483871,\"lng\":138.53806451613},{\"lat\":-190.72903225806,\"lng\":138.53806451613}]"
+    },
+    {
+        "id": 13753,
+        "mapping_version_id": 507,
+        "floor_id": 295,
+        "group": 10,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 10",
+        "vertices_json": "[{\"lat\":-165.62451612903,\"lng\":156.77032258065},{\"lat\":-152.1664516129,\"lng\":156.77032258065},{\"lat\":-152.1664516129,\"lng\":171.94193548387},{\"lat\":-165.62451612903,\"lng\":171.94193548387}]"
+    },
+    {
+        "id": 13754,
+        "mapping_version_id": 507,
+        "floor_id": 295,
+        "group": 12,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 12",
+        "vertices_json": "[{\"lat\":-165.85161290323,\"lng\":215.67096774194},{\"lat\":-151.54709677419,\"lng\":215.67096774194},{\"lat\":-151.54709677419,\"lng\":230.26451612903},{\"lat\":-165.85161290323,\"lng\":230.26451612903}]"
+    },
+    {
+        "id": 13755,
+        "mapping_version_id": 507,
+        "floor_id": 295,
+        "group": 7,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 7",
+        "vertices_json": "[{\"lat\":-80.525161290323,\"lng\":241.33290322581},{\"lat\":-63.557419354839,\"lng\":241.33290322581},{\"lat\":-63.557419354839,\"lng\":256.89677419354996},{\"lat\":-80.525161290323,\"lng\":256.89677419354996}]"
+    },
+    {
+        "id": 13759,
+        "mapping_version_id": 507,
+        "floor_id": 295,
+        "group": 9,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 9",
+        "vertices_json": "[{\"lat\":-194.61032258065,\"lng\":243.29419354839},{\"lat\":-178.65419354839,\"lng\":243.29419354839},{\"lat\":-178.65419354839,\"lng\":256.5664516129},{\"lat\":-194.61032258065,\"lng\":256.5664516129}]"
+    },
+    {
+        "id": 13760,
+        "mapping_version_id": 507,
+        "floor_id": 295,
+        "group": 5,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 5",
+        "vertices_json": "[{\"lat\":-136.49419354839,\"lng\":116.53290322581},{\"lat\":-120.93032258065,\"lng\":116.53290322581},{\"lat\":-120.93032258065,\"lng\":130.7135483871},{\"lat\":-136.49419354839,\"lng\":130.7135483871}]"
+    },
+    {
+        "id": 13761,
+        "mapping_version_id": 507,
+        "floor_id": 295,
+        "group": 6,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 6",
+        "vertices_json": "[{\"lat\":-80.36,\"lng\":126.58709677419},{\"lat\":-55.712258064516,\"lng\":126.58709677419},{\"lat\":-55.712258064516,\"lng\":145.12387096774},{\"lat\":-80.36,\"lng\":145.12387096774}]"
+    },
+    {
+        "id": 13762,
+        "mapping_version_id": 507,
+        "floor_id": 295,
+        "group": 8,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 8",
+        "vertices_json": "[{\"lat\":-133.64516129032,\"lng\":249.81806451613},{\"lat\":-117.52387096774,\"lng\":249.81806451613},{\"lat\":-117.52387096774,\"lng\":264.92774193548},{\"lat\":-133.64516129032,\"lng\":264.92774193548}]"
+    }
+]

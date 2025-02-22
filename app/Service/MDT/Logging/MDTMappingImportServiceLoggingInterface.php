@@ -97,6 +97,8 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemyPatrolsStart(): void;
 
+    public function importEnemyPatrolsUnableToFindAttachedEnemy(int $mdtCloneIndex, array $mdtNpcClone, int $npcId, int $mdtId): void;
+
     public function importEnemyPatrolsEnemyHasPatrol(string $uniqueKey): void;
 
     public function importEnemyPatrolsFoundPatrolIsEmpty(string $uniqueKey): void;
@@ -111,13 +113,15 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemyPatrolsEnd(): void;
 
-    public function importDungeonFloorSwitchMarkersStart(): void;
+    public function importMapPOIsStart(): void;
 
-    public function importDungeonFloorSwitchMarkersImportFromMDT(): void;
+    public function importMapPOIsImportFromMDT(): void;
 
-    public function importDungeonFloorSwitchMarkersNewDungeonFloorSwitchMarkerOK(int $dungeonFloorSwitchMarkerId, int $floorId, int $targetFloorId): void;
+    public function importMapPOIsCreatedNewMapIcon(int $mapIconId, int $floorId, int $mapIconTypeId): void;
 
-    public function importDungeonFloorSwitchMarkersHaveExistingFloorSwitchMarkers(int $count): void;
+    public function importMapPOIsNewDungeonFloorSwitchMarkerOK(int $dungeonFloorSwitchMarkerId, int $floorId, int $targetFloorId): void;
 
-    public function importDungeonFloorSwitchMarkersEnd(): void;
+    public function importMapPOIsHaveExistingFloorSwitchMarkers(int $count): void;
+
+    public function importMapPOIsEnd(): void;
 }

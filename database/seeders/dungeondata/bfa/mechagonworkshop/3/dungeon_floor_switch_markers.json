@@ -20,5 +20,49 @@
         "direction": null,
         "lat": -42.75,
         "lng": 74.12
+    },
+    {
+        "id": 1927,
+        "mapping_version_id": 504,
+        "floor_id": 68,
+        "source_floor_id": null,
+        "target_floor_id": 67,
+        "linked_dungeon_floor_switch_marker_id": null,
+        "direction": null,
+        "lat": -177.62,
+        "lng": 133.12
+    },
+    {
+        "id": 1928,
+        "mapping_version_id": 504,
+        "floor_id": 68,
+        "source_floor_id": null,
+        "target_floor_id": 69,
+        "linked_dungeon_floor_switch_marker_id": null,
+        "direction": null,
+        "lat": -42.75,
+        "lng": 74.12
+    },
+    {
+        "id": 1931,
+        "mapping_version_id": 505,
+        "floor_id": 68,
+        "source_floor_id": null,
+        "target_floor_id": 67,
+        "linked_dungeon_floor_switch_marker_id": 1930,
+        "direction": null,
+        "lat": -177.62,
+        "lng": 133.12
+    },
+    {
+        "id": 1932,
+        "mapping_version_id": 505,
+        "floor_id": 68,
+        "source_floor_id": null,
+        "target_floor_id": 69,
+        "linked_dungeon_floor_switch_marker_id": 1933,
+        "direction": null,
+        "lat": -42.75,
+        "lng": 74.12
     }
 ]

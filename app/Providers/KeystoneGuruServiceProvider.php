@@ -322,7 +322,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 isset($_COOKIE['changelog_release']) && $globalViewVariables['latestRelease']->id > (int)$_COOKIE['changelog_release']);
         });
 
-        view()->composer(['common.layout.header', 'common.layout.navgameversions'], static function (View $view) use ($globalViewVariables) {
+        view()->composer('common.layout.navgameversions', static function (View $view) use ($globalViewVariables) {
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
@@ -331,11 +331,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         view()->composer('common.layout.header', static function (View $view) use ($viewService, $globalViewVariables, &$userOrDefaultRegion) {
-            $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
+            $view->with('activeExpansions', $globalViewVariables['activeExpansions']);
             $view->with('currentSeason', $regionViewVariables['currentSeason']);
             $view->with('nextSeason', $regionViewVariables['nextSeason']);
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
         view()->composer([

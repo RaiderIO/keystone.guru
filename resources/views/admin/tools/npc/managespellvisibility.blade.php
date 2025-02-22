@@ -81,7 +81,7 @@ use Illuminate\Support\Collection;
                     @if($spell === null)
                         <div class="col">
                             <div class="form-element">
-                                Spell not found ({{ $npcSpell->spell_id }})
+                                {{ __('view_admin.tools.npc.managespellvisibility.spell_not_found') }} ({{ $npcSpell->spell_id }})
                             </div>
                         </div>
                     @else
@@ -94,7 +94,7 @@ use Illuminate\Support\Collection;
                         </div>
                         <div class="col">
                             <div class="form-element" style="line-height: 2.5">
-                                <a href="https://www.wowhead.com/{{ $dungeon->gameVersion->key === GameVersion::GAME_VERSION_CLASSIC_ERA ? 'classic/' : '' }}spell={{$npcSpell->spell_id}}"
+                                <a href="https://www.wowhead.com/{{ $dungeon?->gameVersion?->key === GameVersion::GAME_VERSION_CLASSIC_ERA ? 'classic/' : '' }}spell={{$npcSpell->spell_id}}"
                                    data-wh-icon-size="medium"
                                 >
                                     <img src="{{$spell->icon_url}}" width="32px" alt="{{ __($spell->name) }}"/>

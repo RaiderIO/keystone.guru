@@ -1031,6 +1031,10 @@ html, body, #map, #app, .wrapper {
     border: 3px solid #ffffff;
 }
 
+.requires_activation {
+    border: 3px solid #ff9900;
+}
+
 .prideful {
     border: 3px solid #ff9900;
 }

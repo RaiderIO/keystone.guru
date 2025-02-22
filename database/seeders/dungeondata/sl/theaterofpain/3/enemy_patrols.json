@@ -128,5 +128,135 @@
             "weight": 3,
             "vertices_json": "[{\"lat\":-189.5,\"lng\":274.875},{\"lat\":-199.625,\"lng\":279.375}]"
         }
+    },
+    {
+        "id": 9201,
+        "mapping_version_id": 495,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#11bf00",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-163.00094,\"lng\":194.579377},{\"lat\":-144.89858,\"lng\":164.669858}]"
+        }
+    },
+    {
+        "id": 9202,
+        "mapping_version_id": 495,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#11bf00",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-162.047121,\"lng\":199.901717},{\"lat\":-120.518176,\"lng\":194.047541}]"
+        }
+    },
+    {
+        "id": 9203,
+        "mapping_version_id": 495,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-137.24146,\"lng\":156.255856},{\"lat\":-113.069484,\"lng\":82.706114}]"
+        }
+    },
+    {
+        "id": 9204,
+        "mapping_version_id": 495,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-113.391856,\"lng\":186.058548},{\"lat\":-112.75295,\"lng\":83.025046}]"
+        }
+    },
+    {
+        "id": 9205,
+        "mapping_version_id": 495,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#b400ae",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-107.753758,\"lng\":119.535664},{\"lat\":-62.071919,\"lng\":144.868281}]"
+        }
+    },
+    {
+        "id": 9206,
+        "mapping_version_id": 495,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#b400ae",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-116.166031,\"lng\":119.642104},{\"lat\":-80.280763,\"lng\":219.588858}]"
+        }
+    },
+    {
+        "id": 9207,
+        "mapping_version_id": 495,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#9f5700",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-88.906006,\"lng\":256.736268},{\"lat\":-81.878031,\"lng\":305.059832}]"
+        }
+    },
+    {
+        "id": 9208,
+        "mapping_version_id": 495,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#9f3100",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-87.303679,\"lng\":316.783365},{\"lat\":-109.345965,\"lng\":337.858399}]"
+        }
+    },
+    {
+        "id": 9209,
+        "mapping_version_id": 495,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#9f5700",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-57.100603,\"lng\":184.022266},{\"lat\":-81.550505,\"lng\":305.070124}]"
+        }
+    },
+    {
+        "id": 9210,
+        "mapping_version_id": 495,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#9f3100",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-189.228447,\"lng\":274.466358},{\"lat\":-199.965004,\"lng\":279.331545}]"
+        }
     }
 ]

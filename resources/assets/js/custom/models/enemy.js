@@ -262,12 +262,13 @@ class Enemy extends VersionableMapObject {
                     {id: ENEMY_SEASONAL_TYPE_PRIDEFUL, name: lang.get('enemies.seasonal_type.prideful')},
                     {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: lang.get('enemies.seasonal_type.tormented')},
                     {id: ENEMY_SEASONAL_TYPE_ENCRYPTED, name: lang.get('enemies.seasonal_type.encrypted')},
+                    {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: lang.get('enemies.seasonal_type.mdt_placeholder')},
+                    {id: ENEMY_SEASONAL_TYPE_REQUIRES_ACTIVATION, name: lang.get('enemies.seasonal_type.requires_activation')},
                     {id: ENEMY_SEASONAL_TYPE_SHROUDED, name: lang.get('enemies.seasonal_type.shrouded')},
                     {
                         id: ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX,
                         name: lang.get('enemies.seasonal_type.shrouded_zul_gamux')
                     },
-                    {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: lang.get('enemies.seasonal_type.mdt_placeholder')},
                     {id: ENEMY_SEASONAL_TYPE_NO_SHROUDED, name: lang.get('enemies.seasonal_type.no_shrouded')}
                 ],
                 setter: function (value) {
@@ -1066,6 +1067,15 @@ class Enemy extends VersionableMapObject {
     isNotShrouded() {
         console.assert(this instanceof Enemy, 'this is not an Enemy', this);
         return this.seasonal_type === ENEMY_SEASONAL_TYPE_NO_SHROUDED;
+    }
+
+    /**
+     *
+     * @returns {boolean}
+     */
+    isRequiresActivation() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+        return this.seasonal_type === ENEMY_SEASONAL_TYPE_REQUIRES_ACTIVATION;
     }
 
     /**

@@ -3,15 +3,15 @@
         "id": 207186,
         "dungeon_id": 114,
         "classification_id": 2,
-        "npc_type_id": 8,
+        "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 117707,
         "encounter_id": null,
         "name": "Unruly Stormrook",
-        "base_health": 8873232,
+        "base_health": 53559086,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -20,7 +20,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 427616
@@ -29,7 +48,15 @@
                 "spell_id": 430013
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 17688,
+                "mapping_version_id": 507,
+                "npc_id": 207186,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 207197,
@@ -40,10 +67,10 @@
         "display_id": 118393,
         "encounter_id": null,
         "name": "Cursed Rookguard",
-        "base_health": 5545770,
+        "base_health": 51124582,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -52,16 +79,55 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 427402
             },
             {
                 "spell_id": 430758
+            },
+            {
+                "spell_id": 469956
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 17686,
+                "mapping_version_id": 507,
+                "npc_id": 207197,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 207198,
@@ -72,10 +138,10 @@
         "display_id": 118407,
         "encounter_id": null,
         "name": "Cursed Thunderer",
-        "base_health": 5545770,
+        "base_health": 43821070,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -84,7 +150,35 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 430109
@@ -93,7 +187,15 @@
                 "spell_id": 430758
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 17685,
+                "mapping_version_id": 507,
+                "npc_id": 207198,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 207199,
@@ -104,10 +206,10 @@
         "display_id": 114851,
         "encounter_id": null,
         "name": "Cursed Rooktender",
-        "base_health": 5545770,
+        "base_health": 36517559,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -116,13 +218,40 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 427260
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 17689,
+                "mapping_version_id": 507,
+                "npc_id": 207199,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 207202,
@@ -169,12 +298,12 @@
         "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 114403,
-        "encounter_id": null,
+        "encounter_id": 2567,
         "name": "Stormguard Gorren",
-        "base_health": 38820390,
+        "base_health": 341295496,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -183,10 +312,23 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
+                "spell_id": 424737
+            },
+            {
                 "spell_id": 424739
+            },
+            {
+                "spell_id": 424958
             },
             {
                 "spell_id": 424966
@@ -208,6 +350,9 @@
             },
             {
                 "spell_id": 426171
+            },
+            {
+                "spell_id": 451843
             }
         ],
         "npc_enemy_forces": []
@@ -216,15 +361,15 @@
         "id": 207207,
         "dungeon_id": 114,
         "classification_id": 3,
-        "npc_type_id": 8,
+        "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 114324,
-        "encounter_id": null,
-        "name": "Voidstone Monstrosity",
-        "base_health": 57676008,
+        "encounter_id": 2567,
+        "name": "Skardyn Monstrosity",
+        "base_health": 390051996,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -233,10 +378,20 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 181089
+            },
+            {
+                "spell_id": 423305
             },
             {
                 "spell_id": 423356
@@ -245,16 +400,37 @@
                 "spell_id": 423839
             },
             {
+                "spell_id": 428126
+            },
+            {
+                "spell_id": 429487
+            },
+            {
                 "spell_id": 429493
             },
             {
                 "spell_id": 429521
             },
             {
+                "spell_id": 433067
+            },
+            {
+                "spell_id": 440207
+            },
+            {
                 "spell_id": 445262
             },
             {
+                "spell_id": 445457
+            },
+            {
                 "spell_id": 445537
+            },
+            {
+                "spell_id": 455219
+            },
+            {
+                "spell_id": 455220
             }
         ],
         "npc_enemy_forces": []
@@ -263,15 +439,15 @@
         "id": 209230,
         "dungeon_id": 114,
         "classification_id": 3,
-        "npc_type_id": 8,
+        "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 114856,
-        "encounter_id": null,
+        "encounter_id": 2567,
         "name": "Kyrioss",
-        "base_health": 44366160,
+        "base_health": 341295496,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -280,8 +456,40 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 419870
+            },
+            {
+                "spell_id": 419871
+            },
+            {
+                "spell_id": 444034
+            },
+            {
+                "spell_id": 474018
+            },
+            {
+                "spell_id": 1214315
+            },
+            {
+                "spell_id": 1214323
+            },
+            {
+                "spell_id": 1214324
+            },
+            {
+                "spell_id": 1214325
+            },
+            {
+                "spell_id": 1214326
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -293,19 +501,23 @@
         "display_id": 114849,
         "encounter_id": null,
         "name": "Quartermaster Koratite",
-        "base_health": 8873232,
+        "base_health": 77904125,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 2,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 426893
@@ -320,7 +532,15 @@
                 "spell_id": 450628
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 17684,
+                "mapping_version_id": 507,
+                "npc_id": 209801,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 211260,
@@ -331,11 +551,11 @@
         "display_id": 116266,
         "encounter_id": null,
         "name": "Stormrider Vokmar",
-        "base_health": 0,
+        "base_health": 101272425,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
-        "aggressiveness": "aggressive",
+        "level": 82,
+        "mdt_scale": 3.3,
+        "aggressiveness": "friendly",
         "dangerous": 0,
         "truesight": 0,
         "bursting": 1,
@@ -411,15 +631,15 @@
         "id": 212739,
         "dungeon_id": 114,
         "classification_id": 2,
-        "npc_type_id": 8,
+        "npc_type_id": 1,
         "npc_class_id": 1,
         "display_id": 114860,
         "encounter_id": null,
         "name": "Radiating Voidstone",
-        "base_health": 12200694,
+        "base_health": 107118172,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -428,7 +648,14 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 432781
@@ -438,23 +665,49 @@
             },
             {
                 "spell_id": 438848
+            },
+            {
+                "spell_id": 472547
+            },
+            {
+                "spell_id": 472549
+            },
+            {
+                "spell_id": 472764
+            },
+            {
+                "spell_id": 1214628
+            },
+            {
+                "spell_id": 1214631
+            },
+            {
+                "spell_id": 1214645
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 17695,
+                "mapping_version_id": 507,
+                "npc_id": 212739,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 212786,
         "dungeon_id": 114,
         "classification_id": 2,
-        "npc_type_id": 8,
+        "npc_type_id": 6,
         "npc_class_id": 1,
         "display_id": 117707,
         "encounter_id": null,
-        "name": "Cursed Stormrider",
-        "base_health": 8873232,
+        "name": "Voidrider",
+        "base_health": 87642140,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -463,9 +716,37 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
-        "npc_enemy_forces": []
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 427404
+            },
+            {
+                "spell_id": 427439
+            },
+            {
+                "spell_id": 474017
+            },
+            {
+                "spell_id": 474018
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17687,
+                "mapping_version_id": 507,
+                "npc_id": 212786,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 212793,
@@ -476,25 +757,43 @@
         "display_id": 118418,
         "encounter_id": null,
         "name": "Void Ascendant",
-        "base_health": 5545770,
+        "base_health": 82773133,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 2,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
+            {
+                "spell_id": 430238
+            },
             {
                 "spell_id": 432959
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 17694,
+                "mapping_version_id": 507,
+                "npc_id": 212793,
+                "enemy_forces": 22,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 213684,
@@ -534,35 +833,10 @@
         "display_id": 114860,
         "encounter_id": null,
         "name": "Voidstone Awakened",
-        "base_health": 0,
+        "base_health": 24345042,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "runs_away_in_fear": 0,
-        "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
-        "npc_enemy_forces": []
-    },
-    {
-        "id": 214419,
-        "dungeon_id": 114,
-        "classification_id": 2,
-        "npc_type_id": 8,
-        "npc_class_id": 1,
-        "display_id": 117973,
-        "encounter_id": null,
-        "name": "Corrupted Rookguard",
-        "base_health": 8873232,
-        "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 81,
+        "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -574,30 +848,27 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
-                "spell_id": 423981
+                "spell_id": 429028
             },
             {
-                "spell_id": 430758
-            },
-            {
-                "spell_id": 433078
+                "spell_id": 429029
             }
         ],
         "npc_enemy_forces": []
     },
     {
-        "id": 214421,
+        "id": 214419,
         "dungeon_id": 114,
         "classification_id": 2,
-        "npc_type_id": 8,
+        "npc_type_id": 1,
         "npc_class_id": 1,
-        "display_id": 117974,
+        "display_id": 117972,
         "encounter_id": null,
-        "name": "Corrupted Thunderer",
-        "base_health": 6654924,
+        "name": "Void-Cursed Crusher",
+        "base_health": 58428093,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -606,7 +877,88 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 423981
+            },
+            {
+                "spell_id": 430758
+            },
+            {
+                "spell_id": 433078
+            },
+            {
+                "spell_id": 467907
+            },
+            {
+                "spell_id": 474031
+            },
+            {
+                "spell_id": 474032
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17690,
+                "mapping_version_id": 507,
+                "npc_id": 214419,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 214421,
+        "dungeon_id": 114,
+        "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 117974,
+        "encounter_id": null,
+        "name": "Coalescing Void Diffuser",
+        "base_health": 73035117,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.5,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 430758
@@ -624,7 +976,15 @@
                 "spell_id": 452932
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 17692,
+                "mapping_version_id": 507,
+                "npc_id": 214421,
+                "enemy_forces": 25,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 214439,
@@ -635,10 +995,10 @@
         "display_id": 119838,
         "encounter_id": null,
         "name": "Corrupted Oracle",
-        "base_health": 5545770,
+        "base_health": 38952062,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -647,10 +1007,35 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 430179
+            },
+            {
+                "spell_id": 430238
             },
             {
                 "spell_id": 430754
@@ -659,7 +1044,15 @@
                 "spell_id": 430758
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 17691,
+                "mapping_version_id": 507,
+                "npc_id": 214439,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 217339,
@@ -698,11 +1091,11 @@
         "npc_class_id": 1,
         "display_id": 121686,
         "encounter_id": null,
-        "name": "Inflicted Civilian",
-        "base_health": 1109154,
+        "name": "Afflicted Civilian",
+        "base_health": 9738015,
         "health_percentage": null,
-        "level": null,
-        "mdt_scale": null,
+        "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -711,7 +1104,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 443847
@@ -720,7 +1132,15 @@
                 "spell_id": 443854
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 17693,
+                "mapping_version_id": 507,
+                "npc_id": 219066,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 219931,

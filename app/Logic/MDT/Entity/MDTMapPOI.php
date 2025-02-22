@@ -36,6 +36,12 @@ class MDTMapPOI implements Arrayable
     public const TYPE_MISTS_ITEM           = 'mistsItem';
     public const TYPE_STONEVAULT_ITEM      = 'stonevaultItem';
     public const TYPE_COT_ITEM             = 'cityOfThreadsItem';
+    public const TYPE_CINDERBREW_ITEM_A    = 'brewItemA';
+    public const TYPE_CINDERBREW_ITEM_B    = 'brewItemB';
+    public const TYPE_WORKSHOP_ITEM        = 'workshopItem';
+    public const TYPE_PRIORY_ITEM          = 'prioryItem';
+    public const TYPE_MOTHERLODE_ITEM      = 'motherlodeItem';
+    public const TYPE_FLOODGATE_ITEM       = 'floodgateItem';
 
     public const ALL_TYPES = [
         self::TYPE_MAP_LINK,
@@ -56,6 +62,12 @@ class MDTMapPOI implements Arrayable
         self::TYPE_STONEVAULT_ITEM,
         self::TYPE_MISTS_ITEM,
         self::TYPE_COT_ITEM,
+        self::TYPE_CINDERBREW_ITEM_A,
+        self::TYPE_CINDERBREW_ITEM_B,
+        self::TYPE_WORKSHOP_ITEM,
+        self::TYPE_PRIORY_ITEM,
+        self::TYPE_MOTHERLODE_ITEM,
+        self::TYPE_FLOODGATE_ITEM,
     ];
 
     private readonly string $template;

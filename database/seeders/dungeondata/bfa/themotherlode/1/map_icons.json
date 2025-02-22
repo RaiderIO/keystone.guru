@@ -128,5 +128,18 @@
         "permanent_tooltip": 0,
         "seasonal_index": 0,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 512,
+        "floor_id": 50,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -225.42,
+        "lng": 199.64,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

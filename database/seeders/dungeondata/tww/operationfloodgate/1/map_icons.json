@@ -1,0 +1,80 @@
+[
+    {
+        "mapping_version_id": 510,
+        "floor_id": 372,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -35.638557377049,
+        "lng": 171.72983606557,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 510,
+        "floor_id": 372,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 103,
+        "lat": -145.55908196721,
+        "lng": 98.631344262295,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 510,
+        "floor_id": 372,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 103,
+        "lat": -186.37639344262,
+        "lng": 259.82740983607,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 510,
+        "floor_id": 372,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 103,
+        "lat": -135.54570491803,
+        "lng": 191.51318032787,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 510,
+        "floor_id": 372,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 103,
+        "lat": -157.17560655738,
+        "lng": 136.72918032787,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 510,
+        "floor_id": 372,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 103,
+        "lat": -97.120524590164,
+        "lng": 206.56262295082,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

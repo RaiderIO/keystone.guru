@@ -1,0 +1,1405 @@
+[
+    {
+        "id": 226396,
+        "dungeon_id": 137,
+        "classification_id": 3,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 124283,
+        "encounter_id": 2650,
+        "name": "Swampface",
+        "base_health": 341295496,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 2,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 226398,
+        "dungeon_id": 137,
+        "classification_id": 3,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 122867,
+        "encounter_id": 2650,
+        "name": "Big M.O.M.M.A.",
+        "base_health": 534958833,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.5,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 226402,
+        "dungeon_id": 137,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 122215,
+        "encounter_id": 2650,
+        "name": "Bront",
+        "base_health": 219404248,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.7,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 226403,
+        "dungeon_id": 137,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 123036,
+        "encounter_id": 2650,
+        "name": "Keeza Quickfuse",
+        "base_health": 170647748,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.7,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 226404,
+        "dungeon_id": 137,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 122475,
+        "encounter_id": 2650,
+        "name": "Geezle Gigazap",
+        "base_health": 390051996,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 2,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 227145,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 75850,
+        "encounter_id": null,
+        "name": "Waterworks Crocolisk",
+        "base_health": 48610763,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.3,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 465820
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17757,
+                "mapping_version_id": 510,
+                "npc_id": 227145,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17758,
+                "mapping_version_id": 509,
+                "npc_id": 227145,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 228144,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 122752,
+        "encounter_id": null,
+        "name": "Darkfuse Soldier",
+        "base_health": 48610763,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.2,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 462737
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17723,
+                "mapping_version_id": 510,
+                "npc_id": 228144,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17724,
+                "mapping_version_id": 509,
+                "npc_id": 228144,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 228424,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 125461,
+        "encounter_id": null,
+        "name": "Darkfuse Mechadrone",
+        "base_health": 48610767,
+        "health_percentage": null,
+        "level": 81,
+        "mdt_scale": 1.5,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 460393
+            },
+            {
+                "spell_id": 472452
+            },
+            {
+                "spell_id": 472454
+            },
+            {
+                "spell_id": 1214780
+            },
+            {
+                "spell_id": 1214801
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 229069,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 126613,
+        "encounter_id": null,
+        "name": "Mechadrone Sniper",
+        "base_health": 48610763,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.5,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 464655
+            },
+            {
+                "spell_id": 1214468
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17725,
+                "mapping_version_id": 510,
+                "npc_id": 229069,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17726,
+                "mapping_version_id": 509,
+                "npc_id": 229069,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 229212,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 124724,
+        "encounter_id": null,
+        "name": "Darkfuse Demolitionist",
+        "base_health": 48610763,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.5,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 461793
+            },
+            {
+                "spell_id": 461796
+            },
+            {
+                "spell_id": 461805
+            },
+            {
+                "spell_id": 1216039
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17733,
+                "mapping_version_id": 510,
+                "npc_id": 229212,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17734,
+                "mapping_version_id": 509,
+                "npc_id": 229212,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 229250,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 122082,
+        "encounter_id": null,
+        "name": "Venture Co. Contractor",
+        "base_health": 48610763,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.2,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 17729,
+                "mapping_version_id": 510,
+                "npc_id": 229250,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17730,
+                "mapping_version_id": 509,
+                "npc_id": 229250,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 229251,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 122097,
+        "encounter_id": null,
+        "name": "Venture Co. Architect",
+        "base_health": 63297101,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 2,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 465408
+            },
+            {
+                "spell_id": 1213803
+            },
+            {
+                "spell_id": 1213805
+            },
+            {
+                "spell_id": 1216894
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17747,
+                "mapping_version_id": 510,
+                "npc_id": 229251,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17748,
+                "mapping_version_id": 509,
+                "npc_id": 229251,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 229252,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 121293,
+        "encounter_id": null,
+        "name": "Darkfuse Hyena",
+        "base_health": 38888610,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.2,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 463058
+            },
+            {
+                "spell_id": 463061
+            },
+            {
+                "spell_id": 469771
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17731,
+                "mapping_version_id": 510,
+                "npc_id": 229252,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17732,
+                "mapping_version_id": 509,
+                "npc_id": 229252,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 229686,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 122080,
+        "encounter_id": null,
+        "name": "Venture Co. Surveyor",
+        "base_health": 48610763,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.5,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 462771
+            },
+            {
+                "spell_id": 462776
+            },
+            {
+                "spell_id": 463169
+            },
+            {
+                "spell_id": 469796
+            },
+            {
+                "spell_id": 472338
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17739,
+                "mapping_version_id": 510,
+                "npc_id": 229686,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17740,
+                "mapping_version_id": 509,
+                "npc_id": 229686,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 230740,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 122881,
+        "encounter_id": null,
+        "name": "Shreddinator 3000",
+        "base_health": 97221525,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.6,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 17721,
+                "mapping_version_id": 510,
+                "npc_id": 230740,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17722,
+                "mapping_version_id": 509,
+                "npc_id": 230740,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 230748,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 126383,
+        "encounter_id": null,
+        "name": "Darkfuse Bloodwarper",
+        "base_health": 77904125,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 2,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 465827
+            },
+            {
+                "spell_id": 465830
+            },
+            {
+                "spell_id": 465871
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17735,
+                "mapping_version_id": 510,
+                "npc_id": 230748,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17736,
+                "mapping_version_id": 509,
+                "npc_id": 230748,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 231014,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 121696,
+        "encounter_id": null,
+        "name": "Loaderbot",
+        "base_health": 38888610,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 465120
+            },
+            {
+                "spell_id": 465127
+            },
+            {
+                "spell_id": 465128
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17727,
+                "mapping_version_id": 510,
+                "npc_id": 231014,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17728,
+                "mapping_version_id": 509,
+                "npc_id": 231014,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 231197,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 124782,
+        "encounter_id": null,
+        "name": "Bubbles",
+        "base_health": 146070234,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 2,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 1,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [],
+        "npc_enemy_forces": [
+            {
+                "id": 17751,
+                "mapping_version_id": 510,
+                "npc_id": 231197,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17752,
+                "mapping_version_id": 509,
+                "npc_id": 231197,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 231223,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 126961,
+        "encounter_id": null,
+        "name": "Disturbed Kelp",
+        "base_health": 48690078,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.5,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 471733
+            },
+            {
+                "spell_id": 471736
+            },
+            {
+                "spell_id": 1217456
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17749,
+                "mapping_version_id": 510,
+                "npc_id": 231223,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17750,
+                "mapping_version_id": 509,
+                "npc_id": 231223,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 231312,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 124181,
+        "encounter_id": null,
+        "name": "Venture Co. Electrician",
+        "base_health": 48690078,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.5,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 465595
+            },
+            {
+                "spell_id": 469799
+            },
+            {
+                "spell_id": 469800
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17741,
+                "mapping_version_id": 510,
+                "npc_id": 231312,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17742,
+                "mapping_version_id": 509,
+                "npc_id": 231312,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 231325,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 122517,
+        "encounter_id": null,
+        "name": "Darkfuse Jumpstarter",
+        "base_health": 77904125,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.7,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 1,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 465604
+            },
+            {
+                "spell_id": 465666
+            },
+            {
+                "spell_id": 1216607
+            },
+            {
+                "spell_id": 1216610
+            },
+            {
+                "spell_id": 1216611
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17753,
+                "mapping_version_id": 510,
+                "npc_id": 231325,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17754,
+                "mapping_version_id": 509,
+                "npc_id": 231325,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 231380,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 112449,
+        "encounter_id": null,
+        "name": "Undercrawler",
+        "base_health": 48610763,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.3,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 465813
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17755,
+                "mapping_version_id": 510,
+                "npc_id": 231380,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17756,
+                "mapping_version_id": 509,
+                "npc_id": 231380,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 231385,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 124177,
+        "encounter_id": null,
+        "name": "Darkfuse Inspector",
+        "base_health": 48690078,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.5,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 20
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 465682
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17737,
+                "mapping_version_id": 510,
+                "npc_id": 231385,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17738,
+                "mapping_version_id": 509,
+                "npc_id": 231385,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 231496,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 122887,
+        "encounter_id": null,
+        "name": "Venture Co. Diver",
+        "base_health": 48690078,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.6,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 468631
+            },
+            {
+                "spell_id": 468726
+            },
+            {
+                "spell_id": 468727
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17745,
+                "mapping_version_id": 510,
+                "npc_id": 231496,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17746,
+                "mapping_version_id": 509,
+                "npc_id": 231496,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 231497,
+        "dungeon_id": 137,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 120779,
+        "encounter_id": null,
+        "name": "Bombshell Crab",
+        "base_health": 48610763,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 468672
+            },
+            {
+                "spell_id": 468680
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17743,
+                "mapping_version_id": 510,
+                "npc_id": 231497,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17744,
+                "mapping_version_id": 509,
+                "npc_id": 231497,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            }
+        ]
+    }
+]

@@ -1,0 +1,62 @@
+[
+    {
+        "id": 472,
+        "mapping_version_id": 504,
+        "floor_id": 369,
+        "target_floor_id": 67,
+        "lat": -192.56,
+        "lng": 102.62,
+        "size": 122,
+        "rotation": 0
+    },
+    {
+        "id": 473,
+        "mapping_version_id": 504,
+        "floor_id": 369,
+        "target_floor_id": 68,
+        "lat": -176.35,
+        "lng": 299.59,
+        "size": 183,
+        "rotation": 0
+    },
+    {
+        "id": 474,
+        "mapping_version_id": 504,
+        "floor_id": 369,
+        "target_floor_id": 69,
+        "lat": -76.34,
+        "lng": 103,
+        "size": 179,
+        "rotation": 0
+    },
+    {
+        "id": 475,
+        "mapping_version_id": 505,
+        "floor_id": 369,
+        "target_floor_id": 67,
+        "lat": -192.56,
+        "lng": 102.62,
+        "size": 122,
+        "rotation": 0
+    },
+    {
+        "id": 476,
+        "mapping_version_id": 505,
+        "floor_id": 369,
+        "target_floor_id": 68,
+        "lat": -176.35,
+        "lng": 299.59,
+        "size": 183,
+        "rotation": 0
+    },
+    {
+        "id": 477,
+        "mapping_version_id": 505,
+        "floor_id": 369,
+        "target_floor_id": 69,
+        "lat": -76.34,
+        "lng": 103,
+        "size": 179,
+        "rotation": 0
+    }
+]

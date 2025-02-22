@@ -46,6 +46,12 @@ class Hotkeys extends Signalable {
         console.assert(this instanceof Hotkeys, 'this is not an instance of Hotkeys', this);
 
         let keyEvent = event.originalEvent;
+
+        // Ignore if we put a key into an input or textarea
+        if (keyEvent.srcElement.tagName === 'INPUT' || keyEvent.srcElement.tagName === 'TEXTAREA') {
+            return;
+        }
+
         let keyObj = null;
         for (let i = 0; i < this.keys.length; i++) {
             let keyObjCandidate = this.keys[i];

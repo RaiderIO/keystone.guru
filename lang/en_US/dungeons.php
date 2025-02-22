@@ -809,10 +809,11 @@ return [
         'mechagon_workshop'         => [
             'name'   => 'Operation Mechagon: Workshop',
             'floors' => [
-                'the_robodrome'  => 'The Robodrome',
-                'waste_pipes'    => 'Waste Pipes',
-                'the_under_junk' => 'The Under Junk',
-                'mechagon_city'  => 'Mechagon City',
+                'the_robodrome'               => 'The Robodrome',
+                'waste_pipes'                 => 'Waste Pipes',
+                'the_under_junk'              => 'The Under Junk',
+                'mechagon_city'               => 'Mechagon City',
+                'operation_mechagon_workshop' => 'Operation Mechagon: Workshop',
             ],
         ],
         'orgrimmar_horrific_vision' => [
@@ -1029,6 +1030,7 @@ return [
             'name'   => 'Darkflame Cleft',
             'floors' => [
                 'darkflame_cleft' => 'Darkflame Cleft',
+                'shadow_realm'    => 'Shadow Realm',
             ],
         ],
         'priory_of_the_sacred_flame' => [
@@ -1060,6 +1062,14 @@ return [
             'name'   => 'The Stonevault',
             'floors' => [
                 'the_stonevault' => 'The Stonevault',
+            ],
+        ],
+        'operation_floodgate'        => [
+            'name'   => 'Operation: Floodgate',
+            'floors' => [
+                'the_waterworks'      => 'The Waterworks',
+                'the_grid'            => 'The G.R.I.D.',
+                'operation_floodgate' => 'Operation: Floodgate',
             ],
         ],
     ],

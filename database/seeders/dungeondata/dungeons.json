@@ -1874,13 +1874,13 @@
         "instance_id": 1023,
         "challenge_mode_id": 353,
         "mdt_id": 19,
-        "raid": 1,
+        "raid": 0,
         "key": "siegeofboralus",
         "name": "dungeons.bfa.siege_of_boralus.name",
         "slug": "siege-of-boralus",
         "heatmap_enabled": 1,
         "speedrun_enabled": 0,
-        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 0,
         "mdt_supported": true,
         "floors": [
@@ -2025,7 +2025,7 @@
         "map_id": 1594,
         "instance_id": 1012,
         "challenge_mode_id": 247,
-        "mdt_id": 21,
+        "mdt_id": 120,
         "raid": 0,
         "key": "themotherlode",
         "name": "dungeons.bfa.the_motherlode.name",
@@ -2722,7 +2722,7 @@
         "map_id": 2097,
         "instance_id": 1178,
         "challenge_mode_id": 370,
-        "mdt_id": 26,
+        "mdt_id": 122,
         "raid": 0,
         "key": "mechagonworkshop",
         "name": "dungeons.bfa.mechagon_workshop.name",
@@ -2829,6 +2829,30 @@
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 369,
+                "index": 5,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.bfa.mechagon_workshop.floors.operation_mechagon_workshop",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
@@ -3783,7 +3807,7 @@
         "map_id": 2293,
         "instance_id": 1187,
         "challenge_mode_id": 382,
-        "mdt_id": 36,
+        "mdt_id": 121,
         "raid": 0,
         "key": "theaterofpain",
         "name": "dungeons.sl.theater_of_pain.name",
@@ -3970,6 +3994,30 @@
                         "direction": "up"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 368,
+                "index": 6,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.sl.theater_of_pain.floors.theater_of_pain",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
@@ -12707,7 +12755,7 @@
         "map_id": 2661,
         "instance_id": 1272,
         "challenge_mode_id": 506,
-        "mdt_id": 0,
+        "mdt_id": 116,
         "raid": 0,
         "key": "cinderbrewmeadery",
         "name": "dungeons.tww.cinderbrew_meadery.name",
@@ -12716,7 +12764,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 285,
@@ -12859,7 +12907,7 @@
         "map_id": 2651,
         "instance_id": 1210,
         "challenge_mode_id": 504,
-        "mdt_id": 0,
+        "mdt_id": 117,
         "raid": 0,
         "key": "darkflamecleft",
         "name": "dungeons.tww.darkflame_cleft.name",
@@ -12868,7 +12916,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 289,
@@ -12890,6 +12938,68 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1040,
+                        "floor1_id": 289,
+                        "floor2_id": 370,
+                        "direction": "left"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 370,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": 2303,
+                "map_name": null,
+                "name": "dungeons.tww.darkflame_cleft.floors.shadow_realm",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1041,
+                        "floor1_id": 370,
+                        "floor2_id": 289,
+                        "direction": "right"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 371,
+                "index": 3,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.tww.darkflame_cleft.floors.darkflame_cleft",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
                 "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
@@ -12904,7 +13014,7 @@
         "map_id": 2649,
         "instance_id": 1267,
         "challenge_mode_id": 499,
-        "mdt_id": 0,
+        "mdt_id": 115,
         "raid": 0,
         "key": "prioryofthesacredflame",
         "name": "dungeons.tww.priory_of_the_sacred_flame.name",
@@ -12913,7 +13023,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 290,
@@ -12937,10 +13047,10 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 950,
+                        "id": 1060,
                         "floor1_id": 290,
                         "floor2_id": 291,
-                        "direction": "up"
+                        "direction": "left"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -12968,16 +13078,10 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 951,
+                        "id": 1061,
                         "floor1_id": 291,
                         "floor2_id": 290,
-                        "direction": "up"
-                    },
-                    {
-                        "id": 952,
-                        "floor1_id": 291,
-                        "floor2_id": 290,
-                        "direction": "up"
+                        "direction": "right"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -13086,7 +13190,7 @@
         "map_id": 2648,
         "instance_id": 1268,
         "challenge_mode_id": 500,
-        "mdt_id": 0,
+        "mdt_id": 118,
         "raid": 0,
         "key": "therookery",
         "name": "dungeons.tww.the_rookery.name",
@@ -13095,7 +13199,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 294,
@@ -13119,19 +13223,19 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 953,
+                        "id": 1042,
                         "floor1_id": 294,
                         "floor2_id": 295,
-                        "direction": "up"
+                        "direction": "left"
                     },
                     {
-                        "id": 960,
+                        "id": 1043,
                         "floor1_id": 294,
                         "floor2_id": 297,
                         "direction": "up"
                     },
                     {
-                        "id": 961,
+                        "id": 1044,
                         "floor1_id": 294,
                         "floor2_id": 298,
                         "direction": "up"
@@ -13162,16 +13266,22 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 954,
+                        "id": 1049,
                         "floor1_id": 295,
                         "floor2_id": 294,
-                        "direction": "up"
+                        "direction": "right"
                     },
                     {
-                        "id": 955,
+                        "id": 1050,
                         "floor1_id": 295,
                         "floor2_id": 296,
-                        "direction": "up"
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1051,
+                        "floor1_id": 295,
+                        "floor2_id": 297,
+                        "direction": "down"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -13199,16 +13309,16 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 956,
+                        "id": 1064,
                         "floor1_id": 296,
                         "floor2_id": 295,
                         "direction": "up"
                     },
                     {
-                        "id": 957,
+                        "id": 1065,
                         "floor1_id": 296,
                         "floor2_id": 297,
-                        "direction": "up"
+                        "direction": "down"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -13236,16 +13346,28 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 958,
+                        "id": 1054,
+                        "floor1_id": 297,
+                        "floor2_id": 294,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1055,
+                        "floor1_id": 297,
+                        "floor2_id": 295,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1056,
                         "floor1_id": 297,
                         "floor2_id": 296,
                         "direction": "up"
                     },
                     {
-                        "id": 959,
+                        "id": 1057,
                         "floor1_id": 297,
-                        "floor2_id": 294,
-                        "direction": "up"
+                        "floor2_id": 298,
+                        "direction": "down"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -13273,16 +13395,16 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 962,
+                        "id": 1058,
                         "floor1_id": 298,
-                        "floor2_id": 294,
+                        "floor2_id": 297,
                         "direction": "up"
                     },
                     {
-                        "id": 963,
+                        "id": 1059,
                         "floor1_id": 298,
                         "floor2_id": 299,
-                        "direction": "up"
+                        "direction": "down"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],
@@ -15777,6 +15899,113 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
+    },
+    {
+        "id": 137,
+        "expansion_id": 11,
+        "game_version_id": 1,
+        "zone_id": 15452,
+        "map_id": 2773,
+        "instance_id": 1298,
+        "challenge_mode_id": null,
+        "mdt_id": 119,
+        "raid": 0,
+        "key": "operationfloodgate",
+        "name": "dungeons.tww.operation_floodgate.name",
+        "slug": "operation-floodgate",
+        "heatmap_enabled": 0,
+        "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
+        "mdt_supported": true,
+        "floors": [
+            {
+                "id": 372,
+                "index": 1,
+                "mdt_sub_level": null,
+                "ui_map_id": 2387,
+                "map_name": null,
+                "name": "dungeons.tww.operation_floodgate.floors.the_waterworks",
+                "default": 1,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1062,
+                        "floor1_id": 372,
+                        "floor2_id": 373,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 373,
+                "index": 2,
+                "mdt_sub_level": null,
+                "ui_map_id": 2388,
+                "map_name": null,
+                "name": "dungeons.tww.operation_floodgate.floors.the_grid",
+                "default": 0,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [
+                    {
+                        "id": 1063,
+                        "floor1_id": 373,
+                        "floor2_id": 372,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 374,
+                "index": 3,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.tww.operation_floodgate.floors.operation_floodgate",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }

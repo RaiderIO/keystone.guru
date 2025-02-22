@@ -56,6 +56,8 @@ class EnemyVisualMain extends EnemyVisualIcon {
                 mainVisualInnerClasses.push('prideful');
             } else if (this.enemyvisual.enemy.isTormented()) {
                 mainVisualInnerClasses.push('tormented');
+            } else if (this.enemyvisual.enemy.isRequiresActivation()) {
+                mainVisualInnerClasses.push('requires_activation');
             }
         }
 

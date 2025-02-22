@@ -1,0 +1,67 @@
+{
+    "id": 280,
+    "release_changelog_id": 287,
+    "version": "v13.0",
+    "title": "Added TWW S2 dungeons",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-02-21T21:23:45+00:00",
+    "updated_at": "2025-02-21T21:23:45+00:00",
+    "changelog": {
+        "id": 287,
+        "release_id": 280,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 287,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2730,
+                "change": "Updated Theater of Pain mapping."
+            },
+            {
+                "release_changelog_id": 287,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2731,
+                "change": "Added The Rookery."
+            },
+            {
+                "release_changelog_id": 287,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2732,
+                "change": "Added Operation Floodgate."
+            },
+            {
+                "release_changelog_id": 287,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2733,
+                "change": "Updated The MOTHERLODE!! mapping."
+            },
+            {
+                "release_changelog_id": 287,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2734,
+                "change": "Updated Operation Mechagon: Workshop mapping."
+            },
+            {
+                "release_changelog_id": 287,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2735,
+                "change": "Added Priory of the Sacred Flame."
+            },
+            {
+                "release_changelog_id": 287,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2738,
+                "change": "Added Cinderbrew Meadery."
+            },
+            {
+                "release_changelog_id": 287,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2739,
+                "change": "Added Darkflame Cleft."
+            }
+        ]
+    }
+}

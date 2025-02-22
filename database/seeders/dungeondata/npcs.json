@@ -8417,14 +8417,7 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 24
-            }
-        ],
+        "npc_characteristics": [],
         "npc_spells": [
             {
                 "spell_id": 355707
@@ -8462,14 +8455,7 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 24
-            }
-        ],
+        "npc_characteristics": [],
         "npc_spells": [
             {
                 "spell_id": 355714
@@ -8507,14 +8493,7 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 24
-            }
-        ],
+        "npc_characteristics": [],
         "npc_spells": [
             {
                 "spell_id": 355719
@@ -8555,14 +8534,7 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 24
-            }
-        ],
+        "npc_characteristics": [],
         "npc_spells": [
             {
                 "spell_id": 355710
@@ -8638,7 +8610,7 @@
         "display_id": 103111,
         "encounter_id": null,
         "name": "Vy Relic",
-        "base_health": 27489,
+        "base_health": 33039,
         "health_percentage": null,
         "level": 62,
         "mdt_scale": 1,
@@ -8650,11 +8622,7 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            }
-        ],
+        "npc_characteristics": [],
         "npc_spells": [
             {
                 "spell_id": 366406
@@ -8680,7 +8648,7 @@
         "display_id": 101046,
         "encounter_id": null,
         "name": "Wo Relic",
-        "base_health": 27489,
+        "base_health": 33039,
         "health_percentage": null,
         "level": 62,
         "mdt_scale": 1,
@@ -8692,11 +8660,7 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            }
-        ],
+        "npc_characteristics": [],
         "npc_spells": [
             {
                 "spell_id": 366566
@@ -8719,7 +8683,7 @@
         "display_id": 105134,
         "encounter_id": null,
         "name": "Urh Relic",
-        "base_health": 27489,
+        "base_health": 33039,
         "health_percentage": null,
         "level": 62,
         "mdt_scale": 1,
@@ -8731,11 +8695,7 @@
         "sanguine": 0,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            }
-        ],
+        "npc_characteristics": [],
         "npc_spells": [
             {
                 "spell_id": 366288

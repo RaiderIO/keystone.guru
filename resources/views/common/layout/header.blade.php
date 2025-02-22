@@ -41,7 +41,7 @@ foreach ($activeExpansions as $expansion) {
 if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
     if ($nextSeason !== null) {
         $navs[route('dungeonroutes.season', ['expansion' => $nextSeason->expansion, 'season' => $nextSeason->index])] = [
-            'text' => $nextSeason->name_long
+            'text' => $nextSeason->expansion_id !== $currentSeason->expansion_id ? $nextSeason->name_long : $nextSeason->name,
         ];
     }
 

@@ -122,7 +122,7 @@ class DungeonExploreController extends Controller
                 'title'                   => __($dungeon->name),
                 'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
                 'showHeatmapSearch'       => $heatmapActive,
-                'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons ?
+                'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons && $mostRecentSeason !== null ?
                     $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
             ]));

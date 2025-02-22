@@ -1,1 +1,26 @@
-[]
+[
+    {
+        "id": 13782,
+        "mapping_version_id": 507,
+        "floor_id": 298,
+        "group": 20,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 20",
+        "vertices_json": "[{\"lat\":-222.82,\"lng\":220.98},{\"lat\":-211.34,\"lng\":220.98},{\"lat\":-211.34,\"lng\":231.96},{\"lat\":-222.82,\"lng\":231.96}]"
+    },
+    {
+        "id": 13783,
+        "mapping_version_id": 507,
+        "floor_id": 298,
+        "group": 21,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 21",
+        "vertices_json": "[{\"lat\":-221.2,\"lng\":157.08},{\"lat\":-209.32,\"lng\":157.08},{\"lat\":-209.32,\"lng\":168.44},{\"lat\":-221.2,\"lng\":168.44}]"
+    }
+]

@@ -8,10 +8,10 @@
         "display_id": 80443,
         "encounter_id": 2109,
         "name": "Coin-Operated Crowd Pummeler",
-        "base_health": 8914542,
+        "base_health": 487564995,
         "health_percentage": null,
-        "level": 122,
-        "mdt_scale": 1,
+        "level": 82,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -46,6 +46,9 @@
             },
             {
                 "spell_id": 271903
+            },
+            {
+                "spell_id": 1217294
             }
         ],
         "npc_enemy_forces": []
@@ -59,10 +62,10 @@
         "display_id": 83891,
         "encounter_id": 2114,
         "name": "Azerokk",
-        "base_health": 4733929,
+        "base_health": 307165947,
         "health_percentage": null,
-        "level": 122,
-        "mdt_scale": 1,
+        "level": 82,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -87,10 +90,16 @@
                 "spell_id": 258622
             },
             {
+                "spell_id": 258628
+            },
+            {
                 "spell_id": 271698
             },
             {
                 "spell_id": 275907
+            },
+            {
+                "spell_id": 471894
             }
         ],
         "npc_enemy_forces": []
@@ -104,10 +113,10 @@
         "display_id": 81489,
         "encounter_id": 2115,
         "name": "Rixxa Fluxflame",
-        "base_health": 5379465,
+        "base_health": 307165947,
         "health_percentage": null,
-        "level": 122,
-        "mdt_scale": 1,
+        "level": 82,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -132,7 +141,16 @@
                 "spell_id": 259856
             },
             {
+                "spell_id": 259940
+            },
+            {
                 "spell_id": 260669
+            },
+            {
+                "spell_id": 270042
+            },
+            {
+                "spell_id": 275992
             }
         ],
         "npc_enemy_forces": []
@@ -143,13 +161,13 @@
         "classification_id": 4,
         "npc_type_id": 9,
         "npc_class_id": 1,
-        "display_id": 81816,
+        "display_id": 127820,
         "encounter_id": 2116,
         "name": "Mogul Razdunk",
-        "base_health": 5994261,
+        "base_health": 312041597,
         "health_percentage": null,
-        "level": 122,
-        "mdt_scale": 1,
+        "level": 82,
+        "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -204,18 +222,53 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 129246,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "npc_type_id": 100,
+        "npc_class_id": 1,
+        "display_id": 85701,
+        "encounter_id": null,
+        "name": "Azerite Footbomb",
+        "base_health": 9738015,
+        "health_percentage": null,
+        "level": 81,
+        "mdt_scale": 1,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 256137
+            },
+            {
+                "spell_id": 256493
+            },
+            {
+                "spell_id": 270882
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 129802,
         "dungeon_id": 20,
         "classification_id": 2,
         "npc_type_id": 6,
         "npc_class_id": 1,
-        "display_id": 83052,
+        "display_id": 124456,
         "encounter_id": null,
         "name": "Earthrager",
-        "base_health": 768495,
+        "base_health": 81150140,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 1,
+        "level": 80,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -232,25 +285,13 @@
                 "characteristic_id": 2
             },
             {
-                "characteristic_id": 5
-            },
-            {
                 "characteristic_id": 11
             },
             {
                 "characteristic_id": 12
             },
             {
-                "characteristic_id": 13
-            },
-            {
-                "characteristic_id": 14
-            },
-            {
                 "characteristic_id": 18
-            },
-            {
-                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -265,6 +306,12 @@
             },
             {
                 "spell_id": 271526
+            },
+            {
+                "spell_id": 1213142
+            },
+            {
+                "spell_id": 1214673
             }
         ],
         "npc_enemy_forces": []
@@ -275,16 +322,16 @@
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
-        "display_id": 30262,
+        "display_id": 124175,
         "encounter_id": null,
         "name": "Addled Thug",
-        "base_health": 999044,
+        "base_health": 68166109,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 1.2,
+        "level": 80,
+        "mdt_scale": 0.7,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0,
+        "truesight": 1,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
@@ -293,33 +340,6 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
-                "characteristic_id": 12
-            },
-            {
-                "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 16
-            },
-            {
-                "characteristic_id": 18
-            },
-            {
-                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -343,9 +363,22 @@
             },
             {
                 "spell_id": 277564
+            },
+            {
+                "spell_id": 1217279
+            },
+            {
+                "spell_id": 1217280
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17763,
+                "mapping_version_id": 512,
+                "npc_id": 130435,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1190,
                 "mapping_version_id": 20,
@@ -364,10 +397,10 @@
         "display_id": 81226,
         "encounter_id": null,
         "name": "Off-Duty Laborer",
-        "base_health": 307398,
+        "base_health": 19476031,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 0.8,
+        "level": 80,
+        "mdt_scale": 0.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -379,9 +412,6 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 2
             },
             {
                 "characteristic_id": 5
@@ -396,13 +426,10 @@
                 "characteristic_id": 14
             },
             {
-                "characteristic_id": 17
-            },
-            {
                 "characteristic_id": 18
             },
             {
-                "characteristic_id": 19
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -421,6 +448,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17760,
+                "mapping_version_id": 512,
+                "npc_id": 130436,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 1191,
                 "mapping_version_id": 20,
                 "npc_id": 130436,
@@ -435,13 +469,13 @@
         "classification_id": 1,
         "npc_type_id": 8,
         "npc_class_id": 1,
-        "display_id": 65436,
+        "display_id": 114158,
         "encounter_id": null,
         "name": "Mine Rat",
-        "base_health": 461097,
+        "base_health": 24345039,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 0.8,
+        "level": 80,
+        "mdt_scale": 0.6,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -452,31 +486,13 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
                 "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 10
             },
             {
                 "characteristic_id": 11
             },
             {
-                "characteristic_id": 12
-            },
-            {
-                "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 17
-            },
-            {
                 "characteristic_id": 18
-            },
-            {
-                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -495,6 +511,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17767,
+                "mapping_version_id": 512,
+                "npc_id": 130437,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 1192,
                 "mapping_version_id": 20,
                 "npc_id": 130437,
@@ -512,10 +535,10 @@
         "display_id": 82943,
         "encounter_id": null,
         "name": "Mechanized Peacekeeper",
-        "base_health": 1229592,
+        "base_health": 87642140,
         "health_percentage": null,
-        "level": 121,
-        "mdt_scale": 1.2,
+        "level": 81,
+        "mdt_scale": 0.7,
         "aggressiveness": "neutral",
         "dangerous": 1,
         "truesight": 0,
@@ -534,6 +557,9 @@
                 "spell_id": 209859
             },
             {
+                "spell_id": 257371
+            },
+            {
                 "spell_id": 262066
             },
             {
@@ -547,9 +573,22 @@
             },
             {
                 "spell_id": 277564
+            },
+            {
+                "spell_id": 472041
+            },
+            {
+                "spell_id": 1217283
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17781,
+                "mapping_version_id": 512,
+                "npc_id": 130485,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1193,
                 "mapping_version_id": 20,
@@ -568,10 +607,10 @@
         "display_id": 81265,
         "encounter_id": null,
         "name": "Mech Jockey",
-        "base_health": 768495,
+        "base_health": 48690078,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 1,
+        "level": 80,
+        "mdt_scale": 0.7,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -582,16 +621,10 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
-            },
-            {
                 "characteristic_id": 2
             },
             {
                 "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 10
             },
             {
                 "characteristic_id": 11
@@ -606,13 +639,10 @@
                 "characteristic_id": 16
             },
             {
-                "characteristic_id": 17
-            },
-            {
                 "characteristic_id": 18
             },
             {
-                "characteristic_id": 19
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -642,9 +672,19 @@
             },
             {
                 "spell_id": 281621
+            },
+            {
+                "spell_id": 1213893
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17762,
+                "mapping_version_id": 512,
+                "npc_id": 130488,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1194,
                 "mapping_version_id": 20,
@@ -660,13 +700,13 @@
         "classification_id": 2,
         "npc_type_id": 6,
         "npc_class_id": 1,
-        "display_id": 83052,
+        "display_id": 127697,
         "encounter_id": null,
         "name": "Stonefury",
-        "base_health": 768495,
+        "base_health": 48690078,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 1,
+        "level": 80,
+        "mdt_scale": 0.7,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -686,22 +726,13 @@
                 "characteristic_id": 5
             },
             {
-                "characteristic_id": 11
-            },
-            {
                 "characteristic_id": 12
-            },
-            {
-                "characteristic_id": 13
             },
             {
                 "characteristic_id": 14
             },
             {
                 "characteristic_id": 18
-            },
-            {
-                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -726,6 +757,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17772,
+                "mapping_version_id": 512,
+                "npc_id": 130635,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 1195,
                 "mapping_version_id": 20,
                 "npc_id": 130635,
@@ -743,10 +781,10 @@
         "display_id": 81316,
         "encounter_id": null,
         "name": "Wanton Sapper",
-        "base_health": 768495,
+        "base_health": 48690078,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 1,
+        "level": 80,
+        "mdt_scale": 0.7,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -760,13 +798,7 @@
                 "characteristic_id": 1
             },
             {
-                "characteristic_id": 2
-            },
-            {
                 "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 10
             },
             {
                 "characteristic_id": 11
@@ -778,13 +810,7 @@
                 "characteristic_id": 14
             },
             {
-                "characteristic_id": 17
-            },
-            {
                 "characteristic_id": 18
-            },
-            {
-                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -809,6 +835,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17768,
+                "mapping_version_id": 512,
+                "npc_id": 130653,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 1196,
                 "mapping_version_id": 20,
                 "npc_id": 130653,
@@ -826,10 +859,10 @@
         "display_id": 81333,
         "encounter_id": null,
         "name": "Venture Co. Earthshaper",
-        "base_health": 768495,
+        "base_health": 48690078,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 1,
+        "level": 80,
+        "mdt_scale": 0.7,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -849,9 +882,6 @@
                 "characteristic_id": 5
             },
             {
-                "characteristic_id": 10
-            },
-            {
                 "characteristic_id": 11
             },
             {
@@ -861,13 +891,7 @@
                 "characteristic_id": 14
             },
             {
-                "characteristic_id": 17
-            },
-            {
                 "characteristic_id": 18
-            },
-            {
-                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -891,9 +915,19 @@
             },
             {
                 "spell_id": 277564
+            },
+            {
+                "spell_id": 1215934
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17766,
+                "mapping_version_id": 512,
+                "npc_id": 130661,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1197,
                 "mapping_version_id": 20,
@@ -902,6 +936,45 @@
                 "enemy_forces_teeming": null
             }
         ]
+    },
+    {
+        "id": 132056,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 82922,
+        "encounter_id": null,
+        "name": "Venture Co. Skyscorcher",
+        "base_health": 40575070,
+        "health_percentage": null,
+        "level": 81,
+        "mdt_scale": 1.6,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 260372
+            },
+            {
+                "spell_id": 262513
+            },
+            {
+                "spell_id": 262515
+            }
+        ],
+        "npc_enemy_forces": []
     },
     {
         "id": 133345,
@@ -998,10 +1071,10 @@
         "display_id": 83136,
         "encounter_id": null,
         "name": "Venture Co. Mastermind",
-        "base_health": 1229592,
+        "base_health": 77904125,
         "health_percentage": null,
-        "level": 121,
-        "mdt_scale": 1.2,
+        "level": 81,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -1029,13 +1102,35 @@
                 "spell_id": 262947
             },
             {
+                "spell_id": 268880
+            },
+            {
                 "spell_id": 271428
             },
             {
                 "spell_id": 277564
+            },
+            {
+                "spell_id": 473304
+            },
+            {
+                "spell_id": 1214748
+            },
+            {
+                "spell_id": 1215424
+            },
+            {
+                "spell_id": 1215916
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17774,
+                "mapping_version_id": 512,
+                "npc_id": 133430,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1199,
                 "mapping_version_id": 20,
@@ -1054,10 +1149,10 @@
         "display_id": 82915,
         "encounter_id": null,
         "name": "Venture Co. Alchemist",
-        "base_health": 768495,
+        "base_health": 48690078,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 1,
+        "level": 80,
+        "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1069,6 +1164,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
             },
             {
                 "characteristic_id": 5
@@ -1086,13 +1184,7 @@
                 "characteristic_id": 16
             },
             {
-                "characteristic_id": 17
-            },
-            {
                 "characteristic_id": 18
-            },
-            {
-                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1116,6 +1208,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17776,
+                "mapping_version_id": 512,
+                "npc_id": 133432,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1200,
                 "mapping_version_id": 20,
@@ -1196,10 +1295,10 @@
         "display_id": 83391,
         "encounter_id": null,
         "name": "Venture Co. War Machine",
-        "base_health": 1229592,
+        "base_health": 92511148,
         "health_percentage": null,
-        "level": 121,
-        "mdt_scale": 1.3,
+        "level": 81,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 1,
@@ -1232,6 +1331,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17778,
+                "mapping_version_id": 512,
+                "npc_id": 133463,
+                "enemy_forces": 22,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 1202,
                 "mapping_version_id": 20,
                 "npc_id": 133463,
@@ -1246,13 +1352,13 @@
         "classification_id": 1,
         "npc_type_id": 9,
         "npc_class_id": 1,
-        "display_id": 49134,
+        "display_id": 127835,
         "encounter_id": null,
         "name": "Crawler Mine",
-        "base_health": 19707,
+        "base_health": 3408305,
         "health_percentage": null,
-        "level": 121,
-        "mdt_scale": 0.7,
+        "level": 81,
+        "mdt_scale": 0.5,
         "aggressiveness": "neutral",
         "dangerous": 0,
         "truesight": 0,
@@ -1266,7 +1372,7 @@
                 "characteristic_id": 11
             },
             {
-                "characteristic_id": 19
+                "characteristic_id": 18
             }
         ],
         "npc_spells": [
@@ -1281,9 +1387,19 @@
             },
             {
                 "spell_id": 277564
+            },
+            {
+                "spell_id": 1217689
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17780,
+                "mapping_version_id": 512,
+                "npc_id": 133482,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1203,
                 "mapping_version_id": 20,
@@ -1365,80 +1481,15 @@
         "id": 133963,
         "dungeon_id": 20,
         "classification_id": 1,
-        "npc_type_id": 8,
+        "npc_type_id": 2,
         "npc_class_id": 1,
         "display_id": 1141,
         "encounter_id": null,
         "name": "Test Subject",
-        "base_health": 153699,
+        "base_health": 9738015,
         "health_percentage": null,
-        "level": 120,
+        "level": 80,
         "mdt_scale": 0.5,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "runs_away_in_fear": 0,
-        "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 12
-            },
-            {
-                "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 18
-            },
-            {
-                "characteristic_id": 19
-            }
-        ],
-        "npc_spells": [
-            {
-                "spell_id": 209859
-            },
-            {
-                "spell_id": 268810
-            },
-            {
-                "spell_id": 268815
-            },
-            {
-                "spell_id": 277242
-            },
-            {
-                "spell_id": 277564
-            }
-        ],
-        "npc_enemy_forces": [
-            {
-                "id": 1205,
-                "mapping_version_id": 20,
-                "npc_id": 133963,
-                "enemy_forces": 1,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
-        "id": 134005,
-        "dungeon_id": 20,
-        "classification_id": 1,
-        "npc_type_id": 6,
-        "npc_class_id": 2,
-        "display_id": 88196,
-        "encounter_id": null,
-        "name": "Shalebiter",
-        "base_health": 153699,
-        "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 0.7,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1461,10 +1512,76 @@
                 "characteristic_id": 12
             },
             {
-                "characteristic_id": 18
+                "characteristic_id": 14
             },
             {
-                "characteristic_id": 19
+                "characteristic_id": 18
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 209859
+            },
+            {
+                "spell_id": 268810
+            },
+            {
+                "spell_id": 268815
+            },
+            {
+                "spell_id": 277242
+            },
+            {
+                "spell_id": 277564
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17777,
+                "mapping_version_id": 512,
+                "npc_id": 133963,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 1205,
+                "mapping_version_id": 20,
+                "npc_id": 133963,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 134005,
+        "dungeon_id": 20,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 2,
+        "display_id": 127834,
+        "encounter_id": null,
+        "name": "Shalebiter",
+        "base_health": 9738015,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 0.6,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 18
             }
         ],
         "npc_spells": [
@@ -1483,6 +1600,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17771,
+                "mapping_version_id": 512,
+                "npc_id": 134005,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 1206,
                 "mapping_version_id": 20,
                 "npc_id": 134005,
@@ -1500,10 +1624,10 @@
         "display_id": 83286,
         "encounter_id": null,
         "name": "Taskmaster Askari",
-        "base_health": 1229592,
+        "base_health": 97380156,
         "health_percentage": null,
-        "level": 121,
-        "mdt_scale": 1.4,
+        "level": 81,
+        "mdt_scale": 0.9,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1535,9 +1659,34 @@
             },
             {
                 "spell_id": 263601
+            },
+            {
+                "spell_id": 1213139
+            },
+            {
+                "spell_id": 1213140
+            },
+            {
+                "spell_id": 1213141
+            },
+            {
+                "spell_id": 1214751
+            },
+            {
+                "spell_id": 1214752
+            },
+            {
+                "spell_id": 1214754
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17773,
+                "mapping_version_id": 512,
+                "npc_id": 134012,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1207,
                 "mapping_version_id": 20,
@@ -1556,10 +1705,10 @@
         "display_id": 83395,
         "encounter_id": null,
         "name": "Hired Assassin",
-        "base_health": 768495,
+        "base_health": 43821070,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 1,
+        "level": 80,
+        "mdt_scale": 0.7,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1573,13 +1722,7 @@
                 "characteristic_id": 1
             },
             {
-                "characteristic_id": 2
-            },
-            {
                 "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 10
             },
             {
                 "characteristic_id": 11
@@ -1594,13 +1737,7 @@
                 "characteristic_id": 16
             },
             {
-                "characteristic_id": 17
-            },
-            {
                 "characteristic_id": 18
-            },
-            {
-                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1624,6 +1761,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17764,
+                "mapping_version_id": 512,
+                "npc_id": 134232,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1208,
                 "mapping_version_id": 20,
@@ -1714,10 +1858,10 @@
         "display_id": 82943,
         "encounter_id": null,
         "name": "Mechanized Peacekeeper",
-        "base_health": 1229592,
+        "base_health": 87642140,
         "health_percentage": null,
-        "level": 121,
-        "mdt_scale": 1.6,
+        "level": 81,
+        "mdt_scale": 0.9,
         "aggressiveness": "neutral",
         "dangerous": 1,
         "truesight": 0,
@@ -1736,6 +1880,9 @@
                 "spell_id": 209859
             },
             {
+                "spell_id": 257371
+            },
+            {
                 "spell_id": 262066
             },
             {
@@ -1743,9 +1890,22 @@
             },
             {
                 "spell_id": 263628
+            },
+            {
+                "spell_id": 472041
+            },
+            {
+                "spell_id": 1217283
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17765,
+                "mapping_version_id": 512,
+                "npc_id": 136139,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1211,
                 "mapping_version_id": 20,
@@ -1764,10 +1924,10 @@
         "display_id": 84784,
         "encounter_id": null,
         "name": "Refreshment Vendor",
-        "base_health": 768495,
+        "base_health": 48690078,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 1,
+        "level": 80,
+        "mdt_scale": 0.7,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1781,13 +1941,7 @@
                 "characteristic_id": 1
             },
             {
-                "characteristic_id": 2
-            },
-            {
                 "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 10
             },
             {
                 "characteristic_id": 11
@@ -1799,16 +1953,10 @@
                 "characteristic_id": 14
             },
             {
-                "characteristic_id": 16
-            },
-            {
-                "characteristic_id": 17
-            },
-            {
                 "characteristic_id": 18
             },
             {
-                "characteristic_id": 19
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -1839,6 +1987,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17761,
+                "mapping_version_id": 512,
+                "npc_id": 136470,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 1212,
                 "mapping_version_id": 20,
                 "npc_id": 136470,
@@ -1856,10 +2011,10 @@
         "display_id": 84881,
         "encounter_id": null,
         "name": "Azerite Extractor",
-        "base_health": 1229592,
+        "base_health": 92511148,
         "health_percentage": null,
-        "level": 121,
-        "mdt_scale": 1.2,
+        "level": 81,
+        "mdt_scale": 0.9,
         "aggressiveness": "aggressive",
         "dangerous": 1,
         "truesight": 0,
@@ -1885,9 +2040,28 @@
             },
             {
                 "spell_id": 277564
+            },
+            {
+                "spell_id": 473168
+            },
+            {
+                "spell_id": 473177
+            },
+            {
+                "spell_id": 473198
+            },
+            {
+                "spell_id": 1215411
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17769,
+                "mapping_version_id": 512,
+                "npc_id": 136643,
+                "enemy_forces": 16,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1213,
                 "mapping_version_id": 20,
@@ -1931,9 +2105,9 @@
         "display_id": 84962,
         "encounter_id": null,
         "name": "Weapons Tester",
-        "base_health": 768495,
+        "base_health": 48690078,
         "health_percentage": null,
-        "level": 120,
+        "level": 80,
         "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 1,
@@ -1945,7 +2119,7 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
-                "characteristic_id": 1
+                "characteristic_id": 5
             },
             {
                 "characteristic_id": 11
@@ -1957,13 +2131,10 @@
                 "characteristic_id": 14
             },
             {
-                "characteristic_id": 17
+                "characteristic_id": 16
             },
             {
                 "characteristic_id": 18
-            },
-            {
-                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1985,6 +2156,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17775,
+                "mapping_version_id": 512,
+                "npc_id": 136934,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 1215,
                 "mapping_version_id": 20,
                 "npc_id": 136934,
@@ -2002,10 +2180,10 @@
         "display_id": 85024,
         "encounter_id": null,
         "name": "Ordnance Specialist",
-        "base_health": 768495,
+        "base_health": 38952062,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 1,
+        "level": 80,
+        "mdt_scale": 0.8,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2019,16 +2197,16 @@
                 "characteristic_id": 1
             },
             {
-                "characteristic_id": 2
+                "characteristic_id": 11
             },
             {
-                "characteristic_id": 14
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 16
             },
             {
                 "characteristic_id": 18
-            },
-            {
-                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -2050,6 +2228,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17779,
+                "mapping_version_id": 512,
+                "npc_id": 137029,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 1216,
                 "mapping_version_id": 20,
                 "npc_id": 137029,
@@ -2067,9 +2252,9 @@
         "display_id": 32024,
         "encounter_id": null,
         "name": "Big Money Crab",
-        "base_health": 153699,
+        "base_health": 9738015,
         "health_percentage": null,
-        "level": 120,
+        "level": 80,
         "mdt_scale": 0.7,
         "aggressiveness": "neutral",
         "dangerous": 0,
@@ -2087,16 +2272,7 @@
                 "characteristic_id": 2
             },
             {
-                "characteristic_id": 11
-            },
-            {
-                "characteristic_id": 17
-            },
-            {
-                "characteristic_id": 18
-            },
-            {
-                "characteristic_id": 19
+                "characteristic_id": 14
             }
         ],
         "npc_spells": [
@@ -2108,6 +2284,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17759,
+                "mapping_version_id": 512,
+                "npc_id": 137713,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1217,
                 "mapping_version_id": 20,
@@ -2151,10 +2334,10 @@
         "display_id": 12207,
         "encounter_id": null,
         "name": "Safety Shark",
-        "base_health": 3073980,
+        "base_health": 194760312,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 1.2,
+        "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 1,
@@ -2170,6 +2353,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17770,
+                "mapping_version_id": 512,
+                "npc_id": 137940,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 1219,
                 "mapping_version_id": 20,
@@ -2255,10 +2445,10 @@
         "display_id": 85829,
         "encounter_id": null,
         "name": "Footbomb Hooligan",
-        "base_health": 153699,
+        "base_health": 9738015,
         "health_percentage": null,
-        "level": 120,
-        "mdt_scale": 0.6,
+        "level": 80,
+        "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -2271,6 +2461,12 @@
         "npc_spells": [
             {
                 "spell_id": 271784
+            },
+            {
+                "spell_id": 278702
+            },
+            {
+                "spell_id": 278706
             }
         ],
         "npc_enemy_forces": []
@@ -2298,6 +2494,38 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
         "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 141303,
+        "dungeon_id": 20,
+        "classification_id": 2,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 127819,
+        "encounter_id": null,
+        "name": "B.O.O.M.B.A.",
+        "base_health": 100000,
+        "health_percentage": null,
+        "level": 81,
+        "mdt_scale": 1.6,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 276229
+            },
+            {
+                "spell_id": 276234
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
