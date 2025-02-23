@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -40,6 +41,7 @@ class Handler extends ExceptionHandler
         BadRequestException::class,
         MethodNotAllowedHttpException::class,
         NotFoundHttpException::class,
+        AccessDeniedHttpException::class,
     ];
 
     /**
