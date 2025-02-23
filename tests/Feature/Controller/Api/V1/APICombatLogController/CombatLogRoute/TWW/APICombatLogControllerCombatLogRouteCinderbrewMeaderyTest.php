@@ -11,19 +11,19 @@ use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICom
 #[Group('API')]
 #[Group('APICombatLog')]
 #[Group('CombatLogRoute')]
-#[Group('PrioryOfTheSacredFlame')]
-class APICombatLogControllerCombatLogRoutePrioryOfTheSacredFlameTest extends APICombatLogControllerCombatLogRouteTestBase
+#[Group('CinderbrewMeadery')]
+class APICombatLogControllerCombatLogRouteCinderbrewMeaderyTest extends APICombatLogControllerCombatLogRouteTestBase
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_PRIORY_OF_THE_SACRED_FLAME;
+        return Dungeon::DUNGEON_CINDERBREW_MEADERY;
     }
 
     #[Test]
-    public function create_givenTwwS2PtrPrioryOfTheSacredFlame15Json_shouldReturnValidDungeonRoute(): void
+    public function create_givenTwwS2PtrCinderbrewMeadery12Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('TWW/tww_s2_ptr_priory_of_the_sacred_flame_13', self::FIXTURES_ROOT_DIR);
+        $postBody = $this->getJsonData('TWW/tww_s2_ptr_cinderbrew_meadery_12', self::FIXTURES_ROOT_DIR);
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
@@ -35,7 +35,7 @@ class APICombatLogControllerCombatLogRoutePrioryOfTheSacredFlameTest extends API
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 21, 990);
+        $this->validatePulls($responseArr, 18, 634);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }

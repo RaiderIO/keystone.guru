@@ -20,7 +20,7 @@ class APICombatLogControllerCombatLogRouteTheRookeryTest extends APICombatLogCon
     }
 
     #[Test]
-    public function create_givenTwwS1TheRookery15Json_shouldReturnValidDungeonRoute(): void
+    public function create_givenTwwS2PtrTheRookery15Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
         $postBody = $this->getJsonData('TWW/tww_s2_ptr_the_rookery_15', self::FIXTURES_ROOT_DIR);
