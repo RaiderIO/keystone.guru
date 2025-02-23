@@ -4,7 +4,7 @@
     },
     "settings": {
         "temporary": true,
-        "debugIcons": true
+        "debugIcons": false
     },
     "challengeMode": {
         "start": "2024-06-17T16:04:14.541+00:00",

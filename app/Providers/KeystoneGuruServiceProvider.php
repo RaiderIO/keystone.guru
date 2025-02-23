@@ -235,11 +235,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 return;
             }
 
-
             if (// One exception - search actually renders views back to the user which we need
                 !Str::startsWith(request()->getRequestUri(), ['/ajax/search']) &&
                 // API requests don't need to load this in at all! We don't use the view cache since there's no view
-                Str::startsWith(request()->getRequestUri(), ['/ajax', '/api', '/benchmark'])) {
+                Str::startsWith(request()->getRequestUri(), ['/ajax/', '/api/', '/benchmark/'])) {
                 return;
             }
 

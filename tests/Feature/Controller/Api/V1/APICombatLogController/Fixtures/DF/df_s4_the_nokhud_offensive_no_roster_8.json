@@ -3,7 +3,7 @@
         "runId": "season-df-4 - logged: #1516945 - run: #3033087"
     },
     "settings": {
-        "temporary": false,
+        "temporary": true,
         "debugIcons": false
     },
     "challengeMode": {

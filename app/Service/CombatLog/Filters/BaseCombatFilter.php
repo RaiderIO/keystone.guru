@@ -56,6 +56,9 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
         // City of Threads: Xeph'itik is defeated at 50%
         219984 => 0.51,
+
+        // Darkflame Cleft: The Darkness is defeated at 45%
+        208747 => 0.46,
     ];
 
     /** @var array Some enemies are summoned that we DO want to track in the route */

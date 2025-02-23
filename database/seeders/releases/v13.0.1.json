@@ -1,0 +1,25 @@
+{
+    "id": 281,
+    "release_changelog_id": 288,
+    "version": "v13.0.1",
+    "title": "Auto-route creator improvements",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-02-23T22:29:07+00:00",
+    "updated_at": "2025-02-23T22:29:07+00:00",
+    "changelog": {
+        "id": 288,
+        "release_id": 281,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 288,
+                "release_changelog_category_id": 11,
+                "ticket_id": 2737,
+                "change": "Auto-route improvements for Darkflame Cleft, Cinderbrew Brewery, Priory of the Sacred Flame and The Rookery"
+            }
+        ]
+    }
+}

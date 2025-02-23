@@ -915,7 +915,7 @@
         "display_id": 118872,
         "encounter_id": null,
         "name": "Elaena Emberlanz",
-        "base_health": 1336796077,
+        "base_health": 145832288,
         "health_percentage": null,
         "level": 81,
         "mdt_scale": 2.5,
@@ -940,13 +940,25 @@
                 "spell_id": 424432
             },
             {
-                "spell_id": 448385
-            },
-            {
                 "spell_id": 448515
             }
         ],
-        "npc_enemy_forces": []
+        "npc_enemy_forces": [
+            {
+                "id": 17782,
+                "mapping_version_id": 508,
+                "npc_id": 211290,
+                "enemy_forces": 50,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17783,
+                "mapping_version_id": 334,
+                "npc_id": 211290,
+                "enemy_forces": 50,
+                "enemy_forces_teeming": null
+            }
+        ]
     },
     {
         "id": 211291,
