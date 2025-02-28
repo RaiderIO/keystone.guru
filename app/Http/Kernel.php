@@ -39,6 +39,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
+        TrustProxies::class,
         ServerTimingMiddleware::class,
         CheckForMaintenanceMode::class,
         ValidatePostSize::class,
@@ -56,7 +57,6 @@ class Kernel extends HttpKernel
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,
-            TrustProxies::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
@@ -65,7 +65,6 @@ class Kernel extends HttpKernel
 
         'api' => [
             'authentication'            => ApiAuthentication::class,
-            TrustProxies::class,
             'bindings',
             'debug_info_context_logger' => DebugInfoContextLogger::class,
             'read_only_mode'            => ReadOnlyMode::class,

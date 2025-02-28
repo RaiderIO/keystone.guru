@@ -12,9 +12,14 @@ class SearchHandlerHeatmap extends SearchHandler {
                 let template;
                 if (isLoading) {
                     template = Handlebars.templates['map_heatmapsearch_loader'];
+                } else if (json === null || json.hasOwnProperty('error')) {
+                    template = Handlebars.templates['map_heatmapsearch_error_loading_data'];
+                    data.error = lang.get('messages.error_loading_data_label');
                 } else {
                     template = Handlebars.templates['map_heatmapsearch_run_count'];
-                    data.run_count = lang.get('messages.run_count_label', {count: json.run_count});
+                    data.run_count = lang.get('messages.run_count_label', {
+                        count: json.run_count
+                    });
                 }
 
                 currentSnackbarId = getState().addSnackbar(

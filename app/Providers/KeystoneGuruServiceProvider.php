@@ -127,6 +127,17 @@ use Str;
 
 class KeystoneGuruServiceProvider extends ServiceProvider
 {
+    private const VIEW_VARIABLES_URL_WHITELIST = [
+        // search actually renders views back to the user which we need
+        'ajax/search',
+    ];
+
+    private const VIEW_VARIABLES_URL_BLACKLIST = [
+        'ajax',
+        'api',
+        'benchmark',
+    ];
+
     /**
      * Register services.
      */
@@ -235,11 +246,19 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 return;
             }
 
-            if (// One exception - search actually renders views back to the user which we need
-                !Str::startsWith(request()->getRequestUri(), ['/ajax/search']) &&
-                // API requests don't need to load this in at all! We don't use the view cache since there's no view
-                Str::startsWith(request()->getRequestUri(), ['/ajax/', '/api/', '/benchmark/'])) {
-                return;
+            $requestUri = trim(request()->getRequestUri(), '/');
+            $isWhitelisted = collect(self::VIEW_VARIABLES_URL_WHITELIST)->contains(static function ($url) use($requestUri) {
+                return Str::startsWith($requestUri, $url);
+            });
+
+            if (!$isWhitelisted) {
+                // If it's blacklisted..
+                if (collect(self::VIEW_VARIABLES_URL_BLACKLIST)->contains(static function ($url) use($requestUri) {
+                    return Str::startsWith($requestUri, $url);
+                })) {
+                    // Don't set the view variables at all
+                    return;
+                }
             }
 
             session_set_cookie_params([
@@ -286,7 +305,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             // Don't include the viewName in the layouts - they must inherit from whatever calls it!
             if (!str_starts_with((string)$view->getName(), 'layouts')) {
                 $view->with('viewName', $view->getName());
-            } else if(!isset($view->getData()['viewName'])){
+            } else if (!isset($view->getData()['viewName'])) {
                 $view->with('viewName', 'home');
             }
             $view->with('theme', $_COOKIE['theme'] ?? 'darkly');
@@ -555,7 +574,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('raidBuffsOptions', collect(SimulationCraftRaidBuffs::cases())->mapWithKeys(static function (SimulationCraftRaidBuffs $raidBuff) {
                 return [
                     $raidBuff->value =>
-                    __(sprintf('view_common.modal.simulateoptions.default.raid_buffs_map.%s', Str::lower(Str::snake($raidBuff->name))))
+                        __(sprintf('view_common.modal.simulateoptions.default.raid_buffs_map.%s', Str::lower(Str::snake($raidBuff->name)))),
                 ];
             })->toArray());
         });

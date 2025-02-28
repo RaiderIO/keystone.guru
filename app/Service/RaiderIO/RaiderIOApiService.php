@@ -2,17 +2,16 @@
 
 namespace App\Service\RaiderIO;
 
-use App\Logic\Utils\Stopwatch;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\RaiderIO\Dtos\HeatmapDataResponse\HeatmapDataResponse;
 use App\Service\RaiderIO\Dtos\RaiderIOHeatmapGridResponse;
+use App\Service\RaiderIO\Exceptions\InvalidApiResponseException;
 use App\Service\RaiderIO\Logging\RaiderIOApiServiceLoggingInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Traits\Curl;
-use Exception;
 use Str;
 
 class RaiderIOApiService implements RaiderIOApiServiceInterface
@@ -60,7 +59,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             if (!is_array($json) || !isset($json['gridsByFloor'], $json['numRuns'])) {
                 $this->log->getHeatmapDataInvalidResponse($response);
 
-                throw new Exception(sprintf('Invalid response from RaiderIO API %s', $response));
+                throw new InvalidApiResponseException('Invalid response from Raider.IO API');
             }
 
             return HeatmapDataResponse::fromArray(
