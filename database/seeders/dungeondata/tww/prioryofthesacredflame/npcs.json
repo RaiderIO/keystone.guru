@@ -8,7 +8,7 @@
         "display_id": 120987,
         "encounter_id": null,
         "name": "Fervent Sharpshooter",
-        "base_health": 48610763,
+        "base_health": 48720247,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -31,6 +31,12 @@
                 "characteristic_id": 5
             },
             {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
                 "characteristic_id": 11
             },
             {
@@ -40,15 +46,27 @@
                 "characteristic_id": 14
             },
             {
+                "characteristic_id": 16
+            },
+            {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 427359
             },
             {
                 "spell_id": 427629
+            },
+            {
+                "spell_id": 429099
             },
             {
                 "spell_id": 453458
@@ -61,6 +79,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17870,
+                "mapping_version_id": 517,
+                "npc_id": 206694,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17711,
                 "mapping_version_id": 508,
@@ -79,19 +104,23 @@
         "display_id": 120988,
         "encounter_id": null,
         "name": "Arathi Knight",
-        "base_health": 77777220,
+        "base_health": 77952395,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 1,
+        "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 427359
@@ -101,9 +130,19 @@
             },
             {
                 "spell_id": 427621
+            },
+            {
+                "spell_id": 444296
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17862,
+                "mapping_version_id": 517,
+                "npc_id": 206696,
+                "enemy_forces": 18,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17705,
                 "mapping_version_id": 508,
@@ -122,7 +161,7 @@
         "display_id": 120847,
         "encounter_id": null,
         "name": "Devout Priest",
-        "base_health": 41319149,
+        "base_health": 41412211,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -143,6 +182,9 @@
             },
             {
                 "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 9
             },
             {
                 "characteristic_id": 12
@@ -179,6 +221,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17867,
+                "mapping_version_id": 517,
+                "npc_id": 206697,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17709,
                 "mapping_version_id": 508,
                 "npc_id": 206697,
@@ -196,7 +245,7 @@
         "display_id": 121005,
         "encounter_id": null,
         "name": "Fanatical Conjuror",
-        "base_health": 43749686,
+        "base_health": 43848222,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -216,6 +265,12 @@
                 "characteristic_id": 5
             },
             {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
                 "characteristic_id": 12
             },
             {
@@ -226,6 +281,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -236,10 +294,23 @@
                 "spell_id": 427469
             },
             {
+                "spell_id": 427472
+            },
+            {
+                "spell_id": 427473
+            },
+            {
                 "spell_id": 427484
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17869,
+                "mapping_version_id": 517,
+                "npc_id": 206698,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17710,
                 "mapping_version_id": 508,
@@ -258,7 +329,7 @@
         "display_id": 121012,
         "encounter_id": null,
         "name": "War Lynx",
-        "base_health": 48610763,
+        "base_health": 48720247,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -297,6 +368,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17880,
+                "mapping_version_id": 517,
+                "npc_id": 206699,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17719,
                 "mapping_version_id": 508,
                 "npc_id": 206699,
@@ -314,7 +392,7 @@
         "display_id": 121023,
         "encounter_id": null,
         "name": "Ardent Paladin",
-        "base_health": 82638296,
+        "base_health": 82824420,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -350,6 +428,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17866,
+                "mapping_version_id": 517,
+                "npc_id": 206704,
+                "enemy_forces": 14,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17708,
                 "mapping_version_id": 508,
                 "npc_id": 206704,
@@ -367,7 +452,7 @@
         "display_id": 120023,
         "encounter_id": null,
         "name": "Arathi Footman",
-        "base_health": 63193991,
+        "base_health": 63336321,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -388,6 +473,15 @@
             },
             {
                 "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 9
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
             },
             {
                 "characteristic_id": 12
@@ -417,9 +511,19 @@
             },
             {
                 "spell_id": 427360
+            },
+            {
+                "spell_id": 429099
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17861,
+                "mapping_version_id": 517,
+                "npc_id": 206705,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17704,
                 "mapping_version_id": 508,
@@ -438,7 +542,7 @@
         "display_id": 120878,
         "encounter_id": null,
         "name": "Lightspawn",
-        "base_health": 77777220,
+        "base_health": 77952395,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -464,6 +568,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17874,
+                "mapping_version_id": 517,
+                "npc_id": 206710,
+                "enemy_forces": 18,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17715,
                 "mapping_version_id": 508,
                 "npc_id": 206710,
@@ -481,7 +592,7 @@
         "display_id": 118878,
         "encounter_id": 2570,
         "name": "Baron Braunpyke",
-        "base_health": 340428348,
+        "base_health": 341320379,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -515,6 +626,9 @@
                 "spell_id": 423062
             },
             {
+                "spell_id": 423072
+            },
+            {
                 "spell_id": 423076
             },
             {
@@ -522,6 +636,9 @@
             },
             {
                 "spell_id": 446368
+            },
+            {
+                "spell_id": 446525
             },
             {
                 "spell_id": 446649
@@ -541,7 +658,7 @@
         "display_id": 118877,
         "encounter_id": 2570,
         "name": "Prioress Murrpray",
-        "base_health": 389060969,
+        "base_health": 390080433,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -576,6 +693,9 @@
             },
             {
                 "spell_id": 423682
+            },
+            {
+                "spell_id": 425538
             },
             {
                 "spell_id": 425554
@@ -619,7 +739,7 @@
         "display_id": 121006,
         "encounter_id": null,
         "name": "Arathi Neophyte",
-        "base_health": 26744476,
+        "base_health": 24360123,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 0.8,
@@ -633,11 +753,34 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 18
             }
         ],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 427359
+            },
+            {
+                "spell_id": 429099
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 17863,
+                "mapping_version_id": 517,
+                "npc_id": 207943,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17706,
                 "mapping_version_id": 508,
@@ -656,7 +799,7 @@
         "display_id": 118879,
         "encounter_id": 2570,
         "name": "Captain Dailcry",
-        "base_health": 544685357,
+        "base_health": 546112606,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -710,7 +853,7 @@
         "display_id": 121024,
         "encounter_id": null,
         "name": "Zealous Templar",
-        "base_health": 63193991,
+        "base_health": 63336321,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -730,7 +873,13 @@
                 "characteristic_id": 5
             },
             {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
             },
             {
                 "characteristic_id": 18
@@ -755,6 +904,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17881,
+                "mapping_version_id": 517,
+                "npc_id": 207949,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17720,
                 "mapping_version_id": 508,
                 "npc_id": 207949,
@@ -767,7 +923,7 @@
         "id": 209747,
         "dungeon_id": 112,
         "classification_id": 2,
-        "npc_type_id": 3,
+        "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 115544,
         "encounter_id": null,
@@ -787,6 +943,13 @@
         "npc_characteristics": [],
         "npc_spells": [],
         "npc_enemy_forces": [
+            {
+                "id": 17865,
+                "mapping_version_id": 517,
+                "npc_id": 209747,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17696,
                 "mapping_version_id": 508,
@@ -841,7 +1004,7 @@
         "display_id": 115544,
         "encounter_id": null,
         "name": "Arathi Neophyte",
-        "base_health": 64814356,
+        "base_health": 64960335,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -856,6 +1019,12 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
             },
             {
                 "characteristic_id": 18
@@ -877,7 +1046,7 @@
         "display_id": 118873,
         "encounter_id": null,
         "name": "Taener Duelmal",
-        "base_health": 145832288,
+        "base_health": 146160741,
         "health_percentage": null,
         "level": 81,
         "mdt_scale": 2.5,
@@ -902,6 +1071,9 @@
             },
             {
                 "spell_id": 424462
+            },
+            {
+                "spell_id": 448385
             }
         ],
         "npc_enemy_forces": []
@@ -915,7 +1087,7 @@
         "display_id": 118872,
         "encounter_id": null,
         "name": "Elaena Emberlanz",
-        "base_health": 145832288,
+        "base_health": 146160741,
         "health_percentage": null,
         "level": 81,
         "mdt_scale": 2.5,
@@ -938,6 +1110,9 @@
             },
             {
                 "spell_id": 424432
+            },
+            {
+                "spell_id": 448385
             },
             {
                 "spell_id": 448515
@@ -969,7 +1144,7 @@
         "display_id": 118870,
         "encounter_id": null,
         "name": "Sergeant Shaynemail",
-        "base_health": 145832288,
+        "base_health": 146160741,
         "health_percentage": null,
         "level": 81,
         "mdt_scale": 2.5,
@@ -988,10 +1163,16 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 424423
+            },
+            {
                 "spell_id": 424426
             },
             {
                 "spell_id": 424621
+            },
+            {
+                "spell_id": 448385
             }
         ],
         "npc_enemy_forces": []
@@ -1005,13 +1186,13 @@
         "display_id": 118876,
         "encounter_id": null,
         "name": "Guard Captain Suleyman",
-        "base_health": 194443050,
+        "base_health": 194880988,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 1,
+        "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
@@ -1024,6 +1205,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 427359
+            },
+            {
                 "spell_id": 448485
             },
             {
@@ -1031,6 +1215,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17872,
+                "mapping_version_id": 517,
+                "npc_id": 212826,
+                "enemy_forces": 50,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17713,
                 "mapping_version_id": 508,
@@ -1049,13 +1240,13 @@
         "display_id": 118867,
         "encounter_id": null,
         "name": "High Priest Aemya",
-        "base_health": 121526906,
+        "base_health": 121800617,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 1,
+        "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
@@ -1065,6 +1256,12 @@
         "npc_spells": [
             {
                 "spell_id": 427357
+            },
+            {
+                "spell_id": 427359
+            },
+            {
+                "spell_id": 428150
             },
             {
                 "spell_id": 428151
@@ -1077,6 +1274,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17873,
+                "mapping_version_id": 517,
+                "npc_id": 212827,
+                "enemy_forces": 50,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17714,
                 "mapping_version_id": 508,
@@ -1095,13 +1299,13 @@
         "display_id": 118874,
         "encounter_id": null,
         "name": "Forge Master Damian",
-        "base_health": 145832288,
+        "base_health": 146070234,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 1,
+        "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
@@ -1114,7 +1318,13 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 427894
+            },
+            {
                 "spell_id": 427897
+            },
+            {
+                "spell_id": 427898
             },
             {
                 "spell_id": 427900
@@ -1124,9 +1334,19 @@
             },
             {
                 "spell_id": 427951
+            },
+            {
+                "spell_id": 427952
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17871,
+                "mapping_version_id": 517,
+                "npc_id": 212831,
+                "enemy_forces": 50,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17712,
                 "mapping_version_id": 508,
@@ -1145,7 +1365,7 @@
         "display_id": 116189,
         "encounter_id": null,
         "name": "Risen Footman",
-        "base_health": 58332915,
+        "base_health": 58464296,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1190,6 +1410,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17875,
+                "mapping_version_id": 517,
+                "npc_id": 212835,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17716,
                 "mapping_version_id": 508,
                 "npc_id": 212835,
@@ -1207,7 +1434,7 @@
         "display_id": 121017,
         "encounter_id": null,
         "name": "Arathi Neophyte",
-        "base_health": 24305381,
+        "base_health": 24360123,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 0.8,
@@ -1224,11 +1451,25 @@
                 "characteristic_id": 5
             },
             {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 18
             }
         ],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 429099
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 17864,
+                "mapping_version_id": 517,
+                "npc_id": 212838,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17707,
                 "mapping_version_id": 508,
@@ -1247,7 +1488,7 @@
         "display_id": 116186,
         "encounter_id": null,
         "name": "Sir Braunpyke",
-        "base_health": 145832288,
+        "base_health": 146160741,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.4,
@@ -1275,6 +1516,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17878,
+                "mapping_version_id": 517,
+                "npc_id": 217658,
+                "enemy_forces": 50,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17718,
                 "mapping_version_id": 508,
@@ -1318,7 +1566,7 @@
         "display_id": 116171,
         "encounter_id": null,
         "name": "Risen Mage",
-        "base_health": 43749686,
+        "base_health": 43848222,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1369,6 +1617,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17876,
+                "mapping_version_id": 517,
+                "npc_id": 221760,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17717,
                 "mapping_version_id": 508,
                 "npc_id": 221760,
@@ -1386,7 +1641,7 @@
         "display_id": 118872,
         "encounter_id": null,
         "name": "Elaena Emberlanz",
-        "base_health": 145832288,
+        "base_health": 146070234,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.7,
@@ -1411,10 +1666,20 @@
                 "spell_id": 424432
             },
             {
+                "spell_id": 448385
+            },
+            {
                 "spell_id": 448515
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17868,
+                "mapping_version_id": 517,
+                "npc_id": 239833,
+                "enemy_forces": 50,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17698,
                 "mapping_version_id": 508,
@@ -1440,7 +1705,7 @@
         "display_id": 118873,
         "encounter_id": null,
         "name": "Taener Duelmal",
-        "base_health": 145832288,
+        "base_health": 146160741,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.7,
@@ -1452,9 +1717,42 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 424420
+            },
+            {
+                "spell_id": 424421
+            },
+            {
+                "spell_id": 424460
+            },
+            {
+                "spell_id": 424462
+            },
+            {
+                "spell_id": 424466
+            },
+            {
+                "spell_id": 424467
+            },
+            {
+                "spell_id": 448385
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 17879,
+                "mapping_version_id": 517,
+                "npc_id": 239834,
+                "enemy_forces": 50,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17702,
                 "mapping_version_id": 508,
@@ -1480,7 +1778,7 @@
         "display_id": 118870,
         "encounter_id": null,
         "name": "Sergeant Shaynemail",
-        "base_health": 145832288,
+        "base_health": 146160741,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.7,
@@ -1499,13 +1797,29 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 424423
+            },
+            {
                 "spell_id": 424426
             },
             {
                 "spell_id": 424621
+            },
+            {
+                "spell_id": 427359
+            },
+            {
+                "spell_id": 448385
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17877,
+                "mapping_version_id": 517,
+                "npc_id": 239836,
+                "enemy_forces": 50,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17700,
                 "mapping_version_id": 508,
@@ -1526,7 +1840,7 @@
         "id": 555555,
         "dungeon_id": 112,
         "classification_id": 2,
-        "npc_type_id": 3,
+        "npc_type_id": 8,
         "npc_class_id": 1,
         "display_id": 121006,
         "encounter_id": null,
@@ -1544,7 +1858,14 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 435088
+            },
+            {
+                "spell_id": 435093
+            }
+        ],
         "npc_enemy_forces": []
     }
 ]
