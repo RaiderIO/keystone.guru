@@ -98602,7 +98602,7 @@
         "cast_time": 0,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": "2025-02-12T15:53:39+00:00",
         "spell_dungeons": [
             {
@@ -99403,7 +99403,7 @@
         "cast_time": 2000,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": "2025-03-01T21:09:42+00:00",
         "spell_dungeons": [
             {

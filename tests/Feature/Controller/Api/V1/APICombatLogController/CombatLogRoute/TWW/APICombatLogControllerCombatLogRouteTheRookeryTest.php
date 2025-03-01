@@ -35,7 +35,7 @@ class APICombatLogControllerCombatLogRouteTheRookeryTest extends APICombatLogCon
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 16, 1088);
+        $this->validatePulls($responseArr, 16, 1076);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
