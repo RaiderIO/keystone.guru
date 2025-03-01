@@ -213,7 +213,7 @@ class MappingVersion extends Model
 
     public function getMapIconNearLocation(LatLng $latLng, int $mapIconTypeId): ?MapIcon
     {
-        $range = 2;
+        $range = 5;
         /** @var MapIcon|null $mapIcon */
         $mapIcon = $this->mapIcons()
             ->where('lat', '>', $latLng->getLat() - $range)

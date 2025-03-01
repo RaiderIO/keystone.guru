@@ -35,7 +35,7 @@ class APICombatLogControllerCombatLogRouteDarkflameCleftTest extends APICombatLo
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 19, 417);
+        $this->validatePulls($responseArr, 19, 402);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }

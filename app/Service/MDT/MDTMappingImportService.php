@@ -42,6 +42,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
         98362,
     ];
 
+    private const IGNORE_ENEMY_DISTANCE_CHECK_NPC_IDS = [
+        // Darkflame Cleft, The Darkness - we move it to an entirely different area so please ignore this check
+        208747,
+    ];
+
     public function __construct(private readonly CacheServiceInterface $cacheService, private readonly CoordinatesServiceInterface $coordinatesService, private readonly MDTMappingImportServiceLoggingInterface $log)
     {
     }
@@ -427,7 +432,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     if (!$forceImport) {
                         $fields[] = 'floor_id';
 
-                        if (($distance = $this->coordinatesService->distanceIngameXY(
+                        if (!in_array($mdtEnemy->npc_id, self::IGNORE_ENEMY_DISTANCE_CHECK_NPC_IDS) &&
+                            ($distance = $this->coordinatesService->distanceIngameXY(
                                 $this->coordinatesService->calculateIngameLocationForMapLocation($existingEnemy->getLatLng()),
                                 $this->coordinatesService->calculateIngameLocationForMapLocation($mdtEnemy->getLatLng())
                             )) > 150) {
