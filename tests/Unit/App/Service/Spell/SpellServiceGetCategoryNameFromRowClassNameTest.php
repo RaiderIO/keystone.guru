@@ -43,9 +43,9 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         // Arrange
         $log          = LoggingFixtures::createSpellServiceLogging($this);
         $spellService = ServiceFixtures::getSpellServiceMock(
-            $this,
-            ['getCharacterClassFromClassName'],
-            $log
+            testCase: $this,
+            methodsToMock: ['getCharacterClassFromClassName'],
+            log: $log
         );
 
         $spellService
@@ -156,9 +156,9 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         // Arrange
         $log          = LoggingFixtures::createSpellServiceLogging($this);
         $spellService = ServiceFixtures::getSpellServiceMock(
-            $this,
-            ['getCharacterClassFromClassName'],
-            $log
+            testCase: $this,
+            methodsToMock: ['getCharacterClassFromClassName'],
+            log: $log
         );
 
         $spellService
@@ -206,9 +206,9 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
 
         $log          = LoggingFixtures::createSpellServiceLogging($this);
         $spellService = ServiceFixtures::getSpellServiceMock(
-            $this,
-            ['getCharacterClassFromClassName'],
-            $log
+            testCase: $this,
+            methodsToMock: ['getCharacterClassFromClassName'],
+            log: $log
         );
 
         $spellService
@@ -250,9 +250,9 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
 
         $log          = LoggingFixtures::createSpellServiceLogging($this);
         $spellService = ServiceFixtures::getSpellServiceMock(
-            $this,
-            ['getCharacterClassFromClassName'],
-            $log
+            testCase: $this,
+            methodsToMock: ['getCharacterClassFromClassName'],
+            log: $log
         );
 
         $spellService
