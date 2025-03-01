@@ -18,5 +18,25 @@
         "lng": 192,
         "size": 256,
         "rotation": 0
+    },
+    {
+        "id": 501,
+        "mapping_version_id": 516,
+        "floor_id": 371,
+        "target_floor_id": 370,
+        "lat": -128,
+        "lng": 192,
+        "size": 256,
+        "rotation": 0
+    },
+    {
+        "id": 502,
+        "mapping_version_id": 516,
+        "floor_id": 371,
+        "target_floor_id": 289,
+        "lat": -128,
+        "lng": 192,
+        "size": 256,
+        "rotation": 0
     }
 ]

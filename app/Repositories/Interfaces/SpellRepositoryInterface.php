@@ -19,4 +19,8 @@ use Illuminate\Support\Collection;
 interface SpellRepositoryInterface extends BaseRepositoryInterface
 {
 
+    /**
+     * @return int[]
+     */
+    public function getMissingSpellIds(): array;
 }
