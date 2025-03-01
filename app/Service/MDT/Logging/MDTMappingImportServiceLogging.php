@@ -272,7 +272,7 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->start(__METHOD__);
     }
 
-    public function importMapPOIsImportFromMDT(): void
+    public function importMapPOIsMDTHasMapPOIs(): void
     {
         $this->debug(__METHOD__);
     }
@@ -280,6 +280,11 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
     public function importMapPOIsCreatedNewMapIcon(int $mapIconId, int $floorId, int $mapIconTypeId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function importMapPOIsMapIconAlreadyExists(int $mapIconId, array $latLng, string $mdtMapPOIName): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
     }
 
     public function importMapPOIsNewDungeonFloorSwitchMarkerOK(int $dungeonFloorSwitchMarkerId, int $floorId, int $targetFloorId): void

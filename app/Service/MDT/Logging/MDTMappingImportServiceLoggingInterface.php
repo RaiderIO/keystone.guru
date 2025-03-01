@@ -115,9 +115,11 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importMapPOIsStart(): void;
 
-    public function importMapPOIsImportFromMDT(): void;
+    public function importMapPOIsMDTHasMapPOIs(): void;
 
     public function importMapPOIsCreatedNewMapIcon(int $mapIconId, int $floorId, int $mapIconTypeId): void;
+
+    public function importMapPOIsMapIconAlreadyExists(int $mapIconId, array $latLng, string $mdtMapPOIName): void;
 
     public function importMapPOIsNewDungeonFloorSwitchMarkerOK(int $dungeonFloorSwitchMarkerId, int $floorId, int $targetFloorId): void;
 

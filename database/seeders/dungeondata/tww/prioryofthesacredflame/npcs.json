@@ -988,16 +988,10 @@
         ],
         "npc_spells": [
             {
-                "spell_id": 424423
-            },
-            {
                 "spell_id": 424426
             },
             {
                 "spell_id": 424621
-            },
-            {
-                "spell_id": 448385
             }
         ],
         "npc_enemy_forces": []
@@ -1417,9 +1411,6 @@
                 "spell_id": 424432
             },
             {
-                "spell_id": 448385
-            },
-            {
                 "spell_id": 448515
             }
         ],
@@ -1508,16 +1499,10 @@
         ],
         "npc_spells": [
             {
-                "spell_id": 424423
-            },
-            {
                 "spell_id": 424426
             },
             {
                 "spell_id": 424621
-            },
-            {
-                "spell_id": 448385
             }
         ],
         "npc_enemy_forces": [

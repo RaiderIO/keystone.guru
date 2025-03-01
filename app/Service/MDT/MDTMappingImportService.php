@@ -673,7 +673,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $mdtMapPOIs = $mdtDungeon->getMDTMapPOIs();
 
             if ($mdtMapPOIs->isNotEmpty()) {
-                $this->log->importMapPOIsImportFromMDT();
+                $this->log->importMapPOIsMDTHasMapPOIs();
 
                 $mapIconTypeMapping = [
                     MDTMapPOI::TYPE_GRAVEYARD        => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD],
@@ -689,16 +689,25 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
 
                     if (isset($mapIconTypeMapping[$mdtMapPOI->getType()])) {
-                        $mapIcon = MapIcon::create(array_merge([
-                            'mapping_version_id' => $newMappingVersion->id,
-                            'map_icon_type_id'   => $mapIconTypeMapping[$mdtMapPOI->getType()],
-                        ], $latLng->toArrayWithFloor()));
+                        $existingMapIcon = $currentMappingVersion->getMapIconNearLocation($latLng, $mapIconTypeMapping[$mdtMapPOI->getType()]);
+                        if ($existingMapIcon === null) {
+                            $mapIcon = MapIcon::create(array_merge([
+                                'mapping_version_id' => $newMappingVersion->id,
+                                'map_icon_type_id'   => $mapIconTypeMapping[$mdtMapPOI->getType()],
+                            ], $latLng->toArrayWithFloor()));
 
-                        $this->log->importMapPOIsCreatedNewMapIcon(
-                            $mapIcon->id,
-                            $mapIcon->floor_id,
-                            $mapIcon->map_icon_type_id,
-                        );
+                            $this->log->importMapPOIsCreatedNewMapIcon(
+                                $mapIcon->id,
+                                $mapIcon->floor_id,
+                                $mapIcon->map_icon_type_id,
+                            );
+                        } else {
+                            $this->log->importMapPOIsMapIconAlreadyExists(
+                                $existingMapIcon->id,
+                                $latLng->toArray(),
+                                $mdtMapPOI->getType()
+                            );
+                        }
                     } else if ($mdtMapPOI->getType() === MDTMapPOI::TYPE_MAP_LINK) {
                         // So because of the linked_floor_switch_id we cannot re-import dungeon floor switches
                         // We cannot for sure map the floor switches between different versions to one another
