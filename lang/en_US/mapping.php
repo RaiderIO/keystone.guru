@@ -89,6 +89,9 @@ return [
             'the_stonevault' => [
                 'imbued_iron_energy' => 'Warriors, Dwarves, Blacksmiths (25): Energy trapped inside the Imbued Iron Bar releases, increasing the Versatility of all players within 20 yards by 10% for 10 mins.',
             ],
+            'priory_of_the_sacred_flame' => [
+                'miniboss_explanation' => 'Keystone.guru: When the mini bosses are killed together with the boss, they do not give any count. When summoned by another mini boss, they DO give count.'
+            ]
         ]
     ],
 
