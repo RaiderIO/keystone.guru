@@ -260,6 +260,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17902,
+                "mapping_version_id": 519,
+                "npc_id": 144293,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17666,
                 "mapping_version_id": 505,
                 "npc_id": 144293,
@@ -341,6 +348,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17896,
+                "mapping_version_id": 519,
+                "npc_id": 144294,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17660,
                 "mapping_version_id": 505,
                 "npc_id": 144294,
@@ -419,6 +433,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17898,
+                "mapping_version_id": 519,
+                "npc_id": 144295,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17662,
                 "mapping_version_id": 505,
                 "npc_id": 144295,
@@ -479,6 +500,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17899,
+                "mapping_version_id": 519,
+                "npc_id": 144296,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17663,
                 "mapping_version_id": 505,
                 "npc_id": 144296,
@@ -535,6 +563,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17900,
+                "mapping_version_id": 519,
+                "npc_id": 144298,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17664,
                 "mapping_version_id": 505,
@@ -609,10 +644,20 @@
                 "spell_id": 293670
             },
             {
+                "spell_id": 293683
+            },
+            {
                 "spell_id": 293724
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17897,
+                "mapping_version_id": 519,
+                "npc_id": 144299,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17661,
                 "mapping_version_id": 505,
@@ -709,6 +754,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17903,
+                "mapping_version_id": 519,
+                "npc_id": 144301,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17667,
                 "mapping_version_id": 505,
                 "npc_id": 144301,
@@ -772,6 +824,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17907,
+                "mapping_version_id": 519,
+                "npc_id": 144303,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17671,
                 "mapping_version_id": 505,
                 "npc_id": 144303,
@@ -825,6 +884,9 @@
             },
             {
                 "spell_id": 283640
+            },
+            {
+                "spell_id": 285150
             },
             {
                 "spell_id": 285152
@@ -900,6 +962,9 @@
             },
             {
                 "spell_id": 291928
+            },
+            {
+                "spell_id": 296331
             },
             {
                 "spell_id": 1226680
@@ -1021,6 +1086,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17894,
+                "mapping_version_id": 519,
+                "npc_id": 151476,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17658,
                 "mapping_version_id": 505,
                 "npc_id": 151476,
@@ -1078,6 +1150,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17895,
+                "mapping_version_id": 519,
+                "npc_id": 151649,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17659,
                 "mapping_version_id": 505,
                 "npc_id": 151649,
@@ -1134,6 +1213,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17904,
+                "mapping_version_id": 519,
+                "npc_id": 151657,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17668,
                 "mapping_version_id": 505,
@@ -1198,6 +1284,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17906,
+                "mapping_version_id": 519,
+                "npc_id": 151658,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17670,
                 "mapping_version_id": 505,
                 "npc_id": 151658,
@@ -1257,6 +1350,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17905,
+                "mapping_version_id": 519,
+                "npc_id": 151659,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17669,
                 "mapping_version_id": 505,
@@ -1330,6 +1430,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17901,
+                "mapping_version_id": 519,
+                "npc_id": 151773,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17665,
                 "mapping_version_id": 505,
                 "npc_id": 151773,
@@ -1379,7 +1486,7 @@
         "display_id": 91336,
         "encounter_id": null,
         "name": "Inconspicuous Plant",
-        "base_health": 51185084,
+        "base_health": 8124616,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -1391,7 +1498,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 18
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 294855
@@ -1461,6 +1572,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17908,
+                "mapping_version_id": 519,
+                "npc_id": 236033,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17655,
                 "mapping_version_id": 505,
