@@ -507,6 +507,10 @@ class Enemy extends VersionableMapObject {
             // noinspection JSUnresolvedReference
             if (isUserAdmin) {
                 result.info.push({
+                    key: lang.get('messages.sidebar_enemy_id_label'),
+                    value: this.id
+                });
+                result.info.push({
                     key: lang.get('messages.sidebar_enemy_npc_id_label'),
                     value: `<a href="/admin/npc/${this.npc.id}">${this.npc.id}</a>`
                 });

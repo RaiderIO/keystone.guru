@@ -29,6 +29,7 @@ abstract class DungeonRouteBuilder
 {
     private const DUNGEON_ENEMY_FLOOR_CHECK_ENABLED = [
         //        Dungeon::DUNGEON_WAYCREST_MANOR
+        //        Dungeon::DUNGEON_THEATER_OF_PAIN
     ];
 
     protected const NPC_ID_MAPPING = [
@@ -80,7 +81,7 @@ abstract class DungeonRouteBuilder
             'floor.dungeon',
             'enemyPack',
             'enemyPatrol',
-        ])->where(function (Builder $builder){
+        ])->where(function (Builder $builder) {
             $builder->whereNull('seasonal_type')
                 ->orWhereNot('seasonal_type', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER);
         })->get()
@@ -248,6 +249,7 @@ abstract class DungeonRouteBuilder
                     return false;
                 }
 
+                // Just ignore all Teeming enemies - Teeming is removed
                 if ($availableEnemy->teeming !== null) {
                     return false;
                 }
@@ -333,20 +335,26 @@ abstract class DungeonRouteBuilder
         ?LatLng         $previousPullLatLng,
         ClosestEnemy    $closestEnemy
     ): void {
-        // Build a list of potential enemies which will always take precedence since they're in a group that we have aggroed.
-        // Therefore, these enemies should be in combat with us regardless
-        /** @var Collection<Enemy> $preferredEnemiesInEngagedGroups */
-        $preferredEnemiesInEngagedGroups = $filteredEnemies->filter(static function (Enemy $availableEnemy) use ($preferredGroups) {
-            return $availableEnemy->enemy_pack_id !== null && $preferredGroups->has($availableEnemy->enemyPack->group);
-        });
+        try {
+            $this->log->findClosestEnemyInPreferredGroupsStart($preferredGroups->toArray());
 
-        if ($preferredEnemiesInEngagedGroups->isNotEmpty()) {
-            $this->findClosestEnemyAndDistanceFromList(
-                $preferredEnemiesInEngagedGroups,
-                $activePullEnemy,
-                $previousPullLatLng,
-                $closestEnemy
-            );
+            // Build a list of potential enemies which will always take precedence since they're in a group that we have aggroed.
+            // Therefore, these enemies should be in combat with us regardless
+            /** @var Collection<Enemy> $preferredEnemiesInEngagedGroups */
+            $preferredEnemiesInEngagedGroups = $filteredEnemies->filter(static function (Enemy $availableEnemy) use ($preferredGroups) {
+                return $availableEnemy->enemy_pack_id !== null && $preferredGroups->has($availableEnemy->enemyPack->group);
+            });
+
+            if ($preferredEnemiesInEngagedGroups->isNotEmpty()) {
+                $this->findClosestEnemyAndDistanceFromList(
+                    $preferredEnemiesInEngagedGroups,
+                    $activePullEnemy,
+                    $previousPullLatLng,
+                    $closestEnemy
+                );
+            }
+        } finally {
+            $this->log->findClosestEnemyInPreferredGroupsEnd();
         }
     }
 
@@ -360,16 +368,28 @@ abstract class DungeonRouteBuilder
         ?LatLng         $previousPullLatLng,
         ClosestEnemy    $closestEnemy
     ): void {
-        /** @var Collection<Enemy> $preferredEnemiesOnCurrentFloor */
-        $preferredEnemiesOnCurrentFloor = $filteredEnemies->filter(fn(Enemy $availableEnemy) => $availableEnemy->floor_id == $this->currentFloor->id);
+        try {
+            $this->log->findClosestEnemyInPreferredFloorStart($this->currentFloor->id);
 
-        if ($preferredEnemiesOnCurrentFloor->isNotEmpty()) {
-            $this->findClosestEnemyAndDistanceFromList(
-                $preferredEnemiesOnCurrentFloor,
-                $activePullEnemy,
-                $previousPullLatLng,
-                $closestEnemy
+            /** @var Collection<Enemy> $preferredEnemiesOnCurrentFloor */
+            $preferredEnemiesOnCurrentFloor = $filteredEnemies->filter(
+                fn(Enemy $availableEnemy) =>
+                    // Only if we have floor checks enabled for this dungeon
+                    in_array($availableEnemy->floor->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_ENABLED) &&
+                    $availableEnemy->floor_id == $this->currentFloor->id
             );
+
+            if ($preferredEnemiesOnCurrentFloor->isNotEmpty()) {
+                $this->findClosestEnemyAndDistanceFromList(
+                    $preferredEnemiesOnCurrentFloor,
+                    $activePullEnemy,
+                    $previousPullLatLng,
+                    $closestEnemy
+                );
+            }
+
+        } finally {
+            $this->log->findClosestEnemyInPreferredFloorEnd();
         }
     }
 
@@ -384,44 +404,50 @@ abstract class DungeonRouteBuilder
         ?LatLng         $previousPullLatLng,
         ClosestEnemy    $closestEnemy): void
     {
-        $this->findClosestEnemyAndDistanceFromList(
-            $filteredEnemies,
-            $activePullEnemy,
-            $previousPullLatLng,
-            $closestEnemy
-        );
+        try {
+            $this->log->findClosestEnemyInAllFilteredEnemiesStart();
 
-        // If the closest enemy was still pretty far away - check if there was a patrol that may have been closer
-        if ($closestEnemy->getDistanceBetweenEnemies() >
-            ($this->currentFloor->enemy_engagement_max_range_patrols ?? config('keystoneguru.enemy_engagement_max_range_patrols_default'))) {
             $this->findClosestEnemyAndDistanceFromList(
                 $filteredEnemies,
                 $activePullEnemy,
                 $previousPullLatLng,
-                $closestEnemy,
-                true
+                $closestEnemy
             );
-        }
 
-        if ($closestEnemy->getEnemy() === null) {
-            $this->log->findClosestEnemyInAllFilteredEnemiesEnemyIsNull(
-                $closestEnemy->getDistanceBetweenEnemies(),
-                $closestEnemy->getDistanceBetweenLastPullAndEnemy()
-            );
-        } else if ($closestEnemy->getDistanceBetweenEnemies() >
-            ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
-            if ($closestEnemy->getEnemy()->npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
-                $this->log->findClosestEnemyInAllFilteredEnemiesEnemyIsBossIgnoringTooFarAwayCheck();
-            } else {
-                $this->log->findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(
-                    $closestEnemy->getEnemy()->id,
-                    $closestEnemy->getDistanceBetweenEnemies(),
-                    $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
-                    $this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default')
+            // If the closest enemy was still pretty far away - check if there was a patrol that may have been closer
+            if ($closestEnemy->getDistanceBetweenEnemies() >
+                ($this->currentFloor->enemy_engagement_max_range_patrols ?? config('keystoneguru.enemy_engagement_max_range_patrols_default'))) {
+                $this->findClosestEnemyAndDistanceFromList(
+                    $filteredEnemies,
+                    $activePullEnemy,
+                    $previousPullLatLng,
+                    $closestEnemy,
+                    true
                 );
-
-                $closestEnemy->setEnemy(null);
             }
+
+            if ($closestEnemy->getEnemy() === null) {
+                $this->log->findClosestEnemyInAllFilteredEnemiesEnemyIsNull(
+                    $closestEnemy->getDistanceBetweenEnemies(),
+                    $closestEnemy->getDistanceBetweenLastPullAndEnemy()
+                );
+            } else if ($closestEnemy->getDistanceBetweenEnemies() >
+                ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
+                if ($closestEnemy->getEnemy()->npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+                    $this->log->findClosestEnemyInAllFilteredEnemiesEnemyIsBossIgnoringTooFarAwayCheck();
+                } else {
+                    $this->log->findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(
+                        $closestEnemy->getEnemy()->id,
+                        $closestEnemy->getDistanceBetweenEnemies(),
+                        $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
+                        $this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default')
+                    );
+
+                    $closestEnemy->setEnemy(null);
+                }
+            }
+        } finally {
+            $this->log->findClosestEnemyInAllFilteredEnemiesEnd();
         }
     }
 
