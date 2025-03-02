@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller\Api\V1\APICombatLogController\CombatLogRoute\SL;
+namespace Controller\Api\V1\APICombatLogController\CombatLogRoute\BFA;
 
 use App\Models\Dungeon;
 use PHPUnit\Framework\Attributes\Group;
@@ -11,19 +11,19 @@ use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICom
 #[Group('API')]
 #[Group('APICombatLog')]
 #[Group('CombatLogRoute')]
-#[Group('TheaterOfPain')]
-class APICombatLogControllerCombatLogRouteTheaterOfPainTest extends APICombatLogControllerCombatLogRouteTestBase
+#[Group('TheMotherlode')]
+class APICombatLogControllerCombatLogRouteTheMotherlodeTest extends APICombatLogControllerCombatLogRouteTestBase
 {
     protected function getDungeonKey(): string
     {
-        return Dungeon::DUNGEON_THEATER_OF_PAIN;
+        return Dungeon::DUNGEON_THE_MOTHERLODE;
     }
 
     #[Test]
-    public function create_givenTwwS2PtrTheaterOfPain14Json_shouldReturnValidDungeonRoute(): void
+    public function create_givenTwwS2PtrTheMotherlodeJson_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
-        $postBody = $this->getJsonData('SL/tww_s2_ptr_theater_of_pain_14', self::FIXTURES_ROOT_DIR);
+        $postBody = $this->getJsonData('BFA/tww_s2_ptr_the_motherlode_16', self::FIXTURES_ROOT_DIR);
 
         // Act
         $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
@@ -35,7 +35,7 @@ class APICombatLogControllerCombatLogRouteTheaterOfPainTest extends APICombatLog
 
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
-        $this->validatePulls($responseArr, 20, 273);
+        $this->validatePulls($responseArr, 18, 480);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }

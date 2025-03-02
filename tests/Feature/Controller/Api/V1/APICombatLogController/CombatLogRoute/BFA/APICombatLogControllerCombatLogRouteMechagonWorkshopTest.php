@@ -20,7 +20,7 @@ class APICombatLogControllerCombatLogRouteMechagonWorkshopTest extends APICombat
     }
 
     #[Test]
-    public function create_givenTwwS1MechagonWorkshop4Json_shouldReturnValidDungeonRoute(): void
+    public function create_givenTwwS2PtrMechagonWorkshop4Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
         $postBody = $this->getJsonData('BFA/tww_s2_ptr_mechagon_workshop_15', self::FIXTURES_ROOT_DIR);
