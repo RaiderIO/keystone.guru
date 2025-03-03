@@ -29,9 +29,13 @@ use App\Models\Polyline;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\EnemyRepositoryInterface;
+use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Repositories\Interfaces\NpcRepositoryInterface;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Repositories\Stub\AffixGroup\AffixGroupRepository as AffixGroupRepositoryStub;
 use App\Repositories\Stub\DungeonRoute\DungeonRouteAffixGroupRepository as DungeonRouteAffixGroupRepositoryStub;
 use App\Repositories\Stub\DungeonRoute\DungeonRouteRepository as DungeonRouteRepositoryStub;
@@ -62,16 +66,20 @@ use Ramsey\Uuid\Uuid;
 class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteServiceInterface
 {
     public function __construct(
-        protected CombatLogService                                  $combatLogService,
-        protected SeasonServiceInterface                            $seasonService,
-        protected CoordinatesServiceInterface                       $coordinatesService,
-        protected DungeonRouteRepositoryInterface                   $dungeonRouteRepository,
-        protected DungeonRouteAffixGroupRepositoryInterface         $dungeonRouteAffixGroupRepository,
-        protected AffixGroupRepositoryInterface                     $affixGroupRepository,
-        protected KillZoneRepositoryInterface                       $killZoneRepository,
-        protected KillZoneEnemyRepositoryInterface                  $killZoneEnemyRepository,
-        protected KillZoneSpellRepositoryInterface                  $killZoneSpellRepository,
-        protected CombatLogRouteDungeonRouteServiceLoggingInterface $log
+        protected readonly CombatLogService                                  $combatLogService,
+        protected readonly SeasonServiceInterface                            $seasonService,
+        protected readonly CoordinatesServiceInterface                       $coordinatesService,
+        protected readonly DungeonRouteRepositoryInterface                   $dungeonRouteRepository,
+        protected readonly DungeonRouteAffixGroupRepositoryInterface         $dungeonRouteAffixGroupRepository,
+        protected readonly AffixGroupRepositoryInterface                     $affixGroupRepository,
+        protected readonly KillZoneRepositoryInterface                       $killZoneRepository,
+        protected readonly KillZoneEnemyRepositoryInterface                  $killZoneEnemyRepository,
+        protected readonly KillZoneSpellRepositoryInterface                  $killZoneSpellRepository,
+        protected readonly EnemyRepositoryInterface                          $enemyRepository,
+        protected readonly NpcRepositoryInterface                            $npcRepository,
+        protected readonly SpellRepositoryInterface                          $spellRepository,
+        protected readonly FloorRepositoryInterface                          $floorRepository,
+        protected readonly CombatLogRouteDungeonRouteServiceLoggingInterface $log
     ) {
     }
 
@@ -90,6 +98,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $this->killZoneRepository,
             $this->killZoneEnemyRepository,
             $this->killZoneSpellRepository,
+            $this->enemyRepository,
+            $this->npcRepository,
+            $this->spellRepository,
+            $this->floorRepository,
             $combatLogRoute
         ))->build();
 
@@ -121,6 +133,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             new KillZoneRepositoryStub(),
             new KillZoneEnemyRepositoryStub(),
             new KillZoneSpellRepositoryStub(),
+            $this->enemyRepository,
+            $this->npcRepository,
+            $this->spellRepository,
+            $this->floorRepository,
             $combatLogRoute
         );
 
@@ -144,6 +160,11 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             new KillZoneRepositoryStub(),
             new KillZoneEnemyRepositoryStub(),
             new KillZoneSpellRepositoryStub(),
+            // @TODO Change these four to take advantage of Swoole
+            $this->enemyRepository,
+            $this->npcRepository,
+            $this->spellRepository,
+            $this->floorRepository,
             $combatLogRoute
         );
 
@@ -172,7 +193,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             }
 
             // #1818 Filter out any NPC ids that are invalid
-            $validNpcIds = $dungeonRoute->dungeon->getInUseNpcIds();
+            $validNpcIds = $this->npcRepository->getInUseNpcIds($dungeonRoute->dungeon);
 
             /** @var ChallengeModeStartSpecialEvent $challengeModeStartEvent */
             $challengeModeStartEvent = $resultEvents->filter(static fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
@@ -196,10 +217,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 $challengeModeStartEvent->getAffixIDs(),
             );
 
-            $npcs                           = collect();
-            $npcEngagedEvents               = collect();
-            $spells                         = collect();
-            $playerDeaths                   = collect();
+            $npcs             = collect();
+            $npcEngagedEvents = collect();
+            $spells           = collect();
+            $playerDeaths     = collect();
             /** @var Collection<CombatantInfoResultEvent> $mostRecentCombatantInfo */
             $mostRecentCombatantInfo        = collect();
             $mostRecentCombatantInfoIndexFn = static function (string $guid) use ($mostRecentCombatantInfo) {
@@ -283,7 +304,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                         // Extract the index of the combatant consistently
                             $mostRecentCombatantInfo->mapWithKeys(
                                 static fn(CombatantInfoResultEvent $combatantInfo, string $guidKey) => [
-                                    $mostRecentCombatantInfoIndexFn($guidKey) => $combatantInfo
+                                    $mostRecentCombatantInfoIndexFn($guidKey) => $combatantInfo,
                                 ]
                             )->search($combatantInfo),
                             $combatantInfo->getClass()->class_id,
@@ -415,8 +436,8 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         $polylineAttributes  = [];
         $brushlineAttributes = [];
 
-        $npcs          = $dungeonRoute->dungeon->getInUseNpcs()->keyBy('id');
-        $validNpcIds   = $dungeonRoute->dungeon->getInUseNpcIds($npcs);
+        $npcs          = $this->npcRepository->getInUseNpcs($dungeonRoute->dungeon)->keyBy('id');
+        $validNpcIds   = $this->npcRepository->getInUseNpcIds($dungeonRoute->dungeon);
         $previousFloor = null;
         foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
             $currentFloor = $combatLogRouteNpc->getResolvedEnemy()?->floor ?? $previousFloor;

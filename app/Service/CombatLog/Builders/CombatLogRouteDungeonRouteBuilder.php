@@ -8,13 +8,16 @@ use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
-use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\EnemyRepositoryInterface;
+use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Repositories\Interfaces\NpcRepositoryInterface;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\Builders\Logging\CombatLogRouteDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
@@ -50,6 +53,10 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         KillZoneRepositoryInterface                   $killZoneRepository,
         KillZoneEnemyRepositoryInterface              $killZoneEnemyRepository,
         KillZoneSpellRepositoryInterface              $killZoneSpellRepository,
+        EnemyRepositoryInterface                      $enemyRepository,
+        NpcRepositoryInterface                        $npcRepository,
+        protected readonly SpellRepositoryInterface   $spellRepository,
+        protected readonly FloorRepositoryInterface   $floorRepository,
         protected readonly CombatLogRouteRequestModel $combatLogRoute
     ) {
         $log = App::make(CombatLogRouteDungeonRouteBuilderLoggingInterface::class);
@@ -59,6 +66,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             $killZoneRepository,
             $killZoneEnemyRepository,
             $killZoneSpellRepository,
+            $enemyRepository,
+            $npcRepository,
             $this->combatLogRoute->createDungeonRoute(
                 $this->seasonService,
                 $dungeonRouteRepository,
@@ -68,9 +77,9 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             $log
         );
 
-        $this->validSpellIds = Spell::whereIn('id',
+        $this->validSpellIds = $this->spellRepository->findAllById(
             $combatLogRoute->spells->map(fn(CombatLogRouteSpellRequestModel $spell) => $spell->spellId)
-        )->get()->keyBy('id');
+        );
 
         /** @var CombatLogRouteDungeonRouteBuilderLoggingInterface $log */
         $this->log = $log;
@@ -136,7 +145,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 if ($newFloor === null) {
                     $floorCache->put(
                         $event['npc']->coord->uiMapId,
-                        $newFloor = Floor::findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id)
+                        $this->floorRepository->findByUiMapId($event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id)
                     );
                 }
 
@@ -146,7 +155,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
 
                     // First floor ever, can't find it? Assign the default floor
                     if ($this->currentFloor === null) {
-                        $this->currentFloor = $this->dungeonRoute->dungeon->floors()->where('default', 1)->first();
+                        $this->currentFloor = $this->floorRepository->getDefaultFloorForDungeon($this->dungeonRoute->dungeon_id);
 
                         $this->log->buildKillZonesFloorAssigningDefaultFloor($this->currentFloor->id);
                     }

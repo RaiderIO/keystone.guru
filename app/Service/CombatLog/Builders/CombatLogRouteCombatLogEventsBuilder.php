@@ -12,9 +12,13 @@ use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\EnemyRepositoryInterface;
+use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Repositories\Interfaces\NpcRepositoryInterface;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\Builders\Logging\CombatLogRouteCombatLogEventsBuilderLoggingInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -39,6 +43,10 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
         KillZoneRepositoryInterface               $killZoneRepository,
         KillZoneEnemyRepositoryInterface          $killZoneEnemyRepository,
         KillZoneSpellRepositoryInterface          $killZoneSpellRepository,
+        EnemyRepositoryInterface                  $enemyRepository,
+        NpcRepositoryInterface                    $npcRepository,
+        SpellRepositoryInterface                  $spellRepository,
+        FloorRepositoryInterface                  $floorRepository,
         CombatLogRouteRequestModel                $combatLogRoute
     ) {
         /** @var CombatLogRouteCombatLogEventsBuilderLoggingInterface $log */
@@ -54,6 +62,10 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
             $killZoneRepository,
             $killZoneEnemyRepository,
             $killZoneSpellRepository,
+            $enemyRepository,
+            $npcRepository,
+            $spellRepository,
+            $floorRepository,
             $combatLogRoute
         );
     }

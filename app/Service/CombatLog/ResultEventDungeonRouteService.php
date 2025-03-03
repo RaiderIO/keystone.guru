@@ -12,9 +12,11 @@ use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\EnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Repositories\Interfaces\NpcRepositoryInterface;
 use App\Service\CombatLog\Builders\ResultEventDungeonRouteBuilder;
 use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
@@ -42,6 +44,8 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
         protected KillZoneRepositoryInterface                         $killZoneRepository,
         protected KillZoneEnemyRepositoryInterface                    $killZoneEnemyRepository,
         protected KillZoneSpellRepositoryInterface                    $killZoneSpellRepository,
+        protected EnemyRepositoryInterface                            $enemyRepository,
+        protected NpcRepositoryInterface                              $npcRepository,
         private readonly CombatLogDungeonRouteServiceLoggingInterface $log)
     {
     }
@@ -113,6 +117,8 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
                 $this->killZoneRepository,
                 $this->killZoneEnemyRepository,
                 $this->killZoneSpellRepository,
+                $this->enemyRepository,
+                $this->npcRepository,
                 $dungeonRoute,
                 $resultEvents
             ))->build();

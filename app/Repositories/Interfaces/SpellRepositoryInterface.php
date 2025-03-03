@@ -18,9 +18,14 @@ use Illuminate\Support\Collection;
  */
 interface SpellRepositoryInterface extends BaseRepositoryInterface
 {
-
     /**
      * @return int[]
      */
     public function getMissingSpellIds(): array;
+
+    /**
+     * @param Collection<int> $spellIds
+     * @return Collection<Spell>
+     */
+    public function findAllById(Collection $spellIds): Collection;
 }

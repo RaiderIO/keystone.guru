@@ -12,9 +12,11 @@ use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Npc\NpcClassification;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\EnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Repositories\Interfaces\NpcRepositoryInterface;
 use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullCollection;
@@ -22,7 +24,6 @@ use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
 use App\Service\CombatLog\Models\ClosestEnemy;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 abstract class DungeonRouteBuilder
@@ -72,28 +73,16 @@ abstract class DungeonRouteBuilder
         protected KillZoneRepositoryInterface                $killZoneRepository,
         protected KillZoneEnemyRepositoryInterface           $killZoneEnemyRepository,
         protected KillZoneSpellRepositoryInterface           $killZoneSpellRepository,
+        protected EnemyRepositoryInterface                   $enemyRepository,
+        protected NpcRepositoryInterface                     $npcRepository,
         protected DungeonRoute                               $dungeonRoute,
         private readonly DungeonRouteBuilderLoggingInterface $log
     ) {
         $this->currentFloor     = null;
-        $this->availableEnemies = $this->dungeonRoute->mappingVersion->enemies()->with([
-            'floor',
-            'floor.dungeon',
-            'enemyPack',
-            'enemyPatrol',
-        ])->where(function (Builder $builder) {
-            $builder->whereNull('seasonal_type')
-                ->orWhereNot('seasonal_type', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER);
-        })->get()
-            ->each(static function (Enemy $enemy) {
-                // Ensure that the kill priority is 0 if it wasn't set
-                $enemy->kill_priority ??= 0;
-            })
-            ->sort(static fn(Enemy $enemy) => $enemy->enemy_patrol_id ?? 0)
-            ->keyBy('id');
+        $this->availableEnemies = $enemyRepository->getAvailableEnemiesForDungeonRouteBuilder($this->dungeonRoute->mappingVersion);
 
         // #1818 Filter out any NPC ids that are invalid
-        $this->validNpcIds = $this->dungeonRoute->dungeon->getInUseNpcIds();
+        $this->validNpcIds = $this->npcRepository->getInUseNpcIds($this->dungeonRoute->dungeon);
 
         $this->activePullCollection = new ActivePullCollection();
 
@@ -115,6 +104,7 @@ abstract class DungeonRouteBuilder
     {
         $this->dungeonRoute->setRelation('killZones', $this->killZones);
 
+        // @TODO should this be done in the repository? Do we need to skip this for correction?
         // Direct update doesn't work.. no clue why
         $enemyForces = $this->dungeonRoute->getEnemyForces();
         $this->dungeonRouteRepository->find($this->dungeonRoute->id)->update(['enemy_forces' => $enemyForces]);
@@ -373,8 +363,7 @@ abstract class DungeonRouteBuilder
 
             /** @var Collection<Enemy> $preferredEnemiesOnCurrentFloor */
             $preferredEnemiesOnCurrentFloor = $filteredEnemies->filter(
-                fn(Enemy $availableEnemy) =>
-                    // Only if we have floor checks enabled for this dungeon
+                fn(Enemy $availableEnemy) => // Only if we have floor checks enabled for this dungeon
                     in_array($availableEnemy->floor->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_ENABLED) &&
                     $availableEnemy->floor_id == $this->currentFloor->id
             );
