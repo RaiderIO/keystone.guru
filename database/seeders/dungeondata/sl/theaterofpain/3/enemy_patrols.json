@@ -258,5 +258,135 @@
             "weight": 3,
             "vertices_json": "[{\"lat\":-189.228447,\"lng\":274.466358},{\"lat\":-199.965004,\"lng\":279.331545}]"
         }
+    },
+    {
+        "id": 9265,
+        "mapping_version_id": 520,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#11bf00",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-163.405851,\"lng\":194.301195},{\"lat\":-145.097265,\"lng\":164.551843}]"
+        }
+    },
+    {
+        "id": 9266,
+        "mapping_version_id": 520,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#11bf00",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-162.073483,\"lng\":199.816965},{\"lat\":-120.440259,\"lng\":193.800242}]"
+        }
+    },
+    {
+        "id": 9267,
+        "mapping_version_id": 520,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-137.667585,\"lng\":156.105901},{\"lat\":-113.256136,\"lng\":82.902438}]"
+        }
+    },
+    {
+        "id": 9268,
+        "mapping_version_id": 520,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-113.767595,\"lng\":186.191866},{\"lat\":-113.433191,\"lng\":83.07192}]"
+        }
+    },
+    {
+        "id": 9269,
+        "mapping_version_id": 520,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#b400ae",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-107.95821,\"lng\":119.370498},{\"lat\":-61.847574,\"lng\":144.919939}]"
+        }
+    },
+    {
+        "id": 9270,
+        "mapping_version_id": 520,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#b400ae",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-115.828205,\"lng\":119.985924},{\"lat\":-80.146138,\"lng\":219.526546}]"
+        }
+    },
+    {
+        "id": 9271,
+        "mapping_version_id": 520,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#9f5700",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-56.942907,\"lng\":183.664209},{\"lat\":-81.787441,\"lng\":305.279548}]"
+        }
+    },
+    {
+        "id": 9272,
+        "mapping_version_id": 520,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#9f5700",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-88.636085,\"lng\":257.043976},{\"lat\":-81.581465,\"lng\":305.179123}]"
+        }
+    },
+    {
+        "id": 9273,
+        "mapping_version_id": 520,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#9f3100",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-87.199762,\"lng\":316.935782},{\"lat\":-109.283792,\"lng\":338.295115}]"
+        }
+    },
+    {
+        "id": 9274,
+        "mapping_version_id": 520,
+        "floor_id": 94,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#9f3100",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-189.212525,\"lng\":274.62392},{\"lat\":-199.641095,\"lng\":279.733808}]"
+        }
     }
 ]

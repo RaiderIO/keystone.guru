@@ -193,5 +193,57 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 520,
+        "floor_id": 93,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 12,
+        "lat": -84,
+        "lng": 122.5,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 520,
+        "floor_id": 93,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -125.02630181484,
+        "lng": 223.81504416911,
+        "comment": "mapping.map_icons.sl.theater_of_pain.miniboss_pick_one",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 520,
+        "floor_id": 93,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -159.5625,
+        "lng": 175.125,
+        "comment": "mapping.map_icons.sl.theater_of_pain.miniboss_pick_one",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 520,
+        "floor_id": 93,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 42,
+        "lat": -188.0625,
+        "lng": 268.6875,
+        "comment": "mapping.map_icons.sl.theater_of_pain.miniboss_pick_one",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

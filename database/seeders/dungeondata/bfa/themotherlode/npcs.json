@@ -1803,6 +1803,31 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 136005,
+        "dungeon_id": 20,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 85712,
+        "encounter_id": null,
+        "name": "Rowdy Reveler",
+        "base_health": 153699,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 136006,
         "dungeon_id": 20,
         "classification_id": 1,
@@ -2576,6 +2601,47 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
         "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 235631,
+        "dungeon_id": 20,
+        "classification_id": 1,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 49134,
+        "encounter_id": null,
+        "name": "Crawler Mine",
+        "base_health": 3408305,
+        "health_percentage": null,
+        "level": 81,
+        "mdt_scale": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 262348
+            },
+            {
+                "spell_id": 262377
+            },
+            {
+                "spell_id": 277242
+            },
+            {
+                "spell_id": 277564
+            },
+            {
+                "spell_id": 1217689
+            }
+        ],
         "npc_enemy_forces": []
     }
 ]
