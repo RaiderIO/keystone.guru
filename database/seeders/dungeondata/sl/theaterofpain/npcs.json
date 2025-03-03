@@ -8,7 +8,7 @@
         "display_id": 95233,
         "encounter_id": null,
         "name": "Maniacal Soulbinder",
-        "base_health": 43821070,
+        "base_health": 43848222,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.3,
@@ -74,6 +74,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17921,
+                "mapping_version_id": 520,
+                "npc_id": 160495,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17466,
                 "mapping_version_id": 495,
                 "npc_id": 160495,
@@ -98,7 +105,7 @@
         "display_id": 96088,
         "encounter_id": 2389,
         "name": "Kul'tharok",
-        "base_health": 312041597,
+        "base_health": 312064346,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.6,
@@ -197,7 +204,7 @@
         "display_id": 95106,
         "encounter_id": 2401,
         "name": "Gorechop",
-        "base_health": 341295496,
+        "base_health": 341320379,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -219,7 +226,13 @@
                 "spell_id": 318406
             },
             {
+                "spell_id": 322795
+            },
+            {
                 "spell_id": 323515
+            },
+            {
+                "spell_id": 332859
             }
         ],
         "npc_enemy_forces": []
@@ -233,7 +246,7 @@
         "display_id": 95439,
         "encounter_id": 2390,
         "name": "Xav the Unfallen",
-        "base_health": 307165947,
+        "base_health": 307188341,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -286,6 +299,9 @@
             },
             {
                 "spell_id": 339415
+            },
+            {
+                "spell_id": 391891
             }
         ],
         "npc_enemy_forces": []
@@ -299,7 +315,7 @@
         "display_id": 97489,
         "encounter_id": null,
         "name": "Nekthara the Mangler",
-        "base_health": 155808250,
+        "base_health": 155904790,
         "health_percentage": null,
         "level": 81,
         "mdt_scale": 2,
@@ -321,6 +337,12 @@
                 "spell_id": 317605
             },
             {
+                "spell_id": 331288
+            },
+            {
+                "spell_id": 336995
+            },
+            {
                 "spell_id": 336996
             },
             {
@@ -331,6 +353,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17928,
+                "mapping_version_id": 520,
+                "npc_id": 162744,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17473,
                 "mapping_version_id": 495,
@@ -356,7 +385,7 @@
         "display_id": 94812,
         "encounter_id": null,
         "name": "Soulforged Bonereaver",
-        "base_health": 97380156,
+        "base_health": 97440494,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.6,
@@ -389,6 +418,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17922,
+                "mapping_version_id": 520,
+                "npc_id": 162763,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17467,
                 "mapping_version_id": 495,
                 "npc_id": 162763,
@@ -413,7 +449,7 @@
         "display_id": 97161,
         "encounter_id": null,
         "name": "Rancid Gasbag",
-        "base_health": 92511148,
+        "base_health": 92568469,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -432,6 +468,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 330592
+            },
+            {
                 "spell_id": 330608
             },
             {
@@ -445,6 +484,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17927,
+                "mapping_version_id": 520,
+                "npc_id": 163086,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17472,
                 "mapping_version_id": 495,
@@ -470,7 +516,7 @@
         "display_id": 94761,
         "encounter_id": null,
         "name": "Disgusting Refuse",
-        "base_health": 12172520,
+        "base_health": 12180062,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -530,6 +576,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17924,
+                "mapping_version_id": 520,
+                "npc_id": 163089,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17469,
                 "mapping_version_id": 495,
                 "npc_id": 163089,
@@ -554,7 +607,7 @@
         "display_id": 96820,
         "encounter_id": 2397,
         "name": "Dessia the Decapitator",
-        "base_health": 175523398,
+        "base_health": 214544238,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -602,7 +655,7 @@
         "display_id": 98082,
         "encounter_id": 2397,
         "name": "Sathel the Accursed",
-        "base_health": 136518199,
+        "base_health": 195040217,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -656,7 +709,7 @@
         "display_id": 98081,
         "encounter_id": 2397,
         "name": "Paceran the Virulent",
-        "base_health": 156020799,
+        "base_health": 195040217,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -767,7 +820,7 @@
         "display_id": 96489,
         "encounter_id": null,
         "name": "Ancient Captain",
-        "base_health": 58428093,
+        "base_health": 58464296,
         "health_percentage": null,
         "level": 81,
         "mdt_scale": 1.5,
@@ -779,7 +832,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 330545
@@ -795,6 +852,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17916,
+                "mapping_version_id": 520,
+                "npc_id": 164506,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17461,
                 "mapping_version_id": 495,
@@ -820,7 +884,7 @@
         "display_id": 96212,
         "encounter_id": null,
         "name": "Shambling Arbalest",
-        "base_health": 41386567,
+        "base_health": 41412211,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -880,6 +944,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17912,
+                "mapping_version_id": 520,
+                "npc_id": 164510,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17457,
                 "mapping_version_id": 495,
                 "npc_id": 164510,
@@ -904,7 +975,7 @@
         "display_id": 94761,
         "encounter_id": null,
         "name": "Oozing Leftovers",
-        "base_health": 312041597,
+        "base_health": 36540188,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.6,
@@ -919,6 +990,18 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -943,7 +1026,7 @@
         "display_id": 96078,
         "encounter_id": 2417,
         "name": "Mordretha, the Endless Empress",
-        "base_health": 390051996,
+        "base_health": 390080433,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -1003,7 +1086,7 @@
         "display_id": 96337,
         "encounter_id": null,
         "name": "Deathwalker",
-        "base_health": 312041597,
+        "base_health": 4872025,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.6,
@@ -1015,7 +1098,26 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 324589
@@ -1032,7 +1134,7 @@
         "display_id": 97490,
         "encounter_id": null,
         "name": "Heavin the Breaker",
-        "base_health": 155808250,
+        "base_health": 155904790,
         "health_percentage": null,
         "level": 81,
         "mdt_scale": 2,
@@ -1051,6 +1153,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 317605
+            },
+            {
                 "spell_id": 331288
             },
             {
@@ -1061,6 +1166,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17929,
+                "mapping_version_id": 520,
+                "npc_id": 167532,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17474,
                 "mapping_version_id": 495,
@@ -1086,7 +1198,7 @@
         "display_id": 126299,
         "encounter_id": null,
         "name": "Advent Nevermore",
-        "base_health": 155808250,
+        "base_health": 155554440,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -1108,6 +1220,9 @@
                 "spell_id": 331275
             },
             {
+                "spell_id": 331288
+            },
+            {
                 "spell_id": 333827
             },
             {
@@ -1115,6 +1230,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17917,
+                "mapping_version_id": 520,
+                "npc_id": 167533,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17462,
                 "mapping_version_id": 495,
@@ -1140,7 +1262,7 @@
         "display_id": 126296,
         "encounter_id": null,
         "name": "Rek the Hardened",
-        "base_health": 93098572,
+        "base_health": 155904790,
         "health_percentage": null,
         "level": 81,
         "mdt_scale": 2,
@@ -1173,6 +1295,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17930,
+                "mapping_version_id": 520,
+                "npc_id": 167534,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17475,
                 "mapping_version_id": 495,
                 "npc_id": 167534,
@@ -1197,7 +1326,7 @@
         "display_id": 126297,
         "encounter_id": null,
         "name": "Harugia the Bloodthirsty",
-        "base_health": 155808250,
+        "base_health": 155904790,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -1216,6 +1345,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 333845
+            },
+            {
                 "spell_id": 333861
             },
             {
@@ -1232,6 +1364,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17915,
+                "mapping_version_id": 520,
+                "npc_id": 167536,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17460,
                 "mapping_version_id": 495,
@@ -1257,7 +1396,7 @@
         "display_id": 97488,
         "encounter_id": null,
         "name": "Dokigg the Brutalizer",
-        "base_health": 155808250,
+        "base_health": 155904790,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -1305,6 +1444,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17914,
+                "mapping_version_id": 520,
+                "npc_id": 167538,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17459,
                 "mapping_version_id": 495,
                 "npc_id": 167538,
@@ -1329,7 +1475,7 @@
         "display_id": 96253,
         "encounter_id": null,
         "name": "Ossified Conscript",
-        "base_health": 48690078,
+        "base_health": 48720247,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1383,6 +1529,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17913,
+                "mapping_version_id": 520,
+                "npc_id": 167994,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17458,
                 "mapping_version_id": 495,
                 "npc_id": 167994,
@@ -1407,7 +1560,7 @@
         "display_id": 96442,
         "encounter_id": null,
         "name": "Portal Guardian",
-        "base_health": 73035117,
+        "base_health": 73080370,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.6,
@@ -1442,6 +1595,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17919,
+                "mapping_version_id": 520,
+                "npc_id": 167998,
+                "enemy_forces": 8,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17464,
                 "mapping_version_id": 495,
@@ -1500,7 +1660,7 @@
         "display_id": 90428,
         "encounter_id": null,
         "name": "Shackled Soul",
-        "base_health": 29214047,
+        "base_health": 29232148,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1557,6 +1717,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17918,
+                "mapping_version_id": 520,
+                "npc_id": 169875,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17463,
                 "mapping_version_id": 495,
                 "npc_id": 169875,
@@ -1581,7 +1748,7 @@
         "display_id": 97011,
         "encounter_id": null,
         "name": "Nefarious Darkspeaker",
-        "base_health": 68166109,
+        "base_health": 68208346,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.6,
@@ -1614,6 +1781,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17923,
+                "mapping_version_id": 520,
+                "npc_id": 169893,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17468,
                 "mapping_version_id": 495,
                 "npc_id": 169893,
@@ -1638,7 +1812,7 @@
         "display_id": 97116,
         "encounter_id": null,
         "name": "Putrid Butcher",
-        "base_health": 58428093,
+        "base_health": 58464296,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.7,
@@ -1695,6 +1869,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17926,
+                "mapping_version_id": 520,
+                "npc_id": 169927,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17471,
                 "mapping_version_id": 495,
                 "npc_id": 169927,
@@ -1714,12 +1895,12 @@
         "id": 170234,
         "dungeon_id": 35,
         "classification_id": 2,
-        "npc_type_id": 11,
+        "npc_type_id": 10,
         "npc_class_id": 1,
         "display_id": 97254,
         "encounter_id": null,
         "name": "Oppressive Banner",
-        "base_health": 312041597,
+        "base_health": 14210073,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -1773,7 +1954,7 @@
         "display_id": 97117,
         "encounter_id": null,
         "name": "Diseased Horror",
-        "base_health": 48690078,
+        "base_health": 48720247,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.7,
@@ -1836,6 +2017,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17925,
+                "mapping_version_id": 520,
+                "npc_id": 170690,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17470,
                 "mapping_version_id": 495,
                 "npc_id": 170690,
@@ -1885,7 +2073,7 @@
         "display_id": 95570,
         "encounter_id": null,
         "name": "Unyielding Contender",
-        "base_health": 55993590,
+        "base_health": 56028285,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1954,6 +2142,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17910,
+                "mapping_version_id": 520,
+                "npc_id": 170838,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17455,
                 "mapping_version_id": 495,
                 "npc_id": 170838,
@@ -1978,7 +2173,7 @@
         "display_id": 96471,
         "encounter_id": null,
         "name": "Raging Bloodhorn",
-        "base_health": 87642140,
+        "base_health": 87696445,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.8,
@@ -2005,6 +2200,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17911,
+                "mapping_version_id": 520,
+                "npc_id": 170850,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17456,
                 "mapping_version_id": 495,
                 "npc_id": 170850,
@@ -2029,7 +2231,7 @@
         "display_id": 97410,
         "encounter_id": null,
         "name": "Bone Magus",
-        "base_health": 24345039,
+        "base_health": 43848222,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -2089,6 +2291,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17920,
+                "mapping_version_id": 520,
+                "npc_id": 170882,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17465,
                 "mapping_version_id": 495,
                 "npc_id": 170882,
@@ -2113,7 +2322,7 @@
         "display_id": 98696,
         "encounter_id": null,
         "name": "Battlefield Ritualist",
-        "base_health": 43821070,
+        "base_health": 43848222,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -2179,6 +2388,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17909,
+                "mapping_version_id": 520,
+                "npc_id": 174197,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17454,
                 "mapping_version_id": 495,
                 "npc_id": 174197,
@@ -2203,7 +2419,7 @@
         "display_id": 94755,
         "encounter_id": null,
         "name": "Blighted Sludge-Spewer",
-        "base_health": 38952062,
+        "base_health": 38976198,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.3,
@@ -2272,6 +2488,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17931,
+                "mapping_version_id": 520,
+                "npc_id": 174210,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17476,
                 "mapping_version_id": 495,
                 "npc_id": 174210,
@@ -2296,7 +2519,7 @@
         "display_id": 96131,
         "encounter_id": null,
         "name": "Lost Soul",
-        "base_health": 312041597,
+        "base_health": 8120042,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.6,
@@ -2308,7 +2531,14 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 474013
