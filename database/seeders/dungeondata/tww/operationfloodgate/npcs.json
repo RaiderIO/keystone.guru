@@ -8,7 +8,7 @@
         "display_id": 124283,
         "encounter_id": 2650,
         "name": "Swampface",
-        "base_health": 341295496,
+        "base_health": 341041732,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -25,7 +25,47 @@
                 "characteristic_id": 1
             }
         ],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 469478
+            },
+            {
+                "spell_id": 469479
+            },
+            {
+                "spell_id": 469480
+            },
+            {
+                "spell_id": 470038
+            },
+            {
+                "spell_id": 470039
+            },
+            {
+                "spell_id": 472794
+            },
+            {
+                "spell_id": 472819
+            },
+            {
+                "spell_id": 472878
+            },
+            {
+                "spell_id": 473046
+            },
+            {
+                "spell_id": 473070
+            },
+            {
+                "spell_id": 473081
+            },
+            {
+                "spell_id": 473114
+            },
+            {
+                "spell_id": 473126
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -37,7 +77,7 @@
         "display_id": 122867,
         "encounter_id": 2650,
         "name": "Big M.O.M.M.A.",
-        "base_health": 534958833,
+        "base_health": 535922722,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -49,8 +89,49 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 460156
+            },
+            {
+                "spell_id": 460158
+            },
+            {
+                "spell_id": 469981
+            },
+            {
+                "spell_id": 471585
+            },
+            {
+                "spell_id": 471652
+            },
+            {
+                "spell_id": 473220
+            },
+            {
+                "spell_id": 473224
+            },
+            {
+                "spell_id": 473240
+            },
+            {
+                "spell_id": 473287
+            },
+            {
+                "spell_id": 473351
+            },
+            {
+                "spell_id": 473836
+            },
+            {
+                "spell_id": 1215504
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -62,7 +143,7 @@
         "display_id": 122215,
         "encounter_id": 2650,
         "name": "Bront",
-        "base_health": 219404248,
+        "base_health": 219241114,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.7,
@@ -79,7 +160,23 @@
                 "characteristic_id": 1
             }
         ],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 459779
+            },
+            {
+                "spell_id": 459799
+            },
+            {
+                "spell_id": 460965
+            },
+            {
+                "spell_id": 470022
+            },
+            {
+                "spell_id": 470090
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -91,7 +188,7 @@
         "display_id": 123036,
         "encounter_id": 2650,
         "name": "Keeza Quickfuse",
-        "base_health": 170647748,
+        "base_health": 170520866,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.7,
@@ -108,7 +205,44 @@
                 "characteristic_id": 1
             }
         ],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 460602
+            },
+            {
+                "spell_id": 460814
+            },
+            {
+                "spell_id": 460867
+            },
+            {
+                "spell_id": 461994
+            },
+            {
+                "spell_id": 470090
+            },
+            {
+                "spell_id": 472755
+            },
+            {
+                "spell_id": 473526
+            },
+            {
+                "spell_id": 473690
+            },
+            {
+                "spell_id": 473713
+            },
+            {
+                "spell_id": 473719
+            },
+            {
+                "spell_id": 1217653
+            },
+            {
+                "spell_id": 1217751
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -120,7 +254,7 @@
         "display_id": 122475,
         "encounter_id": 2650,
         "name": "Geezle Gigazap",
-        "base_health": 390051996,
+        "base_health": 390080433,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -137,7 +271,47 @@
                 "characteristic_id": 1
             }
         ],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 465462
+            },
+            {
+                "spell_id": 465463
+            },
+            {
+                "spell_id": 465982
+            },
+            {
+                "spell_id": 466124
+            },
+            {
+                "spell_id": 466188
+            },
+            {
+                "spell_id": 466189
+            },
+            {
+                "spell_id": 466190
+            },
+            {
+                "spell_id": 466197
+            },
+            {
+                "spell_id": 468604
+            },
+            {
+                "spell_id": 468813
+            },
+            {
+                "spell_id": 468815
+            },
+            {
+                "spell_id": 468841
+            },
+            {
+                "spell_id": 468846
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -149,7 +323,7 @@
         "display_id": 75850,
         "encounter_id": null,
         "name": "Waterworks Crocolisk",
-        "base_health": 48610763,
+        "base_health": 48747699,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.3,
@@ -176,6 +350,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17950,
+                "mapping_version_id": 521,
+                "npc_id": 227145,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17757,
                 "mapping_version_id": 510,
                 "npc_id": 227145,
@@ -200,7 +381,7 @@
         "display_id": 122752,
         "encounter_id": null,
         "name": "Darkfuse Soldier",
-        "base_health": 48610763,
+        "base_health": 48747699,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -215,6 +396,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
             },
             {
                 "characteristic_id": 5
@@ -236,6 +420,9 @@
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -244,6 +431,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17933,
+                "mapping_version_id": 521,
+                "npc_id": 228144,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17723,
                 "mapping_version_id": 510,
@@ -269,7 +463,7 @@
         "display_id": 125461,
         "encounter_id": null,
         "name": "Darkfuse Mechadrone",
-        "base_health": 48610767,
+        "base_health": 48747699,
         "health_percentage": null,
         "level": 81,
         "mdt_scale": 1.5,
@@ -314,7 +508,7 @@
         "display_id": 126613,
         "encounter_id": null,
         "name": "Mechadrone Sniper",
-        "base_health": 48610763,
+        "base_health": 48747699,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -338,6 +532,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -349,6 +546,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17934,
+                "mapping_version_id": 521,
+                "npc_id": 229069,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17725,
                 "mapping_version_id": 510,
@@ -374,7 +578,7 @@
         "display_id": 124724,
         "encounter_id": null,
         "name": "Darkfuse Demolitionist",
-        "base_health": 48610763,
+        "base_health": 48747699,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -394,6 +598,12 @@
                 "characteristic_id": 5
             },
             {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 12
             },
             {
@@ -407,6 +617,9 @@
             },
             {
                 "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -424,6 +637,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17938,
+                "mapping_version_id": 521,
+                "npc_id": 229212,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17733,
                 "mapping_version_id": 510,
@@ -449,7 +669,7 @@
         "display_id": 122082,
         "encounter_id": null,
         "name": "Venture Co. Contractor",
-        "base_health": 48610763,
+        "base_health": 48747699,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -464,6 +684,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
             },
             {
                 "characteristic_id": 5
@@ -490,6 +713,13 @@
         "npc_spells": [],
         "npc_enemy_forces": [
             {
+                "id": 17936,
+                "mapping_version_id": 521,
+                "npc_id": 229250,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17729,
                 "mapping_version_id": 510,
                 "npc_id": 229250,
@@ -514,7 +744,7 @@
         "display_id": 122097,
         "encounter_id": null,
         "name": "Venture Co. Architect",
-        "base_health": 63297101,
+        "base_health": 63372008,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -547,6 +777,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17945,
+                "mapping_version_id": 521,
+                "npc_id": 229251,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17747,
                 "mapping_version_id": 510,
                 "npc_id": 229251,
@@ -571,7 +808,7 @@
         "display_id": 121293,
         "encounter_id": null,
         "name": "Darkfuse Hyena",
-        "base_health": 38888610,
+        "base_health": 38998159,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -592,6 +829,9 @@
             },
             {
                 "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
             },
             {
                 "characteristic_id": 12
@@ -619,6 +859,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17937,
+                "mapping_version_id": 521,
+                "npc_id": 229252,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17731,
                 "mapping_version_id": 510,
                 "npc_id": 229252,
@@ -643,7 +890,7 @@
         "display_id": 122080,
         "encounter_id": null,
         "name": "Venture Co. Surveyor",
-        "base_health": 48610763,
+        "base_health": 48747699,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -703,6 +950,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17941,
+                "mapping_version_id": 521,
+                "npc_id": 229686,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17739,
                 "mapping_version_id": 510,
                 "npc_id": 229686,
@@ -727,13 +981,13 @@
         "display_id": 122881,
         "encounter_id": null,
         "name": "Shreddinator 3000",
-        "base_health": 97221525,
+        "base_health": 97495397,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.6,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0,
+        "truesight": 1,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
@@ -744,8 +998,31 @@
                 "characteristic_id": 1
             }
         ],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 465754
+            },
+            {
+                "spell_id": 474337
+            },
+            {
+                "spell_id": 474350
+            },
+            {
+                "spell_id": 474351
+            },
+            {
+                "spell_id": 474388
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 17932,
+                "mapping_version_id": 521,
+                "npc_id": 230740,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17721,
                 "mapping_version_id": 510,
@@ -771,7 +1048,7 @@
         "display_id": 126383,
         "encounter_id": null,
         "name": "Darkfuse Bloodwarper",
-        "base_health": 77904125,
+        "base_health": 77996318,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -793,9 +1070,19 @@
             },
             {
                 "spell_id": 465871
+            },
+            {
+                "spell_id": 1216826
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17939,
+                "mapping_version_id": 521,
+                "npc_id": 230748,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17735,
                 "mapping_version_id": 510,
@@ -821,7 +1108,7 @@
         "display_id": 121696,
         "encounter_id": null,
         "name": "Loaderbot",
-        "base_health": 38888610,
+        "base_health": 38998159,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.1,
@@ -860,6 +1147,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17935,
+                "mapping_version_id": 521,
+                "npc_id": 231014,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17727,
                 "mapping_version_id": 510,
                 "npc_id": 231014,
@@ -884,7 +1178,7 @@
         "display_id": 124782,
         "encounter_id": null,
         "name": "Bubbles",
-        "base_health": 146070234,
+        "base_health": 146160741,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -901,8 +1195,37 @@
                 "characteristic_id": 1
             }
         ],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 465487
+            },
+            {
+                "spell_id": 469721
+            },
+            {
+                "spell_id": 469811
+            },
+            {
+                "spell_id": 469816
+            },
+            {
+                "spell_id": 469818
+            },
+            {
+                "spell_id": 469819
+            },
+            {
+                "spell_id": 1217496
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 17947,
+                "mapping_version_id": 521,
+                "npc_id": 231197,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17751,
                 "mapping_version_id": 510,
@@ -928,7 +1251,7 @@
         "display_id": 126961,
         "encounter_id": null,
         "name": "Disturbed Kelp",
-        "base_health": 48690078,
+        "base_health": 48747699,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -958,6 +1281,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -972,6 +1298,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17946,
+                "mapping_version_id": 521,
+                "npc_id": 231223,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17749,
                 "mapping_version_id": 510,
@@ -997,7 +1330,7 @@
         "display_id": 124181,
         "encounter_id": null,
         "name": "Venture Co. Electrician",
-        "base_health": 48690078,
+        "base_health": 38976198,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1010,6 +1343,9 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
             {
                 "characteristic_id": 2
             },
@@ -1032,12 +1368,18 @@
                 "characteristic_id": 18
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
         "npc_spells": [
             {
                 "spell_id": 465595
+            },
+            {
+                "spell_id": 465966
             },
             {
                 "spell_id": 469799
@@ -1047,6 +1389,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17942,
+                "mapping_version_id": 521,
+                "npc_id": 231312,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17741,
                 "mapping_version_id": 510,
@@ -1072,7 +1421,7 @@
         "display_id": 122517,
         "encounter_id": null,
         "name": "Darkfuse Jumpstarter",
-        "base_health": 77904125,
+        "base_health": 77952395,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.7,
@@ -1108,6 +1457,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17948,
+                "mapping_version_id": 521,
+                "npc_id": 231325,
+                "enemy_forces": 12,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17753,
                 "mapping_version_id": 510,
                 "npc_id": 231325,
@@ -1132,7 +1488,7 @@
         "display_id": 112449,
         "encounter_id": null,
         "name": "Undercrawler",
-        "base_health": 48610763,
+        "base_health": 48747699,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.3,
@@ -1158,6 +1514,9 @@
                 "characteristic_id": 14
             },
             {
+                "characteristic_id": 16
+            },
+            {
                 "characteristic_id": 18
             },
             {
@@ -1170,6 +1529,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17949,
+                "mapping_version_id": 521,
+                "npc_id": 231380,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17755,
                 "mapping_version_id": 510,
@@ -1195,7 +1561,7 @@
         "display_id": 124177,
         "encounter_id": null,
         "name": "Darkfuse Inspector",
-        "base_health": 48690078,
+        "base_health": 48747699,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1236,15 +1602,31 @@
                 "characteristic_id": 18
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 20
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 465681
+            },
             {
                 "spell_id": 465682
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17940,
+                "mapping_version_id": 521,
+                "npc_id": 231385,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17737,
                 "mapping_version_id": 510,
@@ -1270,7 +1652,7 @@
         "display_id": 122887,
         "encounter_id": null,
         "name": "Venture Co. Diver",
-        "base_health": 48690078,
+        "base_health": 48747699,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.6,
@@ -1306,6 +1688,12 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -1320,6 +1708,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17944,
+                "mapping_version_id": 521,
+                "npc_id": 231496,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17745,
                 "mapping_version_id": 510,
@@ -1345,7 +1740,7 @@
         "display_id": 120779,
         "encounter_id": null,
         "name": "Bombshell Crab",
-        "base_health": 48610763,
+        "base_health": 48747699,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.1,
@@ -1371,10 +1766,16 @@
                 "characteristic_id": 12
             },
             {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 16
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1386,6 +1787,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17943,
+                "mapping_version_id": 521,
+                "npc_id": 231497,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17743,
                 "mapping_version_id": 510,
