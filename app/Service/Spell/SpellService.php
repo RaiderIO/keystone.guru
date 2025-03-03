@@ -3,13 +3,18 @@
 namespace App\Service\Spell;
 
 use App\Models\CharacterClass;
+use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\Spell\Logging\SpellServiceLoggingInterface;
 use Illuminate\Support\Str;
 
 class SpellService implements SpellServiceInterface
 {
-    public function __construct(private readonly SpellServiceLoggingInterface $log)
+    public function __construct(
+        private readonly SpellRepositoryInterface $spellRepository,
+        private readonly SpellServiceLoggingInterface $log
+    )
     {
     }
 
@@ -151,5 +156,13 @@ class SpellService implements SpellServiceInterface
         }
 
         return sprintf('spells.cooldown_group.%s', $cooldownGroupSlug);
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getMissingSpellIds(): array
+    {
+        return $this->spellRepository->getMissingSpellIds();
     }
 }

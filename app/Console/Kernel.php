@@ -72,6 +72,7 @@ use App\Console\Commands\Supervisor\StopSupervisor;
 use App\Console\Commands\Wowhead\FetchDisplayIds;
 use App\Console\Commands\Wowhead\FetchHealth;
 use App\Console\Commands\Wowhead\FetchMissingSpellIcons;
+use App\Console\Commands\Wowhead\FetchMissingSpells;
 use App\Console\Commands\Wowhead\FetchSpellData;
 use App\Console\Commands\Wowhead\RefreshDisplayIds as RefreshDisplayIdsWowhead;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
@@ -214,6 +215,7 @@ class Kernel extends ConsoleKernel
         FetchDisplayIds::class,
         FetchHealth::class,
         FetchMissingSpellIcons::class,
+        FetchMissingSpells::class,
         FetchSpellData::class,
         RefreshDisplayIdsWowhead::class,
 

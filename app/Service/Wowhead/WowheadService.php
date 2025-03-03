@@ -100,7 +100,6 @@ class WowheadService implements WowheadServiceInterface
 
                 // Not missing = we continue
                 if (file_exists($targetFile)) {
-
                     return true;
                 }
 

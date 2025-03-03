@@ -51,7 +51,10 @@ class FetchSpellData extends Command
                 ->get();
         }
 
-        $this->info(sprintf('Fetching spell data for %d spells', $spells->count()));
+        // If it's just one.. whatever
+        if ($spells->count() > 1) {
+            $this->info(sprintf('Fetching spell data for %d spells', $spells->count()));
+        }
 
         $gameVersions = [];
         if ($dungeon?->gameVersion !== null) {
@@ -64,8 +67,13 @@ class FetchSpellData extends Command
             ])->get();
         }
 
+        $i = 1;
         foreach ($spells as $spell) {
-            $this->info(sprintf('Fetching spell data for spell %d', $spell->id));
+            if ($spells->count() > 1) {
+                $this->info(sprintf('Fetching spell data for spell %d (%d/%d)', $spell->id, $i, $spells->count()));
+            } else {
+                $this->info(sprintf('Fetching spell data for spell %d', $spell->id));
+            }
 
             foreach ($gameVersions as $gameVersion) {
                 $spellDataResult = $wowheadService->getSpellData($gameVersion, $spell->id);
@@ -84,6 +92,8 @@ class FetchSpellData extends Command
                     break;
                 }
             }
+
+            $i++;
 
             // Don't DDOS
 //            usleep(500000);

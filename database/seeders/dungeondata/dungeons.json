@@ -3934,7 +3934,7 @@
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range": 100,
                 "enemy_engagement_max_range_patrols": null,
                 "ingame_min_x": 2540,
                 "ingame_min_y": 2791.67,
@@ -3945,13 +3945,13 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 256,
+                        "id": 1067,
                         "floor1_id": 96,
                         "floor2_id": 93,
                         "direction": "right"
                     },
                     {
-                        "id": 257,
+                        "id": 1068,
                         "floor1_id": 96,
                         "floor2_id": 95,
                         "direction": "down"
@@ -3971,7 +3971,7 @@
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range": 100,
                 "enemy_engagement_max_range_patrols": null,
                 "ingame_min_x": 2540,
                 "ingame_min_y": 2791.67,
@@ -3982,13 +3982,13 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 254,
+                        "id": 1069,
                         "floor1_id": 95,
                         "floor2_id": 93,
                         "direction": "right"
                     },
                     {
-                        "id": 255,
+                        "id": 1070,
                         "floor1_id": 95,
                         "floor2_id": 96,
                         "direction": "up"
@@ -12962,10 +12962,10 @@
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": null,
                 "enemy_engagement_max_range_patrols": null,
-                "ingame_min_x": 0,
-                "ingame_min_y": 0,
-                "ingame_max_x": 0,
-                "ingame_max_y": 0,
+                "ingame_min_x": 725,
+                "ingame_min_y": 25,
+                "ingame_max_x": -250,
+                "ingame_max_y": 675,
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
@@ -13036,7 +13036,7 @@
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
-                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range": 200,
                 "enemy_engagement_max_range_patrols": null,
                 "ingame_min_x": -789.58,
                 "ingame_min_y": 2714.58,
@@ -13047,7 +13047,7 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1060,
+                        "id": 1066,
                         "floor1_id": 290,
                         "floor2_id": 291,
                         "direction": "left"

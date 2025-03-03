@@ -11,6 +11,7 @@ use Tests\Feature\Controller\Api\V1\APICombatLogController\CorrectEvents\APIComb
 #[Group('API')]
 #[Group('APICombatLog')]
 #[Group('CorrectEvents')]
+#[Group('GrimBatol')]
 class APICombatLogControllerCorrectEventsGrimBatolTest extends APICombatLogControllerCorrectEventsTestBase
 {
     protected function getDungeonKey(): string

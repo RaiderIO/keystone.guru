@@ -11,7 +11,7 @@
             "wowInstanceId": null
         },
         "settings": {
-            "temporary": false,
+            "temporary": true,
             "debugIcons": false
         },
         "challengeMode": {
@@ -784,8 +784,8 @@
                     "uiMapId": 2093
                 },
                 "coordEnemy": {
-                    "x": -2630.07,
-                    "y": -2481.38,
+                    "x": -2611.5,
+                    "y": -2480.8,
                     "uiMapId": 2093
                 }
             },
@@ -800,8 +800,8 @@
                     "uiMapId": 2093
                 },
                 "coordEnemy": {
-                    "x": -2620.84,
-                    "y": -2487.49,
+                    "x": -2630.07,
+                    "y": -2481.38,
                     "uiMapId": 2093
                 }
             },
@@ -817,7 +817,7 @@
                 },
                 "coordEnemy": {
                     "x": -2620.84,
-                    "y": -2475.38,
+                    "y": -2487.49,
                     "uiMapId": 2093
                 }
             },
@@ -832,8 +832,8 @@
                     "uiMapId": 2093
                 },
                 "coordEnemy": {
-                    "x": -2611.5,
-                    "y": -2480.8,
+                    "x": -2620.84,
+                    "y": -2475.38,
                     "uiMapId": 2093
                 }
             },

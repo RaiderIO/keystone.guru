@@ -13,7 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Teapot\StatusCode;
@@ -31,13 +33,15 @@ class Handler extends ExceptionHandler
         AuthenticationException::class,
         AuthorizationException::class,
         HttpException::class,
-        NotFoundHttpException::class,
         ModelNotFoundException::class,
         TokenMismatchException::class,
         ValidationException::class,
         // Added it to prevent spam from people trying to exploit the API
         // Now that I have better protection I want to see those exceptions again so I can ban their asses
         BadRequestException::class,
+        MethodNotAllowedHttpException::class,
+        NotFoundHttpException::class,
+        AccessDeniedHttpException::class,
     ];
 
     /**
@@ -60,7 +64,7 @@ class Handler extends ExceptionHandler
             if ($e instanceof TooManyRequestsHttpException) {
                 $handlerLogging->tooManyRequests($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $e);
             } else if (!in_array(get_class($e), $this->dontReport)) {
-                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, get_class($e), $e->getMessage());
+                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $request?->all(), get_class($e), $e->getMessage());
             }
         }
 
@@ -92,7 +96,7 @@ class Handler extends ExceptionHandler
             } else if (!config('app.debug')) {
                 return response()->json(['message' => __('exceptions.handler.internal_server_error')], StatusCode::INTERNAL_SERVER_ERROR);
             } else {
-                return response()->json(['message' => $e->getMessage()], $e->getCode());
+                return response()->json(['message' => $e->getMessage()], StatusCode::INTERNAL_SERVER_ERROR);
             }
         }
 

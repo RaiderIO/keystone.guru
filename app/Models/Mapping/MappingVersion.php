@@ -211,6 +211,21 @@ class MappingVersion extends Model
         return $this->timer_max_seconds * config('keystoneguru.keystone.timer.plusthreefactor');
     }
 
+    public function getMapIconNearLocation(LatLng $latLng, int $mapIconTypeId): ?MapIcon
+    {
+        $range = 5;
+        /** @var MapIcon|null $mapIcon */
+        $mapIcon = $this->mapIcons()
+            ->where('lat', '>', $latLng->getLat() - $range)
+            ->where('lat', '<', $latLng->getLat() + $range)
+            ->where('lng', '>', $latLng->getLng() - $range)
+            ->where('lng', '<', $latLng->getLng() + $range)
+            ->where('map_icon_type_id', $mapIconTypeId)
+            ->first();
+
+        return $mapIcon;
+    }
+
     /**
      * @return Collection<FloorUnion>
      */

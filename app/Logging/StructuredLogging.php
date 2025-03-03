@@ -34,7 +34,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         /** @var Application|Container $app */
         $app = app();
 
-        if ($app->runningInConsole() && config('app.type') === 'local') {
+        if ($app->runningInConsole() && !$app->runningUnitTests() && config('app.type') === 'local') {
             $this->setChannel('stderr');
         }
 

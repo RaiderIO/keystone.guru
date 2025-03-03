@@ -4,6 +4,7 @@ namespace Tests\Fixtures;
 
 use App\Models\Season;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\AffixGroup\AffixGroupEaseTierService;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\AffixGroup\Logging\AffixGroupEaseTierServiceLoggingInterface;
@@ -138,12 +139,14 @@ class ServiceFixtures
     public static function getSpellServiceMock(
         PublicTestCase               $testCase,
         array                        $methodsToMock = [],
+        SpellRepositoryInterface     $spellRepository = null,
         SpellServiceLoggingInterface $log = null
     ): MockObject|SpellService {
         return $testCase
             ->getMockBuilder(SpellService::class)
             ->onlyMethods($methodsToMock)
             ->setConstructorArgs([
+                $spellRepository ?? RepositoryFixtures::getSpellRepositoryMock($testCase),
                 $log ?? LoggingFixtures::createSpellServiceLogging($testCase),
             ])
             ->getMock();

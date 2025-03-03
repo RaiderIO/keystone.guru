@@ -236,6 +236,7 @@ return [
     'sidebar_collapse'                                                     => 'Collapse the sidebar',
     'copied_to_clipboard'                                                  => 'Copied to clipboard',
     'sidebar_enemy_health_label'                                           => 'Health',
+    'sidebar_enemy_id_label'                                               => 'Enemy ID',
     'sidebar_enemy_npc_id_label'                                           => 'Npc ID',
     'sidebar_enemy_bursting_label'                                         => 'Bursts',
     'sidebar_enemy_sanguine_label'                                         => 'Sanguine',
@@ -473,5 +474,6 @@ return [
     'toggle_spell_visibility_error'                                        => 'Spell visibility toggle failed',
     'week_label'                                                           => 'Week',
     'loading_label'                                                        => 'Loading',
+    'error_loading_data_label'                                             => 'Error loading data - please try again',
     'run_count_label'                                                      => 'Showing data from :count runs',
 ];

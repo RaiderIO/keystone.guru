@@ -8,7 +8,7 @@
         "display_id": 118076,
         "encounter_id": null,
         "name": "Bee Wrangler",
-        "base_health": 46255575,
+        "base_health": 46180225,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -56,6 +56,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17828,
+                "mapping_version_id": 515,
+                "npc_id": 210264,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17530,
                 "mapping_version_id": 498,
                 "npc_id": 210264,
@@ -73,7 +80,7 @@
         "display_id": 121054,
         "encounter_id": null,
         "name": "Worker Bee",
-        "base_health": 43821070,
+        "base_health": 43749686,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -86,6 +93,9 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
             {
                 "characteristic_id": 5
             },
@@ -118,6 +128,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17825,
+                "mapping_version_id": 515,
+                "npc_id": 210265,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17527,
                 "mapping_version_id": 498,
                 "npc_id": 210265,
@@ -135,7 +152,7 @@
         "display_id": 117177,
         "encounter_id": 2586,
         "name": "I'pa",
-        "base_health": 292538997,
+        "base_health": 291795727,
         "health_percentage": null,
         "level": 82,
         "mdt_scale": 1.5,
@@ -189,7 +206,7 @@
         "display_id": 118999,
         "encounter_id": null,
         "name": "Hired Muscle",
-        "base_health": 77904125,
+        "base_health": 77777220,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -201,7 +218,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 434505
@@ -222,10 +243,20 @@
                 "spell_id": 463220
             },
             {
+                "spell_id": 463223
+            },
+            {
                 "spell_id": 463227
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17823,
+                "mapping_version_id": 515,
+                "npc_id": 210269,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17525,
                 "mapping_version_id": 498,
@@ -244,7 +275,7 @@
         "display_id": 117828,
         "encounter_id": null,
         "name": "Brew Drop",
-        "base_health": 16554627,
+        "base_health": 16527659,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -261,6 +292,9 @@
                 "characteristic_id": 5
             },
             {
+                "characteristic_id": 12
+            },
+            {
                 "characteristic_id": 18
             }
         ],
@@ -273,6 +307,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17833,
+                "mapping_version_id": 515,
+                "npc_id": 210270,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17535,
                 "mapping_version_id": 498,
@@ -291,7 +332,7 @@
         "display_id": 116429,
         "encounter_id": 2586,
         "name": "Brewmaster Aldryr",
-        "base_health": 292538997,
+        "base_health": 291795727,
         "health_percentage": null,
         "level": 82,
         "mdt_scale": 2,
@@ -342,7 +383,7 @@
         "display_id": 118000,
         "encounter_id": 2586,
         "name": "Goldie Baronbottom",
-        "base_health": 390051996,
+        "base_health": 389060969,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -402,7 +443,7 @@
         "display_id": 119026,
         "encounter_id": null,
         "name": "Venture Co. Patron",
-        "base_health": 43821070,
+        "base_health": 43749686,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -441,6 +482,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17822,
+                "mapping_version_id": 515,
+                "npc_id": 214668,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17524,
                 "mapping_version_id": 498,
                 "npc_id": 214668,
@@ -458,7 +506,7 @@
         "display_id": 119436,
         "encounter_id": null,
         "name": "Flavor Scientist",
-        "base_health": 43821070,
+        "base_health": 43749686,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -487,6 +535,9 @@
                 "characteristic_id": 14
             },
             {
+                "characteristic_id": 16
+            },
+            {
                 "characteristic_id": 18
             },
             {
@@ -502,6 +553,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17830,
+                "mapping_version_id": 515,
+                "npc_id": 214673,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17532,
                 "mapping_version_id": 498,
@@ -520,7 +578,7 @@
         "display_id": 121036,
         "encounter_id": null,
         "name": "Chef Chewie",
-        "base_health": 146070234,
+        "base_health": 145832288,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -559,6 +617,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17824,
+                "mapping_version_id": 515,
+                "npc_id": 214697,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17526,
                 "mapping_version_id": 498,
                 "npc_id": 214697,
@@ -576,7 +641,7 @@
         "display_id": 121037,
         "encounter_id": null,
         "name": "Tasting Room Attendant",
-        "base_health": 43821070,
+        "base_health": 43749686,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -590,6 +655,9 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
                 "characteristic_id": 5
             },
             {
@@ -601,6 +669,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 434695
+            },
+            {
                 "spell_id": 434706
             },
             {
@@ -608,6 +679,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17820,
+                "mapping_version_id": 515,
+                "npc_id": 214920,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17522,
                 "mapping_version_id": 498,
@@ -676,7 +754,7 @@
         "display_id": 120557,
         "encounter_id": 2586,
         "name": "Benk Buzzbee",
-        "base_health": 307165947,
+        "base_health": 306385513,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.9,
@@ -713,6 +791,9 @@
                 "spell_id": 440138
             },
             {
+                "spell_id": 440140
+            },
+            {
                 "spell_id": 440141
             }
         ],
@@ -727,7 +808,7 @@
         "display_id": 120631,
         "encounter_id": null,
         "name": "Ravenous Cinderbee",
-        "base_health": 10143768,
+        "base_health": 10127243,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -778,7 +859,7 @@
         "display_id": 119013,
         "encounter_id": null,
         "name": "Venture Co. Pyromaniac",
-        "base_health": 43821070,
+        "base_health": 43749686,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -796,6 +877,9 @@
             },
             {
                 "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
             },
             {
                 "characteristic_id": 12
@@ -844,6 +928,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17821,
+                "mapping_version_id": 515,
+                "npc_id": 218671,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17523,
                 "mapping_version_id": 498,
                 "npc_id": 218671,
@@ -861,7 +952,7 @@
         "display_id": 121060,
         "encounter_id": null,
         "name": "Bee-let",
-        "base_health": 9738015,
+        "base_health": 9722152,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -890,6 +981,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17829,
+                "mapping_version_id": 515,
+                "npc_id": 218865,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17531,
                 "mapping_version_id": 498,
@@ -958,7 +1056,7 @@
         "display_id": 120498,
         "encounter_id": null,
         "name": "Brew Drop",
-        "base_health": 8926515,
+        "base_health": 8911974,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1021,7 +1119,7 @@
         "display_id": 121109,
         "encounter_id": null,
         "name": "Yes Man",
-        "base_health": 48690078,
+        "base_health": 48610763,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -1033,7 +1131,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 2
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 439403
@@ -1046,6 +1148,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17834,
+                "mapping_version_id": 515,
+                "npc_id": 219588,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17536,
                 "mapping_version_id": 498,
@@ -1064,7 +1173,7 @@
         "display_id": 118003,
         "encounter_id": null,
         "name": "Taste Tester",
-        "base_health": 48690078,
+        "base_health": 48610763,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1088,6 +1197,9 @@
             },
             {
                 "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
             },
             {
                 "characteristic_id": 12
@@ -1115,6 +1227,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17831,
+                "mapping_version_id": 515,
+                "npc_id": 220060,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17533,
                 "mapping_version_id": 498,
                 "npc_id": 220060,
@@ -1132,7 +1251,7 @@
         "display_id": 118378,
         "encounter_id": null,
         "name": "Royal Jelly Purveyor",
-        "base_health": 48690078,
+        "base_health": 48610763,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1171,6 +1290,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17826,
+                "mapping_version_id": 515,
+                "npc_id": 220141,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17528,
                 "mapping_version_id": 498,
                 "npc_id": 220141,
@@ -1188,7 +1314,7 @@
         "display_id": 108585,
         "encounter_id": null,
         "name": "Venture Co. Honey Harvester",
-        "base_health": 77904125,
+        "base_health": 77777220,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.8,
@@ -1215,6 +1341,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17827,
+                "mapping_version_id": 515,
+                "npc_id": 220946,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17529,
                 "mapping_version_id": 498,
                 "npc_id": 220946,
@@ -1232,7 +1365,7 @@
         "display_id": 119436,
         "encounter_id": null,
         "name": "Flavor Scientist",
-        "base_health": 43821070,
+        "base_health": 43749686,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1247,6 +1380,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
             },
             {
                 "characteristic_id": 12
@@ -1280,6 +1416,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17835,
+                "mapping_version_id": 515,
+                "npc_id": 222964,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17537,
                 "mapping_version_id": 498,
                 "npc_id": 222964,
@@ -1297,7 +1440,7 @@
         "display_id": 121087,
         "encounter_id": null,
         "name": "Careless Hopgoblin",
-        "base_health": 92511148,
+        "base_health": 92360449,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.8,
@@ -1336,6 +1479,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17832,
+                "mapping_version_id": 515,
+                "npc_id": 223423,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17534,
                 "mapping_version_id": 498,
                 "npc_id": 223423,
@@ -1353,7 +1503,7 @@
         "display_id": 121054,
         "encounter_id": null,
         "name": "Worker Bee",
-        "base_health": 48690078,
+        "base_health": 48610763,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1395,6 +1545,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17836,
+                "mapping_version_id": 515,
+                "npc_id": 223497,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17538,
                 "mapping_version_id": 498,
                 "npc_id": 223497,
@@ -1419,7 +1576,7 @@
         "display_id": 121060,
         "encounter_id": null,
         "name": "Bee-let",
-        "base_health": 9738015,
+        "base_health": 9722152,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1,
@@ -1448,6 +1605,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17837,
+                "mapping_version_id": 515,
+                "npc_id": 223498,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17539,
                 "mapping_version_id": 498,

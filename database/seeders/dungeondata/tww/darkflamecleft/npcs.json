@@ -108,7 +108,7 @@
         "display_id": 114467,
         "encounter_id": null,
         "name": "Wandering Candle",
-        "base_health": 77952395,
+        "base_health": 77904125,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.7,
@@ -138,6 +138,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17845,
+                "mapping_version_id": 516,
+                "npc_id": 208450,
+                "enemy_forces": 15,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17639,
                 "mapping_version_id": 503,
                 "npc_id": 208450,
@@ -155,7 +162,7 @@
         "display_id": 92318,
         "encounter_id": null,
         "name": "Shuffling Horror",
-        "base_health": 43848222,
+        "base_health": 43821070,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.4,
@@ -197,6 +204,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17850,
+                "mapping_version_id": 516,
+                "npc_id": 208456,
+                "enemy_forces": 2,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17644,
                 "mapping_version_id": 503,
                 "npc_id": 208456,
@@ -214,7 +228,7 @@
         "display_id": 92318,
         "encounter_id": null,
         "name": "Skittering Darkness",
-        "base_health": 9744049,
+        "base_health": 9738015,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 0.8,
@@ -250,6 +264,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17849,
+                "mapping_version_id": 516,
+                "npc_id": 208457,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17643,
                 "mapping_version_id": 503,
                 "npc_id": 208457,
@@ -267,7 +288,7 @@
         "display_id": 115888,
         "encounter_id": 2569,
         "name": "Blazikon",
-        "base_health": 341320379,
+        "base_health": 341295496,
         "health_percentage": null,
         "level": 82,
         "mdt_scale": 2,
@@ -330,7 +351,7 @@
         "display_id": 114508,
         "encounter_id": 2569,
         "name": "The Candle King",
-        "base_health": 341320379,
+        "base_health": 341295496,
         "health_percentage": null,
         "level": 82,
         "mdt_scale": 2,
@@ -352,10 +373,16 @@
                 "spell_id": 420659
             },
             {
+                "spell_id": 420676
+            },
+            {
                 "spell_id": 420696
             },
             {
                 "spell_id": 421146
+            },
+            {
+                "spell_id": 421274
             },
             {
                 "spell_id": 421277
@@ -384,8 +411,8 @@
         "display_id": 117773,
         "encounter_id": 2569,
         "name": "The Darkness",
-        "base_health": 987391096,
-        "health_percentage": null,
+        "base_health": 987319115,
+        "health_percentage": 55,
         "level": 82,
         "mdt_scale": 2,
         "aggressiveness": "aggressive",
@@ -415,6 +442,9 @@
                 "spell_id": 427015
             },
             {
+                "spell_id": 427025
+            },
+            {
                 "spell_id": 427100
             },
             {
@@ -422,6 +452,12 @@
             },
             {
                 "spell_id": 427180
+            },
+            {
+                "spell_id": 428266
+            },
+            {
+                "spell_id": 428276
             }
         ],
         "npc_enemy_forces": []
@@ -435,7 +471,7 @@
         "display_id": 114170,
         "encounter_id": null,
         "name": "Menial Laborer",
-        "base_health": 8120042,
+        "base_health": 8115014,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -459,6 +495,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [],
@@ -502,7 +541,7 @@
         "display_id": 114039,
         "encounter_id": 2569,
         "name": "Ol' Waxbeard",
-        "base_health": 243800271,
+        "base_health": 243782498,
         "health_percentage": null,
         "level": 82,
         "mdt_scale": 2,
@@ -521,6 +560,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 421686
+            },
+            {
                 "spell_id": 422122
             },
             {
@@ -531,6 +573,9 @@
             },
             {
                 "spell_id": 422246
+            },
+            {
+                "spell_id": 422274
             },
             {
                 "spell_id": 423693
@@ -572,7 +617,7 @@
         "display_id": 92709,
         "encounter_id": null,
         "name": "Corridor Creeper",
-        "base_health": 65772334,
+        "base_health": 65731606,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.7,
@@ -592,9 +637,19 @@
         "npc_spells": [
             {
                 "spell_id": 422628
+            },
+            {
+                "spell_id": 469620
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17851,
+                "mapping_version_id": 516,
+                "npc_id": 210539,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17645,
                 "mapping_version_id": 503,
@@ -642,7 +697,7 @@
         "display_id": 114696,
         "encounter_id": null,
         "name": "Menial Laborer",
-        "base_health": 9744049,
+        "base_health": 9738015,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 0.8,
@@ -684,6 +739,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17838,
+                "mapping_version_id": 516,
+                "npc_id": 210810,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17632,
                 "mapping_version_id": 503,
                 "npc_id": 210810,
@@ -701,7 +763,7 @@
         "display_id": 114709,
         "encounter_id": null,
         "name": "Royal Wicklighter",
-        "base_health": 43848222,
+        "base_health": 43821070,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -722,6 +784,9 @@
             },
             {
                 "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
             },
             {
                 "characteristic_id": 12
@@ -749,6 +814,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17842,
+                "mapping_version_id": 516,
+                "npc_id": 210812,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17636,
                 "mapping_version_id": 503,
                 "npc_id": 210812,
@@ -766,7 +838,7 @@
         "display_id": 114721,
         "encounter_id": null,
         "name": "Lowly Moleherd",
-        "base_health": 46284235,
+        "base_health": 46255575,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -801,7 +873,13 @@
                 "characteristic_id": 14
             },
             {
+                "characteristic_id": 16
+            },
+            {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 24
             }
         ],
         "npc_spells": [
@@ -816,6 +894,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17840,
+                "mapping_version_id": 516,
+                "npc_id": 210818,
+                "enemy_forces": 5,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17634,
                 "mapping_version_id": 503,
@@ -834,13 +919,13 @@
         "display_id": 114091,
         "encounter_id": null,
         "name": "Rank Overseer",
-        "base_health": 77952395,
+        "base_health": 77904125,
         "health_percentage": null,
         "level": 81,
         "mdt_scale": 1.5,
         "aggressiveness": "aggressive",
         "dangerous": 0,
-        "truesight": 0,
+        "truesight": 1,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
@@ -867,6 +952,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17839,
+                "mapping_version_id": 516,
+                "npc_id": 211121,
+                "enemy_forces": 10,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17633,
                 "mapping_version_id": 503,
                 "npc_id": 211121,
@@ -884,7 +976,7 @@
         "display_id": 118916,
         "encounter_id": null,
         "name": "Blazing Fiend",
-        "base_health": 38976198,
+        "base_health": 38952062,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -907,6 +999,9 @@
                 "characteristic_id": 12
             },
             {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 18
             }
         ],
@@ -916,6 +1011,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17852,
+                "mapping_version_id": 516,
+                "npc_id": 211228,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17646,
                 "mapping_version_id": 503,
@@ -934,7 +1036,7 @@
         "display_id": 112394,
         "encounter_id": null,
         "name": "Pack Mole",
-        "base_health": 51156260,
+        "base_health": 51124582,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -978,6 +1080,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17841,
+                "mapping_version_id": 516,
+                "npc_id": 211977,
+                "enemy_forces": 3,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17635,
                 "mapping_version_id": 503,
@@ -1046,7 +1155,7 @@
         "display_id": 114757,
         "encounter_id": null,
         "name": "Kobold Taskworker",
-        "base_health": 48720247,
+        "base_health": 48690078,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1060,10 +1169,19 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
                 "characteristic_id": 5
             },
             {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
             },
             {
                 "characteristic_id": 18
@@ -1078,6 +1196,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17843,
+                "mapping_version_id": 516,
+                "npc_id": 212383,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17637,
                 "mapping_version_id": 503,
@@ -1096,21 +1221,41 @@
         "display_id": 114705,
         "encounter_id": null,
         "name": "Torchsnarl",
-        "base_health": 146160741,
+        "base_health": 146070234,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
         "aggressiveness": "aggressive",
         "dangerous": 1,
-        "truesight": 0,
+        "truesight": 1,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 426275
+            },
+            {
+                "spell_id": 426277
+            },
+            {
+                "spell_id": 426619
+            },
+            {
+                "spell_id": 1218117
+            }
+        ],
         "npc_enemy_forces": [
+            {
+                "id": 17848,
+                "mapping_version_id": 516,
+                "npc_id": 212411,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17642,
                 "mapping_version_id": 503,
@@ -1129,7 +1274,7 @@
         "display_id": 114736,
         "encounter_id": null,
         "name": "Sootsnout",
-        "base_health": 146160741,
+        "base_health": 146070234,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1154,9 +1299,19 @@
             },
             {
                 "spell_id": 426677
+            },
+            {
+                "spell_id": 1218131
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17847,
+                "mapping_version_id": 516,
+                "npc_id": 212412,
+                "enemy_forces": 20,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17641,
                 "mapping_version_id": 503,
@@ -1175,7 +1330,7 @@
         "display_id": 68714,
         "encounter_id": null,
         "name": "Wriggling Darkspawn",
-        "base_health": 2436013,
+        "base_health": 2434504,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -1199,6 +1354,9 @@
             },
             {
                 "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 18
             }
         ],
         "npc_spells": [
@@ -1245,7 +1403,7 @@
         "display_id": 114373,
         "encounter_id": null,
         "name": "Dynamite Mine Cart",
-        "base_health": 12180063,
+        "base_health": 12172521,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 2,
@@ -1278,7 +1436,7 @@
         "display_id": 118173,
         "encounter_id": null,
         "name": "Kobold Flametender",
-        "base_health": 9744049,
+        "base_health": 9738015,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.2,
@@ -1292,6 +1450,9 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 1
+            },
+            {
                 "characteristic_id": 5
             },
             {
@@ -1299,6 +1460,9 @@
             },
             {
                 "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
             },
             {
                 "characteristic_id": 18
@@ -1313,6 +1477,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17846,
+                "mapping_version_id": 516,
+                "npc_id": 213913,
+                "enemy_forces": 1,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17640,
                 "mapping_version_id": 503,
@@ -1356,7 +1527,7 @@
         "display_id": 92709,
         "encounter_id": null,
         "name": "Corridor Sleeper",
-        "base_health": 73080370,
+        "base_health": 65731606,
         "health_percentage": null,
         "level": 81,
         "mdt_scale": 1.7,
@@ -1383,6 +1554,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17860,
+                "mapping_version_id": 516,
+                "npc_id": 220616,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
+            {
                 "id": 17654,
                 "mapping_version_id": 503,
                 "npc_id": 220616,
@@ -1400,7 +1578,7 @@
         "display_id": 118916,
         "encounter_id": null,
         "name": "Blazing Fiend",
-        "base_health": 38976198,
+        "base_health": 38952062,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1420,6 +1598,9 @@
                 "characteristic_id": 5
             },
             {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 12
             },
             {
@@ -1435,6 +1616,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17844,
+                "mapping_version_id": 516,
+                "npc_id": 220815,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17638,
                 "mapping_version_id": 503,
@@ -1478,7 +1666,7 @@
         "display_id": 118916,
         "encounter_id": null,
         "name": "Blazing Fiend",
-        "base_health": 38976198,
+        "base_health": 38952062,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1498,6 +1686,9 @@
                 "characteristic_id": 12
             },
             {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 18
             }
         ],
@@ -1510,6 +1701,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17853,
+                "mapping_version_id": 516,
+                "npc_id": 223770,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17647,
                 "mapping_version_id": 503,
@@ -1528,7 +1726,7 @@
         "display_id": 118916,
         "encounter_id": null,
         "name": "Blazing Fiend",
-        "base_health": 38976198,
+        "base_health": 38952062,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1548,6 +1746,9 @@
                 "characteristic_id": 12
             },
             {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 18
             }
         ],
@@ -1557,6 +1758,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17854,
+                "mapping_version_id": 516,
+                "npc_id": 223772,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17648,
                 "mapping_version_id": 503,
@@ -1575,7 +1783,7 @@
         "display_id": 118916,
         "encounter_id": null,
         "name": "Blazing Fiend",
-        "base_health": 38976198,
+        "base_health": 38952062,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1598,6 +1806,9 @@
                 "characteristic_id": 12
             },
             {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 18
             }
         ],
@@ -1607,6 +1818,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17855,
+                "mapping_version_id": 516,
+                "npc_id": 223773,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17649,
                 "mapping_version_id": 503,
@@ -1625,7 +1843,7 @@
         "display_id": 118916,
         "encounter_id": null,
         "name": "Blazing Fiend",
-        "base_health": 38976198,
+        "base_health": 38952062,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1645,6 +1863,9 @@
                 "characteristic_id": 12
             },
             {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 18
             }
         ],
@@ -1657,6 +1878,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17856,
+                "mapping_version_id": 516,
+                "npc_id": 223774,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17650,
                 "mapping_version_id": 503,
@@ -1675,7 +1903,7 @@
         "display_id": 118916,
         "encounter_id": null,
         "name": "Blazing Fiend",
-        "base_health": 38976198,
+        "base_health": 38952062,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1698,6 +1926,9 @@
                 "characteristic_id": 12
             },
             {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 18
             }
         ],
@@ -1707,6 +1938,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17857,
+                "mapping_version_id": 516,
+                "npc_id": 223775,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17651,
                 "mapping_version_id": 503,
@@ -1725,7 +1963,7 @@
         "display_id": 118916,
         "encounter_id": null,
         "name": "Blazing Fiend",
-        "base_health": 38976198,
+        "base_health": 38952062,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1745,6 +1983,9 @@
                 "characteristic_id": 12
             },
             {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 18
             }
         ],
@@ -1754,6 +1995,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17858,
+                "mapping_version_id": 516,
+                "npc_id": 223776,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17652,
                 "mapping_version_id": 503,
@@ -1772,7 +2020,7 @@
         "display_id": 118916,
         "encounter_id": null,
         "name": "Blazing Fiend",
-        "base_health": 38976198,
+        "base_health": 38952062,
         "health_percentage": null,
         "level": 80,
         "mdt_scale": 1.5,
@@ -1792,6 +2040,9 @@
                 "characteristic_id": 12
             },
             {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 18
             }
         ],
@@ -1801,6 +2052,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17859,
+                "mapping_version_id": 516,
+                "npc_id": 223777,
+                "enemy_forces": 7,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 17653,
                 "mapping_version_id": 503,
