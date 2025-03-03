@@ -55,7 +55,8 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $e): void
     {
-        $request = request();
+        // request() is not available in console
+        $request = app()->runningInConsole() ? null : request();
 
         if (app()->has(HandlerLoggingInterface::class) && !app()->runningInConsole()) {
             $handlerLogging = app()->make(HandlerLoggingInterface::class);
