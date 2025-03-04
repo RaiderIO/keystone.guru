@@ -86,6 +86,8 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
 
         $dungeonRoute->setRelation('dungeon', $dungeon);
         $dungeonRoute->setRelation('mappingVersion', $currentMappingVersion);
+        // Initially set the relation so we don't go fetching it from the database initially
+        $dungeonRoute->setRelation('killZones', collect());
 
         // Find the correct affix groups that match the affix combination the dungeon was started with
         $currentSeasonForDungeon = $dungeon->getActiveSeason($seasonService);
