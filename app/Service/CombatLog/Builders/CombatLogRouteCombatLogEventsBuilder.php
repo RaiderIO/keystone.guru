@@ -10,6 +10,7 @@ use App\Models\CombatLog\CombatLogEvent;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\EnemyRepositoryInterface;
@@ -47,6 +48,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
         NpcRepositoryInterface                    $npcRepository,
         SpellRepositoryInterface                  $spellRepository,
         FloorRepositoryInterface                  $floorRepository,
+        DungeonRepositoryInterface                $dungeonRepository,
         CombatLogRouteRequestModel                $combatLogRoute
     ) {
         /** @var CombatLogRouteCombatLogEventsBuilderLoggingInterface $log */
@@ -66,6 +68,7 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
             $npcRepository,
             $spellRepository,
             $floorRepository,
+            $dungeonRepository,
             $combatLogRoute
         );
     }

@@ -3,11 +3,11 @@
 namespace App\Http\Models\Request\CombatLog\Route;
 
 use App\Http\Models\Request\RequestModel;
-use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Faction;
 use App\Models\PublishedState;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
@@ -57,9 +57,10 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         DungeonRouteRepositoryInterface           $dungeonRouteRepository,
         AffixGroupRepositoryInterface             $affixGroupRepository,
         DungeonRouteAffixGroupRepositoryInterface $dungeonRouteAffixGroupRepository,
+        DungeonRepositoryInterface                $dungeonRepository,
     ): DungeonRoute {
         try {
-            $dungeon = Dungeon::where('challenge_mode_id', $this->challengeMode->challengeModeId)->firstOrFail();
+            $dungeon = $dungeonRepository->getByChallengeModeIdOrFail($this->challengeMode->challengeModeId);
         } catch (Exception) {
             throw new DungeonNotSupportedException(
                 sprintf('Dungeon with challengeModeId %d not found', $this->challengeMode->challengeModeId)
@@ -68,12 +69,14 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
 
         $currentMappingVersion = $dungeon->currentMappingVersion;
 
+        $currentSeasonForDungeon = $dungeon->getActiveSeason($seasonService);
+
         $dungeonRoute = $dungeonRouteRepository->create([
-            'public_key'         => DungeonRoute::generateRandomPublicKey(),
+            'public_key'         => $dungeonRouteRepository->generateRandomPublicKey(),
             'author_id'          => Auth::id() ?? -1,
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $currentMappingVersion->id,
-            'season_id'          => $seasonService->getMostRecentSeasonForDungeon($dungeon)?->id,
+            'season_id'          => $currentSeasonForDungeon?->id,
             'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
             'title'              => __($dungeon->name),
@@ -90,7 +93,6 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         $dungeonRoute->setRelation('killZones', collect());
 
         // Find the correct affix groups that match the affix combination the dungeon was started with
-        $currentSeasonForDungeon = $dungeon->getActiveSeason($seasonService);
         if ($currentSeasonForDungeon !== null) {
             $affixIds            = collect($this->challengeMode->affixes);
             $eligibleAffixGroups = $affixGroupRepository->getBySeasonId($currentSeasonForDungeon->id);

@@ -9,6 +9,7 @@ use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\EnemyRepositoryInterface;
@@ -57,6 +58,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         NpcRepositoryInterface                        $npcRepository,
         protected readonly SpellRepositoryInterface   $spellRepository,
         protected readonly FloorRepositoryInterface   $floorRepository,
+        protected readonly DungeonRepositoryInterface $dungeonRepository,
         protected readonly CombatLogRouteRequestModel $combatLogRoute
     ) {
         $log = App::make(CombatLogRouteDungeonRouteBuilderLoggingInterface::class);
@@ -72,7 +74,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 $this->seasonService,
                 $dungeonRouteRepository,
                 $affixGroupRepository,
-                $dungeonRouteAffixGroupRepository
+                $dungeonRouteAffixGroupRepository,
+                $this->dungeonRepository
             ),
             $log
         );

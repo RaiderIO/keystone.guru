@@ -18,5 +18,5 @@ use Illuminate\Support\Collection;
  */
 interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
 {
-
+    public function generateRandomPublicKey(): string;
 }

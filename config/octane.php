@@ -1,5 +1,6 @@
 <?php
 
+use Barryvdh\Debugbar\LaravelDebugbar;
 use Laravel\Octane\Contracts\OperationTerminated;
 use Laravel\Octane\Events\RequestHandled;
 use Laravel\Octane\Events\RequestReceived;
@@ -135,7 +136,7 @@ return [
     ],
 
     'flush' => [
-        //
+        LaravelDebugbar::class,
     ],
 
     /*

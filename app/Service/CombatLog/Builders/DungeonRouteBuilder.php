@@ -224,7 +224,9 @@ abstract class DungeonRouteBuilder
 
         try {
             $this->log->findUnkilledEnemyForNpcAtIngameLocationStart(
-                $npcId, $activePullEnemy->getX(), $activePullEnemy->getY(),
+                $npcId,
+                $activePullEnemy->getX(),
+                $activePullEnemy->getY(),
                 $previousPullLatLng?->getLat(),
                 $previousPullLatLng?->getLng(),
                 $preferredGroups->toArray()

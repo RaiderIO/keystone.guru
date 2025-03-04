@@ -15,6 +15,7 @@ use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\EnemyRepositoryInterface;
@@ -54,6 +55,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         NpcRepositoryInterface                    $npcRepository,
         SpellRepositoryInterface                  $spellRepository,
         FloorRepositoryInterface                  $floorRepository,
+        DungeonRepositoryInterface                $dungeonRepository,
         CombatLogRouteRequestModel                $combatLogRoute
     ) {
         /** @var CombatLogRouteCorrectionBuilderLoggingInterface $log */
@@ -73,6 +75,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
             $npcRepository,
             $spellRepository,
             $floorRepository,
+            $dungeonRepository,
             $combatLogRoute
         );
     }
