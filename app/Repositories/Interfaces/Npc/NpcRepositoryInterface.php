@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Interfaces;
+namespace App\Repositories\Interfaces\Npc;
 
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;

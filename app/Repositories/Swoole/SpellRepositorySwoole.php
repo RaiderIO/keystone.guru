@@ -3,23 +3,19 @@
 namespace App\Repositories\Swoole;
 
 use App\Models\Spell\Spell;
-use App\Repositories\Database\DatabaseRepository;
+use App\Repositories\Database\SpellRepository;
 use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
 use Illuminate\Support\Collection;
 
-class SpellRepositorySwoole extends DatabaseRepository implements SpellRepositorySwooleInterface
+class SpellRepositorySwoole extends SpellRepository implements SpellRepositorySwooleInterface
 {
+    private Collection $allSpellsById;
+
     public function __construct()
     {
-        parent::__construct(Spell::class);
-    }
+        parent::__construct();
 
-    /**
-     * @inheritDoc
-     */
-    public function getMissingSpellIds(): array
-    {
-        // TODO: Implement getMissingSpellIds() method.
+        $this->allSpellsById = collect();
     }
 
     /**
@@ -27,6 +23,18 @@ class SpellRepositorySwoole extends DatabaseRepository implements SpellRepositor
      */
     public function findAllById(Collection $spellIds): Collection
     {
-        // TODO: Implement findAllById() method.
+        if ($this->allSpellsById->isEmpty()) {
+            $this->allSpellsById = Spell::all()->keyBy('id');
+        }
+
+        $result = collect();
+
+        foreach ($spellIds as $spellId) {
+            if ($this->allSpellsById->has($spellId)) {
+                $result->put($spellId, clone $this->allSpellsById->get($spellId));
+            }
+        }
+
+        return $result;
     }
 }

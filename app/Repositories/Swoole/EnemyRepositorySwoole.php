@@ -4,9 +4,9 @@ namespace App\Repositories\Swoole;
 
 use App\Models\Enemy;
 use App\Models\Mapping\MappingVersion;
-use App\Repositories\Database\DatabaseRepository;
+use App\Repositories\Database\EnemyRepository;
 use App\Repositories\Swoole\Interfaces\EnemyRepositorySwooleInterface;
-use Illuminate\Database\Eloquent\Builder;
+use App\Repositories\Swoole\Traits\ClonesCollections;
 use Illuminate\Support\Collection;
 
 /**
@@ -19,13 +19,16 @@ use Illuminate\Support\Collection;
  * @method bool delete(Enemy $model)
  * @method Collection<Enemy> all()
  */
-class EnemyRepositorySwoole extends DatabaseRepository implements EnemyRepositorySwooleInterface
+class EnemyRepositorySwoole extends EnemyRepository implements EnemyRepositorySwooleInterface
 {
+    use ClonesCollections;
+
+    /** @var Collection<Collection<Enemy>> */
     private Collection $availableEnemiesByMappingVersion;
 
     public function __construct()
     {
-        parent::__construct(Enemy::class);
+        parent::__construct();
 
         $this->availableEnemiesByMappingVersion = collect();
     }
@@ -35,27 +38,14 @@ class EnemyRepositorySwoole extends DatabaseRepository implements EnemyRepositor
      */
     public function getAvailableEnemiesForDungeonRouteBuilder(MappingVersion $mappingVersion): Collection
     {
-        if ($this->availableEnemiesByMappingVersion->has($mappingVersion->id)) {
-            return $this->availableEnemiesByMappingVersion->get($mappingVersion->id);
+        if (!$this->availableEnemiesByMappingVersion->has($mappingVersion->id)) {
+            $availableEnemies = parent::getAvailableEnemiesForDungeonRouteBuilder($mappingVersion);
+
+            $this->availableEnemiesByMappingVersion->put($mappingVersion->id, $availableEnemies);
         }
 
-        $availableEnemies = $mappingVersion->enemies()->with([
-            'floor',
-            'floor.dungeon',
-            'enemyPack',
-            'enemyPatrol',
-        ])->where(function (Builder $builder) {
-            $builder->whereNull('seasonal_type')
-                ->orWhereNot('seasonal_type', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER);
-        })->get()
-            ->each(static function (Enemy $enemy) {
-                // Ensure that the kill priority is 0 if it wasn't set
-                $enemy->kill_priority ??= 0;
-            })
-            ->sort(static fn(Enemy $enemy) => $enemy->enemy_patrol_id ?? 0)
-            ->keyBy('id');
+        $availableEnemies = $this->availableEnemiesByMappingVersion->get($mappingVersion->id);
 
-        $this->availableEnemiesByMappingVersion->put($mappingVersion->id, $availableEnemies);
-        return $availableEnemies;
+        return $this->cloneCollection($availableEnemies);
     }
 }

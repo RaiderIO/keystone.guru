@@ -33,6 +33,4 @@ class EnemyRepository extends DatabaseRepository implements EnemyRepositoryInter
             ->sort(static fn(Enemy $enemy) => $enemy->enemy_patrol_id ?? 0)
             ->keyBy('id');
     }
-
-
 }

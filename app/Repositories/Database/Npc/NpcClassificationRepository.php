@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Repositories\Database;
+namespace App\Repositories\Database\Npc;
 
 use App\Models\Npc\NpcClassification;
-use App\Repositories\Interfaces\NpcClassificationRepositoryInterface;
+use App\Repositories\Database\DatabaseRepository;
+use App\Repositories\Interfaces\Npc\NpcClassificationRepositoryInterface;
 
 class NpcClassificationRepository extends DatabaseRepository implements NpcClassificationRepositoryInterface
 {

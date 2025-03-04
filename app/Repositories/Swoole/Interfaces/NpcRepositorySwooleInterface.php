@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Swoole\Interfaces;
 
-use App\Repositories\Interfaces\NpcRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 
 interface NpcRepositorySwooleInterface extends NpcRepositoryInterface
 {

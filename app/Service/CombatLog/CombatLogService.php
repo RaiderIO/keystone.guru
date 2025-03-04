@@ -13,7 +13,7 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\Structs\MapBounds;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Repositories\Interfaces\NpcRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\CombatLog\Dtos\ChallengeMode;
 use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;

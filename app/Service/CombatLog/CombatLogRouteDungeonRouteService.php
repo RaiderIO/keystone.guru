@@ -34,7 +34,7 @@ use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
-use App\Repositories\Interfaces\NpcRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Repositories\Stub\AffixGroup\AffixGroupRepository as AffixGroupRepositoryStub;
 use App\Repositories\Stub\DungeonRoute\DungeonRouteAffixGroupRepository as DungeonRouteAffixGroupRepositoryStub;
@@ -171,14 +171,14 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             new KillZoneEnemyRepositoryStub(),
             new KillZoneSpellRepositoryStub(),
             // @TODO Change these four to take advantage of Swoole
-            $this->enemyRepositorySwoole,
-//            $this->npcRepositorySwoole,
-//            $this->spellRepositorySwoole,
-//            $this->floorRepositorySwoole,
 //            $this->enemyRepository,
-            $this->npcRepository,
-            $this->spellRepository,
-            $this->floorRepository,
+            $this->enemyRepositorySwoole,
+//            $this->npcRepository,
+            $this->npcRepositorySwoole,
+//            $this->spellRepository,
+            $this->spellRepositorySwoole,
+//            $this->floorRepository,
+            $this->floorRepositorySwoole,
             $combatLogRoute
         );
 

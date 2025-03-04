@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Repositories\Database;
+namespace App\Repositories\Database\Npc;
 
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
-use App\Repositories\Interfaces\NpcRepositoryInterface;
+use App\Repositories\Database\DatabaseRepository;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
