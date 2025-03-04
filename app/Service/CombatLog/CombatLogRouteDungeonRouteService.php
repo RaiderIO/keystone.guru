@@ -42,6 +42,10 @@ use App\Repositories\Stub\DungeonRoute\DungeonRouteRepository as DungeonRouteRep
 use App\Repositories\Stub\KillZone\KillZoneEnemyRepository as KillZoneEnemyRepositoryStub;
 use App\Repositories\Stub\KillZone\KillZoneRepository as KillZoneRepositoryStub;
 use App\Repositories\Stub\KillZone\KillZoneSpellRepository as KillZoneSpellRepositoryStub;
+use App\Repositories\Swoole\Interfaces\EnemyRepositorySwooleInterface;
+use App\Repositories\Swoole\Interfaces\FloorRepositorySwooleInterface;
+use App\Repositories\Swoole\Interfaces\NpcRepositorySwooleInterface;
+use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
 use App\Service\CombatLog\Builders\CombatLogRouteCombatLogEventsBuilder;
 use App\Service\CombatLog\Builders\CombatLogRouteCorrectionBuilder;
 use App\Service\CombatLog\Builders\CombatLogRouteDungeonRouteBuilder;
@@ -79,6 +83,12 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         protected readonly NpcRepositoryInterface                            $npcRepository,
         protected readonly SpellRepositoryInterface                          $spellRepository,
         protected readonly FloorRepositoryInterface                          $floorRepository,
+        // Swoole
+        protected readonly EnemyRepositorySwooleInterface                    $enemyRepositorySwoole,
+        protected readonly NpcRepositorySwooleInterface                      $npcRepositorySwoole,
+        protected readonly SpellRepositorySwooleInterface                    $spellRepositorySwoole,
+        protected readonly FloorRepositorySwooleInterface                    $floorRepositorySwoole,
+
         protected readonly CombatLogRouteDungeonRouteServiceLoggingInterface $log
     ) {
     }
@@ -161,7 +171,11 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             new KillZoneEnemyRepositoryStub(),
             new KillZoneSpellRepositoryStub(),
             // @TODO Change these four to take advantage of Swoole
-            $this->enemyRepository,
+            $this->enemyRepositorySwoole,
+//            $this->npcRepositorySwoole,
+//            $this->spellRepositorySwoole,
+//            $this->floorRepositorySwoole,
+//            $this->enemyRepository,
             $this->npcRepository,
             $this->spellRepository,
             $this->floorRepository,

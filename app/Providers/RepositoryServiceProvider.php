@@ -286,7 +286,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TimewalkingEventRepositoryInterface::class, TimewalkingEventRepository::class);
 
         // Root
-        // Root
         $this->app->bind(AffixRepositoryInterface::class, AffixRepository::class);
         $this->app->bind(BrushlineRepositoryInterface::class, BrushlineRepository::class);
         $this->app->bind(CacheModelRepositoryInterface::class, CacheModelRepository::class);

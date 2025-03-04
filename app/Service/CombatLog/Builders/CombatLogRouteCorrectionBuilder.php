@@ -77,6 +77,12 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         );
     }
 
+    protected function buildFinished(): void
+    {
+        // Do not call parent - we don't care about enemy forces etc
+        $this->dungeonRoute->setRelation('killZones', $this->killZones);
+    }
+
     public function getCombatLogRoute(): CombatLogRouteRequestModel
     {
         /** @var Collection<CombatLogRouteNpcRequestModel> $npcs */

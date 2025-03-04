@@ -129,6 +129,7 @@
         "phpunit/phpunit": "^10.1",
         "rector/rector": "^1.0",
         "spatie/laravel-ignition": "^2.0",
+        "swoole/ide-helper": "~6.0.0",
         "wotuu/keystone.guru.deployer": "0.1"
     },
     "autoload": {
