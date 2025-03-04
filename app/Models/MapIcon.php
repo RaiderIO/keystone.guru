@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property MappingVersion|null $mappingVersion
  * @property Floor               $floor
  * @property DungeonRoute|null   $dungeonRoute
+ * @property Team|null           $team
  * @property MapIconType         $mapIconType
  *
  * @mixin Eloquent
@@ -104,6 +105,11 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
     public function mappingVersion(): BelongsTo
     {
         return $this->belongsTo(MappingVersion::class);
+    }
+
+    public function team(): BelongsTo
+    {
+        return $this->belongsTo(Team::class);
     }
 
     public function getIsAdminAttribute(): bool

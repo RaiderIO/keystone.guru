@@ -42,12 +42,14 @@ trait HasLatLng
         if ($splitFloorsLatLng->getFloor()?->facade) {
             $facadeLatLng      = $splitFloorsLatLng;
             $splitFloorsLatLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
-                $this->mappingVersion ?? $this->dungeonRoute->mappingVersion,
+            // Use the direct mapping version, otherwise proxy through dungeonRoute, finally as a fallback use the dungeon's current mapping version
+                $this->mappingVersion ?? $this->dungeonRoute->mappingVersion ?? $this->floor->dungeon->currentMappingVersion,
                 $facadeLatLng
             );
         } else {
             $facadeLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
-                $this->mappingVersion ?? $this->dungeonRoute->mappingVersion,
+                // Use the direct mapping version, otherwise proxy through dungeonRoute, finally as a fallback use the dungeon's current mapping version
+                $this->mappingVersion ?? $this->dungeonRoute->mappingVersion ?? $this->floor->dungeon->currentMappingVersion,
                 $splitFloorsLatLng
             );
         }
