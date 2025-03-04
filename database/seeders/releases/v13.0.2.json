@@ -1,0 +1,25 @@
+{
+    "id": 282,
+    "release_changelog_id": 289,
+    "version": "v13.0.2",
+    "title": "Re-imported Priory of the Sacred Flame",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-03-04T11:26:13+00:00",
+    "updated_at": "2025-03-04T11:26:13+00:00",
+    "changelog": {
+        "id": 289,
+        "release_id": 282,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 289,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2735,
+                "change": "Re-imported Priory of the Sacred Flame."
+            }
+        ]
+    }
+}

@@ -28,6 +28,8 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importNpcsDataFromMDTStart(string $key): void;
 
+    public function importNpcsDataFromMDTIgnoreNpc(int $npcId): void;
+
     public function importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
         int $npcCharacteristicsDeleted,
         int $npcCharacteristicsInserted,

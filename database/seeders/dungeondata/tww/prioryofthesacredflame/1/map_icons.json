@@ -76,5 +76,44 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
+    },
+    {
+        "mapping_version_id": 523,
+        "floor_id": 290,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 102,
+        "lat": -131.61431967603,
+        "lng": 214.90336840492,
+        "comment": "The warmth of the Eternal Flame empowers you causing your spells and abilities to inflect additional Holy damage.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 523,
+        "floor_id": 290,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 10,
+        "lat": -122.05822868725,
+        "lng": 318.98523115287,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 523,
+        "floor_id": 290,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -167.33000683519,
+        "lng": 116.78256811446,
+        "comment": "mapping.map_icons.tww.priory_of_the_sacred_flame.miniboss_explanation",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
     }
 ]

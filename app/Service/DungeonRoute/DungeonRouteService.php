@@ -108,13 +108,13 @@ class DungeonRouteService implements DungeonRouteServiceInterface
                         ->orWhere(static function (Builder $builder) {
                             // If it is in the queue to be refreshed
                             $builder->whereColumn('thumbnail_refresh_queued_at', '>', 'thumbnail_updated_at')
-                                ->whereDate('thumbnail_refresh_queued_at', '<', now()->subHours(config('keystoneguru.thumbnail.refresh_requeue_hours')));
+                                ->whereDate('thumbnail_refresh_queued_at', '<', now()->subHours(config('keystoneguru.thumbnail.refresh_requeue_hours'))->toDateTimeString());
                         });
                 })
                 ->where(static function (Builder $builder) {
                     // Only if it's not already queued!
                     $builder->whereColumn('updated_at', '>', 'thumbnail_updated_at')
-                        ->whereDate('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail.refresh_min')));
+                        ->whereDate('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail.refresh_min'))->toDateTimeString());
                 })
                 // Published routes get priority! This is only really relevant initially while processing the thumbnail queue
                 ->orderBy('published_state_id', 'desc')
