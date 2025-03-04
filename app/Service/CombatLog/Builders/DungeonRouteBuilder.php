@@ -360,28 +360,31 @@ abstract class DungeonRouteBuilder
         ?LatLng         $previousPullLatLng,
         ClosestEnemy    $closestEnemy
     ): void {
-        try {
-            $this->log->findClosestEnemyInPreferredFloorStart($this->currentFloor->id);
+        // Disabled - it's not working as intended because Blizzard's floor IDs are all over the place
+        return;
 
-            /** @var Collection<Enemy> $preferredEnemiesOnCurrentFloor */
-            $preferredEnemiesOnCurrentFloor = $filteredEnemies->filter(
-                fn(Enemy $availableEnemy) => // Only if we have floor checks enabled for this dungeon
-                    in_array($availableEnemy->floor->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_ENABLED) &&
-                    $availableEnemy->floor_id == $this->currentFloor->id
-            );
-
-            if ($preferredEnemiesOnCurrentFloor->isNotEmpty()) {
-                $this->findClosestEnemyAndDistanceFromList(
-                    $preferredEnemiesOnCurrentFloor,
-                    $activePullEnemy,
-                    $previousPullLatLng,
-                    $closestEnemy
-                );
-            }
-
-        } finally {
-            $this->log->findClosestEnemyInPreferredFloorEnd();
-        }
+//        try {
+//            $this->log->findClosestEnemyInPreferredFloorStart($this->currentFloor->id);
+//
+//            /** @var Collection<Enemy> $preferredEnemiesOnCurrentFloor */
+//            $preferredEnemiesOnCurrentFloor = $filteredEnemies->filter(
+//                fn(Enemy $availableEnemy) => // Only if we have floor checks enabled for this dungeon
+//                    in_array($availableEnemy->floor->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_ENABLED) &&
+//                    $availableEnemy->floor_id == $this->currentFloor->id
+//            );
+//
+//            if ($preferredEnemiesOnCurrentFloor->isNotEmpty()) {
+//                $this->findClosestEnemyAndDistanceFromList(
+//                    $preferredEnemiesOnCurrentFloor,
+//                    $activePullEnemy,
+//                    $previousPullLatLng,
+//                    $closestEnemy
+//                );
+//            }
+//
+//        } finally {
+//            $this->log->findClosestEnemyInPreferredFloorEnd();
+//        }
     }
 
     /**

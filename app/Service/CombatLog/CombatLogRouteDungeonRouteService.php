@@ -64,12 +64,11 @@ use App\Service\CombatLog\ResultEvents\SpellCast as SpellCastResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Season\SeasonServiceStub;
-use DB;
+use Auth;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Log;
 use Ramsey\Uuid\Uuid;
 
 class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteServiceInterface
@@ -120,7 +119,8 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $this->spellRepository,
             $this->floorRepository,
             $this->dungeonRepository,
-            $combatLogRoute
+            $combatLogRoute,
+            Auth::id() ?? -1
         ))->build();
 
         $this->saveChallengeModeRun($combatLogRoute, $dungeonRoute);

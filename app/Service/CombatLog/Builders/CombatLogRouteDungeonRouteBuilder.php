@@ -59,7 +59,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
         protected readonly SpellRepositoryInterface   $spellRepository,
         protected readonly FloorRepositoryInterface   $floorRepository,
         protected readonly DungeonRepositoryInterface $dungeonRepository,
-        protected readonly CombatLogRouteRequestModel $combatLogRoute
+        protected readonly CombatLogRouteRequestModel $combatLogRoute,
+        ?int                                          $userId = null
     ) {
         $log = App::make(CombatLogRouteDungeonRouteBuilderLoggingInterface::class);
 
@@ -75,7 +76,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 $dungeonRouteRepository,
                 $affixGroupRepository,
                 $dungeonRouteAffixGroupRepository,
-                $this->dungeonRepository
+                $this->dungeonRepository,
+                $userId
             ),
             $log
         );

@@ -12,12 +12,10 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInt
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\Season\SeasonServiceInterface;
-use Auth;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Random\RandomException;
 
 /**
  * @OA\Schema(schema="CombatLogRouteRequest")
@@ -50,7 +48,7 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
 
 
     /**
-     * @throws DungeonNotSupportedException|RandomException
+     * @throws DungeonNotSupportedException
      */
     public function createDungeonRoute(
         SeasonServiceInterface                    $seasonService,
@@ -58,6 +56,7 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         AffixGroupRepositoryInterface             $affixGroupRepository,
         DungeonRouteAffixGroupRepositoryInterface $dungeonRouteAffixGroupRepository,
         DungeonRepositoryInterface                $dungeonRepository,
+        ?int $userId = null
     ): DungeonRoute {
         try {
             $dungeon = $dungeonRepository->getByChallengeModeIdOrFail($this->challengeMode->challengeModeId);
@@ -73,7 +72,7 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
 
         $dungeonRoute = $dungeonRouteRepository->create([
             'public_key'         => $dungeonRouteRepository->generateRandomPublicKey(),
-            'author_id'          => Auth::id() ?? -1,
+            'author_id' => $userId,
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $currentMappingVersion->id,
             'season_id'          => $currentSeasonForDungeon?->id,
