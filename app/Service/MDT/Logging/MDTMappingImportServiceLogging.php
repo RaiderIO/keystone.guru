@@ -62,6 +62,11 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->start(__METHOD__, get_defined_vars());
     }
 
+    public function importNpcsDataFromMDTIgnoreNpc(int $npcId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
     public function importNpcsDataFromMDTNpcNotMarkedForAllDungeons(int $npcId): void
     {
         $this->error(__METHOD__, get_defined_vars());
