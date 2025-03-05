@@ -1,0 +1,31 @@
+{
+    "id": 283,
+    "release_changelog_id": 290,
+    "version": "v13.0.3",
+    "title": "Fixed Operation Floodgate ARC - added week 1 affixes",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-03-05T08:24:23+00:00",
+    "updated_at": "2025-03-05T08:24:23+00:00",
+    "changelog": {
+        "id": 290,
+        "release_id": 283,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 290,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2750,
+                "change": "Affixes are now up-to-date with week 1."
+            },
+            {
+                "release_changelog_id": 290,
+                "release_changelog_category_id": 11,
+                "ticket_id": 2737,
+                "change": "Operation Floodgate now works properly with the auto-route creator."
+            }
+        ]
+    }
+}
