@@ -6,12 +6,15 @@ use App\Models\Dungeon;
 use App\Service\Cache\Logging\CacheServiceLoggingInterface;
 use Closure;
 use DateInterval;
+use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class CacheService implements CacheServiceInterface
 {
+    private const LOCK_BLOCK_TIMEOUT = 20;
+
     private bool $cacheEnabled = true;
 
     public function __construct(private readonly CacheServiceLoggingInterface $log)
@@ -29,7 +32,7 @@ class CacheService implements CacheServiceInterface
 
     public function setCacheEnabled(bool $cacheEnabled): CacheService
     {
-        $this->cacheEnabled = $cacheEnabled;
+//        $this->cacheEnabled = $cacheEnabled;
 
         return $this;
     }
@@ -60,35 +63,42 @@ class CacheService implements CacheServiceInterface
     {
         $result = null;
 
-        // If we should ignore the cache, of if it's found
-        if (!$this->cacheEnabled || ($result = $this->get($key)) === null) {
+        $lock = Cache::lock(sprintf('%s:lock', $key), 10);
+        try {
+            // If we should ignore the cache, or if it's not found
+            if (!$this->cacheEnabled || ($result = $this->get($key)) === null) {
+                // Wait up to 20 seconds to acquire the lock...
+                $lock->block(self::LOCK_BLOCK_TIMEOUT);
 
-            // Get the result by calling the closure
-            if ($value instanceof Closure) {
-                $value = $value();
-            }
-
-            // Only write it to cache when we're not local
-            if (config('app.env') !== 'local') {
-                if (is_string($ttl)) {
-                    $ttl = DateInterval::createFromDateString($ttl);
+                // Get the result by calling the closure
+                if ($value instanceof Closure) {
+                    $value = $value();
                 }
 
-                // If not overridden, get the TTL from config, if it's set anyway
-                try {
-                    if ($this->set($key, $value, $ttl ?? $this->getTtl($key))) {
+                // Only write it to cache when we're not local
+                if (config('app.env') !== 'local') {
+                    if (is_string($ttl)) {
+                        $ttl = DateInterval::createFromDateString($ttl);
+                    }
+
+                    // If not overridden, get the TTL from config, if it's set anyway
+                    try {
+                        if ($this->set($key, $value, $ttl ?? $this->getTtl($key))) {
+                            $result = $value;
+                        }
+                    } catch (InvalidArgumentException $e) {
+                        $this->log->rememberFailedToSetCache($key, $e);
+
                         $result = $value;
                     }
-                } catch (InvalidArgumentException $e) {
-                    logger()->error($e->getMessage(), [
-                        'exception' => $e,
-                    ]);
-
+                } else {
                     $result = $value;
                 }
-            } else {
-                $result = $value;
             }
+        } catch (LockTimeoutException $e) {
+            $this->log->rememberFailedToAcquireLock($key, $e);
+        } finally {
+            $lock->release();
         }
 
         return $result;
