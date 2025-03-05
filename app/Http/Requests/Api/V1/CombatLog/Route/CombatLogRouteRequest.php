@@ -64,8 +64,8 @@ class CombatLogRouteRequest extends APIFormRequest
             'challengeMode.challengeModeId' => ['required', Rule::exists(Dungeon::class, 'challenge_mode_id')],
             'challengeMode.level'           => ['required', 'int'],
             'challengeMode.numDeaths'       => ['nullable', 'int'], // @TODO make required after raider.io supports it
-            'challengeMode.affixes'         => ['required', 'array'],
-            'challengeMode.affixes.*'       => ['required', 'integer'], // #1818 Rule::exists(Affix::class, 'affix_id')],
+            'challengeMode.affixes'         => ['nullable', 'array'],
+            'challengeMode.affixes.*'       => ['nullable', 'integer'], // #1818 Rule::exists(Affix::class, 'affix_id')],
             'npcs'                          => ['required', 'array', new CombatLogRouteNpcChronologicalRule()],
             'npcs.*.npcId'                  => ['required', 'integer'], // #1818 Rule::exists('npcs', 'id')
             'npcs.*.spawnUid'               => ['required', 'string', 'max:10'],

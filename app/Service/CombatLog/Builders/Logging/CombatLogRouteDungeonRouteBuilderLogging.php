@@ -4,11 +4,6 @@ namespace App\Service\CombatLog\Builders\Logging;
 
 class CombatLogRouteDungeonRouteBuilderLogging extends DungeonRouteBuilderLogging implements CombatLogRouteDungeonRouteBuilderLoggingInterface
 {
-    public function buildKillZonesFloorNotFound(?int $currentFloorId, int $uiMapId, int $dungeonId): void
-    {
-        $this->warning(__METHOD__, get_defined_vars());
-    }
-
     public function buildKillZonesFloorAssigningDefaultFloor(int $currentFloorId): void
     {
         $this->info(__METHOD__, get_defined_vars());
