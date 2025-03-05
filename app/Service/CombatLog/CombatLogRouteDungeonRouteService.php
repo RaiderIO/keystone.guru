@@ -170,9 +170,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
      */
     public function correctCombatLogRoute(CombatLogRouteRequestModel $combatLogRoute): CombatLogRouteRequestModel
     {
-        $hasCache = $this->enemyRepositorySwoole->hasCache();
 
         // @TODO Remove this
+//        $hasCache = $this->enemyRepositorySwoole->hasCache();
 //        if ($hasCache) {
 //            // Enable query logging at the start of the method
 //            DB::flushQueryLog();

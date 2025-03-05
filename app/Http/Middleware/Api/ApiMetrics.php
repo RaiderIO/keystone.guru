@@ -3,6 +3,7 @@
 namespace App\Http\Middleware\Api;
 
 use App\Models\Metrics\Metric;
+use App\Models\User;
 use App\Service\Metric\MetricServiceInterface;
 use Auth;
 use Closure;
@@ -21,8 +22,9 @@ class ApiMetrics
     public function handle(Request $request, Closure $next): Response
     {
         if (!app()->runningUnitTests()) {
-            $this->metricService->storeMetricByModel(
-                Auth::user(),
+            $this->metricService->storeMetricAsync(
+                Auth::user()->id,
+                User::class,
                 Metric::CATEGORY_API_CALL,
                 $request->path(),
                 1

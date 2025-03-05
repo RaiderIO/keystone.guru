@@ -2,6 +2,8 @@
 
 namespace App\Service\Cache;
 
+use Illuminate\Contracts\Cache\Lock;
+
 interface CacheServiceInterface
 {
     public function setCacheEnabled(bool $cacheEnabled): self;
@@ -19,4 +21,6 @@ interface CacheServiceInterface
     public function dropCaches(): void;
 
     public function clearIdleKeys(?int $seconds = null): int;
+
+    public function lock(string $key, int $ttl = 60): Lock;
 }
