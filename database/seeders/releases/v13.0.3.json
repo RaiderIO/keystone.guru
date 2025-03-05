@@ -3,7 +3,7 @@
     "release_changelog_id": 290,
     "version": "v13.0.3",
     "title": "Fixed Operation Floodgate ARC - added week 1 affixes",
-    "backup_db": 1,
+    "backup_db": 0,
     "silent": 0,
     "spotlight": 0,
     "released": 0,
