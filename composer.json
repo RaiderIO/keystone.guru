@@ -26,7 +26,7 @@
                 "source": {
                     "url": "https://github.com/RaiderIO/keystone.guru.deployer.git",
                     "type": "git",
-                    "reference": "f429ff594cc0ae483f1620b728665d6448d7e114"
+                    "reference": "f2d98240516f6e7abf28d03f67efc4f1a4d4f3f5"
                 }
             }
         },
