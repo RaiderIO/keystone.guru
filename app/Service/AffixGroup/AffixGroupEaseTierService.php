@@ -21,6 +21,7 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         'The Everbloom'                          => 'Everbloom',
         'Uldaman: Legacy of Tyr'                 => 'Uldaman',
         'Ara-Kara: City of Echoes'               => 'Ara-Kara, City of Echoes',
+        'Operation Mechagon: Workshop'           => 'Operation: Mechagon - Workshop',
     ];
     public const DATE_TIME_FORMAT     = 'Y-m-d\TH:i:sP';
 

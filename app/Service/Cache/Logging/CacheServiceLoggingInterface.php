@@ -2,8 +2,13 @@
 
 namespace App\Service\Cache\Logging;
 
+use Exception;
+
 interface CacheServiceLoggingInterface
 {
+    public function rememberFailedToSetCache(string $key, Exception $e): void;
+
+    public function rememberFailedToAcquireLock(string $key, Exception $e): void;
 
     public function deleteKeysByPatternStart(?int $seconds): void;
 
