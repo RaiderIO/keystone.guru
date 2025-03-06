@@ -62,7 +62,7 @@ class ReleaseController extends Controller
 
         $release->version   = $request->get('version');
         $release->title     = $request->get('title', '') ?? '';
-        $release->backup_db = $request->get('backup_db', 1);
+        $release->backup_db = $request->get('backup_db', 0);
         $release->silent    = $request->get('silent', 0);
         $release->spotlight = $request->get('spotlight', 0);
 
