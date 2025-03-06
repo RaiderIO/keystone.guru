@@ -20,7 +20,7 @@ services:
 
   app-swoole:
     build:
-      context: docker-compose/app-swoole
+      context: docker-compose/app
       dockerfile: Dockerfile
     image: keystone.guru-swoole
     container_name: keystone.guru-app-swoole
