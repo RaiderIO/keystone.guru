@@ -262,7 +262,6 @@ class ThumbnailService implements ThumbnailServiceInterface
 
             // Set it for processing in a queue
             ProcessRouteFloorThumbnailCustom::dispatch(
-                $this,
                 $dungeonRouteThumbnailJob,
                 $dungeonRoute,
                 $floor->index

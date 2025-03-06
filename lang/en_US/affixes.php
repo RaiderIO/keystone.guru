@@ -16,7 +16,7 @@ return [
     ],
     'fortified'                    => [
         'name'        => 'Fortified',
-        'description' => 'Non-boss enemies have 20% more health and inflict up to 30% increased damage.',
+        'description' => 'Non-boss enemies have 20% more health and inflict up to 20% increased damage.',
     ],
     'grievous'                     => [
         'name'        => 'Grievous',
@@ -56,7 +56,7 @@ return [
     ],
     'tyrannical'                   => [
         'name'        => 'Tyrannical',
-        'description' => 'Boss enemies have 30% more health and inflict up to 15% increased damage.',
+        'description' => 'Boss enemies have 25% more health and inflict up to 15% increased damage.',
     ],
     'volcanic'                     => [
         'name'        => 'Volcanic',
@@ -148,11 +148,11 @@ return [
     ],
     'xalataths_guile'             => [
         'name'        => 'Xal\'atath\'s Guile',
-        'description' => 'Xal\'atath betrays players, revoking her bargains and increasing the health and damage of enemies by 20%',
+        'description' => 'Xal\'atath betrays players, revoking her bargains while making deaths subtract 15 seconds from time remaining.',
     ],
     'challengers_peril'            => [
         'name'        => 'Challenger\'s Peril',
-        'description' => 'Dying subtracts 15 seconds from time remaining.',
+        'description' => 'The timer is increased by 90 seconds, but dying subtracts 15 seconds from time remaining.',
     ],
     'seasonal_index_preset'        => '%s preset %d',
 

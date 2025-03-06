@@ -155,9 +155,6 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 }
 
                 if ($newFloor === null) {
-                    // Floor not found = we stay on the current floor
-                    $this->log->buildKillZonesFloorNotFound($this->currentFloor?->id, $event['npc']->coord->uiMapId, $this->dungeonRoute->dungeon_id);
-
                     // First floor ever, can't find it? Assign the default floor
                     if ($this->currentFloor === null) {
                         $this->currentFloor = $this->floorRepository->getDefaultFloorForDungeon($this->dungeonRoute->dungeon_id);

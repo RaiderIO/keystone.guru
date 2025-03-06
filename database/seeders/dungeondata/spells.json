@@ -88446,6 +88446,25 @@
         ]
     },
     {
+        "id": 391891,
+        "category": "spells.category.druid",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "Magic",
+        "mechanic": null,
+        "icon_name": "inv_ability_druid_adaptiveswarm",
+        "name": "Adaptive Swarm",
+        "schools_mask": 8,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": null,
+        "cast_time": 0,
+        "duration": 12000,
+        "selectable": false,
+        "hidden_on_map": false,
+        "fetched_data_at": "2025-03-05T07:54:48+00:00",
+        "spell_dungeons": []
+    },
+    {
         "id": 391967,
         "category": "spells.category.unknown",
         "cooldown_group": "spells.cooldown_group.unknown",
@@ -119106,7 +119125,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -119365,7 +119384,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -120105,7 +120124,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -121254,7 +121273,7 @@
         "cast_time": 0,
         "duration": 6000,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": "2025-03-01T21:11:21+00:00",
         "spell_dungeons": [
             {
@@ -121346,7 +121365,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -121507,7 +121526,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -121737,7 +121756,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -121760,7 +121779,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -121783,7 +121802,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -121829,7 +121848,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -122188,7 +122207,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -122234,7 +122253,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -122280,7 +122299,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -122303,7 +122322,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -122464,7 +122483,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -122487,7 +122506,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -122602,7 +122621,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -122648,7 +122667,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -123035,7 +123054,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -123058,7 +123077,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -123081,7 +123100,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -123150,7 +123169,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -123196,7 +123215,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -123311,7 +123330,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -123334,7 +123353,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -123495,7 +123514,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -123587,7 +123606,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -123610,7 +123629,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -123633,7 +123652,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -123928,7 +123947,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -124988,7 +125007,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -125657,7 +125676,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {
@@ -125952,7 +125971,7 @@
         "cast_time": null,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": null,
         "spell_dungeons": [
             {

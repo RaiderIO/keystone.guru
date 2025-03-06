@@ -48,18 +48,14 @@ class Cache extends SchedulerCommand
             // Disable cache so that we may refresh it
             $discoverService = $discoverService->withCache(false);
 
-            $expansions = [
+            $expansions = array_filter([
                 $expansionService->getCurrentExpansion(),
+                // Next expansion is usually going to be empty, unless we're actively approaching a new expansion
                 $expansionService->getNextExpansion(),
-            ];
+            ]);
 
             // Refresh caches for all categories
             foreach ($expansions as $expansion) {
-                // Next expansion is usually going to be empty, unless we're actively approaching a new expansion
-                if ($expansion === null) {
-                    continue;
-                }
-
                 /** @var Expansion $expansion */
                 $this->info(sprintf('- %s', $expansion->shortname));
 
@@ -74,19 +70,15 @@ class Cache extends SchedulerCommand
 
                 // In theory this can lead to cache misses when we're in the process of switching seasons, but I'll take it
                 /** @var Season[] $seasons */
-                $seasons = [
+                $seasons = array_filter([
                     $expansionService->getCurrentSeason($expansion),
                     $expansionService->getNextSeason($expansion),
-                ];
+                ]);
 
                 // Now, if this expansion has a current season, re-build all the pages as if they're viewing the
                 // :expansion/season/:season page. Remember, an expansion's season can have dungeons from any other expansion into it
                 // The cache key changes when you assign a season to the DiscoverService so those pages need to be cached again
                 foreach ($seasons as $season) {
-                    // May be null if we're in between seasons, or the next season is not known yet
-                    if ($season === null) {
-                        continue;
-                    }
                     $this->info(sprintf('- %s', $season->name));
 
                     foreach ($season->affixGroups ?? [] as $affixGroup) {
