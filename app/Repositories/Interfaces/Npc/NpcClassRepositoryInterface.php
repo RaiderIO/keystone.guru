@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Interfaces;
+namespace App\Repositories\Interfaces\Npc;
 
 use App\Models\Npc\NpcClass;
 use App\Repositories\BaseRepositoryInterface;

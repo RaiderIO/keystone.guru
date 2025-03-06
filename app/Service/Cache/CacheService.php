@@ -7,6 +7,7 @@ use App\Service\Cache\Logging\CacheServiceLoggingInterface;
 use Closure;
 use DateInterval;
 use Illuminate\Contracts\Cache\LockTimeoutException;
+use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -166,6 +167,11 @@ class CacheService implements CacheServiceInterface
         return $this->deleteKeysByPattern([
             sprintf('/%s[a-zA-Z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
         ], $seconds);
+    }
+
+    public function lock(string $key, int $ttl = 60): Lock
+    {
+        return Cache::lock($key, $ttl, 'default');
     }
 
     private function deleteKeysByPattern(array $regexes, ?int $idleTimeSeconds = null): int

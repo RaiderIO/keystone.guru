@@ -12,4 +12,10 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     {
         parent::__construct(DungeonRoute::class);
     }
+
+    public function generateRandomPublicKey(): string
+    {
+        // Just do something that is mostly unique
+        return md5(uniqid());
+    }
 }

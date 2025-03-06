@@ -4,12 +4,20 @@ namespace App\Service\Metric;
 
 use App\Models\Metrics\Metric;
 use App\Models\Metrics\MetricAggregation;
+use App\Service\Cache\CacheServiceInterface;
 use Artisan;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class MetricService implements MetricServiceInterface
 {
+    public function __construct(
+        private readonly CacheServiceInterface $cacheService,
+    ) {
+
+    }
+
     public function storeMetric(?int $modelId, ?string $modelClass, int $category, string $tag, int $value): Metric
     {
         return Metric::create([
@@ -30,6 +38,43 @@ class MetricService implements MetricServiceInterface
             'tag'         => $tag,
             'value'       => $value,
         ]);
+    }
+
+    public function storeMetricAsync(?int $modelId, ?string $modelClass, int $category, string $tag, int $value): void
+    {
+        $this->withLock('metrics:pending:lock', function () use ($modelId, $modelClass, $category, $tag, $value) {
+            $key = 'metrics:pending';
+
+            // Get current metrics list or initialize an empty array
+            $pendingMetrics = $this->cacheService->get($key) ?? [];
+
+            $now              = Carbon::now()->toDateTimeString();
+            $pendingMetrics[] = [
+                'model_id'    => $modelId,
+                'model_class' => $modelClass,
+                'category'    => $category,
+                'tag'         => $tag,
+                'value'       => $value,
+                'created_at'  => $now,
+                'updated_at'  => $now,
+            ];
+
+            // Save the updated list back to the cache
+            $this->cacheService->set($key, $pendingMetrics);
+        });
+    }
+
+    public function flushPendingMetrics(): array
+    {
+        return $this->withLock('metrics:pending:lock', function () {
+            $key = 'metrics:pending';
+
+            // Retrieve and clear the pending metrics
+            $pendingMetrics = $this->cacheService->get($key) ?? [];
+            $this->cacheService->set($key, []); // Reset the list
+
+            return $pendingMetrics;
+        });
     }
 
     public function aggregateMetrics(): bool
@@ -56,5 +101,19 @@ class MetricService implements MetricServiceInterface
         }
 
         return $result;
+    }
+
+    private function withLock(string $lockKey, callable $callback, int $ttl = 5): mixed
+    {
+        try {
+            $lock = $this->cacheService->lock($lockKey, $ttl);
+
+            // Execute the critical section
+            return $callback();
+        } finally {
+            if (isset($lock)) {
+                $lock->release();
+            }
+        }
     }
 }

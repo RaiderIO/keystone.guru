@@ -18,5 +18,7 @@ use Illuminate\Support\Collection;
  */
 interface FloorRepositoryInterface extends BaseRepositoryInterface
 {
+    public function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor;
 
+    public function getDefaultFloorForDungeon(int $dungeonId): ?Floor;
 }

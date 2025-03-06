@@ -60,6 +60,7 @@ use App\Console\Commands\Scheduler\DungeonRoute\RefreshOutdatedThumbnails;
 use App\Console\Commands\Scheduler\DungeonRoute\UpdatePopularity;
 use App\Console\Commands\Scheduler\DungeonRoute\UpdateRating;
 use App\Console\Commands\Scheduler\Metric\Aggregate;
+use App\Console\Commands\Scheduler\Metric\SavePending;
 use App\Console\Commands\Scheduler\Patreon\RefreshMembershipStatus;
 use App\Console\Commands\Scheduler\RefreshAffixGroupEaseTiers;
 use App\Console\Commands\Scheduler\Telemetry\Telemetry;
@@ -170,9 +171,6 @@ class Kernel extends ConsoleKernel
         ImportNpcs::class,
         ImportSpells::class,
 
-        // Metric
-        Aggregate::class,
-
         // Patreon
         RefreshMembershipStatus::class,
 
@@ -193,6 +191,9 @@ class Kernel extends ConsoleKernel
         RefreshAffixGroupEaseTiers::class,
         RefreshOutdatedThumbnails::class,
         Telemetry::class,
+        // Metric
+        Aggregate::class,
+        SavePending::class,
 
         // Spell
         ImportCsv::class,
@@ -277,6 +278,7 @@ class Kernel extends ConsoleKernel
 
             // Aggregate all metrics so they're nice and snappy to load
             $schedule->command('metric:aggregate')->everyFiveMinutes();
+            $schedule->command('metric:savepending')->everyMinute();
 
             // Sync ads.txt
             $schedule->command('adprovider:syncadstxt')->everyFifteenMinutes();

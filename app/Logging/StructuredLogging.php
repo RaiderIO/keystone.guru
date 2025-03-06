@@ -65,6 +65,11 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
     protected function start(string $functionName, array $context = [], bool $addContext = true): void
     {
+        $level = Level::Info;
+        if ($level->isLowerThan(self::getLogLevel())) {
+            return;
+        }
+
         $targetKey = Str::replaceEnd('start', '', strtolower($functionName));
 
         if (isset($this->groupedContexts[$targetKey])) {
@@ -79,14 +84,19 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         $this->addContext($targetKey, $addContext ? $context : []);
         Stopwatch::start($targetKey);
 
-        $this->log(Level::Info, $functionName, $context);
+        $this->log($level, $functionName, $context);
     }
 
     protected function end(string $functionName, array $context = []): void
     {
+        $level = Level::Info;
+        if ($level->isLowerThan(self::getLogLevel())) {
+            return;
+        }
+
         $targetKey = Str::replaceEnd('end', '', strtolower($functionName));
 
-        $this->log(Level::Info, $functionName, array_merge($context, ['elapsedMS' => Stopwatch::stop($targetKey)]));
+        $this->log($level, $functionName, array_merge($context, ['elapsedMS' => Stopwatch::stop($targetKey)]));
 
         if (!isset($this->groupedContexts[$targetKey])) {
             $this->log(
@@ -153,7 +163,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
     private function log(Level $level, string $functionName, array $context = []): void
     {
-        if (!self::$ENABLED) {
+        if (!self::$ENABLED || $level->isLowerThan(self::getLogLevel())) {
             return;
         }
 
@@ -188,6 +198,11 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         foreach ($this->groupedContexts as $key => $context) {
             $this->cachedContext = array_merge($this->cachedContext, $context);
         }
+    }
+
+    private static function getLogLevel(): Level
+    {
+        return Level::fromName(ucfirst(config('app.log_level') ?? 'Debug'));
     }
 
     public static function setChannel(?string $channel): void
