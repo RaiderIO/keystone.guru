@@ -2,13 +2,25 @@
 
 namespace App\Service\User;
 
+use App\Logic\Utils\Stopwatch;
+use App\Models\User;
+use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class UserService implements UserServiceInterface
 {
     use AuthenticatesUsers;
+
+    private const CACHE_KEY_USER_AUTH = 'user_auth:%s-%s';
+    private const CACHE_TTL_USER_AUTH = 300;
+
+    public function __construct(
+        private readonly CacheServiceInterface $cacheService,
+    ) {
+    }
 
     public function loginAsUserFromAuthenticationHeader(Request $request): bool
     {
@@ -37,10 +49,45 @@ class UserService implements UserServiceInterface
         return $this->loginAsUser($username, $password);
     }
 
+    /**
+     * Logs in as a user with the given email and password. This uses caching to prevent expensive password hashing
+     * for every single correct attempt.
+     *
+     * @param string $email
+     * @param string $password
+     * @return bool
+     */
     public function loginAsUser(string $email, string $password): bool
     {
-        return $this->guard()->attempt(
-            get_defined_vars()
+        // Use a more secure cache key (HMAC for password)
+        $cacheKey = sprintf(
+            self::CACHE_KEY_USER_AUTH,
+            $email,
+            hash_hmac('sha256', $password, config('app.key'))
         );
+
+        // Fast-path: Check cache for authenticated user
+        if ($user = $this->cacheService->get($cacheKey)) {
+            auth()->setUser($user);
+
+            return true;
+        }
+
+        $user = User::where('email', $email)->first();
+
+        // Perform the expensive password verification
+        if (!$user || !Hash::check($password, $user->password)) {
+            return false;
+        }
+
+        // Cache user for 5 minutes (only caches the user object, not the password)
+        $this->cacheService->set($cacheKey, $user, self::CACHE_TTL_USER_AUTH);
+
+        // Authenticate the user
+        auth()->setUser($user);
+
+        return true;
     }
+
+
 }

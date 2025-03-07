@@ -25,6 +25,7 @@ use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
+use App\Service\Metric\MetricService;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Spell\Logging\SpellServiceLoggingInterface;
@@ -130,6 +131,23 @@ class ServiceFixtures
         return $testCase
             ->getMockBuilder(CoordinatesService::class)
             ->onlyMethods($methodsToMock)
+            ->getMock();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function getMetricServiceMock(
+        PublicTestCase        $testCase,
+        array                 $methodsToMock = [],
+        CacheServiceInterface $cacheService = null,
+    ): MockObject|MetricService {
+        return $testCase
+            ->getMockBuilder(MetricService::class)
+            ->onlyMethods($methodsToMock)
+            ->setConstructorArgs([
+                $cacheService ?? self::getCacheServiceMock($testCase),
+            ])
             ->getMock();
     }
 

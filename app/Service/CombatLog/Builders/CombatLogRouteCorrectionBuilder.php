@@ -3,23 +3,28 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcCorrectionRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRosterRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\EnemyRepositoryInterface;
+use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\Builders\Logging\CombatLogRouteCorrectionBuilderLoggingInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -46,7 +51,12 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         KillZoneRepositoryInterface               $killZoneRepository,
         KillZoneEnemyRepositoryInterface          $killZoneEnemyRepository,
         KillZoneSpellRepositoryInterface          $killZoneSpellRepository,
-        CombatLogRouteRequestModel $combatLogRoute
+        EnemyRepositoryInterface                  $enemyRepository,
+        NpcRepositoryInterface                    $npcRepository,
+        SpellRepositoryInterface                  $spellRepository,
+        FloorRepositoryInterface                  $floorRepository,
+        DungeonRepositoryInterface                $dungeonRepository,
+        CombatLogRouteRequestModel                $combatLogRoute
     ) {
         /** @var CombatLogRouteCorrectionBuilderLoggingInterface $log */
         $log       = App::make(CombatLogRouteCorrectionBuilderLoggingInterface::class);
@@ -61,8 +71,19 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
             $killZoneRepository,
             $killZoneEnemyRepository,
             $killZoneSpellRepository,
+            $enemyRepository,
+            $npcRepository,
+            $spellRepository,
+            $floorRepository,
+            $dungeonRepository,
             $combatLogRoute
         );
+    }
+
+    protected function buildFinished(): void
+    {
+        // Do not call parent - we don't care about enemy forces etc
+        $this->dungeonRoute->setRelation('killZones', $this->killZones);
     }
 
     public function getCombatLogRoute(): CombatLogRouteRequestModel

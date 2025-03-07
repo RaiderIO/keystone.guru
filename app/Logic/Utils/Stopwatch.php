@@ -128,4 +128,9 @@ class Stopwatch
 
         return $result;
     }
+
+    public static function clear(): void
+    {
+        self::$timers = [];
+    }
 }

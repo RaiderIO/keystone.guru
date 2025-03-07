@@ -18,8 +18,8 @@ use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcType;
-use App\Models\Path;
 use App\Models\Polyline;
+use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Service\CombatLog\Logging\CombatLogMappingVersionServiceLoggingInterface;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -29,8 +29,12 @@ use Illuminate\Support\Collection;
 
 class CombatLogMappingVersionService implements CombatLogMappingVersionServiceInterface
 {
-    public function __construct(private readonly CombatLogServiceInterface $combatLogService, private readonly CoordinatesServiceInterface $coordinatesService, private readonly CombatLogMappingVersionServiceLoggingInterface $log)
-    {
+    public function __construct(
+        private readonly CombatLogServiceInterface                      $combatLogService,
+        private readonly CoordinatesServiceInterface                    $coordinatesService,
+        private readonly FloorRepositoryInterface                       $floorRepository,
+        private readonly CombatLogMappingVersionServiceLoggingInterface $log
+    ) {
     }
 
     /**
@@ -187,7 +191,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
             // Ensure we know the floor
             if ($parsedEvent instanceof MapChange) {
-                $currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID(), $dungeon->id);
+                $currentFloor = $this->floorRepository->findByUiMapId($parsedEvent->getUiMapID(), $dungeon->id);
                 if ($currentFloor === null) {
                     $this->log->createMappingVersionFromCombatLogSkipEntryMapChangeFloorNotFound();
 
@@ -283,7 +287,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             // Save all paths (as enemy patrols, so I can see them in the mapping version admin) and couple the polylines to them
             $i = 0;
             foreach ($enemyConnectionsAttributes as $enemyConnectionsAttribute) {
-                $polyline = $polyLines[$i];
+                $polyline                                 = $polyLines[$i];
                 $enemyConnectionsAttribute['polyline_id'] = $polyline->id;
 
                 $enemyPatrol = EnemyPatrol::create($enemyConnectionsAttribute);

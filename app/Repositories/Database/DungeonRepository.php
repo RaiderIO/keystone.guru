@@ -17,4 +17,9 @@ class DungeonRepository extends DatabaseRepository implements DungeonRepositoryI
     {
         return Dungeon::get('map_id')->pluck('map_id')->unique();
     }
+
+    public function getByChallengeModeIdOrFail(int $challengeModeId): Dungeon
+    {
+        return Dungeon::where('challenge_mode_id', $challengeModeId)->firstOrFail();
+    }
 }

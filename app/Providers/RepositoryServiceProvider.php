@@ -63,13 +63,13 @@ use App\Repositories\Database\MDTImportRepository;
 use App\Repositories\Database\Metrics\MetricAggregationRepository;
 use App\Repositories\Database\Metrics\MetricRepository;
 use App\Repositories\Database\MountableAreaRepository;
+use App\Repositories\Database\Npc\NpcBolsteringWhitelistRepository;
+use App\Repositories\Database\Npc\NpcClassificationRepository;
+use App\Repositories\Database\Npc\NpcClassRepository;
 use App\Repositories\Database\Npc\NpcEnemyForcesRepository;
-use App\Repositories\Database\NpcBolsteringWhitelistRepository;
-use App\Repositories\Database\NpcClassificationRepository;
-use App\Repositories\Database\NpcClassRepository;
-use App\Repositories\Database\NpcRepository;
-use App\Repositories\Database\NpcSpellRepository;
-use App\Repositories\Database\NpcTypeRepository;
+use App\Repositories\Database\Npc\NpcRepository;
+use App\Repositories\Database\Npc\NpcSpellRepository;
+use App\Repositories\Database\Npc\NpcTypeRepository;
 use App\Repositories\Database\Opensearch\OpensearchModelRepository;
 use App\Repositories\Database\PageViewRepository;
 use App\Repositories\Database\PathRepository;
@@ -159,13 +159,13 @@ use App\Repositories\Interfaces\MDTImportRepositoryInterface;
 use App\Repositories\Interfaces\Metrics\MetricAggregationRepositoryInterface;
 use App\Repositories\Interfaces\Metrics\MetricRepositoryInterface;
 use App\Repositories\Interfaces\MountableAreaRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcBolsteringWhitelistRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcClassificationRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcClassRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcEnemyForcesRepositoryInterface;
-use App\Repositories\Interfaces\NpcBolsteringWhitelistRepositoryInterface;
-use App\Repositories\Interfaces\NpcClassificationRepositoryInterface;
-use App\Repositories\Interfaces\NpcClassRepositoryInterface;
-use App\Repositories\Interfaces\NpcRepositoryInterface;
-use App\Repositories\Interfaces\NpcSpellRepositoryInterface;
-use App\Repositories\Interfaces\NpcTypeRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcSpellRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcTypeRepositoryInterface;
 use App\Repositories\Interfaces\Opensearch\OpensearchModelRepositoryInterface;
 use App\Repositories\Interfaces\PageViewRepositoryInterface;
 use App\Repositories\Interfaces\PathRepositoryInterface;
@@ -285,7 +285,6 @@ class RepositoryServiceProvider extends ServiceProvider
         // Timewalking
         $this->app->bind(TimewalkingEventRepositoryInterface::class, TimewalkingEventRepository::class);
 
-        // Root
         // Root
         $this->app->bind(AffixRepositoryInterface::class, AffixRepository::class);
         $this->app->bind(BrushlineRepositoryInterface::class, BrushlineRepository::class);

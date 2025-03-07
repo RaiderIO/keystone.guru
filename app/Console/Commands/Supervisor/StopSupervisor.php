@@ -35,6 +35,7 @@ class StopSupervisor extends Command
         $this->shell([
             sprintf('sudo /usr/bin/supervisorctl stop laravel-echo-server%s:*', $appType),
             sprintf('sudo /usr/bin/supervisorctl stop laravel-horizon%s:*', $appType),
+            sprintf('sudo /usr/bin/supervisorctl stop swoole%s:*', $appType),
         ]);
 
         return 0;

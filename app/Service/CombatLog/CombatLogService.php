@@ -13,6 +13,7 @@ use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\Structs\MapBounds;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\CombatLog\Dtos\ChallengeMode;
 use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
@@ -32,6 +33,7 @@ class CombatLogService implements CombatLogServiceInterface
 {
     public function __construct(
         private readonly SeasonServiceInterface           $seasonService,
+        private readonly NpcRepositoryInterface           $npcRepository,
         private readonly CombatLogServiceLoggingInterface $log)
     {
     }
@@ -182,7 +184,9 @@ class CombatLogService implements CombatLogServiceInterface
                     function (BaseEvent $baseEvent, int $lineNr) use (&$dungeonRouteFilter, &$combatLogDungeonRouteFilter) {
                         // If parsing was successful, it generated a dungeonroute, so then construct our filter
                         if ($dungeonRouteFilter->parse($baseEvent, $lineNr)) {
-                            $combatLogDungeonRouteFilter->setDungeonRoute($dungeonRouteFilter->getDungeonRoute());
+                            $combatLogDungeonRouteFilter->setValidNpcIds(
+                                $this->npcRepository->getInUseNpcIds($dungeonRouteFilter->getDungeonRoute()->dungeon)
+                            );
                         }
 
                         try {

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Repositories\Interfaces;
+namespace App\Repositories\Interfaces\Npc;
 
+use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -18,5 +19,13 @@ use Illuminate\Support\Collection;
  */
 interface NpcRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * @return Collection<Npc>
+     */
+    public function getInUseNpcs(Dungeon $dungeon): Collection;
 
+    /**
+     * @return Collection<int>
+     */
+    public function getInUseNpcIds(Dungeon $dungeon, ?Collection $inUseNpcs = null): Collection;
 }

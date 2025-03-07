@@ -78,7 +78,6 @@ class DatabaseSeeder extends Seeder
 
         self::$running = true;
 
-        $cacheService->dropCaches();
         // $this->call(UsersTableSeeder::class);
         // $this->call(LaratrustSeeder::class);
 
@@ -148,6 +147,8 @@ class DatabaseSeeder extends Seeder
                 }
             }
         }
+
+        $cacheService->dropCaches();
 
         self::$running = false;
     }

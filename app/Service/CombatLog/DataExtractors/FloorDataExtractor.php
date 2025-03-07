@@ -7,6 +7,7 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\SpecialEvents\MapChange;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
+use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Service\CombatLog\DataExtractors\Logging\FloorDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
@@ -18,7 +19,9 @@ class FloorDataExtractor implements DataExtractorInterface
 
     private FloorDataExtractorLoggingInterface $log;
 
-    public function __construct()
+    public function __construct(
+        private readonly FloorRepositoryInterface                       $floorRepository
+    )
     {
         $log = App::make(FloorDataExtractorLoggingInterface::class);
         /** @var FloorDataExtractorLoggingInterface $log */
@@ -45,7 +48,7 @@ class FloorDataExtractor implements DataExtractorInterface
 
 //        $this->previousFloor = $this->currentFloor;
 
-        $this->currentFloor = Floor::findByUiMapId($parsedEvent->getUiMapID(), $currentDungeon->dungeon->id);
+        $this->currentFloor = $this->floorRepository->findByUiMapId($parsedEvent->getUiMapID(), $currentDungeon->dungeon->id);
         if ($this->currentFloor !== null) {
 
             $newIngameMinX = round($parsedEvent->getXMin(), 2);

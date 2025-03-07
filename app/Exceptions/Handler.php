@@ -55,7 +55,8 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $e): void
     {
-        $request = request();
+        // request() is not available in console
+        $request = app()->runningInConsole() ? null : request();
 
         if (app()->has(HandlerLoggingInterface::class) && !app()->runningInConsole()) {
             $handlerLogging = app()->make(HandlerLoggingInterface::class);
@@ -95,7 +96,7 @@ class Handler extends ExceptionHandler
                 return response()->json(['message' => __('exceptions.handler.too_many_requests')], RFC6585::TOO_MANY_REQUESTS);
             } else if (!config('app.debug')) {
                 return response()->json(['message' => __('exceptions.handler.internal_server_error')], StatusCode::INTERNAL_SERVER_ERROR);
-            } else {
+            } else if (config('app.type') !== 'local') {
                 return response()->json(['message' => $e->getMessage()], StatusCode::INTERNAL_SERVER_ERROR);
             }
         }

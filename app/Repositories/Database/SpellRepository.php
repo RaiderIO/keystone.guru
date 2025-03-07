@@ -5,6 +5,7 @@ namespace App\Repositories\Database;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
+use Illuminate\Support\Collection;
 
 class SpellRepository extends DatabaseRepository implements SpellRepositoryInterface
 {
@@ -21,5 +22,13 @@ class SpellRepository extends DatabaseRepository implements SpellRepositoryInter
             ->distinct()
             ->pluck('npc_spells.spell_id')
             ->toArray();
+    }
+
+    public function findAllById(Collection $spellIds): Collection
+    {
+        return Spell::query()
+            ->whereIn('id', $spellIds)
+            ->get()
+            ->keyBy('id');
     }
 }

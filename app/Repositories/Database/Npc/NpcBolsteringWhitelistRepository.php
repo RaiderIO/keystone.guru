@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Repositories\Database;
+namespace App\Repositories\Database\Npc;
 
 use App\Models\Npc\NpcBolsteringWhitelist;
-use App\Repositories\Interfaces\NpcBolsteringWhitelistRepositoryInterface;
+use App\Repositories\Database\DatabaseRepository;
+use App\Repositories\Interfaces\Npc\NpcBolsteringWhitelistRepositoryInterface;
 
 class NpcBolsteringWhitelistRepository extends DatabaseRepository implements NpcBolsteringWhitelistRepositoryInterface
 {

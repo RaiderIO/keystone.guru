@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Repositories\Database;
+namespace App\Repositories\Database\Npc;
 
 use App\Models\Npc\NpcType;
-use App\Repositories\Interfaces\NpcTypeRepositoryInterface;
+use App\Repositories\Database\DatabaseRepository;
+use App\Repositories\Interfaces\Npc\NpcTypeRepositoryInterface;
 
 class NpcTypeRepository extends DatabaseRepository implements NpcTypeRepositoryInterface
 {

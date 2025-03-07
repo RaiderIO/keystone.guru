@@ -7,9 +7,11 @@ use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeCombatLogEvent;
 use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\EnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\CombatLog\Builders\Logging\ResultEventDungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Models\ActivePull\ActivePull;
 use App\Service\CombatLog\Models\ActivePull\ActivePullEnemy;
@@ -36,6 +38,8 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
         KillZoneRepositoryInterface      $killZoneRepository,
         KillZoneEnemyRepositoryInterface $killZoneEnemyRepository,
         KillZoneSpellRepositoryInterface $killZoneSpellRepository,
+        EnemyRepositoryInterface         $enemyRepository,
+        NpcRepositoryInterface           $npcRepository,
         DungeonRoute                     $dungeonRoute,
         /** @var Collection<BaseResultEvent> */
         private readonly Collection      $resultEvents
@@ -48,6 +52,8 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
             $killZoneRepository,
             $killZoneEnemyRepository,
             $killZoneSpellRepository,
+            $enemyRepository,
+            $npcRepository,
             $dungeonRoute,
             $this->log
         );

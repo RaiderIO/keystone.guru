@@ -16,6 +16,14 @@ parameters:
     scanDirectories:
         - vendor/paquettg/php-html-parser/src
 
+    # Prevent hogging of all resources
+    # https://phpstan.org/config-reference#parallel-processing
+    parallel:
+        jobSize: 20
+        maximumNumberOfProcesses: 4
+        minimumNumberOfJobsPerProcess: 2
+
+
 #    ignoreErrors:
 #        - '#PHPDoc tag @var#'
 #

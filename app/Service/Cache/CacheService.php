@@ -7,6 +7,7 @@ use App\Service\Cache\Logging\CacheServiceLoggingInterface;
 use Closure;
 use DateInterval;
 use Illuminate\Contracts\Cache\LockTimeoutException;
+use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -32,7 +33,7 @@ class CacheService implements CacheServiceInterface
 
     public function setCacheEnabled(bool $cacheEnabled): CacheService
     {
-//        $this->cacheEnabled = $cacheEnabled;
+        $this->cacheEnabled = $cacheEnabled;
 
         return $this;
     }
@@ -63,12 +64,13 @@ class CacheService implements CacheServiceInterface
     {
         $result = null;
 
-        $lock = Cache::lock(sprintf('%s:lock', $key), 10);
+//        $lock = Cache::lock(sprintf('%s:lock', $key), 10);
         try {
+            // Wait up to 20 seconds to acquire the lock...
+//            $lock->block(self::LOCK_BLOCK_TIMEOUT);
+
             // If we should ignore the cache, or if it's not found
             if (!$this->cacheEnabled || ($result = $this->get($key)) === null) {
-                // Wait up to 20 seconds to acquire the lock...
-                $lock->block(self::LOCK_BLOCK_TIMEOUT);
 
                 // Get the result by calling the closure
                 if ($value instanceof Closure) {
@@ -98,7 +100,7 @@ class CacheService implements CacheServiceInterface
         } catch (LockTimeoutException $e) {
             $this->log->rememberFailedToAcquireLock($key, $e);
         } finally {
-            $lock->release();
+//            $lock->release();
         }
 
         return $result;
@@ -143,11 +145,6 @@ class CacheService implements CacheServiceInterface
             $this->unset($key);
         }
 
-        // Delete all
-        foreach (Dungeon::all() as $dungeon) {
-            $this->unset(sprintf('dungeon_%d', $dungeon->id));
-        }
-
         // Clear all view caches for dungeonroutes - go through redis to drop all cards
         $prefix = config('database.redis.options.prefix');
         $this->deleteKeysByPattern([
@@ -155,7 +152,9 @@ class CacheService implements CacheServiceInterface
             sprintf('/%sdungeonroute_card:(?>vertical|horizontal):[a-zA-Z_]+:[01]_[01]_[01]_\d+/', $prefix),
             // Dungeon data used in MapContext
             sprintf('/%sdungeon_\d+_\d+_[a-z_]+/', $prefix),
+            sprintf('/%sview_variables:game_server_region:[a-z]+/', $prefix),
         ]);
+        $this->unset('view_variables:global');
     }
 
     public function clearIdleKeys(?int $seconds = null): int
@@ -168,6 +167,11 @@ class CacheService implements CacheServiceInterface
         return $this->deleteKeysByPattern([
             sprintf('/%s[a-zA-Z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
         ], $seconds);
+    }
+
+    public function lock(string $key, int $ttl = 60): Lock
+    {
+        return Cache::lock($key, $ttl, 'default');
     }
 
     private function deleteKeysByPattern(array $regexes, ?int $idleTimeSeconds = null): int

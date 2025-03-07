@@ -3,6 +3,7 @@
 namespace App\Repositories\Interfaces;
 
 use App\Models\Enemy;
+use App\Models\Mapping\MappingVersion;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
 
@@ -19,4 +20,9 @@ use Illuminate\Support\Collection;
 interface EnemyRepositoryInterface extends BaseRepositoryInterface
 {
 
+    /**
+     * @param MappingVersion $mappingVersion
+     * @return Collection<Enemy>
+     */
+    public function getAvailableEnemiesForDungeonRouteBuilder(MappingVersion $mappingVersion): Collection;
 }
