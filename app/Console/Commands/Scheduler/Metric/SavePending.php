@@ -35,7 +35,7 @@ class SavePending extends SchedulerCommand
      */
     public function handle(MetricServiceInterface $metricService): int
     {
-        $pendingMetrics = $metricService->flushPendingMetrics();
+        $pendingMetrics = $metricService->flushPendingMetrics(60);
 
         if (empty($pendingMetrics)) {
             $this->info('No pending metrics to save.');

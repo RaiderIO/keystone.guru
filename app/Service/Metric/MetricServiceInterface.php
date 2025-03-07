@@ -13,7 +13,7 @@ interface MetricServiceInterface
 
     public function storeMetricAsync(?int $modelId, ?string $modelClass, int $category, string $tag, int $value): void;
 
-    public function flushPendingMetrics(): array;
+    public function flushPendingMetrics(?int $groupBySeconds = null): array;
 
     public function aggregateMetrics(): bool;
 }

@@ -64,16 +64,16 @@ class MetricService implements MetricServiceInterface
         });
     }
 
-    public function flushPendingMetrics(): array
+    public function flushPendingMetrics(?int $groupBySeconds = null): array
     {
-        return $this->withLock('metrics:pending:lock', function () {
+        return $this->withLock('metrics:pending:lock', function () use ($groupBySeconds) {
             $key = 'metrics:pending';
 
             // Retrieve and clear the pending metrics
             $pendingMetrics = $this->cacheService->get($key) ?? [];
             $this->cacheService->set($key, []); // Reset the list
 
-            return $pendingMetrics;
+            return $groupBySeconds !== null ? $this->groupMetrics($pendingMetrics, $groupBySeconds) : $pendingMetrics;
         });
     }
 
@@ -101,6 +101,36 @@ class MetricService implements MetricServiceInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param array{array{model_id: int, model_class: string, category: string, tag: string, value: int, created_at: string, updated_at: string}} $pendingMetrics
+     * @param int                                                                                                                                 $seconds
+     * @return array
+     */
+    public function groupMetrics(array $pendingMetrics, int $seconds = 30): array
+    {
+        $groupedMetrics = [];
+
+        foreach ($pendingMetrics as $metric) {
+            $timestamp = Carbon::parse($metric['created_at'])->timestamp;
+
+            $groupKey = sprintf('%d-%d-%s-%s-%s',
+                $timestamp - ($timestamp % $seconds),
+                $metric['model_id'],
+                $metric['model_class'],
+                $metric['category'],
+                $metric['tag']
+            );
+
+            if (!isset($groupedMetrics[$groupKey])) {
+                $groupedMetrics[$groupKey] = $metric;
+            } else {
+                $groupedMetrics[$groupKey]['value'] += $metric['value'];
+            }
+        }
+
+        return array_values($groupedMetrics);
     }
 
     private function withLock(string $lockKey, callable $callback, int $ttl = 5): mixed

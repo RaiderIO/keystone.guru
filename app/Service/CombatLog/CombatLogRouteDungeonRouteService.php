@@ -170,17 +170,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
      */
     public function correctCombatLogRoute(CombatLogRouteRequestModel $combatLogRoute): CombatLogRouteRequestModel
     {
-
-        // @TODO Remove this
-//        $hasCache = $this->enemyRepositorySwoole->hasCache();
-//        if ($hasCache) {
-//            // Enable query logging at the start of the method
-//            DB::flushQueryLog();
-//            DB::enableQueryLog();
-//        }
+        $isSwoole = onSwooleServer();
 
         $builder = new CombatLogRouteCorrectionBuilder(
-//            $this->seasonService,
             new SeasonServiceStub(),
             $this->coordinatesService,
             new DungeonRouteRepositoryStub(),
@@ -189,44 +181,17 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             new KillZoneRepositoryStub(),
             new KillZoneEnemyRepositoryStub(),
             new KillZoneSpellRepositoryStub(),
-            // @TODO Change these four to take advantage of Swoole
-//            $this->enemyRepository,
-            $this->enemyRepositorySwoole,
-//            $this->npcRepository,
-            $this->npcRepositorySwoole,
-//            $this->spellRepository,
-            $this->spellRepositorySwoole,
-//            $this->floorRepository,
-            $this->floorRepositorySwoole,
-//            $this->dungeonRepository,
-            $this->dungeonRepositorySwoole,
+            $isSwoole ? $this->enemyRepositorySwoole : $this->enemyRepository,
+            $isSwoole ? $this->npcRepositorySwoole : $this->npcRepository,
+            $isSwoole ? $this->spellRepositorySwoole : $this->spellRepository,
+            $isSwoole ? $this->floorRepositorySwoole : $this->floorRepository,
+            $isSwoole ? $this->dungeonRepositorySwoole : $this->dungeonRepository,
             $combatLogRoute
         );
 
-
         $builder->build();
 
-        $combatLogRoute = $builder->getCombatLogRoute();
-
-        // @TODO Remove this
-//        if ($hasCache) {
-//            // Retrieve and log executed queries
-//            $queries = DB::getQueryLog();
-//
-//            $totalTime = 0;
-//            foreach ($queries as $query) {
-////                Log::withoutContext()->info('Query: ' . $query['query']);
-////                Log::withoutContext()->info('Bindings: ' . implode(', ', $query['bindings']));
-////                Log::withoutContext()->info('Time: ' . $query['time'] . 'ms');
-//
-//                $totalTime += $query['time'];
-//            }
-//            Log::withoutContext()->info('Total time: ' . $totalTime . 'ms');
-//
-//            DB::disableQueryLog();
-//        }
-
-        return $combatLogRoute;
+        return $builder->getCombatLogRoute();
     }
 
 

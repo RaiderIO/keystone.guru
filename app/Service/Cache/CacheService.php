@@ -33,7 +33,7 @@ class CacheService implements CacheServiceInterface
 
     public function setCacheEnabled(bool $cacheEnabled): CacheService
     {
-//        $this->cacheEnabled = $cacheEnabled;
+        $this->cacheEnabled = $cacheEnabled;
 
         return $this;
     }
