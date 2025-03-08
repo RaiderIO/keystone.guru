@@ -112,8 +112,20 @@ class MetricService implements MetricServiceInterface
     {
         $groupedMetrics = [];
 
+        $cachedCarbon = [];
         foreach ($pendingMetrics as $metric) {
-            $timestamp = Carbon::parse($metric['created_at'])->timestamp;
+            if (isset($cachedCarbon[$metric['created_at']])) {
+                $carbonCache = $cachedCarbon[$metric['created_at']];
+            } else {
+                $carbon                              = Carbon::parse($metric['created_at']);
+                $carbonCache                         = [
+                    'carbon'    => $carbon,
+                    'timestamp' => $carbon->timestamp,
+                ];
+                $cachedCarbon[$metric['created_at']] = $carbonCache;
+            }
+
+            $timestamp = $carbonCache['timestamp'];
 
             $groupKey = sprintf('%d-%d-%s-%s-%s',
                 $timestamp - ($timestamp % $seconds),
@@ -124,6 +136,8 @@ class MetricService implements MetricServiceInterface
             );
 
             if (!isset($groupedMetrics[$groupKey])) {
+                // Ensure that the timestamp is in the correct format
+                $metric['created_at']      = $metric['updated_at'] = $carbonCache['carbon']->toDateTimeString();
                 $groupedMetrics[$groupKey] = $metric;
             } else {
                 $groupedMetrics[$groupKey]['value'] += $metric['value'];

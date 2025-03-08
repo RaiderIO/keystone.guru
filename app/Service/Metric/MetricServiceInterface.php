@@ -16,4 +16,6 @@ interface MetricServiceInterface
     public function flushPendingMetrics(?int $groupBySeconds = null): array;
 
     public function aggregateMetrics(): bool;
+
+    public function groupMetrics(array $pendingMetrics, int $seconds = 30): array;
 }
