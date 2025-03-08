@@ -30,6 +30,8 @@ namespace App\Http\Models\Request\CombatLog\Route;
  * @OA\Property(property="diedAt", type="string", format="date-time")
  * @OA\Property(property="coord", ref="#/components/schemas/CombatLogRouteCoord")
  * @OA\Property(property="coordEnemy", ref="#/components/schemas/CombatLogRouteCoord")
+ * @OA\Property(property="gridCoord", ref="#/components/schemas/CombatLogRouteCoord")
+ * @OA\Property(property="gridCoordEnemy", ref="#/components/schemas/CombatLogRouteCoord")
  */
 class CombatLogRouteNpcCorrectionRequestModel extends CombatLogRouteNpcRequestModel
 {
@@ -39,8 +41,10 @@ class CombatLogRouteNpcCorrectionRequestModel extends CombatLogRouteNpcRequestMo
         ?string                                 $engagedAt = null,
         ?string                                 $diedAt = null,
         ?CombatLogRouteCoordRequestModel        $coord = null,
-        public ?CombatLogRouteCoordRequestModel $coordEnemy = null)
-    {
+        public ?CombatLogRouteCoordRequestModel $coordEnemy = null,
+        public ?CombatLogRouteCoordRequestModel $gridCoord = null,
+        public ?CombatLogRouteCoordRequestModel $gridCoordEnemy = null
+    ) {
         parent::__construct(
             $npcId,
             $spawnUid,

@@ -383,8 +383,8 @@ return [
                 // are equal to enemy positions this only just increases the accuracy of the
                 // points, while still having a low bucket count.
                 'enemy'  => [
-                    'size_x' => 800,
-                    'size_y' => 600,
+                    'size_x' => 300,
+                    'size_y' => 200,
                 ],
             ],
         ],

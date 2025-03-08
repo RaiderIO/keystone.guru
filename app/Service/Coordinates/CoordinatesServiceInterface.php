@@ -2,6 +2,7 @@
 
 namespace App\Service\Coordinates;
 
+use App\Logic\Structs\GridLocation;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
@@ -24,4 +25,6 @@ interface CoordinatesServiceInterface
     public function distanceIngameXY(IngameXY $ingameXYA, IngameXY $ingameXYB): float;
 
     public function polygonContainsPoint(LatLng $latLng, array $polygon): bool;
+
+    public function calculateGridLocationForIngameLocation(IngameXY $ingameXY, int $gridSizeX, int $gridSizeY): IngameXY;
 }

@@ -5,6 +5,7 @@ namespace App\Service\CombatLog\Builders;
 use App;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteGridCoordRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcCorrectionRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
@@ -13,6 +14,7 @@ use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRosterRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
+use App\Logic\Structs\IngameXY;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
@@ -98,7 +100,8 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         try {
             $this->log->getCombatLogRouteStart();
 
-            $floorsById = $this->dungeonRoute->dungeon->floors->keyBy('id');
+            $floorsById      = $this->dungeonRoute->dungeon->floors->keyBy('id');
+            $floorsByUiMapId = $this->dungeonRoute->dungeon->floors->keyBy('uiMapId');
 
             foreach ($this->combatLogRoute->npcs as $npc) {
                 $resolvedEnemy = $npc->getResolvedEnemy();
@@ -109,12 +112,28 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                     continue;
                 }
 
-                /** @var Floor $floor */
-                $floor = $floorsById->get($resolvedEnemy->floor_id);
-                $resolvedEnemy->setRelation('floor', $floor);
+                /** @var Floor $resolvedEnemyFloor */
+                $resolvedEnemyFloor = $floorsById->get($resolvedEnemy->floor_id);
+                $resolvedEnemy->setRelation('floor', $resolvedEnemyFloor);
 
                 $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(
                     $resolvedEnemy->getLatLng()
+                );
+
+                $gridLocation      = $this->coordinatesService->calculateGridLocationForIngameLocation(
+                    new IngameXY(
+                        $npc->coord->x,
+                        $npc->coord->y,
+                        // Fallback on the enemy's floor just in case
+                        $this->floorRepository->findByUiMapId($npc->coord->uiMapId) ?? $resolvedEnemy->floor
+                    ),
+                    config('keystoneguru.heatmap.service.data.player.size_x'),
+                    config('keystoneguru.heatmap.service.data.player.size_y')
+                );
+                $gridLocationEnemy = $this->coordinatesService->calculateGridLocationForIngameLocation(
+                    $ingameXY,
+                    config('keystoneguru.heatmap.service.data.enemy.size_x'),
+                    config('keystoneguru.heatmap.service.data.enemy.size_y')
                 );
 
                 $npcs->push(
@@ -131,7 +150,17 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                         new CombatLogRouteCoordRequestModel(
                             $ingameXY->getX(2),
                             $ingameXY->getY(2),
-                            $floor->ui_map_id
+                            $resolvedEnemyFloor->ui_map_id
+                        ),
+                        new CombatLogRouteCoordRequestModel(
+                            $gridLocation->getX(2),
+                            $gridLocation->getY(2),
+                            $npc->coord->uiMapId
+                        ),
+                        new CombatLogRouteCoordRequestModel(
+                            $gridLocationEnemy->getX(2),
+                            $gridLocationEnemy->getY(2),
+                            $resolvedEnemyFloor->ui_map_id
                         )
                     )
                 );
