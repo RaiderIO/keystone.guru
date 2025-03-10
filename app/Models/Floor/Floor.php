@@ -115,6 +115,8 @@ class Floor extends CacheModel implements MappingModelInterface
         2215 => 2359, // Harrowfall -> The Dawnbreaker
         // Grim Batol
         241  => 293, // Twilight Highlands -> Grim Batol
+        // Mechagon: Workshop
+        1490 => 1497, // Mechagon -> Mechagon: Workshop -> Mechagon City
     ];
 
     protected $fillable = [
