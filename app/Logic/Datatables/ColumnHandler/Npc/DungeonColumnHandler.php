@@ -21,7 +21,7 @@ class DungeonColumnHandler extends SimpleColumnHandler
         parent::__construct($dtHandler, 'dungeon_id', 'dungeons.name');
     }
 
-    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch): void
+    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
     {
         // Only order
         $this->getDtHandler()->getBuilder()->leftJoin('translations', static function (JoinClause $clause) {

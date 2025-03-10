@@ -30,7 +30,7 @@ class SimpleColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, $columnName, $columnData);
     }
 
-    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch): void
+    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
     {
         // If the column name is not valid, ignore it entirely
         if (!in_array($this->getColumnName(), self::VALID_COLUMN_NAMES)) {
@@ -50,7 +50,7 @@ class SimpleColumnHandler extends DatatablesColumnHandler
             // Order on this column?
             if (!is_null($order)) {
                 // Order either asc or desc, nothing else
-                $subBuilder->orderBy($this->getColumnData(), $order['dir'] === 'asc' ? 'asc' : 'desc');
+                $orderBuilder->orderBy($this->getColumnData(), $order['dir'] === 'asc' ? 'asc' : 'desc');
             }
         }
     }

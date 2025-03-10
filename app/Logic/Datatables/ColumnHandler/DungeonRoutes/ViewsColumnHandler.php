@@ -19,7 +19,7 @@ class ViewsColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'views');
     }
 
-    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch): void
+    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
     {
         $views = $columnData['search']['value'];
         //        if (!empty($views)) {
@@ -31,7 +31,7 @@ class ViewsColumnHandler extends DatatablesColumnHandler
 
         // Only order
         if ($order !== null) {
-            $subBuilder->orderBy('views', $order['dir'] === 'asc' ? 'asc' : 'desc');
+            $orderBuilder->orderBy('views', $order['dir'] === 'asc' ? 'asc' : 'desc');
         }
     }
 }

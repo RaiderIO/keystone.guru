@@ -56,6 +56,7 @@ if (Auth::check()) {
 ?>
 @include('common.general.inline', ['path' => 'dungeonroute/table',
         'options' =>  [
+            'currentUserId' => Auth::check() ? Auth::id() : -1,
             'tableView' => $view,
             'viewMode' => $cookieViewMode,
             'teamPublicKey' => $team ? $team->public_key : '',
