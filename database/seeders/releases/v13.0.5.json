@@ -1,0 +1,31 @@
+{
+    "id": 285,
+    "release_changelog_id": 292,
+    "version": "v13.0.5",
+    "title": "Route table sorting now works again",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-03-10T14:17:04+00:00",
+    "updated_at": "2025-03-10T14:17:04+00:00",
+    "changelog": {
+        "id": 292,
+        "release_id": 285,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 292,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2764,
+                "change": "Route table sorting now works again."
+            },
+            {
+                "release_changelog_id": 292,
+                "release_changelog_category_id": 7,
+                "ticket_id": 2763,
+                "change": "In the route list of your team, you can now change the publish state of routes directly from the Actions dropdown if they're your routes."
+            }
+        ]
+    }
+}
