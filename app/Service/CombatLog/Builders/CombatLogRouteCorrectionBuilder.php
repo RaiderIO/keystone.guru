@@ -5,7 +5,6 @@ namespace App\Service\CombatLog\Builders;
 use App;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteGridCoordRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcCorrectionRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
@@ -167,17 +166,42 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
             }
 
             foreach ($this->combatLogRoute->spells as $spell) {
+                $gridLocation      = $this->coordinatesService->calculateGridLocationForIngameLocation(
+                    new IngameXY(
+                        $spell->coord->x,
+                        $spell->coord->y,
+                        $this->floorRepository->findByUiMapId($spell->coord->uiMapId)
+                    ),
+                    config('keystoneguru.heatmap.service.data.player.size_x'),
+                    config('keystoneguru.heatmap.service.data.player.size_y')
+                );
+
                 $spells->push(
                     new CombatLogRouteSpellRequestModel(
                         $spell->spellId,
                         $spell->playerUid,
                         $spell->castAt,
                         $spell->coord,
+                        new CombatLogRouteCoordRequestModel(
+                            $gridLocation->getX(2),
+                            $gridLocation->getY(2),
+                            $spell->coord->uiMapId
+                        ),
                     )
                 );
             }
 
             foreach ($this->combatLogRoute->playerDeaths ?? [] as $playerDeath) {
+                $gridLocation      = $this->coordinatesService->calculateGridLocationForIngameLocation(
+                    new IngameXY(
+                        $playerDeath->coord->x,
+                        $playerDeath->coord->y,
+                        $this->floorRepository->findByUiMapId($playerDeath->coord->uiMapId)
+                    ),
+                    config('keystoneguru.heatmap.service.data.player.size_x'),
+                    config('keystoneguru.heatmap.service.data.player.size_y')
+                );
+
                 $playerDeaths->push(
                     new CombatLogRoutePlayerDeathRequestModel(
                         $playerDeath->characterId,
@@ -186,6 +210,11 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                         $playerDeath->itemLevel,
                         $playerDeath->diedAt,
                         $playerDeath->coord,
+                        new CombatLogRouteCoordRequestModel(
+                            $gridLocation->getX(2),
+                            $gridLocation->getY(2),
+                            $playerDeath->coord->uiMapId
+                        ),
                     )
                 );
             }

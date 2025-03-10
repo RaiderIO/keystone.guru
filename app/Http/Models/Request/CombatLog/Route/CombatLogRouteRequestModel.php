@@ -19,9 +19,9 @@ use Illuminate\Support\Collection;
 
 /**
  * @OA\Schema(schema="CombatLogRouteRequest")
- * @OA\Property(property="metadata", ref="#/components/schemas/CombatLogRouteMetadata")
- * @OA\Property(property="settings", ref="#/components/schemas/CombatLogRouteSettings")
- * @OA\Property(property="challengeMode", ref="#/components/schemas/CombatLogRouteChallengeMode")
+ * @OA\Property(property="metadata",type="object",ref="#/components/schemas/CombatLogRouteMetadata")
+ * @OA\Property(property="settings",type="object",ref="#/components/schemas/CombatLogRouteSettings")
+ * @OA\Property(property="challengeMode",type="object",ref="#/components/schemas/CombatLogRouteChallengeMode")
  * @OA\Property(property="npcs",type="array",items={"$ref":"#/components/schemas/CombatLogRouteNpc"})
  * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpell"}, nullable=true)
  * @OA\Property(property="playerDeaths",type="array",items={"$ref":"#/components/schemas/CombatLogRoutePlayerDeath"}, nullable=true)

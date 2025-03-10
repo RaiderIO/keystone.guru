@@ -10,10 +10,10 @@ use JsonSerializable;
 
 /**
  * @OA\Schema(schema="User")
- * @OA\Property(property="publicKey", type="string", example="MS4cR1S")
- * @OA\Property(property="name", type="string", example="John Doe")
- * @OA\Property(property="links", ref="#/components/schemas/UserLinks")
- * @OA\Property(property="avatar", type="string", example="https://keystone.guru/images/avatar/MS4cR1S.jpg")
+ * @OA\Property(property="publicKey",type="string",example="MS4cR1S")
+ * @OA\Property(property="name",type="string",example="John Doe")
+ * @OA\Property(property="links",type="object",ref="#/components/schemas/UserLinks")
+ * @OA\Property(property="avatar",type="string",example="https://keystone.guru/images/avatar/MS4cR1S.jpg")
  *
  * @mixin User
  */

@@ -12,6 +12,7 @@ use Illuminate\Support\Carbon;
  * @OA\Property(property="playerUid",type="string")
  * @OA\Property(property="castAt",type="string",format="date-time")
  * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
+ * @OA\Property(property="gridCoord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  */
 class CombatLogRouteSpellRequestModel extends RequestModel implements Arrayable
 {
@@ -21,8 +22,9 @@ class CombatLogRouteSpellRequestModel extends RequestModel implements Arrayable
         public ?int                             $spellId = null,
         public ?string                          $playerUid = null,
         public ?string                          $castAt = null,
-        public ?CombatLogRouteCoordRequestModel $coord = null)
-    {
+        public ?CombatLogRouteCoordRequestModel $coord = null,
+        public ?CombatLogRouteCoordRequestModel $gridCoord = null
+    ) {
     }
 
     public function getCastAt(): Carbon

@@ -24,14 +24,14 @@ namespace App\Http\Models\Request\CombatLog\Route;
  * }
  *
  * @OA\Schema(schema="CombatLogRouteNpcCorrection")
- * @OA\Property(property="npcId", type="integer")
- * @OA\Property(property="spawnUid", type="string")
- * @OA\Property(property="engagedAt", type="string", format="date-time")
- * @OA\Property(property="diedAt", type="string", format="date-time")
- * @OA\Property(property="coord", ref="#/components/schemas/CombatLogRouteCoord")
- * @OA\Property(property="coordEnemy", ref="#/components/schemas/CombatLogRouteCoord")
- * @OA\Property(property="gridCoord", ref="#/components/schemas/CombatLogRouteCoord")
- * @OA\Property(property="gridCoordEnemy", ref="#/components/schemas/CombatLogRouteCoord")
+ * @OA\Property(property="npcId",type="integer")
+ * @OA\Property(property="spawnUid",type="string")
+ * @OA\Property(property="engagedAt",type="string",format="date-time")
+ * @OA\Property(property="diedAt",type="string",format="date-time")
+ * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
+ * @OA\Property(property="coordEnemy",type="object",ref="#/components/schemas/CombatLogRouteCoord")
+ * @OA\Property(property="gridCoord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
+ * @OA\Property(property="gridCoordEnemy",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  */
 class CombatLogRouteNpcCorrectionRequestModel extends CombatLogRouteNpcRequestModel
 {

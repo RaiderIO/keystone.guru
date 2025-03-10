@@ -22,9 +22,9 @@ use JsonSerializable;
  * @OA\Property(property="enemyForcesRequired", type="integer", example=100)
  * @OA\Property(property="expiresAt", type="string", format="date-time", example="2021-01-01T00:00:00Z")
  * @OA\Property(property="pulls", type="array", @OA\Items(ref="#/components/schemas/Pull"))
- * @OA\Property(property="author", ref="#/components/schemas/User")
+ * @OA\Property(property="author",type="object",ref="#/components/schemas/User")
  * @OA\Property(property="affixGroups", type="array", @OA\Items(ref="#/components/schemas/AffixGroup"))
- * @OA\Property(property="links", ref="#/components/schemas/DungeonRouteLinks")
+ * @OA\Property(property="links",type="object",ref="#/components/schemas/DungeonRouteLinks")
  *
  * @mixin DungeonRoute
  */

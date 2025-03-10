@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 /**
  * @OA\Schema(schema="RouteThumbnailJobEnvelope")
- * @OA\Property(type="array",property="data",@OA\Items(ref="#/components/schemas/RouteThumbnailJob"))
+ * @OA\Property(property="data",type="array",@OA\Items(ref="#/components/schemas/RouteThumbnailJob"))
  *
  * @author Wouter
  *

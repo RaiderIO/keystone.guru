@@ -13,7 +13,7 @@ use Illuminate\Support\Carbon;
  * @OA\Property(property="spawnUid", type="string")
  * @OA\Property(property="engagedAt", type="string", format="date-time")
  * @OA\Property(property="diedAt", type="string", format="date-time")
- * @OA\Property(property="coord", ref="#/components/schemas/CombatLogRouteCoord")
+ * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  */
 class CombatLogRouteNpcRequestModel extends RequestModel implements Arrayable
 {
