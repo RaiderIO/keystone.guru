@@ -20,7 +20,7 @@ class DungeonColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'dungeon_id');
     }
 
-    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch): void
+    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
     {
         // If we should search for this value
         if ($columnData['searchable'] === 'true') {
@@ -30,11 +30,10 @@ class DungeonColumnHandler extends DatatablesColumnHandler
                 $explode = explode('-', (string)$searchValue);
                 if (count($explode) === 2) {
                     if ($explode[0] === 'season') {
-                        $seasonId = $explode[1];
                         // Joins need to be added to the main builder
-                        $subBuilder->where('dungeon_routes.season_id', $seasonId);
+                        $subBuilder->where('dungeon_routes.season_id', (int)$explode[1]);
                     } else if ($explode[0] === 'expansion') {
-                        $subBuilder->where('dungeons.expansion_id', $explode[1]);
+                        $subBuilder->where('dungeons.expansion_id', (int)$explode[1]);
                     } else {
                         throw new Exception(sprintf('Unable to find prefix %s', $explode[0]));
                     }
@@ -48,8 +47,7 @@ class DungeonColumnHandler extends DatatablesColumnHandler
         if ($columnData['orderable'] === 'true') {
             // Order on this column?
             if (!is_null($order)) {
-                // Always order based on expansion - the most recent expansion should always come on top
-                $subBuilder->orderby('dungeons.expansion_id', 'DESC')
+                $orderBuilder->orderby('dungeons.expansion_id', $order['dir'] === 'asc' ? 'asc' : 'desc')
                     // Order either asc or desc, nothing else
                     ->orderBy($this->getColumnData(), $order['dir'] === 'asc' ? 'asc' : 'desc');
             }

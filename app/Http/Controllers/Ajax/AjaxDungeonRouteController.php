@@ -24,6 +24,7 @@ use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonRouteAffixesColumnHa
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\DungeonRouteAttributesColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\EnemyForcesColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\RatingColumnHandler;
+use App\Logic\Datatables\ColumnHandler\DungeonRoutes\TitleColumnHandler;
 use App\Logic\Datatables\ColumnHandler\DungeonRoutes\ViewsColumnHandler;
 use App\Logic\Datatables\DungeonRoutesDatatablesHandler;
 use App\Logic\MDT\Exception\ImportWarning;
@@ -200,6 +201,8 @@ class AjaxDungeonRouteController extends Controller
         $dtHandler = new DungeonRoutesDatatablesHandler($request);
 
         return $dtHandler->setBuilder($routes)->addColumnHandler([
+            // Route titles
+            new TitleColumnHandler($dtHandler),
             // Handles any searching/filtering based on dungeon
             new DungeonColumnHandler($dtHandler),
             // Handles any searching/filtering based on DR Affixes

@@ -20,7 +20,7 @@ class RatingColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'rating');
     }
 
-    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch): void
+    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
     {
 
         //        $rating = $columnData['search']['value'];
@@ -36,11 +36,11 @@ class RatingColumnHandler extends DatatablesColumnHandler
             // https://stackoverflow.com/a/1881185/771270
             // I divided by 2 to reduce the impact of single 10 votes when there's not a lot of voting (which is the case now)
             // This may have to be revisited once the site gains some more traction and votes start pouring in
-            $subBuilder->addSelect(DB::raw('(AVG(dungeon_route_ratings.rating) / 2) + LOG(COUNT(dungeon_route_ratings.id)) as weighted_rating'));
+            $orderBuilder->addSelect(DB::raw('(AVG(dungeon_route_ratings.rating) / 2) + LOG(COUNT(dungeon_route_ratings.id)) as weighted_rating'));
 
-            $subBuilder->leftJoin('dungeon_route_ratings', 'dungeon_route_ratings.dungeon_route_id', '=', 'dungeon_routes.id');
-            $subBuilder->groupBy(DB::raw('dungeon_routes.id'));
-            $subBuilder->orderBy('weighted_rating', $order['dir'] === 'asc' ? 'asc' : 'desc');
+            $orderBuilder->leftJoin('dungeon_route_ratings', 'dungeon_route_ratings.dungeon_route_id', '=', 'dungeon_routes.id');
+            $orderBuilder->groupBy(DB::raw('dungeon_routes.id'));
+            $orderBuilder->orderBy('weighted_rating', $order['dir'] === 'asc' ? 'asc' : 'desc');
         }
     }
 }

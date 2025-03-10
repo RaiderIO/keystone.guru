@@ -80,7 +80,7 @@ abstract class DatatablesHandler
         // For any custom column handlers, handle their wishes inside a single where
         $this->builder->where(function (Builder $subBuilder) {
             foreach ($this->columnHandlers as $columnHandler) {
-                $columnHandler->applyToBuilder($subBuilder);
+                $columnHandler->applyToBuilder($subBuilder, $this->builder);
             }
 
             // Handle default filtering/sorting
@@ -91,7 +91,7 @@ abstract class DatatablesHandler
                 // Only if not handled by a custom column handler already
                 if (!empty($columnName) && !isset($this->columnHandlers[$columnName])) {
                     // Handle filtering/sorting by this column
-                    (new SimpleColumnHandler($this, $columnName))->applyToBuilder($subBuilder);
+                    (new SimpleColumnHandler($this, $columnName))->applyToBuilder($subBuilder, $this->builder);
                 }
             }
         });

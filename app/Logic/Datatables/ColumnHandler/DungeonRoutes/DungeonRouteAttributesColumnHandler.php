@@ -20,7 +20,7 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'routeattributes.name');
     }
 
-    protected function applyFilter(Builder $subBuilder, $columnData, $order, $generalSearch): void
+    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
     {
         $routeattributes = $columnData['search']['value'];
         // If filtering or ordering
@@ -65,7 +65,7 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
 
             // If ordering
             if ($order !== null) {
-                $subBuilder->orderByRaw('COUNT(dungeon_route_attributes.id) ' . ($order['dir'] === 'asc' ? 'asc' : 'desc'));
+                $orderBuilder->orderByRaw('COUNT(dungeon_route_attributes.id) ' . ($order['dir'] === 'asc' ? 'asc' : 'desc'));
             }
         }
     }
