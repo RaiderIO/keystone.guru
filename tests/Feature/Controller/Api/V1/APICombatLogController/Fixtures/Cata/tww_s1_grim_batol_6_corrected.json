@@ -68,6 +68,16 @@
                     "x": 257.64,
                     "y": -533.57,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 266.23,
+                    "y": -536.26,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 260.44,
+                    "y": -536.26,
+                    "uiMapId": 293
                 }
             },
             {
@@ -83,6 +93,16 @@
                 "coordEnemy": {
                     "x": 257.64,
                     "y": -543.98,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 263.33,
+                    "y": -542.06,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 260.44,
+                    "y": -544.96,
                     "uiMapId": 293
                 }
             },
@@ -100,6 +120,16 @@
                     "x": 257.54,
                     "y": -523.22,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 263.33,
+                    "y": -530.47,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 260.44,
+                    "y": -524.68,
+                    "uiMapId": 293
                 }
             },
             {
@@ -115,6 +145,16 @@
                 "coordEnemy": {
                     "x": 314.44,
                     "y": -532.61,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 298.1,
+                    "y": -533.37,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 315.48,
+                    "y": -533.37,
                     "uiMapId": 293
                 }
             },
@@ -132,6 +172,16 @@
                     "x": 322.71,
                     "y": -500.68,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 318.37,
+                    "y": -510.19,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 324.17,
+                    "y": -501.5,
+                    "uiMapId": 293
                 }
             },
             {
@@ -147,6 +197,16 @@
                 "coordEnemy": {
                     "x": 318.83,
                     "y": -489.62,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 318.37,
+                    "y": -504.4,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 321.27,
+                    "y": -489.92,
                     "uiMapId": 293
                 }
             },
@@ -164,6 +224,16 @@
                     "x": 312.28,
                     "y": -498.71,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 312.58,
+                    "y": -507.3,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 312.58,
+                    "y": -501.5,
+                    "uiMapId": 293
                 }
             },
             {
@@ -179,6 +249,16 @@
                 "coordEnemy": {
                     "x": 338.11,
                     "y": -434.68,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 344.45,
+                    "y": -446.46,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 338.65,
+                    "y": -434.88,
                     "uiMapId": 293
                 }
             },
@@ -196,6 +276,16 @@
                     "x": 341.27,
                     "y": -444.86,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 350.24,
+                    "y": -449.36,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 341.55,
+                    "y": -446.46,
+                    "uiMapId": 293
                 }
             },
             {
@@ -211,6 +301,16 @@
                 "coordEnemy": {
                     "x": 329.88,
                     "y": -442.27,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 335.75,
+                    "y": -449.36,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 329.96,
+                    "y": -443.57,
                     "uiMapId": 293
                 }
             },
@@ -228,6 +328,16 @@
                     "x": 353.5,
                     "y": -458.77,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 358.93,
+                    "y": -455.15,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 356.03,
+                    "y": -460.95,
+                    "uiMapId": 293
                 }
             },
             {
@@ -243,6 +353,16 @@
                 "coordEnemy": {
                     "x": 369.84,
                     "y": -486.1,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 364.72,
+                    "y": -495.71,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 370.52,
+                    "y": -487.02,
                     "uiMapId": 293
                 }
             },
@@ -260,6 +380,16 @@
                     "x": 379.99,
                     "y": -448.06,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 385,
+                    "y": -458.05,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 382.1,
+                    "y": -449.36,
+                    "uiMapId": 293
                 }
             },
             {
@@ -275,6 +405,16 @@
                 "coordEnemy": {
                     "x": 370.3,
                     "y": -445.62,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 364.72,
+                    "y": -458.05,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 370.52,
+                    "y": -446.46,
                     "uiMapId": 293
                 }
             },
@@ -292,6 +432,16 @@
                     "x": 359.79,
                     "y": -482.18,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 367.62,
+                    "y": -487.02,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 361.83,
+                    "y": -484.12,
+                    "uiMapId": 293
                 }
             },
             {
@@ -307,6 +457,16 @@
                 "coordEnemy": {
                     "x": 373.05,
                     "y": -434.96,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 361.83,
+                    "y": -458.05,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 373.41,
+                    "y": -437.77,
                     "uiMapId": 293
                 }
             },
@@ -324,6 +484,16 @@
                     "x": 383.84,
                     "y": -437.69,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 370.52,
+                    "y": -455.15,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 385,
+                    "y": -437.77,
+                    "uiMapId": 293
                 }
             },
             {
@@ -339,6 +509,16 @@
                 "coordEnemy": {
                     "x": 376.81,
                     "y": -523.27,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 370.52,
+                    "y": -527.57,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 379.21,
+                    "y": -524.68,
                     "uiMapId": 293
                 }
             },
@@ -356,6 +536,16 @@
                     "x": 377.3,
                     "y": -538.62,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 367.62,
+                    "y": -515.99,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 379.21,
+                    "y": -539.16,
+                    "uiMapId": 293
                 }
             },
             {
@@ -371,6 +561,16 @@
                 "coordEnemy": {
                     "x": 363.68,
                     "y": -553.25,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 358.93,
+                    "y": -515.99,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 364.72,
+                    "y": -553.65,
                     "uiMapId": 293
                 }
             },
@@ -388,6 +588,16 @@
                     "x": 357.71,
                     "y": -542.72,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 361.83,
+                    "y": -515.99,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 358.93,
+                    "y": -544.96,
+                    "uiMapId": 293
                 }
             },
             {
@@ -403,6 +613,16 @@
                 "coordEnemy": {
                     "x": 371.08,
                     "y": -530.41,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 370.52,
+                    "y": -536.26,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 373.41,
+                    "y": -530.47,
                     "uiMapId": 293
                 }
             },
@@ -420,6 +640,16 @@
                     "x": 352.28,
                     "y": -553.95,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 370.52,
+                    "y": -542.06,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 353.14,
+                    "y": -556.54,
+                    "uiMapId": 293
                 }
             },
             {
@@ -435,6 +665,16 @@
                 "coordEnemy": {
                     "x": 375.23,
                     "y": -598.24,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 373.41,
+                    "y": -597.1,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 376.31,
+                    "y": -600,
                     "uiMapId": 293
                 }
             },
@@ -452,6 +692,16 @@
                     "x": 368.94,
                     "y": -589.17,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 370.52,
+                    "y": -594.2,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 370.52,
+                    "y": -591.31,
+                    "uiMapId": 293
                 }
             },
             {
@@ -467,6 +717,16 @@
                 "coordEnemy": {
                     "x": 379.87,
                     "y": -588.31,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 373.41,
+                    "y": -591.31,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 382.1,
+                    "y": -588.41,
                     "uiMapId": 293
                 }
             },
@@ -484,6 +744,16 @@
                     "x": 356.47,
                     "y": -635.14,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 361.83,
+                    "y": -634.76,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 358.93,
+                    "y": -637.65,
+                    "uiMapId": 293
                 }
             },
             {
@@ -499,6 +769,16 @@
                 "coordEnemy": {
                     "x": 375.79,
                     "y": -623.07,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 370.52,
+                    "y": -628.96,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 376.31,
+                    "y": -623.17,
                     "uiMapId": 293
                 }
             },
@@ -516,6 +796,16 @@
                     "x": 365.9,
                     "y": -628.76,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 364.72,
+                    "y": -628.96,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 367.62,
+                    "y": -628.96,
+                    "uiMapId": 293
                 }
             },
             {
@@ -531,6 +821,16 @@
                 "coordEnemy": {
                     "x": 378.87,
                     "y": -692.67,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 373.41,
+                    "y": -684,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 379.21,
+                    "y": -692.69,
                     "uiMapId": 293
                 }
             },
@@ -548,6 +848,16 @@
                     "x": 374.85,
                     "y": -669.82,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 370.52,
+                    "y": -672.42,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 376.31,
+                    "y": -672.42,
+                    "uiMapId": 293
                 }
             },
             {
@@ -563,6 +873,16 @@
                 "coordEnemy": {
                     "x": 386.62,
                     "y": -684.6,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 364.72,
+                    "y": -675.31,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 387.9,
+                    "y": -686.9,
                     "uiMapId": 293
                 }
             },
@@ -580,6 +900,16 @@
                     "x": 364.38,
                     "y": -679.93,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 376.31,
+                    "y": -678.21,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 364.72,
+                    "y": -681.11,
+                    "uiMapId": 293
                 }
             },
             {
@@ -595,6 +925,16 @@
                 "coordEnemy": {
                     "x": 375.17,
                     "y": -681.39,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 367.62,
+                    "y": -678.21,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 376.31,
+                    "y": -684,
                     "uiMapId": 293
                 }
             },
@@ -612,6 +952,16 @@
                     "x": 411.93,
                     "y": -681.41,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 419.76,
+                    "y": -684,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 413.97,
+                    "y": -684,
+                    "uiMapId": 293
                 }
             },
             {
@@ -627,6 +977,16 @@
                 "coordEnemy": {
                     "x": 422.96,
                     "y": -684.92,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 419.76,
+                    "y": -678.21,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 425.56,
+                    "y": -686.9,
                     "uiMapId": 293
                 }
             },
@@ -644,6 +1004,16 @@
                     "x": 430.77,
                     "y": -675.51,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 413.97,
+                    "y": -684,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 431.35,
+                    "y": -678.21,
+                    "uiMapId": 293
                 }
             },
             {
@@ -659,6 +1029,16 @@
                 "coordEnemy": {
                     "x": 419.5,
                     "y": -673.82,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 408.18,
+                    "y": -684,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 419.76,
+                    "y": -675.31,
                     "uiMapId": 293
                 }
             },
@@ -676,6 +1056,16 @@
                     "x": 426.16,
                     "y": -665.6,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 419.76,
+                    "y": -672.42,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 428.45,
+                    "y": -666.62,
+                    "uiMapId": 293
                 }
             },
             {
@@ -691,6 +1081,16 @@
                 "coordEnemy": {
                     "x": 471.17,
                     "y": -713.95,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 442.94,
+                    "y": -704.28,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 471.91,
+                    "y": -715.87,
                     "uiMapId": 293
                 }
             },
@@ -708,6 +1108,16 @@
                     "x": 483.07,
                     "y": -532.19,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 483.49,
+                    "y": -536.26,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 483.49,
+                    "y": -533.37,
+                    "uiMapId": 293
                 }
             },
             {
@@ -723,6 +1133,16 @@
                 "coordEnemy": {
                     "x": 488.89,
                     "y": -543.74,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 489.29,
+                    "y": -542.06,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 489.29,
+                    "y": -544.96,
                     "uiMapId": 293
                 }
             },
@@ -740,6 +1160,16 @@
                     "x": 489.09,
                     "y": -520.3,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 486.39,
+                    "y": -524.68,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 489.29,
+                    "y": -521.78,
+                    "uiMapId": 293
                 }
             },
             {
@@ -755,6 +1185,16 @@
                 "coordEnemy": {
                     "x": 496.16,
                     "y": -532.09,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 492.18,
+                    "y": -533.37,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 497.98,
+                    "y": -533.37,
                     "uiMapId": 293
                 }
             },
@@ -772,6 +1212,16 @@
                     "x": 520.75,
                     "y": -486.98,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 521.15,
+                    "y": -492.81,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 521.15,
+                    "y": -487.02,
+                    "uiMapId": 293
                 }
             },
             {
@@ -787,6 +1237,16 @@
                 "coordEnemy": {
                     "x": 540.95,
                     "y": -488,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 535.64,
+                    "y": -495.71,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 541.43,
+                    "y": -489.92,
                     "uiMapId": 293
                 }
             },
@@ -804,6 +1264,16 @@
                     "x": 531.44,
                     "y": -481.64,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 532.74,
+                    "y": -492.81,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 532.74,
+                    "y": -484.12,
+                    "uiMapId": 293
                 }
             },
             {
@@ -819,6 +1289,16 @@
                 "coordEnemy": {
                     "x": 488.17,
                     "y": -476.09,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 489.29,
+                    "y": -475.43,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 489.29,
+                    "y": -478.33,
                     "uiMapId": 293
                 }
             },
@@ -836,6 +1316,16 @@
                     "x": 481.54,
                     "y": -484.04,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 492.18,
+                    "y": -475.43,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 483.49,
+                    "y": -484.12,
+                    "uiMapId": 293
                 }
             },
             {
@@ -851,6 +1341,16 @@
                 "coordEnemy": {
                     "x": 474.3,
                     "y": -492.09,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 495.08,
+                    "y": -469.64,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 474.8,
+                    "y": -492.81,
                     "uiMapId": 293
                 }
             },
@@ -868,6 +1368,16 @@
                     "x": 530.72,
                     "y": -495.77,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 532.74,
+                    "y": -492.81,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 532.74,
+                    "y": -498.61,
+                    "uiMapId": 293
                 }
             },
             {
@@ -883,6 +1393,16 @@
                 "coordEnemy": {
                     "x": 580.41,
                     "y": -486.82,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 564.6,
+                    "y": -472.53,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 581.99,
+                    "y": -487.02,
                     "uiMapId": 293
                 }
             },
@@ -900,6 +1420,16 @@
                     "x": 572.14,
                     "y": -479.11,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 561.71,
+                    "y": -466.74,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 573.29,
+                    "y": -481.22,
+                    "uiMapId": 293
                 }
             },
             {
@@ -915,6 +1445,16 @@
                 "coordEnemy": {
                     "x": 588.6,
                     "y": -495.57,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 570.4,
+                    "y": -475.43,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 590.68,
+                    "y": -495.71,
                     "uiMapId": 293
                 }
             },
@@ -932,6 +1472,16 @@
                     "x": 532.5,
                     "y": -589.17,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 567.5,
+                    "y": -484.12,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 532.74,
+                    "y": -591.31,
+                    "uiMapId": 293
                 }
             },
             {
@@ -947,6 +1497,16 @@
                 "coordEnemy": {
                     "x": 580.53,
                     "y": -532.63,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 579.09,
+                    "y": -533.37,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 581.99,
+                    "y": -533.37,
                     "uiMapId": 293
                 }
             },
@@ -964,6 +1524,16 @@
                     "x": 574.49,
                     "y": -522.14,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 576.19,
+                    "y": -524.68,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 576.19,
+                    "y": -524.68,
+                    "uiMapId": 293
                 }
             },
             {
@@ -979,6 +1549,16 @@
                 "coordEnemy": {
                     "x": 574.11,
                     "y": -543.46,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 576.19,
+                    "y": -542.06,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 576.19,
+                    "y": -544.96,
                     "uiMapId": 293
                 }
             },
@@ -996,6 +1576,16 @@
                     "x": 566.4,
                     "y": -532.19,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 573.29,
+                    "y": -533.37,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 567.5,
+                    "y": -533.37,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1011,6 +1601,16 @@
                 "coordEnemy": {
                     "x": 636.55,
                     "y": -668.62,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 642.82,
+                    "y": -675.31,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 637.03,
+                    "y": -669.52,
                     "uiMapId": 293
                 }
             },
@@ -1028,6 +1628,16 @@
                     "x": 643,
                     "y": -676.47,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 634.13,
+                    "y": -666.62,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 645.72,
+                    "y": -678.21,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1043,6 +1653,16 @@
                 "coordEnemy": {
                     "x": 651.81,
                     "y": -685.9,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 645.72,
+                    "y": -678.21,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 654.41,
+                    "y": -686.9,
                     "uiMapId": 293
                 }
             },
@@ -1060,6 +1680,16 @@
                     "x": 685.67,
                     "y": -691.96,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 686.27,
+                    "y": -681.11,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 686.27,
+                    "y": -692.69,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1075,6 +1705,16 @@
                 "coordEnemy": {
                     "x": 678.28,
                     "y": -683.15,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 686.27,
+                    "y": -689.8,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 680.48,
+                    "y": -684,
                     "uiMapId": 293
                 }
             },
@@ -1092,6 +1732,16 @@
                     "x": 699.52,
                     "y": -658.81,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 706.55,
+                    "y": -660.83,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 700.76,
+                    "y": -660.83,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1107,6 +1757,16 @@
                 "coordEnemy": {
                     "x": 692.92,
                     "y": -667.22,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 703.65,
+                    "y": -660.83,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 694.96,
+                    "y": -669.52,
                     "uiMapId": 293
                 }
             },
@@ -1124,6 +1784,16 @@
                     "x": 701.55,
                     "y": -673.48,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 703.65,
+                    "y": -663.73,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 703.65,
+                    "y": -675.31,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1139,6 +1809,16 @@
                 "coordEnemy": {
                     "x": 707.99,
                     "y": -664.79,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 706.55,
+                    "y": -663.73,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 709.45,
+                    "y": -666.62,
                     "uiMapId": 293
                 }
             },
@@ -1156,6 +1836,16 @@
                     "x": 738.27,
                     "y": -647.26,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 721.03,
+                    "y": -657.93,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 738.41,
+                    "y": -649.24,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1171,6 +1861,16 @@
                 "coordEnemy": {
                     "x": 743.99,
                     "y": -637.67,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 723.93,
+                    "y": -652.14,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 744.21,
+                    "y": -640.55,
                     "uiMapId": 293
                 }
             },
@@ -1188,6 +1888,16 @@
                     "x": 698.48,
                     "y": -627.17,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 697.86,
+                    "y": -628.96,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 700.76,
+                    "y": -628.96,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1203,6 +1913,16 @@
                 "coordEnemy": {
                     "x": 686.13,
                     "y": -593.68,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 689.17,
+                    "y": -597.1,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 686.27,
+                    "y": -594.2,
                     "uiMapId": 293
                 }
             },
@@ -1220,6 +1940,16 @@
                     "x": 686.69,
                     "y": -604.51,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 689.17,
+                    "y": -602.89,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 689.17,
+                    "y": -605.79,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1235,6 +1965,16 @@
                 "coordEnemy": {
                     "x": 695.64,
                     "y": -598.74,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 694.96,
+                    "y": -597.1,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 697.86,
+                    "y": -600,
                     "uiMapId": 293
                 }
             },
@@ -1252,6 +1992,16 @@
                     "x": 675.16,
                     "y": -526.06,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 689.17,
+                    "y": -539.16,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 677.58,
+                    "y": -527.57,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1267,6 +2017,16 @@
                 "coordEnemy": {
                     "x": 685.97,
                     "y": -537.26,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 686.27,
+                    "y": -539.16,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 686.27,
+                    "y": -539.16,
                     "uiMapId": 293
                 }
             },
@@ -1284,6 +2044,16 @@
                     "x": 674.66,
                     "y": -536.92,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 683.37,
+                    "y": -533.37,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 674.68,
+                    "y": -539.16,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1299,6 +2069,16 @@
                 "coordEnemy": {
                     "x": 686.47,
                     "y": -525.48,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 689.17,
+                    "y": -533.37,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 689.17,
+                    "y": -527.57,
                     "uiMapId": 293
                 }
             },
@@ -1316,6 +2096,16 @@
                     "x": 703.93,
                     "y": -569.23,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 697.86,
+                    "y": -530.47,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 706.55,
+                    "y": -571.03,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1331,6 +2121,16 @@
                 "coordEnemy": {
                     "x": 692.38,
                     "y": -566.33,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 700.76,
+                    "y": -524.68,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 694.96,
+                    "y": -568.13,
                     "uiMapId": 293
                 }
             },
@@ -1348,6 +2148,16 @@
                     "x": 696.42,
                     "y": -486.92,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 697.86,
+                    "y": -489.92,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 697.86,
+                    "y": -487.02,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1363,6 +2173,16 @@
                 "coordEnemy": {
                     "x": 699.68,
                     "y": -497.33,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 697.86,
+                    "y": -487.02,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 700.76,
+                    "y": -498.61,
                     "uiMapId": 293
                 }
             },
@@ -1380,6 +2200,16 @@
                     "x": 686.57,
                     "y": -489.14,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 692.07,
+                    "y": -492.81,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 689.17,
+                    "y": -489.92,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1395,6 +2225,16 @@
                 "coordEnemy": {
                     "x": 689.85,
                     "y": -499.29,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 692.07,
+                    "y": -487.02,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 692.07,
+                    "y": -501.5,
                     "uiMapId": 293
                 }
             },
@@ -1412,6 +2252,16 @@
                     "x": 701.91,
                     "y": -462.43,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 700.76,
+                    "y": -458.05,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 703.65,
+                    "y": -463.84,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1427,6 +2277,16 @@
                 "coordEnemy": {
                     "x": 715.74,
                     "y": -458.09,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 712.34,
+                    "y": -455.15,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 718.14,
+                    "y": -460.95,
                     "uiMapId": 293
                 }
             },
@@ -1444,6 +2304,16 @@
                     "x": 662.32,
                     "y": -401.77,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 697.86,
+                    "y": -440.67,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 663.1,
+                    "y": -403.01,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1459,6 +2329,16 @@
                 "coordEnemy": {
                     "x": 694.36,
                     "y": -394.38,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 677.58,
+                    "y": -414.6,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 694.96,
+                    "y": -397.22,
                     "uiMapId": 293
                 }
             },
@@ -1476,6 +2356,16 @@
                     "x": 750.26,
                     "y": -499.5,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 752.9,
+                    "y": -504.4,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 752.9,
+                    "y": -501.5,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1491,6 +2381,16 @@
                 "coordEnemy": {
                     "x": 747.6,
                     "y": -478.29,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 752.9,
+                    "y": -495.71,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 750,
+                    "y": -478.33,
                     "uiMapId": 293
                 }
             },
@@ -1508,6 +2408,16 @@
                     "x": 748.88,
                     "y": -489.48,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 752.9,
+                    "y": -501.5,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 750,
+                    "y": -489.92,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1523,6 +2433,16 @@
                 "coordEnemy": {
                     "x": 739.65,
                     "y": -501.26,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 741.31,
+                    "y": -504.4,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 741.31,
+                    "y": -501.5,
                     "uiMapId": 293
                 }
             },
@@ -1540,6 +2460,16 @@
                     "x": 736.8,
                     "y": -479.77,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 738.41,
+                    "y": -498.61,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 738.41,
+                    "y": -481.22,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1555,6 +2485,16 @@
                 "coordEnemy": {
                     "x": 738.25,
                     "y": -490.29,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 741.31,
+                    "y": -510.19,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 738.41,
+                    "y": -492.81,
                     "uiMapId": 293
                 }
             },
@@ -1572,6 +2512,16 @@
                     "x": 780.19,
                     "y": -526.9,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 761.59,
+                    "y": -530.47,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 781.87,
+                    "y": -527.57,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1587,6 +2537,16 @@
                 "coordEnemy": {
                     "x": 779.99,
                     "y": -533.93,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 758.69,
+                    "y": -527.57,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 781.87,
+                    "y": -536.26,
                     "uiMapId": 293
                 }
             },
@@ -1604,6 +2564,16 @@
                     "x": 779.95,
                     "y": -541.26,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 761.59,
+                    "y": -527.57,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 781.87,
+                    "y": -542.06,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1619,6 +2589,16 @@
                 "coordEnemy": {
                     "x": 794.25,
                     "y": -534.13,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 761.59,
+                    "y": -530.47,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 796.35,
+                    "y": -536.26,
                     "uiMapId": 293
                 }
             },
@@ -1636,6 +2616,16 @@
                     "x": 787.44,
                     "y": -526.99,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 758.69,
+                    "y": -530.47,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 787.66,
+                    "y": -527.57,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1651,6 +2641,16 @@
                 "coordEnemy": {
                     "x": 793.99,
                     "y": -541.4,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 761.59,
+                    "y": -527.57,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 796.35,
+                    "y": -542.06,
                     "uiMapId": 293
                 }
             },
@@ -1668,6 +2668,16 @@
                     "x": 786.94,
                     "y": -541.38,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 761.59,
+                    "y": -527.57,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 787.66,
+                    "y": -542.06,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1683,6 +2693,16 @@
                 "coordEnemy": {
                     "x": 794.45,
                     "y": -527.15,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 761.59,
+                    "y": -530.47,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 796.35,
+                    "y": -527.57,
                     "uiMapId": 293
                 }
             },
@@ -1700,6 +2720,16 @@
                     "x": 749.24,
                     "y": -531.67,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 750,
+                    "y": -539.16,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 750,
+                    "y": -533.37,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1715,6 +2745,16 @@
                 "coordEnemy": {
                     "x": 827.96,
                     "y": -546.49,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -542.06,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 828.22,
+                    "y": -547.85,
                     "uiMapId": 293
                 }
             },
@@ -1732,6 +2772,16 @@
                     "x": 818.13,
                     "y": -535.93,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -533.37,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 819.53,
+                    "y": -536.26,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1747,6 +2797,16 @@
                 "coordEnemy": {
                     "x": 835.33,
                     "y": -528.63,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 831.11,
+                    "y": -536.26,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 836.91,
+                    "y": -530.47,
                     "uiMapId": 293
                 }
             },
@@ -1764,6 +2824,16 @@
                     "x": 820.9,
                     "y": -543.64,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 822.42,
+                    "y": -536.26,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 822.42,
+                    "y": -544.96,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1779,6 +2849,16 @@
                 "coordEnemy": {
                     "x": 820.98,
                     "y": -528.71,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -530.47,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 822.42,
+                    "y": -530.47,
                     "uiMapId": 293
                 }
             },
@@ -1796,6 +2876,16 @@
                     "x": 834.95,
                     "y": -543.66,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 831.11,
+                    "y": -539.16,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 836.91,
+                    "y": -544.96,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1811,6 +2901,16 @@
                 "coordEnemy": {
                     "x": 828.14,
                     "y": -525.46,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -539.16,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 828.22,
+                    "y": -527.57,
                     "uiMapId": 293
                 }
             },
@@ -1828,6 +2928,16 @@
                     "x": 837.99,
                     "y": -536.28,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -542.06,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 839.8,
+                    "y": -539.16,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1843,6 +2953,16 @@
                 "coordEnemy": {
                     "x": 828.04,
                     "y": -535.89,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -536.26,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 828.22,
+                    "y": -536.26,
                     "uiMapId": 293
                 }
             },
@@ -1860,6 +2980,16 @@
                     "x": 821.28,
                     "y": -580.12,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -585.51,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 822.42,
+                    "y": -582.61,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1875,6 +3005,16 @@
                 "coordEnemy": {
                     "x": 836.67,
                     "y": -580.72,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 834.01,
+                    "y": -582.61,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 836.91,
+                    "y": -582.61,
                     "uiMapId": 293
                 }
             },
@@ -1892,6 +3032,16 @@
                     "x": 835.81,
                     "y": -594.62,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 834.01,
+                    "y": -591.31,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 836.91,
+                    "y": -597.1,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1907,6 +3057,16 @@
                 "coordEnemy": {
                     "x": 828.64,
                     "y": -598.18,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 834.01,
+                    "y": -600,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 831.11,
+                    "y": -600,
                     "uiMapId": 293
                 }
             },
@@ -1924,6 +3084,16 @@
                     "x": 829.12,
                     "y": -576.94,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -588.41,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 831.11,
+                    "y": -579.72,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1939,6 +3109,16 @@
                 "coordEnemy": {
                     "x": 818.85,
                     "y": -587.95,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 822.42,
+                    "y": -588.41,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 819.53,
+                    "y": -588.41,
                     "uiMapId": 293
                 }
             },
@@ -1956,6 +3136,16 @@
                     "x": 821.66,
                     "y": -595.68,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -600,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 822.42,
+                    "y": -597.1,
+                    "uiMapId": 293
                 }
             },
             {
@@ -1971,6 +3161,16 @@
                 "coordEnemy": {
                     "x": 838.56,
                     "y": -587.77,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -597.1,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 839.8,
+                    "y": -588.41,
                     "uiMapId": 293
                 }
             },
@@ -1988,6 +3188,16 @@
                     "x": 828.66,
                     "y": -587.45,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -594.2,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 831.11,
+                    "y": -588.41,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2003,6 +3213,16 @@
                 "coordEnemy": {
                     "x": 826.9,
                     "y": -675.27,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -669.52,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 828.22,
+                    "y": -675.31,
                     "uiMapId": 293
                 }
             },
@@ -2020,6 +3240,16 @@
                     "x": 833.57,
                     "y": -675.61,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 831.11,
+                    "y": -669.52,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 834.01,
+                    "y": -678.21,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2035,6 +3265,16 @@
                 "coordEnemy": {
                     "x": 826.4,
                     "y": -653.86,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -649.24,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 828.22,
+                    "y": -655.04,
                     "uiMapId": 293
                 }
             },
@@ -2052,6 +3292,16 @@
                     "x": 819.93,
                     "y": -654.02,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 822.42,
+                    "y": -655.04,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 822.42,
+                    "y": -655.04,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2067,6 +3317,16 @@
                 "coordEnemy": {
                     "x": 832.85,
                     "y": -653.74,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 834.01,
+                    "y": -657.93,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 834.01,
+                    "y": -655.04,
                     "uiMapId": 293
                 }
             },
@@ -2084,6 +3344,16 @@
                     "x": 839.84,
                     "y": -675.73,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 834.01,
+                    "y": -666.62,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 842.7,
+                    "y": -678.21,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2099,6 +3369,16 @@
                 "coordEnemy": {
                     "x": 839.22,
                     "y": -653.88,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -660.83,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 839.8,
+                    "y": -655.04,
                     "uiMapId": 293
                 }
             },
@@ -2116,6 +3396,16 @@
                     "x": 846.42,
                     "y": -675.35,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -666.62,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 848.49,
+                    "y": -678.21,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2131,6 +3421,16 @@
                 "coordEnemy": {
                     "x": 820.38,
                     "y": -675.35,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -672.42,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 822.42,
+                    "y": -678.21,
                     "uiMapId": 293
                 }
             },
@@ -2148,6 +3448,16 @@
                     "x": 813.75,
                     "y": -675.37,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 822.42,
+                    "y": -666.62,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 816.63,
+                    "y": -678.21,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2163,6 +3473,16 @@
                 "coordEnemy": {
                     "x": 845.64,
                     "y": -654.08,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 834.01,
+                    "y": -657.93,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 848.49,
+                    "y": -655.04,
                     "uiMapId": 293
                 }
             },
@@ -2180,6 +3500,16 @@
                     "x": 813.35,
                     "y": -653.72,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 822.42,
+                    "y": -660.83,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 813.73,
+                    "y": -655.04,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2195,6 +3525,16 @@
                 "coordEnemy": {
                     "x": 839.7,
                     "y": -664.71,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 834.01,
+                    "y": -663.73,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 839.8,
+                    "y": -666.62,
                     "uiMapId": 293
                 }
             },
@@ -2212,6 +3552,16 @@
                     "x": 820.52,
                     "y": -665.08,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -663.73,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 822.42,
+                    "y": -666.62,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2228,6 +3578,16 @@
                     "x": 816.65,
                     "y": -780.76,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -776.7,
+                    "uiMapId": 293
+                },
+                "gridCoordEnemy": {
+                    "x": 819.53,
+                    "y": -782.5,
+                    "uiMapId": 293
                 }
             }
         ],
@@ -2240,6 +3600,11 @@
                     "x": 259.73,
                     "y": -540.07,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 260.44,
+                    "y": -542.06,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2249,6 +3614,11 @@
                 "coord": {
                     "x": 247.35,
                     "y": -545.32,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 248.85,
+                    "y": -547.85,
                     "uiMapId": 293
                 }
             },
@@ -2260,6 +3630,11 @@
                     "x": 273.04,
                     "y": -529.71,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 274.92,
+                    "y": -530.47,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2269,6 +3644,11 @@
                 "coord": {
                     "x": 273.04,
                     "y": -529.71,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 274.92,
+                    "y": -530.47,
                     "uiMapId": 293
                 }
             },
@@ -2280,6 +3660,11 @@
                     "x": 313.7,
                     "y": -510.58,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 315.48,
+                    "y": -513.09,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2289,6 +3674,11 @@
                 "coord": {
                     "x": 316.97,
                     "y": -511.46,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 318.37,
+                    "y": -513.09,
                     "uiMapId": 293
                 }
             },
@@ -2300,6 +3690,11 @@
                     "x": 337.44,
                     "y": -452.98,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 338.65,
+                    "y": -455.15,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2309,6 +3704,11 @@
                 "coord": {
                     "x": 340.54,
                     "y": -448.26,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 341.55,
+                    "y": -449.36,
                     "uiMapId": 293
                 }
             },
@@ -2320,6 +3720,11 @@
                     "x": 328.44,
                     "y": -461.45,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 329.96,
+                    "y": -463.84,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2329,6 +3734,11 @@
                 "coord": {
                     "x": 359.84,
                     "y": -468.05,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 361.83,
+                    "y": -469.64,
                     "uiMapId": 293
                 }
             },
@@ -2340,6 +3750,11 @@
                     "x": 365.01,
                     "y": -458.28,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 367.62,
+                    "y": -460.95,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2349,6 +3764,11 @@
                 "coord": {
                     "x": 365.01,
                     "y": -458.28,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 367.62,
+                    "y": -460.95,
                     "uiMapId": 293
                 }
             },
@@ -2360,6 +3780,11 @@
                     "x": 353.23,
                     "y": -458.76,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 356.03,
+                    "y": -460.95,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2369,6 +3794,11 @@
                 "coord": {
                     "x": 369.86,
                     "y": -450.87,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 370.52,
+                    "y": -452.26,
                     "uiMapId": 293
                 }
             },
@@ -2380,6 +3810,11 @@
                     "x": 369.85,
                     "y": -585.64,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 370.52,
+                    "y": -588.41,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2389,6 +3824,11 @@
                 "coord": {
                     "x": 372.36,
                     "y": -590.11,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 373.41,
+                    "y": -591.31,
                     "uiMapId": 293
                 }
             },
@@ -2400,6 +3840,11 @@
                     "x": 361.11,
                     "y": -669.08,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 361.83,
+                    "y": -669.52,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2409,6 +3854,11 @@
                 "coord": {
                     "x": 360.63,
                     "y": -677.24,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 361.83,
+                    "y": -678.21,
                     "uiMapId": 293
                 }
             },
@@ -2420,6 +3870,11 @@
                     "x": 408.71,
                     "y": -686.35,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 411.07,
+                    "y": -686.9,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2429,6 +3884,11 @@
                 "coord": {
                     "x": 408.71,
                     "y": -686.35,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 411.07,
+                    "y": -686.9,
                     "uiMapId": 293
                 }
             },
@@ -2440,6 +3900,11 @@
                     "x": 408.16,
                     "y": -691.22,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 408.18,
+                    "y": -692.69,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2449,6 +3914,11 @@
                 "coord": {
                     "x": 422.82,
                     "y": -695.97,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 425.56,
+                    "y": -698.49,
                     "uiMapId": 293
                 }
             },
@@ -2460,6 +3930,11 @@
                     "x": 439.67,
                     "y": -706.23,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 440.04,
+                    "y": -707.18,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2469,6 +3944,11 @@
                 "coord": {
                     "x": 402.53,
                     "y": -684.98,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 405.28,
+                    "y": -686.9,
                     "uiMapId": 293
                 }
             },
@@ -2480,6 +3960,11 @@
                     "x": 414.3,
                     "y": -707.84,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 416.87,
+                    "y": -710.08,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2489,6 +3974,11 @@
                 "coord": {
                     "x": 412.44,
                     "y": -707.72,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 413.97,
+                    "y": -710.08,
                     "uiMapId": 293
                 }
             },
@@ -2500,6 +3990,11 @@
                     "x": 429.28,
                     "y": -718.61,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 431.35,
+                    "y": -718.77,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2509,6 +4004,11 @@
                 "coord": {
                     "x": 429.28,
                     "y": -718.61,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 431.35,
+                    "y": -718.77,
                     "uiMapId": 293
                 }
             },
@@ -2520,6 +4020,11 @@
                     "x": 418.7,
                     "y": -717.22,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 419.76,
+                    "y": -718.77,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2529,6 +4034,11 @@
                 "coord": {
                     "x": 430.27,
                     "y": -688.78,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 431.35,
+                    "y": -689.8,
                     "uiMapId": 293
                 }
             },
@@ -2540,6 +4050,11 @@
                     "x": 423.64,
                     "y": -703.57,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 425.56,
+                    "y": -704.28,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2549,6 +4064,11 @@
                 "coord": {
                     "x": 420.76,
                     "y": -697.64,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 422.66,
+                    "y": -698.49,
                     "uiMapId": 293
                 }
             },
@@ -2560,6 +4080,11 @@
                     "x": 412.55,
                     "y": -692.03,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 413.97,
+                    "y": -692.69,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2569,6 +4094,11 @@
                 "coord": {
                     "x": 488.41,
                     "y": -534.97,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 489.29,
+                    "y": -536.26,
                     "uiMapId": 293
                 }
             },
@@ -2580,6 +4110,11 @@
                     "x": 529.35,
                     "y": -493.24,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 529.84,
+                    "y": -495.71,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2589,6 +4124,11 @@
                 "coord": {
                     "x": 530.88,
                     "y": -495.57,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 532.74,
+                    "y": -495.71,
                     "uiMapId": 293
                 }
             },
@@ -2600,6 +4140,11 @@
                     "x": 520.3,
                     "y": -488.79,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 521.15,
+                    "y": -489.92,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2609,6 +4154,11 @@
                 "coord": {
                     "x": 520.24,
                     "y": -489.38,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 521.15,
+                    "y": -489.92,
                     "uiMapId": 293
                 }
             },
@@ -2620,6 +4170,11 @@
                     "x": 526.5,
                     "y": -498.38,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 526.95,
+                    "y": -498.61,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2629,6 +4184,11 @@
                 "coord": {
                     "x": 500.84,
                     "y": -488.13,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 500.87,
+                    "y": -489.92,
                     "uiMapId": 293
                 }
             },
@@ -2640,6 +4200,11 @@
                     "x": 507.48,
                     "y": -487.81,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 509.56,
+                    "y": -489.92,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2649,6 +4214,11 @@
                 "coord": {
                     "x": 512.23,
                     "y": -492.74,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 512.46,
+                    "y": -492.81,
                     "uiMapId": 293
                 }
             },
@@ -2660,6 +4230,11 @@
                     "x": 518.77,
                     "y": -482.07,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 521.15,
+                    "y": -484.12,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2669,6 +4244,11 @@
                 "coord": {
                     "x": 526.57,
                     "y": -501.46,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 526.95,
+                    "y": -501.5,
                     "uiMapId": 293
                 }
             },
@@ -2680,6 +4260,11 @@
                     "x": 532.61,
                     "y": -492.67,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 532.74,
+                    "y": -492.81,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2689,6 +4274,11 @@
                 "coord": {
                     "x": 550.97,
                     "y": -488.96,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 553.02,
+                    "y": -489.92,
                     "uiMapId": 293
                 }
             },
@@ -2700,6 +4290,11 @@
                     "x": 530.09,
                     "y": -496.82,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 532.74,
+                    "y": -498.61,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2709,6 +4304,11 @@
                 "coord": {
                     "x": 534.82,
                     "y": -495.5,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 535.64,
+                    "y": -495.71,
                     "uiMapId": 293
                 }
             },
@@ -2720,6 +4320,11 @@
                     "x": 549.04,
                     "y": -491.95,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 550.12,
+                    "y": -492.81,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2729,6 +4334,11 @@
                 "coord": {
                     "x": 547.14,
                     "y": -496.08,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 547.22,
+                    "y": -498.61,
                     "uiMapId": 293
                 }
             },
@@ -2740,6 +4350,11 @@
                     "x": 541.15,
                     "y": -482.32,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 541.43,
+                    "y": -484.12,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2749,6 +4364,11 @@
                 "coord": {
                     "x": 524.95,
                     "y": -495.22,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 526.95,
+                    "y": -495.71,
                     "uiMapId": 293
                 }
             },
@@ -2760,6 +4380,11 @@
                     "x": 541.96,
                     "y": -481.64,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 544.33,
+                    "y": -484.12,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2769,6 +4394,11 @@
                 "coord": {
                     "x": 492.12,
                     "y": -502.38,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 492.18,
+                    "y": -504.4,
                     "uiMapId": 293
                 }
             },
@@ -2780,6 +4410,11 @@
                     "x": 479.76,
                     "y": -495.58,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 480.6,
+                    "y": -495.71,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2789,6 +4424,11 @@
                 "coord": {
                     "x": 499.37,
                     "y": -478.71,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 500.87,
+                    "y": -481.22,
                     "uiMapId": 293
                 }
             },
@@ -2800,6 +4440,11 @@
                     "x": 500.88,
                     "y": -481.58,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 503.77,
+                    "y": -484.12,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2809,6 +4454,11 @@
                 "coord": {
                     "x": 499.37,
                     "y": -478.71,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 500.87,
+                    "y": -481.22,
                     "uiMapId": 293
                 }
             },
@@ -2820,6 +4470,11 @@
                     "x": 496.94,
                     "y": -478.46,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 497.98,
+                    "y": -481.22,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2829,6 +4484,11 @@
                 "coord": {
                     "x": 499.37,
                     "y": -478.71,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 500.87,
+                    "y": -481.22,
                     "uiMapId": 293
                 }
             },
@@ -2840,6 +4500,11 @@
                     "x": 490.67,
                     "y": -475.28,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 492.18,
+                    "y": -475.43,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2849,6 +4514,11 @@
                 "coord": {
                     "x": 484.43,
                     "y": -485.04,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 486.39,
+                    "y": -487.02,
                     "uiMapId": 293
                 }
             },
@@ -2860,6 +4530,11 @@
                     "x": 477.88,
                     "y": -545.63,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 480.6,
+                    "y": -547.85,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2869,6 +4544,11 @@
                 "coord": {
                     "x": 463.39,
                     "y": -526.03,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 466.11,
+                    "y": -527.57,
                     "uiMapId": 293
                 }
             },
@@ -2880,6 +4560,11 @@
                     "x": 571.11,
                     "y": -529.88,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 573.29,
+                    "y": -530.47,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2889,6 +4574,11 @@
                 "coord": {
                     "x": 566.85,
                     "y": -529.45,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 567.5,
+                    "y": -530.47,
                     "uiMapId": 293
                 }
             },
@@ -2900,6 +4590,11 @@
                     "x": 585.76,
                     "y": -532.34,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 587.78,
+                    "y": -533.37,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2909,6 +4604,11 @@
                 "coord": {
                     "x": 640.19,
                     "y": -670.85,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 642.82,
+                    "y": -672.42,
                     "uiMapId": 293
                 }
             },
@@ -2920,6 +4620,11 @@
                     "x": 628.18,
                     "y": -669.27,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 628.33,
+                    "y": -669.52,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2929,6 +4634,11 @@
                 "coord": {
                     "x": 640.15,
                     "y": -670.41,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 642.82,
+                    "y": -672.42,
                     "uiMapId": 293
                 }
             },
@@ -2940,6 +4650,11 @@
                     "x": 636.74,
                     "y": -664.7,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 637.03,
+                    "y": -666.62,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2949,6 +4664,11 @@
                 "coord": {
                     "x": 635,
                     "y": -660.89,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 637.03,
+                    "y": -663.73,
                     "uiMapId": 293
                 }
             },
@@ -2960,6 +4680,11 @@
                     "x": 682.45,
                     "y": -687.11,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 683.37,
+                    "y": -689.8,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2969,6 +4694,11 @@
                 "coord": {
                     "x": 682.45,
                     "y": -687.11,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 683.37,
+                    "y": -689.8,
                     "uiMapId": 293
                 }
             },
@@ -2980,6 +4710,11 @@
                     "x": 682.45,
                     "y": -687.11,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 683.37,
+                    "y": -689.8,
+                    "uiMapId": 293
                 }
             },
             {
@@ -2989,6 +4724,11 @@
                 "coord": {
                     "x": 705.05,
                     "y": -659.89,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 706.55,
+                    "y": -660.83,
                     "uiMapId": 293
                 }
             },
@@ -3000,6 +4740,11 @@
                     "x": 703.78,
                     "y": -660.07,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 706.55,
+                    "y": -660.83,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3009,6 +4754,11 @@
                 "coord": {
                     "x": 707.61,
                     "y": -661,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 709.45,
+                    "y": -663.73,
                     "uiMapId": 293
                 }
             },
@@ -3020,6 +4770,11 @@
                     "x": 720.55,
                     "y": -650.18,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 721.03,
+                    "y": -652.14,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3029,6 +4784,11 @@
                 "coord": {
                     "x": 708.1,
                     "y": -656.26,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 709.45,
+                    "y": -657.93,
                     "uiMapId": 293
                 }
             },
@@ -3040,6 +4800,11 @@
                     "x": 687.66,
                     "y": -602.92,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 689.17,
+                    "y": -605.79,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3049,6 +4814,11 @@
                 "coord": {
                     "x": 678.26,
                     "y": -613.11,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 680.48,
+                    "y": -614.48,
                     "uiMapId": 293
                 }
             },
@@ -3060,6 +4830,11 @@
                     "x": 689.95,
                     "y": -536.07,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 692.07,
+                    "y": -536.26,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3069,6 +4844,11 @@
                 "coord": {
                     "x": 689.95,
                     "y": -536.07,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 692.07,
+                    "y": -536.26,
                     "uiMapId": 293
                 }
             },
@@ -3080,6 +4860,11 @@
                     "x": 698.6,
                     "y": -548.29,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 700.76,
+                    "y": -550.75,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3089,6 +4874,11 @@
                 "coord": {
                     "x": 698.22,
                     "y": -490.18,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 700.76,
+                    "y": -492.81,
                     "uiMapId": 293
                 }
             },
@@ -3100,6 +4890,11 @@
                     "x": 697.39,
                     "y": -497.28,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 697.86,
+                    "y": -498.61,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3109,6 +4904,11 @@
                 "coord": {
                     "x": 699.39,
                     "y": -462.63,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 700.76,
+                    "y": -463.84,
                     "uiMapId": 293
                 }
             },
@@ -3120,6 +4920,11 @@
                     "x": 689.39,
                     "y": -475.31,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 692.07,
+                    "y": -475.43,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3129,6 +4934,11 @@
                 "coord": {
                     "x": 676.58,
                     "y": -413.37,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 677.58,
+                    "y": -414.6,
                     "uiMapId": 293
                 }
             },
@@ -3140,6 +4950,11 @@
                     "x": 678.29,
                     "y": -409.86,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 680.48,
+                    "y": -411.7,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3149,6 +4964,11 @@
                 "coord": {
                     "x": 692.86,
                     "y": -431.41,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 694.96,
+                    "y": -431.98,
                     "uiMapId": 293
                 }
             },
@@ -3160,6 +4980,11 @@
                     "x": 711.68,
                     "y": -435.12,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 712.34,
+                    "y": -437.77,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3169,6 +4994,11 @@
                 "coord": {
                     "x": 712.62,
                     "y": -434.25,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 715.24,
+                    "y": -434.88,
                     "uiMapId": 293
                 }
             },
@@ -3180,6 +5010,11 @@
                     "x": 693.22,
                     "y": -428.4,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 694.96,
+                    "y": -429.08,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3189,6 +5024,11 @@
                 "coord": {
                     "x": 678.6,
                     "y": -427.82,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 680.48,
+                    "y": -429.08,
                     "uiMapId": 293
                 }
             },
@@ -3200,6 +5040,11 @@
                     "x": 695,
                     "y": -423.57,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 697.86,
+                    "y": -426.18,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3209,6 +5054,11 @@
                 "coord": {
                     "x": 707.78,
                     "y": -416.65,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 709.45,
+                    "y": -417.49,
                     "uiMapId": 293
                 }
             },
@@ -3220,6 +5070,11 @@
                     "x": 673.41,
                     "y": -440.68,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 674.68,
+                    "y": -443.57,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3229,6 +5084,11 @@
                 "coord": {
                     "x": 689.08,
                     "y": -426.11,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 689.17,
+                    "y": -426.18,
                     "uiMapId": 293
                 }
             },
@@ -3240,6 +5100,11 @@
                     "x": 699.2,
                     "y": -422.9,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 700.76,
+                    "y": -423.29,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3249,6 +5114,11 @@
                 "coord": {
                     "x": 725.31,
                     "y": -451.48,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 726.83,
+                    "y": -452.26,
                     "uiMapId": 293
                 }
             },
@@ -3260,6 +5130,11 @@
                     "x": 725.31,
                     "y": -451.48,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 726.83,
+                    "y": -452.26,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3269,6 +5144,11 @@
                 "coord": {
                     "x": 708.85,
                     "y": -447.69,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 709.45,
+                    "y": -449.36,
                     "uiMapId": 293
                 }
             },
@@ -3280,6 +5160,11 @@
                     "x": 712.6,
                     "y": -450.66,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 715.24,
+                    "y": -452.26,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3289,6 +5174,11 @@
                 "coord": {
                     "x": 706.75,
                     "y": -449.8,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 709.45,
+                    "y": -452.26,
                     "uiMapId": 293
                 }
             },
@@ -3300,6 +5190,11 @@
                     "x": 709.66,
                     "y": -440.45,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 712.34,
+                    "y": -440.67,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3309,6 +5204,11 @@
                 "coord": {
                     "x": 740.79,
                     "y": -493.37,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 741.31,
+                    "y": -495.71,
                     "uiMapId": 293
                 }
             },
@@ -3320,6 +5220,11 @@
                     "x": 745.12,
                     "y": -486.92,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 747.1,
+                    "y": -487.02,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3329,6 +5234,11 @@
                 "coord": {
                     "x": 753.98,
                     "y": -521.73,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 755.8,
+                    "y": -521.78,
                     "uiMapId": 293
                 }
             },
@@ -3340,6 +5250,11 @@
                     "x": 754.27,
                     "y": -520.27,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 755.8,
+                    "y": -521.78,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3349,6 +5264,11 @@
                 "coord": {
                     "x": 822.32,
                     "y": -533.95,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 822.42,
+                    "y": -536.26,
                     "uiMapId": 293
                 }
             },
@@ -3360,6 +5280,11 @@
                     "x": 828.02,
                     "y": -589.16,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -591.31,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3369,6 +5294,11 @@
                 "coord": {
                     "x": 828.47,
                     "y": -568.73,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 831.11,
+                    "y": -571.03,
                     "uiMapId": 293
                 }
             },
@@ -3380,6 +5310,11 @@
                     "x": 824.58,
                     "y": -589.14,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -591.31,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3389,6 +5324,11 @@
                 "coord": {
                     "x": 825.16,
                     "y": -659.63,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -660.83,
                     "uiMapId": 293
                 }
             },
@@ -3400,6 +5340,11 @@
                     "x": 823.91,
                     "y": -673.89,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -675.31,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3409,6 +5354,11 @@
                 "coord": {
                     "x": 827.18,
                     "y": -650.36,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -652.14,
                     "uiMapId": 293
                 }
             },
@@ -3420,6 +5370,11 @@
                     "x": 828.77,
                     "y": -654.59,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 831.11,
+                    "y": -655.04,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3429,6 +5384,11 @@
                 "coord": {
                     "x": 835.28,
                     "y": -676.14,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 836.91,
+                    "y": -678.21,
                     "uiMapId": 293
                 }
             },
@@ -3440,6 +5400,11 @@
                     "x": 823.15,
                     "y": -673.95,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -675.31,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3449,6 +5414,11 @@
                 "coord": {
                     "x": 823.63,
                     "y": -763.34,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -765.12,
                     "uiMapId": 293
                 }
             },
@@ -3460,6 +5430,11 @@
                     "x": 824.69,
                     "y": -766.66,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -768.01,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3469,6 +5444,11 @@
                 "coord": {
                     "x": 825.93,
                     "y": -738.61,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -739.04,
                     "uiMapId": 293
                 }
             },
@@ -3480,6 +5460,11 @@
                     "x": 822.56,
                     "y": -763.91,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -765.12,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3489,6 +5474,11 @@
                 "coord": {
                     "x": 822.73,
                     "y": -755.36,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -756.43,
                     "uiMapId": 293
                 }
             },
@@ -3500,6 +5490,11 @@
                     "x": 820.59,
                     "y": -754.38,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 822.42,
+                    "y": -756.43,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3509,6 +5504,11 @@
                 "coord": {
                     "x": 847.09,
                     "y": -753.1,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 848.49,
+                    "y": -753.53,
                     "uiMapId": 293
                 }
             },
@@ -3520,6 +5520,11 @@
                     "x": 859.93,
                     "y": -754.59,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 860.08,
+                    "y": -756.43,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3529,6 +5534,11 @@
                 "coord": {
                     "x": 846.24,
                     "y": -743.72,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 848.49,
+                    "y": -744.84,
                     "uiMapId": 293
                 }
             },
@@ -3540,6 +5550,11 @@
                     "x": 849.34,
                     "y": -738.6,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 851.39,
+                    "y": -739.04,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3549,6 +5564,11 @@
                 "coord": {
                     "x": 828.48,
                     "y": -738.74,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 831.11,
+                    "y": -739.04,
                     "uiMapId": 293
                 }
             },
@@ -3560,6 +5580,11 @@
                     "x": 826.57,
                     "y": -766.35,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -768.01,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3569,6 +5594,11 @@
                 "coord": {
                     "x": 826.57,
                     "y": -766.35,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 828.22,
+                    "y": -768.01,
                     "uiMapId": 293
                 }
             },
@@ -3580,6 +5610,11 @@
                     "x": 852.6,
                     "y": -730.76,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 854.29,
+                    "y": -733.25,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3589,6 +5624,11 @@
                 "coord": {
                     "x": 859.96,
                     "y": -753.31,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 860.08,
+                    "y": -753.53,
                     "uiMapId": 293
                 }
             },
@@ -3600,6 +5640,11 @@
                     "x": 855.37,
                     "y": -744.12,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 857.18,
+                    "y": -744.84,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3609,6 +5654,11 @@
                 "coord": {
                     "x": 858.04,
                     "y": -730.21,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 860.08,
+                    "y": -730.35,
                     "uiMapId": 293
                 }
             },
@@ -3620,6 +5670,11 @@
                     "x": 865.86,
                     "y": -733.29,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 865.88,
+                    "y": -736.15,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3629,6 +5684,11 @@
                 "coord": {
                     "x": 840.88,
                     "y": -725.7,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 842.7,
+                    "y": -727.46,
                     "uiMapId": 293
                 }
             },
@@ -3640,6 +5700,11 @@
                     "x": 848.79,
                     "y": -727.56,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 851.39,
+                    "y": -730.35,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3649,6 +5714,11 @@
                 "coord": {
                     "x": 839.29,
                     "y": -726.37,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 839.8,
+                    "y": -727.46,
                     "uiMapId": 293
                 }
             },
@@ -3660,6 +5730,11 @@
                     "x": 835.26,
                     "y": -767.3,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 836.91,
+                    "y": -768.01,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3669,6 +5744,11 @@
                 "coord": {
                     "x": 830.2,
                     "y": -759.1,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 831.11,
+                    "y": -759.32,
                     "uiMapId": 293
                 }
             },
@@ -3680,6 +5760,11 @@
                     "x": 830.03,
                     "y": -763.31,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 831.11,
+                    "y": -765.12,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3689,6 +5774,11 @@
                 "coord": {
                     "x": 816.79,
                     "y": -761.24,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 819.53,
+                    "y": -762.22,
                     "uiMapId": 293
                 }
             },
@@ -3700,6 +5790,11 @@
                     "x": 863.6,
                     "y": -718.48,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 865.88,
+                    "y": -718.77,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3709,6 +5804,11 @@
                 "coord": {
                     "x": 842.11,
                     "y": -744.25,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 842.7,
+                    "y": -744.84,
                     "uiMapId": 293
                 }
             },
@@ -3720,6 +5820,11 @@
                     "x": 849.58,
                     "y": -702.31,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 851.39,
+                    "y": -704.28,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3730,6 +5835,11 @@
                     "x": 850.46,
                     "y": -717.51,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 851.39,
+                    "y": -718.77,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3739,6 +5849,11 @@
                 "coord": {
                     "x": 848.73,
                     "y": -702.49,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 851.39,
+                    "y": -704.28,
                     "uiMapId": 293
                 }
             }
@@ -3754,6 +5869,11 @@
                     "x": 344.93,
                     "y": -453.48,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 347.34,
+                    "y": -455.15,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3765,6 +5885,11 @@
                 "coord": {
                     "x": 514.86,
                     "y": -488.32,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 515.36,
+                    "y": -489.92,
                     "uiMapId": 293
                 }
             },
@@ -3778,6 +5903,11 @@
                     "x": 509.21,
                     "y": -486.36,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 509.56,
+                    "y": -487.02,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3789,6 +5919,11 @@
                 "coord": {
                     "x": 532.97,
                     "y": -489.41,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 535.64,
+                    "y": -489.92,
                     "uiMapId": 293
                 }
             },
@@ -3802,6 +5937,11 @@
                     "x": 526.24,
                     "y": -493.5,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 526.95,
+                    "y": -495.71,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3813,6 +5953,11 @@
                 "coord": {
                     "x": 534.16,
                     "y": -491.35,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 535.64,
+                    "y": -492.81,
                     "uiMapId": 293
                 }
             },
@@ -3826,6 +5971,11 @@
                     "x": 692.41,
                     "y": -432.18,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 694.96,
+                    "y": -434.88,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3837,6 +5987,11 @@
                 "coord": {
                     "x": 758.93,
                     "y": -523.33,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 761.59,
+                    "y": -524.68,
                     "uiMapId": 293
                 }
             },
@@ -3850,6 +6005,11 @@
                     "x": 752.61,
                     "y": -522.63,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 752.9,
+                    "y": -524.68,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3861,6 +6021,11 @@
                 "coord": {
                     "x": 821.6,
                     "y": -670.05,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 822.42,
+                    "y": -672.42,
                     "uiMapId": 293
                 }
             },
@@ -3874,6 +6039,11 @@
                     "x": 823.73,
                     "y": -672.3,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 825.32,
+                    "y": -672.42,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3885,6 +6055,11 @@
                 "coord": {
                     "x": 856.15,
                     "y": -750.1,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 857.18,
+                    "y": -750.63,
                     "uiMapId": 293
                 }
             },
@@ -3898,6 +6073,11 @@
                     "x": 847.59,
                     "y": -746.34,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 848.49,
+                    "y": -747.73,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3909,6 +6089,11 @@
                 "coord": {
                     "x": 846.2,
                     "y": -740.62,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 848.49,
+                    "y": -741.94,
                     "uiMapId": 293
                 }
             },
@@ -3922,6 +6107,11 @@
                     "x": 850.42,
                     "y": -735.52,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 851.39,
+                    "y": -736.15,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3933,6 +6123,11 @@
                 "coord": {
                     "x": 851.78,
                     "y": -732.36,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 854.29,
+                    "y": -733.25,
                     "uiMapId": 293
                 }
             },
@@ -3946,6 +6141,11 @@
                     "x": 850.24,
                     "y": -740.23,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 851.39,
+                    "y": -741.94,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3957,6 +6157,11 @@
                 "coord": {
                     "x": 832,
                     "y": -764.89,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 834.01,
+                    "y": -765.12,
                     "uiMapId": 293
                 }
             },
@@ -3970,6 +6175,11 @@
                     "x": 856.67,
                     "y": -727.79,
                     "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 857.18,
+                    "y": -730.35,
+                    "uiMapId": 293
                 }
             },
             {
@@ -3981,6 +6191,11 @@
                 "coord": {
                     "x": 861.52,
                     "y": -727.59,
+                    "uiMapId": 293
+                },
+                "gridCoord": {
+                    "x": 862.98,
+                    "y": -730.35,
                     "uiMapId": 293
                 }
             }

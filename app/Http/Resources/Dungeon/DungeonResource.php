@@ -12,23 +12,24 @@ use JsonSerializable;
 
 /**
  * @OA\Schema(schema="Dungeon")
- * @OA\Property(type="integer",property="id",example="69")
- * @OA\Property(type="string",property="expansion",example="tww",description="The key of the expansion this dungeon belongs to")
- * @OA\Property(type="string",property="name",example="The Stonevault",description="The English dungeon name")
- * @OA\Property(type="string",property="slug",example="the-stonevault",description="The URL friendly slug of the dungeon's name")
- * @OA\Property(type="string",property="key",example="thestonevault",description="The unique identifier for this dungeon")
- * @OA\Property(type="integer",property="zoneId",example="14938",description="The zone ID of the dungeon. Found on the Wowhead page of this dungeon")
- * @OA\Property(type="integer",property="mapId",example="2652",description="The map ID of the dungeon. Found on https://wago.tools/db2/Map")
- * @OA\Property(type="integer",property="instanceId",example="1269",description="The instance ID of the dungeon. Found on https://wago.tools/db2/JournalInstance")
- * @OA\Property(type="integer",property="challengeModeId",example="501",description="The challenge mode ID of the dungeon. Found on https://wago.tools/db2/MapChallengeMode")
- * @OA\Property(type="boolean",property="raid",example="0",description="True if this dungeon is a raid")
- * @OA\Property(type="boolean",property="speedrunEnabled",example="0",description="Whether speedrun is enabled for this dungeon")
- * @OA\Property(type="boolean",property="speedrunDifficulty10ManEnabled",example="0",description="Whether 10-man difficulty is enabled for speedrunning")
- * @OA\Property(type="boolean",property="speedrunDifficulty25ManEnabled",example="0",description="Whether 25-man difficulty is enabled for speedrunning")
- * @OA\Property(type="array",property="floors",@OA\Items(ref="#/components/schemas/Floor"))
+ * @OA\Property(property="id", type="integer", example="69")
+ * @OA\Property(property="expansion", type="string", example="tww", description="The key of the expansion this dungeon belongs to")
+ * @OA\Property(property="name", type="string", example="The Stonevault", description="The English dungeon name")
+ * @OA\Property(property="slug", type="string", example="the-stonevault", description="The URL friendly slug of the dungeon's name")
+ * @OA\Property(property="key", type="string", example="thestonevault", description="The unique identifier for this dungeon")
+ * @OA\Property(property="zoneId", type="integer", example="14938", description="The zone ID of the dungeon. Found on the Wowhead page of this dungeon")
+ * @OA\Property(property="mapId", type="integer", example="2652", description="The map ID of the dungeon. Found on https://wago.tools/db2/Map")
+ * @OA\Property(property="instanceId", type="integer", example="1269", description="The instance ID of the dungeon. Found on https://wago.tools/db2/JournalInstance")
+ * @OA\Property(property="challengeModeId", type="integer", example="501", description="The challenge mode ID of the dungeon. Found on https://wago.tools/db2/MapChallengeMode")
+ * @OA\Property(property="raid", type="boolean", example="0", description="True if this dungeon is a raid")
+ * @OA\Property(property="speedrunEnabled", type="boolean", example="0", description="Whether speedrun is enabled for this dungeon")
+ * @OA\Property(property="speedrunDifficulty10ManEnabled", type="boolean", example="0", description="Whether 10-man difficulty is enabled for speedrunning")
+ * @OA\Property(property="speedrunDifficulty25ManEnabled", type="boolean", example="0", description="Whether 25-man difficulty is enabled for speedrunning")
+ * @OA\Property(property="floors", type="array", @OA\Items(ref="#/components/schemas/Floor"))
  *
  * @mixin Dungeon
  */
+
 class DungeonResource extends JsonResource
 {
     /**

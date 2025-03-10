@@ -18,6 +18,29 @@ services:
     networks:
       - keystone.guru
 
+  app-swoole:
+    build:
+      context: docker-compose/app
+      dockerfile: Dockerfile
+    image: keystone.guru-swoole
+    container_name: keystone.guru-app-swoole
+    depends_on:
+      - app
+      - db
+      - db-combatlog
+      - redis
+    restart: no
+    working_dir: /var/www/
+    command: php /var/www/artisan octane:start --host=0.0.0.0 --port=9501 --workers=1 --task-workers=1
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ~/.ssh:/root/.ssh
+    networks:
+      - keystone.guru
+    ports:
+      - "9501:9501"
+
   cron:
     build:
       context: docker-compose/cron
@@ -123,6 +146,7 @@ services:
     depends_on:
       # It complains about php-fpm not being there if this is not running first
       - app
+      - app-swoole
       - laravel-echo-server
       - php-deployer
     ports:

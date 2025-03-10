@@ -5,6 +5,7 @@ namespace App\Models\Metrics;
 use App\Models\Traits\HasGenericModelRelation;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int    $id
@@ -13,8 +14,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int    $category
  * @property string $tag
  * @property int    $value
- * @property string $updated_at
- * @property string $created_at
+ *
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
  *
  * @author Wouter
  *

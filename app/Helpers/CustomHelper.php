@@ -1,6 +1,7 @@
 <?php
 
 use Ramsey\Uuid\Uuid;
+use Swoole\Http\Server;
 
 $GLOBALS['correlationId'] = Uuid::uuid4()->toString();
 
@@ -74,4 +75,18 @@ function str_getcsv_assoc(string $csv_string, string $delimiter = ',', bool $ski
         },
         $lines
     );
+}
+
+if (!function_exists('servedByOctane')) {
+    function servedByOctane(): bool
+    {
+        return isset($_SERVER['LARAVEL_OCTANE']) && ((int)$_SERVER['LARAVEL_OCTANE'] === 1);
+    }
+}
+
+if (!function_exists('onSwooleServer')) {
+    function onSwooleServer(): bool
+    {
+        return (extension_loaded('swoole') || extension_loaded('openswoole')) && app()->bound(Server::class);
+    }
 }

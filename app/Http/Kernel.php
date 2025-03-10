@@ -8,6 +8,7 @@ use App\Http\Middleware\DebugInfoContextLogger;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\LegalAgreed;
 use App\Http\Middleware\OnlyAjax;
+use App\Http\Middleware\PoweredBySwoole;
 use App\Http\Middleware\ReadOnlyMode;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\TracksUserIpAddress;
@@ -45,6 +46,7 @@ class Kernel extends HttpKernel
         ValidatePostSize::class,
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
+        PoweredBySwoole::class
     ];
 
     /**

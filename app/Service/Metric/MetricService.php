@@ -4,12 +4,20 @@ namespace App\Service\Metric;
 
 use App\Models\Metrics\Metric;
 use App\Models\Metrics\MetricAggregation;
+use App\Service\Cache\CacheServiceInterface;
 use Artisan;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class MetricService implements MetricServiceInterface
 {
+    public function __construct(
+        private readonly CacheServiceInterface $cacheService,
+    ) {
+
+    }
+
     public function storeMetric(?int $modelId, ?string $modelClass, int $category, string $tag, int $value): Metric
     {
         return Metric::create([
@@ -30,6 +38,43 @@ class MetricService implements MetricServiceInterface
             'tag'         => $tag,
             'value'       => $value,
         ]);
+    }
+
+    public function storeMetricAsync(?int $modelId, ?string $modelClass, int $category, string $tag, int $value): void
+    {
+        $this->withLock('metrics:pending:lock', function () use ($modelId, $modelClass, $category, $tag, $value) {
+            $key = 'metrics:pending';
+
+            // Get current metrics list or initialize an empty array
+            $pendingMetrics = $this->cacheService->get($key) ?? [];
+
+            $now              = Carbon::now()->toDateTimeString();
+            $pendingMetrics[] = [
+                'model_id'    => $modelId,
+                'model_class' => $modelClass,
+                'category'    => $category,
+                'tag'         => $tag,
+                'value'       => $value,
+                'created_at'  => $now,
+                'updated_at'  => $now,
+            ];
+
+            // Save the updated list back to the cache
+            $this->cacheService->set($key, $pendingMetrics);
+        });
+    }
+
+    public function flushPendingMetrics(?int $groupBySeconds = null): array
+    {
+        return $this->withLock('metrics:pending:lock', function () use ($groupBySeconds) {
+            $key = 'metrics:pending';
+
+            // Retrieve and clear the pending metrics
+            $pendingMetrics = $this->cacheService->get($key) ?? [];
+            $this->cacheService->set($key, []); // Reset the list
+
+            return $groupBySeconds !== null ? $this->groupMetrics($pendingMetrics, $groupBySeconds) : $pendingMetrics;
+        });
     }
 
     public function aggregateMetrics(): bool
@@ -56,5 +101,63 @@ class MetricService implements MetricServiceInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param array{array{model_id: int, model_class: string, category: string, tag: string, value: int, created_at: string, updated_at: string}} $pendingMetrics
+     * @param int                                                                                                                                 $seconds
+     * @return array
+     */
+    public function groupMetrics(array $pendingMetrics, int $seconds = 30): array
+    {
+        $groupedMetrics = [];
+
+        $cachedCarbon = [];
+        foreach ($pendingMetrics as $metric) {
+            if (isset($cachedCarbon[$metric['created_at']])) {
+                $carbonCache = $cachedCarbon[$metric['created_at']];
+            } else {
+                $carbon                              = Carbon::parse($metric['created_at']);
+                $carbonCache                         = [
+                    'carbon'    => $carbon,
+                    'timestamp' => $carbon->timestamp,
+                ];
+                $cachedCarbon[$metric['created_at']] = $carbonCache;
+            }
+
+            $timestamp = $carbonCache['timestamp'];
+
+            $groupKey = sprintf('%d-%d-%s-%s-%s',
+                $timestamp - ($timestamp % $seconds),
+                $metric['model_id'],
+                $metric['model_class'],
+                $metric['category'],
+                $metric['tag']
+            );
+
+            if (!isset($groupedMetrics[$groupKey])) {
+                // Ensure that the timestamp is in the correct format
+                $metric['created_at']      = $metric['updated_at'] = $carbonCache['carbon']->toDateTimeString();
+                $groupedMetrics[$groupKey] = $metric;
+            } else {
+                $groupedMetrics[$groupKey]['value'] += $metric['value'];
+            }
+        }
+
+        return array_values($groupedMetrics);
+    }
+
+    private function withLock(string $lockKey, callable $callback, int $ttl = 5): mixed
+    {
+        try {
+            $lock = $this->cacheService->lock($lockKey, $ttl);
+
+            // Execute the critical section
+            return $callback();
+        } finally {
+            if (isset($lock)) {
+                $lock->release();
+            }
+        }
     }
 }

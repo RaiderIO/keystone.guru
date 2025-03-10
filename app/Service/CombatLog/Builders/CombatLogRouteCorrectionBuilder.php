@@ -3,23 +3,29 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcCorrectionRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRosterRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
+use App\Logic\Structs\IngameXY;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\EnemyRepositoryInterface;
+use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneSpellRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\CombatLog\Builders\Logging\CombatLogRouteCorrectionBuilderLoggingInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -46,7 +52,12 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         KillZoneRepositoryInterface               $killZoneRepository,
         KillZoneEnemyRepositoryInterface          $killZoneEnemyRepository,
         KillZoneSpellRepositoryInterface          $killZoneSpellRepository,
-        CombatLogRouteRequestModel $combatLogRoute
+        EnemyRepositoryInterface                  $enemyRepository,
+        NpcRepositoryInterface                    $npcRepository,
+        SpellRepositoryInterface                  $spellRepository,
+        FloorRepositoryInterface                  $floorRepository,
+        DungeonRepositoryInterface                $dungeonRepository,
+        CombatLogRouteRequestModel                $combatLogRoute
     ) {
         /** @var CombatLogRouteCorrectionBuilderLoggingInterface $log */
         $log       = App::make(CombatLogRouteCorrectionBuilderLoggingInterface::class);
@@ -61,8 +72,19 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
             $killZoneRepository,
             $killZoneEnemyRepository,
             $killZoneSpellRepository,
+            $enemyRepository,
+            $npcRepository,
+            $spellRepository,
+            $floorRepository,
+            $dungeonRepository,
             $combatLogRoute
         );
+    }
+
+    protected function buildFinished(): void
+    {
+        // Do not call parent - we don't care about enemy forces etc
+        $this->dungeonRoute->setRelation('killZones', $this->killZones);
     }
 
     public function getCombatLogRoute(): CombatLogRouteRequestModel
@@ -77,7 +99,8 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         try {
             $this->log->getCombatLogRouteStart();
 
-            $floorsById = $this->dungeonRoute->dungeon->floors->keyBy('id');
+            $floorsById      = $this->dungeonRoute->dungeon->floors->keyBy('id');
+            $floorsByUiMapId = $this->dungeonRoute->dungeon->floors->keyBy('uiMapId');
 
             foreach ($this->combatLogRoute->npcs as $npc) {
                 $resolvedEnemy = $npc->getResolvedEnemy();
@@ -88,12 +111,28 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                     continue;
                 }
 
-                /** @var Floor $floor */
-                $floor = $floorsById->get($resolvedEnemy->floor_id);
-                $resolvedEnemy->setRelation('floor', $floor);
+                /** @var Floor $resolvedEnemyFloor */
+                $resolvedEnemyFloor = $floorsById->get($resolvedEnemy->floor_id);
+                $resolvedEnemy->setRelation('floor', $resolvedEnemyFloor);
 
                 $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(
                     $resolvedEnemy->getLatLng()
+                );
+
+                $gridLocation      = $this->coordinatesService->calculateGridLocationForIngameLocation(
+                    new IngameXY(
+                        $npc->coord->x,
+                        $npc->coord->y,
+                        // Fallback on the enemy's floor just in case
+                        $this->floorRepository->findByUiMapId($npc->coord->uiMapId) ?? $resolvedEnemy->floor
+                    ),
+                    config('keystoneguru.heatmap.service.data.player.size_x'),
+                    config('keystoneguru.heatmap.service.data.player.size_y')
+                );
+                $gridLocationEnemy = $this->coordinatesService->calculateGridLocationForIngameLocation(
+                    $ingameXY,
+                    config('keystoneguru.heatmap.service.data.enemy.size_x'),
+                    config('keystoneguru.heatmap.service.data.enemy.size_y')
                 );
 
                 $npcs->push(
@@ -110,24 +149,59 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                         new CombatLogRouteCoordRequestModel(
                             $ingameXY->getX(2),
                             $ingameXY->getY(2),
-                            $floor->ui_map_id
+                            $resolvedEnemyFloor->ui_map_id
+                        ),
+                        new CombatLogRouteCoordRequestModel(
+                            $gridLocation->getX(2),
+                            $gridLocation->getY(2),
+                            $npc->coord->uiMapId
+                        ),
+                        new CombatLogRouteCoordRequestModel(
+                            $gridLocationEnemy->getX(2),
+                            $gridLocationEnemy->getY(2),
+                            $resolvedEnemyFloor->ui_map_id
                         )
                     )
                 );
             }
 
             foreach ($this->combatLogRoute->spells as $spell) {
+                $gridLocation      = $this->coordinatesService->calculateGridLocationForIngameLocation(
+                    new IngameXY(
+                        $spell->coord->x,
+                        $spell->coord->y,
+                        $this->floorRepository->findByUiMapId($spell->coord->uiMapId)
+                    ),
+                    config('keystoneguru.heatmap.service.data.player.size_x'),
+                    config('keystoneguru.heatmap.service.data.player.size_y')
+                );
+
                 $spells->push(
                     new CombatLogRouteSpellRequestModel(
                         $spell->spellId,
                         $spell->playerUid,
                         $spell->castAt,
                         $spell->coord,
+                        new CombatLogRouteCoordRequestModel(
+                            $gridLocation->getX(2),
+                            $gridLocation->getY(2),
+                            $spell->coord->uiMapId
+                        ),
                     )
                 );
             }
 
             foreach ($this->combatLogRoute->playerDeaths ?? [] as $playerDeath) {
+                $gridLocation      = $this->coordinatesService->calculateGridLocationForIngameLocation(
+                    new IngameXY(
+                        $playerDeath->coord->x,
+                        $playerDeath->coord->y,
+                        $this->floorRepository->findByUiMapId($playerDeath->coord->uiMapId)
+                    ),
+                    config('keystoneguru.heatmap.service.data.player.size_x'),
+                    config('keystoneguru.heatmap.service.data.player.size_y')
+                );
+
                 $playerDeaths->push(
                     new CombatLogRoutePlayerDeathRequestModel(
                         $playerDeath->characterId,
@@ -136,6 +210,11 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                         $playerDeath->itemLevel,
                         $playerDeath->diedAt,
                         $playerDeath->coord,
+                        new CombatLogRouteCoordRequestModel(
+                            $gridLocation->getX(2),
+                            $gridLocation->getY(2),
+                            $playerDeath->coord->uiMapId
+                        ),
                     )
                 );
             }

@@ -2,8 +2,8 @@
 
 namespace App\Service\CombatLog\Filters\DungeonRoute;
 
-use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\CombatLog\Filters\BaseCombatLogFilter;
+use Illuminate\Support\Collection;
 
 class CombatLogDungeonRouteFilter extends BaseCombatLogFilter
 {
@@ -26,9 +26,9 @@ class CombatLogDungeonRouteFilter extends BaseCombatLogFilter
         $this->addFilter($this->spellFilter);
     }
 
-    public function setDungeonRoute(DungeonRoute $dungeonRoute): self
+    public function setValidNpcIds(Collection $validNpcIds): self
     {
-        $this->combatFilter->setValidNpcIds($dungeonRoute->dungeon->getInUseNpcIds());
+        $this->combatFilter->setValidNpcIds($validNpcIds);
 
         return $this;
     }

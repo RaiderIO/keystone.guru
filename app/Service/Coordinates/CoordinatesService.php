@@ -2,6 +2,7 @@
 
 namespace App\Service\Coordinates;
 
+use App\Logic\Structs\GridLocation;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
@@ -275,6 +276,29 @@ class CoordinatesService implements CoordinatesServiceInterface
         }
 
         return $oddNodes;
+    }
+
+    public function calculateGridLocationForIngameLocation(IngameXY $ingameXY, int $gridSizeX, int $gridSizeY): IngameXY
+    {
+        $floor = $ingameXY->getFloor();
+
+        if ($floor === null) {
+            throw new InvalidArgumentException('No floor set for ingameXY!');
+        }
+
+        $width  = $floor->ingame_max_x - $floor->ingame_min_x;
+        $height = $floor->ingame_max_y - $floor->ingame_min_y;
+        $stepX  = $width / $gridSizeX;
+        $stepY  = $height / $gridSizeY;
+
+        $gx = (int)((($ingameXY->getX() - $floor->ingame_min_x) / $width) * $gridSizeX);
+        $gy = (int)((($ingameXY->getY() - $floor->ingame_min_y) / $height) * $gridSizeY);
+
+        return new IngameXY(
+            ($gx * $stepX) + $floor->ingame_min_x,
+            ($gy * $stepY) + $floor->ingame_min_y,
+            $floor
+        );
     }
 
     public static function getMapCenterLatLng(?Floor $floor = null): LatLng

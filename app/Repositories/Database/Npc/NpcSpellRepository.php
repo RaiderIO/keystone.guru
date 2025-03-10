@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Repositories\Database;
+namespace App\Repositories\Database\Npc;
 
 use App\Models\Npc\NpcSpell;
-use App\Repositories\Interfaces\NpcSpellRepositoryInterface;
+use App\Repositories\Database\DatabaseRepository;
+use App\Repositories\Interfaces\Npc\NpcSpellRepositoryInterface;
 
 class NpcSpellRepository extends DatabaseRepository implements NpcSpellRepositoryInterface
 {

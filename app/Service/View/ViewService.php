@@ -39,7 +39,7 @@ class ViewService implements ViewServiceInterface
      */
     public function getGlobalViewVariables(bool $useCache = true): array
     {
-        return $this->cacheService->setCacheEnabled($useCache)->remember('global_view_variables', function () {
+        return $this->cacheService->setCacheEnabled($useCache)->remember('view_variables:global', function () {
             // Build a list of some common
             $demoRoutes = DungeonRoute::where('demo', true)
                 ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD_WITH_LINK])
@@ -166,7 +166,7 @@ class ViewService implements ViewServiceInterface
     public function getGameServerRegionViewVariables(GameServerRegion $gameServerRegion, bool $useCache = true): array
     {
         return $this->cacheService->setCacheEnabled($useCache)->remember(
-            sprintf('game_server_region_%s_view_variables', $gameServerRegion->short),
+            sprintf('view_variables:game_server_region:%s', $gameServerRegion->short),
             function () use ($gameServerRegion) {
                 $currentExpansion = $this->expansionService->getCurrentExpansion($gameServerRegion);
                 $currentSeason    = $this->expansionService->getCurrentSeason($currentExpansion, $gameServerRegion);
@@ -221,6 +221,6 @@ class ViewService implements ViewServiceInterface
                     'allAffixGroups'                   => $allAffixGroups,
                     'allCurrentAffixes'                => $allCurrentAffixes,
                 ];
-            });
+            }, config('keystoneguru.cache.global_view_variables.ttl'));
     }
 }

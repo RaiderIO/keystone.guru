@@ -159,7 +159,7 @@ return [
                 'connection' => 'redis',
                 'queue'      => [sprintf('%s-production-thumbnail', env('APP_TYPE'))],
                 'balance'    => 'simple',
-                'processes'  => 6,
+                'processes'  => 3,
                 'tries'      => 1,
             ],
             'supervisor-thumbnail-api' => [

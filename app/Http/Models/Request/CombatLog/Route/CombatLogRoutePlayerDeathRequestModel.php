@@ -9,12 +9,13 @@ use Illuminate\Support\Carbon;
 
 /**
  * @OA\Schema(schema="CombatLogRoutePlayerDeath")
- * @OA\Property(property="characterId", type="integer")
- * @OA\Property(property="classId", type="integer")
- * @OA\Property(property="specId", type="integer")
- * @OA\Property(property="itemLevel", type="number", format="float")
- * @OA\Property(property="diedAt", type="string", format="date-time")
- * @OA\Property(property="coord", ref="#/components/schemas/CombatLogRouteCoord")
+ * @OA\Property(property="characterId",type="integer")
+ * @OA\Property(property="classId",type="integer")
+ * @OA\Property(property="specId",type="integer")
+ * @OA\Property(property="itemLevel",type="number",format="float")
+ * @OA\Property(property="diedAt",type="string",format="date-time")
+ * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
+ * @OA\Property(property="gridCoord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  */
 class CombatLogRoutePlayerDeathRequestModel extends RequestModel implements Arrayable
 {
@@ -28,8 +29,9 @@ class CombatLogRoutePlayerDeathRequestModel extends RequestModel implements Arra
         public ?int                             $specId = null,
         public ?float                           $itemLevel = null,
         public ?string                          $diedAt = null,
-        public ?CombatLogRouteCoordRequestModel $coord = null)
-    {
+        public ?CombatLogRouteCoordRequestModel $coord = null,
+        public ?CombatLogRouteCoordRequestModel $gridCoord = null
+    ) {
     }
 
     public function getDiedAt(): Carbon
