@@ -465,12 +465,16 @@ class DungeonrouteTable extends InlineCode {
             addremoveroute: {
                 'title': lang.get('messages.actions_label'),
                 'render': function (data, type, row, meta) {
-                    let result = null;
+                    let result;
                     if (row.has_team) {
-                        let template = Handlebars.templates['team_dungeonroute_table_route_actions_template'];
+                        let template = Handlebars.templates[
+                            row.author.id === self.options.currentUserId ?
+                                'dungeonroute_table_profile_actions_template' :
+                                'team_dungeonroute_table_route_actions'
+                            ];
                         result = template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
                     } else {
-                        let template = Handlebars.templates['team_dungeonroute_table_add_route_actions_template'];
+                        let template = Handlebars.templates['team_dungeonroute_table_add_route_actions'];
                         result = template($.extend({}, getHandlebarsDefaultVariables(), {public_key: row.public_key}));
                     }
                     return result;
