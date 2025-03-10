@@ -167,8 +167,10 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
 
             foreach ($this->combatLogRoute->spells as $spell) {
                 $floor = $this->floorRepository->findByUiMapId($spell->coord->uiMapId);
-                if ($floor === null && !in_array($spell->coord->uiMapId, Floor::UI_MAP_ID_OPEN_WORLD)) {
-                    $this->log->getCombatLogRouteSpellFloorNotFound($spell->coord->uiMapId);
+                if ($floor === null) {
+                    if (!in_array($spell->coord->uiMapId, Floor::UI_MAP_ID_OPEN_WORLD)) {
+                        $this->log->getCombatLogRouteSpellFloorNotFound($spell->coord->uiMapId);
+                    }
                     continue;
                 }
 
@@ -176,6 +178,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                     new IngameXY(
                         $spell->coord->x,
                         $spell->coord->y,
+                        $floor,
                     ),
                     config('keystoneguru.heatmap.service.data.player.size_x'),
                     config('keystoneguru.heatmap.service.data.player.size_y')
@@ -198,8 +201,10 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
 
             foreach ($this->combatLogRoute->playerDeaths ?? [] as $playerDeath) {
                 $floor = $this->floorRepository->findByUiMapId($playerDeath->coord->uiMapId);
-                if ($floor === null && !in_array($playerDeath->coord->uiMapId, Floor::UI_MAP_ID_OPEN_WORLD)) {
-                    $this->log->getCombatLogRoutePlayerDeathFloorNotFound($playerDeath->coord->uiMapId);
+                if ($floor === null) {
+                    if (!in_array($playerDeath->coord->uiMapId, Floor::UI_MAP_ID_OPEN_WORLD)) {
+                        $this->log->getCombatLogRoutePlayerDeathFloorNotFound($playerDeath->coord->uiMapId);
+                    }
                     continue;
                 }
 
@@ -207,7 +212,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                     new IngameXY(
                         $playerDeath->coord->x,
                         $playerDeath->coord->y,
-                        $this->floorRepository->findByUiMapId($playerDeath->coord->uiMapId)
+                        $floor
                     ),
                     config('keystoneguru.heatmap.service.data.player.size_x'),
                     config('keystoneguru.heatmap.service.data.player.size_y')
