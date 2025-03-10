@@ -119,6 +119,13 @@ class Floor extends CacheModel implements MappingModelInterface
         1490 => 1497, // Mechagon -> Mechagon: Workshop -> Mechagon City
     ];
 
+    /**
+     * Some IDs which are open world and we cannot resolve to a dungeon floor.
+     */
+    public const UI_MAP_ID_OPEN_WORLD = [
+        2274, // Khaz Algar
+    ];
+
     protected $fillable = [
         'dungeon_id',
         'index',
@@ -375,8 +382,8 @@ class Floor extends CacheModel implements MappingModelInterface
     }
 
     /**
-     * @deprecated Use FloorRepository::findByUiMapId instead
      * @param int|null $dungeonId Can be passed in case the uiMapIds are not unique
+     * @deprecated Use FloorRepository::findByUiMapId instead
      */
     public static function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor
     {
