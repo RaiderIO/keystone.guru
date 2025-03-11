@@ -154,6 +154,10 @@ return [
         'name'        => 'Challenger\'s Peril',
         'description' => 'The timer is increased by 90 seconds, but dying subtracts 15 seconds from time remaining.',
     ],
+    'xalataths_bargain_pulsar'  => [
+        'name'        => 'Xal\'atath\'s Bargain: Pulsar',
+        'description' => 'While in combat, Xal\'atath summons pulsars that orbit players.',
+    ],
     'seasonal_index_preset'        => '%s preset %d',
 
 ];
