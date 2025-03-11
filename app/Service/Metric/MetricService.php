@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-readonly class MetricService implements MetricServiceInterface
+class MetricService implements MetricServiceInterface
 {
     public function __construct(
-        private CacheServiceInterface $cacheService,
+        private readonly CacheServiceInterface $cacheService,
     ) {
 
     }
