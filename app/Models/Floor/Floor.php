@@ -115,14 +115,17 @@ class Floor extends CacheModel implements MappingModelInterface
         2215 => 2359, // Harrowfall -> The Dawnbreaker
         // Grim Batol
         241  => 293, // Twilight Highlands -> Grim Batol
-        // Mechagon: Workshop
-        1490 => 1497, // Mechagon -> Mechagon: Workshop -> Mechagon City
     ];
 
     /**
-     * Some IDs which are open world and we cannot resolve to a dungeon floor.
+     * Some IDs which are open world, and we cannot resolve to a dungeon floor.
      */
     public const UI_MAP_ID_OPEN_WORLD = [
+        1550, // The Shadowlands
+        2214, // The Ringing Deeps
+        1490, // Mechagon
+        1493, // Mechagon
+        2248, // Isle of Dorn
         2274, // Khaz Algar
     ];
 

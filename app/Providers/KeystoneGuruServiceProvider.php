@@ -127,17 +127,6 @@ use Str;
 
 class KeystoneGuruServiceProvider extends ServiceProvider
 {
-    private const VIEW_VARIABLES_URL_WHITELIST = [
-        // search actually renders views back to the user which we need
-        'ajax/search',
-    ];
-
-    private const VIEW_VARIABLES_URL_BLACKLIST = [
-        'ajax',
-        'api',
-        'benchmark',
-    ];
-
     /**
      * Register services.
      */
@@ -246,19 +235,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 return;
             }
 
-            $requestUri = trim(request()->getRequestUri(), '/');
-            $isWhitelisted = collect(self::VIEW_VARIABLES_URL_WHITELIST)->contains(static function ($url) use($requestUri) {
-                return Str::startsWith($requestUri, $url);
-            });
-
-            if (!$isWhitelisted) {
-                // If it's blacklisted..
-                if (collect(self::VIEW_VARIABLES_URL_BLACKLIST)->contains(static function ($url) use($requestUri) {
-                    return Str::startsWith($requestUri, $url);
-                })) {
-                    // Don't set the view variables at all
-                    return;
-                }
+            if (!$viewService->shouldLoadViewVariables(request()->getUri())) {
+                return;
             }
 
             session_set_cookie_params([
