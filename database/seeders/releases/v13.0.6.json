@@ -1,0 +1,31 @@
+{
+    "id": 286,
+    "release_changelog_id": 293,
+    "version": "v13.0.6",
+    "title": "",
+    "backup_db": 0,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-03-11T15:26:00+00:00",
+    "updated_at": "2025-03-11T15:26:00+00:00",
+    "changelog": {
+        "id": 293,
+        "release_id": 286,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 293,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2623,
+                "change": "Added cache prefix to model cache. This prevents massive CPU spikes when performing a deployment."
+            },
+            {
+                "release_changelog_id": 293,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2767,
+                "change": "Fixed more error spam from malicious actors."
+            }
+        ]
+    }
+}
