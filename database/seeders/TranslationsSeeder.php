@@ -24,7 +24,6 @@ class TranslationsSeeder extends Seeder implements TableSeederInterface
                 $translations = Lang::get($fileName, [], $locale);
 
                 if (!is_array($translations)) {
-//                    $this->command->comment(sprintf('Skipping %s, no translations found', $fileName));
                     continue;
                 }
 
@@ -35,9 +34,7 @@ class TranslationsSeeder extends Seeder implements TableSeederInterface
             }
         }
 
-//        $this->command->info(sprintf('Inserting %s translations', count($translationAttributes)));
         collect($translationAttributes)->chunk(1000)->each(function ($chunk) {
-
             Translation::from(DatabaseSeeder::getTempTableName(Translation::class))
                 ->insert($chunk->toArray());
         });

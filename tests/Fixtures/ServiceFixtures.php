@@ -30,6 +30,7 @@ use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\Spell\Logging\SpellServiceLoggingInterface;
 use App\Service\Spell\SpellService;
+use App\Service\View\ViewService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\MockObject\Exception;
@@ -54,6 +55,28 @@ class ServiceFixtures
             ->setConstructorArgs([
                 $seasonService ?? self::getSeasonServiceMock($testCase),
                 $log ?? LoggingFixtures::createAffixGroupEaseTierServiceLogging($testCase),
+            ])
+            ->getMock();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function getViewServiceMock(
+        PublicTestCase                      $testCase,
+        ?CacheServiceInterface              $cacheService = null,
+        ?ExpansionServiceInterface          $expansionService = null,
+        ?AffixGroupEaseTierServiceInterface $easeTierService = null,
+        array                               $methodsToMock = []
+
+    ): MockObject|ViewService {
+        return $testCase
+            ->getMockBuilder(ViewService::class)
+            ->onlyMethods($methodsToMock)
+            ->setConstructorArgs([
+                $cacheService ?? self::getCacheServiceMock($testCase),
+                $expansionService ?? self::getExpansionServiceMock($testCase),
+                $easeTierService ?? self::getAffixGroupEaseTierServiceMock($testCase),
             ])
             ->getMock();
     }

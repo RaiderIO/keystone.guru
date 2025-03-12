@@ -68,7 +68,7 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             new Affix(['key' => Affix::AFFIX_XALATATHS_BARGAIN_FRENZIED, 'name' => 'affixes.xalataths_bargain_frenzied.name', 'icon_file_id' => -1, 'affix_id' => 153, 'description' => 'affixes.xalataths_bargain_frenzied.description']),
             new Affix(['key' => Affix::AFFIX_XALATATHS_GUILE, 'name' => 'affixes.xalataths_guile.name', 'icon_file_id' => -1, 'affix_id' => 147, 'description' => 'affixes.xalataths_guile.description']),
             new Affix(['key' => Affix::AFFIX_CHALLENGERS_PERIL, 'name' => 'affixes.challengers_peril.name', 'icon_file_id' => -1, 'affix_id' => 152, 'description' => 'affixes.challengers_peril.description']),
-
+            new Affix(['key' => Affix::AFFIX_XALATATHS_BARGAIN_PULSAR, 'name' => 'affixes.xalataths_bargain_pulsar.name', 'icon_file_id' => -1, 'affix_id' => 162, 'description' => 'affixes.xalataths_bargain_pulsar.description']),
         ]);
 
         foreach ($affixes as $affix) {
@@ -282,7 +282,7 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             array_merge($season15, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]]),
             array_merge($season15, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE]]),
             array_merge($season15, ['affixes' => [Affix::AFFIX_XALATATHS_BARGAIN_ASCENDANT, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]]),
-            array_merge($season15, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE]]),
+            array_merge($season15, ['affixes' => [Affix::AFFIX_XALATATHS_BARGAIN_PULSAR, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE]]),
             array_merge($season15, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]]),
             array_merge($season15, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE]]),
             array_merge($season15, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]]),

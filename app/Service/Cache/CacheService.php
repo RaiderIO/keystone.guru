@@ -2,12 +2,10 @@
 
 namespace App\Service\Cache;
 
-use App\Models\Dungeon;
 use App\Service\Cache\Logging\CacheServiceLoggingInterface;
 use Closure;
 use DateInterval;
 use Illuminate\Contracts\Cache\LockTimeoutException;
-use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -169,9 +167,9 @@ class CacheService implements CacheServiceInterface
         ], $seconds);
     }
 
-    public function lock(string $key, int $ttl = 60): Lock
+    public function lock(string $key, callable $callable, int $waitFor = 10): mixed
     {
-        return Cache::lock($key, $ttl, 'default');
+        return Cache::lock($key, 10, 'default')->block($waitFor, $callable);
     }
 
     private function deleteKeysByPattern(array $regexes, ?int $idleTimeSeconds = null): int

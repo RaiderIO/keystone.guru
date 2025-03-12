@@ -42,7 +42,7 @@ class MetricService implements MetricServiceInterface
 
     public function storeMetricAsync(?int $modelId, ?string $modelClass, int $category, string $tag, int $value): void
     {
-        $this->withLock('metrics:pending:lock', function () use ($modelId, $modelClass, $category, $tag, $value) {
+        $this->cacheService->lock('metrics:pending:lock', function () use ($modelId, $modelClass, $category, $tag, $value) {
             $key = 'metrics:pending';
 
             // Get current metrics list or initialize an empty array
@@ -66,7 +66,7 @@ class MetricService implements MetricServiceInterface
 
     public function flushPendingMetrics(?int $groupBySeconds = null): array
     {
-        return $this->withLock('metrics:pending:lock', function () use ($groupBySeconds) {
+        return $this->cacheService->lock('metrics:pending:lock', function () use ($groupBySeconds) {
             $key = 'metrics:pending';
 
             // Retrieve and clear the pending metrics
@@ -145,19 +145,5 @@ class MetricService implements MetricServiceInterface
         }
 
         return array_values($groupedMetrics);
-    }
-
-    private function withLock(string $lockKey, callable $callback, int $ttl = 5): mixed
-    {
-        try {
-            $lock = $this->cacheService->lock($lockKey, $ttl);
-
-            // Execute the critical section
-            return $callback();
-        } finally {
-            if (isset($lock)) {
-                $lock->release();
-            }
-        }
     }
 }

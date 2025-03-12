@@ -22,5 +22,5 @@ interface CacheServiceInterface
 
     public function clearIdleKeys(?int $seconds = null): int;
 
-    public function lock(string $key, int $ttl = 60): Lock;
+    public function lock(string $key, callable $callable, int $waitFor = 60): mixed;
 }

@@ -24,9 +24,22 @@ use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Str;
 
 class ViewService implements ViewServiceInterface
 {
+    private const VIEW_VARIABLES_URL_WHITELIST = [
+        // search actually renders views back to the user which we need
+        '/ajax/search',
+    ];
+
+    private const VIEW_VARIABLES_URL_BLACKLIST = [
+        '/ajax/',
+        '/api/',
+        '/benchmark',
+    ];
+
+
     public function __construct(
         private readonly CacheServiceInterface              $cacheService,
         private readonly ExpansionServiceInterface          $expansionService,
@@ -222,5 +235,24 @@ class ViewService implements ViewServiceInterface
                     'allCurrentAffixes'                => $allCurrentAffixes,
                 ];
             }, config('keystoneguru.cache.global_view_variables.ttl'));
+    }
+
+    public function shouldLoadViewVariables(string $uri): bool
+    {
+        $isWhitelisted = collect(self::VIEW_VARIABLES_URL_WHITELIST)->contains(static function ($url) use ($uri) {
+            return Str::startsWith($uri, $url);
+        });
+
+        if (!$isWhitelisted) {
+            // If it's blacklisted..
+            if (collect(self::VIEW_VARIABLES_URL_BLACKLIST)->contains(static function ($url) use ($uri) {
+                return Str::startsWith($uri, $url);
+            })) {
+                // Don't set the view variables at all
+                return false;
+            }
+        }
+
+        return true;
     }
 }

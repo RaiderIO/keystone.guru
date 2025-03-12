@@ -6,6 +6,7 @@ use App\Console\Commands\Scheduler\SchedulerCommand;
 use App\Logic\Utils\Stopwatch;
 use App\Models\Metrics\Metric;
 use App\Service\Metric\MetricServiceInterface;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class SavePending
@@ -38,20 +39,20 @@ class SavePending extends SchedulerCommand
         $pendingMetrics = $metricService->flushPendingMetrics(60);
 
         if (empty($pendingMetrics)) {
-            $this->info('No pending metrics to save.');
+            Log::channel('scheduler')->info('No pending metrics to save.');
 
             return 0;
         }
 
-        $this->info(sprintf('Flushing %d pending metrics to the database.', count($pendingMetrics)));
+        Log::channel('scheduler')->info(sprintf('Flushing %d pending metrics to the database.', count($pendingMetrics)));
         Stopwatch::start('metric:savepending');
         $result = Metric::insert($pendingMetrics);
         if ($result) {
-            $this->info(
+            Log::channel('scheduler')->info(
                 sprintf('Successfully saved metrics to the database in %d ms.', Stopwatch::stop('metric:savepending'))
             );
         } else {
-            $this->error('Failed to save metrics to the database.');
+            Log::channel('scheduler')->error('Failed to save metrics to the database.');
         }
 
         return !$result;

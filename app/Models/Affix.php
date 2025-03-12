@@ -76,6 +76,7 @@ class Affix extends CacheModel
     public const AFFIX_XALATATHS_BARGAIN_FRENZIED  = 'Xal\'atath\'s Bargain: Frenzied';
     public const AFFIX_XALATATHS_GUILE             = 'Xal\'atath\'s Guile';
     public const AFFIX_CHALLENGERS_PERIL           = 'Challenger\'s Peril';
+    public const AFFIX_XALATATHS_BARGAIN_PULSAR    = 'Xal\'atath\'s Bargain: Pulsar';
 
 
     public const ALL = [
@@ -117,6 +118,7 @@ class Affix extends CacheModel
         self::AFFIX_XALATATHS_BARGAIN_FRENZIED  => 36,
         self::AFFIX_XALATATHS_GUILE             => 37,
         self::AFFIX_CHALLENGERS_PERIL           => 38,
+        self::AFFIX_XALATATHS_BARGAIN_PULSAR    => 39,
     ];
 
     public const SEASONAL_AFFIXES = [
@@ -135,6 +137,7 @@ class Affix extends CacheModel
         self::AFFIX_XALATATHS_BARGAIN_OBLIVION,
         self::AFFIX_XALATATHS_BARGAIN_FRENZIED,
         self::AFFIX_XALATATHS_GUILE,
+        self::AFFIX_XALATATHS_BARGAIN_PULSAR,
     ];
 
     private const SEASONAL_TYPE_AFFIX_MAPPING = [
