@@ -474,6 +474,7 @@ return [
     'toggle_spell_visibility_error'                                        => 'Spell visibility toggle failed',
     'week_label'                                                           => 'Week',
     'loading_label'                                                        => 'Loading',
+    'too_much_data_label'                                                  => 'Too much runs found - please further refine your search',
     'error_loading_data_label'                                             => 'Error loading data - please try again',
     'run_count_label'                                                      => 'Showing data from :count runs',
 ];
