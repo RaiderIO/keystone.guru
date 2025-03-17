@@ -11,7 +11,7 @@
             "wowInstanceId": 2648
         },
         "settings": {
-            "temporary": false,
+            "temporary": true,
             "debugIcons": false
         },
         "challengeMode": {
@@ -93,7 +93,7 @@
                     "uiMapId": 2315
                 },
                 "coordEnemy": {
-                    "x": 2112.42,
+                    "x": 2112.43,
                     "y": 2848.39,
                     "uiMapId": 2315
                 },

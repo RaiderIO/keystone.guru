@@ -10,7 +10,7 @@
         "wowInstanceId": 2648
     },
     "settings": {
-        "temporary": false,
+        "temporary": true,
         "debugIcons": false
     },
     "challengeMode": {
