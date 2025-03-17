@@ -24,4 +24,10 @@ class APICombatLogControllerCorrectEventsDarkflameCleftTest extends APICombatLog
     {
         $this->executeTest('TWW/tww_s2_darkflame_cleft_5');
     }
+
+    #[Test]
+    public function create_givenDarkflameCleft14ShadowRealmJson_shouldReturnCorrectedJsonData(): void
+    {
+        $this->executeTest('TWW/tww_s2_darkflame_cleft_14_shadow_realm');
+    }
 }

@@ -7,12 +7,17 @@ use Illuminate\Support\Collection;
 
 class ActivePull
 {
+    protected ?Carbon $startTime;
+
+    protected ?Carbon $endTime;
+
     /** @var Collection<ActivePullEnemy> */
     protected Collection $enemiesInCombat;
 
     /** @var Collection<ActivePullEnemy> */
     protected Collection $enemiesKilled;
 
+    /** @var Collection<int> */
     protected Collection $spellsCast;
 
     /**
@@ -24,11 +29,23 @@ class ActivePull
 
     public function __construct()
     {
+        $this->startTime       = null;
+        $this->endTime         = null;
         $this->enemiesInCombat = collect();
         $this->enemiesKilled   = collect();
         $this->spellsCast      = collect();
 
         $this->isCompleted = false;
+    }
+
+    public function getStartTime(): ?Carbon
+    {
+        return $this->startTime;
+    }
+
+    public function getEndTime(): ?Carbon
+    {
+        return $this->endTime;
     }
 
     public function getAverageHPPercentAt(Carbon $timestamp): float
@@ -59,6 +76,9 @@ class ActivePull
         return $this->enemiesKilled;
     }
 
+    /**
+     * @return Collection<int>
+     */
     public function getSpellsCast(): Collection
     {
         return $this->spellsCast;
@@ -71,6 +91,10 @@ class ActivePull
         if ($activePullEnemy !== null) {
             $this->enemiesInCombat->forget($uniqueId);
             $this->enemiesKilled->put($activePullEnemy->getUniqueId(), $activePullEnemy);
+
+            if ($this->endTime === null || $activePullEnemy->getDiedAt()->isAfter($this->endTime)) {
+                $this->endTime = $activePullEnemy->getDiedAt();
+            }
 
             if ($this->enemiesInCombat->isEmpty()) {
                 $this->isCompleted = true;
@@ -93,6 +117,10 @@ class ActivePull
     public function enemyEngaged(ActivePullEnemy $activePullEnemy): ActivePull
     {
         $this->enemiesInCombat->put($activePullEnemy->getUniqueId(), $activePullEnemy);
+
+        if ($this->startTime === null || $activePullEnemy->getEngagedAt()->isBefore($this->startTime)) {
+            $this->startTime = $activePullEnemy->getEngagedAt();
+        }
 
         return $this;
     }

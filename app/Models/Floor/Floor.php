@@ -129,6 +129,8 @@ class Floor extends CacheModel implements MappingModelInterface
         2274, // Khaz Algar
     ];
 
+    public const DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID = 2304;
+
     protected $fillable = [
         'dungeon_id',
         'index',
