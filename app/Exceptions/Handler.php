@@ -65,7 +65,7 @@ class Handler extends ExceptionHandler
             if ($e instanceof TooManyRequestsHttpException) {
                 $handlerLogging->tooManyRequests($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $e);
             } else if (!in_array(get_class($e), $this->dontReport)) {
-                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $request?->all(), get_class($e), $e->getMessage());
+                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $this->maskSensitiveVariables($request?->all()), get_class($e), $e->getMessage());
             }
         }
 
@@ -122,5 +122,21 @@ class Handler extends ExceptionHandler
     private function isApiRequest(Request $request): bool
     {
         return str_starts_with($request->decodedPath(), 'api/');
+    }
+
+    private function maskSensitiveVariables(?array $array): ?array
+    {
+        if ($array === null) {
+            return null;
+        }
+
+        $keys = ['_token', 'password', 'password_confirmation'];
+        foreach ($keys as $key) {
+            if (isset($array[$key]) && is_string($array[$key])) {
+                $array[$key] = '*********';
+            }
+        }
+
+        return $array;
     }
 }
