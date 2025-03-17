@@ -100,7 +100,6 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
             $this->log->getCombatLogRouteStart();
 
             $floorsById      = $this->dungeonRoute->dungeon->floors->keyBy('id');
-            $floorsByUiMapId = $this->dungeonRoute->dungeon->floors->keyBy('uiMapId');
 
             foreach ($this->combatLogRoute->npcs as $npc) {
                 $resolvedEnemy = $npc->getResolvedEnemy();
