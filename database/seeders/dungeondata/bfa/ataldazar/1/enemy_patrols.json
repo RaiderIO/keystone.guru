@@ -61,7 +61,7 @@
             "color": "#003280",
             "color_animated": null,
             "weight": 4,
-            "vertices_json": "[{\"lat\":\"-117.5\",\"lng\":\"264.5\"},{\"lat\":\"-101.5\",\"lng\":\"264.62\"}]"
+            "vertices_json": "[{\"lat\":-117.5,\"lng\":264.5},{\"lat\":-101.5,\"lng\":264.62}]"
         }
     },
     {
