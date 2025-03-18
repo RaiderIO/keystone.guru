@@ -396,7 +396,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 12541
+            }
+        ],
         "npc_enemy_forces": []
     },
     {

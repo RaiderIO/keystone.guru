@@ -53,11 +53,17 @@ class AffixGroup extends AffixGroupBase
     {
         $result = collect();
 
-        $eligibleAffixGroups = AffixGroup::where('season_id', $season->id)->get();
+        $eligibleAffixGroups    = AffixGroup::where('season_id', $season->id)->get();
+        $bestMatchingAffixCount = 0;
         foreach ($eligibleAffixGroups as $eligibleAffixGroup) {
-            // If the affix group's affixes are all in $affixIds
-            if ($affixIds->diff($eligibleAffixGroup->affixes->pluck('affix_id'))->isEmpty()) {
-                // Couple the affix group to the newly created dungeon route
+            // We have to find the best matching affix group - if we don't have all the affixes we can just take the best guess
+            $matchingAffixCount = $affixIds->diff($eligibleAffixGroup->affixes->pluck('affix_id'))->count();
+            if ($bestMatchingAffixCount <= $matchingAffixCount) {
+                if ($bestMatchingAffixCount < $matchingAffixCount) {
+                    $result = collect();
+                    // We found a better matching affix group
+                    $bestMatchingAffixCount = $matchingAffixCount;
+                }
                 $result->push($eligibleAffixGroup);
             }
         }

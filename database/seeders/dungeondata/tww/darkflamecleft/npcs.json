@@ -500,7 +500,11 @@
                 "characteristic_id": 24
             }
         ],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 224729
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -806,6 +810,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 224729
+            },
+            {
                 "spell_id": 423479
             },
             {
@@ -883,6 +890,9 @@
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 424650
             },
@@ -1302,6 +1312,9 @@
             },
             {
                 "spell_id": 1218131
+            },
+            {
+                "spell_id": 1218133
             }
         ],
         "npc_enemy_forces": [
@@ -1753,6 +1766,9 @@
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 424322
             }

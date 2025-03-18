@@ -50,6 +50,7 @@ class CombatLogEntry
     private const RAW_EVENT_IGNORE = [
         'Search the gold piles for magic items!',
         'Everyone within 10 yards will be consumed!',
+        ':20|t Voidstone Monstrosity is weakened by |cFFFF0000|Hspell:423839|h[Storm\'s Vengeance]|h|r!',
         // This is sometimes randomly put in the combat log. If this is not a bug and something that keeps returning
         // we may need to find a better solution
         'COMBAT_LOG_VERSION,20,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,11.0.0,PROJECT_ID,1',

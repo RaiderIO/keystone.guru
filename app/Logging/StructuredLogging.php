@@ -16,6 +16,18 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
     private static int $GROUPED_CONTEXT_COUNT = 0;
 
+    /** @var array|string[] Precalculated padding to ensure the log lines line up nicely with some padding at the start */
+    private static array $START_PADDING = [
+        Level::Debug->value     => '  ',
+        Level::Notice->value    => ' ',
+        Level::Info->value      => '   ',
+        Level::Warning->value   => '',
+        Level::Error->value     => '  ',
+        Level::Critical->value  => '',
+        Level::Alert->value     => '  ',
+        Level::Emergency->value => '',
+    ];
+
     private static ?string $CHANNEL = null;
 
     /** @var array Every begin call that was made, a new key => [] is added to this array. */
@@ -23,6 +35,15 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
     /** @var array Upon calling begin() or end(), this array is a flattened version of to make it quicker to write logs to disk */
     private array $cachedContext = [];
+
+    /** @var bool Optimization to only cache the context when we're actually going to log something - not when adding the context yet */
+    private bool $isContextCached = false;
+
+    /** @var array When logging, we make conversions like this:
+     * App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
+     * This array caches these conversions to make it quicker to log
+     */
+    private array $cachedConvertedFunctionNames = [];
 
     private ?string $channel = null;
 
@@ -48,9 +69,8 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         if (!isset($this->groupedContexts[$key])) {
             self::$GROUPED_CONTEXT_COUNT++;
         }
-        // Add all variables from $context, but remove key (our first parameter) since we don't need it
         $this->groupedContexts[$key] = empty($context) ? [] : array_merge(...$context);
-        $this->cacheGroupedContexts();
+        $this->isContextCached       = false;
     }
 
     public function removeContext(string $key): void
@@ -59,7 +79,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
             self::$GROUPED_CONTEXT_COUNT--;
 
             unset($this->groupedContexts[$key]);
-            $this->cacheGroupedContexts();
+            $this->isContextCached = false;
         }
     }
 
@@ -167,16 +187,20 @@ abstract class StructuredLogging implements StructuredLoggingInterface
             return;
         }
 
-        $levelName = $level->getName();
-        // WARNING = 7, yeah I know EMERGENCY is 9 but that's used so little that I'm not compensating for it
-        $fixedLength     = 7;
-        $levelNameLength = strlen($levelName);
-        $startPadding    = str_repeat(' ', max(0, $fixedLength - $levelNameLength));
+        if (!$this->isContextCached) {
+            $this->cacheGroupedContexts();
+        }
 
-        $messageWithContextCounts = trim(
-            sprintf('%s %s', str_repeat('-', self::$GROUPED_CONTEXT_COUNT), array_reverse(explode('\\', $functionName))[0])
-        );
-        // Convert App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
+        $levelName = $level->getName();
+
+        // Cache the following operation - it's pretty slow
+        if (!isset($cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT])) {
+            // Convert App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
+            $cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT] = trim(
+                sprintf('%s %s', str_repeat('-', self::$GROUPED_CONTEXT_COUNT), array_reverse(explode('\\', $functionName))[0])
+            );
+        }
+        $messageWithContextCounts = $cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT];
 
         foreach ($this->loggers as $logger) {
             if ($logger instanceof LogManager) {
@@ -185,8 +209,8 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
             $logger->log(
                 $levelName,
-                sprintf('%s%s', $startPadding, $messageWithContextCounts),
-                array_merge($this->cachedContext, $context)
+                sprintf('%s%s', self::$START_PADDING[$level->value], $messageWithContextCounts),
+                empty($context) ? $this->cachedContext : array_merge($this->cachedContext, $context)
             );
         }
     }
@@ -198,6 +222,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         foreach ($this->groupedContexts as $key => $context) {
             $this->cachedContext = array_merge($this->cachedContext, $context);
         }
+        $this->isContextCached = true;
     }
 
     private static function getLogLevel(): Level
