@@ -11,7 +11,7 @@ class RaiderIOApiServiceLogging extends RollbarStructuredLogging implements Raid
         $this->start(__METHOD__, get_defined_vars());
     }
 
-    public function getHeatmapDataInvalidResponse(string $response): void
+    public function getHeatmapDataInvalidResponse(string $dungeonName, string $response): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }

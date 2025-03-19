@@ -94,5 +94,53 @@
         "color_animated": null,
         "label": "Imported from MDT - group 1",
         "vertices_json": "[{\"lat\":-98.5649,\"lng\":293.9647},{\"lat\":-91.0325,\"lng\":293.9647},{\"lat\":-91.0325,\"lng\":302.2699},{\"lat\":-98.5649,\"lng\":302.2699}]"
+    },
+    {
+        "id": 14610,
+        "mapping_version_id": 525,
+        "floor_id": 294,
+        "group": 2,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 2",
+        "vertices_json": "[{\"lat\":-132.3098,\"lng\":271.4675},{\"lat\":-126.0482,\"lng\":271.4675},{\"lat\":-126.0482,\"lng\":273.6932},{\"lat\":-132.3098,\"lng\":273.6932}]"
+    },
+    {
+        "id": 14611,
+        "mapping_version_id": 525,
+        "floor_id": 294,
+        "group": 3,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 3",
+        "vertices_json": "[{\"lat\":-116.7996,\"lng\":271.0583},{\"lat\":-109.5845,\"lng\":271.0583},{\"lat\":-109.5845,\"lng\":273.3303},{\"lat\":-116.7996,\"lng\":273.3303}]"
+    },
+    {
+        "id": 14612,
+        "mapping_version_id": 525,
+        "floor_id": 294,
+        "group": 4,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 4",
+        "vertices_json": "[{\"lat\":-155.6262,\"lng\":281.4006},{\"lat\":-148.4082,\"lng\":281.4006},{\"lat\":-148.4082,\"lng\":283.6258},{\"lat\":-155.6262,\"lng\":283.6258}]"
+    },
+    {
+        "id": 14613,
+        "mapping_version_id": 525,
+        "floor_id": 294,
+        "group": 1,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 1",
+        "vertices_json": "[{\"lat\":-98.5649,\"lng\":293.9647},{\"lat\":-91.0325,\"lng\":293.9647},{\"lat\":-91.0325,\"lng\":302.2699},{\"lat\":-98.5649,\"lng\":302.2699}]"
     }
 ]

@@ -13309,13 +13309,13 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1064,
+                        "id": 1089,
                         "floor1_id": 296,
                         "floor2_id": 295,
                         "direction": "up"
                     },
                     {
-                        "id": 1065,
+                        "id": 1090,
                         "floor1_id": 296,
                         "floor2_id": 297,
                         "direction": "down"
