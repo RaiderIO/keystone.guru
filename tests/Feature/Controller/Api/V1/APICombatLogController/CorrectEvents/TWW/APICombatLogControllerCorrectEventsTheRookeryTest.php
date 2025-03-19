@@ -20,7 +20,7 @@ class APICombatLogControllerCorrectEventsTheRookeryTest extends APICombatLogCont
     }
 
     #[Test]
-    public function create_givenTheRookery2Json_shouldReturnCorrectedJsonData(): void
+    public function create_givenTheRookery13Json_shouldReturnCorrectedJsonData(): void
     {
         $this->executeTest('TWW/tww_s2_the_rookery_13');
     }
