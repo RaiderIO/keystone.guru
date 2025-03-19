@@ -630,6 +630,9 @@
                 "characteristic_id": 14
             },
             {
+                "characteristic_id": 16
+            },
+            {
                 "characteristic_id": 18
             },
             {
@@ -1701,6 +1704,9 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
             {
                 "characteristic_id": 18
             }

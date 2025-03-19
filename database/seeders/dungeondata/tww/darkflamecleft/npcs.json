@@ -189,6 +189,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -248,6 +251,9 @@
                 "characteristic_id": 5
             },
             {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 12
             },
             {
@@ -255,6 +261,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -494,7 +503,13 @@
                 "characteristic_id": 12
             },
             {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -733,6 +748,9 @@
                 "characteristic_id": 18
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
@@ -770,7 +788,7 @@
         "base_health": 43821070,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1.5,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -782,6 +800,9 @@
         "npc_characteristics": [
             {
                 "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
             },
             {
                 "characteristic_id": 5
@@ -803,6 +824,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -848,7 +872,7 @@
         "base_health": 46255575,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1.5,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -884,6 +908,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -1013,6 +1040,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1049,7 +1079,7 @@
         "base_health": 51124582,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1.5,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1076,6 +1106,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1182,6 +1215,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 2
+            },
+            {
                 "characteristic_id": 5
             },
             {
@@ -1195,6 +1231,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -1243,7 +1282,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 426275
@@ -1360,7 +1403,13 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 2
+            },
+            {
                 "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
             },
             {
                 "characteristic_id": 12
@@ -1370,6 +1419,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1479,6 +1531,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -1617,7 +1672,13 @@
                 "characteristic_id": 12
             },
             {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1703,6 +1764,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1763,6 +1827,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1816,6 +1883,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 2
+            },
+            {
                 "characteristic_id": 5
             },
             {
@@ -1826,6 +1896,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1883,6 +1956,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1946,6 +2022,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1993,6 +2072,9 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 2
+            },
+            {
                 "characteristic_id": 5
             },
             {
@@ -2003,6 +2085,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -2060,6 +2145,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
