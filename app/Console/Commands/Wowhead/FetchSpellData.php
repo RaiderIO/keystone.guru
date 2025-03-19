@@ -47,7 +47,7 @@ class FetchSpellData extends Command
             $spells = collect([Spell::findOrFail($spellId)]);
         } else {
             $spells = Spell::whereNull('fetched_data_at')
-                ->orWhere('fetched_data_at', '<=', Carbon::now()->subDay())
+                ->orWhere('fetched_data_at', '<=', Carbon::now()->subYear())
                 ->get();
         }
 
