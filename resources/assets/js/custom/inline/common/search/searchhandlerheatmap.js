@@ -12,9 +12,13 @@ class SearchHandlerHeatmap extends SearchHandler {
                 let template;
                 if (isLoading) {
                     template = Handlebars.templates['map_heatmapsearch_loader'];
-                } else if (json === null || json.hasOwnProperty('error')) {
+                } else if (json === null || json.hasOwnProperty('message')) {
                     template = Handlebars.templates['map_heatmapsearch_error_loading_data'];
-                    data.error = lang.get('messages.error_loading_data_label');
+                    if( json !== null && json.hasOwnProperty('message') && json.message === 'Invalid response from Raider.IO API' ) {
+                        data.error = lang.get('messages.too_much_data_label');
+                    } else {
+                        data.error = lang.get('messages.error_loading_data_label');
+                    }
                 } else {
                     template = Handlebars.templates['map_heatmapsearch_run_count'];
                     data.run_count = lang.get('messages.run_count_label', {

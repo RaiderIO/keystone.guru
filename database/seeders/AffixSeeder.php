@@ -283,8 +283,8 @@ class AffixSeeder extends Seeder implements TableSeederInterface
             array_merge($season15, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE]]),
             array_merge($season15, ['affixes' => [Affix::AFFIX_XALATATHS_BARGAIN_ASCENDANT, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]]),
             array_merge($season15, ['affixes' => [Affix::AFFIX_XALATATHS_BARGAIN_PULSAR, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE]]),
-            array_merge($season15, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]]),
-            array_merge($season15, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE]]),
+            array_merge($season15, ['affixes' => [Affix::AFFIX_XALATATHS_BARGAIN_VOIDBOUND, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]]),
+            array_merge($season15, ['affixes' => [Affix::AFFIX_XALATATHS_BARGAIN_DEVOUR, Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE]]),
             array_merge($season15, ['affixes' => [Affix::AFFIX_UNKNOWN, Affix::AFFIX_TYRANNICAL, Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]]),
         ];
         // @formatter:on

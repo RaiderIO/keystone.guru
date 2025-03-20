@@ -12953,7 +12953,7 @@
                 "id": 370,
                 "index": 2,
                 "mdt_sub_level": null,
-                "ui_map_id": 2303,
+                "ui_map_id": 2304,
                 "map_name": null,
                 "name": "dungeons.tww.darkflame_cleft.floors.shadow_realm",
                 "default": 0,
@@ -13309,13 +13309,13 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1064,
+                        "id": 1089,
                         "floor1_id": 296,
                         "floor2_id": 295,
                         "direction": "up"
                     },
                     {
-                        "id": 1065,
+                        "id": 1090,
                         "floor1_id": 296,
                         "floor2_id": 297,
                         "direction": "down"
@@ -14852,16 +14852,16 @@
         "name": "dungeons.classic.naxxramas_classic.name",
         "slug": "naxxramas-classic",
         "heatmap_enabled": 0,
-        "speedrun_enabled": 0,
-        "speedrun_difficulty_10_man_enabled": 0,
-        "speedrun_difficulty_25_man_enabled": 0,
+        "speedrun_enabled": 1,
+        "speedrun_difficulty_10_man_enabled": 1,
+        "speedrun_difficulty_25_man_enabled": 1,
         "mdt_supported": false,
         "floors": [
             {
                 "id": 334,
                 "index": 1,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 162,
                 "map_name": null,
                 "name": "dungeons.classic.naxxramas_classic.floors.the_construct_quarter",
                 "default": 1,
@@ -14877,15 +14877,90 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1071,
+                        "floor1_id": 334,
+                        "floor2_id": 335,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1072,
+                        "floor1_id": 334,
+                        "floor2_id": 336,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1073,
+                        "floor1_id": 334,
+                        "floor2_id": 338,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
+                "dungeon_speedrun_required_npcs25_man": [
+                    {
+                        "id": 123,
+                        "floor_id": 334,
+                        "npc_id": 16017,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 10
+                    },
+                    {
+                        "id": 124,
+                        "floor_id": 334,
+                        "npc_id": 16018,
+                        "npc2_id": 16029,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 11
+                    },
+                    {
+                        "id": 125,
+                        "floor_id": 334,
+                        "npc_id": 16024,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 20
+                    },
+                    {
+                        "id": 126,
+                        "floor_id": 334,
+                        "npc_id": 16021,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 5
+                    },
+                    {
+                        "id": 127,
+                        "floor_id": 334,
+                        "npc_id": 16025,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 7
+                    }
+                ]
             },
             {
                 "id": 335,
                 "index": 2,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 163,
                 "map_name": null,
                 "name": "dungeons.classic.naxxramas_classic.floors.the_arachnid_quarter",
                 "default": 0,
@@ -14901,15 +14976,90 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1074,
+                        "floor1_id": 335,
+                        "floor2_id": 334,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1075,
+                        "floor1_id": 335,
+                        "floor2_id": 337,
+                        "direction": "down"
+                    },
+                    {
+                        "id": 1076,
+                        "floor1_id": 335,
+                        "floor2_id": 338,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
+                "dungeon_speedrun_required_npcs25_man": [
+                    {
+                        "id": 128,
+                        "floor_id": 335,
+                        "npc_id": 15977,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 91
+                    },
+                    {
+                        "id": 129,
+                        "floor_id": 335,
+                        "npc_id": 15976,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 2
+                    },
+                    {
+                        "id": 130,
+                        "floor_id": 335,
+                        "npc_id": 15980,
+                        "npc2_id": 15981,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 48
+                    },
+                    {
+                        "id": 131,
+                        "floor_id": 335,
+                        "npc_id": 15978,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 1
+                    },
+                    {
+                        "id": 132,
+                        "floor_id": 335,
+                        "npc_id": 15979,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 2
+                    }
+                ]
             },
             {
                 "id": 336,
                 "index": 3,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 164,
                 "map_name": null,
                 "name": "dungeons.classic.naxxramas_classic.floors.the_military_quarter",
                 "default": 0,
@@ -14925,15 +15075,123 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1077,
+                        "floor1_id": 336,
+                        "floor2_id": 334,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1078,
+                        "floor1_id": 336,
+                        "floor2_id": 337,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1079,
+                        "floor1_id": 336,
+                        "floor2_id": 338,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
+                "dungeon_speedrun_required_npcs25_man": [
+                    {
+                        "id": 133,
+                        "floor_id": 336,
+                        "npc_id": 16146,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 14
+                    },
+                    {
+                        "id": 134,
+                        "floor_id": 336,
+                        "npc_id": 16145,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 14
+                    },
+                    {
+                        "id": 135,
+                        "floor_id": 336,
+                        "npc_id": 16163,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 9
+                    },
+                    {
+                        "id": 136,
+                        "floor_id": 336,
+                        "npc_id": 16193,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 4
+                    },
+                    {
+                        "id": 137,
+                        "floor_id": 336,
+                        "npc_id": 16154,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 8
+                    },
+                    {
+                        "id": 138,
+                        "floor_id": 336,
+                        "npc_id": 16164,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 3
+                    },
+                    {
+                        "id": 139,
+                        "floor_id": 336,
+                        "npc_id": 16165,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 6
+                    },
+                    {
+                        "id": 140,
+                        "floor_id": 336,
+                        "npc_id": 16194,
+                        "npc2_id": 16215,
+                        "npc3_id": 16216,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 8
+                    }
+                ]
             },
             {
                 "id": 337,
                 "index": 4,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 165,
                 "map_name": null,
                 "name": "dungeons.classic.naxxramas_classic.floors.the_plague_quarter",
                 "default": 0,
@@ -14949,15 +15207,68 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1080,
+                        "floor1_id": 337,
+                        "floor2_id": 335,
+                        "direction": "up"
+                    },
+                    {
+                        "id": 1081,
+                        "floor1_id": 337,
+                        "floor2_id": 336,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1082,
+                        "floor1_id": 337,
+                        "floor2_id": 338,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
-                "dungeon_speedrun_required_npcs25_man": []
+                "dungeon_speedrun_required_npcs25_man": [
+                    {
+                        "id": 141,
+                        "floor_id": 337,
+                        "npc_id": 16168,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 8
+                    },
+                    {
+                        "id": 142,
+                        "floor_id": 337,
+                        "npc_id": 16243,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 4
+                    },
+                    {
+                        "id": 143,
+                        "floor_id": 337,
+                        "npc_id": 16034,
+                        "npc2_id": null,
+                        "npc3_id": null,
+                        "npc4_id": null,
+                        "npc5_id": null,
+                        "difficulty": 2,
+                        "count": 2
+                    }
+                ]
             },
             {
                 "id": 338,
                 "index": 5,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 166,
                 "map_name": null,
                 "name": "dungeons.classic.naxxramas_classic.floors.the_lower_necropolis",
                 "default": 0,
@@ -14973,7 +15284,38 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1083,
+                        "floor1_id": 338,
+                        "floor2_id": 334,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1084,
+                        "floor1_id": 338,
+                        "floor2_id": 335,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1085,
+                        "floor1_id": 338,
+                        "floor2_id": 336,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1086,
+                        "floor1_id": 338,
+                        "floor2_id": 337,
+                        "direction": "right"
+                    },
+                    {
+                        "id": 1087,
+                        "floor1_id": 338,
+                        "floor2_id": 339,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -14981,7 +15323,7 @@
                 "id": 339,
                 "index": 6,
                 "mdt_sub_level": null,
-                "ui_map_id": null,
+                "ui_map_id": 167,
                 "map_name": null,
                 "name": "dungeons.classic.naxxramas_classic.floors.the_upper_necropolis",
                 "default": 0,
@@ -14997,7 +15339,14 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1088,
+                        "floor1_id": 339,
+                        "floor2_id": 338,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }

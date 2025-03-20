@@ -1,0 +1,43 @@
+{
+    "id": 287,
+    "release_changelog_id": 294,
+    "version": "v13.0.7",
+    "title": "",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-03-19T10:23:56+00:00",
+    "updated_at": "2025-03-19T10:23:56+00:00",
+    "changelog": {
+        "id": 294,
+        "release_id": 287,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 294,
+                "release_changelog_category_id": 3,
+                "ticket_id": 2778,
+                "change": "Added a few additional spells to be selected for pulls etc."
+            },
+            {
+                "release_changelog_id": 294,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2776,
+                "change": "Updated The Rookery around the first boss - the enemies on the floor were rotated 90 degrees from what they should have been."
+            },
+            {
+                "release_changelog_id": 294,
+                "release_changelog_category_id": 6,
+                "ticket_id": 2776,
+                "change": "Updated MDT to the latest version"
+            },
+            {
+                "release_changelog_id": 294,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2771,
+                "change": "Darkflame Cleft heatmaps now properly split in two floors instead of overlaying it all on a single floor (I added an artificial second floor to separate the Shadow Realm from the original floor - but heatmaps didn't account for that). Requires a reindexing of data which will happen at a later time!"
+            }
+        ]
+    }
+}

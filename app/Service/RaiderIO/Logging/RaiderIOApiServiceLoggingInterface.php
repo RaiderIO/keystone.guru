@@ -6,7 +6,7 @@ interface RaiderIOApiServiceLoggingInterface
 {
     public function getHeatmapDataStart(string $url): void;
 
-    public function getHeatmapDataInvalidResponse(string $response): void;
+    public function getHeatmapDataInvalidResponse(string $dungeonName, string $response): void;
 
     public function getHeatmapDataEnd(): void;
 }

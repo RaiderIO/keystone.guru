@@ -6,6 +6,7 @@ use App;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
+use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
@@ -204,6 +205,14 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 // Ensure we know about the enemy being resolved fully
                 $event['npc']->setResolvedEnemy($resolvedEnemy);
                 $activePullEnemy->setResolvedEnemy($resolvedEnemy);
+
+                // A bit of a hack slash exception for Darkflame Cleft. In the second part of the dungeon you cycle back
+                // to the beginning, but you're now phased in a Shadow Realm. I split this off in a separate floor so
+                // that the enemies are not on the same floor as the original enemies that you already killed.
+                // So what we do here is forcibly yoink the originally killed enemy (that you sent me) to the new floor.
+                if ($this->dungeonRoute->dungeon->key === Dungeon::DUNGEON_DARKFLAME_CLEFT) {
+                    $event['npc']->coord->uiMapId = $resolvedEnemy->floor->ui_map_id;
+                }
 
                 $this->log->buildKillZonesEnemyEngaged($uniqueUid, $event['npc']->getEngagedAt()->toDateTimeString());
                 $activePull->enemyEngaged($activePullEnemy);

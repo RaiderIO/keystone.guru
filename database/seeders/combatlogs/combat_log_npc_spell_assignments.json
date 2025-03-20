@@ -3418,5 +3418,1832 @@
         "raw_event": "1\/31\/2025 12:30:04.5040  SPELL_AURA_REMOVED,Creature-0-5252-2875-2195-238055-00001CBFF6,\"Dark Rider\",0xa28,0x0,Player-5827-02703CC7,\"Nilze-LivingFlame-EU\",0x512,0x0,412609,\"Deep Wound\",0x1,DEBUFF\r\n",
         "created_at": "2025-02-12T16:09:19+00:00",
         "updated_at": "2025-02-12T16:09:19+00:00"
+    },
+    {
+        "id": 433,
+        "npc_id": 16383,
+        "spell_id": 28314,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 17:43:45.7010  SPELL_CAST_SUCCESS,Creature-0-5253-0-1181-16383-0002488C8E,\"Flameshocker\",0xa28,0x0,Player-5827-02BA1E2C,\"Gulldama-LivingFlame-EU\",0x518,0x0,28314,\"Flameshocker's Touch\",0x1,Creature-0-5253-0-1181-16383-0002488C8E,0000000000000000,42090,45594,0,0,0,0,0,-1,0,0,0,-8832.02,628.65,1453,5.1068,54\r\n",
+        "created_at": "2025-03-17T16:09:04+00:00",
+        "updated_at": "2025-03-17T16:09:04+00:00"
+    },
+    {
+        "id": 434,
+        "npc_id": 16383,
+        "spell_id": 28329,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 17:43:45.8000  SPELL_MISSED,Creature-0-5253-0-1181-16383-0002488C8E,\"Flameshocker\",0xa28,0x0,Player-5827-02BA1E2C,\"Gulldama-LivingFlame-EU\",0x518,0x0,28329,\"Flameshocker's Touch\",0x4,RESIST,nil,0,ST\r\n",
+        "created_at": "2025-03-17T16:09:04+00:00",
+        "updated_at": "2025-03-17T16:09:04+00:00"
+    },
+    {
+        "id": 435,
+        "npc_id": 16383,
+        "spell_id": 28323,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 17:43:51.9930  SPELL_MISSED,Creature-0-5253-0-1181-16383-0000488C8E,\"Flameshocker\",0xa28,0x0,Player-5827-02704FDC,\"Milunari-LivingFlame-EU\",0x518,0x0,28323,\"Flameshocker's Revenge\",0x4,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-17T16:09:05+00:00",
+        "updated_at": "2025-03-17T16:09:05+00:00"
+    },
+    {
+        "id": 436,
+        "npc_id": 3678,
+        "spell_id": 5232,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 17:45:29.7370  SPELL_AURA_APPLIED,Creature-0-5210-43-13159-3678-0000488BF6,\"Disciple of Naralex\",0xa28,0x0,Player-5827-02C8315F,\"Slibarmaster-LivingFlame-EU\",0x518,0x0,5232,\"Mark of the Wild\",0x8,BUFF\r\n",
+        "created_at": "2025-03-17T16:09:06+00:00",
+        "updated_at": "2025-03-17T16:09:06+00:00"
+    },
+    {
+        "id": 437,
+        "npc_id": 10398,
+        "spell_id": 16429,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 17:49:19.6260  SPELL_AURA_REMOVED,Creature-0-5252-329-12371-10398-00044882DE,\"Thuzadin Shadowcaster\",0xa28,0x0,Player-5827-02BE8AB0,\"Lilemsy-LivingFlame-EU\",0x518,0x0,16429,\"Piercing Shadow\",0x20,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:09:07+00:00",
+        "updated_at": "2025-03-17T16:09:07+00:00"
+    },
+    {
+        "id": 438,
+        "npc_id": 16146,
+        "spell_id": 13589,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:25:18.5540  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16146-00014893FD,\"Deathknight\",0xa48,0x0,Creature-0-5210-533-13740-16145-00024893FD,\"Deathknight Captain\",0xa48,0x0,13589,\"Haste Aura\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:09:09+00:00",
+        "updated_at": "2025-03-17T16:09:09+00:00"
+    },
+    {
+        "id": 439,
+        "npc_id": 16017,
+        "spell_id": 27793,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:25:18.5540  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16017-00004893FD,\"Patchwork Golem\",0xa48,0x0,Creature-0-5210-533-13740-16017-00004893FD,\"Patchwork Golem\",0xa48,0x0,27793,\"Disease Cloud\",0x8,BUFF\r\n",
+        "created_at": "2025-03-17T16:09:09+00:00",
+        "updated_at": "2025-03-17T16:09:09+00:00"
+    },
+    {
+        "id": 440,
+        "npc_id": 16243,
+        "spell_id": 28987,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:25:18.6010  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16243-00004893FD,\"Plague Slime\",0xa48,0x0,Creature-0-5210-533-13740-16243-00004893FD,\"Plague Slime\",0xa48,0x0,28987,\"Plague Slime (Black)\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:09:12+00:00",
+        "updated_at": "2025-03-17T16:09:12+00:00"
+    },
+    {
+        "id": 441,
+        "npc_id": 16034,
+        "spell_id": 30110,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:25:18.6040  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16034-00004893FD,\"Plague Beast\",0xa48,0x0,Creature-0-5210-533-13740-16034-00004893FD,\"Plague Beast\",0xa48,0x0,30110,\"Mutated Spores\",0x8,BUFF\r\n",
+        "created_at": "2025-03-17T16:09:13+00:00",
+        "updated_at": "2025-03-17T16:09:13+00:00"
+    },
+    {
+        "id": 442,
+        "npc_id": 16029,
+        "spell_id": 28362,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:28:41.0510  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16029-0001C893FD,\"Sludge Belcher\",0xa48,0x0,Creature-0-5210-533-13740-16029-0001C893FD,\"Sludge Belcher\",0xa48,0x0,28362,\"Disease Cloud\",0x8,BUFF\r\n",
+        "created_at": "2025-03-17T16:09:14+00:00",
+        "updated_at": "2025-03-17T16:09:14+00:00"
+    },
+    {
+        "id": 443,
+        "npc_id": 15977,
+        "spell_id": 28428,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:30:38.2010  SPELL_DAMAGE,Creature-0-5210-533-13740-15977-00104893FD,\"Infectious Skitterer\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,28428,\"Instant Poison\",0x8,Player-5827-02A9817B,0000000000000000,76,100,0,0,0,0,0,-1,0,0,0,3104.45,-3496.27,0,0.6733,85,364,599,-1,8,150,0,0,nil,nil,nil,ST\r\n",
+        "created_at": "2025-03-17T16:09:15+00:00",
+        "updated_at": "2025-03-17T16:09:15+00:00"
+    },
+    {
+        "id": 444,
+        "npc_id": 15975,
+        "spell_id": 28434,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:30:46.5720  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-15975-0006C893FD,\"Carrion Spinner\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,28434,\"Spider Web\",0x1,Creature-0-5210-533-13740-15975-0006C893FD,0000000000000000,84888,84888,0,0,0,0,0,-1,0,0,0,3151.00,-3520.45,0,1.4938,61\r\n",
+        "created_at": "2025-03-17T16:09:16+00:00",
+        "updated_at": "2025-03-17T16:09:16+00:00"
+    },
+    {
+        "id": 445,
+        "npc_id": 15974,
+        "spell_id": 28440,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:30:49.6770  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-15974-00064893FD,\"Dread Creeper\",0xa48,0x0,Player-5827-0270178E,\"Reymau-LivingFlame-EU\",0x40514,0x4,28440,\"Veil of Shadow\",0x20,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:09:17+00:00",
+        "updated_at": "2025-03-17T16:09:17+00:00"
+    },
+    {
+        "id": 446,
+        "npc_id": 16017,
+        "spell_id": 28358,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:32:10.5750  SPELL_DAMAGE,Creature-0-5210-533-13740-16017-00034893FD,\"Patchwork Golem\",0x10a48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,28358,\"Disease Cloud\",0x8,Player-5827-02A9817B,0000000000000000,99,100,0,0,0,0,0,-1,0,0,0,3062.77,-3367.93,0,1.7209,85,174,263,-1,8,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:09:18+00:00",
+        "updated_at": "2025-03-17T16:09:18+00:00"
+    },
+    {
+        "id": 447,
+        "npc_id": 16017,
+        "spell_id": 27758,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:33:02.6490  SPELL_MISSED,Creature-0-5210-533-13740-16017-00014893FD,\"Patchwork Golem\",0x10a48,0x0,Player-5827-02704735,\"Wankturis-LivingFlame-EU\",0x40514,0x1,27758,\"War Stomp\",0x1,IMMUNE,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:09:19+00:00",
+        "updated_at": "2025-03-17T16:09:19+00:00"
+    },
+    {
+        "id": 448,
+        "npc_id": 16029,
+        "spell_id": 27891,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:33:36.9190  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16029-0001C893FD,\"Sludge Belcher\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,27891,\"Disease Buffet\",0x8,Creature-0-5210-533-13740-16029-0001C893FD,0000000000000000,74378,121388,0,0,0,0,0,-1,0,0,0,3047.61,-3218.35,0,5.7494,62\r\n",
+        "created_at": "2025-03-17T16:09:19+00:00",
+        "updated_at": "2025-03-17T16:09:19+00:00"
+    },
+    {
+        "id": 449,
+        "npc_id": 16029,
+        "spell_id": 28361,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:33:37.1760  SPELL_DAMAGE,Creature-0-5210-533-13740-16029-0001C893FD,\"Sludge Belcher\",0xa48,0x0,Player-5827-0278BDBC,\"Aconion-LivingFlame-EU\",0x514,0x0,28361,\"Disease Cloud\",0x8,Player-5827-0278BDBC,0000000000000000,97,100,0,0,0,0,0,-1,0,0,0,3053.61,-3216.38,0,2.8173,81,278,326,-1,8,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:09:20+00:00",
+        "updated_at": "2025-03-17T16:09:20+00:00"
+    },
+    {
+        "id": 450,
+        "npc_id": 16022,
+        "spell_id": 28310,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:34:28.3830  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16022-000A4893FD,\"Surgical Assistant\",0xa48,0x0,Player-5827-02766F09,\"Valkian-LivingFlame-EU\",0x514,0x0,28310,\"Mind Flay\",0x20,Creature-0-5210-533-13740-16022-000A4893FD,0000000000000000,64092,64092,0,0,0,0,0,-1,0,0,0,3004.65,-3251.97,0,1.0112,60\r\n",
+        "created_at": "2025-03-17T16:09:21+00:00",
+        "updated_at": "2025-03-17T16:09:21+00:00"
+    },
+    {
+        "id": 451,
+        "npc_id": 16020,
+        "spell_id": 28301,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:34:28.3840  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16020-0008C893FD,\"Mad Scientist\",0xa48,0x0,Player-5827-02766F09,\"Valkian-LivingFlame-EU\",0x514,0x0,28301,\"Mana Burn\",0x20,Creature-0-5210-533-13740-16020-0008C893FD,0000000000000000,75049,75456,0,0,0,0,0,-1,0,0,0,3015.60,-3240.78,0,3.7689,61\r\n",
+        "created_at": "2025-03-17T16:09:22+00:00",
+        "updated_at": "2025-03-17T16:09:22+00:00"
+    },
+    {
+        "id": 452,
+        "npc_id": 16021,
+        "spell_id": 27990,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:34:29.4610  SPELL_MISSED,Creature-0-5210-533-13740-16021-00024893FD,\"Living Monstrosity\",0x10a48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,27990,\"Fear\",0x20,IMMUNE,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:09:23+00:00",
+        "updated_at": "2025-03-17T16:09:23+00:00"
+    },
+    {
+        "id": 453,
+        "npc_id": 16024,
+        "spell_id": 28322,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:36:40.5420  SPELL_DAMAGE,Creature-0-5210-533-13740-16024-0000C899A0,\"Embalming Slime\",0xa48,0x0,Player-5827-0213A229,\"Ligdeeznuts-LivingFlame-EU\",0x514,0x0,28322,\"Embalming Cloud\",0x8,Player-5827-0213A229,0000000000000000,73,100,0,0,0,0,0,-1,0,0,0,3117.81,-3267.72,0,1.0372,82,1043,3546,-1,8,874,0,1581,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:09:25+00:00",
+        "updated_at": "2025-03-17T16:09:25+00:00"
+    },
+    {
+        "id": 454,
+        "npc_id": 16146,
+        "spell_id": 28350,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:37:18.1260  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16146-0003C893FD,\"Deathknight\",0xa48,0x0,Player-5827-02704735,\"Wankturis-LivingFlame-EU\",0x40514,0x1,28350,\"Veil of Darkness\",0x20,Creature-0-5210-533-13740-16146-0003C893FD,0000000000000000,29240,113184,0,0,0,0,0,-1,0,0,0,2943.79,-3383.17,0,1.1040,61\r\n",
+        "created_at": "2025-03-17T16:09:26+00:00",
+        "updated_at": "2025-03-17T16:09:26+00:00"
+    },
+    {
+        "id": 455,
+        "npc_id": 16165,
+        "spell_id": 15453,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:37:26.1100  SPELL_MISSED,Creature-0-5210-533-13740-16165-0000C893FD,\"Necro Knight\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,15453,\"Arcane Explosion\",0x40,ABSORB,nil,803,1039,AOE\r\n",
+        "created_at": "2025-03-17T16:09:27+00:00",
+        "updated_at": "2025-03-17T16:09:27+00:00"
+    },
+    {
+        "id": 456,
+        "npc_id": 16193,
+        "spell_id": 23931,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:37:37.5130  SPELL_MISSED,Creature-0-5210-533-13740-16193-00014893FD,\"Skeletal Smith\",0xa48,0x0,Player-5827-0271A8A5,\"Bradabiach-LivingFlame-EU\",0x514,0x0,23931,\"Thunderclap\",0x8,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-17T16:09:28+00:00",
+        "updated_at": "2025-03-17T16:09:28+00:00"
+    },
+    {
+        "id": 457,
+        "npc_id": 16164,
+        "spell_id": 28407,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:37:43.9730  SPELL_DAMAGE,Creature-0-5210-533-13740-16164-00014893FD,\"Shade of Naxxramas\",0xa48,0x80,Player-5827-02703CD3,\"Aitra-LivingFlame-EU\",0x514,0x0,28407,\"Shadow Bolt Volley\",0x20,Player-5827-02703CD3,0000000000000000,76,100,0,0,0,0,0,-1,0,0,0,2895.24,-3310.65,0,1.7871,86,1981,2029,-1,32,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:09:28+00:00",
+        "updated_at": "2025-03-17T16:09:28+00:00"
+    },
+    {
+        "id": 458,
+        "npc_id": 16193,
+        "spell_id": 24317,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:37:45.6850  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16193-00004893FD,\"Skeletal Smith\",0xa48,0x0,Player-5827-02766F09,\"Valkian-LivingFlame-EU\",0x514,0x0,24317,\"Sunder Armor\",0x1,Creature-0-5210-533-13740-16193-00004893FD,0000000000000000,13183,75456,0,0,0,0,0,-1,0,0,0,2914.48,-3311.22,0,2.6615,61\r\n",
+        "created_at": "2025-03-17T16:09:29+00:00",
+        "updated_at": "2025-03-17T16:09:29+00:00"
+    },
+    {
+        "id": 459,
+        "npc_id": 16163,
+        "spell_id": 28412,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:38:56.8500  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16163-00014893FD,\"Deathknight Cavalier\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,28412,\"Death Coil\",0x20,Creature-0-5210-533-13740-16163-00014893FD,0000000000000000,122519,169763,0,0,0,0,0,-1,0,0,0,2817.62,-3209.85,0,1.0362,61\r\n",
+        "created_at": "2025-03-17T16:09:31+00:00",
+        "updated_at": "2025-03-17T16:09:31+00:00"
+    },
+    {
+        "id": 460,
+        "npc_id": 16163,
+        "spell_id": 28413,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:38:58.6740  SPELL_MISSED,Creature-0-5210-533-13740-16163-00014893FD,\"Deathknight Cavalier\",0x10a48,0x0,Player-5827-01E38AA1,\"Ziumbiula-LivingFlame-EU\",0x514,0x0,28413,\"Aura of Agony\",0x20,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-17T16:09:31+00:00",
+        "updated_at": "2025-03-17T16:09:31+00:00"
+    },
+    {
+        "id": 461,
+        "npc_id": 16163,
+        "spell_id": 15754,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:39:00.0550  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16163-0001C893FD,\"Deathknight Cavalier\",0xa48,0x0,Player-5827-02704735,\"Wankturis-LivingFlame-EU\",0x40514,0x1,15754,\"Cleave\",0x1,Creature-0-5210-533-13740-16163-0001C893FD,0000000000000000,132776,169763,0,0,0,0,0,-1,0,0,0,2831.23,-3211.20,0,2.5244,61\r\n",
+        "created_at": "2025-03-17T16:09:31+00:00",
+        "updated_at": "2025-03-17T16:09:31+00:00"
+    },
+    {
+        "id": 462,
+        "npc_id": 16861,
+        "spell_id": 15754,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:39:23.2220  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16861-00004893FD,\"Death Lord\",0xa48,0x0,Player-5827-0270178E,\"Reymau-LivingFlame-EU\",0x40514,0x4,15754,\"Cleave\",0x1,Creature-0-5210-533-13740-16861-00004893FD,0000000000000000,112011,169763,0,0,0,0,0,-1,0,0,0,2837.50,-3199.67,0,4.5545,61\r\n",
+        "created_at": "2025-03-17T16:09:32+00:00",
+        "updated_at": "2025-03-17T16:09:32+00:00"
+    },
+    {
+        "id": 463,
+        "npc_id": 16861,
+        "spell_id": 28412,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:39:23.9410  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16861-00004893FD,\"Death Lord\",0xa48,0x0,Player-5827-0270178E,\"Reymau-LivingFlame-EU\",0x40514,0x4,28412,\"Death Coil\",0x20,Creature-0-5210-533-13740-16861-00004893FD,0000000000000000,93006,169763,0,0,0,0,0,-1,0,0,0,2837.50,-3199.67,0,4.5545,61\r\n",
+        "created_at": "2025-03-17T16:09:32+00:00",
+        "updated_at": "2025-03-17T16:09:32+00:00"
+    },
+    {
+        "id": 464,
+        "npc_id": 16861,
+        "spell_id": 28413,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:39:25.5690  SPELL_MISSED,Creature-0-5210-533-13740-16861-00004893FD,\"Death Lord\",0x10a48,0x0,Player-5827-02700C8B,\"Alight-LivingFlame-EU\",0x511,0x0,28413,\"Aura of Agony\",0x20,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-17T16:09:32+00:00",
+        "updated_at": "2025-03-17T16:09:32+00:00"
+    },
+    {
+        "id": 465,
+        "npc_id": 16163,
+        "spell_id": 403233,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:39:31.8220  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16163-00034893FD,\"Deathknight Cavalier\",0x10a48,0x0,Creature-0-5210-533-13740-16163-00034893FD,\"Deathknight Cavalier\",0x10a48,0x0,403233,\"Meathook\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:09:32+00:00",
+        "updated_at": "2025-03-17T16:09:32+00:00"
+    },
+    {
+        "id": 466,
+        "npc_id": 16067,
+        "spell_id": 20615,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:39:40.1380  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16067-00014893FD,\"Skeletal Steed\",0xa48,0x0,Player-5827-02704735,\"Wankturis-LivingFlame-EU\",0x40514,0x1,20615,\"Intercept Stun\",0x1,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:09:33+00:00",
+        "updated_at": "2025-03-17T16:09:33+00:00"
+    },
+    {
+        "id": 467,
+        "npc_id": 16067,
+        "spell_id": 5568,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:39:41.7860  SPELL_MISSED,Creature-0-5210-533-13740-16067-00014893FD,\"Skeletal Steed\",0xa48,0x0,Player-5827-01D4B327,\"Cattywampus-LivingFlame-EU\",0x514,0x0,5568,\"Trample\",0x1,DODGE,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:09:34+00:00",
+        "updated_at": "2025-03-17T16:09:34+00:00"
+    },
+    {
+        "id": 468,
+        "npc_id": 16244,
+        "spell_id": 13738,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:41:18.0560  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16244-00004893FD,\"Infectious Ghoul\",0xa48,0x0,Player-5827-0270178E,\"Reymau-LivingFlame-EU\",0x40514,0x4,13738,\"Rend\",0x1,Creature-0-5210-533-13740-16244-00004893FD,0000000000000000,128298,141480,0,0,0,0,0,-1,0,0,0,2935.71,-3501.92,0,3.2869,61\r\n",
+        "created_at": "2025-03-17T16:09:35+00:00",
+        "updated_at": "2025-03-17T16:09:35+00:00"
+    },
+    {
+        "id": 469,
+        "npc_id": 16244,
+        "spell_id": 24318,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:41:21.2840  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16244-00014893FD,\"Infectious Ghoul\",0xa48,0x0,Creature-0-5210-533-13740-16244-00014893FD,\"Infectious Ghoul\",0xa48,0x0,24318,\"Enrage\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:09:36+00:00",
+        "updated_at": "2025-03-17T16:09:36+00:00"
+    },
+    {
+        "id": 470,
+        "npc_id": 16244,
+        "spell_id": 29915,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:41:26.6210  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16244-00014893FD,\"Infectious Ghoul\",0xa48,0x0,Player-5827-0270178E,\"Reymau-LivingFlame-EU\",0x40514,0x4,29915,\"Flesh Rot\",0x1,Creature-0-5210-533-13740-16244-00014893FD,0000000000000000,8754,141480,0,0,0,0,0,-1,0,0,0,2941.38,-3496.67,0,4.5249,61\r\n",
+        "created_at": "2025-03-17T16:09:37+00:00",
+        "updated_at": "2025-03-17T16:09:37+00:00"
+    },
+    {
+        "id": 471,
+        "npc_id": 16168,
+        "spell_id": 29325,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:41:48.0630  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16168-0002C893FD,\"Stoneskin Gargoyle\",0x10a48,0x80,Player-5827-01E38AA1,\"Ziumbiula-LivingFlame-EU\",0x514,0x0,29325,\"Acid Volley\",0x8,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:09:37+00:00",
+        "updated_at": "2025-03-17T16:09:37+00:00"
+    },
+    {
+        "id": 472,
+        "npc_id": 16243,
+        "spell_id": 28988,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:42:04.2350  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16243-00014893FD,\"Plague Slime\",0xa48,0x0,Creature-0-5210-533-13740-16243-00014893FD,\"Plague Slime\",0xa48,0x0,28988,\"Plague Slime (Blue)\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:09:38+00:00",
+        "updated_at": "2025-03-17T16:09:38+00:00"
+    },
+    {
+        "id": 473,
+        "npc_id": 16573,
+        "spell_id": 28969,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:48:16.2320  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16573-00004893FD,\"Crypt Guard\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,28969,\"Acid Spit\",0x8,Creature-0-5210-533-13740-16573-00004893FD,0000000000000000,2002839,2002839,0,0,0,0,0,-1,0,0,0,3295.33,-3453.60,0,3.7348,61\r\n",
+        "created_at": "2025-03-17T16:09:40+00:00",
+        "updated_at": "2025-03-17T16:09:40+00:00"
+    },
+    {
+        "id": 474,
+        "npc_id": 16573,
+        "spell_id": 28991,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:48:25.5090  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16573-0000C893FD,\"Crypt Guard\",0xa48,0x40,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,28991,\"Web\",0x8,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:09:42+00:00",
+        "updated_at": "2025-03-17T16:09:42+00:00"
+    },
+    {
+        "id": 475,
+        "npc_id": 15956,
+        "spell_id": 28783,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:48:32.9510  SPELL_DAMAGE,Creature-0-5210-533-13740-15956-00004893FD,\"Anub'Rekhan\",0x10a48,0x0,Player-5827-02A6CC6C,\"Etasupreme-LivingFlame-EU\",0x514,0x0,28783,\"Impale\",0x1,Player-5827-02A6CC6C,0000000000000000,63,100,0,0,0,0,0,-1,0,0,0,3255.44,-3498.61,0,0.5418,82,7331,14598,-1,1,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:09:43+00:00",
+        "updated_at": "2025-03-17T16:09:43+00:00"
+    },
+    {
+        "id": 476,
+        "npc_id": 16573,
+        "spell_id": 8269,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:48:43.2620  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16573-0000C893FD,\"Crypt Guard\",0xa48,0x40,Creature-0-5210-533-13740-16573-0000C893FD,\"Crypt Guard\",0xa48,0x40,8269,\"Enrage\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:09:43+00:00",
+        "updated_at": "2025-03-17T16:09:43+00:00"
+    },
+    {
+        "id": 477,
+        "npc_id": 15975,
+        "spell_id": 30043,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:50:03.1390  SPELL_DAMAGE,Creature-0-5210-533-13740-15975-00074893FD,\"Carrion Spinner\",0xa48,0x0,Player-5827-02704735,\"Wankturis-LivingFlame-EU\",0x40514,0x4,30043,\"Poison Spray\",0x8,Player-5827-02704735,0000000000000000,88,100,0,0,0,0,0,-1,0,0,0,3154.58,-3641.45,0,1.3199,80,4178,5619,-1,8,1393,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:09:45+00:00",
+        "updated_at": "2025-03-17T16:09:45+00:00"
+    },
+    {
+        "id": 478,
+        "npc_id": 15978,
+        "spell_id": 8269,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:50:05.4260  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-15978-0000C893FD,\"Crypt Reaver\",0x10a48,0x0,Creature-0-5210-533-13740-15978-0000C893FD,\"Crypt Reaver\",0x10a48,0x0,8269,\"Enrage\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:09:45+00:00",
+        "updated_at": "2025-03-17T16:09:45+00:00"
+    },
+    {
+        "id": 479,
+        "npc_id": 15980,
+        "spell_id": 28447,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:51:01.8060  SPELL_MISSED,Creature-0-5210-533-13740-15980-0000C893FD,\"Naxxramas Cultist\",0xa48,0x0,Player-5827-02704735,\"Wankturis-LivingFlame-EU\",0x40514,0x4,28447,\"Shadow Burst\",0x20,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-17T16:09:49+00:00",
+        "updated_at": "2025-03-17T16:09:49+00:00"
+    },
+    {
+        "id": 480,
+        "npc_id": 15981,
+        "spell_id": 15253,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:51:05.6030  SPELL_MISSED,Creature-0-5210-533-13740-15981-00014893FD,\"Naxxramas Acolyte\",0xa48,0x0,Player-5827-02718707,\"Enari-LivingFlame-EU\",0x514,0x0,15253,\"Arcane Explosion\",0x40,ABSORB,nil,1135,2317,AOE\r\n",
+        "created_at": "2025-03-17T16:09:49+00:00",
+        "updated_at": "2025-03-17T16:09:49+00:00"
+    },
+    {
+        "id": 481,
+        "npc_id": 15981,
+        "spell_id": 28448,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:51:34.7620  SPELL_DAMAGE,Creature-0-5210-533-13740-15981-0004C893FD,\"Naxxramas Acolyte\",0x10a48,0x0,Player-5827-02704735,\"Wankturis-LivingFlame-EU\",0x40514,0x4,28448,\"Shadow Bolt Volley\",0x20,Player-5827-02704735,0000000000000000,93,100,0,0,0,0,0,-1,0,0,0,3320.06,-3684.09,0,1.0673,80,2463,3332,-1,32,821,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:09:50+00:00",
+        "updated_at": "2025-03-17T16:09:50+00:00"
+    },
+    {
+        "id": 482,
+        "npc_id": 16506,
+        "spell_id": 30025,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:52:27.8820  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16506-00004893FD,\"Naxxramas Worshipper\",0xa48,0x0,Creature-0-5210-533-13740-16506-00004893FD,\"Naxxramas Worshipper\",0xa48,0x0,30025,\"Mind Exhaustion Passive\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:09:51+00:00",
+        "updated_at": "2025-03-17T16:09:51+00:00"
+    },
+    {
+        "id": 483,
+        "npc_id": 16505,
+        "spell_id": 30225,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:52:35.5360  SPELL_MISSED,Creature-0-5210-533-13740-16505-0000C893FD,\"Naxxramas Follower\",0xa48,0x0,Player-5827-01D4B327,\"Cattywampus-LivingFlame-EU\",0x514,0x0,30225,\"Silence\",0x8,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-17T16:09:53+00:00",
+        "updated_at": "2025-03-17T16:09:53+00:00"
+    },
+    {
+        "id": 484,
+        "npc_id": 16505,
+        "spell_id": 22886,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:52:39.1710  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16505-00004893FD,\"Naxxramas Follower\",0xa48,0x0,Player-5827-02703CD3,\"Aitra-LivingFlame-EU\",0x514,0x0,22886,\"Berserker Charge\",0x1,Creature-0-5210-533-13740-16505-00004893FD,0000000000000000,979417,1101516,0,0,0,0,0,-1,0,0,0,3375.43,-3654.26,0,5.2243,61\r\n",
+        "created_at": "2025-03-17T16:09:54+00:00",
+        "updated_at": "2025-03-17T16:09:54+00:00"
+    },
+    {
+        "id": 485,
+        "npc_id": 15953,
+        "spell_id": 28794,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:52:40.7930  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-15953-00004893FD,\"Grand Widow Faerlina\",0x10a48,0x0,Player-5827-01D4B327,\"Cattywampus-LivingFlame-EU\",0x514,0x0,28794,\"Rain of Fire\",0x4,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:09:54+00:00",
+        "updated_at": "2025-03-17T16:09:54+00:00"
+    },
+    {
+        "id": 486,
+        "npc_id": 15953,
+        "spell_id": 28796,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:52:42.5340  SPELL_MISSED,Creature-0-5210-533-13740-15953-00004893FD,\"Grand Widow Faerlina\",0x10a48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x40514,0x1,28796,\"Poison Bolt Volley\",0x8,ABSORB,nil,5052,5100,AOE\r\n",
+        "created_at": "2025-03-17T16:09:55+00:00",
+        "updated_at": "2025-03-17T16:09:55+00:00"
+    },
+    {
+        "id": 487,
+        "npc_id": 15979,
+        "spell_id": 28614,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:53:43.2210  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-15979-0000C893FD,\"Tomb Horror\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,28614,\"Pointy Spike\",0x1,Creature-0-5210-533-13740-15979-0000C893FD,0000000000000000,731078,754324,0,0,0,0,0,-1,0,0,0,3229.46,-3791.09,0,1.1849,61\r\n",
+        "created_at": "2025-03-17T16:09:57+00:00",
+        "updated_at": "2025-03-17T16:09:57+00:00"
+    },
+    {
+        "id": 488,
+        "npc_id": 16449,
+        "spell_id": 28599,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:54:25.8430  SPELL_DAMAGE,Creature-0-5210-533-13740-16449-00014893FD,\"Spirit of Naxxramas\",0x10a48,0x80,Player-5827-02718707,\"Enari-LivingFlame-EU\",0x514,0x0,28599,\"Shadow Bolt Volley\",0x20,Player-5827-02718707,0000000000000000,87,100,0,0,0,0,0,-1,0,0,0,3099.55,-3846.35,0,5.2276,83,3459,6215,-1,32,1542,0,1167,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:09:58+00:00",
+        "updated_at": "2025-03-17T16:09:58+00:00"
+    },
+    {
+        "id": 489,
+        "npc_id": 16447,
+        "spell_id": 24318,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:54:30.6420  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16447-0011C893FE,\"Plagued Ghoul\",0x10a48,0x0,Creature-0-5210-533-13740-16447-0011C893FE,\"Plagued Ghoul\",0x10a48,0x0,24318,\"Enrage\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:09:58+00:00",
+        "updated_at": "2025-03-17T16:09:58+00:00"
+    },
+    {
+        "id": 490,
+        "npc_id": 16447,
+        "spell_id": 13738,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:54:33.8370  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16447-0010C893FE,\"Plagued Ghoul\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,13738,\"Rend\",0x1,Creature-0-5210-533-13740-16447-0010C893FE,0000000000000000,376032,646564,0,0,0,0,0,-1,0,0,0,3113.02,-3859.19,0,2.1718,61\r\n",
+        "created_at": "2025-03-17T16:09:58+00:00",
+        "updated_at": "2025-03-17T16:09:58+00:00"
+    },
+    {
+        "id": 491,
+        "npc_id": 16447,
+        "spell_id": 29915,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:54:35.3550  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16447-0010C893FE,\"Plagued Ghoul\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,29915,\"Flesh Rot\",0x1,Creature-0-5210-533-13740-16447-0010C893FE,0000000000000000,294330,646564,0,0,0,0,0,-1,0,0,0,3113.02,-3859.19,0,2.1718,61\r\n",
+        "created_at": "2025-03-17T16:09:58+00:00",
+        "updated_at": "2025-03-17T16:09:58+00:00"
+    },
+    {
+        "id": 492,
+        "npc_id": 16368,
+        "spell_id": 28448,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:54:58.8340  SPELL_DAMAGE,Creature-0-5210-533-13740-16368-0002C893FE,\"Necropolis Acolyte\",0x10a48,0x0,Player-5827-0278BDBC,\"Aconion-LivingFlame-EU\",0x514,0x0,28448,\"Shadow Bolt Volley\",0x20,Player-5827-0278BDBC,0000000000000000,84,100,0,0,0,0,0,-1,0,0,0,3162.79,-3870.41,0,3.3244,81,3509,3557,-1,32,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:09:59+00:00",
+        "updated_at": "2025-03-17T16:09:59+00:00"
+    },
+    {
+        "id": 493,
+        "npc_id": 16368,
+        "spell_id": 22271,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:54:58.9480  SPELL_MISSED,Creature-0-5210-533-13740-16368-0002C893FE,\"Necropolis Acolyte\",0x10a48,0x0,Player-5827-02718707,\"Enari-LivingFlame-EU\",0x514,0x0,22271,\"Arcane Explosion\",0x40,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-17T16:09:59+00:00",
+        "updated_at": "2025-03-17T16:09:59+00:00"
+    },
+    {
+        "id": 494,
+        "npc_id": 16446,
+        "spell_id": 403233,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:55:07.5070  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16446-00034893FD,\"Plagued Gargoyle\",0xa48,0x80,Creature-0-5210-533-13740-16446-00034893FD,\"Plagued Gargoyle\",0xa48,0x80,403233,\"Meathook\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:09:59+00:00",
+        "updated_at": "2025-03-17T16:09:59+00:00"
+    },
+    {
+        "id": 495,
+        "npc_id": 16446,
+        "spell_id": 29325,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:55:09.8160  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16446-0003C893FD,\"Plagued Gargoyle\",0xa48,0x0,Player-5827-02718707,\"Enari-LivingFlame-EU\",0x514,0x0,29325,\"Acid Volley\",0x8,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:09:59+00:00",
+        "updated_at": "2025-03-17T16:09:59+00:00"
+    },
+    {
+        "id": 496,
+        "npc_id": 15952,
+        "spell_id": 28741,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:57:26.3650  SPELL_DAMAGE,Creature-0-5210-533-13740-15952-00004893FD,\"Maexxna\",0x10a48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,28741,\"Poison Shock\",0x8,Player-5827-02A9817B,0000000000000000,89,100,0,0,0,0,0,-1,0,0,0,3503.75,-3900.01,0,1.8387,85,5368,6675,-1,8,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:10:01+00:00",
+        "updated_at": "2025-03-17T16:10:01+00:00"
+    },
+    {
+        "id": 497,
+        "npc_id": 15952,
+        "spell_id": 28776,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:57:34.4590  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-15952-00004893FD,\"Maexxna\",0x10a48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,28776,\"Necrotic Poison\",0x8,Creature-0-5210-533-13740-15952-00004893FD,0000000000000000,21525004,25615314,0,0,0,0,0,-1,0,0,0,3500.77,-3888.39,0,1.8491,63\r\n",
+        "created_at": "2025-03-17T16:10:02+00:00",
+        "updated_at": "2025-03-17T16:10:02+00:00"
+    },
+    {
+        "id": 498,
+        "npc_id": 15952,
+        "spell_id": 29484,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:58:00.4400  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-15952-00004893FD,\"Maexxna\",0x10a48,0x0,Player-5827-01E38AA1,\"Ziumbiula-LivingFlame-EU\",0x514,0x0,29484,\"Web Spray\",0x8,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:10:03+00:00",
+        "updated_at": "2025-03-17T16:10:03+00:00"
+    },
+    {
+        "id": 499,
+        "npc_id": 15952,
+        "spell_id": 28747,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 18:58:18.1470  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-15952-00004893FD,\"Maexxna\",0x10a48,0x0,Creature-0-5210-533-13740-15952-00004893FD,\"Maexxna\",0x10a48,0x0,28747,\"Enrage\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:10:04+00:00",
+        "updated_at": "2025-03-17T16:10:04+00:00"
+    },
+    {
+        "id": 500,
+        "npc_id": 15954,
+        "spell_id": 29213,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:00:11.4840  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-15954-00004893FD,\"Noth the Plaguebringer\",0x10a48,0x0,Player-5827-01D4B327,\"Cattywampus-LivingFlame-EU\",0x514,0x0,29213,\"Curse of the Plaguebringer\",0x20,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:10:06+00:00",
+        "updated_at": "2025-03-17T16:10:06+00:00"
+    },
+    {
+        "id": 501,
+        "npc_id": 16984,
+        "spell_id": 12057,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:00:28.1830  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16984-0000489F40,\"Plagued Warrior\",0xa48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x40514,0x1,12057,\"Strike\",0x1,Creature-0-5210-533-13740-16984-0000489F40,Creature-0-5210-533-13740-15954-00004893FD,1297366,1405503,0,0,0,0,0,-1,0,0,0,2683.68,-3500.93,0,5.7405,61\r\n",
+        "created_at": "2025-03-17T16:10:08+00:00",
+        "updated_at": "2025-03-17T16:10:08+00:00"
+    },
+    {
+        "id": 502,
+        "npc_id": 15954,
+        "spell_id": 29212,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:00:37.3470  SPELL_MISSED,Creature-0-5210-533-13740-15954-00004893FD,\"Noth the Plaguebringer\",0x10a48,0x0,Player-5827-02704735,\"Wankturis-LivingFlame-EU\",0x40514,0x4,29212,\"Cripple\",0x20,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-17T16:10:10+00:00",
+        "updated_at": "2025-03-17T16:10:10+00:00"
+    },
+    {
+        "id": 503,
+        "npc_id": 15954,
+        "spell_id": 29208,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:00:37.3480  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-15954-00004893FD,\"Noth the Plaguebringer\",0x10a48,0x0,Creature-0-5210-533-13740-15954-00004893FD,\"Noth the Plaguebringer\",0x10a48,0x0,29208,\"Blink\",0x8,BUFF\r\n",
+        "created_at": "2025-03-17T16:10:11+00:00",
+        "updated_at": "2025-03-17T16:10:11+00:00"
+    },
+    {
+        "id": 504,
+        "npc_id": 16036,
+        "spell_id": 30112,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:01:03.8510  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16036-0007C893FE,\"Frenzied Bat\",0xa48,0x0,Player-5827-02700C8B,\"Alight-LivingFlame-EU\",0x511,0x0,30112,\"Frenzied Dive\",0x1,Creature-0-5210-533-13740-16036-0007C893FE,0000000000000000,73225,73225,0,0,0,0,0,-1,0,0,0,2691.64,-3562.65,0,3.3123,60\r\n",
+        "created_at": "2025-03-17T16:10:12+00:00",
+        "updated_at": "2025-03-17T16:10:12+00:00"
+    },
+    {
+        "id": 505,
+        "npc_id": 16297,
+        "spell_id": 30109,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:01:04.9220  SPELL_MISSED,Creature-0-5210-533-13740-16297-0004C893FD,\"Mutated Grub\",0x10a48,0x0,Player-5827-02718707,\"Enari-LivingFlame-EU\",0x514,0x0,30109,\"Slime Burst\",0x8,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-17T16:10:13+00:00",
+        "updated_at": "2025-03-17T16:10:13+00:00"
+    },
+    {
+        "id": 506,
+        "npc_id": 16037,
+        "spell_id": 30113,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:01:05.2970  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16037-0001C893FE,\"Plagued Bat\",0xa48,0x0,Player-5827-02718707,\"Enari-LivingFlame-EU\",0x514,0x0,30113,\"Putrid Bite\",0x8,Creature-0-5210-533-13740-16037-0001C893FE,0000000000000000,72967,73225,0,0,0,0,0,-1,0,0,0,2687.70,-3593.87,0,2.9330,60\r\n",
+        "created_at": "2025-03-17T16:10:14+00:00",
+        "updated_at": "2025-03-17T16:10:14+00:00"
+    },
+    {
+        "id": 507,
+        "npc_id": 16034,
+        "spell_id": 30111,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:01:27.7280  SPELL_DAMAGE,Creature-0-5210-533-13740-16034-0001C893FD,\"Plague Beast\",0xa48,0x0,Player-5827-0271AEE8,\"Rexeon-LivingFlame-EU\",0x514,0x0,30111,\"Mutated Spores\",0x8,Player-5827-0271AEE8,0000000000000000,94,100,0,0,0,0,0,-1,0,0,0,2795.38,-3624.73,0,6.2015,82,1049,1214,-1,8,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:10:15+00:00",
+        "updated_at": "2025-03-17T16:10:15+00:00"
+    },
+    {
+        "id": 508,
+        "npc_id": 16034,
+        "spell_id": 5568,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:01:33.9420  SPELL_MISSED,Creature-0-5210-533-13740-16034-0001C893FD,\"Plague Beast\",0x10a48,0x80,Player-5827-02718707,\"Enari-LivingFlame-EU\",0x514,0x0,5568,\"Trample\",0x1,DODGE,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:10:15+00:00",
+        "updated_at": "2025-03-17T16:10:15+00:00"
+    },
+    {
+        "id": 509,
+        "npc_id": 15936,
+        "spell_id": 29998,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:02:16.9580  SPELL_MISSED,Creature-0-5210-533-13740-15936-00004893FD,\"Heigan the Unclean\",0x10a48,0x0,Player-5827-01D4B327,\"Cattywampus-LivingFlame-EU\",0x514,0x0,29998,\"Decrepit Fever\",0x8,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-17T16:10:16+00:00",
+        "updated_at": "2025-03-17T16:10:16+00:00"
+    },
+    {
+        "id": 510,
+        "npc_id": 16236,
+        "spell_id": 29407,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:02:19.4220  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16236-0000C89FAB,\"Eye Stalk\",0xa48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x40514,0x1,29407,\"Mind Flay\",0x20,Creature-0-5210-533-13740-16236-0000C89FAB,0000000000000000,3231,3231,0,0,0,0,0,-1,0,0,0,2894.48,-3757.66,0,5.7560,61\r\n",
+        "created_at": "2025-03-17T16:10:17+00:00",
+        "updated_at": "2025-03-17T16:10:17+00:00"
+    },
+    {
+        "id": 511,
+        "npc_id": 15936,
+        "spell_id": 29310,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:02:26.7000  SPELL_DRAIN,Creature-0-5210-533-13740-15936-00004893FD,\"Heigan the Unclean\",0x10a48,0x0,Player-5827-0287B883,\"C\u00f3nflicts-LivingFlame-EU\",0x514,0x0,29310,\"Mana Burn\",0x20,Player-5827-0287B883,0000000000000000,89,100,0,0,0,0,0,-1,0,0,0,2787.17,-3703.44,0,1.9559,80,2578,0,0,6559\r\n",
+        "created_at": "2025-03-17T16:10:18+00:00",
+        "updated_at": "2025-03-17T16:10:18+00:00"
+    },
+    {
+        "id": 512,
+        "npc_id": 16011,
+        "spell_id": 29865,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:04:20.0330  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16011-00004893FD,\"Loatheb\",0x10a48,0x0,Player-5827-01D4B327,\"Cattywampus-LivingFlame-EU\",0x514,0x0,29865,\"Poison Aura\",0x8,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:10:20+00:00",
+        "updated_at": "2025-03-17T16:10:20+00:00"
+    },
+    {
+        "id": 513,
+        "npc_id": 16803,
+        "spell_id": 29061,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:07:57.8270  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16803-00014893FD,\"Deathknight Understudy\",0x1114,0x0,Creature-0-5210-533-13740-16803-00014893FD,\"Deathknight Understudy\",0x1114,0x0,29061,\"Shield Wall\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:10:25+00:00",
+        "updated_at": "2025-03-17T16:10:25+00:00"
+    },
+    {
+        "id": 514,
+        "npc_id": 16061,
+        "spell_id": 29107,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:08:18.8110  SPELL_MISSED,Creature-0-5210-533-13740-16061-00004893FD,\"Instructor Razuvious\",0x10a48,0x0,Player-5827-01D9CC03,\"Jizzbozz-LivingFlame-EU\",0x514,0x0,29107,\"Disrupting Shout\",0x1,IMMUNE,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:10:26+00:00",
+        "updated_at": "2025-03-17T16:10:26+00:00"
+    },
+    {
+        "id": 515,
+        "npc_id": 16215,
+        "spell_id": 29848,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:09:26.3590  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16215-0000C893FE,\"Unholy Staff\",0xa48,0x0,Player-5827-02704735,\"Wankturis-LivingFlame-EU\",0x40514,0x4,29848,\"Polymorph\",0x1,Creature-0-5210-533-13740-16215-0000C893FE,0000000000000000,588057,603459,0,0,0,0,0,-1,0,0,0,2723.02,-3116.42,0,0.2927,61\r\n",
+        "created_at": "2025-03-17T16:10:28+00:00",
+        "updated_at": "2025-03-17T16:10:28+00:00"
+    },
+    {
+        "id": 516,
+        "npc_id": 16215,
+        "spell_id": 29849,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:09:28.0030  SPELL_DAMAGE,Creature-0-5210-533-13740-16215-00004893FE,\"Unholy Staff\",0x10a48,0x40,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x0,29849,\"Frost Nova\",0x10,Player-5827-02A9817B,0000000000000000,88,100,0,0,0,0,0,-1,0,0,0,2721.74,-3115.24,0,5.3755,85,1520,1924,-1,16,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:10:29+00:00",
+        "updated_at": "2025-03-17T16:10:29+00:00"
+    },
+    {
+        "id": 517,
+        "npc_id": 16215,
+        "spell_id": 28450,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:09:28.4720  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16215-0000C893FE,\"Unholy Staff\",0xa48,0x0,Creature-0-5210-533-13740-16215-0000C893FE,\"Unholy Staff\",0xa48,0x0,28450,\"Arcane Explosion\",0x40,BUFF\r\n",
+        "created_at": "2025-03-17T16:10:30+00:00",
+        "updated_at": "2025-03-17T16:10:30+00:00"
+    },
+    {
+        "id": 518,
+        "npc_id": 16194,
+        "spell_id": 24236,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:09:38.2200  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16194-00004893FD,\"Unholy Axe\",0xa48,0x0,Creature-0-5210-533-13740-16194-00004893FD,\"Unholy Axe\",0xa48,0x0,24236,\"Whirlwind\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:10:31+00:00",
+        "updated_at": "2025-03-17T16:10:31+00:00"
+    },
+    {
+        "id": 519,
+        "npc_id": 16216,
+        "spell_id": 19632,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:10:05.8960  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16216-00014893FD,\"Unholy Swords\",0x10a48,0x40,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x0,19632,\"Cleave\",0x1,Creature-0-5210-533-13740-16216-00014893FD,0000000000000000,40213,646564,0,0,0,0,0,-1,0,0,0,2747.87,-3207.67,0,5.4866,61\r\n",
+        "created_at": "2025-03-17T16:10:31+00:00",
+        "updated_at": "2025-03-17T16:10:31+00:00"
+    },
+    {
+        "id": 520,
+        "npc_id": 16165,
+        "spell_id": 30094,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:10:49.4390  SPELL_DAMAGE,Creature-0-5210-533-13740-16165-00024893FD,\"Necro Knight\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x0,30094,\"Frost Nova\",0x10,Player-5827-02A9817B,0000000000000000,88,100,0,0,0,0,0,-1,0,0,0,2789.04,-3400.95,0,0.4233,85,1739,2730,-1,16,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:10:32+00:00",
+        "updated_at": "2025-03-17T16:10:32+00:00"
+    },
+    {
+        "id": 521,
+        "npc_id": 16165,
+        "spell_id": 30095,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:10:51.0520  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16165-00024893FD,\"Necro Knight\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x0,30095,\"Cone of Cold\",0x10,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:10:33+00:00",
+        "updated_at": "2025-03-17T16:10:33+00:00"
+    },
+    {
+        "id": 522,
+        "npc_id": 16145,
+        "spell_id": 28334,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:10:59.5320  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16145-0000C893FD,\"Deathknight Captain\",0x10a48,0x0,Creature-0-5210-533-13740-16145-0000C893FD,\"Deathknight Captain\",0x10a48,0x0,28334,\"Whirlwind\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:10:34+00:00",
+        "updated_at": "2025-03-17T16:10:34+00:00"
+    },
+    {
+        "id": 523,
+        "npc_id": 16145,
+        "spell_id": 403233,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:11:00.6300  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16145-00004893FD,\"Deathknight Captain\",0x10a48,0x0,Creature-0-5210-533-13740-16145-00004893FD,\"Deathknight Captain\",0x10a48,0x0,403233,\"Meathook\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:10:34+00:00",
+        "updated_at": "2025-03-17T16:10:34+00:00"
+    },
+    {
+        "id": 524,
+        "npc_id": 16145,
+        "spell_id": 28335,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:11:01.6570  SPELL_MISSED,Creature-0-5210-533-13740-16145-0000C893FD,\"Deathknight Captain\",0xa48,0x0,Player-5827-02704735,\"Wankturis-LivingFlame-EU\",0x40514,0x4,28335,\"Whirlwind\",0x1,DODGE,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:10:35+00:00",
+        "updated_at": "2025-03-17T16:10:35+00:00"
+    },
+    {
+        "id": 525,
+        "npc_id": 16124,
+        "spell_id": 30285,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:12:17.2180  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16124-000148A20C,\"Unrelenting Trainee\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x0,30285,\"Eagle Claw\",0x1,Creature-0-5210-533-13740-16124-000148A20C,Creature-0-5210-533-13740-16137-0006C89403,19761,76918,0,0,0,0,0,-1,0,0,0,2681.48,-3418.55,0,2.3126,60\r\n",
+        "created_at": "2025-03-17T16:10:36+00:00",
+        "updated_at": "2025-03-17T16:10:36+00:00"
+    },
+    {
+        "id": 526,
+        "npc_id": 16449,
+        "spell_id": 403233,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:12:25.7370  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16449-00024893FD,\"Spirit of Naxxramas\",0xa48,0x80,Creature-0-5210-533-13740-16449-00024893FD,\"Spirit of Naxxramas\",0xa48,0x80,403233,\"Meathook\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:10:36+00:00",
+        "updated_at": "2025-03-17T16:10:36+00:00"
+    },
+    {
+        "id": 527,
+        "npc_id": 16127,
+        "spell_id": 27989,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:12:29.7470  SPELL_DAMAGE,Creature-0-5210-533-13740-16127-000048A21C,\"Spectral Trainee\",0xa48,0x0,Player-5827-02704E9F,\"Palasen-LivingFlame-EU\",0x514,0x0,27989,\"Arcane Explosion\",0x40,Player-5827-02704E9F,0000000000000000,89,100,0,0,0,0,0,-1,0,0,0,2668.29,-3323.27,0,4.9255,79,2020,2068,-1,64,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:10:37+00:00",
+        "updated_at": "2025-03-17T16:10:37+00:00"
+    },
+    {
+        "id": 528,
+        "npc_id": 16125,
+        "spell_id": 20615,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:13:04.6130  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16125-0000C8A23E,\"Unrelenting Deathknight\",0xa48,0x0,Player-5827-0270BAA2,\"Worshipping-LivingFlame-EU\",0x514,0x0,20615,\"Intercept Stun\",0x1,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:10:37+00:00",
+        "updated_at": "2025-03-17T16:10:37+00:00"
+    },
+    {
+        "id": 529,
+        "npc_id": 16125,
+        "spell_id": 27825,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:13:07.0370  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16125-0000C8A23E,\"Unrelenting Deathknight\",0xa48,0x0,Player-5827-0270BAA2,\"Worshipping-LivingFlame-EU\",0x514,0x0,27825,\"Shadow Mark\",0x1,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:10:38+00:00",
+        "updated_at": "2025-03-17T16:10:38+00:00"
+    },
+    {
+        "id": 530,
+        "npc_id": 16148,
+        "spell_id": 15589,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:13:29.7280  SPELL_DAMAGE,Creature-0-5210-533-13740-16148-000048A253,\"Spectral Deathknight\",0xa48,0x0,Player-5827-02766F09,\"Valkian-LivingFlame-EU\",0x514,0x0,15589,\"Whirlwind\",0x1,Player-5827-02766F09,0000000000000000,76,100,0,0,0,0,0,-1,0,0,0,2695.45,-3329.35,0,0.3908,77,3787,7823,-1,1,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:10:38+00:00",
+        "updated_at": "2025-03-17T16:10:38+00:00"
+    },
+    {
+        "id": 531,
+        "npc_id": 16148,
+        "spell_id": 27991,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:13:31.3240  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16148-000048A256,\"Spectral Deathknight\",0xa48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x40514,0x1,27991,\"Sunder Armor\",0x1,Creature-0-5210-533-13740-16148-000048A256,Creature-0-5210-533-13740-16137-0003489403,329777,336041,0,0,0,0,0,-1,0,0,0,2702.81,-3316.73,0,3.3446,62\r\n",
+        "created_at": "2025-03-17T16:10:39+00:00",
+        "updated_at": "2025-03-17T16:10:39+00:00"
+    },
+    {
+        "id": 532,
+        "npc_id": 16126,
+        "spell_id": 27987,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:14:03.6750  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16126-000048A27B,\"Unrelenting Rider\",0xa48,0x0,Creature-0-5210-533-13740-16126-000048A27B,\"Unrelenting Rider\",0xa48,0x0,27987,\"Unholy Aura\",0x20,BUFF\r\n",
+        "created_at": "2025-03-17T16:10:40+00:00",
+        "updated_at": "2025-03-17T16:10:40+00:00"
+    },
+    {
+        "id": 533,
+        "npc_id": 16126,
+        "spell_id": 27988,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:14:05.6720  SPELL_MISSED,Creature-0-5210-533-13740-16126-000048A27B,\"Unrelenting Rider\",0x10a48,0x0,Player-5827-0213A229,\"Ligdeeznuts-LivingFlame-EU\",0x514,0x0,27988,\"Unholy Aura\",0x20,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-17T16:10:41+00:00",
+        "updated_at": "2025-03-17T16:10:41+00:00"
+    },
+    {
+        "id": 534,
+        "npc_id": 16150,
+        "spell_id": 27987,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:14:23.0870  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16150-000048A28D,\"Spectral Rider\",0xa48,0x0,Creature-0-5210-533-13740-16150-000048A28D,\"Spectral Rider\",0xa48,0x0,27987,\"Unholy Aura\",0x20,BUFF\r\n",
+        "created_at": "2025-03-17T16:10:41+00:00",
+        "updated_at": "2025-03-17T16:10:41+00:00"
+    },
+    {
+        "id": 535,
+        "npc_id": 16150,
+        "spell_id": 27988,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:14:25.1200  SPELL_DAMAGE,Creature-0-5210-533-13740-16150-000048A28D,\"Spectral Rider\",0xa48,0x0,Player-5827-0270C980,\"Quilx-LivingFlame-EU\",0x514,0x0,27988,\"Unholy Aura\",0x20,Player-5827-0270C980,0000000000000000,93,100,0,0,0,0,0,-1,0,0,0,2698.29,-3326.13,0,5.6636,83,1608,1655,-1,32,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:10:42+00:00",
+        "updated_at": "2025-03-17T16:10:42+00:00"
+    },
+    {
+        "id": 536,
+        "npc_id": 16149,
+        "spell_id": 27993,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:14:26.3740  SPELL_DAMAGE,Creature-0-5210-533-13740-16149-000048A28D,\"Spectral Horse\",0xa48,0x0,Player-5827-0278BDBC,\"Aconion-LivingFlame-EU\",0x514,0x0,27993,\"Stomp\",0x1,Player-5827-0278BDBC,0000000000000000,99,100,0,0,0,0,0,-1,0,0,0,2707.41,-3339.34,0,0.9050,81,213,410,-1,1,0,0,12,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:10:43+00:00",
+        "updated_at": "2025-03-17T16:10:43+00:00"
+    },
+    {
+        "id": 537,
+        "npc_id": 16150,
+        "spell_id": 27994,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:14:29.5830  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16150-000048A28D,\"Spectral Rider\",0xa48,0x0,Player-5827-0278BDBC,\"Aconion-LivingFlame-EU\",0x514,0x0,27994,\"Drain Life\",0x20,Creature-0-5210-533-13740-16150-000048A28D,Creature-0-5210-533-13740-16137-0006489403,130249,198347,0,0,0,0,0,-1,0,0,0,2701.96,-3335.52,0,2.0858,63\r\n",
+        "created_at": "2025-03-17T16:10:43+00:00",
+        "updated_at": "2025-03-17T16:10:43+00:00"
+    },
+    {
+        "id": 538,
+        "npc_id": 16127,
+        "spell_id": 403233,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:14:57.2600  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16127-000048A2AF,\"Spectral Trainee\",0xa48,0x0,Creature-0-5210-533-13740-16127-000048A2AF,\"Spectral Trainee\",0xa48,0x0,403233,\"Meathook\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:10:44+00:00",
+        "updated_at": "2025-03-17T16:10:44+00:00"
+    },
+    {
+        "id": 539,
+        "npc_id": 16060,
+        "spell_id": 28679,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:16:19.2570  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16060-00004893FE,\"Gothik the Harvester\",0x10a48,0x0,Player-5827-0213A229,\"Ligdeeznuts-LivingFlame-EU\",0x514,0x0,28679,\"Harvest Soul\",0x40,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:10:45+00:00",
+        "updated_at": "2025-03-17T16:10:45+00:00"
+    },
+    {
+        "id": 540,
+        "npc_id": 16451,
+        "spell_id": 15754,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:19:06.4620  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16451-00004893FE,\"Deathknight Vindicator\",0x10a48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x0,15754,\"Cleave\",0x1,Creature-0-5210-533-13740-16451-00004893FE,0000000000000000,372097,887722,0,0,0,0,0,-1,0,0,0,2613.17,-3052.57,0,2.4546,62\r\n",
+        "created_at": "2025-03-17T16:10:48+00:00",
+        "updated_at": "2025-03-17T16:10:48+00:00"
+    },
+    {
+        "id": 541,
+        "npc_id": 16451,
+        "spell_id": 28413,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:19:07.7730  SPELL_MISSED,Creature-0-5210-533-13740-16451-00004893FE,\"Deathknight Vindicator\",0x10a48,0x0,Player-5827-0213A229,\"Ligdeeznuts-LivingFlame-EU\",0x514,0x0,28413,\"Aura of Agony\",0x20,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-17T16:10:48+00:00",
+        "updated_at": "2025-03-17T16:10:48+00:00"
+    },
+    {
+        "id": 542,
+        "npc_id": 16062,
+        "spell_id": 28882,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:19:45.3280  SPELL_DAMAGE,Creature-0-5210-533-13740-16062-00004893FD,\"Highlord Mograine\",0xa48,0x0,Player-5827-02704735,\"Wankturis-LivingFlame-EU\",0x40514,0x4,28882,\"Righteous Fire\",0x4,Player-5827-02704735,0000000000000000,63,100,0,0,0,0,0,-1,0,0,0,2544.54,-3015.44,0,1.6991,80,2161,8688,-1,4,6480,0,0,nil,nil,nil,ST\r\n",
+        "created_at": "2025-03-17T16:10:50+00:00",
+        "updated_at": "2025-03-17T16:10:50+00:00"
+    },
+    {
+        "id": 543,
+        "npc_id": 16065,
+        "spell_id": 28863,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:19:49.1010  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16065-00004893FD,\"Lady Blaumeux\",0xa48,0x0,Player-5827-0270B831,\"Symantha-LivingFlame-EU\",0x512,0x0,28863,\"Void Zone\",0x20,Creature-0-5210-533-13740-16065-00004893FD,0000000000000000,7875078,7875078,0,0,0,0,0,-1,0,0,0,2464.67,-2952.58,0,6.1917,63\r\n",
+        "created_at": "2025-03-17T16:10:54+00:00",
+        "updated_at": "2025-03-17T16:10:54+00:00"
+    },
+    {
+        "id": 544,
+        "npc_id": 16064,
+        "spell_id": 29061,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:19:55.4300  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16064-00004893FD,\"Thane Korth'azz\",0x10a48,0x0,Creature-0-5210-533-13740-16064-00004893FD,\"Thane Korth'azz\",0x10a48,0x0,29061,\"Shield Wall\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:10:57+00:00",
+        "updated_at": "2025-03-17T16:10:57+00:00"
+    },
+    {
+        "id": 545,
+        "npc_id": 16063,
+        "spell_id": 28883,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:19:58.6820  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16063-00004893FD,\"Sir Zeliek\",0xa48,0x0,Player-5827-02712DB1,\"Sieje-LivingFlame-EU\",0x514,0x0,28883,\"Holy Wrath\",0x2,Creature-0-5210-533-13740-16063-00004893FD,0000000000000000,7871572,7875078,0,0,0,0,0,-1,0,0,0,2522.27,-2893.65,0,3.8447,63\r\n",
+        "created_at": "2025-03-17T16:10:58+00:00",
+        "updated_at": "2025-03-17T16:10:58+00:00"
+    },
+    {
+        "id": 546,
+        "npc_id": 16064,
+        "spell_id": 28884,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:19:58.9090  SPELL_DAMAGE,Creature-0-5210-533-13740-16064-00004893FD,\"Thane Korth'azz\",0xa48,0x0,Player-5827-027017CF,\"Jepuw-LivingFlame-EU\",0x514,0x0,28884,\"Meteor\",0x4,Player-5827-027017CF,0000000000000000,93,100,0,0,0,0,0,-1,0,0,0,2533.88,-3034.70,0,4.6149,82,1759,5533,-1,4,2743,0,1258,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:11:09+00:00",
+        "updated_at": "2025-03-17T16:11:09+00:00"
+    },
+    {
+        "id": 547,
+        "npc_id": 16062,
+        "spell_id": 29061,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:20:06.7780  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16062-00004893FD,\"Highlord Mograine\",0x10a48,0x0,Creature-0-5210-533-13740-16062-00004893FD,\"Highlord Mograine\",0x10a48,0x0,29061,\"Shield Wall\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:11:11+00:00",
+        "updated_at": "2025-03-17T16:11:11+00:00"
+    },
+    {
+        "id": 548,
+        "npc_id": 16062,
+        "spell_id": 28836,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:20:11.6520  SPELL_MISSED,Creature-0-5210-533-13740-16062-00004893FD,\"Highlord Mograine\",0xa48,0x0,Player-5827-01D4B327,\"Cattywampus-LivingFlame-EU\",0x514,0x0,28836,\"Mark\",0x20,ABSORB,nil,920,919,ST\r\n",
+        "created_at": "2025-03-17T16:11:12+00:00",
+        "updated_at": "2025-03-17T16:11:12+00:00"
+    },
+    {
+        "id": 549,
+        "npc_id": 16063,
+        "spell_id": 28836,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:20:11.6650  SPELL_DAMAGE,Creature-0-5210-533-13740-16063-00004893FD,\"Sir Zeliek\",0xa48,0x0,Player-5827-02712DB1,\"Sieje-LivingFlame-EU\",0x514,0x0,28836,\"Mark\",0x20,Player-5827-02712DB1,0000000000000000,81,100,0,0,0,0,0,-1,0,0,0,2501.51,-2911.24,0,2.3861,85,736,919,-1,32,0,0,0,nil,nil,nil,ST\r\n",
+        "created_at": "2025-03-17T16:11:12+00:00",
+        "updated_at": "2025-03-17T16:11:12+00:00"
+    },
+    {
+        "id": 550,
+        "npc_id": 16064,
+        "spell_id": 28836,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:20:11.6660  SPELL_DAMAGE,Creature-0-5210-533-13740-16064-00004893FD,\"Thane Korth'azz\",0x10a48,0x0,Player-5827-01D4B327,\"Cattywampus-LivingFlame-EU\",0x514,0x0,28836,\"Mark\",0x20,Player-5827-01D4B327,0000000000000000,98,100,0,0,0,0,0,-1,0,0,0,2531.26,-3034.09,0,4.4541,85,513,919,-1,32,0,0,407,nil,nil,nil,ST\r\n",
+        "created_at": "2025-03-17T16:11:12+00:00",
+        "updated_at": "2025-03-17T16:11:12+00:00"
+    },
+    {
+        "id": 551,
+        "npc_id": 16065,
+        "spell_id": 28836,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:20:11.6770  SPELL_DAMAGE,Creature-0-5210-533-13740-16065-00004893FD,\"Lady Blaumeux\",0xa48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x40514,0x1,28836,\"Mark\",0x20,Player-5827-027063DB,0000000000000000,97,100,0,0,0,0,0,-1,0,0,0,2484.68,-2939.72,0,3.6962,83,920,919,-1,32,0,0,0,nil,nil,nil,ST\r\n",
+        "created_at": "2025-03-17T16:11:12+00:00",
+        "updated_at": "2025-03-17T16:11:12+00:00"
+    },
+    {
+        "id": 552,
+        "npc_id": 16065,
+        "spell_id": 29061,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:21:00.2460  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16065-00004893FD,\"Lady Blaumeux\",0x10a48,0x0,Creature-0-5210-533-13740-16065-00004893FD,\"Lady Blaumeux\",0x10a48,0x0,29061,\"Shield Wall\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:11:13+00:00",
+        "updated_at": "2025-03-17T16:11:13+00:00"
+    },
+    {
+        "id": 553,
+        "npc_id": 16063,
+        "spell_id": 29061,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:21:16.3540  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16063-00004893FD,\"Sir Zeliek\",0xa48,0x0,Creature-0-5210-533-13740-16063-00004893FD,\"Sir Zeliek\",0xa48,0x0,29061,\"Shield Wall\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:11:14+00:00",
+        "updated_at": "2025-03-17T16:11:14+00:00"
+    },
+    {
+        "id": 554,
+        "npc_id": 16028,
+        "spell_id": 28308,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:24:35.9040  SPELL_MISSED,Creature-0-5210-533-13740-16028-00004893FD,\"Patchwerk\",0x10a48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x40514,0x1,28308,\"Hateful Strike\",0x1,DODGE,nil,ST\r\n",
+        "created_at": "2025-03-17T16:11:16+00:00",
+        "updated_at": "2025-03-17T16:11:16+00:00"
+    },
+    {
+        "id": 555,
+        "npc_id": 16028,
+        "spell_id": 28131,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:25:23.2610  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16028-00004893FD,\"Patchwerk\",0x10a48,0x0,Creature-0-5210-533-13740-16028-00004893FD,\"Patchwerk\",0x10a48,0x0,28131,\"Enrage\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:11:18+00:00",
+        "updated_at": "2025-03-17T16:11:18+00:00"
+    },
+    {
+        "id": 556,
+        "npc_id": 16025,
+        "spell_id": 28318,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:26:41.0540  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-16025-00004893FD,\"Stitched Spewer\",0xa48,0x0,Player-5827-02718707,\"Enari-LivingFlame-EU\",0x514,0x0,28318,\"Slime Shot\",0x8,Creature-0-5210-533-13740-16025-00004893FD,0000000000000000,1027532,1027532,0,0,0,0,0,-1,0,0,0,3329.84,-3308.59,0,1.7252,63\r\n",
+        "created_at": "2025-03-17T16:11:19+00:00",
+        "updated_at": "2025-03-17T16:11:19+00:00"
+    },
+    {
+        "id": 557,
+        "npc_id": 16025,
+        "spell_id": 28405,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:26:44.7090  SPELL_MISSED,Creature-0-5210-533-13740-16025-0000C893FD,\"Stitched Spewer\",0xa48,0x0,Player-5827-01E38AA1,\"Ziumbiula-LivingFlame-EU\",0x514,0x0,28405,\"Knockback\",0x1,DODGE,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:11:21+00:00",
+        "updated_at": "2025-03-17T16:11:21+00:00"
+    },
+    {
+        "id": 558,
+        "npc_id": 15931,
+        "spell_id": 28169,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:28:24.6010  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-15931-00004893FD,\"Grobbulus\",0x10a48,0x0,Player-5827-01FA8F1C,\"Sugarpuffs-LivingFlame-EU\",0x514,0x0,28169,\"Mutating Injection\",0x1,Creature-0-5210-533-13740-15931-00004893FD,0000000000000000,14818126,22031278,0,0,0,0,0,-1,0,0,0,3277.57,-3346.80,0,0.0218,63\r\n",
+        "created_at": "2025-03-17T16:11:22+00:00",
+        "updated_at": "2025-03-17T16:11:22+00:00"
+    },
+    {
+        "id": 559,
+        "npc_id": 15931,
+        "spell_id": 28206,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:28:29.3200  SPELL_DAMAGE,Creature-0-5210-533-13740-15931-00004893FD,\"Grobbulus\",0x10a48,0x0,Player-5827-01FA8F1C,\"Sugarpuffs-LivingFlame-EU\",0x514,0x80,28206,\"Mutagen Explosion\",0x1,Player-5827-01FA8F1C,0000000000000000,68,100,0,0,0,0,0,-1,0,0,0,3252.48,-3345.05,0,4.9050,80,6297,11695,-1,1,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:11:24+00:00",
+        "updated_at": "2025-03-17T16:11:24+00:00"
+    },
+    {
+        "id": 560,
+        "npc_id": 15931,
+        "spell_id": 28157,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:28:31.0930  SPELL_DAMAGE,Creature-0-5210-533-13740-15931-00004893FD,\"Grobbulus\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,28157,\"Slime Spray\",0x8,Player-5827-02A9817B,0000000000000000,98,100,0,0,0,0,0,-1,0,0,0,3286.77,-3346.85,0,3.1040,85,916,12099,-1,8,3025,0,6207,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:11:24+00:00",
+        "updated_at": "2025-03-17T16:11:24+00:00"
+    },
+    {
+        "id": 561,
+        "npc_id": 16290,
+        "spell_id": 28153,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:28:34.2140  SPELL_DAMAGE,Creature-0-5210-533-13740-16290-000048A5DF,\"Fallout Slime\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,28153,\"Disease Cloud\",0x8,Player-5827-02A9817B,0000000000000000,98,100,0,0,0,0,0,-1,0,0,0,3286.93,-3346.85,0,3.1035,85,732,1129,-1,8,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:11:26+00:00",
+        "updated_at": "2025-03-17T16:11:26+00:00"
+    },
+    {
+        "id": 562,
+        "npc_id": 15932,
+        "spell_id": 28371,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:30:48.3210  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-15932-00004893FD,\"Gluth\",0x10a48,0x0,Creature-0-5210-533-13740-15932-00004893FD,\"Gluth\",0x10a48,0x0,28371,\"Frenzy\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:11:28+00:00",
+        "updated_at": "2025-03-17T16:11:28+00:00"
+    },
+    {
+        "id": 563,
+        "npc_id": 15932,
+        "spell_id": 25646,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:30:51.6660  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-15932-00004893FD,\"Gluth\",0x10a48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,25646,\"Mortal Wound\",0x1,Creature-0-5210-533-13740-15932-00004893FD,0000000000000000,19639038,21820451,0,0,0,0,0,-1,0,0,0,3311.86,-3131.86,0,0.8902,63\r\n",
+        "created_at": "2025-03-17T16:11:28+00:00",
+        "updated_at": "2025-03-17T16:11:28+00:00"
+    },
+    {
+        "id": 564,
+        "npc_id": 16360,
+        "spell_id": 29306,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:30:55.7080  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16360-000048A66E,\"Zombie Chow\",0xa48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x40514,0x1,29306,\"Infected Wound\",0x8,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:11:29+00:00",
+        "updated_at": "2025-03-17T16:11:29+00:00"
+    },
+    {
+        "id": 565,
+        "npc_id": 15932,
+        "spell_id": 29685,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:30:56.4710  SPELL_MISSED,Creature-0-5210-533-13740-15932-00004893FD,\"Gluth\",0x10a48,0x0,Player-5827-01D4B327,\"Cattywampus-LivingFlame-EU\",0x514,0x0,29685,\"Terrifying Roar\",0x1,IMMUNE,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:11:31+00:00",
+        "updated_at": "2025-03-17T16:11:31+00:00"
+    },
+    {
+        "id": 566,
+        "npc_id": 15930,
+        "spell_id": 28135,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:32:27.1540  SPELL_DRAIN,Creature-0-5210-533-13740-15930-00004893FD,\"Feugen\",0xa48,0x0,Player-5827-02766F09,\"Valkian-LivingFlame-EU\",0x514,0x0,28135,\"Static Field\",0x8,Player-5827-02766F09,0000000000000000,96,100,0,0,0,0,0,-1,0,0,0,3505.42,-2995.54,0,1.0861,77,500,0,0,3992\r\n",
+        "created_at": "2025-03-17T16:11:33+00:00",
+        "updated_at": "2025-03-17T16:11:33+00:00"
+    },
+    {
+        "id": 567,
+        "npc_id": 15929,
+        "spell_id": 28134,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:32:32.0480  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-15929-00004893FD,\"Stalagg\",0x10a48,0x0,Creature-0-5210-533-13740-15929-00004893FD,\"Stalagg\",0x10a48,0x0,28134,\"Power Surge\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:11:34+00:00",
+        "updated_at": "2025-03-17T16:11:34+00:00"
+    },
+    {
+        "id": 568,
+        "npc_id": 15930,
+        "spell_id": 28125,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:32:36.8550  SPELL_DAMAGE,Creature-0-5210-533-13740-15930-00004893FD,\"Feugen\",0xa48,0x0,Player-5827-0278BDBC,\"Aconion-LivingFlame-EU\",0x514,0x0,28125,\"War Stomp\",0x1,Player-5827-0278BDBC,0000000000000000,72,100,0,0,0,0,0,-1,0,0,0,3503.66,-2996.24,0,1.0246,81,6083,6083,-1,1,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:11:37+00:00",
+        "updated_at": "2025-03-17T16:11:37+00:00"
+    },
+    {
+        "id": 569,
+        "npc_id": 15929,
+        "spell_id": 28125,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:32:36.8840  SPELL_DAMAGE,Creature-0-5210-533-13740-15929-00004893FD,\"Stalagg\",0x10a48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,28125,\"War Stomp\",0x1,Player-5827-02A9817B,0000000000000000,81,100,0,0,0,0,0,-1,0,0,0,3457.71,-2940.33,0,3.7298,85,3518,5427,-1,1,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:11:37+00:00",
+        "updated_at": "2025-03-17T16:11:37+00:00"
+    },
+    {
+        "id": 570,
+        "npc_id": 15928,
+        "spell_id": 28167,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:33:06.8690  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-15928-00004893FD,\"Thaddius\",0x10a48,0x0,Player-5827-02703CD3,\"Aitra-LivingFlame-EU\",0x514,0x0,28167,\"Chain Lightning\",0x8,Creature-0-5210-533-13740-15928-00004893FD,0000000000000000,63685636,64892127,0,0,0,0,0,-1,0,0,0,3513.84,-2926.55,0,4.1364,63\r\n",
+        "created_at": "2025-03-17T16:11:40+00:00",
+        "updated_at": "2025-03-17T16:11:40+00:00"
+    },
+    {
+        "id": 571,
+        "npc_id": 15989,
+        "spell_id": 28531,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:35:38.8110  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-15989-000048A78B,\"Sapphiron\",0xa48,0x0,Player-5827-01D4B327,\"Cattywampus-LivingFlame-EU\",0x514,0x0,28531,\"Frost Aura\",0x10,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:11:43+00:00",
+        "updated_at": "2025-03-17T16:11:43+00:00"
+    },
+    {
+        "id": 572,
+        "npc_id": 15989,
+        "spell_id": 348191,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:35:39.7160  SPELL_DAMAGE,Creature-0-5210-533-13740-15989-000048A78B,\"Sapphiron\",0x10a48,0x0,Player-5827-01D4B327,\"Cattywampus-LivingFlame-EU\",0x514,0x0,348191,\"Frost Aura\",0x10,Player-5827-01D4B327,0000000000000000,90,100,0,0,0,0,0,-1,0,0,0,3542.52,-5246.36,0,2.5461,85,2208,2208,-1,16,0,0,0,nil,nil,nil,ST\r\n",
+        "created_at": "2025-03-17T16:11:45+00:00",
+        "updated_at": "2025-03-17T16:11:45+00:00"
+    },
+    {
+        "id": 573,
+        "npc_id": 15989,
+        "spell_id": 19983,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:35:47.4340  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-15989-000048A78B,\"Sapphiron\",0x10a48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,19983,\"Cleave\",0x1,Creature-0-5210-533-13740-15989-000048A78B,0000000000000000,36208579,38370261,0,0,0,0,0,-1,0,0,0,3522.39,-5236.78,0,4.5029,63\r\n",
+        "created_at": "2025-03-17T16:11:45+00:00",
+        "updated_at": "2025-03-17T16:11:45+00:00"
+    },
+    {
+        "id": 574,
+        "npc_id": 15989,
+        "spell_id": 28542,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:35:49.9840  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-15989-000048A78B,\"Sapphiron\",0x10a48,0x0,Player-5827-01FA8F1C,\"Sugarpuffs-LivingFlame-EU\",0x514,0x0,28542,\"Life Drain\",0x20,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:11:47+00:00",
+        "updated_at": "2025-03-17T16:11:47+00:00"
+    },
+    {
+        "id": 575,
+        "npc_id": 15989,
+        "spell_id": 28522,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:36:24.0660  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-15989-000048A78B,\"Sapphiron\",0x10a48,0x0,Player-5827-02700C8B,\"Alight-LivingFlame-EU\",0x511,0x8,28522,\"Icebolt\",0x10,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:11:55+00:00",
+        "updated_at": "2025-03-17T16:11:55+00:00"
+    },
+    {
+        "id": 576,
+        "npc_id": 15989,
+        "spell_id": 15847,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:36:51.5750  SPELL_DAMAGE,Creature-0-5210-533-13740-15989-000048A78B,\"Sapphiron\",0x10a48,0x0,Player-5827-0278BDBC,\"Aconion-LivingFlame-EU\",0x514,0x0,15847,\"Tail Sweep\",0x1,Player-5827-0278BDBC,0000000000000000,89,100,0,0,0,0,0,-1,0,0,0,3533.24,-5253.90,0,2.1135,81,2284,2984,-1,1,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:11:55+00:00",
+        "updated_at": "2025-03-17T16:11:55+00:00"
+    },
+    {
+        "id": 577,
+        "npc_id": 15990,
+        "spell_id": 27810,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:43:10.2410  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-15990-00004893FD,\"Kel'Thuzad\",0x10a48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,27810,\"Shadow Fissure\",0x20,Creature-0-5210-533-13740-15990-00004893FD,0000000000000000,44276138,47040465,0,0,0,0,0,-1,0,0,0,3711.55,-5104.21,0,3.6126,63\r\n",
+        "created_at": "2025-03-17T16:12:02+00:00",
+        "updated_at": "2025-03-17T16:12:02+00:00"
+    },
+    {
+        "id": 578,
+        "npc_id": 15990,
+        "spell_id": 27819,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:43:23.5880  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-15990-00004893FD,\"Kel'Thuzad\",0x10a48,0x0,Player-5827-02A6CC6C,\"Etasupreme-LivingFlame-EU\",0x514,0x0,27819,\"Detonate Mana\",0x8,Creature-0-5210-533-13740-15990-00004893FD,0000000000000000,37616483,47040465,0,0,0,0,0,-1,0,0,0,3716.00,-5107.04,0,2.8871,63\r\n",
+        "created_at": "2025-03-17T16:12:03+00:00",
+        "updated_at": "2025-03-17T16:12:03+00:00"
+    },
+    {
+        "id": 579,
+        "npc_id": 15990,
+        "spell_id": 28410,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:43:27.4640  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-15990-00004893FD,\"Kel'Thuzad\",0x10a48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,28410,\"Chains of Kel'Thuzad\",0x20,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:12:05+00:00",
+        "updated_at": "2025-03-17T16:12:05+00:00"
+    },
+    {
+        "id": 580,
+        "npc_id": 15990,
+        "spell_id": 28479,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:43:31.0960  SPELL_DAMAGE,Creature-0-5210-533-13740-15990-00004893FD,\"Kel'Thuzad\",0x10a48,0x0,Player-5827-01E38AA1,\"Ziumbiula-LivingFlame-EU\",0x514,0x0,28479,\"Frostbolt\",0x10,Player-5827-01E38AA1,0000000000000000,50,100,0,0,0,0,0,-1,0,0,0,3723.87,-5109.58,0,2.9470,87,7983,9954,-1,16,0,0,2914,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-17T16:12:06+00:00",
+        "updated_at": "2025-03-17T16:12:06+00:00"
+    },
+    {
+        "id": 581,
+        "npc_id": 15990,
+        "spell_id": 27808,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:43:39.3730  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-15990-00004893FD,\"Kel'Thuzad\",0x10a48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x40514,0x1,27808,\"Frost Blast\",0x1,Creature-0-5210-533-13740-15990-00004893FD,0000000000000000,31638934,47040465,0,0,0,0,0,-1,0,0,0,3717.32,-5107.39,0,2.8915,63\r\n",
+        "created_at": "2025-03-17T16:12:07+00:00",
+        "updated_at": "2025-03-17T16:12:07+00:00"
+    },
+    {
+        "id": 582,
+        "npc_id": 15990,
+        "spell_id": 29879,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:43:40.3960  SPELL_DAMAGE,Creature-0-5210-533-13740-15990-00004893FD,\"Kel'Thuzad\",0x10a48,0x0,Player-5827-027063DB,\"Reymae-LivingFlame-EU\",0x40514,0x1,29879,\"Frost Blast\",0x10,Player-5827-027063DB,0000000000000000,51,100,0,0,0,0,0,-1,0,0,0,3710.16,-5105.56,0,6.0243,83,7662,7661,-1,16,0,0,0,nil,nil,nil,ST\r\n",
+        "created_at": "2025-03-17T16:12:08+00:00",
+        "updated_at": "2025-03-17T16:12:08+00:00"
+    },
+    {
+        "id": 583,
+        "npc_id": 15990,
+        "spell_id": 20615,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:43:48.5100  SPELL_AURA_REMOVED,Creature-0-5210-533-13740-15990-00004893FD,\"Kel'Thuzad\",0x10a48,0x0,Player-5827-0270BAA2,\"Worshipping-LivingFlame-EU\",0x514,0x0,20615,\"Intercept Stun\",0x1,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:12:08+00:00",
+        "updated_at": "2025-03-17T16:12:08+00:00"
+    },
+    {
+        "id": 584,
+        "npc_id": 15990,
+        "spell_id": 412609,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:43:58.6090  SPELL_AURA_REMOVED,Creature-0-5210-533-13740-15990-00004893FD,\"Kel'Thuzad\",0x10a48,0x0,Player-5827-0270BAA2,\"Worshipping-LivingFlame-EU\",0x514,0x0,412609,\"Deep Wound\",0x1,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:12:09+00:00",
+        "updated_at": "2025-03-17T16:12:09+00:00"
+    },
+    {
+        "id": 585,
+        "npc_id": 16441,
+        "spell_id": 28470,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:44:34.9100  SPELL_AURA_APPLIED,Creature-0-5210-533-13740-16441-000048A99A,\"Guardian of Icecrown\",0xa48,0x0,Creature-0-5210-533-13740-16441-000048A99A,\"Guardian of Icecrown\",0xa48,0x0,28470,\"Blood Tap\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:12:11+00:00",
+        "updated_at": "2025-03-17T16:12:11+00:00"
+    },
+    {
+        "id": 586,
+        "npc_id": 15990,
+        "spell_id": 28478,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:46:13.1040  SPELL_CAST_SUCCESS,Creature-0-5210-533-13740-15990-00004893FD,\"Kel'Thuzad\",0xa48,0x0,Player-5827-02A9817B,\"Resplendere-LivingFlame-EU\",0x40514,0x20,28478,\"Frostbolt\",0x10,Creature-0-5210-533-13740-15990-00004893FD,0000000000000000,24014576,47040465,0,0,0,0,0,-1,0,0,0,3716.02,-5107.52,0,3.1806,63\r\n",
+        "created_at": "2025-03-17T16:12:16+00:00",
+        "updated_at": "2025-03-17T16:12:16+00:00"
+    },
+    {
+        "id": 587,
+        "npc_id": 7347,
+        "spell_id": 12541,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 19:55:17.1550  SPELL_AURA_APPLIED,Creature-0-5251-129-14279-7347-0001489B17,\"Boneflayer Ghoul\",0xa28,0x0,Player-5827-020981D1,\"Jajadinmor-LivingFlame-EU\",0x518,0x0,12541,\"Ghoul Rot\",0x1,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:12:19+00:00",
+        "updated_at": "2025-03-17T16:12:19+00:00"
+    },
+    {
+        "id": 588,
+        "npc_id": 15976,
+        "spell_id": 28431,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:15:14.0770  SPELL_CAST_SUCCESS,Creature-0-5251-533-15735-15976-0000C8ADDF,\"Venom Stalker\",0x10a48,0x0,Player-5827-02766E38,\"J\u00e6ssie-LivingFlame-EU\",0x514,0x0,28431,\"Poison Charge\",0x8,Creature-0-5251-533-15735-15976-0000C8ADDF,0000000000000000,16112,141480,0,0,0,0,0,-1,0,0,0,3182.84,-3475.69,0,0.4223,61\r\n",
+        "created_at": "2025-03-17T16:12:23+00:00",
+        "updated_at": "2025-03-17T16:12:23+00:00"
+    },
+    {
+        "id": 589,
+        "npc_id": 16017,
+        "spell_id": 27794,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:16:05.1500  SPELL_CAST_SUCCESS,Creature-0-5251-533-15735-16017-0003C8ADDF,\"Patchwork Golem\",0xa48,0x0,Player-5827-02704690,\"Reymea-LivingFlame-EU\",0x40512,0x20,27794,\"Cleave\",0x1,Creature-0-5251-533-15735-16017-0003C8ADDF,0000000000000000,766,132048,0,0,0,0,0,-1,0,0,0,3081.40,-3358.12,0,0.9389,61\r\n",
+        "created_at": "2025-03-17T16:12:23+00:00",
+        "updated_at": "2025-03-17T16:12:23+00:00"
+    },
+    {
+        "id": 590,
+        "npc_id": 16165,
+        "spell_id": 28391,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:20:37.0800  SPELL_AURA_APPLIED,Creature-0-5251-533-15735-16165-0000C8ADDF,\"Necro Knight\",0x10a48,0x0,Creature-0-5251-533-15735-16165-0000C8ADDF,\"Necro Knight\",0x10a48,0x0,28391,\"Blink\",0x8,BUFF\r\n",
+        "created_at": "2025-03-17T16:12:27+00:00",
+        "updated_at": "2025-03-17T16:12:27+00:00"
+    },
+    {
+        "id": 591,
+        "npc_id": 16165,
+        "spell_id": 30092,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:21:18.2920  SPELL_MISSED,Creature-0-5251-533-15735-16165-000348ADDF,\"Necro Knight\",0xa48,0x0,Player-5827-02BDBACF,\"Spectrym-LivingFlame-EU\",0x514,0x0,30092,\"Blast Wave\",0x4,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-17T16:12:28+00:00",
+        "updated_at": "2025-03-17T16:12:28+00:00"
+    },
+    {
+        "id": 592,
+        "npc_id": 16164,
+        "spell_id": 403233,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:21:20.3170  SPELL_AURA_APPLIED,Creature-0-5251-533-15735-16164-000248ADDF,\"Shade of Naxxramas\",0xa48,0x0,Creature-0-5251-533-15735-16164-000248ADDF,\"Shade of Naxxramas\",0xa48,0x0,403233,\"Meathook\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:12:28+00:00",
+        "updated_at": "2025-03-17T16:12:28+00:00"
+    },
+    {
+        "id": 593,
+        "npc_id": 16146,
+        "spell_id": 19134,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:21:30.0260  SPELL_CAST_SUCCESS,Creature-0-5251-533-15735-16146-0005C8ADDF,\"Deathknight\",0xa48,0x0,Player-5827-02704690,\"Reymea-LivingFlame-EU\",0x40512,0x20,19134,\"Intimidating Shout\",0x1,Creature-0-5251-533-15735-16146-0005C8ADDF,0000000000000000,48188,113184,0,0,0,0,0,-1,0,0,0,2880.30,-3203.69,0,2.9760,61\r\n",
+        "created_at": "2025-03-17T16:12:28+00:00",
+        "updated_at": "2025-03-17T16:12:28+00:00"
+    },
+    {
+        "id": 594,
+        "npc_id": 16067,
+        "spell_id": 403233,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:22:59.4110  SPELL_AURA_APPLIED,Creature-0-5251-533-15735-16067-0003C8ADDF,\"Skeletal Steed\",0x10a48,0x0,Creature-0-5251-533-15735-16067-0003C8ADDF,\"Skeletal Steed\",0x10a48,0x0,403233,\"Meathook\",0x1,BUFF\r\n",
+        "created_at": "2025-03-17T16:12:29+00:00",
+        "updated_at": "2025-03-17T16:12:29+00:00"
+    },
+    {
+        "id": 595,
+        "npc_id": 15978,
+        "spell_id": 22412,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:30:10.2050  SPELL_AURA_APPLIED,Creature-0-5251-533-15735-15978-0000C8ADDF,\"Crypt Reaver\",0x10a48,0x0,Player-5827-027175D9,\"Synessa-LivingFlame-EU\",0x514,0x0,22412,\"Virulent Poison\",0x8,DEBUFF\r\n",
+        "created_at": "2025-03-17T16:12:32+00:00",
+        "updated_at": "2025-03-17T16:12:32+00:00"
+    },
+    {
+        "id": 596,
+        "npc_id": 16453,
+        "spell_id": 28431,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:30:48.2240  SPELL_CAST_SUCCESS,Creature-0-5251-533-15735-16453-0002C8ADDF,\"Necro Stalker\",0x10a48,0x0,Player-5827-02712D3B,\"Eitra-LivingFlame-EU\",0x514,0x0,28431,\"Poison Charge\",0x8,Creature-0-5251-533-15735-16453-0002C8ADDF,0000000000000000,31830,373570,0,0,0,0,0,-1,0,0,0,3258.85,-3688.43,0,3.5375,61\r\n",
+        "created_at": "2025-03-17T16:12:32+00:00",
+        "updated_at": "2025-03-17T16:12:32+00:00"
+    },
+    {
+        "id": 597,
+        "npc_id": 16394,
+        "spell_id": 28315,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 17:43:11.7600  SPELL_MISSED,Creature-0-5253-0-1181-16394-0000488C8E,\"Pallid Horror\",0xa28,0x0,Player-5827-01D733DA,\"Atomicblonde-LivingFlame-EU\",0x518,0x0,28315,\"Aura of Fear\",0x20,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-17T16:38:03+00:00",
+        "updated_at": "2025-03-17T16:38:03+00:00"
+    },
+    {
+        "id": 598,
+        "npc_id": 15936,
+        "spell_id": 29371,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:42:39.6190  SPELL_DAMAGE,Creature-0-5251-533-15735-15936-000048ADDF,\"Heigan the Unclean\",0xa48,0x0,Player-5827-02704690,\"Reymea-LivingFlame-EU\",0x40512,0x20,29371,\"Eruption\",0x8,Player-5827-02704690,0000000000000000,82,100,0,0,0,0,0,-1,0,0,0,2771.66,-3687.22,0,5.6907,84,5177,14506,-1,8,0,0,8036,nil,nil,nil,ST\r\n",
+        "created_at": "2025-03-18T14:55:46+00:00",
+        "updated_at": "2025-03-18T14:55:46+00:00"
+    },
+    {
+        "id": 599,
+        "npc_id": 16011,
+        "spell_id": 29204,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:46:35.3620  SPELL_AURA_APPLIED,Creature-0-5251-533-15735-16011-000048ADDF,\"Loatheb\",0x10a48,0x0,Player-5827-02702ACA,\"Valq-LivingFlame-EU\",0x514,0x0,29204,\"Inevitable Doom\",0x20,DEBUFF\r\n",
+        "created_at": "2025-03-18T14:55:49+00:00",
+        "updated_at": "2025-03-18T14:55:49+00:00"
+    },
+    {
+        "id": 600,
+        "npc_id": 16061,
+        "spell_id": 26613,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:49:33.2560  SPELL_CAST_SUCCESS,Creature-0-5251-533-15735-16061-000048ADDF,\"Instructor Razuvious\",0x10a48,0x0,Player-5827-02704690,\"Reymea-LivingFlame-EU\",0x40512,0x20,26613,\"Unbalancing Strike\",0x1,Creature-0-5251-533-15735-16061-000048ADDF,0000000000000000,6669125,20028435,0,0,0,0,0,-1,0,0,0,2809.54,-3109.37,0,0.2364,63\r\n",
+        "created_at": "2025-03-18T14:55:50+00:00",
+        "updated_at": "2025-03-18T14:55:50+00:00"
+    },
+    {
+        "id": 601,
+        "npc_id": 16194,
+        "spell_id": 15589,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:51:39.9560  SPELL_MISSED,Creature-0-5251-533-15735-16194-0001C8ADDF,\"Unholy Axe\",0x10a48,0x0,Player-5827-02708C1D,\"Spookyhdyraa-LivingFlame-EU\",0x514,0x0,15589,\"Whirlwind\",0x1,DODGE,nil,AOE\r\n",
+        "created_at": "2025-03-18T14:55:51+00:00",
+        "updated_at": "2025-03-18T14:55:51+00:00"
+    },
+    {
+        "id": 602,
+        "npc_id": 16194,
+        "spell_id": 18765,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:51:42.1970  SPELL_AURA_APPLIED,Creature-0-5251-533-15735-16194-000248ADDF,\"Unholy Axe\",0xa48,0x0,Creature-0-5251-533-15735-16194-000248ADDF,\"Unholy Axe\",0xa48,0x0,18765,\"Sweeping Strikes\",0x1,BUFF\r\n",
+        "created_at": "2025-03-18T14:55:51+00:00",
+        "updated_at": "2025-03-18T14:55:51+00:00"
+    },
+    {
+        "id": 603,
+        "npc_id": 16194,
+        "spell_id": 15708,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:51:55.1750  SPELL_CAST_SUCCESS,Creature-0-5251-533-15735-16194-000248ADDF,\"Unholy Axe\",0xa48,0x0,Player-5827-02704690,\"Reymea-LivingFlame-EU\",0x40512,0x20,15708,\"Mortal Strike\",0x1,Creature-0-5251-533-15735-16194-000248ADDF,0000000000000000,309449,775876,0,0,0,0,0,-1,0,0,0,2700.55,-3110.27,0,3.1452,61\r\n",
+        "created_at": "2025-03-18T14:55:52+00:00",
+        "updated_at": "2025-03-18T14:55:52+00:00"
+    },
+    {
+        "id": 604,
+        "npc_id": 16194,
+        "spell_id": 12723,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:51:57.9720  SPELL_DAMAGE,Creature-0-5251-533-15735-16194-000248ADDF,\"Unholy Axe\",0x10a48,0x0,Player-5827-0271100F,\"J\u00e5nj\u00e5-LivingFlame-EU\",0x514,0x0,12723,\"Sweeping Strikes\",0x1,Player-5827-0271100F,0000000000000000,0,100,0,0,0,0,0,-1,0,0,0,2702.04,-3110.28,0,3.2568,79,21388,21387,2378,1,0,0,0,nil,nil,nil,ST\r\n",
+        "created_at": "2025-03-18T14:55:53+00:00",
+        "updated_at": "2025-03-18T14:55:53+00:00"
+    },
+    {
+        "id": 605,
+        "npc_id": 16452,
+        "spell_id": 30094,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:55:22.0450  SPELL_DAMAGE,Creature-0-5251-533-15735-16452-000448ADDF,\"Necro Knight Guardian\",0xa48,0x0,Player-5827-0273FBF9,\"Peppad-LivingFlame-EU\",0x514,0x0,30094,\"Frost Nova\",0x10,Player-5827-0273FBF9,0000000000000000,91,100,0,0,0,0,0,-1,0,0,0,2652.19,-3333.03,0,3.0930,81,1802,2756,-1,16,0,0,907,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-18T14:55:54+00:00",
+        "updated_at": "2025-03-18T14:55:54+00:00"
+    },
+    {
+        "id": 606,
+        "npc_id": 16452,
+        "spell_id": 30095,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:55:23.6610  SPELL_AURA_APPLIED,Creature-0-5251-533-15735-16452-000448ADDF,\"Necro Knight Guardian\",0xa48,0x0,Player-5827-0271100F,\"J\u00e5nj\u00e5-LivingFlame-EU\",0x514,0x0,30095,\"Cone of Cold\",0x10,DEBUFF\r\n",
+        "created_at": "2025-03-18T14:55:54+00:00",
+        "updated_at": "2025-03-18T14:55:54+00:00"
+    },
+    {
+        "id": 607,
+        "npc_id": 16451,
+        "spell_id": 28412,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:55:34.9840  SPELL_CAST_SUCCESS,Creature-0-5251-533-15735-16451-000248ADDF,\"Deathknight Vindicator\",0xa48,0x0,Player-5827-02702ACA,\"Valq-LivingFlame-EU\",0x514,0x0,28412,\"Death Coil\",0x20,Creature-0-5251-533-15735-16451-000248ADDF,0000000000000000,214778,887722,0,0,0,0,0,-1,0,0,0,2655.22,-3336.79,0,0.1950,62\r\n",
+        "created_at": "2025-03-18T14:55:54+00:00",
+        "updated_at": "2025-03-18T14:55:54+00:00"
+    },
+    {
+        "id": 608,
+        "npc_id": 16452,
+        "spell_id": 28391,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:55:45.1760  SPELL_AURA_APPLIED,Creature-0-5251-533-15735-16452-000148ADDF,\"Necro Knight Guardian\",0xa48,0x0,Creature-0-5251-533-15735-16452-000148ADDF,\"Necro Knight Guardian\",0xa48,0x0,28391,\"Blink\",0x8,BUFF\r\n",
+        "created_at": "2025-03-18T14:55:54+00:00",
+        "updated_at": "2025-03-18T14:55:54+00:00"
+    },
+    {
+        "id": 609,
+        "npc_id": 16452,
+        "spell_id": 30096,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:55:47.8270  SPELL_DAMAGE,Creature-0-5251-533-15735-16452-000148ADDF,\"Necro Knight Guardian\",0xa48,0x0,Player-5827-0273FBF9,\"Peppad-LivingFlame-EU\",0x514,0x0,30096,\"Arcane Explosion\",0x40,Player-5827-0273FBF9,0000000000000000,86,100,0,0,0,0,0,-1,0,0,0,2659.89,-3330.90,0,4.0690,81,2883,3120,-1,64,0,0,190,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-18T14:55:55+00:00",
+        "updated_at": "2025-03-18T14:55:55+00:00"
+    },
+    {
+        "id": 610,
+        "npc_id": 16126,
+        "spell_id": 27831,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:57:52.6300  SPELL_DAMAGE,Creature-0-5251-533-15735-16126-000048BAC7,\"Unrelenting Rider\",0xa48,0x0,Player-5827-02704690,\"Reymea-LivingFlame-EU\",0x40512,0x20,27831,\"Shadow Bolt Volley\",0x20,Player-5827-02704690,0000000000000000,90,100,0,0,0,0,0,-1,0,0,0,2697.78,-3421.02,0,2.9876,84,2686,13248,-1,32,3300,0,6543,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-18T14:55:57+00:00",
+        "updated_at": "2025-03-18T14:55:57+00:00"
+    },
+    {
+        "id": 611,
+        "npc_id": 16124,
+        "spell_id": 11428,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 20:59:00.6580  SPELL_CAST_SUCCESS,Creature-0-5251-533-15735-16124-0000C8BB05,\"Unrelenting Trainee\",0xa48,0x0,Player-5827-02749364,\"Bubbling-LivingFlame-EU\",0x514,0x0,11428,\"Knockdown\",0x1,Creature-0-5251-533-15735-16124-0000C8BB05,Creature-0-5251-533-15735-16137-0000C8ADE4,69489,76918,0,0,0,0,0,-1,0,0,0,2668.29,-3427.42,0,2.0344,60\r\n",
+        "created_at": "2025-03-18T14:55:58+00:00",
+        "updated_at": "2025-03-18T14:55:58+00:00"
+    },
+    {
+        "id": 612,
+        "npc_id": 16025,
+        "spell_id": 28311,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 21:10:26.6350  SPELL_CAST_SUCCESS,Creature-0-5251-533-15735-16025-000248ADDF,\"Stitched Spewer\",0x10a48,0x0,Player-5827-02749364,\"Bubbling-LivingFlame-EU\",0x514,0x10,28311,\"Slime Bolt\",0x8,Creature-0-5251-533-15735-16025-000248ADDF,0000000000000000,805228,1027532,0,0,0,0,0,-1,0,0,0,3283.74,-3275.02,0,5.4531,63\r\n",
+        "created_at": "2025-03-18T14:56:04+00:00",
+        "updated_at": "2025-03-18T14:56:04+00:00"
+    },
+    {
+        "id": 613,
+        "npc_id": 15928,
+        "spell_id": 28089,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 21:17:23.1930  SPELL_MISSED,Creature-0-5251-533-15735-15928-000048ADDF,\"Thaddius\",0x10a48,0x0,Player-5827-02704727,\"Zankturiz-LivingFlame-EU\",0x40514,0x1,28089,\"Polarity Shift\",0x8,IMMUNE,nil,AOE\r\n",
+        "created_at": "2025-03-18T14:56:08+00:00",
+        "updated_at": "2025-03-18T14:56:08+00:00"
+    },
+    {
+        "id": 614,
+        "npc_id": 16427,
+        "spell_id": 28457,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 21:28:24.9710  SPELL_MISSED,Creature-0-5251-533-15735-16427-000048C1EE,\"Soldier of the Frozen Wastes\",0x10a48,0x0,Player-5827-02702ACA,\"Valq-LivingFlame-EU\",0x514,0x0,28457,\"Dark Blast\",0x20,RESIST,nil,0,AOE\r\n",
+        "created_at": "2025-03-18T14:56:12+00:00",
+        "updated_at": "2025-03-18T14:56:12+00:00"
+    },
+    {
+        "id": 615,
+        "npc_id": 15990,
+        "spell_id": 10890,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 21:29:46.6670  SPELL_AURA_REMOVED,Creature-0-5251-533-15735-15990-000048ADDF,\"Kel'Thuzad\",0x10a48,0x0,Player-5827-02703446,\"Frishalaxx-LivingFlame-EU\",0x40514,0x4,10890,\"Psychic Scream\",0x20,DEBUFF\r\n",
+        "created_at": "2025-03-18T14:56:13+00:00",
+        "updated_at": "2025-03-18T14:56:13+00:00"
+    },
+    {
+        "id": 616,
+        "npc_id": 238527,
+        "spell_id": 16143,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "raw_event": "3\/5\/2025 21:51:28.0710  SPELL_AURA_APPLIED,Creature-0-5210-2875-16432-238527-000048B634,\"Mangled Cadaver\",0xa28,0x0,Player-5827-0273FD3C,\"Jgw-LivingFlame-EU\",0x518,0x0,16143,\"Cadaver Worms\",0x20,DEBUFF\r\n",
+        "created_at": "2025-03-18T14:56:16+00:00",
+        "updated_at": "2025-03-18T14:56:16+00:00"
+    },
+    {
+        "id": 617,
+        "npc_id": 151812,
+        "spell_id": 295130,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_200104_2_operation-mechagon.zip",
+        "raw_event": "3\/5\/2025 23:45:41.5870  SPELL_AURA_APPLIED,Creature-0-3774-2097-3376-151812-000248DE3E,\"Detect-o-Bot\",0xa48,0x0,Player-3702-0A718BEB,\"Terebethia-ArgentDawn-EU\",0x512,0x0,295130,\"Neutralize Threat\",0x1,DEBUFF\r\n",
+        "created_at": "2025-03-18T15:33:07+00:00",
+        "updated_at": "2025-03-18T15:33:07+00:00"
+    },
+    {
+        "id": 618,
+        "npc_id": 150397,
+        "spell_id": 291974,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_200104_2_operation-mechagon.zip",
+        "raw_event": "3\/5\/2025 23:57:26.3270  SPELL_AURA_APPLIED,Creature-0-3774-2097-3376-150397-000048DE3E,\"King Mechagon\",0xa48,0x0,Player-3702-0A718BEB,\"Terebethia-ArgentDawn-EU\",0x512,0x0,291974,\"Obnoxious Monologue\",0x1,DEBUFF\r\n",
+        "created_at": "2025-03-18T15:33:11+00:00",
+        "updated_at": "2025-03-18T15:33:11+00:00"
+    },
+    {
+        "id": 619,
+        "npc_id": 136005,
+        "spell_id": 276304,
+        "combat_log_path": "tmp\/WoWCombatLog-030625_212658_2_the-motherlode.zip",
+        "raw_event": "3\/6\/2025 23:12:30.1600  SPELL_CAST_SUCCESS,Creature-0-4250-1594-7339-136005-0008CA2B74,\"Rowdy Reveler\",0xa28,0x0,Player-1597-069DFDDB,\"Flipperj-Jaedenar-EU\",0x512,0x0,276304,\"Penny For Your Thoughts\",0x1,Creature-0-4250-1594-7339-136005-0008CA2B74,0000000000000000,3870576,10426133,0,0,42857,0,0,0,1,0,0,0,797.66,-3694.07,1010,2.4999,80\r\n",
+        "created_at": "2025-03-18T15:33:15+00:00",
+        "updated_at": "2025-03-18T15:33:15+00:00"
+    },
+    {
+        "id": 620,
+        "npc_id": 132713,
+        "spell_id": 262019,
+        "combat_log_path": "tmp\/WoWCombatLog-030625_212658_2_the-motherlode.zip",
+        "raw_event": "3\/6\/2025 23:39:16.9660  SPELL_MISSED,Creature-0-4250-1594-7339-132713-00004A2B74,\"Mogul Razdunk\",0xa48,0x0,Player-1084-0A5F453F,\"M\u00e1lic-TarrenMill-EU\",0x512,0x0,262019,\"Grease Gun\",0x1,DODGE,nil,ST\r\n",
+        "created_at": "2025-03-18T15:33:23+00:00",
+        "updated_at": "2025-03-18T15:33:23+00:00"
+    },
+    {
+        "id": 621,
+        "npc_id": 165946,
+        "spell_id": 323681,
+        "combat_log_path": "tmp\/WoWCombatLog-030625_212658_2_theater-of-pain.zip",
+        "raw_event": "3\/7\/2025 00:15:09.5520  SPELL_PERIODIC_DAMAGE,Creature-0-1471-2293-12806-165946-00004A3A2D,\"Mordretha, the Endless Empress\",0xa48,0x0,Player-3713-0B28F128,\"Howmuchwood-Al'Akir-EU\",0x512,0x0,323681,\"Dark Devastation\",0x20,Player-3713-0B28F128,0000000000000000,2928850,6058360,70061,18174,25615,1205,0,0,3,99,140,0,2843.78,-2557.48,1683,5.9753,626,2277627,2602737,-1,32,0,0,0,nil,nil,nil,ST\r\n",
+        "created_at": "2025-03-18T15:33:34+00:00",
+        "updated_at": "2025-03-18T15:33:34+00:00"
+    },
+    {
+        "id": 622,
+        "npc_id": 226404,
+        "spell_id": 468811,
+        "combat_log_path": "tmp\/WoWCombatLog-030825_142311_5_operation-floodgate.zip",
+        "raw_event": "3\/8\/2025 14:48:47.6341  SPELL_AURA_APPLIED,Creature-0-4255-2773-12114-226404-00004C45AB,\"Geezle Gigazap\",0x10a48,0x0,Creature-0-4255-2773-12114-226404-00004C45AB,\"Geezle Gigazap\",0x10a48,0x0,468811,\"Gigazap\",0x1,BUFF\r\n",
+        "created_at": "2025-03-18T15:33:47+00:00",
+        "updated_at": "2025-03-18T15:33:47+00:00"
+    },
+    {
+        "id": 623,
+        "npc_id": 145312,
+        "spell_id": 282945,
+        "combat_log_path": "tmp\/WoWCombatLog-030825_142311_7_operation-mechagon.zip",
+        "raw_event": "3\/8\/2025 15:00:43.9511  SPELL_DAMAGE,Creature-0-1463-2097-18087-145312-00034C4D88,\"Buzz Saw\",0xa48,0x0,Player-1084-0B1BB938,\"Fpa-TarrenMill-EU\",0x512,0x0,282945,\"Buzz Saw\",0x1,Player-1084-0B1BB938,0000000000000000,5493052,6588040,9060,74047,15807,888,0,0,0,2490500,2500000,0,486.48,220.07,1491,2.1389,635,1094988,1326406,-1,1,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-18T15:33:49+00:00",
+        "updated_at": "2025-03-18T15:33:49+00:00"
+    },
+    {
+        "id": 624,
+        "npc_id": 212739,
+        "spell_id": 472765,
+        "combat_log_path": "tmp\/WoWCombatLog-030825_205159_7_the-rookery.zip",
+        "raw_event": "3\/9\/2025 01:14:42.2431  SPELL_AURA_APPLIED,Creature-0-4254-2648-13671-212739-0000CCD8A8,\"Consuming Voidstone\",0x10a48,0x0,Creature-0-4254-2648-13671-212739-0000CCD8A8,\"Consuming Voidstone\",0x10a48,0x0,472765,\"Consumed Void\",0x20,BUFF\r\n",
+        "created_at": "2025-03-18T15:34:50+00:00",
+        "updated_at": "2025-03-18T15:34:50+00:00"
+    },
+    {
+        "id": 625,
+        "npc_id": 212412,
+        "spell_id": 1218133,
+        "combat_log_path": "tmp\/WoWCombatLog-030925_200224_6_darkflame-cleft.zip",
+        "raw_event": "3\/9\/2025 22:10:38.9980  SPELL_CAST_SUCCESS,Creature-0-3111-2651-22805-212412-00004E0F74,\"Sootsnout\",0xa48,0x0,Player-1084-0A5F453F,\"M\u00e1lic-TarrenMill-EU\",0x512,0x0,1218133,\"Burning Candles\",0x4,Creature-0-3111-2651-22805-212412-00004E0F74,0000000000000000,155534444,185957076,0,0,42857,0,0,0,1,0,0,0,179.06,-156.31,2303,4.6109,81\r\n",
+        "created_at": "2025-03-18T15:35:22+00:00",
+        "updated_at": "2025-03-18T15:35:22+00:00"
+    },
+    {
+        "id": 626,
+        "npc_id": 210818,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-030925_200224_7_darkflame-cleft.zip",
+        "raw_event": "3\/9\/2025 23:22:34.1640  SPELL_CAST_SUCCESS,Creature-0-4239-2651-28098-210818-00004E2214,\"Lowly Moleherd\",0x10a48,0x0,Player-1084-0A5F453F,\"M\u00e1lic-TarrenMill-EU\",0x512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-4239-2651-28098-210818-00004E2214,0000000000000000,12466462,63092580,0,0,42857,0,0,0,1,0,0,0,454.83,51.02,2303,3.1773,80\r\n",
+        "created_at": "2025-03-18T15:35:26+00:00",
+        "updated_at": "2025-03-18T15:35:26+00:00"
+    },
+    {
+        "id": 627,
+        "npc_id": 210812,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-030925_200224_7_darkflame-cleft.zip",
+        "raw_event": "3\/9\/2025 23:22:34.1650  SPELL_CAST_SUCCESS,Creature-0-4239-2651-28098-210812-00004E2214,\"Royal Wicklighter\",0xa48,0x0,Player-1084-0A5F453F,\"M\u00e1lic-TarrenMill-EU\",0x512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-4239-2651-28098-210812-00004E2214,0000000000000000,1002689,59771919,0,0,42857,0,0,0,0,7988,7988,0,452.30,44.22,2303,3.0359,80\r\n",
+        "created_at": "2025-03-18T15:35:26+00:00",
+        "updated_at": "2025-03-18T15:35:26+00:00"
+    },
+    {
+        "id": 628,
+        "npc_id": 210148,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-030925_200224_7_darkflame-cleft.zip",
+        "raw_event": "3\/9\/2025 23:24:05.0370  SPELL_CAST_SUCCESS,Creature-0-4239-2651-28098-210148-0001CE22FF,\"Menial Laborer\",0xa48,0x0,Player-1084-0A5E58A3,\"Sacai-Dentarg-EU\",0x512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-4239-2651-28098-210148-0001CE22FF,0000000000000000,3421844,13282649,0,0,42857,0,0,0,1,0,0,0,537.80,37.24,2303,0.2775,80\r\n",
+        "created_at": "2025-03-18T15:35:27+00:00",
+        "updated_at": "2025-03-18T15:35:27+00:00"
+    },
+    {
+        "id": 629,
+        "npc_id": 223772,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-030925_200224_7_darkflame-cleft.zip",
+        "raw_event": "3\/9\/2025 23:27:56.4830  SPELL_CAST_SUCCESS,Creature-0-4239-2651-28098-223772-00004E2214,\"Blazing Fiend\",0xa48,0x0,Player-1084-0A5F453F,\"M\u00e1lic-TarrenMill-EU\",0x512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-4239-2651-28098-223772-00004E2214,0000000000000000,46953985,53130594,0,0,42857,0,0,0,0,7988,7988,0,430.24,-169.49,2303,5.9250,80\r\n",
+        "created_at": "2025-03-18T15:35:28+00:00",
+        "updated_at": "2025-03-18T15:35:28+00:00"
+    },
+    {
+        "id": 630,
+        "npc_id": 150485,
+        "spell_id": 291856,
+        "combat_log_path": "tmp\/WoWCombatLog-030925_200224_8_operation-mechagon.zip",
+        "raw_event": "3\/9\/2025 23:06:16.8090  SPELL_DAMAGE,Creature-0-4235-2097-14990-150485-0000CE1E65,\"Plasma Orb\",0xa48,0x0,Player-1084-0AD43A4A,\"R\u00eda-Dentarg-EU\",0x512,0x0,291856,\"Recalibrate\",0x8,Player-1084-0AD43A4A,0000000000000000,1340321,7620660,88611,17647,27399,524,270,0,3,120,120,0,682.26,629.61,1497,2.9262,644,6280339,7118380,-1,8,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-18T15:35:44+00:00",
+        "updated_at": "2025-03-18T15:35:44+00:00"
+    },
+    {
+        "id": 631,
+        "npc_id": 153202,
+        "spell_id": 282943,
+        "combat_log_path": "tmp\/WoWCombatLog-031125_193853_10_operation-mechagon.zip",
+        "raw_event": "3\/11\/2025 21:18:38.2921  SPELL_DAMAGE,Creature-0-4235-2097-9859-153202-000050999E,\"Piston Smasher\",0xa48,0x0,Player-633-0A64192A,\"Virgilus-Darkspear-EU\",0x512,0x0,282943,\"Piston Smasher\",0x1,Player-633-0A64192A,0000000000000000,11978955,13361363,94849,11999,172719,1285,122,0,1,800,1000,0,453.33,261.50,1491,1.0087,645,9225,29275,-1,1,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-18T15:35:54+00:00",
+        "updated_at": "2025-03-18T15:35:54+00:00"
+    },
+    {
+        "id": 632,
+        "npc_id": 145313,
+        "spell_id": 282943,
+        "combat_log_path": "tmp\/WoWCombatLog-031125_193853_10_operation-mechagon.zip",
+        "raw_event": "3\/11\/2025 21:25:38.2031  SPELL_DAMAGE,Creature-0-4235-2097-9859-145313-000050999E,\"Piston Smasher\",0xa48,0x0,Player-633-0A64192A,\"Virgilus-Darkspear-EU\",0x512,0x0,282943,\"Piston Smasher\",0x1,Player-633-0A64192A,0000000000000000,13113847,17369771,98904,11999,172719,706,122,0,1,865,1000,0,489.80,224.34,1491,0.6693,645,5092,29275,-1,1,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-18T15:35:55+00:00",
+        "updated_at": "2025-03-18T15:35:55+00:00"
+    },
+    {
+        "id": 633,
+        "npc_id": 150520,
+        "spell_id": 291930,
+        "combat_log_path": "tmp\/WoWCombatLog-031125_193853_10_operation-mechagon.zip",
+        "raw_event": "3\/11\/2025 21:33:24.9701  SPELL_DAMAGE,Creature-0-4235-2097-9859-150520-000150999E,\"Cubed Clutter\",0xa48,0x0,Player-1084-0AEB3198,\"Ariellae-TarrenMill-EU\",0x512,0x0,291930,\"Air Drop\",0x1,Player-1084-0AEB3198,0000000000000000,3983391,8192562,9513,76667,30991,2041,300,0,0,2402850,2500000,0,587.46,225.50,1494,0.5563,643,4209171,8969462,-1,1,0,0,1897620,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-18T15:36:07+00:00",
+        "updated_at": "2025-03-18T15:36:07+00:00"
+    },
+    {
+        "id": 634,
+        "npc_id": 239834,
+        "spell_id": 427359,
+        "combat_log_path": "tmp\/WoWCombatLog-031125_193853_9_priory-of-the-sacred-flame.zip",
+        "raw_event": "3\/11\/2025 20:45:29.4561  SPELL_AURA_APPLIED,Creature-0-1461-2649-693-239834-00005092BC,\"Taener Duelmal\",0xa48,0x0,Creature-0-1461-2649-693-239834-00005092BC,\"Taener Duelmal\",0xa48,0x0,427359,\"Defend\",0x1,BUFF\r\n",
+        "created_at": "2025-03-18T15:47:04+00:00",
+        "updated_at": "2025-03-18T15:47:04+00:00"
+    },
+    {
+        "id": 635,
+        "npc_id": 150520,
+        "spell_id": 291953,
+        "combat_log_path": "tmp\/WoWCombatLog-031725_211731_2_operation-mechagon.zip",
+        "raw_event": "3\/17\/2025 22:07:18.7051  SPELL_DAMAGE,Creature-0-3891-2097-28206-150520-0000588ED6,\"Cubed Clutter\",0xa48,0x0,Player-1084-0A5F4542,\"Paltalin-TarrenMill-EU\",0x512,0x0,291953,\"Junk Bomb\",0x4,Player-1084-0A5F4542,0000000000000000,4424913,7096400,77262,18354,66478,626,200,0,0,2500000,2500000,0,597.71,233.39,1494,3.6482,635,2671487,3847098,-1,4,0,0,461200,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-03-18T15:47:16+00:00",
+        "updated_at": "2025-03-18T15:47:16+00:00"
     }
 ]

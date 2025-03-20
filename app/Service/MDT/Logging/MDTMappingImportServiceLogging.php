@@ -78,6 +78,8 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
     }
 
     public function importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
+        int $npcsUpdated,
+        int $npcsInserted,
         int $npcCharacteristicsDeleted,
         int $npcCharacteristicsInserted,
         int $npcSpellsDeleted,

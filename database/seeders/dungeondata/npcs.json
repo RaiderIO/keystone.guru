@@ -2225,6 +2225,341 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 15928,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16137,
+        "encounter_id": null,
+        "name": "Thaddius",
+        "base_health": 64892127,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28089
+            },
+            {
+                "spell_id": 28167
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15929,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 15297,
+        "encounter_id": null,
+        "name": "Stalagg",
+        "base_health": 2587854,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28125
+            },
+            {
+                "spell_id": 28134
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15930,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 15297,
+        "encounter_id": null,
+        "name": "Feugen",
+        "base_health": 2587854,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28125
+            },
+            {
+                "spell_id": 28135
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15931,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16035,
+        "encounter_id": null,
+        "name": "Grobbulus",
+        "base_health": 4820849,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28157
+            },
+            {
+                "spell_id": 28169
+            },
+            {
+                "spell_id": 28206
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15932,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16064,
+        "encounter_id": null,
+        "name": "Gluth",
+        "base_health": 21820451,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 25646
+            },
+            {
+                "spell_id": 28371
+            },
+            {
+                "spell_id": 29685
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15936,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16309,
+        "encounter_id": null,
+        "name": "Heigan the Unclean",
+        "base_health": 19712196,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 29310
+            },
+            {
+                "spell_id": 29371
+            },
+            {
+                "spell_id": 29998
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15952,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 15928,
+        "encounter_id": null,
+        "name": "Maexxna",
+        "base_health": 25615314,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28741
+            },
+            {
+                "spell_id": 28747
+            },
+            {
+                "spell_id": 28776
+            },
+            {
+                "spell_id": 29484
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15953,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 15940,
+        "encounter_id": null,
+        "name": "Grand Widow Faerlina",
+        "base_health": 16523460,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28794
+            },
+            {
+                "spell_id": 28796
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15954,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16590,
+        "encounter_id": null,
+        "name": "Noth the Plaguebringer",
+        "base_health": 16866050,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 29208
+            },
+            {
+                "spell_id": 29212
+            },
+            {
+                "spell_id": 29213
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15956,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 15931,
+        "encounter_id": null,
+        "name": "Anub'Rekhan",
+        "base_health": 16022620,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28783
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 15957,
         "dungeon_id": -1,
         "classification_id": 2,
@@ -2250,6 +2585,247 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 15974,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 15937,
+        "encounter_id": null,
+        "name": "Dread Creeper",
+        "base_health": 70740,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28440
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15975,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 15938,
+        "encounter_id": null,
+        "name": "Carrion Spinner",
+        "base_health": 84888,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28434
+            },
+            {
+                "spell_id": 30043
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15976,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 75392,
+        "encounter_id": null,
+        "name": "Venom Stalker",
+        "base_health": 141480,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28431
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15977,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 958,
+        "encounter_id": null,
+        "name": "Infectious Skitterer",
+        "base_health": 23580,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28428
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15978,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 15941,
+        "encounter_id": null,
+        "name": "Crypt Reaver",
+        "base_health": 969845,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 8269
+            },
+            {
+                "spell_id": 22412
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15979,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 15942,
+        "encounter_id": null,
+        "name": "Tomb Horror",
+        "base_health": 754324,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28614
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15980,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 16594,
+        "encounter_id": null,
+        "name": "Naxxramas Cultist",
+        "base_health": 181054,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28447
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15981,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 16598,
+        "encounter_id": null,
+        "name": "Naxxramas Acolyte",
+        "base_health": 181054,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 15253
+            },
+            {
+                "spell_id": 28448
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 15984,
         "dungeon_id": -1,
         "classification_id": 2,
@@ -2264,6 +2840,2481 @@
         "mdt_scale": null,
         "aggressiveness": "aggressive",
         "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15989,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16033,
+        "encounter_id": null,
+        "name": "Sapphiron",
+        "base_health": 38370261,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 15847
+            },
+            {
+                "spell_id": 19983
+            },
+            {
+                "spell_id": 28522
+            },
+            {
+                "spell_id": 28531
+            },
+            {
+                "spell_id": 28542
+            },
+            {
+                "spell_id": 348191
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 15990,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 15945,
+        "encounter_id": null,
+        "name": "Kel'Thuzad",
+        "base_health": 47040465,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 10890
+            },
+            {
+                "spell_id": 20615
+            },
+            {
+                "spell_id": 27808
+            },
+            {
+                "spell_id": 27810
+            },
+            {
+                "spell_id": 27819
+            },
+            {
+                "spell_id": 28410
+            },
+            {
+                "spell_id": 28478
+            },
+            {
+                "spell_id": 28479
+            },
+            {
+                "spell_id": 29879
+            },
+            {
+                "spell_id": 412609
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16011,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16110,
+        "encounter_id": null,
+        "name": "Loatheb",
+        "base_health": 54076770,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 29204
+            },
+            {
+                "spell_id": 29865
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16017,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 9760,
+        "encounter_id": null,
+        "name": "Patchwork Golem",
+        "base_health": 132048,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 27758
+            },
+            {
+                "spell_id": 27793
+            },
+            {
+                "spell_id": 27794
+            },
+            {
+                "spell_id": 28358
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16018,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 15958,
+        "encounter_id": null,
+        "name": "Bile Retcher",
+        "base_health": 160344,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16020,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16063,
+        "encounter_id": null,
+        "name": "Mad Scientist",
+        "base_health": 75456,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28301
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16021,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16175,
+        "encounter_id": null,
+        "name": "Living Monstrosity",
+        "base_health": 67977,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 27990
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16022,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 836,
+        "encounter_id": null,
+        "name": "Surgical Assistant",
+        "base_health": 64092,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28310
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16024,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 12349,
+        "encounter_id": null,
+        "name": "Embalming Slime",
+        "base_health": 18312,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28322
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16025,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 24484,
+        "encounter_id": null,
+        "name": "Stitched Spewer",
+        "base_health": 1027532,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28311
+            },
+            {
+                "spell_id": 28318
+            },
+            {
+                "spell_id": 28405
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16028,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16174,
+        "encounter_id": null,
+        "name": "Patchwerk",
+        "base_health": 20028435,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28131
+            },
+            {
+                "spell_id": 28308
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16029,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 15962,
+        "encounter_id": null,
+        "name": "Sludge Belcher",
+        "base_health": 121388,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 27891
+            },
+            {
+                "spell_id": 28361
+            },
+            {
+                "spell_id": 28362
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16034,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 23136,
+        "encounter_id": null,
+        "name": "Plague Beast",
+        "base_health": 387938,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 5568
+            },
+            {
+                "spell_id": 30110
+            },
+            {
+                "spell_id": 30111
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16036,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 7896,
+        "encounter_id": null,
+        "name": "Frenzied Bat",
+        "base_health": 73225,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 30112
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16037,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 1954,
+        "encounter_id": null,
+        "name": "Plagued Bat",
+        "base_health": 73225,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 30113
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16056,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 15978,
+        "encounter_id": null,
+        "name": "Diseased Maggot",
+        "base_health": 20921,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16057,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 15554,
+        "encounter_id": null,
+        "name": "Rotting Maggot",
+        "base_health": 20921,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16060,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16279,
+        "encounter_id": null,
+        "name": "Gothik the Harvester",
+        "base_health": 10499296,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28679
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16061,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16582,
+        "encounter_id": null,
+        "name": "Instructor Razuvious",
+        "base_health": 20028435,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 26613
+            },
+            {
+                "spell_id": 29107
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16063,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16154,
+        "encounter_id": null,
+        "name": "Sir Zeliek",
+        "base_health": 7875078,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28836
+            },
+            {
+                "spell_id": 28883
+            },
+            {
+                "spell_id": 29061
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16064,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16155,
+        "encounter_id": null,
+        "name": "Thane Korth'azz",
+        "base_health": 9450092,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28836
+            },
+            {
+                "spell_id": 28884
+            },
+            {
+                "spell_id": 29061
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16065,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16153,
+        "encounter_id": null,
+        "name": "Lady Blaumeux",
+        "base_health": 7875078,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28836
+            },
+            {
+                "spell_id": 28863
+            },
+            {
+                "spell_id": 29061
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16067,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 26539,
+        "encounter_id": null,
+        "name": "Deathcharger Steed",
+        "base_health": 66024,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 5568
+            },
+            {
+                "spell_id": 20615
+            },
+            {
+                "spell_id": 403233
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16124,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 16608,
+        "encounter_id": null,
+        "name": "Unrelenting Trainee",
+        "base_health": 76918,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 11428
+            },
+            {
+                "spell_id": 30285
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16125,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16612,
+        "encounter_id": null,
+        "name": "Unrelenting Death Knight",
+        "base_health": 405624,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 20615
+            },
+            {
+                "spell_id": 27825
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16126,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 26571,
+        "encounter_id": null,
+        "name": "Unrelenting Rider",
+        "base_health": 490402,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 27831
+            },
+            {
+                "spell_id": 27987
+            },
+            {
+                "spell_id": 27988
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16127,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 3942,
+        "encounter_id": null,
+        "name": "Spectral Trainee",
+        "base_health": 99841,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 27989
+            },
+            {
+                "spell_id": 403233
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16142,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 12349,
+        "encounter_id": null,
+        "name": "Bile Sludge",
+        "base_health": 9711,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16145,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 26546,
+        "encounter_id": null,
+        "name": "Deathknight Captain",
+        "base_health": 141480,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28334
+            },
+            {
+                "spell_id": 28335
+            },
+            {
+                "spell_id": 403233
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16146,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16508,
+        "encounter_id": null,
+        "name": "Deathknight",
+        "base_health": 113184,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 13589
+            },
+            {
+                "spell_id": 19134
+            },
+            {
+                "spell_id": 28350
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16148,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 26683,
+        "encounter_id": null,
+        "name": "Spectral Death Knight",
+        "base_health": 336041,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 15589
+            },
+            {
+                "spell_id": 27991
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16149,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 26681,
+        "encounter_id": null,
+        "name": "Spectral Horse",
+        "base_health": 564591,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 27993
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16150,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 26682,
+        "encounter_id": null,
+        "name": "Spectral Rider",
+        "base_health": 198347,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 27987
+            },
+            {
+                "spell_id": 27988
+            },
+            {
+                "spell_id": 27994
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16154,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16927,
+        "encounter_id": null,
+        "name": "Risen Deathknight",
+        "base_health": 37728,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16156,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 26569,
+        "encounter_id": null,
+        "name": "Dark Touched Warrior",
+        "base_health": 37728,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16163,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 26571,
+        "encounter_id": null,
+        "name": "Deathknight Cavalier",
+        "base_health": 169763,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 15754
+            },
+            {
+                "spell_id": 28412
+            },
+            {
+                "spell_id": 28413
+            },
+            {
+                "spell_id": 403233
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16164,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 10553,
+        "encounter_id": null,
+        "name": "Shade of Naxxramas",
+        "base_health": 84888,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28407
+            },
+            {
+                "spell_id": 403233
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16165,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 27105,
+        "encounter_id": null,
+        "name": "Necro Knight",
+        "base_health": 59427,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 15453
+            },
+            {
+                "spell_id": 28391
+            },
+            {
+                "spell_id": 30092
+            },
+            {
+                "spell_id": 30094
+            },
+            {
+                "spell_id": 30095
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16167,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 21305,
+        "encounter_id": null,
+        "name": "Bony Construct",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16168,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 14710,
+        "encounter_id": null,
+        "name": "Stoneskin Gargoyle",
+        "base_health": 396113,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 29325
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16193,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 26563,
+        "encounter_id": null,
+        "name": "Skeletal Smith",
+        "base_health": 75456,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 23931
+            },
+            {
+                "spell_id": 24317
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16194,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 24722,
+        "encounter_id": null,
+        "name": "Unholy Axe",
+        "base_health": 775876,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 12723
+            },
+            {
+                "spell_id": 15589
+            },
+            {
+                "spell_id": 15708
+            },
+            {
+                "spell_id": 18765
+            },
+            {
+                "spell_id": 24236
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16215,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 24723,
+        "encounter_id": null,
+        "name": "Unholy Staff",
+        "base_health": 603459,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28450
+            },
+            {
+                "spell_id": 29848
+            },
+            {
+                "spell_id": 29849
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16216,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 24724,
+        "encounter_id": null,
+        "name": "Unholy Swords",
+        "base_health": 646564,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 19632
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16236,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 15788,
+        "encounter_id": null,
+        "name": "Eye Stalk",
+        "base_health": 3231,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 29407
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16243,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 11140,
+        "encounter_id": null,
+        "name": "Plague Slime",
+        "base_health": 212220,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28987
+            },
+            {
+                "spell_id": 28988
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16244,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 26329,
+        "encounter_id": null,
+        "name": "Infectious Ghoul",
+        "base_health": 141480,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 13738
+            },
+            {
+                "spell_id": 24318
+            },
+            {
+                "spell_id": 29915
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16286,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 11,
+        "npc_class_id": 1,
+        "display_id": 16111,
+        "encounter_id": null,
+        "name": "Spore",
+        "base_health": 3487,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16290,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 12349,
+        "encounter_id": null,
+        "name": "Fallout Slime",
+        "base_health": 488167,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28153
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16297,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 16895,
+        "encounter_id": null,
+        "name": "Mutated Grub",
+        "base_health": 172417,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 30109
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16360,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 10976,
+        "encounter_id": null,
+        "name": "Zombie Chow",
+        "base_health": 1598956,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 29306
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16375,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 12349,
+        "encounter_id": null,
+        "name": "Sewage Slime",
+        "base_health": 228900,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16390,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 24999,
+        "encounter_id": null,
+        "name": "Deathchill Servant",
+        "base_health": 9432,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16427,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 7869,
+        "encounter_id": null,
+        "name": "Soldier of the Frozen Wastes",
+        "base_health": 2000,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28457
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16428,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 12818,
+        "encounter_id": null,
+        "name": "Unstoppable Abomination",
+        "base_health": 90000,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16429,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16178,
+        "encounter_id": null,
+        "name": "Soul Weaver",
+        "base_health": 70000,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16441,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16586,
+        "encounter_id": null,
+        "name": "Guardian of Icecrown",
+        "base_health": 22446454,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28470
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16447,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 24998,
+        "encounter_id": null,
+        "name": "Plagued Ghoul",
+        "base_health": 646564,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 13738
+            },
+            {
+                "spell_id": 24318
+            },
+            {
+                "spell_id": 29915
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16453,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 75392,
+        "encounter_id": null,
+        "name": "Necro Stalker",
+        "base_health": 373570,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 28431
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16486,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 11,
+        "npc_class_id": 1,
+        "display_id": 16213,
+        "encounter_id": null,
+        "name": "Web Wrap",
+        "base_health": 6104,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16505,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 16605,
+        "encounter_id": null,
+        "name": "Naxxramas Follower",
+        "base_health": 1101516,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 22886
+            },
+            {
+                "spell_id": 30225
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16506,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 16603,
+        "encounter_id": null,
+        "name": "Naxxramas Worshipper",
+        "base_health": 550781,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 30025
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16573,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 14698,
+        "encounter_id": null,
+        "name": "Crypt Guard",
+        "base_health": 2002839,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 8269
+            },
+            {
+                "spell_id": 28969
+            },
+            {
+                "spell_id": 28991
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16698,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 27943,
+        "encounter_id": null,
+        "name": "Corpse Scarab",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16803,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 16539,
+        "encounter_id": null,
+        "name": "Death Knight Understudy",
+        "base_health": 990282,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 29061
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16861,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 10729,
+        "encounter_id": null,
+        "name": "Death Lord",
+        "base_health": 169763,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 15754
+            },
+            {
+                "spell_id": 28412
+            },
+            {
+                "spell_id": 28413
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16981,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 27107,
+        "encounter_id": null,
+        "name": "Plagued Guardian",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16982,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 12074,
+        "encounter_id": null,
+        "name": "Plagued Construct",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16983,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 28021,
+        "encounter_id": null,
+        "name": "Plagued Champion",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16984,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 28022,
+        "encounter_id": null,
+        "name": "Plagued Warrior",
+        "base_health": 1405503,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 12057
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 16998,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 3,
+        "npc_class_id": 1,
+        "display_id": 46897,
+        "encounter_id": null,
+        "name": "Mr. Bigglesworth",
+        "base_health": 26,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 17055,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 13111,
+        "encounter_id": null,
+        "name": "Maexxna Spiderling",
+        "base_health": 17435,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 23561,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 7869,
+        "encounter_id": null,
+        "name": "Soldier of the Frozen Wastes",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 23562,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 12818,
+        "encounter_id": null,
+        "name": "Unstoppable Abomination",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 23563,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 16178,
+        "encounter_id": null,
+        "name": "Soul Weaver",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 29818,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": 26539,
+        "encounter_id": null,
+        "name": "Deathcharger Steed",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 29912,
+        "dungeon_id": -1,
+        "classification_id": 1,
+        "npc_type_id": 11,
+        "npc_class_id": 1,
+        "display_id": 26620,
+        "encounter_id": null,
+        "name": "Obedience Crystal",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "friendly",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 29941,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 16539,
+        "encounter_id": null,
+        "name": "Death Knight Understudy",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 30071,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 26746,
+        "encounter_id": null,
+        "name": "Stitched Colossus",
+        "base_health": 674050,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 30083,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 25627,
+        "encounter_id": null,
+        "name": "Marauding Geist",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 30085,
+        "dungeon_id": -1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 19329,
+        "encounter_id": null,
+        "name": "Vigilant Shade",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 30549,
+        "dungeon_id": -1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 10729,
+        "encounter_id": null,
+        "name": "Baron Rivendare",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
@@ -2337,6 +5388,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17995,
+                "mapping_version_id": 524,
+                "npc_id": 114626,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": null
+            },
             {
                 "id": 15862,
                 "mapping_version_id": 305,
@@ -3974,6 +7032,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17996,
+                "mapping_version_id": 524,
+                "npc_id": 161124,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": 6
+            },
+            {
                 "id": 15863,
                 "mapping_version_id": 305,
                 "npc_id": 161124,
@@ -5041,6 +8106,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17997,
+                "mapping_version_id": 524,
+                "npc_id": 161241,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": 6
+            },
             {
                 "id": 15864,
                 "mapping_version_id": 305,
@@ -6110,6 +9182,13 @@
         ],
         "npc_enemy_forces": [
             {
+                "id": 17998,
+                "mapping_version_id": 524,
+                "npc_id": 161243,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": 6
+            },
+            {
                 "id": 15865,
                 "mapping_version_id": 305,
                 "npc_id": 161243,
@@ -7174,6 +10253,13 @@
             }
         ],
         "npc_enemy_forces": [
+            {
+                "id": 17999,
+                "mapping_version_id": 524,
+                "npc_id": 161244,
+                "enemy_forces": 4,
+                "enemy_forces_teeming": 6
+            },
             {
                 "id": 15866,
                 "mapping_version_id": 305,
@@ -8585,7 +11671,7 @@
         "display_id": null,
         "encounter_id": null,
         "name": "Incubus",
-        "base_health": 12345,
+        "base_health": 100,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,

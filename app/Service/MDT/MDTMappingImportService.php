@@ -129,6 +129,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 return [__($characteristic->name, [], 'en_US') => $characteristic];
             });
 
+            $npcsUpdated                  = $npcsInserted = 0;
             $npcCharacteristicsAttributes = [];
             $npcSpellsAttributes          = [];
             $affectedNpcIds               = [];
@@ -204,7 +205,14 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 }
 
                 try {
-                    $saveResult = $newlyCreated ? $npc->save() : $npc->update();
+                    if ($newlyCreated) {
+                        $saveResult = $npc->save();
+                        $npcsInserted++;
+                    } else {
+                        $saveResult = $npc->update();
+                        $npcsUpdated++;
+                    }
+
                     if (!$saveResult) {
                         throw new Exception(sprintf('Unable to save npc %d!', $npc->id));
                     } else if ($newlyCreated) {
@@ -233,6 +241,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             NpcSpell::insert($npcSpellsAttributes);
 
             $this->log->importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
+                $npcsUpdated,
+                $npcsInserted,
                 $npcCharacteristicsDeleted,
                 count($npcCharacteristicsAttributes),
                 0,

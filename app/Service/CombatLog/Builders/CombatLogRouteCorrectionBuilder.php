@@ -99,8 +99,10 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         try {
             $this->log->getCombatLogRouteStart();
 
-            $floorsById      = $this->dungeonRoute->dungeon->floors->keyBy('id');
-            $floorsByUiMapId = $this->dungeonRoute->dungeon->floors->keyBy('uiMapId');
+            $floorsById = $this->dungeonRoute->dungeon->floors->keyBy('id');
+
+            // Keep track of when we switch to the shadow realm in Darkflame Cleft for additional corrections
+            $darkflameCleftShadowRealmSwitchTime = null;
 
             foreach ($this->combatLogRoute->npcs as $npc) {
                 $resolvedEnemy = $npc->getResolvedEnemy();
@@ -118,6 +120,15 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                 $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(
                     $resolvedEnemy->getLatLng()
                 );
+
+                // Catch the time at which we should switch floors to the Shadow Realm, so we can perform proper
+                // corrections for spells and deaths that happen in the Shadow Realm
+                if ($npc->coord->uiMapId === Floor::DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID) {
+                    if ($darkflameCleftShadowRealmSwitchTime === null ||
+                        $darkflameCleftShadowRealmSwitchTime->isAfter($npc->getEngagedAt())) {
+                        $darkflameCleftShadowRealmSwitchTime = $npc->getEngagedAt();
+                    }
+                }
 
                 $gridLocation      = $this->coordinatesService->calculateGridLocationForIngameLocation(
                     new IngameXY(
@@ -174,6 +185,12 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                     continue;
                 }
 
+                if ($darkflameCleftShadowRealmSwitchTime !== null &&
+                    $spell->getCastAt()->isAfter($darkflameCleftShadowRealmSwitchTime)) {
+                    $floor                 = $this->floorRepository->findByUiMapId(Floor::DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID);
+                    $spell->coord->uiMapId = Floor::DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID;
+                }
+
                 $gridLocation = $this->coordinatesService->calculateGridLocationForIngameLocation(
                     new IngameXY(
                         $spell->coord->x,
@@ -206,6 +223,12 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                         $this->log->getCombatLogRoutePlayerDeathFloorNotFound($playerDeath->coord->uiMapId);
                     }
                     continue;
+                }
+
+                if ($darkflameCleftShadowRealmSwitchTime !== null &&
+                    $playerDeath->getDiedAt()->isAfter($darkflameCleftShadowRealmSwitchTime)) {
+                    $floor                       = $this->floorRepository->findByUiMapId(Floor::DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID);
+                    $playerDeath->coord->uiMapId = Floor::DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID;
                 }
 
                 $gridLocation = $this->coordinatesService->calculateGridLocationForIngameLocation(

@@ -3,7 +3,9 @@
 namespace App\Logic\CombatLog\SpecialEvents;
 
 /**
- * 8/14/2024 23:32:54.6402  8/27/2024 20:59:34.5502  STAGGER_PREVENTED,Player-1084-0A912E3E,76280.429688
+ * 8/27/2024 20:59:34.5502  STAGGER_PREVENTED,Player-1084-0A912E3E,76280.429688
+ * Retail 11.1.0 and up?
+ * 3/11/2025 19:41:15.9521  STAGGER_PREVENTED,Player-1084-0A912E3E,451253,171505.781250
  *
  * @author Wouter
  *
@@ -11,5 +13,13 @@ namespace App\Logic\CombatLog\SpecialEvents;
  */
 class StaggerPrevented extends StaggerBase
 {
+    public function getParameterCount(): int
+    {
+        return 3;
+    }
 
+    public function getOptionalParameterCount(): int
+    {
+        return 1;
+    }
 }

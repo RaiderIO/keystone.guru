@@ -97,6 +97,31 @@
         ]
     },
     {
+        "id": 162105,
+        "dungeon_id": 35,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 96336,
+        "encounter_id": null,
+        "name": "Portal",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 162309,
         "dungeon_id": 35,
         "classification_id": 3,
@@ -1046,6 +1071,9 @@
         "npc_spells": [
             {
                 "spell_id": 323608
+            },
+            {
+                "spell_id": 323681
             },
             {
                 "spell_id": 323683
@@ -2040,6 +2068,31 @@
         ]
     },
     {
+        "id": 170703,
+        "dungeon_id": 35,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 76082,
+        "encounter_id": null,
+        "name": "Trap Door Rift",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 170750,
         "dungeon_id": 35,
         "classification_id": 2,
@@ -2314,6 +2367,31 @@
         ]
     },
     {
+        "id": 173549,
+        "dungeon_id": 35,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 96471,
+        "encounter_id": null,
+        "name": "Echo Bullrider",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 174197,
         "dungeon_id": 35,
         "classification_id": 2,
@@ -2509,6 +2587,31 @@
                 "enemy_forces_teeming": null
             }
         ]
+    },
+    {
+        "id": 174461,
+        "dungeon_id": 35,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 96336,
+        "encounter_id": null,
+        "name": "Teleporter",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
     },
     {
         "id": 234443,

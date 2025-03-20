@@ -5647,5 +5647,180 @@
         "extracted_data": 1,
         "created_at": "2025-02-08T14:32:09+00:00",
         "updated_at": "2025-02-08T14:32:09+00:00"
+    },
+    {
+        "id": 812,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_174311.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T14:56:19+00:00",
+        "updated_at": "2025-03-18T14:56:19+00:00"
+    },
+    {
+        "id": 813,
+        "combat_log_path": "tmp\/WoWCombatLog-030525_200104_2_operation-mechagon.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:33:13+00:00",
+        "updated_at": "2025-03-18T15:33:13+00:00"
+    },
+    {
+        "id": 814,
+        "combat_log_path": "tmp\/WoWCombatLog-030625_212658_2_the-motherlode.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:33:23+00:00",
+        "updated_at": "2025-03-18T15:33:23+00:00"
+    },
+    {
+        "id": 815,
+        "combat_log_path": "tmp\/WoWCombatLog-030625_212658_2_theater-of-pain.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:33:35+00:00",
+        "updated_at": "2025-03-18T15:33:35+00:00"
+    },
+    {
+        "id": 816,
+        "combat_log_path": "tmp\/WoWCombatLog-030825_142311_5_operation-floodgate.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:33:48+00:00",
+        "updated_at": "2025-03-18T15:33:48+00:00"
+    },
+    {
+        "id": 817,
+        "combat_log_path": "tmp\/WoWCombatLog-030825_142311_7_operation-mechagon.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:33:56+00:00",
+        "updated_at": "2025-03-18T15:33:56+00:00"
+    },
+    {
+        "id": 818,
+        "combat_log_path": "tmp\/WoWCombatLog-030825_205159_4_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:34:04+00:00",
+        "updated_at": "2025-03-18T15:34:04+00:00"
+    },
+    {
+        "id": 819,
+        "combat_log_path": "tmp\/WoWCombatLog-030825_205159_4_the-motherlode.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:34:12+00:00",
+        "updated_at": "2025-03-18T15:34:12+00:00"
+    },
+    {
+        "id": 820,
+        "combat_log_path": "tmp\/WoWCombatLog-030825_205159_6_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:34:19+00:00",
+        "updated_at": "2025-03-18T15:34:19+00:00"
+    },
+    {
+        "id": 821,
+        "combat_log_path": "tmp\/WoWCombatLog-030825_205159_7_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:34:31+00:00",
+        "updated_at": "2025-03-18T15:34:31+00:00"
+    },
+    {
+        "id": 822,
+        "combat_log_path": "tmp\/WoWCombatLog-030825_205159_7_the-motherlode.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:34:41+00:00",
+        "updated_at": "2025-03-18T15:34:41+00:00"
+    },
+    {
+        "id": 823,
+        "combat_log_path": "tmp\/WoWCombatLog-030825_205159_7_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:34:53+00:00",
+        "updated_at": "2025-03-18T15:34:53+00:00"
+    },
+    {
+        "id": 824,
+        "combat_log_path": "tmp\/WoWCombatLog-030825_205159_8_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:35:02+00:00",
+        "updated_at": "2025-03-18T15:35:02+00:00"
+    },
+    {
+        "id": 825,
+        "combat_log_path": "tmp\/WoWCombatLog-030925_200224_2_operation-floodgate.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:35:09+00:00",
+        "updated_at": "2025-03-18T15:35:09+00:00"
+    },
+    {
+        "id": 826,
+        "combat_log_path": "tmp\/WoWCombatLog-030925_200224_3_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:35:11+00:00",
+        "updated_at": "2025-03-18T15:35:11+00:00"
+    },
+    {
+        "id": 827,
+        "combat_log_path": "tmp\/WoWCombatLog-030925_200224_3_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:35:16+00:00",
+        "updated_at": "2025-03-18T15:35:16+00:00"
+    },
+    {
+        "id": 828,
+        "combat_log_path": "tmp\/WoWCombatLog-030925_200224_6_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:35:25+00:00",
+        "updated_at": "2025-03-18T15:35:25+00:00"
+    },
+    {
+        "id": 829,
+        "combat_log_path": "tmp\/WoWCombatLog-030925_200224_7_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:35:33+00:00",
+        "updated_at": "2025-03-18T15:35:33+00:00"
+    },
+    {
+        "id": 830,
+        "combat_log_path": "tmp\/WoWCombatLog-030925_200224_8_operation-mechagon.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:35:46+00:00",
+        "updated_at": "2025-03-18T15:35:46+00:00"
+    },
+    {
+        "id": 831,
+        "combat_log_path": "tmp\/WoWCombatLog-031125_193853_10_operation-mechagon.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:36:15+00:00",
+        "updated_at": "2025-03-18T15:36:15+00:00"
+    },
+    {
+        "id": 832,
+        "combat_log_path": "tmp\/WoWCombatLog-031125_193853_8_darkflame-cleft.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:46:59+00:00",
+        "updated_at": "2025-03-18T15:46:59+00:00"
+    },
+    {
+        "id": 833,
+        "combat_log_path": "tmp\/WoWCombatLog-031125_193853_9_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:47:12+00:00",
+        "updated_at": "2025-03-18T15:47:12+00:00"
+    },
+    {
+        "id": 834,
+        "combat_log_path": "tmp\/WoWCombatLog-031725_211731_2_operation-mechagon.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:47:20+00:00",
+        "updated_at": "2025-03-18T15:47:20+00:00"
+    },
+    {
+        "id": 835,
+        "combat_log_path": "tmp\/WoWCombatLog-031725_211731_2_the-motherlode.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:47:29+00:00",
+        "updated_at": "2025-03-18T15:47:29+00:00"
+    },
+    {
+        "id": 836,
+        "combat_log_path": "tmp\/WoWCombatLog-031725_211731_2_the-rookery.zip",
+        "extracted_data": 1,
+        "created_at": "2025-03-18T15:47:36+00:00",
+        "updated_at": "2025-03-18T15:47:36+00:00"
     }
 ]

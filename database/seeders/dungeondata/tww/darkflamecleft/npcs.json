@@ -189,6 +189,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -248,6 +251,9 @@
                 "characteristic_id": 5
             },
             {
+                "characteristic_id": 11
+            },
+            {
                 "characteristic_id": 12
             },
             {
@@ -255,6 +261,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -494,13 +503,23 @@
                 "characteristic_id": 12
             },
             {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
             }
         ],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 224729
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -729,6 +748,9 @@
                 "characteristic_id": 18
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
@@ -766,82 +788,7 @@
         "base_health": 43821070,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1.5,
-        "aggressiveness": "aggressive",
-        "dangerous": 0,
-        "truesight": 0,
-        "bursting": 1,
-        "bolstering": 1,
-        "sanguine": 1,
-        "runs_away_in_fear": 0,
-        "npcbolsteringwhitelists": [],
-        "npc_characteristics": [
-            {
-                "characteristic_id": 1
-            },
-            {
-                "characteristic_id": 5
-            },
-            {
-                "characteristic_id": 10
-            },
-            {
-                "characteristic_id": 11
-            },
-            {
-                "characteristic_id": 12
-            },
-            {
-                "characteristic_id": 14
-            },
-            {
-                "characteristic_id": 16
-            },
-            {
-                "characteristic_id": 18
-            },
-            {
-                "characteristic_id": 24
-            }
-        ],
-        "npc_spells": [
-            {
-                "spell_id": 423479
-            },
-            {
-                "spell_id": 428019
-            }
-        ],
-        "npc_enemy_forces": [
-            {
-                "id": 17842,
-                "mapping_version_id": 516,
-                "npc_id": 210812,
-                "enemy_forces": 6,
-                "enemy_forces_teeming": null
-            },
-            {
-                "id": 17636,
-                "mapping_version_id": 503,
-                "npc_id": 210812,
-                "enemy_forces": 6,
-                "enemy_forces_teeming": null
-            }
-        ]
-    },
-    {
-        "id": 210818,
-        "dungeon_id": 111,
-        "classification_id": 2,
-        "npc_type_id": 8,
-        "npc_class_id": 1,
-        "display_id": 114721,
-        "encounter_id": null,
-        "name": "Lowly Moleherd",
-        "base_health": 46255575,
-        "health_percentage": null,
-        "level": 80,
-        "mdt_scale": 1.5,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -879,10 +826,100 @@
                 "characteristic_id": 18
             },
             {
+                "characteristic_id": 19
+            },
+            {
                 "characteristic_id": 24
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
+            {
+                "spell_id": 423479
+            },
+            {
+                "spell_id": 428019
+            }
+        ],
+        "npc_enemy_forces": [
+            {
+                "id": 17842,
+                "mapping_version_id": 516,
+                "npc_id": 210812,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            },
+            {
+                "id": 17636,
+                "mapping_version_id": 503,
+                "npc_id": 210812,
+                "enemy_forces": 6,
+                "enemy_forces_teeming": null
+            }
+        ]
+    },
+    {
+        "id": 210818,
+        "dungeon_id": 111,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 114721,
+        "encounter_id": null,
+        "name": "Lowly Moleherd",
+        "base_health": 46255575,
+        "health_percentage": null,
+        "level": 80,
+        "mdt_scale": 1.2,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            },
+            {
+                "characteristic_id": 2
+            },
+            {
+                "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 10
+            },
+            {
+                "characteristic_id": 11
+            },
+            {
+                "characteristic_id": 12
+            },
+            {
+                "characteristic_id": 14
+            },
+            {
+                "characteristic_id": 16
+            },
+            {
+                "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
+            },
+            {
+                "characteristic_id": 24
+            }
+        ],
+        "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 424650
             },
@@ -1003,6 +1040,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1039,7 +1079,7 @@
         "base_health": 51124582,
         "health_percentage": null,
         "level": 80,
-        "mdt_scale": 1.5,
+        "mdt_scale": 1.2,
         "aggressiveness": "aggressive",
         "dangerous": 0,
         "truesight": 0,
@@ -1066,6 +1106,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1172,6 +1215,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 2
+            },
+            {
                 "characteristic_id": 5
             },
             {
@@ -1185,6 +1231,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -1233,7 +1282,11 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_characteristics": [],
+        "npc_characteristics": [
+            {
+                "characteristic_id": 1
+            }
+        ],
         "npc_spells": [
             {
                 "spell_id": 426275
@@ -1302,6 +1355,9 @@
             },
             {
                 "spell_id": 1218131
+            },
+            {
+                "spell_id": 1218133
             }
         ],
         "npc_enemy_forces": [
@@ -1347,7 +1403,13 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 2
+            },
+            {
                 "characteristic_id": 5
+            },
+            {
+                "characteristic_id": 11
             },
             {
                 "characteristic_id": 12
@@ -1357,6 +1419,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1466,6 +1531,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             },
             {
                 "characteristic_id": 24
@@ -1604,7 +1672,13 @@
                 "characteristic_id": 12
             },
             {
+                "characteristic_id": 14
+            },
+            {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1690,6 +1764,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1750,9 +1827,15 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 424322
             }
@@ -1800,6 +1883,9 @@
                 "characteristic_id": 1
             },
             {
+                "characteristic_id": 2
+            },
+            {
                 "characteristic_id": 5
             },
             {
@@ -1810,6 +1896,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1867,6 +1956,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1930,6 +2022,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -1977,6 +2072,9 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [
             {
+                "characteristic_id": 2
+            },
+            {
                 "characteristic_id": 5
             },
             {
@@ -1987,6 +2085,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
@@ -2044,6 +2145,9 @@
             },
             {
                 "characteristic_id": 18
+            },
+            {
+                "characteristic_id": 19
             }
         ],
         "npc_spells": [
