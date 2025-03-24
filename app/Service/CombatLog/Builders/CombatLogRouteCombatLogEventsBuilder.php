@@ -3,9 +3,9 @@
 namespace App\Service\CombatLog\Builders;
 
 use App;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
+use App\Logic\Structs\IngameXY;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Floor\Floor;
@@ -27,11 +27,14 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
+ * This class generates combat log events that we can insert in the combat log database, then to Opensearch,
+ * which is then used for the local Service to have heat map data locally.
+ *
  * @author Wouter
  *
  * @since 24/06/2023
  */
-class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBuilder
+class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuilder
 {
     private CombatLogRouteCombatLogEventsBuilderLoggingInterface $log;
 
@@ -80,15 +83,13 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
         try {
             $this->log->getCombatLogEventsStart($this->combatLogRoute->metadata->runId);
 
+            $correctedCombatLogRoute = $this->getCombatLogRoute();
+
             $now   = Carbon::now();
-            $start = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $this->combatLogRoute->challengeMode->start);
-            $end   = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $this->combatLogRoute->challengeMode->end);
+            $start = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $correctedCombatLogRoute->challengeMode->start);
+            $end   = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $correctedCombatLogRoute->challengeMode->end);
 
-            $defaultFloor    = $this->dungeonRoute->dungeon->floors->where('default', true)->first();
-            $floorsById      = $this->dungeonRoute->dungeon->floors->keyBy('id');
-            $floorsByUiMapId = $this->dungeonRoute->dungeon->floors->keyBy('ui_map_id');
-
-            foreach ($this->combatLogRoute->npcs as $npc) {
+            foreach ($correctedCombatLogRoute->npcs as $npc) {
                 $resolvedEnemy = $npc->getResolvedEnemy();
 
                 if ($resolvedEnemy === null) {
@@ -101,7 +102,34 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
                 $floor = $floorsById->get($resolvedEnemy->floor_id);
                 $resolvedEnemy->setRelation('floor', $floor);
 
-                $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($resolvedEnemy->getLatLng());
+                $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(
+                    $resolvedEnemy->getLatLng()
+                );
+
+                // Catch the time at which we should switch floors to the Shadow Realm, so we can perform proper
+                // corrections for spells and deaths that happen in the Shadow Realm
+                if ($npc->coord->uiMapId === Floor::DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID) {
+                    if ($darkflameCleftShadowRealmSwitchTime === null ||
+                        $darkflameCleftShadowRealmSwitchTime->isAfter($npc->getEngagedAt())) {
+                        $darkflameCleftShadowRealmSwitchTime = $npc->getEngagedAt();
+                    }
+                }
+
+                $gridLocation      = $this->coordinatesService->calculateGridLocationForIngameLocation(
+                    new IngameXY(
+                        $npc->coord->x,
+                        $npc->coord->y,
+                        // Fallback on the enemy's floor just in case
+                        $this->floorRepository->findByUiMapId($npc->coord->uiMapId) ?? $resolvedEnemy->floor
+                    ),
+                    config('keystoneguru.heatmap.service.data.player.size_x'),
+                    config('keystoneguru.heatmap.service.data.player.size_y')
+                );
+                $gridLocationEnemy = $this->coordinatesService->calculateGridLocationForIngameLocation(
+                    $ingameXY,
+                    config('keystoneguru.heatmap.service.data.enemy.size_x'),
+                    config('keystoneguru.heatmap.service.data.enemy.size_y')
+                );
 
                 $result->push(new CombatLogEvent(array_merge(
                     $this->getBaseCombatLogEventAttributes($now, $start, $end, $floor),
@@ -109,35 +137,31 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
                         // Original event location
                         'pos_x'      => round($npc->coord->x, 2),
                         'pos_y'      => round($npc->coord->y, 2),
+                        'pos_grid_x' => $gridLocation->getX(2),
+                        'pos_grid_y' => $gridLocation->getY(2),
                         'event_type' => CombatLogEventEventType::NpcDeath->value,
                         'context'    => json_encode([
-                            '@timestamp'  => $npc->getDiedAt(),
+                            '@timestamp'       => $npc->getDiedAt(),
                             // Resolved enemy location
-                            'pos_enemy_x' => $ingameXY->getX(2),
-                            'pos_enemy_y' => $ingameXY->getY(2),
+                            'pos_enemy_x'      => $ingameXY->getX(2),
+                            'pos_enemy_y'      => $ingameXY->getY(2),
+                            'pos_enemy_grid_x' => $gridLocationEnemy->getX(2),
+                            'pos_enemy_grid_y' => $gridLocationEnemy->getY(2),
                         ]),
                     ]
                 )));
             }
 
-            $previousFloor = null;
-            foreach ($this->combatLogRoute->spells as $spell) {
+            foreach ($correctedCombatLogRoute->spells as $spell) {
                 /** @var CombatLogRouteSpellRequestModel $spell */
-                // Fallback to the previous floor -> default floor if we can't resolve the floor of the spell
-                $floor = $floorsByUiMapId->get(Floor::UI_MAP_ID_MAPPING[$spell->coord->uiMapId] ?? $spell->coord->uiMapId) ?? $previousFloor ?? $defaultFloor;
-
-                if ($floor === null) {
-                    $this->log->getCombatLogEventsSpellFloorCouldNotBeResolved($spell->coord->uiMapId);
-                    continue;
-                }
-                $previousFloor = $floor;
-
                 $result->push(new CombatLogEvent(array_merge(
-                    $this->getBaseCombatLogEventAttributes($now, $start, $end, $floor),
+                    $this->getBaseCombatLogEventAttributes($correctedCombatLogRoute, $now, $start, $end, $spell->coord->uiMapId),
                     [
                         // Original event location
                         'pos_x'      => round($spell->coord->x, 2),
                         'pos_y'      => round($spell->coord->y, 2),
+                        'pos_grid_x' => $gridLocation->getX(2),
+                        'pos_grid_y' => $gridLocation->getY(2),
                         'event_type' => CombatLogEventEventType::PlayerSpell->value,
                         'context'    => json_encode([
                             '@timestamp' => $spell->getCastAt(),
@@ -147,20 +171,9 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
                 )));
             }
 
-            $previousFloor = null;
-            foreach ($this->combatLogRoute->playerDeaths ?? [] as $playerDeath) {
-                /** @var CombatLogRoutePlayerDeathRequestModel $playerDeath */
-                // Fallback to the previous floor -> default floor if we can't resolve the floor of the death
-                $floor = $floorsByUiMapId->get(Floor::UI_MAP_ID_MAPPING[$playerDeath->coord->uiMapId] ?? $playerDeath->coord->uiMapId) ?? $previousFloor ?? $defaultFloor;
-
-                if ($floor === null) {
-                    $this->log->getCombatLogEventsPlayerDeathFloorCouldNotBeResolved($playerDeath->coord->uiMapId);
-                    continue;
-                }
-                $previousFloor = $floor;
-
+            foreach ($correctedCombatLogRoute->playerDeaths ?? [] as $playerDeath) {
                 $result->push(new CombatLogEvent(array_merge(
-                    $this->getBaseCombatLogEventAttributes($now, $start, $end, $floor),
+                    $this->getBaseCombatLogEventAttributes($correctedCombatLogRoute, $now, $start, $end, $playerDeath->coord->uiMapId),
                     [
                         // Original event location
                         'pos_x'      => round($playerDeath->coord->x, 2),
@@ -185,49 +198,51 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteDungeonRouteBui
     }
 
     private function getBaseCombatLogEventAttributes(
-        Carbon $now,
-        Carbon $start,
-        Carbon $end,
-        Floor  $floor,
+        CombatLogRouteRequestModel $correctedCombatLogRoute,
+        Carbon                     $now,
+        Carbon                     $start,
+        Carbon                     $end,
+        int                        $uiMapId,
     ): array {
         return [
-            'run_id'             => $this->combatLogRoute->metadata->runId,
-            'keystone_run_id'    => $this->combatLogRoute->metadata->keystoneRunId,
-            'logged_run_id'      => $this->combatLogRoute->metadata->loggedRunId,
-            'period'             => $this->combatLogRoute->metadata->period,
-            'season'             => $this->combatLogRoute->metadata->season,
-            'region_id'          => $this->combatLogRoute->metadata->regionId,
-            'realm_type'         => $this->combatLogRoute->metadata->realmType,
-            'wow_instance_id'    => $this->combatLogRoute->metadata->wowInstanceId,
-            'challenge_mode_id'  => $this->combatLogRoute->challengeMode->challengeModeId,
-            'level'              => $this->combatLogRoute->challengeMode->level,
-            'affix_ids'          => json_encode($this->combatLogRoute->challengeMode->affixes),
-            'success'            => $this->combatLogRoute->challengeMode->success,
+            'run_id'             => $correctedCombatLogRoute->metadata->runId,
+            'keystone_run_id'    => $correctedCombatLogRoute->metadata->keystoneRunId,
+            'logged_run_id'      => $correctedCombatLogRoute->metadata->loggedRunId,
+            'period'             => $correctedCombatLogRoute->metadata->period,
+            'season'             => $correctedCombatLogRoute->metadata->season,
+            'region_id'          => $correctedCombatLogRoute->metadata->regionId,
+            'realm_type'         => $correctedCombatLogRoute->metadata->realmType,
+            'wow_instance_id'    => $correctedCombatLogRoute->metadata->wowInstanceId,
+            'challenge_mode_id'  => $correctedCombatLogRoute->challengeMode->challengeModeId,
+            'level'              => $correctedCombatLogRoute->challengeMode->level,
+            'affix_ids'          => json_encode($correctedCombatLogRoute->challengeMode->affixes),
+            'success'            => $correctedCombatLogRoute->challengeMode->success,
             'start'              => $start,
             'end'                => $end,
-            'duration_ms'        => $this->combatLogRoute->challengeMode->durationMs,
-            'par_time_ms'        => $this->combatLogRoute->challengeMode->parTimeMs,
-            'timer_fraction'     => $this->combatLogRoute->challengeMode->timerFraction,
-            'num_deaths'         => $this->combatLogRoute->challengeMode->numDeaths,
-            'ui_map_id'          => $floor->ui_map_id,
-            'num_members'        => $this->combatLogRoute->roster?->numMembers ?? 0,
-            'average_item_level' => $this->combatLogRoute->roster?->averageItemLevel ?? 0,
-            'characters'         => $this->getCharactersJsonFromRoster(),
+            'duration_ms'        => $correctedCombatLogRoute->challengeMode->durationMs,
+            'par_time_ms'        => $correctedCombatLogRoute->challengeMode->parTimeMs,
+            'timer_fraction'     => $correctedCombatLogRoute->challengeMode->timerFraction,
+            'num_deaths'         => $correctedCombatLogRoute->challengeMode->numDeaths,
+            'ui_map_id'          => $uiMapId,
+            'num_members'        => $correctedCombatLogRoute->roster?->numMembers ?? 0,
+            'average_item_level' => $correctedCombatLogRoute->roster?->averageItemLevel ?? 0,
+            'characters'         => $this->getCharactersJsonFromRoster($correctedCombatLogRoute),
             'context'            => "[]",
             'created_at'         => $now,
             'updated_at'         => $now,
         ];
     }
 
-    private function getCharactersJsonFromRoster(): string
-    {
+    private function getCharactersJsonFromRoster(
+        CombatLogRouteRequestModel $correctedCombatLogRoute
+    ): string {
         $result = [];
 
-        for ($i = 0; $i < $this->combatLogRoute->roster?->numMembers ?? 0; $i++) {
+        for ($i = 0; $i < $correctedCombatLogRoute->roster?->numMembers ?? 0; $i++) {
             $result[] = [
-                'id'    => $this->combatLogRoute->roster->characterIds[$i],
-                'class' => $this->combatLogRoute->roster->classIds[$i],
-                'spec'  => $this->combatLogRoute->roster->specIds[$i],
+                'id'    => $correctedCombatLogRoute->roster->characterIds[$i],
+                'class' => $correctedCombatLogRoute->roster->classIds[$i],
+                'spec'  => $correctedCombatLogRoute->roster->specIds[$i],
             ];
         }
 

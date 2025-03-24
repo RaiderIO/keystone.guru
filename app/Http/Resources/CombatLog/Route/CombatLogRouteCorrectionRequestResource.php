@@ -14,13 +14,14 @@ use JsonSerializable;
  * @OA\Property(property="settings",type="object",ref="#/components/schemas/CombatLogRouteSettings")
  * @OA\Property(property="challengeMode",type="object",ref="#/components/schemas/CombatLogRouteChallengeMode")
  * @OA\Property(property="npcs",type="array",items={"$ref":"#/components/schemas/CombatLogRouteNpcCorrection"})
- * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpell"}, nullable=true)
+ * @OA\Property(property="spells",type="array",items={"$ref":"#/components/schemas/CombatLogRouteSpellCorrection"})
+ * @OA\Property(property="playerDeaths",type="array",items={"$ref":"#/components/schemas/CombatLogRoutePlayerDeathCorrection"})
  *
  * @property CombatLogRouteRequestModel $resource
  *
  * @mixin CombatLogRouteRequestModel
  */
-class CombatLogRouteRequestResource extends JsonResource
+class CombatLogRouteCorrectionRequestResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
