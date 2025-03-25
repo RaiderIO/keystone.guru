@@ -233,11 +233,14 @@ return [
             /** Redis prefix */
             'cache_prefix'                                => 'discover',
 
+            /** The penalty that is applied when the route has an incorrect season. This is multiplicative. */
+            'popular_wrong_season_penalty'                => 0.25,
+
             /** The amount of days a pageview may be old for it to be counted towards the 'popular' count */
             'popular_days'                                => 7,
 
             /** The amount of days a route can be old before the popularity counter will drop off to 0 */
-            'popular_falloff_days' => 60,
+            'popular_falloff_days'                        => 60,
 
             /** The penalty that is applied when the mapping version is out of date. This is multiplicative. */
             'popular_out_of_date_mapping_version_penalty' => 0.25,
@@ -388,7 +391,7 @@ return [
                 ],
             ],
         ],
-        'api' => [
+        'api'     => [
             /*
              * Exclude data points that fall below this factor of the max amount of points in the grid.
              * Say that the top hot spot was 10000 entries, then in order to be included in this heatmap, a data point
@@ -405,8 +408,8 @@ return [
              *
              * Null or false disables this
              */
-            'floors_as_array' => true,
-        ]
+            'floors_as_array'                    => true,
+        ],
     ],
 
     'api' => [
