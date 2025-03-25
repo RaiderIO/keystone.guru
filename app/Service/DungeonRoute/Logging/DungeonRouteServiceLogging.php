@@ -51,5 +51,13 @@ class DungeonRouteServiceLogging extends RollbarStructuredLogging implements Dun
         $this->end(__METHOD__, get_defined_vars());
     }
 
+    public function touchRoutesForTeamStart(int $teamId): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
 
+    public function touchRoutesForTeamEnd(int $teamId, int $updatedRouteCount): void
+    {
+        $this->end(__METHOD__, get_defined_vars());
+    }
 }

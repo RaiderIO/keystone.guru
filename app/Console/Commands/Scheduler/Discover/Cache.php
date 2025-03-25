@@ -81,10 +81,10 @@ class Cache extends SchedulerCommand
                 foreach ($seasons as $season) {
                     $this->info(sprintf('- %s', $season->name));
 
-                    foreach ($season->affixGroups ?? [] as $affixGroup) {
-                        $this->info(sprintf('-- AffixGroup %s', $affixGroup->getTextAttribute()));
-                        $discoverService->popularGroupedByDungeonByAffixGroup($affixGroup);
-                    }
+//                    foreach ($season->affixGroups ?? [] as $affixGroup) {
+//                        $this->info(sprintf('-- AffixGroup %s', $affixGroup->getTextAttribute()));
+//                        $discoverService->popularGroupedByDungeonByAffixGroup($affixGroup);
+//                    }
 
                     $discoverService = $discoverService->withSeason($season);
                     foreach ($season->dungeons()->active()->get() as $dungeon) {
@@ -94,10 +94,10 @@ class Cache extends SchedulerCommand
                         $discoverService->newByDungeon($dungeon);
                         $discoverService->popularUsersByDungeon($dungeon);
 
-                        foreach ($season->affixGroups ?? [] as $affixGroup) {
-                            $this->info(sprintf('--- AffixGroup %s', $affixGroup->getTextAttribute()));
-                            $discoverService->popularGroupedByDungeonByAffixGroup($affixGroup);
-                        }
+//                        foreach ($season->affixGroups ?? [] as $affixGroup) {
+//                            $this->info(sprintf('--- AffixGroup %s', $affixGroup->getTextAttribute()));
+//                            $discoverService->popularGroupedByDungeonByAffixGroup($affixGroup);
+//                        }
                     }
                 }
 

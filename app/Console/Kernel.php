@@ -59,6 +59,7 @@ use App\Console\Commands\Scheduler\DungeonRoute\DeleteExpired;
 use App\Console\Commands\Scheduler\DungeonRoute\RefreshOutdatedThumbnails;
 use App\Console\Commands\Scheduler\DungeonRoute\UpdatePopularity;
 use App\Console\Commands\Scheduler\DungeonRoute\UpdateRating;
+use App\Console\Commands\Scheduler\DungeonRoute\Touch;
 use App\Console\Commands\Scheduler\Metric\Aggregate;
 use App\Console\Commands\Scheduler\Metric\SavePending;
 use App\Console\Commands\Scheduler\Patreon\RefreshMembershipStatus;
@@ -128,10 +129,6 @@ class Kernel extends ConsoleKernel
         CreateMissingFloors::class,
         ImportInstanceIds::class,
 
-        // DungeonRoute
-        UpdatePopularity::class,
-        UpdateRating::class,
-
         // Environment
         EnvironmentUpdatePrepare::class,
         EnvironmentUpdate::class,
@@ -187,9 +184,15 @@ class Kernel extends ConsoleKernel
         ReleaseSuccess::class,
 
         // Scheduler
-        DeleteExpired::class,
         RefreshAffixGroupEaseTiers::class,
+        /// DungeonRoute
+        DeleteExpired::class,
         RefreshOutdatedThumbnails::class,
+        UpdatePopularity::class,
+        UpdateRating::class,
+        Touch::class,
+
+        /// Telemetry
         Telemetry::class,
         // Metric
         Aggregate::class,
@@ -244,6 +247,7 @@ class Kernel extends ConsoleKernel
 
             $schedule->command('dungeonroute:refreshoutdatedthumbnails')->everyFifteenMinutes();
             $schedule->command('dungeonroute:deleteexpired')->hourly();
+            $schedule->command('dungeonroute:touch', ['teamId' => config('keystoneguru.raider_io.team_id')])->weeklyOn(3, '0');
 
             if (in_array($appType, ['mapping', 'local'])) {
                 $schedule->command('mapping:sync')->everyFiveMinutes();

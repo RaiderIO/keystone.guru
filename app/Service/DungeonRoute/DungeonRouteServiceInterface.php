@@ -11,4 +11,6 @@ interface DungeonRouteServiceInterface
     public function refreshOutdatedThumbnails(): int;
 
     public function deleteExpiredDungeonRoutes(): int;
+
+    public function touchRoutesForTeam(int $teamId): int;
 }
