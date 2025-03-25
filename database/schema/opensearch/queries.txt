@@ -88,6 +88,12 @@ PUT _index_template/combat_log_events-template
         "pos_y": {
           "type": "float"
         },
+        "pos_grid_x": {
+          "type": "float"
+        },
+        "pos_grid_y": {
+          "type": "float"
+        },
         "event_type": {
           "type": "keyword"
         },
@@ -127,6 +133,12 @@ PUT _index_template/combat_log_events-template
             },
             "pos_enemy_y": {
               "type": "float"
+            },
+            "pos_enemy_grid_x": {
+              "type": "float"
+            },
+            "pos_enemy_grid_y": {
+              "type": "float"
             }
           }
         }
@@ -152,7 +164,7 @@ PUT _plugins/_ism/policies/combat_log_events-ILM-policy
               "delay": "1m"
             },
             "rollover": {
-              "min_size": "50gb"
+              "min_size": "10gb"
             }
           },
           {
@@ -305,10 +317,10 @@ PUT /combat_log_events-000001
       "pos_y": {
         "type": "float"
       },
-      "pos_enemy_x": {
+      "pos_grid_x": {
         "type": "float"
       },
-      "pos_enemy_y": {
+      "pos_grid_y": {
         "type": "float"
       },
       "event_type": {
@@ -353,6 +365,12 @@ PUT /combat_log_events-000001
             "type": "float"
           },
           "pos_enemy_y": {
+            "type": "float"
+          },
+          "pos_enemy_grid_x": {
+            "type": "float"
+          },
+          "pos_enemy_grid_y": {
             "type": "float"
           }
         }

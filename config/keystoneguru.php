@@ -237,7 +237,7 @@ return [
             'popular_days'                                => 7,
 
             /** The amount of days a route can be old before the popularity counter will drop off to 0 */
-            'popular_falloff_days'                        => 30,
+            'popular_falloff_days' => 60,
 
             /** The penalty that is applied when the mapping version is out of date. This is multiplicative. */
             'popular_out_of_date_mapping_version_penalty' => 0.25,

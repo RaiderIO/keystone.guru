@@ -86,7 +86,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
     protected function start(string $functionName, array $context = [], bool $addContext = true): void
     {
         $level = Level::Info;
-        if ($level->isLowerThan(self::getLogLevel())) {
+        if (!self::$ENABLED || $level->isLowerThan(self::getLogLevel())) {
             return;
         }
 
@@ -110,7 +110,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
     protected function end(string $functionName, array $context = []): void
     {
         $level = Level::Info;
-        if ($level->isLowerThan(self::getLogLevel())) {
+        if (!self::$ENABLED || $level->isLowerThan(self::getLogLevel())) {
             return;
         }
 
@@ -194,13 +194,13 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         $levelName = $level->getName();
 
         // Cache the following operation - it's pretty slow
-        if (!isset($cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT])) {
+        if (!isset($this->cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT])) {
             // Convert App\Service\WowTools\Logging\WowToolsServiceLogging::getDisplayIdRequestError to WowToolsServiceLogging::getDisplayIdRequestError
-            $cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT] = trim(
+            $this->cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT] = trim(
                 sprintf('%s %s', str_repeat('-', self::$GROUPED_CONTEXT_COUNT), array_reverse(explode('\\', $functionName))[0])
             );
         }
-        $messageWithContextCounts = $cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT];
+        $messageWithContextCounts = $this->cachedConvertedFunctionNames[$functionName . self::$GROUPED_CONTEXT_COUNT];
 
         foreach ($this->loggers as $logger) {
             if ($logger instanceof LogManager) {

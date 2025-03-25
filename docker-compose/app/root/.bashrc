@@ -37,3 +37,31 @@ git config --global --add safe.directory /var/www/vendor/wotuu/keystone.guru.dep
 # php artisan challengemoderundata:convert
 # # Insert the combat log events into Opensearch
 # php artisan combatlogevent:opensearch
+
+# ### Extract data from challenge_mode_runs and ingest it in the database/Opensearch
+# SELECT challenge_mode_run_data, *
+# FROM `challenge_mode_run_data`
+# INNER JOIN `challenge_mode_runs` on challenge_mode_run_data.challenge_mode_run_id = challenge_mode_runs.id
+# WHERE dungeon_id IN (
+# "114",
+# "112",
+# "137",
+# "111",
+# "109",
+# "35",
+# "20",
+# "25"
+# )
+# SELECT * FROM `challenge_mode_runs` WHERE dungeon_id IN ( "114", "112", "137", "111", "109", "35", "20", "25" )
+
+# # Put the .sql data files in docker-compose/data/
+# docker exec -it keystone.guru-db-combatlog /bin/bash
+# mysql -u homestead -psecret keystone.guru.combatlog < /tmp/data/challenge_mode_run_data.sql
+
+# # Take all the challenge mode run data, correct it, and insert it into the database
+# php artisan challengemoderundata:convert
+# php artisan combatlogevent:opensearch
+
+# # or to populate Opensearch while converting
+# php artisan challengemoderundata:convert --saveToOpensearch
+

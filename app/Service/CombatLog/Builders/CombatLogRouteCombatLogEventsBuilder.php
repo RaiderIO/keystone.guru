@@ -4,11 +4,8 @@ namespace App\Service\CombatLog\Builders;
 
 use App;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
-use App\Logic\Structs\IngameXY;
 use App\Models\CombatLog\CombatLogEvent;
 use App\Models\CombatLog\CombatLogEventEventType;
-use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
@@ -90,78 +87,36 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
             $end   = Carbon::createFromFormat(CombatLogRouteRequestModel::DATE_TIME_FORMAT, $correctedCombatLogRoute->challengeMode->end);
 
             foreach ($correctedCombatLogRoute->npcs as $npc) {
-                $resolvedEnemy = $npc->getResolvedEnemy();
-
-                if ($resolvedEnemy === null) {
-                    $this->log->getCombatLogEventsEnemyCouldNotBeResolved($npc->npcId, $npc->spawnUid);
-                    // If we couldn't resolve the enemy, stop
-                    continue;
-                }
-
-                /** @var Floor $floor */
-                $floor = $floorsById->get($resolvedEnemy->floor_id);
-                $resolvedEnemy->setRelation('floor', $floor);
-
-                $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(
-                    $resolvedEnemy->getLatLng()
-                );
-
-                // Catch the time at which we should switch floors to the Shadow Realm, so we can perform proper
-                // corrections for spells and deaths that happen in the Shadow Realm
-                if ($npc->coord->uiMapId === Floor::DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID) {
-                    if ($darkflameCleftShadowRealmSwitchTime === null ||
-                        $darkflameCleftShadowRealmSwitchTime->isAfter($npc->getEngagedAt())) {
-                        $darkflameCleftShadowRealmSwitchTime = $npc->getEngagedAt();
-                    }
-                }
-
-                $gridLocation      = $this->coordinatesService->calculateGridLocationForIngameLocation(
-                    new IngameXY(
-                        $npc->coord->x,
-                        $npc->coord->y,
-                        // Fallback on the enemy's floor just in case
-                        $this->floorRepository->findByUiMapId($npc->coord->uiMapId) ?? $resolvedEnemy->floor
-                    ),
-                    config('keystoneguru.heatmap.service.data.player.size_x'),
-                    config('keystoneguru.heatmap.service.data.player.size_y')
-                );
-                $gridLocationEnemy = $this->coordinatesService->calculateGridLocationForIngameLocation(
-                    $ingameXY,
-                    config('keystoneguru.heatmap.service.data.enemy.size_x'),
-                    config('keystoneguru.heatmap.service.data.enemy.size_y')
-                );
-
                 $result->push(new CombatLogEvent(array_merge(
-                    $this->getBaseCombatLogEventAttributes($now, $start, $end, $floor),
+                    $this->getBaseCombatLogEventAttributes($correctedCombatLogRoute, $now, $start, $end, $npc->coord->uiMapId),
                     [
                         // Original event location
                         'pos_x'      => round($npc->coord->x, 2),
                         'pos_y'      => round($npc->coord->y, 2),
-                        'pos_grid_x' => $gridLocation->getX(2),
-                        'pos_grid_y' => $gridLocation->getY(2),
+                        'pos_grid_x' => $npc->gridCoord->x,
+                        'pos_grid_y' => $npc->gridCoord->y,
                         'event_type' => CombatLogEventEventType::NpcDeath->value,
                         'context'    => json_encode([
                             '@timestamp'       => $npc->getDiedAt(),
                             // Resolved enemy location
-                            'pos_enemy_x'      => $ingameXY->getX(2),
-                            'pos_enemy_y'      => $ingameXY->getY(2),
-                            'pos_enemy_grid_x' => $gridLocationEnemy->getX(2),
-                            'pos_enemy_grid_y' => $gridLocationEnemy->getY(2),
+                            'pos_enemy_x'      => $npc->coordEnemy->x,
+                            'pos_enemy_y'      => $npc->coordEnemy->y,
+                            'pos_enemy_grid_x' => $npc->gridCoordEnemy->x,
+                            'pos_enemy_grid_y' => $npc->gridCoordEnemy->y,
                         ]),
                     ]
                 )));
             }
 
             foreach ($correctedCombatLogRoute->spells as $spell) {
-                /** @var CombatLogRouteSpellRequestModel $spell */
                 $result->push(new CombatLogEvent(array_merge(
                     $this->getBaseCombatLogEventAttributes($correctedCombatLogRoute, $now, $start, $end, $spell->coord->uiMapId),
                     [
                         // Original event location
                         'pos_x'      => round($spell->coord->x, 2),
                         'pos_y'      => round($spell->coord->y, 2),
-                        'pos_grid_x' => $gridLocation->getX(2),
-                        'pos_grid_y' => $gridLocation->getY(2),
+                        'pos_grid_x' => $spell->gridCoord->x,
+                        'pos_grid_y' => $spell->gridCoord->y,
                         'event_type' => CombatLogEventEventType::PlayerSpell->value,
                         'context'    => json_encode([
                             '@timestamp' => $spell->getCastAt(),
@@ -178,6 +133,8 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
                         // Original event location
                         'pos_x'      => round($playerDeath->coord->x, 2),
                         'pos_y'      => round($playerDeath->coord->y, 2),
+                        'pos_grid_x' => $playerDeath->gridCoord->x,
+                        'pos_grid_y' => $playerDeath->gridCoord->y,
                         'event_type' => CombatLogEventEventType::PlayerDeath->value,
                         'context'    => json_encode([
                             '@timestamp'   => $playerDeath->getDiedAt(),
@@ -240,9 +197,9 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
 
         for ($i = 0; $i < $correctedCombatLogRoute->roster?->numMembers ?? 0; $i++) {
             $result[] = [
-                'id'    => $correctedCombatLogRoute->roster->characterIds[$i],
-                'class' => $correctedCombatLogRoute->roster->classIds[$i],
-                'spec'  => $correctedCombatLogRoute->roster->specIds[$i],
+                'id'    => $correctedCombatLogRoute->roster->characterIds[$i] ?? 12345,
+                'class' => $correctedCombatLogRoute->roster->classIds[$i] ?? 1, // Warrior
+                'spec'  => $correctedCombatLogRoute->roster->specIds[$i] ?? 73, // Warrior Protection
             ];
         }
 

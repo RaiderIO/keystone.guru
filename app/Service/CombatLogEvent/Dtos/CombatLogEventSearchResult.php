@@ -49,7 +49,7 @@ class CombatLogEventSearchResult
             use ($dungeon, $floors, $useFacade) {
                 $ingameXY = match ($this->combatLogEventFilter->getDataType()) {
                     CombatLogEventDataType::PlayerPosition => $combatLogEvent->getIngameXY(),
-                    CombatLogEventDataType::EnemyPosition => $combatLogEvent->getIngameXYNpc()
+                    CombatLogEventDataType::EnemyPosition => $combatLogEvent->getIngameXYEnemy()
                 };
 
                 // If the XY is null, we can't calculate a map location
