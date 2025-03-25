@@ -8,10 +8,7 @@ class LevelSliderInitializer {
             min: options.keyLevelMinDefault,
             max: options.keyLevelMaxDefault,
             from: options.levelFrom,
-            to: options.levelTo,
-            onFinish: function () {
-                Cookies.set('route_key_level', $(options.levelSelector).val());
-            }
+            to: options.levelTo
         });
     }
 

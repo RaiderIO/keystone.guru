@@ -28,8 +28,8 @@ $dungeonSelectId = 'dungeon_id_select';
     'nextSeason' => $nextSeason,
     'keyLevelMinDefault' => config('keystoneguru.keystone.levels.default_min'),
     'keyLevelMaxDefault' => config('keystoneguru.keystone.levels.default_max'),
-    'levelFrom' => $routeKeyLevelFrom,
-    'levelTo' => $routeKeyLevelTo,
+    'levelFrom' => $dungeonroute?->level_min ?? $routeKeyLevelFrom,
+    'levelTo' => $dungeonroute?->level_max ?? $routeKeyLevelTo,
 ]])
 
 @if(!isset($dungeonroute))

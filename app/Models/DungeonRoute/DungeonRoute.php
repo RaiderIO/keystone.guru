@@ -192,6 +192,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     protected $fillable = [
         'id',
         'public_key',
+        'clone_of',
         'author_id',
         'dungeon_id',
         'mapping_version_id',
