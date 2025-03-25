@@ -17,7 +17,7 @@ $showAnonIcon ??= true;
             @endif
 
             @isset($user->iconfile)
-                <img src="{{ $user->iconfile->getURL() }}" style="max-width: 26px; max-height: 26px" alt="Icon"/>
+                <img src="{{ $user->iconfile->getURL() }}" style="max-width: 26px; max-height: 26px; border-radius: 30px;" alt="Icon"/>
             @elseif($showAnonIcon)
                 <i class="fas fa-user"></i>
             @endisset
