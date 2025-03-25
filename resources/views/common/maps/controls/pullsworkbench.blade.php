@@ -78,12 +78,21 @@ use Illuminate\Support\Collection;
 
     @component('common.general.modal', ['id' => 'map_killzonessidebar_killzone_description_modal'])
         <div class="form-group">
-            {!! Form::label(
-                'map_killzonessidebar_killzone_description_modal_textarea',
-                __('view_common.maps.controls.pullsworkbench.modal.description.label'),
-                ['id' => 'map_killzonessidebar_killzone_description_modal_label']
-            ) !!}
+            <h4>
+                {!! Form::label(
+                    'map_killzonessidebar_killzone_description_modal_textarea',
+                    __('view_common.maps.controls.pullsworkbench.modal.description.label'),
+                    ['id' => 'map_killzonessidebar_killzone_description_modal_label']
+                ) !!}
+            </h4>
             <div id="map_killzonessidebar_killzone_description_modal_supported_html_tags" class="form-group">
+            </div>
+            <div class="form-group">
+                {{ __('view_common.maps.controls.pullsworkbench.modal.supported_domains') }}
+                <span id="map_killzonessidebar_killzone_description_modal_supported_domains" class="fas fa-info-circle"
+                      data-toggle="tooltip" data-html="true">
+
+                </span>
             </div>
             <div id="map_killzonessidebar_killzone_description_modal_remaining_characters" class="form-group text-warning" style="display: none;">
             </div>

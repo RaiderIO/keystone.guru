@@ -115,6 +115,12 @@ class PullWorkBench extends Signalable {
         $(`#map_killzonessidebar_killzone_description_modal_supported_html_tags`).text(
             lang.get('messages.pull_workbench_pull_supported_tags_label', {tags: c.map.sanitizeTextDefaultAllowedTags.join(', ')})
         );
+        let $supportedDomains = $(`#map_killzonessidebar_killzone_description_modal_supported_domains`).attr(
+            'title',
+            c.map.sanitizeTextDefaultAllowedDomains.join('<br>')
+        );
+        refreshTooltips($supportedDomains);
+
         $(`#map_killzonessidebar_killzone_description_modal_textarea`).val(
             this.killZone.description ?? ''
         ).on('keydown', this._descriptionKeyDown);

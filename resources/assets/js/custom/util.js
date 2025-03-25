@@ -206,37 +206,48 @@ function getCenteroid(latLngs) {
 
 /**
  *
- * @param input
- * @param allowedTags
+ * @param {string} input
+ * @param {string[]} allowedTags
+ * @param {string[]} allowedDomains
  * @returns {string}
  */
-function filterHTML(input, allowedTags) {
-    // Create a temporary div element
+function filterHTML(input, allowedTags, allowedDomains) {
     let tempDiv = document.createElement('div');
-    // Set the input string as innerHTML of the temporary div
     tempDiv.innerHTML = input;
 
-    // Select all elements within the temporary div
     let allElements = tempDiv.querySelectorAll('*');
 
-    // Loop through each element
     allElements.forEach(function(element) {
-        // If the tag of the element is not in the allowed tags array
-        if (!allowedTags.includes(element.tagName.toLowerCase())) {
-            // Replace the element with its inner text
-            let textNode = document.createTextNode(element.innerText);
-            element.parentNode.replaceChild(textNode, element);
+        let tagName = element.tagName.toLowerCase();
+
+        if (!allowedTags.includes(tagName)) {
+            element.replaceWith(document.createTextNode(element.innerText));
         } else {
-            // Remove all attributes from the element
-            Array.from(element.attributes).forEach(function(attr) {
-                element.removeAttribute(attr.name);
+            if (tagName === 'a' && element.hasAttribute('href')) {
+                try {
+                    let url = new URL(element.href);
+                    if (!allowedDomains.includes(url.hostname)) {
+                        element.replaceWith(document.createTextNode(element.innerText));
+                        return;
+                    }
+                } catch (e) {
+                    element.replaceWith(document.createTextNode(element.innerText));
+                    return;
+                }
+            }
+
+            // Remove all attributes except `href` for <a> tags that are allowed
+            Array.from(element.attributes).forEach(attr => {
+                if (!(tagName === 'a' && attr.name === 'href')) {
+                    element.removeAttribute(attr.name);
+                }
             });
         }
     });
 
-    // Return the innerHTML of the temporary div (now filtered)
     return tempDiv.innerHTML;
 }
+
 
 function getEnemies() {
     return getState().getDungeonMap().mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY);

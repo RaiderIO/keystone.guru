@@ -201,6 +201,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'published_state_id',
         'teeming',
         'title',
+        'description',
         'difficulty',
         'level_min',
         'level_max',

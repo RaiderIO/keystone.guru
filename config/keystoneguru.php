@@ -297,8 +297,11 @@ return [
         'common' => [
             'dungeonroute' => [
                 'card' => [
-                    'cache' => [
+                    'cache'        => [
                         'ttl' => '1 hour',
+                    ],
+                    'allowed_tags' => [
+                        'a', 'h4', 'h5', 'h6', 'b', 'i', 'br',
                     ],
                 ],
             ],

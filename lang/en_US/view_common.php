@@ -407,22 +407,23 @@ return [
                 'no_pulls_created_view'       => 'No pulls created.',
             ],
             'pullsworkbench' => [
-                'modal'            => [
+                'modal'             => [
                     'description' => [
                         'label'               => 'Description',
                         'supported_html_tags' => 'Supported HTML tags: ',
                         'save'                => 'Save',
                     ],
+                    'supported_domains' => 'Supported hyperlink domains (include https://): ',
                     'spells'      => [
                         'label' => 'Spells',
                         'save'  => 'Save',
                     ],
                 ],
-                'description'      => 'Edit description',
-                'spells'           => 'Edit spells',
-                'add_kill_area'    => 'Add kill area',
-                'remove_kill_area' => 'Remove kill area',
-                'delete_killzone'  => 'Delete pull',
+                'description'       => 'Edit description',
+                'spells'            => 'Edit spells',
+                'add_kill_area'     => 'Add kill area',
+                'remove_kill_area'  => 'Remove kill area',
+                'delete_killzone'   => 'Delete pull',
             ],
             'view'           => [
                 'edit_this_route_title'          => 'Edit',

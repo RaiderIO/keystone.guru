@@ -467,7 +467,11 @@ html, body, #map, #app, .wrapper {
     z-index: 100100;
 }
 
-.route_sidebar .map_killzonessidebar_killzone .selected .text-success {
+.route_sidebar .map_killzonessidebar_killzone.selected a {
+    color: white !important;
+}
+
+.route_sidebar .map_killzonessidebar_killzone.selected .text-success {
     color: unset !important;
 }
 

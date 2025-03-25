@@ -152,7 +152,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                             @if(empty($dungeonroute->description))
                                 &nbsp;
                             @else
-                                {{ $dungeonroute->description }}
+                                {!! strip_tags($dungeonroute->description, config('keystoneguru.view.common.dungeonroute.card.allowed_tags')) !!}
                             @endif
                         </div>
                     </div>
