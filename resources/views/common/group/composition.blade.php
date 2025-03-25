@@ -9,8 +9,8 @@ use Illuminate\Support\Collection;
 
 /**
  * @var DungeonRoute                             $model
- * @var Collection<CharacterClassSpecialization> $specializations
  * @var Collection<CharacterClass>               $classes
+ * @var Collection<CharacterClassSpecialization> $specializations
  * @var Collection<CharacterRace>                $racesClasses
  * @var Collection<Faction>                      $allFactions
  */
@@ -21,8 +21,8 @@ $factions ??= $allFactions;
 @include('common.general.inline', ['path' => 'common/group/composition',
 'options' => [
     'factions'         => $factions,
-    'specializations'  => $specializations,
     'classDetails'     => $classes,
+    'specializations'  => $specializations,
     'races'            => $racesClasses,
 ]])
 
@@ -44,8 +44,8 @@ $factions ??= $allFactions;
 
     <script>
         let _oldFaction;
-        let _oldSpecializations;
         let _oldClasses;
+        let _oldSpecializations;
         let _oldRaces;
 
         // Defined in groupcomposition.js
@@ -62,20 +62,20 @@ $factions ??= $allFactions;
                 if( isset($dungeonroute) ){ ?>
 
                 _oldFaction = '{{ $dungeonroute->faction_id }}';
-            _oldSpecializations = {!! $dungeonroute->specializations ?? collect() !!};
             _oldClasses = {!! $dungeonroute->classes ?? collect() !!};
+            _oldSpecializations = {!! $dungeonroute->specializations ?? collect() !!};
             _oldRaces = {!! $dungeonroute->races ?? collect() !!};
 
             <?php } else {
+                $newClasses = [];
+                foreach (old('class', '') as $oldClass) {
+                    $newClasses[] = ['id' => $oldClass];
+                }
+
                 // convert old values in a format we can read it in
                 $newSpecializations = [];
                 foreach (old('specialization', '') as $oldSpecialization) {
                     $newSpecializations[] = ['id' => $oldSpecialization];
-                }
-
-                $newClasses = [];
-                foreach (old('class', '') as $oldClass) {
-                    $newClasses[] = ['id' => $oldClass];
                 }
 
                 $newRaces = [];
@@ -85,8 +85,8 @@ $factions ??= $allFactions;
                 ?>
 
                 _oldFaction = '{{ old('faction_id', '') }}';
-            _oldSpecializations = {!! json_encode($newSpecializations)  !!};
             _oldClasses = {!! json_encode($newClasses)  !!};
+            _oldSpecializations = {!! json_encode($newSpecializations)  !!};
             _oldRaces = {!! json_encode($newRaces)  !!};
 
 <?php }
@@ -141,15 +141,15 @@ $factions ??= $allFactions;
     <div class="col-md pl-1 pr-1">
 
         <div class="form-group">
-            {!! Form::label('specialization[]', sprintf(__('view_common.group.composition.party_member_nr'), $i)) !!}
-            <select data-live-search="true" name="specialization[]"
-                    class="form-control selectpicker specializationselect" data-id="{{$i}}">
+            {!! Form::label('class[]', sprintf(__('view_common.group.composition.party_member_nr'), $i)) !!}
+            <select name="class[]" class="form-control selectpicker classselect" data-id="{{$i}}">
 
             </select>
         </div>
 
         <div class="form-group">
-            <select name="class[]" class="form-control selectpicker classselect" data-id="{{$i}}">
+            <select data-live-search="true" name="specialization[]"
+                    class="form-control selectpicker specializationselect" data-id="{{$i}}">
 
             </select>
         </div>

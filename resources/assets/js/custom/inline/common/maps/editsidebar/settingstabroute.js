@@ -38,13 +38,13 @@ class SettingsTabRoute extends SettingsTab {
                 attributes: $('#attributes').val(),
                 faction_id: $('#faction_id').val(),
                 seasonal_index: $('#seasonal_index').val(),
-                specialization:
-                    $('.specializationselect select').map(function () {
+                class:
+                    $('.classselect select').map(function () {
                         return $(this).val();
                     }).get()
                 ,
-                class:
-                    $('.classselect select').map(function () {
+                specialization:
+                    $('.specializationselect select').map(function () {
                         return $(this).val();
                     }).get()
                 ,
