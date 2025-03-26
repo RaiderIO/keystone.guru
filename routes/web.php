@@ -145,6 +145,11 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     // Explore dungeons (just show me the mapping but don't allow me to create routes)
     Route::prefix('explore')->group(static function () {
         Route::get('/', (new DungeonExploreController())->get(...))->name('dungeon.explore.list');
+        Route::get('/retail/mechagon-workshop', (new DungeonExploreController())->viewDungeonFloorMechagonWorkshopCorrection(...))->name('dungeon.explore.gameversion.view.mechagonworkshopcorrection');
+        Route::get('/retail/mechagon-workshop/{floorIndex}', (new DungeonExploreController())->viewDungeonFloorMechagonWorkshopCorrection(...))->name('dungeon.explore.gameversion.view.mechagonworkshopcorrection.floor');
+        Route::get('/retail/mechagon-workshop/embed', (new DungeonExploreController())->embedMechagonWorkshopCorrection(...))->name('dungeon.explore.gameversion.embed.mechagonworkshopcorrection');
+        Route::get('/retail/mechagon-workshop/embed/{floorIndex}', (new DungeonExploreController())->embedMechagonWorkshopCorrection(...))->name('dungeon.explore.gameversion.embed.mechagonworkshopcorrection.floor');
+
         Route::prefix('{gameVersion}')->group(static function () {
             Route::get('/', (new DungeonExploreController())->getByGameVersion(...))->name('dungeon.explore.gameversion.list');
             Route::prefix('{dungeon}')->group(static function () {
