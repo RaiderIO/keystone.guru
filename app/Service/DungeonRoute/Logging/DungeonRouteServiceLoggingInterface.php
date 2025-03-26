@@ -22,4 +22,8 @@ interface DungeonRouteServiceLoggingInterface
     public function deleteOutdatedDungeonRouteException(int $dungeonRouteId, \Exception $ex): void;
 
     public function deleteOutdatedDungeonRoutesEnd(int $deletedRouteCount): void;
+
+    public function touchRoutesForTeamStart(int $teamId): void;
+
+    public function touchRoutesForTeamEnd(int $teamId, int $updatedRouteCount): void;
 }

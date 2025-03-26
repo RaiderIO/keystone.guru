@@ -1,0 +1,61 @@
+{
+    "id": 288,
+    "release_changelog_id": 295,
+    "version": "v13.0.8",
+    "title": "Reduced importance of affixes across the board and minor corrections\/bugfixes",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-03-26T10:49:58+00:00",
+    "updated_at": "2025-03-26T10:49:58+00:00",
+    "changelog": {
+        "id": 295,
+        "release_id": 288,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 295,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2781,
+                "change": "Route cards (when viewing them from an overview page) have received some minor polish, rounded user icons etc."
+            },
+            {
+                "release_changelog_id": 295,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2783,
+                "change": "Pull and route descriptions now support the a tag - with only a select list of WoW-related domains being allowed to link to."
+            },
+            {
+                "release_changelog_id": 295,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2785,
+                "change": "Route overview pages now calculate popularity a bit differently - the amount of affixes assigned to a route is no longer penalized. Affixes affect the routes much less than ever before - so this penalty is no longer really relevant."
+            },
+            {
+                "release_changelog_id": 295,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2786,
+                "change": "Reduced the amount of background caching going on wrt affixes. Same as above - affixes don't matter as much as they used to, so having a pre-built cache for routes on specific affixes is no longer necessary. This will greatly reduce the time required to rebuild the cache in the background and increase performance as a result."
+            },
+            {
+                "release_changelog_id": 295,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2750,
+                "change": "Affixes for the coming weeks added (with the assumption the rotation is the same as S1 going forward)."
+            },
+            {
+                "release_changelog_id": 295,
+                "release_changelog_category_id": 2,
+                "ticket_id": 2784,
+                "change": "Selecting a composition for your route now lists class first, then specialization and finally race."
+            },
+            {
+                "release_changelog_id": 295,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2782,
+                "change": "Changing a key level in one route will no longer \"adjust them\" in another route. This was a visual bug and the key level wasn't actually changed - but this is resolved now."
+            }
+        ]
+    }
+}

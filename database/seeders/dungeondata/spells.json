@@ -51029,7 +51029,7 @@
         "cast_time": 0,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": "2025-03-19T10:10:35+00:00",
         "spell_dungeons": [
             {
@@ -113960,7 +113960,7 @@
         "cast_time": 3000,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": "2025-03-01T21:10:35+00:00",
         "spell_dungeons": [
             {
@@ -115948,7 +115948,7 @@
         "cast_time": 0,
         "duration": null,
         "selectable": false,
-        "hidden_on_map": false,
+        "hidden_on_map": true,
         "fetched_data_at": "2025-02-12T15:55:15+00:00",
         "spell_dungeons": [
             {

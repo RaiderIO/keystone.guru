@@ -15,13 +15,12 @@ use Illuminate\Support\Carbon;
  * @OA\Property(property="itemLevel",type="number",format="float")
  * @OA\Property(property="diedAt",type="string",format="date-time")
  * @OA\Property(property="coord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
- * @OA\Property(property="gridCoord",type="object",ref="#/components/schemas/CombatLogRouteCoord")
  */
 class CombatLogRoutePlayerDeathRequestModel extends RequestModel implements Arrayable
 {
     private Carbon $diedAtCarbon;
 
-    private ?Enemy $resolvedEnemy = null;
+//    private ?Enemy $resolvedEnemy = null;
 
     public function __construct(
         public ?int                             $characterId = null,
@@ -29,8 +28,7 @@ class CombatLogRoutePlayerDeathRequestModel extends RequestModel implements Arra
         public ?int                             $specId = null,
         public ?float                           $itemLevel = null,
         public ?string                          $diedAt = null,
-        public ?CombatLogRouteCoordRequestModel $coord = null,
-        public ?CombatLogRouteCoordRequestModel $gridCoord = null
+        public ?CombatLogRouteCoordRequestModel $coord = null
     ) {
     }
 

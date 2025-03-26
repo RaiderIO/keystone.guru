@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\V1\InternalTeam\Combatlog;
 use App\Http\Controllers\Controller;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Requests\Api\V1\CombatLog\Route\CombatLogRouteRequest;
-use App\Http\Resources\CombatLog\Route\CombatLogRouteRequestResource;
+use App\Http\Resources\CombatLog\Route\CombatLogRouteCorrectionRequestResource;
 use App\Http\Resources\DungeonRoute\DungeonRouteResource;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 
@@ -63,10 +63,10 @@ class APICombatLogController extends Controller
     public function correctEvents(
         CombatLogRouteRequest                      $request,
         CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService
-    ): CombatLogRouteRequestResource {
+    ): CombatLogRouteCorrectionRequestResource {
         $validated = $request->validated();
 
-        return new CombatLogRouteRequestResource($combatLogRouteDungeonRouteService->correctCombatLogRoute(
+        return new CombatLogRouteCorrectionRequestResource($combatLogRouteDungeonRouteService->correctCombatLogRoute(
             CombatLogRouteRequestModel::createFromArray($validated)
         ));
     }

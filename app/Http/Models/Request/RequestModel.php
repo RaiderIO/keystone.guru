@@ -52,7 +52,7 @@ abstract class RequestModel
                         $collection = collect();
                         $itemType   = static::getCollectionItemType($key);
 
-                        if ($itemType && is_subclass_of($itemType, RequestModel::class)) {
+                        if ($itemType && is_subclass_of($itemType, RequestModel::class) && is_array($value)) {
                             foreach ($value as $item) {
                                 $collection->push($itemType::createFromArray(is_array($item) ? $item : []));
                             }

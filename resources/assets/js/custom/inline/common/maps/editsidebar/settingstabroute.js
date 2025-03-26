@@ -32,19 +32,19 @@ class SettingsTabRoute extends SettingsTab {
             data: {
                 team_id: $('#team_id_select').val(),
                 dungeon_route_title: $('#dungeon_route_title').val(),
-                dungeon_route_description: $('#dungeon_route_description').val(),
+                dungeon_route_description: c.map.sanitizeText($('#dungeon_route_description').val()),
                 dungeon_route_level: $('#dungeon_route_level').val(),
                 // teeming: $('#teeming').is(':checked') ? 1 : 0,
                 attributes: $('#attributes').val(),
                 faction_id: $('#faction_id').val(),
                 seasonal_index: $('#seasonal_index').val(),
-                specialization:
-                    $('.specializationselect select').map(function () {
+                class:
+                    $('.classselect select').map(function () {
                         return $(this).val();
                     }).get()
                 ,
-                class:
-                    $('.classselect select').map(function () {
+                specialization:
+                    $('.specializationselect select').map(function () {
                         return $(this).val();
                     }).get()
                 ,

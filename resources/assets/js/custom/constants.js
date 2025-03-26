@@ -634,7 +634,22 @@ let c = {
             // The amount of users before an overflow is initiated
             userOverflowCount: 1
         },
-        sanitizeTextDefaultAllowedTags: ['h4', 'h5', 'h6', 'b', 'i', 'br'],
+        sanitizeTextDefaultAllowedTags: ['a', 'h4', 'h5', 'h6', 'b', 'i', 'br'],
+        sanitizeTextDefaultAllowedDomains: [
+            'keystone.guru',
+            'raider.io',
+            'twitch.tv',
+            'youtube.com',
+            'wowhead.com',
+            'icy-veins.com',
+            'worldofwarcraft.blizzard.com',
+            'wowpedia.fandom.com',
+            'wowwiki-archive.fandom.com',
+            'wago.io',
+            'curseforge.com',
+            'warcraftlogs.com',
+            'archon.gg',
+        ],
         sanitizeText: function (text, convertLineEnding = true) {
             if (text === null || typeof text !== 'string') {
                 return text;
@@ -650,7 +665,7 @@ let c = {
                 }
             }
 
-            return filterHTML(text, allowedTags);
+            return filterHTML(text, allowedTags, c.map.sanitizeTextDefaultAllowedDomains);
         }
     }
 };

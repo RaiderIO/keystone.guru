@@ -4,6 +4,7 @@ namespace App\Console\Commands\ChallengeModeRunData;
 
 use App\Logging\StructuredLogging;
 use App\Models\CombatLog\ChallengeModeRunData;
+use App\Models\CombatLog\CombatLogEvent;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,14 +17,14 @@ class ConvertToEvents extends Command
      *
      * @var string
      */
-    protected $signature = 'challengemoderundata:convert {--force}';
+    protected $signature = 'challengemoderundata:convert {--force} {--saveToOpensearch}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = "Takes the contents of the existing challenge_mode_run_data table and converts the contents to combat log events, and saves those to the database.";
+    protected $description = "Takes the contents of the existing challenge_mode_run_data table, corrects the request body, converts the contents to combat log events, and saves those to the database.";
 
     /**
      * Execute the console command.
@@ -33,7 +34,8 @@ class ConvertToEvents extends Command
         // We don't care for logging atm, we got a progress bar baby
         StructuredLogging::disable();
 
-        $force = (bool)$this->option('force');
+        $force    = (bool)$this->option('force');
+        $saveToOS = (bool)$this->option('saveToOpensearch');
 
         $count = ChallengeModeRunData::when(!$force, function (Builder $builder) {
             $builder->where('processed', false);
@@ -42,9 +44,18 @@ class ConvertToEvents extends Command
         $progressBar = $this->output->createProgressBar($count);
         $progressBar->setFormat(ProgressBar::FORMAT_DEBUG);
 
-        $result = $challengeModeRunDataService->convert($force, function () use (&$progressBar) {
-            $progressBar->advance();
-        });
+        $result = $challengeModeRunDataService->convert($force,
+            function (ChallengeModeRunData $challengeModeRunData) use (&$progressBar, $saveToOS, $challengeModeRunDataService) {
+                $progressBar->advance();
+
+                // This immediately saves the data to Opensearch so you can start using it while it's being inserted
+                if ($saveToOS) {
+                    $challengeModeRunDataService->insertToOpensearch(
+                        CombatLogEvent::where('run_id', $challengeModeRunData->run_id)->get()
+                    );
+                }
+            }
+        );
 
         $progressBar->finish();
 

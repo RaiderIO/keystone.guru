@@ -13,14 +13,6 @@ class CommonGroupComposition extends InlineCode {
             }
         });
 
-        $('.raceselect').bind('change', function (changeEvent) {
-            self._raceChanged(changeEvent);
-
-            if (!self._loadingDefaults) {
-                refreshSelectPickers();
-            }
-        });
-
         $('.classselect').bind('change', function (changeEvent) {
             self._classChanged(changeEvent);
 
@@ -31,6 +23,14 @@ class CommonGroupComposition extends InlineCode {
 
         $('.specializationselect').bind('change', function (changeEvent) {
             self._specializationChanged(changeEvent);
+
+            if (!self._loadingDefaults) {
+                refreshSelectPickers();
+            }
+        });
+
+        $('.raceselect').bind('change', function (changeEvent) {
+            self._raceChanged(changeEvent);
 
             if (!self._loadingDefaults) {
                 refreshSelectPickers();

@@ -192,6 +192,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     protected $fillable = [
         'id',
         'public_key',
+        'clone_of',
         'author_id',
         'dungeon_id',
         'mapping_version_id',
@@ -200,6 +201,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'published_state_id',
         'teeming',
         'title',
+        'description',
         'difficulty',
         'level_min',
         'level_max',
@@ -919,6 +921,20 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 }
             }
 
+            $newClasses = $request->get('class', []);
+            if (!empty($newClasses)) {
+                // Remove old classes
+                $this->playerclasses()->delete();
+                foreach ($newClasses as $value) {
+                    if (CharacterClass::where('id', $value)->exists()) {
+                        DungeonRoutePlayerClass::create([
+                            'dungeon_route_id'   => $this->id,
+                            'character_class_id' => (int)$value,
+                        ]);
+                    }
+                }
+            }
+
             $newSpecs = $request->get('specialization', []);
             if (!empty($newSpecs)) {
                 // Remove old specializations
@@ -929,20 +945,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                         DungeonRoutePlayerSpecialization::create([
                             'dungeon_route_id'                  => $this->id,
                             'character_class_specialization_id' => (int)$value,
-                        ]);
-                    }
-                }
-            }
-
-            $newClasses = $request->get('class', []);
-            if (!empty($newClasses)) {
-                // Remove old classes
-                $this->playerclasses()->delete();
-                foreach ($newClasses as $value) {
-                    if (CharacterClass::where('id', $value)->exists()) {
-                        DungeonRoutePlayerClass::create([
-                            'dungeon_route_id'   => $this->id,
-                            'character_class_id' => (int)$value,
                         ]);
                     }
                 }

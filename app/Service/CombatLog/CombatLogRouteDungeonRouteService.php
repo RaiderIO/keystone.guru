@@ -4,6 +4,7 @@ namespace App\Service\CombatLog;
 
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCorrectionRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestModel;
@@ -168,7 +169,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
      * @throws DungeonNotSupportedException
      * @throws Exception
      */
-    public function correctCombatLogRoute(CombatLogRouteRequestModel $combatLogRoute): CombatLogRouteRequestModel
+    public function correctCombatLogRoute(CombatLogRouteRequestModel $combatLogRoute): CombatLogRouteCorrectionRequestModel
     {
         $isSwoole = onSwooleServer();
 

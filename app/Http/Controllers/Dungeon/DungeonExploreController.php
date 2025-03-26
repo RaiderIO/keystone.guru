@@ -64,6 +64,17 @@ class DungeonExploreController extends Controller
         ]);
     }
 
+    public function viewDungeonFloorMechagonWorkshopCorrection(
+        ExploreUrlFormRequest $request,
+        string                $floorIndex = '1'
+    ): RedirectResponse {
+        return redirect()->route('dungeon.explore.gameversion.view.floor', [
+                'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
+                'dungeon'     => Dungeon::where('key', Dungeon::DUNGEON_MECHAGON_WORKSHOP)->firstOrFail(),
+                'floorIndex'  => $floorIndex,
+            ] + $request->validated());
+    }
+
     public function viewDungeonFloor(
         ExploreUrlFormRequest          $request,
         MapContextServiceInterface     $mapContextService,
@@ -127,6 +138,17 @@ class DungeonExploreController extends Controller
                     collect(),
             ]));
         }
+    }
+
+    public function embedMechagonWorkshopCorrection(
+        ExploreUrlFormRequest $request,
+        string                $floorIndex = '1'
+    ): RedirectResponse {
+        return redirect()->route('dungeon.explore.gameversion.embed.floor', [
+                'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
+                'dungeon'     => Dungeon::where('key', Dungeon::DUNGEON_MECHAGON_WORKSHOP)->firstOrFail(),
+                'floorIndex'  => $floorIndex,
+            ] + $request->validated());
     }
 
     public function embed(

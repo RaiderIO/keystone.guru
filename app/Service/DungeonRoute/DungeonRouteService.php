@@ -165,4 +165,18 @@ class DungeonRouteService implements DungeonRouteServiceInterface
         return $deletedRouteCount;
     }
 
+    public function touchRoutesForTeam(int $teamId): int
+    {
+        $updatedRouteCount = 0;
+        try {
+            $this->log->touchRoutesForTeamStart($teamId);
+
+            $updatedRouteCount = DungeonRoute::where('team_id', $teamId)->update(['updated_at' => now()]);
+        } finally {
+            $this->log->touchRoutesForTeamEnd($teamId, $updatedRouteCount);
+        }
+
+        return $updatedRouteCount;
+    }
+
 }

@@ -34,8 +34,8 @@ use Illuminate\Support\Carbon;
  * @property int    $ui_map_id
  * @property float  $pos_x
  * @property float  $pos_y
- * @property float  $pos_enemy_x
- * @property float  $pos_enemy_y
+ * @property float $pos_grid_x
+ * @property float $pos_grid_y
  * @property int    $num_members
  * @property float  $average_item_level
  * @property string $event_type
@@ -73,6 +73,8 @@ class CombatLogEvent extends OpensearchModel
         'ui_map_id',
         'pos_x',
         'pos_y',
+        'pos_grid_x',
+        'pos_grid_y',
         'num_members',
         'average_item_level',
         'event_type',
@@ -168,6 +170,12 @@ class CombatLogEvent extends OpensearchModel
                     'pos_y'              => [
                         'type' => 'float',
                     ],
+                    'pos_grid_x'         => [
+                        'type' => 'float',
+                    ],
+                    'pos_grid_y'         => [
+                        'type' => 'float',
+                    ],
                     'num_members'        => [
                         'type' => 'integer',
                     ],
@@ -196,16 +204,26 @@ class CombatLogEvent extends OpensearchModel
                         'type'       => 'nested',
                         'dynamic'    => true,
                         'properties' => [
-                            'spell_id'    => [
+                            '@timestamp'       => [
+                                'format' => 'epoch_second',
+                                'type'   => 'date',
+                            ],
+                            'spell_id'         => [
                                 'type' => 'integer',
                             ],
-                            'npc_id'      => [
+                            'npc_id'           => [
                                 'type' => 'integer',
                             ],
-                            'pos_enemy_x' => [
+                            'pos_enemy_x'      => [
                                 'type' => 'float',
                             ],
-                            'pos_enemy_y' => [
+                            'pos_enemy_y'      => [
+                                'type' => 'float',
+                            ],
+                            'pos_enemy_grid_x' => [
+                                'type' => 'float',
+                            ],
+                            'pos_enemy_grid_y' => [
                                 'type' => 'float',
                             ],
                         ],
@@ -251,6 +269,8 @@ class CombatLogEvent extends OpensearchModel
             //            'pos'               => sprintf('POINT (%f %f)', $this->pos_x, $this->pos_y),
             'pos_x'              => round($this->pos_x, 2),
             'pos_y'              => round($this->pos_y, 2),
+            'pos_grid_x' => round($this->pos_grid_x, 2),
+            'pos_grid_y' => round($this->pos_grid_y, 2),
             'num_members'        => $this->num_members,
             'average_item_level' => $this->average_item_level,
             'event_type'         => $this->event_type,
@@ -289,6 +309,8 @@ class CombatLogEvent extends OpensearchModel
             //            'pos_y'             => (float)$posArr[1],
             'pos_x'              => $row['pos_x'],
             'pos_y'              => $row['pos_y'],
+            'pos_grid_x' => $row['pos_grid_x'],
+            'pos_grid_y' => $row['pos_grid_y'],
             'event_type'         => $row['event_type'],
             'num_members'        => $row['num_members'],
             'average_item_level' => $row['average_item_level'],
@@ -311,7 +333,14 @@ class CombatLogEvent extends OpensearchModel
         return new IngameXY($this->pos_x, $this->pos_y);
     }
 
-    public function getIngameXYNpc(): ?IngameXY
+    public function getIngameGridXY(): IngameXY
+    {
+        // Could use $this->floor but that doesn't work since this model is an Opensearch model - the floor should be added
+        // later
+        return new IngameXY($this->pos_grid_x, $this->pos_grid_y);
+    }
+
+    public function getIngameXYEnemy(): ?IngameXY
     {
         // Could use $this->floor but that doesn't work since this model is an Opensearch model - the floor should be added
         // later
@@ -321,6 +350,18 @@ class CombatLogEvent extends OpensearchModel
         }
 
         return new IngameXY($context['pos_enemy_x'], $context['pos_enemy_y']);
+    }
+
+    public function getIngameXYEnemyGrid(): ?IngameXY
+    {
+        // Could use $this->floor but that doesn't work since this model is an Opensearch model - the floor should be added
+        // later
+        $context = json_decode($this->context, true);
+        if (!isset($context['pos_enemy_grid_x']) || !isset($context['pos_enemy_grid_y'])) {
+            return null;
+        }
+
+        return new IngameXY($context['pos_enemy_grid_x'], $context['pos_enemy_grid_y']);
     }
 
     public function setTimeInterval(Dungeon $dungeon, Carbon $start, int $durationMs): self

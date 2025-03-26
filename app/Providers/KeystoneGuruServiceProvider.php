@@ -377,16 +377,11 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
             $regionViewVariables = $viewService->getGameServerRegionViewVariables($userOrDefaultRegion);
 
-            $routeKeyLevelDefault = '10;15';
-            $routeKeyLevel        = $_COOKIE['route_key_level'] ?? $routeKeyLevelDefault;
-            $explode              = explode(';', $routeKeyLevel);
-            if (count($explode) !== 2) {
-                $routeKeyLevel = $routeKeyLevelDefault;
-                $explode       = explode(';', $routeKeyLevel);
-            }
+            /** @var Season $currentSeason */
+            $currentSeason = $regionViewVariables['currentSeason'];
 
-            $view->with('routeKeyLevelFrom', (int)$explode[0]);
-            $view->with('routeKeyLevelTo', (int)$explode[1]);
+            $view->with('routeKeyLevelFrom', $currentSeason->key_level_min);
+            $view->with('routeKeyLevelTo', $currentSeason->key_level_max);
             $view->with('currentSeason', $regionViewVariables['currentSeason']
                 ->load(['seasonDungeons' => static function ($query) {
                     $query->without(['season', 'dungeon']);

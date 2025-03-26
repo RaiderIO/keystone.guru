@@ -5,13 +5,16 @@ namespace App\Service\CombatLog\Builders;
 use App;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteChallengeModeRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCoordRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteCorrectionRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteMetadataRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcCorrectionRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRoutePlayerDeathCorrectionRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRoutePlayerDeathRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRosterRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSettingsRequestModel;
+use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellCorrectionRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Logic\Structs\IngameXY;
 use App\Models\Floor\Floor;
@@ -87,7 +90,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
         $this->dungeonRoute->setRelation('killZones', $this->killZones);
     }
 
-    public function getCombatLogRoute(): CombatLogRouteRequestModel
+    public function getCombatLogRoute(): CombatLogRouteCorrectionRequestModel
     {
         /** @var Collection<CombatLogRouteNpcRequestModel> $npcs */
         $npcs = new Collection();
@@ -202,7 +205,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                 );
 
                 $spells->push(
-                    new CombatLogRouteSpellRequestModel(
+                    new CombatLogRouteSpellCorrectionRequestModel(
                         $spell->spellId,
                         $spell->playerUid,
                         $spell->castAt,
@@ -242,7 +245,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                 );
 
                 $playerDeaths->push(
-                    new CombatLogRoutePlayerDeathRequestModel(
+                    new CombatLogRoutePlayerDeathCorrectionRequestModel(
                         $playerDeath->characterId,
                         $playerDeath->classId,
                         $playerDeath->specId,
@@ -258,7 +261,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                 );
             }
 
-            $result = new CombatLogRouteRequestModel(
+            $result = new CombatLogRouteCorrectionRequestModel(
             // For now no changes in these, but making copies regardless
                 new CombatLogRouteMetadataRequestModel(
                     $this->combatLogRoute->metadata->runId,

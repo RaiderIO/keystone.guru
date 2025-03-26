@@ -18,10 +18,11 @@ use App\Service\Cache\CacheServiceInterface;
 
 $showAffixes      ??= true;
 $showDungeonImage ??= false;
+$isAdmin           = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
 
 $cacheFn = static function ()
 
-use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $__env)
+use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $isAdmin, $__env)
 
 {
     $dominantAffix = strtolower($dungeonroute->getDominantAffix() ?? 'keystone');
@@ -151,7 +152,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                             @if(empty($dungeonroute->description))
                                 &nbsp;
                             @else
-                                {{ $dungeonroute->description }}
+                                {!! strip_tags($dungeonroute->description, config('keystoneguru.view.common.dungeonroute.card.allowed_tags')) !!}
                             @endif
                         </div>
                     </div>
@@ -188,10 +189,10 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                             <small class="text-muted">
                                 {{ __('view_common.dungeonroute.card.by_author') }}
                                 @include('common.user.name', ['user' => $dungeonroute->author, 'link' => true, 'showAnonIcon' => false])
-                                @if( $dungeonroute->rating > 1 )
-                                    -
-                                    @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->rating])
-                                @endif
+{{--                                @if( $dungeonroute->rating > 1 )--}}
+{{--                                    ---}}
+{{--                                    @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->rating])--}}
+{{--                                @endif--}}
                                 -
                                 <span data-toggle="tooltip"
                                       title="{{ $dungeonroute->updated_at->toDateTimeString('minute') }}">
@@ -212,15 +213,13 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                                    data-publickey="{{ $dungeonroute->public_key }}">
                                     <i class="fas fa-flag"></i> {{ __('view_common.dungeonroute.card.report') }}
                                 </a>
-                                @auth
-                                    @if(Auth::user()->hasRole(Role::ROLE_ADMIN))
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item refresh_thumbnail"
-                                           data-publickey="{{ $dungeonroute->public_key }}">
-                                            <i class="fas fa-sync"></i> {{ __('view_common.dungeonroute.card.refresh_thumbnail') }}
-                                        </a>
-                                    @endif
-                                @endauth
+                                @if($isAdmin)
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item refresh_thumbnail"
+                                       data-publickey="{{ $dungeonroute->public_key }}">
+                                        <i class="fas fa-sync"></i> {{ __('view_common.dungeonroute.card.refresh_thumbnail') }}
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -239,7 +238,6 @@ $cache = true;
 
 if ($cache) {
     $currentUserLocale = Auth::check() ? Auth::user()->locale : 'en_US';
-    $isAdmin           = Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN);
 // Echo the result of this function
     echo $cacheService->remember(
         DungeonRoute::getCardCacheKey($dungeonroute->id, 'vertical', $currentUserLocale, $showAffixes, $showDungeonImage, $isAdmin),

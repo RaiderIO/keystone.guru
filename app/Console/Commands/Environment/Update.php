@@ -119,7 +119,13 @@ class Update extends Command
         $this->call('keystoneguru:view', ['operation' => 'cache']);
 
         // Regenerate API docs
-        $this->call('l5-swagger:generate');
+        $this->call('l5-swagger:generate', [
+            '--all' => true,
+        ]);
+
+        $this->call('vendor:publish', [
+            '--provider' => 'L5Swagger\L5SwaggerServiceProvider',
+        ]);
 
         // A bit of a nasty hack to fix permission issues
         $this->shell(sprintf('chown www-data:www-data -R %s', base_path('storage')));

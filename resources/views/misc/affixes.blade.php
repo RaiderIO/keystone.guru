@@ -89,7 +89,7 @@ try {
 
         <div class="mt-4 text-center">
             <p>
-                {{ sprintf(__('view_misc.affixes.updated_at'), '2024/Oct/23') }}
+                {{ sprintf(__('view_misc.affixes.updated_at'), '2025/Mar/20') }}
                 <a href="https://mythicpl.us/" target="_blank" rel="noopener noreferrer">
                     https://mythicpl.us/ <i class="fas fa-external-link-alt"></i>
                 </a>

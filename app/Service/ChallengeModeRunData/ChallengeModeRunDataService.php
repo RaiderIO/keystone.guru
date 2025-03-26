@@ -101,18 +101,24 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
 
         CombatLogEvent::chunk($count, function (Collection $combatLogEvents) use (&$result, $onProcess, $count) {
             /** @var Collection<CombatLogEvent> $combatLogEvents */
-            $ids = $combatLogEvents->pluck('id')->toArray();
-
-            if ($onProcess !== null) {
-                $onProcess($ids);
-            }
-
-            $result = $result && CombatLogEvent::opensearch()
-                    ->documents()
-                    ->create($ids, null, $count);
+            $result = $this->insertToOpensearch($combatLogEvents, $count, $onProcess);
         });
 
         return $result;
+    }
+
+
+    public function insertToOpensearch(Collection $combatLogEvents, int $count = 1000, ?callable $onProcess = null): bool
+    {
+        $ids = $combatLogEvents->pluck('id')->toArray();
+
+        if ($onProcess !== null) {
+            $onProcess($ids);
+        }
+
+        return CombatLogEvent::opensearch()
+            ->documents()
+            ->create($ids, null, $count);
     }
 
     public function getDungeonFromMapId(int $mapId): ?Dungeon

@@ -22,7 +22,7 @@ $user = Auth::user();
             @include('common.user.name', ['user' => $user])
         </a>
         <div class="dropdown-menu text-center text-xl-left" aria-labelledby="navbarDropdown">
-            @if( $user->hasRole(Role::ROLE_ADMIN))
+            @if($user->hasRole(Role::ROLE_ADMIN))
                 @if( config('telescope.enabled') )
                     <a class="dropdown-item"
                        href="{{ route('telescope') }}">

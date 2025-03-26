@@ -258,12 +258,15 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                 <div class="form-group">
                     <div id="filter_region_container" class="btn-group btn-group-toggle w-100"
                          data-toggle="buttons">
+                        <?php
+                        $defaultRegion = Auth::check() ? GameServerRegion::getUserOrDefaultRegion()->short : GameServerRegion::AMERICAS;
+                        ?>
                         @foreach($allRegions as $region)
-                            <label class="btn btn-secondary {{ $region->short === 'world' ? 'active' : '' }}">
+                            <label class="btn btn-secondary {{ $region->short === $defaultRegion ? 'active' : '' }}">
                                 <input type="radio" name="region"
                                        class="{{ $region->short }}"
                                        value="{{ $region->short }}"
-                                    {{ $region->short === 'world' ? 'checked' : '' }}
+                                    {{ $region->short === $defaultRegion ? 'checked' : '' }}
                                 >
                                 <img src="{{ url(sprintf('images/flags/%s.png', $region->short)) }}"
                                      alt="{{ __($region->name) }}"
