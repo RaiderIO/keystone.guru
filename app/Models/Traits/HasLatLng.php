@@ -35,6 +35,10 @@ trait HasLatLng
 
     public function getCoordinatesData(CoordinatesServiceInterface $coordinatesService): array
     {
+        if (!$this->hasValidLatLng()) {
+            return [];
+        }
+
         $splitFloorsLatLng = $this->getLatLng();
 
         // If we for some reason currently have facade floor assigned to this map icon (shouldn't happen, but just in case)
@@ -48,7 +52,7 @@ trait HasLatLng
             );
         } else {
             $facadeLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
-                // Use the direct mapping version, otherwise proxy through dungeonRoute, finally as a fallback use the dungeon's current mapping version
+            // Use the direct mapping version, otherwise proxy through dungeonRoute, finally as a fallback use the dungeon's current mapping version
                 $this->mappingVersion ?? $this->dungeonRoute->mappingVersion ?? $this->floor->dungeon->currentMappingVersion,
                 $splitFloorsLatLng
             );
