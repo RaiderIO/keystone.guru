@@ -27,6 +27,11 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->end(__METHOD__);
     }
 
+    public function doCreateThumbnailStart(string $publicKey, int $floorIndex, string $targetFolder, ?int $viewportWidth, ?int $viewportHeight, ?int $imageWidth, ?int $imageHeight, ?int $zoomLevel, ?int $quality): void
+    {
+        $this->start(__METHOD__, get_defined_vars());
+    }
+
     public function doCreateThumbnailMaintenanceMode(): void
     {
         $this->info(__METHOD__);
@@ -75,6 +80,11 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
     public function queueThumbnailRefreshMappingVersionNull(string $publicKey): void
     {
         $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function doCreateThumbnailEnd(): void
+    {
+        $this->end(__METHOD__);
     }
 
     public function copyThumbnailsError(string $sourcePublicKey, string $targetPublicKey, int $id, Exception $exception): void

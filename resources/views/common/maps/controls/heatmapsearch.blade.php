@@ -259,7 +259,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                     <div id="filter_region_container" class="btn-group btn-group-toggle w-100"
                          data-toggle="buttons">
                         <?php
-                        $defaultRegion = Auth::check() ? GameServerRegion::getUserOrDefaultRegion()->short : GameServerRegion::AMERICAS;
+                        $defaultRegion = Auth::check() ? GameServerRegion::getUserOrDefaultRegion()->short : GameServerRegion::WORLD;
                         ?>
                         @foreach($allRegions as $region)
                             <label class="btn btn-secondary {{ $region->short === $defaultRegion ? 'active' : '' }}">
