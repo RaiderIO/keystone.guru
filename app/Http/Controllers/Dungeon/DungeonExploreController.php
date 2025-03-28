@@ -174,6 +174,8 @@ class DungeonExploreController extends Controller
             ->indexOrFacade($dungeon->currentMappingVersion, $floorIndex)
             ->first();
 
+        $validated = $request->validated();
+
         if ($floor === null) {
             /** @var Floor $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
@@ -184,13 +186,13 @@ class DungeonExploreController extends Controller
                     'gameVersion' => $gameVersion,
                     'dungeon'     => $dungeon,
                     'floorIndex'  => $defaultFloor?->index ?? '1',
-                ] + $request->validated());
+                ] + $validated);
         } else if ($floor->index !== (int)$floorIndex) {
             return redirect()->route('dungeon.explore.gameversion.embed.floor', [
                     'gameVersion' => $gameVersion,
                     'dungeon'     => $dungeon,
                     'floorIndex'  => $floor->index,
-                ] + $request->validated());
+                ] + $validated);
         }
 
 
@@ -201,17 +203,14 @@ class DungeonExploreController extends Controller
         $showTitle             = $request->get('showTitle', true);
         $defaultZoom           = $request->get('defaultZoom', 1);
 
-        $parameters = [
-            'type'             => $request->get('type'),
-            'dataType'         => $request->get('dataType'),
-            'minMythicLevel'   => $request->get('minMythicLevel'),
-            'maxMythicLevel'   => $request->get('maxMythicLevel'),
-            'includeAffixIds'  => $request->get('includeAffixIds'),
-            'minPeriod'        => $request->get('minPeriod'),
-            'maxPeriod'        => $request->get('maxPeriod'),
-            'minTimerFraction' => $request->get('minTimerFraction'),
-            'maxTimerFraction' => $request->get('maxTimerFraction'),
-        ];
+        unset(
+            $validated['style'],
+            $validated['headerBackgroundColor'],
+            $validated['mapBackgroundColor'],
+            $validated['showEnemyInfo'],
+            $validated['showTitle'],
+            $validated['defaultZoom']
+        );
 
         $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
 
@@ -230,7 +229,7 @@ class DungeonExploreController extends Controller
             'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons ?
                 $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),
-            'parameters'              => $parameters,
+            'parameters'              => $validated,
             'defaultZoom'             => $defaultZoom,
             'embedOptions'            => [
                 'style'                 => $style,

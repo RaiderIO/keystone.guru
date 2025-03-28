@@ -31,7 +31,6 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
 
         // If filtering OR ordering add the join
         if (!empty($routeattributes) || $order !== null) {
-            $subBuilder->leftJoin('dungeon_route_attributes', 'dungeon_route_attributes.dungeon_route_id', '=', 'dungeon_routes.id');
 
             // If filtering
             if (!empty($routeattributes)) {
@@ -65,7 +64,8 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
 
             // If ordering
             if ($order !== null) {
-                $orderBuilder->orderByRaw('COUNT(dungeon_route_attributes.id) ' . ($order['dir'] === 'asc' ? 'asc' : 'desc'));
+                $orderBuilder->leftJoin('dungeon_route_attributes', 'dungeon_route_attributes.dungeon_route_id', '=', 'dungeon_routes.id')
+                    ->orderByRaw('COUNT(dungeon_route_attributes.id) ' . ($order['dir'] === 'asc' ? 'asc' : 'desc'));
             }
         }
     }

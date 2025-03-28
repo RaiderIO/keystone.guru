@@ -15,6 +15,8 @@ interface ThumbnailServiceLoggingInterface
 
     public function createThumbnailCustomEnd(): void;
 
+    public function doCreateThumbnailStart(string $publicKey, int $floorIndex, string $targetFolder, ?int $viewportWidth, ?int $viewportHeight, ?int $imageWidth, ?int $imageHeight, ?int $zoomLevel, ?int $quality): void;
+
     public function doCreateThumbnailMaintenanceMode(): void;
 
     public function doCreateThumbnailProcessStart(string $commandLine): void;
@@ -34,6 +36,8 @@ interface ThumbnailServiceLoggingInterface
     public function doCreateThumbnailError(string $errors): void;
 
     public function queueThumbnailRefreshMappingVersionNull(string $publicKey): void;
+
+    public function doCreateThumbnailEnd(): void;
 
     public function copyThumbnailsError(string $sourcePublicKey, string $targetPublicKey, int $id, Exception $exception): void;
 }

@@ -91,107 +91,122 @@ class ThumbnailService implements ThumbnailServiceInterface
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
-        ?int         $quality = null): bool
-    {
-        if (app()->isDownForMaintenance()) {
-            $this->log->doCreateThumbnailMaintenanceMode();
+        ?int         $quality = null
+    ): bool {
+        try {
+            $this->log->doCreateThumbnailStart(
+                $dungeonRoute->public_key,
+                $floorIndex,
+                $targetFolder,
+                $viewportWidth,
+                $viewportHeight,
+                $imageWidth,
+                $imageHeight,
+                $zoomLevel,
+                $quality
+            );
+            if (app()->isDownForMaintenance()) {
+                $this->log->doCreateThumbnailMaintenanceMode();
 
-            return false;
-        }
+                return false;
+            }
 
-        $viewportWidth  ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_width');
-        $viewportHeight ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_height');
-        $imageWidth     ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_width');
-        $imageHeight    ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_height');
-        $zoomLevel      ??= config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level');
+            $viewportWidth  ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_width');
+            $viewportHeight ??= config('keystoneguru.api.dungeon_route.thumbnail.default_viewport_height');
+            $imageWidth     ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_width');
+            $imageHeight    ??= config('keystoneguru.api.dungeon_route.thumbnail.default_image_height');
+            $zoomLevel      ??= config('keystoneguru.api.dungeon_route.thumbnail.default_zoom_level');
 
-        // 1. Headless chrome saves file in a temp location
-        // 2. File is downsized to a smaller thumbnail (can't make the browser window smaller since that'd mess up the image)
-        // 3. Moved to public folder
+            // 1. Headless chrome saves file in a temp location
+            // 2. File is downsized to a smaller thumbnail (can't make the browser window smaller since that'd mess up the image)
+            // 3. Moved to public folder
 
-        $filename = self::getFilename($dungeonRoute, $floorIndex);
+            $filename = self::getFilename($dungeonRoute, $floorIndex);
 
-        $tmpFile = sprintf('/tmp/%s', $filename);
-        $target  = self::getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder);
+            $tmpFile = sprintf('/tmp/%s', $filename);
+            $target  = self::getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder);
 
-        // puppeteer chromium-browser
-        $process = new Process([
-            'node',
-            // Script to execute
-            resource_path('assets/puppeteer/route_thumbnail.js'),
-            // First argument; where to navigate
-            route('dungeonroute.preview', [
-                'dungeon'      => $dungeonRoute->dungeon,
-                'dungeonroute' => $dungeonRoute->public_key,
-                'title'        => $dungeonRoute->getTitleSlug(),
-                'floorIndex'   => $floorIndex,
-                'secret'       => config('keystoneguru.thumbnail.preview_secret'),
-                'z'            => $zoomLevel,
-            ]),
-            // Second argument; where to save the resulting image
-            $tmpFile,
-            $viewportWidth,
-            $viewportHeight,
-        ]);
+            // puppeteer chromium-browser
+            $process = new Process([
+                'node',
+                // Script to execute
+                resource_path('assets/puppeteer/route_thumbnail.js'),
+                // First argument; where to navigate
+                route('dungeonroute.preview', [
+                    'dungeon'      => $dungeonRoute->dungeon,
+                    'dungeonroute' => $dungeonRoute->public_key,
+                    'title'        => $dungeonRoute->getTitleSlug(),
+                    'floorIndex'   => $floorIndex,
+                    'secret'       => config('keystoneguru.thumbnail.preview_secret'),
+                    'z'            => $zoomLevel,
+                ]),
+                // Second argument; where to save the resulting image
+                $tmpFile,
+                $viewportWidth,
+                $viewportHeight,
+            ]);
 
-        $this->log->doCreateThumbnailProcessStart($process->getCommandLine());
+            $this->log->doCreateThumbnailProcessStart($process->getCommandLine());
 
-        $process->run();
+            $process->run();
 
-        if ($process->isSuccessful()) {
-            if (!file_exists($tmpFile)) {
-                $this->log->doCreateThumbnailFileNotFoundDidPuppeteerDownloadChromium($tmpFile);
-            } else {
-                try {
-                    // We've updated the thumbnail; make sure the route is updated, so it doesn't get updated anymore
-                    $dungeonRoute->thumbnail_updated_at = Carbon::now()->toDateTimeString();
-                    // Do not update the timestamps of the route! Otherwise, we'll just keep on updating the timestamp
-                    $dungeonRoute->timestamps = false;
-                    $dungeonRoute->save();
+            if ($process->isSuccessful()) {
+                if (!file_exists($tmpFile)) {
+                    $this->log->doCreateThumbnailFileNotFoundDidPuppeteerDownloadChromium($tmpFile);
+                } else {
+                    try {
+                        // We've updated the thumbnail; make sure the route is updated, so it doesn't get updated anymore
+                        $dungeonRoute->thumbnail_updated_at = Carbon::now()->toDateTimeString();
+                        // Do not update the timestamps of the route! Otherwise, we'll just keep on updating the timestamp
+                        $dungeonRoute->timestamps = false;
+                        $dungeonRoute->save();
 
-                    // Ensure our write path exists
-                    if (!is_dir($targetFolder)) {
-                        mkdir($targetFolder, 0755, true);
-                    }
-
-                    // Rescale it
-                    $this->log->doCreateThumbnailRescale($tmpFile, $target);
-                    (new ImageManager(new ImagickDriver()))
-                        ->read($tmpFile)
-                        ->resize($imageWidth, $imageHeight)
-                        ->save($target, $quality);
-
-                    // Remove any old .png file that may be there
-                    $oldPngFilePath = str_replace('.jpg', '.png', $target);
-                    if (file_exists($oldPngFilePath) && unlink($oldPngFilePath)) {
-                        $this->log->doCreateThumbnailRemovedOldPngFile();
-                    }
-
-                    $this->log->doCreateThumbnailSuccess($target, file_exists($target));
-                    // Image now exists in target location; compress it and move it to the target location
-                    // Log::channel('scheduler')->info('Compressing image..');
-                    // $this->compressPng($tmpScaledFile, $target);
-                } finally {
-                    // Cleanup
-                    if (file_exists($tmpFile)) {
-                        if (unlink($tmpFile)) {
-                            $this->log->doCreateThumbnailRemovedTmpFileSuccess();
-                        } else {
-                            $this->log->doCreateThumbnailRemovedTmpFileFailure();
+                        // Ensure our write path exists
+                        if (!is_dir($targetFolder)) {
+                            mkdir($targetFolder, 0755, true);
                         }
-                    }
 
-                    // unlink($tmpScaledFile);
+                        // Rescale it
+                        $this->log->doCreateThumbnailRescale($tmpFile, $target);
+                        (new ImageManager(new ImagickDriver()))
+                            ->read($tmpFile)
+                            ->resize($imageWidth, $imageHeight)
+                            ->save($target, $quality);
+
+                        // Remove any old .png file that may be there
+                        $oldPngFilePath = str_replace('.jpg', '.png', $target);
+                        if (file_exists($oldPngFilePath) && unlink($oldPngFilePath)) {
+                            $this->log->doCreateThumbnailRemovedOldPngFile();
+                        }
+
+                        $this->log->doCreateThumbnailSuccess($target, file_exists($target));
+                        // Image now exists in target location; compress it and move it to the target location
+                        // Log::channel('scheduler')->info('Compressing image..');
+                        // $this->compressPng($tmpScaledFile, $target);
+                    } finally {
+                        // Cleanup
+                        if (file_exists($tmpFile)) {
+                            if (unlink($tmpFile)) {
+                                $this->log->doCreateThumbnailRemovedTmpFileSuccess();
+                            } else {
+                                $this->log->doCreateThumbnailRemovedTmpFileFailure();
+                            }
+                        }
+
+                        // unlink($tmpScaledFile);
+                    }
                 }
             }
-        }
 
-        // Log any errors that may have occurred
-        $errors = $process->getErrorOutput();
-        if (!empty($errors)) {
-            $this->log->doCreateThumbnailError($errors);
+            // Log any errors that may have occurred
+            $errors = $process->getErrorOutput();
+            if (!empty($errors)) {
+                $this->log->doCreateThumbnailError($errors);
 
-            return false;
+                return false;
+            }
+        } finally {
+            $this->log->doCreateThumbnailEnd();
         }
 
         return true;

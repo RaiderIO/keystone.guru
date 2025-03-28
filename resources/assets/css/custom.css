@@ -104,6 +104,10 @@ ul.light-slider {
         overflow: hidden;
     }
 
+    .description_row {
+        text-shadow: 2px 2px 2px #5E5E5E;
+    }
+
     .card_dungeonroute.vertical .description_row {
         height: 6rem;
         overflow-x: hidden;

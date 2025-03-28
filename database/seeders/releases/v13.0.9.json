@@ -1,0 +1,31 @@
+{
+    "id": 289,
+    "release_changelog_id": 296,
+    "version": "v13.0.9",
+    "title": "Layout tweaks",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-03-28T13:08:49+00:00",
+    "updated_at": "2025-03-28T13:08:49+00:00",
+    "changelog": {
+        "id": 296,
+        "release_id": 289,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 296,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2792,
+                "change": "Added text shadow to route cards. This will make the description legible when viewing a dungeon with a whiteish background image."
+            },
+            {
+                "release_changelog_id": 296,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2791,
+                "change": "View fullscreen button did not pass through all parameters when the heatmap was used in an embed."
+            }
+        ]
+    }
+}
