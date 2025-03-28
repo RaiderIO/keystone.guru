@@ -92,60 +92,6 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                                    data-toggle="tooltip"></i>
                             </div>
                         @endif
-                        @if( $showAffixes )
-                            <div class="col-auto ml-1">
-                                    <?php
-                                    ob_start();
-                                    ?>
-                                @foreach($dungeonroute->affixes as $affixgroup)
-                                    <div
-                                        class="row no-gutters {{ isset($currentAffixGroup) && $currentAffixGroup->id === $affixgroup->id ? 'current' : '' }}">
-                                        @include('common.affixgroup.affixgroup', [
-                                            'affixgroup' => $affixgroup,
-                                            'showText' => false,
-                                            'dungeon' => $dungeonroute->dungeon,
-                                        ])
-                                    </div>
-                                @endforeach
-                                    <?php
-                                    $affixes = ob_get_clean();
-                                    ?>
-                                <div class="row no-gutters" data-container="body" data-toggle="popover"
-                                     data-placement="bottom"
-                                     data-html="true"
-                                     data-content="{{ $affixes }}" style="cursor: pointer;">
-                                    @php($dominantAffixKey = strtolower($dominantAffix))
-                                    <div class="col-auto">
-                                        <img class="select_icon mr-1"
-                                             src="{{ url(sprintf('/images/affixes/%s.jpg', $dominantAffixKey)) }}"
-                                             alt="{{ __('view_common.dungeonroute.card.dominant_affix') }}"
-                                             @if($dominantAffixKey !== 'keystone')
-                                             data-toggle="tooltip"
-                                             title="{{ __(sprintf('affixes.%s.name', $dominantAffixKey)) }}"
-                                             @endif
-                                        />
-                                    </div>
-                                    @if($seasonalAffix !== null)
-                                        @php($seasonalAffixKey = strtolower(Str::slug($seasonalAffix, '_')))
-                                        <div class="col-auto">
-                                            <img class="select_icon mr-1"
-                                                 src="{{ url(sprintf('/images/affixes/%s.jpg', $seasonalAffixKey)) }}"
-                                                 alt="{{ __('view_common.dungeonroute.card.seasonal_affix') }}"
-                                                 data-toggle="tooltip"
-                                                 title="{{ __(sprintf('affixes.%s.name', $seasonalAffixKey)) }}"
-                                            />
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="col-auto px-1">
-                                @if($tierAffixGroup !== null)
-                                    <h4 class="font-weight-bold px-1 m-0">
-                                        @include('common.dungeonroute.tier', ['dungeon' => $dungeonroute->dungeon, 'affixgroup' => $tierAffixGroup])
-                                    </h4>
-                                @endif
-                            </div>
-                        @endif
                     </div>
                     <div class="row no-gutters px-2 pb-2 pt-1 px-md-3 flex-fill d-flex description_row">
                         <div class="col">
@@ -186,19 +132,81 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                     </div>
                     <div class="row no-gutters footer">
                         <div class="col bg-card-footer px-2 py-1">
-                            <small class="text-muted">
-                                {{ __('view_common.dungeonroute.card.by_author') }}
-                                @include('common.user.name', ['user' => $dungeonroute->author, 'link' => true, 'showAnonIcon' => false])
-{{--                                @if( $dungeonroute->rating > 1 )--}}
-{{--                                    ---}}
-{{--                                    @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->rating])--}}
-{{--                                @endif--}}
-                                -
-                                <span data-toggle="tooltip"
-                                      title="{{ $dungeonroute->updated_at->toDateTimeString('minute') }}">
+                            <div class="row">
+                                <div class="col">
+                                    <small class="text-muted">
+                                        {{--                                {{ __('view_common.dungeonroute.card.by_author') }}--}}
+                                        @include('common.user.name', ['user' => $dungeonroute->author, 'link' => true, 'showAnonIcon' => false])
+                                        {{--                                @if( $dungeonroute->rating > 1 )--}}
+                                        {{--                                    ---}}
+                                        {{--                                    @include('common.dungeonroute.rating', ['count' => $dungeonroute->ratings->count(), 'rating' => (int) $dungeonroute->rating])--}}
+                                        {{--                                @endif--}}
+                                        -
+                                        <span data-toggle="tooltip"
+                                              title="{{ $dungeonroute->updated_at->toDateTimeString('minute') }}">
                             {{ sprintf(__('view_common.dungeonroute.card.updated_at'), $dungeonroute->updated_at->diffForHumans() ) }}
                         </span>
-                            </small>
+                                    </small>
+                                </div>
+
+
+
+
+                                @if( $showAffixes )
+                                    <div class="col-auto pl-1 pr-0">
+                                            <?php
+                                            ob_start();
+                                            ?>
+                                        @foreach($dungeonroute->affixes as $affixgroup)
+                                            <div
+                                                class="row no-gutters {{ isset($currentAffixGroup) && $currentAffixGroup->id === $affixgroup->id ? 'current' : '' }}">
+                                                @include('common.affixgroup.affixgroup', [
+                                                    'affixgroup' => $affixgroup,
+                                                    'showText' => false,
+                                                    'dungeon' => $dungeonroute->dungeon,
+                                                ])
+                                            </div>
+                                        @endforeach
+                                            <?php
+                                            $affixes = ob_get_clean();
+                                            ?>
+                                        <div class="row no-gutters" data-container="body" data-toggle="popover"
+                                             data-placement="bottom"
+                                             data-html="true"
+                                             data-content="{{ $affixes }}" style="cursor: pointer;">
+                                            @php($dominantAffixKey = strtolower($dominantAffix))
+                                            <div class="col-auto">
+                                                <img class="select_icon mr-1"
+                                                     src="{{ url(sprintf('/images/affixes/%s.jpg', $dominantAffixKey)) }}"
+                                                     alt="{{ __('view_common.dungeonroute.card.dominant_affix') }}"
+                                                     @if($dominantAffixKey !== 'keystone')
+                                                         data-toggle="tooltip"
+                                                     title="{{ __(sprintf('affixes.%s.name', $dominantAffixKey)) }}"
+                                                    @endif
+                                                />
+                                            </div>
+                                            @if($seasonalAffix !== null)
+                                                @php($seasonalAffixKey = strtolower(Str::slug($seasonalAffix, '_')))
+                                                <div class="col-auto">
+                                                    <img class="select_icon mr-1"
+                                                         src="{{ url(sprintf('/images/affixes/%s.jpg', $seasonalAffixKey)) }}"
+                                                         alt="{{ __('view_common.dungeonroute.card.seasonal_affix') }}"
+                                                         data-toggle="tooltip"
+                                                         title="{{ __(sprintf('affixes.%s.name', $seasonalAffixKey)) }}"
+                                                    />
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="col-auto px-1">
+                                        @if($tierAffixGroup !== null)
+                                            <h4 class="font-weight-bold px-1 m-0">
+                                                @include('common.dungeonroute.tier', ['dungeon' => $dungeonroute->dungeon, 'affixgroup' => $tierAffixGroup])
+                                            </h4>
+                                        @endif
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                         <div class="col-auto bg-card-footer px-2">
                             <button id="route_menu_button_{{ $dungeonroute->public_key }}"
