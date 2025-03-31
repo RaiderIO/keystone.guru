@@ -267,11 +267,17 @@ class AdminToolsController extends Controller
      */
     public function dungeonroutesubmit(Request $request): View
     {
+        $publicKey = $request->get('public_key');
+
         $dungeonRoute = DungeonRoute::with([
             'faction', 'specializations', 'classes', 'races', 'affixes',
             'brushlines', 'paths', 'author', 'killZones', 'pridefulEnemies', 'publishedstate',
             'ratings', 'favorites', 'enemyraidmarkers', 'mapicons', 'mdtImport', 'team',
-        ])->where('public_key', $request->get('public_key'))->firstOrFail();
+        ])->when(is_numeric($publicKey), function(Builder $builder) use ($publicKey) {
+            $builder->where('id', $publicKey);
+        }, function(Builder $builder) use ($publicKey) {
+            $builder->where('public_key', $publicKey);
+        })->firstOrFail();
 
         return view('admin.tools.dungeonroute.viewcontents', [
             'dungeonroute' => $dungeonRoute,
@@ -498,7 +504,13 @@ class AdminToolsController extends Controller
      */
     public function mdtviewasstringsubmit(Request $request, MDTImportStringServiceInterface $mdtImportStringService, MDTExportStringServiceInterface $mdtExportStringService)
     {
-        $dungeonRoute = DungeonRoute::where('public_key', $request->get('public_key'))->firstOrFail();
+        $publicKey = $request->get('public_key');
+
+        $dungeonRoute = DungeonRoute::when(is_numeric($publicKey), function(Builder $builder) use ($publicKey) {
+            $builder->where('id', $publicKey);
+        }, function(Builder $builder) use ($publicKey) {
+            $builder->where('public_key', $publicKey);
+        })->firstOrFail();
 
         try {
             $warnings = new Collection();

@@ -626,7 +626,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         // May not exist in case of MDT import
         if ($this->exists) {
-            $isShrouded = $this->getSeasonalAffix() === Affix::AFFIX_SHROUDED;
+            $isShrouded = $this->getSeasonalAffix()->key === Affix::AFFIX_SHROUDED;
 
             // Ignore the shrouded query if we're not shrouded (make it fail)
             $ifIsShroudedEnemyForcesQuery = $isShrouded ? '
@@ -1033,6 +1033,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 }
             }
 
+            // Refresh the cards for this route
+            DungeonRoute::dropCaches($this->id);
+
             $result = true;
         }
 
@@ -1094,12 +1097,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     }
 
     /**
-     * Clone relations of this dungeonroute into another dungeon route.
+     * Clone relations of this dungeon route into another dungeon route.
      *
-     * @param DungeonRoute $dungeonroute The RECEIVER of the target $relations
+     * @param DungeonRoute $dungeonRoute The RECEIVER of the target $relations
      * @param array        $relations The relations that you want to clone.
      */
-    public function cloneRelationsInto(DungeonRoute $dungeonroute, array $relations): void
+    public function cloneRelationsInto(DungeonRoute $dungeonRoute, array $relations): void
     {
         // Link all relations to their new dungeon route
         foreach ($relations as $relation) {
@@ -1112,7 +1115,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 /** @var $model Model */
                 $model->id               = 0;
                 $model->exists           = false;
-                $model->dungeon_route_id = $dungeonroute->id;
+                $model->dungeon_route_id = $dungeonRoute->id;
                 $model->save();
 
                 // KillZone, save the enemies that were attached to them
@@ -1123,6 +1126,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                         $killZoneEnemy->kill_zone_id = $model->id;
                         $killZoneEnemy->save();
                     }
+                } // MapIcon, save the map icons WITHOUT A TEAM, otherwise you duplicate icons in other people's teams
+                else if ($model instanceof MapIcon) {
+                    $model->update(['team_id' => null]);
                 } // Make sure all polylines are copied over
                 else if (isset($model->polyline_id)) {
                     // It's not technically a brushline, but all other polyline using structs have the same auto complete
@@ -1370,17 +1376,15 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         }
     }
 
-    public function getSeasonalAffix(): ?string
+    public function getSeasonalAffix(): ?Affix
     {
         $foundSeasonalAffix = null;
 
         $this->affixes->each(static function (AffixGroup $affixGroup) use (&$foundSeasonalAffix) {
             foreach (Affix::SEASONAL_AFFIXES as $seasonalAffix) {
-                if ($affixGroup->hasAffix($seasonalAffix)) {
-                    $foundSeasonalAffix = $seasonalAffix;
-
-                    return false; // break
-                }
+                $foundSeasonalAffix = $foundSeasonalAffix ?? $affixGroup->affixes->first(function(Affix $affix) use ($seasonalAffix) {
+                    return $affix->key === $seasonalAffix;
+                });
             }
 
             return true;

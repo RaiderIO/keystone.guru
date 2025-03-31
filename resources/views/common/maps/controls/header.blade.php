@@ -27,8 +27,7 @@ $echo        ??= false;
 $mayUserEdit = $dungeonroute?->mayUserEdit(Auth::user()) ?? false;
 $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
 
-$dominantAffix = $dungeonroute?->getDominantAffix();
-$seasonalAffix = $dungeonroute?->getSeasonalAffix();
+$seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 ?>
 <nav id="map_header"
      class="map_fade_out navbar navbar-expand-xl {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
@@ -111,17 +110,6 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix();
                                         </div>
                                     @endisset
                                 @endauth
-                                @if($dominantAffix !== null)
-                                    @php($dominantAffixKey = strtolower($dominantAffix))
-                                    <div class="col-auto">
-                                        <img class="select_icon mr-1"
-                                             src="{{ url(sprintf('/images/affixes/%s.jpg', $dominantAffixKey)) }}"
-                                             alt="{{ __('view_common.maps.controls.header.dominant_affix') }}"
-                                             data-toggle="tooltip"
-                                             title="{{ __(sprintf('affixes.%s.name', $dominantAffixKey)) }}"
-                                        />
-                                    </div>
-                                @endif
                                 @if($seasonalAffix !== null)
                                     @php($seasonalAffixKey = strtolower(Str::slug($seasonalAffix, '_')))
                                     <div class="col-auto">

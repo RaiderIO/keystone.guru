@@ -294,7 +294,7 @@ class KillZone extends Model
      */
     public function getSkippableEnemyForces(bool $teeming): Collection
     {
-        $isShrouded = $this->dungeonRoute->getSeasonalAffix() === Affix::AFFIX_SHROUDED;
+        $isShrouded = $this->dungeonRoute->getSeasonalAffix()->key === Affix::AFFIX_SHROUDED;
 
         // Ignore the shrouded query if we're not shrouded (make it fail)
         $ifIsShroudedEnemyForcesQuery = $isShrouded ? '

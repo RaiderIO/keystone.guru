@@ -93,9 +93,9 @@ $dungeonSelectId = 'dungeon_id_select';
 
     @if(isset($dungeonroute))
             <?php
-            $canMigrateToEncrypted = $dungeonroute->getSeasonalAffix() === Affix::AFFIX_TORMENTED;
-            $canMigrateToShrouded  = $dungeonroute->getSeasonalAffix() === Affix::AFFIX_ENCRYPTED;
-
+            $seasonalAffix = $dungeonroute->getSeasonalAffix()->key;
+            $canMigrateToEncrypted = $seasonalAffix === Affix::AFFIX_TORMENTED;
+            $canMigrateToShrouded  = $seasonalAffix === Affix::AFFIX_ENCRYPTED;
             ?>
         @if($canMigrateToEncrypted || $canMigrateToShrouded)
                 <?php $targetAffix = strtolower($canMigrateToEncrypted ? Affix::AFFIX_ENCRYPTED : Affix::AFFIX_SHROUDED); ?>

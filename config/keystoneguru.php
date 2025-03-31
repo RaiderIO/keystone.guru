@@ -151,9 +151,9 @@ return [
      */
     'dungeon_route_limits'                       => [
         'kill_zones' => 50,
-        'brushlines' => 50,
-        'paths'      => 50,
-        'map_icons'  => 50,
+        'brushlines' => 150,
+        'paths'      => 150,
+        'map_icons'  => 150,
     ],
 
     /**
