@@ -626,7 +626,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         // May not exist in case of MDT import
         if ($this->exists) {
-            $isShrouded = $this->getSeasonalAffix()->key === Affix::AFFIX_SHROUDED;
+            $isShrouded = $this->getSeasonalAffix()?->key === Affix::AFFIX_SHROUDED;
 
             // Ignore the shrouded query if we're not shrouded (make it fail)
             $ifIsShroudedEnemyForcesQuery = $isShrouded ? '

@@ -93,7 +93,7 @@ $dungeonSelectId = 'dungeon_id_select';
 
     @if(isset($dungeonroute))
             <?php
-            $seasonalAffix = $dungeonroute->getSeasonalAffix()->key;
+            $seasonalAffix = $dungeonroute->getSeasonalAffix()?->key;
             $canMigrateToEncrypted = $seasonalAffix === Affix::AFFIX_TORMENTED;
             $canMigrateToShrouded  = $seasonalAffix === Affix::AFFIX_ENCRYPTED;
             ?>
