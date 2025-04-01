@@ -6,6 +6,7 @@ use App\Http\Requests\DungeonRoute\DungeonRouteSubmitTemporaryFormRequest;
 use App\Logic\Structs\LatLng;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
+use App\Models\AffixGroup\AffixGroupCoupling;
 use App\Models\Brushline;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
@@ -153,8 +154,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     use Reportable;
     use SerializesDates;
 
-    public const PAGE_VIEW_SOURCE_VIEW_ROUTE = 1;
-    public const PAGE_VIEW_SOURCE_VIEW_EMBED = 2;
+    public const PAGE_VIEW_SOURCE_VIEW_ROUTE    = 1;
+    public const PAGE_VIEW_SOURCE_VIEW_EMBED    = 2;
     public const PAGE_VIEW_SOURCE_PRESENT_ROUTE = 3;
 
     /**
@@ -1378,17 +1379,40 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     public function getSeasonalAffix(): ?Affix
     {
+        /** @var Affix|null $foundSeasonalAffix */
         $foundSeasonalAffix = null;
 
-        $this->affixes->each(static function (AffixGroup $affixGroup) use (&$foundSeasonalAffix) {
-            foreach (Affix::SEASONAL_AFFIXES as $seasonalAffix) {
-                $foundSeasonalAffix = $foundSeasonalAffix ?? $affixGroup->affixes->first(function(Affix $affix) use ($seasonalAffix) {
-                    return $affix->key === $seasonalAffix;
-                });
-            }
+        // Say that we found the seasonal affix, we're attached to a season and that season is TWW
+        // Then we want to display Xal'Atath's Guile when the min level is PAST the min for that affix
+        if ($this->affixes->isNotEmpty() && $this->season !== null && $this->season->expansion->shortname === Expansion::EXPANSION_TWW) {
+            /** @var AffixGroup $affixGroup */
+            $affixGroup = $this->affixes->first();
 
-            return true;
-        });
+            /** @var Affix|null $xalAtathsGuile */
+            $xalAtathsGuile = $affixGroup->affixes->first(fn(Affix $affix) => $affix->key === Affix::AFFIX_XALATATHS_GUILE);
+
+            if ($xalAtathsGuile !== null) {
+                /** @var AffixGroupCoupling|null $affixCoupling */
+                $affixGroup->load(['affixGroupCouplings']);
+                $affixCoupling = $affixGroup->affixGroupCouplings->first(fn(AffixGroupCoupling $affix) => $affix->affix_id === $xalAtathsGuile->id);
+
+                if ($affixCoupling !== null && $this->level_min >= $affixCoupling->key_level) {
+                    $foundSeasonalAffix = $xalAtathsGuile;
+                }
+            }
+        } // If the above didn't find anything, we don't care for the result. The seasonal affixes of TWW dungeons are
+        // not relevant to the routes anymore - we only want to display Guile really.
+        else {
+            $this->affixes->each(static function (AffixGroup $affixGroup) use (&$foundSeasonalAffix) {
+                foreach (Affix::SEASONAL_AFFIXES as $seasonalAffix) {
+                    $foundSeasonalAffix = $foundSeasonalAffix ?? $affixGroup->affixes->first(function (Affix $affix) use ($seasonalAffix) {
+                        return $affix->key === $seasonalAffix;
+                    });
+                }
+
+                return true;
+            });
+        }
 
         return $foundSeasonalAffix;
     }
