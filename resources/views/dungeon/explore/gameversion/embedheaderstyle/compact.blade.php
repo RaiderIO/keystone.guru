@@ -41,12 +41,13 @@ $editHeatmapUrl = route('dungeon.explore.gameversion.view.floor', $routeParams);
                     </a>
                 </h4>
             </div>
+        @else
+            <?php // Fills up any remaining space space ?>
+            <div class="col px-0">
+
+            </div>
         @endif
 
-        <?php // Fills up any remaining space space ?>
-        <div class="col px-0">
-
-        </div>
         <div class="col-auto px-1">
             <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
             @if($embedOptions['show']['floorSelection'])

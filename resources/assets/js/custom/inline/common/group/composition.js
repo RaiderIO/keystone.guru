@@ -289,7 +289,10 @@ class CommonGroupComposition extends InlineCode {
         let self = this;
 
         // For each race select there is ..
-        $.each($raceSelect.find('option'), function (index, value) {
+        $.each($raceSelect.find('option').filter(function() {
+            // Hide the `Class...` option
+            return parseInt($(this).val(), 10) > 0;
+        }), function (index, value) {
             // Hide those options that aren't part of the faction
             let $option = $(value);
 
@@ -297,8 +300,10 @@ class CommonGroupComposition extends InlineCode {
             let optionRace = self._findRaceById(optionRaceId);
 
             let currentFactionId = parseInt($('#faction_id').val());
-            // If it's not the first entry (Race...), and the candidate race is not part of the new class, and if the faction
-            if (optionRaceId > 0 && (newClassId > 0 && !self._isClassPartOfRace(optionRaceId, newClassId) || (currentFactionId !== optionRace.faction_id && currentFactionId !== 0))) {
+            if ((newClassId > 0 && !self._isClassPartOfRace(optionRaceId, newClassId)) ||
+                // Hide it if not part of the selected faction, but not if we have selected Unspecified as a faction
+                (currentFactionId !== optionRace.faction_id && currentFactionId !== self.options.unspecifiedFactionId)
+            ) {
                 $option.hide();
             } else {
                 $option.show();

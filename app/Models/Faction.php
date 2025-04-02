@@ -33,13 +33,10 @@ class Faction extends CacheModel
 
     protected $with = ['iconfile'];
 
-    public const FACTION_ANY = 'any';
-
+    public const FACTION_ANY         = 'any';
     public const FACTION_UNSPECIFIED = 'unspecified';
-
-    public const FACTION_HORDE = 'horde';
-
-    public const FACTION_ALLIANCE = 'alliance';
+    public const FACTION_HORDE       = 'horde';
+    public const FACTION_ALLIANCE    = 'alliance';
 
     public const ALL = [
         self::FACTION_UNSPECIFIED => 1,

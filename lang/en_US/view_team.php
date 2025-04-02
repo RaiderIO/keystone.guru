@@ -43,6 +43,8 @@ return [
         'to_team_list'   => 'Team list',
         'team_header'    => 'Team %s',
         'icon_image_alt' => 'No image',
+        'routes'         => 'Routes',
+        'members'        => 'Members',
     ],
     'invite'   => [
         'linkpreview_title'       => 'Invitation to join team %s',

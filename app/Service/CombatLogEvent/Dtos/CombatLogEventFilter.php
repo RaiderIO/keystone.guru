@@ -449,30 +449,32 @@ class CombatLogEventFilter implements Arrayable
 //            ]);
 //        }
 
-        // Add an AffixGroup filter
-        $mostRecentSeason = $this->seasonService->getMostRecentSeasonForDungeon($dungeon);
+        if ($this->getPeriodMin() !== null && $this->getPeriodMax() !== null) {
+            // Add an AffixGroup filter
+            $mostRecentSeason = $this->seasonService->getMostRecentSeasonForDungeon($dungeon);
+            if ($mostRecentSeason !== null) {
 
-        if ($mostRecentSeason !== null) {
-            /** @var Collection<WeeklyAffixGroup> $weeklyAffixGroupsSinceStart */
-            $weeklyAffixGroupsSinceStart = $this->seasonService->getWeeklyAffixGroupsSinceStart(
-                $mostRecentSeason,
-                GameServerRegion::getUserOrDefaultRegion()
-            );
+                /** @var Collection<WeeklyAffixGroup> $weeklyAffixGroupsSinceStart */
+                $weeklyAffixGroupsSinceStart = $this->seasonService->getWeeklyAffixGroupsSinceStart(
+                    $mostRecentSeason,
+                    GameServerRegion::getUserOrDefaultRegion()
+                );
 
-            /** @var WeeklyAffixGroup $minWeeklyAffixGroup */
-            $minWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (WeeklyAffixGroup $weeklyAffixGroup) use ($mostRecentSeason) {
-                return $weeklyAffixGroup->week === $this->getPeriodMin() - $mostRecentSeason?->start_period;
-            });
-            /** @var WeeklyAffixGroup $maxWeeklyAffixGroup */
-            $maxWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (WeeklyAffixGroup $weeklyAffixGroup) use ($mostRecentSeason) {
-                return $weeklyAffixGroup->week === $this->getPeriodMax() - $mostRecentSeason?->start_period;
-            });
+                /** @var WeeklyAffixGroup $minWeeklyAffixGroup */
+                $minWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (WeeklyAffixGroup $weeklyAffixGroup) use ($mostRecentSeason) {
+                    return $weeklyAffixGroup->week === $this->getPeriodMin() - $mostRecentSeason?->start_period;
+                });
+                /** @var WeeklyAffixGroup $maxWeeklyAffixGroup */
+                $maxWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (WeeklyAffixGroup $weeklyAffixGroup) use ($mostRecentSeason) {
+                    return $weeklyAffixGroup->week === $this->getPeriodMax() - $mostRecentSeason?->start_period;
+                });
 
-            // Add a date range filter
-            $must[] = Range::make('start', [
-                'gte' => $minWeeklyAffixGroup->date->getTimestamp(),
-                'lte' => $maxWeeklyAffixGroup->date->addWeek()->getTimestamp(),
-            ]);
+                // Add a date range filter
+                $must[] = Range::make('start', [
+                    'gte' => $minWeeklyAffixGroup->date->getTimestamp(),
+                    'lte' => $maxWeeklyAffixGroup->date->addWeek()->getTimestamp(),
+                ]);
+            }
         }
 
         return [
@@ -511,9 +513,11 @@ class CombatLogEventFilter implements Arrayable
         $combatLogEventFilter->setPeriodMin($heatmapDataFilter->getMinPeriod());
         $combatLogEventFilter->setPeriodMax($heatmapDataFilter->getMaxPeriod());
 
-        $timerSeconds = $heatmapDataFilter->getDungeon()->currentMappingVersion->timer_max_seconds;
-        $combatLogEventFilter->setDurationMin(($heatmapDataFilter->getTimerFractionMin() * 60) / $timerSeconds);
-        $combatLogEventFilter->setDurationMax(($heatmapDataFilter->getTimerFractionMax() * 60) / $timerSeconds);
+        if ($heatmapDataFilter->getTimerFractionMin() !== null && $heatmapDataFilter->getTimerFractionMax() !== null) {
+            $timerSeconds = $heatmapDataFilter->getDungeon()->currentMappingVersion->timer_max_seconds;
+            $combatLogEventFilter->setDurationMin(($heatmapDataFilter->getTimerFractionMin() * 60) / $timerSeconds);
+            $combatLogEventFilter->setDurationMax(($heatmapDataFilter->getTimerFractionMax() * 60) / $timerSeconds);
+        }
 
         return $combatLogEventFilter;
     }

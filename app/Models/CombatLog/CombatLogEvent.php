@@ -34,8 +34,8 @@ use Illuminate\Support\Carbon;
  * @property int    $ui_map_id
  * @property float  $pos_x
  * @property float  $pos_y
- * @property float $pos_grid_x
- * @property float $pos_grid_y
+ * @property float  $pos_grid_x
+ * @property float  $pos_grid_y
  * @property int    $num_members
  * @property float  $average_item_level
  * @property string $event_type

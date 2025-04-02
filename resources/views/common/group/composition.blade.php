@@ -20,10 +20,11 @@ $factions ??= $allFactions;
 ?>
 @include('common.general.inline', ['path' => 'common/group/composition',
 'options' => [
-    'factions'         => $factions,
-    'classDetails'     => $classes,
-    'specializations'  => $specializations,
-    'races'            => $racesClasses,
+    'unspecifiedFactionId' => $factions->firstWhere('key', Faction::FACTION_UNSPECIFIED)->id,
+    'factions'             => $factions,
+    'classDetails'         => $classes,
+    'specializations'      => $specializations,
+    'races'                => $racesClasses,
 ]])
 
 @section('head')
@@ -31,7 +32,7 @@ $factions ??= $allFactions;
 
     <style>
         @foreach($factions as $faction)
-        .{{ strtolower($faction->key) }}                 {
+        .{{ strtolower($faction->key) }}                  {
             color: {{ $faction->color }};
             font-weight: bold;
         }

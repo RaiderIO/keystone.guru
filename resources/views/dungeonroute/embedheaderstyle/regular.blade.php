@@ -23,8 +23,8 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
             background-image: url({{ $dungeon->getImageUrl() }}); background-size: cover;
         @endif">
     <div class="row no-gutters pb-2">
+        @if($embedOptions['show']['title'])
         <div class="col-8 pt-2">
-            @if($embedOptions['show']['title'])
                 <div class="row no-gutters">
                     <div class="col header_embed_text_ellipsis">
                         <h4 class="mb-0">
@@ -36,11 +36,12 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
                         </h4>
                     </div>
                 </div>
-            @endif
         </div>
+        @else
         <?php // Spacers ?>
         <div class="col">
         </div>
+        @endif
         <div class="col-auto text-right">
             <a href="{{ route('home') }}" target="_blank">
                 <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
@@ -81,7 +82,7 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
             </div>
         @endif
         <div class="col-auto px-1">
-            <?php // Select floor thing is a place holder because otherwise the selectpicker will complain on an empty select ?>
+            <?php // Select floor thing is a placeholder because otherwise the selectpicker will complain on an empty select ?>
             @if($embedOptions['show']['floorSelection'])
                 {!! Form::select('map_floor_selection_dropdown', [__('view_dungeonroute.embed.select_floor')], 1, ['id' => 'map_floor_selection_dropdown', 'class' => 'form-control selectpicker']) !!}
             @endif

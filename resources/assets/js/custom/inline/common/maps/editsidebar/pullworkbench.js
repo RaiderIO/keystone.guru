@@ -58,6 +58,12 @@ class PullWorkBench extends Signalable {
         });
     }
 
+    isActive() {
+        console.assert(this instanceof PullWorkBench, 'this is not a PullWorkBench', this);
+
+        return this.killZone !== null;
+    }
+
     /**
      *
      * @param killZoneId

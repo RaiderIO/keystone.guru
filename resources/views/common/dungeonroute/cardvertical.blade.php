@@ -25,8 +25,6 @@ $cacheFn = static function ()
 use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $isAdmin, $__env)
 
 {
-    $dominantAffix = strtolower($dungeonroute->getDominantAffix() ?? 'keystone');
-
     $seasonalAffix = $dungeonroute->getSeasonalAffix();
     if (!isset($tierAffixGroup)) {
         // Try to come up with a sensible default
@@ -120,7 +118,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                             {{ sprintf('%s%%', $enemyForcesPercentage) }}
                         </div>
                         <div class="col">
-                            @if( $dungeonroute->level_min !== $dungeonroute->season?->key_level_min && $dungeonroute->level_max !== $dungeonroute->season?->key_level_max)
+                            @if( $dungeonroute->level_min !== $dungeonroute->season?->key_level_min || $dungeonroute->level_max !== $dungeonroute->season?->key_level_max)
                                 @include('common.dungeonroute.level', [
                                     'season' => $dungeonroute->season,
                                     'levelMin' => $dungeonroute->level_min,
@@ -174,25 +172,13 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                                              data-placement="bottom"
                                              data-html="true"
                                              data-content="{{ $affixes }}" style="cursor: pointer;">
-                                            @php($dominantAffixKey = strtolower($dominantAffix))
-                                            <div class="col-auto">
-                                                <img class="select_icon mr-1"
-                                                     src="{{ url(sprintf('/images/affixes/%s.jpg', $dominantAffixKey)) }}"
-                                                     alt="{{ __('view_common.dungeonroute.card.dominant_affix') }}"
-                                                     @if($dominantAffixKey !== 'keystone')
-                                                         data-toggle="tooltip"
-                                                     title="{{ __(sprintf('affixes.%s.name', $dominantAffixKey)) }}"
-                                                    @endif
-                                                />
-                                            </div>
                                             @if($seasonalAffix !== null)
-                                                @php($seasonalAffixKey = strtolower(Str::slug($seasonalAffix, '_')))
                                                 <div class="col-auto">
                                                     <img class="select_icon mr-1"
-                                                         src="{{ url(sprintf('/images/affixes/%s.jpg', $seasonalAffixKey)) }}"
+                                                         src="{{ url($seasonalAffix->image_url) }}"
                                                          alt="{{ __('view_common.dungeonroute.card.seasonal_affix') }}"
                                                          data-toggle="tooltip"
-                                                         title="{{ __(sprintf('affixes.%s.name', $seasonalAffixKey)) }}"
+                                                         title="{{ __($seasonalAffix->name) }}"
                                                     />
                                                 </div>
                                             @endif

@@ -161,7 +161,6 @@ class Floor extends CacheModel implements MappingModelInterface
         'mdt_sub_level',
         'ui_map_id',
         'map_name',
-        'active',
         'enemy_engagement_max_range',
         'enemy_engagement_max_range_patrols',
     ];

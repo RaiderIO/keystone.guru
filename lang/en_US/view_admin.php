@@ -314,7 +314,7 @@ return [
             'view'            => [
                 'title'      => 'View dungeonroute',
                 'header'     => 'View dungeonroute',
-                'public_key' => 'Dungeonroute public key',
+                'public_key' => 'Dungeonroute public key/id',
                 'submit'     => 'Submit',
             ],
             'viewcontents'    => [
@@ -387,7 +387,7 @@ return [
             'dungeonroute'                      => [
                 'title'      => 'View dungeonroute as MDT String',
                 'header'     => 'View dungeonroute as MDT String',
-                'public_key' => 'Dungeonroute public key',
+                'public_key' => 'Dungeonroute public key/id',
                 'submit'     => 'Submit',
             ],
             'string'                            => [

@@ -438,6 +438,8 @@ class CommonMapsKillzonessidebar extends InlineCode {
 
         console.assert(this instanceof CommonMapsKillzonessidebar, 'this is not a CommonMapsKillzonessidebar', this);
 
+        let mapContext = getState().getMapContext();
+
         this.map = getState().getDungeonMap();
 
         let self = this;
@@ -537,6 +539,13 @@ class CommonMapsKillzonessidebar extends InlineCode {
         });
 
         console.assert(killZoneMapObjectGroup.isInitialized(), 'KillZoneMapObjectGroup must be initialized!', this);
+
+        if (mapContext instanceof MapContextDungeonRoute) {
+            $('#killzones_description_container').show();
+            $('#killzones_description').html(
+                mapContext.getDescription()
+            );
+        }
 
         $('#killzones_loading').hide();
         if (_.size(killZoneMapObjectGroup.objects) === 0) {

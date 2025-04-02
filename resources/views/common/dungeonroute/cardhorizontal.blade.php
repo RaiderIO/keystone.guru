@@ -22,11 +22,9 @@ $isAdmin           = Auth::user()?->hasRole(Role::ROLE_ADMIN) ?? false;
 $cacheFn = static function ()
 
 use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAffixGroup, $isAdmin, $__env)
-
 {
-    $dominantAffix = strtolower($dungeonroute->getDominantAffix() ?? 'keystone');
-
     $seasonalAffix = $dungeonroute->getSeasonalAffix();
+
     if (!isset($tierAffixGroup)) {
         // Try to come up with a sensible default
         if ($dungeonroute->affixes->count() === 1) {
@@ -110,7 +108,7 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                         ) }}
                 </div>
                 <div class="col">
-                    @if( $dungeonroute->level_min !== $dungeonroute->season?->key_level_min && $dungeonroute->level_max !== $dungeonroute->season?->key_level_max)
+                    @if( $dungeonroute->level_min !== $dungeonroute->season?->key_level_min || $dungeonroute->level_max !== $dungeonroute->season?->key_level_max)
                         @include('common.dungeonroute.level', [
                             'season' => $dungeonroute->season,
                             'levelMin' => $dungeonroute->level_min,
@@ -158,16 +156,11 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                                 <div class="row no-gutters" data-container="body" data-toggle="popover" data-placement="bottom"
                                      data-html="true"
                                      data-content="{{ $affixes }}" style="cursor: pointer;">
-                                    <div class="col">
-                                        <img class="select_icon"
-                                             src="{{ url(sprintf('/images/affixes/%s.jpg', $dominantAffix)) }}"
-                                             alt="Dominant affix"/>
-                                    </div>
                                     @if($seasonalAffix !== null)
                                         <div class="col ml-1">
                                             <img class="select_icon"
-                                                 src="{{ url(sprintf('/images/affixes/%s.jpg', Str::slug($seasonalAffix, '_'))) }}"
-                                                 alt="Dominant affix"/>
+                                                 src="{{ url($seasonalAffix->image_url) }}"
+                                                 alt="{{ __($seasonalAffix->name) }}"/>
                                         </div>
                                     @endif
                                 </div>

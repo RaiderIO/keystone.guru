@@ -86,7 +86,9 @@ abstract class StructuredLogging implements StructuredLoggingInterface
     protected function start(string $functionName, array $context = [], bool $addContext = true): void
     {
         $level = Level::Info;
-        if (!self::$ENABLED || $level->isLowerThan(self::getLogLevel())) {
+        // Do not use $this->shouldLog because the context should still be cached for future log lines that are logged
+        // But if the entire Structured Logging is disabled, we don't need it so we just return
+        if (!self::$ENABLED) {
             return;
         }
 
@@ -110,13 +112,16 @@ abstract class StructuredLogging implements StructuredLoggingInterface
     protected function end(string $functionName, array $context = []): void
     {
         $level = Level::Info;
-        if (!self::$ENABLED || $level->isLowerThan(self::getLogLevel())) {
+        if (!self::$ENABLED) {
             return;
         }
 
         $targetKey = Str::replaceEnd('end', '', strtolower($functionName));
 
-        $this->log($level, $functionName, array_merge($context, ['elapsedMS' => Stopwatch::stop($targetKey)]));
+        // Additional check here to prevent doing array_merge if it's not needed
+        if ($this->shouldLog($level)) {
+            $this->log($level, $functionName, array_merge($context, ['elapsedMS' => Stopwatch::stop($targetKey)]));
+        }
 
         if (!isset($this->groupedContexts[$targetKey])) {
             $this->log(
@@ -183,7 +188,7 @@ abstract class StructuredLogging implements StructuredLoggingInterface
 
     private function log(Level $level, string $functionName, array $context = []): void
     {
-        if (!self::$ENABLED || $level->isLowerThan(self::getLogLevel())) {
+        if (!$this->shouldLog($level)) {
             return;
         }
 
@@ -223,6 +228,12 @@ abstract class StructuredLogging implements StructuredLoggingInterface
             $this->cachedContext = array_merge($this->cachedContext, $context);
         }
         $this->isContextCached = true;
+    }
+
+    private function shouldLog(Level $level): bool
+    {
+        // Higher than does not include the level itself, so negate lower than instead
+        return self::$ENABLED && !$level->isLowerThan(self::getLogLevel());
     }
 
     private static function getLogLevel(): Level

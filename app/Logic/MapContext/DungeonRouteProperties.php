@@ -53,6 +53,7 @@ trait DungeonRouteProperties
         return [
             'publicKey'               => $dungeonRoute->public_key,
             'teamId'                  => $dungeonRoute->team_id,
+            'description'             => $dungeonRoute->description,
             'pullGradient'            => $dungeonRoute->pull_gradient,
             'pullGradientApplyAlways' => $dungeonRoute->pull_gradient_apply_always,
             'faction'                 => $dungeonRoute->faction->key,
@@ -85,7 +86,7 @@ trait DungeonRouteProperties
                 ->pluck(['name'])
                 ->map(static fn(string $name) => __($name, [], 'en_US')),
             // Used for showing a modal when the route has been deleted while editing
-            'dungeonRouteClass' => DungeonRoute::class,
+            'dungeonRouteClass'        => DungeonRoute::class,
         ];
     }
 }

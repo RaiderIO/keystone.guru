@@ -18,9 +18,10 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use Carbon\CarbonPeriod;
 use Codeart\OpensearchLaravel\Aggregations\Aggregation;
 use Codeart\OpensearchLaravel\Aggregations\Types\Cardinality;
+use Codeart\OpensearchLaravel\Aggregations\Types\Composite;
 use Codeart\OpensearchLaravel\Aggregations\Types\Maximum;
 use Codeart\OpensearchLaravel\Aggregations\Types\Minimum;
-use Codeart\OpensearchLaravel\Aggregations\Types\ScriptedMetric;
+use Codeart\OpensearchLaravel\Aggregations\Types\Nested;
 use Codeart\OpensearchLaravel\Aggregations\Types\Terms;
 use Codeart\OpensearchLaravel\Exceptions\OpenSearchCreateException;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
@@ -31,7 +32,7 @@ use Illuminate\Support\Collection;
 class CombatLogEventService implements CombatLogEventServiceInterface
 {
     public function __construct(
-        private readonly CoordinatesServiceInterface $coordinatesService,
+        private readonly CoordinatesServiceInterface           $coordinatesService,
         private readonly CombatLogEventServiceLoggingInterface $log
     ) {
     }
@@ -66,76 +67,98 @@ class CombatLogEventService implements CombatLogEventServiceInterface
      */
     public function getGridAggregation(CombatLogEventFilter $filters): ?CombatLogEventGridAggregationResult
     {
-        // <editor-fold desc="OS Query" defaultState="collapsed">
+        // <editor-fold desc="OS Query Player Position" defaultState="collapsed">
+//        POST /combat_log_events/_search
 //        {
 //            "size": 0,
-//            "query": {
-//                    "bool": {
-//                        "must": [{
-//                            "match": {
-//                                "ui_map_id": 2082
-//                            }
-//                        }, {
-//                            "match": {
-//                                "challenge_mode_id": 406
-//                            }
-//                        }, {
-//                            "range": {
-//                                "level": {
-//                                    "gte": 13,
-//                                    "lte": 20
-//                                }
-//                            }
-//                        }, {
-//                            "bool": {
-//                                "should": [{
-//                                    "bool": {
-//                                        "filter": [{
-//                                            "term": {
-//                                                "affix_id": 10
-//                                                    }
-//                                                }, {
-//                                            "term": {
-//                                                "affix_id": 136
-//                                                    }
-//                                                }, {
-//                                            "term": {
-//                                                "affix_id": 8
-//                                                    }
-//                                                }
-//                                            ]
-//                                        }
-//                                    }, {
-//                                    "bool": {
-//                                        "must": [{
-//                                            "term": {
-//                                                "affix_id": 9
-//                                                    }
-//                                                }, {
-//                                            "term": {
-//                                                "affix_id": 134
-//                                                    }
-//                                                }, {
-//                                            "term": {
-//                                                "affix_id": 11
-//                                                    }
-//                                                }
-//                                            ]
-//                                        }
-//                                    }
-//                                ]
-//                            }
-//                        }
-//                    ]
+//          "query": {
+//            "bool": {
+//                "must": [
+//                {
+//                    "match": {
+//                    "challenge_mode_id": 525
+//                  }
 //                }
-//            },
-//            "aggs": {
-//                    "run_count": {
-//                        "cardinality": {
-//                            "field": "run_id"
-//                    }
-//                }
+//              ]
 //            }
+//          },
+//          "aggs": {
+//            "heatmap": {
+//                "composite": {
+//                    "size": 10000,
+//                "sources": [
+//                  {
+//                      "pos_grid_x": {
+//                      "terms": {
+//                          "field": "pos_grid_x"
+//                      }
+//                    }
+//                  },
+//                  {
+//                      "pos_grid_y": {
+//                      "terms": {
+//                          "field": "pos_grid_y"
+//                      }
+//                    }
+//                  }
+//                ]
+//              }
+//            }
+//          }
+//        }
+        // </editor-fold>
+
+        // <editor-fold desc="OS Query Enemy Position" defaultState="collapsed">
+//        POST /combat_log_events/_search
+//        {
+//          "size": 0,
+//          "query": {
+//            "bool": {
+//                "must": [
+//                {
+//                    "match": {
+//                    "ui_map_id": 1491
+//                  }
+//                },
+//                {
+//                    "match": {
+//                    "challenge_mode_id": 370
+//                  }
+//                },
+//                {
+//                    "match": {
+//                    "event_type": "npc_death"
+//                  }
+//                }
+//              ]
+//            }
+//          },
+//          "aggs": {
+//            "nested_heatmap": {
+//                "nested": {
+//                    "path": "context"
+//              },
+//              "aggs": {
+//                    "heatmap": {
+//                        "composite": {
+//                            "size": 10000,
+//                    "sources": [
+//                      {
+//                          "pos_grid_x": {
+//                          "terms": { "field": "context.pos_enemy_grid_x" }
+//                        }
+//                      },
+//                      {
+//                          "pos_grid_y": {
+//                          "terms": { "field": "context.pos_enemy_grid_y" }
+//                        }
+//                      }
+//                    ]
+//                  }
+//                }
+//              }
+//            }
+//          }
 //        }
         // </editor-fold>
 
@@ -172,77 +195,50 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                     MatchOne::make('ui_map_id', $floor->ui_map_id),
                 ]);
 
-//                dd(json_encode(CombatLogEvent::opensearch()
-//                    ->builder()
-//                    ->search($filterQuery)
-//                    ->toArray()));
-
-                $searchResult = CombatLogEvent::opensearch()
+                $openSearchBuilder = CombatLogEvent::opensearch()
                     ->builder()
                     ->search($filterQuery)
-                    ->aggregations([
+                    ->size(0);
+
+                $buckets = [];
+                if ($dataType === CombatLogEventDataType::PlayerPosition) {
+                    $openSearchBuilder->aggregations([
                         Aggregation::make(
                             name: 'heatmap',
-                            aggregationType: ScriptedMetric::make(
-                                mapScript: strtr('
-                                   int sizeX = :sizeX;
-                                   int sizeY = :sizeY;
-
-                                   float minX = :minXf;
-                                   float minY = :minYf;
-                                   float maxX = :maxXf;
-                                   float maxY = :maxYf;
-
-                                   float width = maxX - minX;
-                                   float height = maxY - minY;
-                                   float stepX = width / sizeX;
-                                   float stepY = height / sizeY;
-
-                                   double docPosX = :player ? doc[\'pos_x\'].value : params[\'_source\'][\'context\'][\'pos_enemy_x\'];
-                                   double docPosY = :player ? doc[\'pos_y\'].value : params[\'_source\'][\'context\'][\'pos_enemy_y\'];
-
-                                   int gx = ((docPosX - minX) / width * sizeX).intValue();
-                                   int gy = ((docPosY - minY) / height * sizeY).intValue();
-
-                                   // Ignore events that are out of bounds
-                                   if( gx < 0 || gx >= sizeX || gy < 0 || gy >= sizeY ) {
-                                     return;
-                                   }
-                                   String key = ((gx * stepX) + minX).toString() + \',\' + ((gy * stepY) + minY).toString();
-                                   if (state.map.containsKey(key)) {
-                                     state.map[key] += 1;
-                                   } else {
-                                     state.map[key] = 1;
-                                   }
-                                 ', array_merge([
-                                        ':minX' => $floor->ingame_min_x,
-                                        ':minY' => $floor->ingame_min_y,
-                                        ':maxX' => $floor->ingame_max_x,
-                                        ':maxY' => $floor->ingame_max_y,
-                                    ], $size)
-                                ),
-                                combineScript: 'return state.map',
-                                reduceScript: '
-                                   Map result = [:];
-                                   for (state in states) {
-                                     for (entry in state.entrySet()) {
-                                       if (result.containsKey(entry.getKey())) {
-                                         result[entry.getKey()] += entry.getValue();
-                                       } else {
-                                         result[entry.getKey()] = entry.getValue();
-                                       }
-                                     }
-                                   }
-                                   return result;
-                                 ',
-                                initScript: 'state.map = [:]'
-                            )
+                            aggregationType: Composite::make([
+                                'pos_grid_x' => Terms::make('pos_grid_x', null),
+                                'pos_grid_y' => Terms::make('pos_grid_y', null),
+                            ], 10000),
                         ),
-                    ])
-                    ->size(0)
-                    ->get();
+                    ]);
 
-                $gridResult[$floor->id] = $searchResult['aggregations']['heatmap']['value'];
+                    $searchResult = $openSearchBuilder->get();
+
+                    $buckets = $searchResult['aggregations']['heatmap']['buckets'];
+                } else if ($dataType === CombatLogEventDataType::EnemyPosition) {
+                    $openSearchBuilder->aggregations([
+                        Aggregation::make(
+                            name: 'nested_heatmap',
+                            aggregationType: Nested::make('context'),
+                            aggregation: Aggregation::make(
+                                name: 'heatmap',
+                                aggregationType: Composite::make([
+                                    'pos_grid_x' => Terms::make('context.pos_enemy_grid_x', null),
+                                    'pos_grid_y' => Terms::make('context.pos_enemy_grid_y', null),
+                                ], 10000),
+                            ),
+                        ),
+                    ]);
+
+                    $searchResult = $openSearchBuilder->get();
+
+                    $buckets = $searchResult['aggregations']['nested_heatmap']['heatmap']['buckets'];
+                }
+
+                $gridResult[$floor->id] = array_combine(
+                    array_map(fn($bucket) => sprintf('%s,%s', $bucket['key']['pos_grid_x'], $bucket['key']['pos_grid_y']), $buckets),
+                    array_column($buckets, 'doc_count')
+                );
             }
 
             // Request the amount of affected runs

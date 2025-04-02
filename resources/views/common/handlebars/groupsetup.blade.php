@@ -16,8 +16,8 @@
         // Only show icons when the author has set specializations
         for (let i in data.specializations) {
             if (data.specializations.hasOwnProperty(i)) {
-                let playerClassKey = data.classes.hasOwnProperty(i) ? data.classes[i].key : '';
-                let playerSpecializationKey = data.specializations.hasOwnProperty(i) ? data.specializations[i].key : '';
+                let playerClassKey = data.classes.hasOwnProperty(i) ? data.classes[i].key.replace(/_/g, '').toLowerCase() : '';
+                let playerSpecializationKey = data.specializations.hasOwnProperty(i) ? data.specializations[i].key.replace(/_/g, '').toLowerCase() : '';
 
                 let playerRaceName = data.races.hasOwnProperty(i) ? lang.get(data.races[i].name) : '';
                 let playerClassName = data.classes.hasOwnProperty(i) ? lang.get(data.classes[i].name) : '';

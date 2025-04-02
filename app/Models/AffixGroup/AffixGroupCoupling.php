@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int        $id
- * @property int        $affix_id Blizzard's affix ID
+ * @property int        $affix_id
  * @property int        $affix_group_id
  * @property int        $key_level
  *

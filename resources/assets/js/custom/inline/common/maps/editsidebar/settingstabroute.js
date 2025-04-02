@@ -85,6 +85,9 @@ class SettingsTabRoute extends SettingsTab {
 
                 mapContext.setLevelMin(levelSplit[0]);
                 mapContext.setLevelMax(levelSplit[1]);
+                mapContext.setDescription(json.description);
+
+                $('#killzones_description').html(json.description);
             },
             complete: function () {
                 $('#save_route_settings').show();

@@ -54,11 +54,16 @@ class TeamEdit extends InlineCode {
             clickEvent.preventDefault();
         });
 
-        this.refreshTable();
+        this.refreshTeamMembersTable();
 
         // Fix members data table being in a separate tab ignoring width
         // https://datatables.net/examples/api/tabs_and_scrolling.html
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            if ($(e.target).attr('href') === '#routes') {
+                // Refresh the table to trigger the preview being generated properly
+                $('#dungeonroute_filter').trigger('click');
+            }
+
             $.fn.dataTable.tables({visible: true, api: true}).columns.adjust();
         });
 
@@ -198,7 +203,7 @@ class TeamEdit extends InlineCode {
                 } else {
                     showSuccessNotification(lang.get('messages.remove_member_success'));
 
-                    self.refreshTable();
+                    self.refreshTeamMembersTable();
                 }
             }
         });
@@ -207,7 +212,7 @@ class TeamEdit extends InlineCode {
     /**
      * Refreshes the table with the current data.
      */
-    refreshTable() {
+    refreshTeamMembersTable() {
         let self = this;
 
         let $table = $('#team_members_table');

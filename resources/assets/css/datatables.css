@@ -507,3 +507,16 @@ table.dataTable td {
 #team_members_table_filter {
     display: none;
 }
+
+.description-container {
+    width: 100%; /* Prevents influencing column width */
+}
+
+.description-content {
+    width: 100%; /* Ensures it stays within the column */
+    word-wrap: break-word;
+    white-space: normal; /* Allows wrapping */
+    overflow-wrap: break-word; /* Ensures long words break */
+}
+
+

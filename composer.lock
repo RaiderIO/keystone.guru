@@ -577,12 +577,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Wotuu/opensearch-laravel.git",
-                "reference": "df2f7fc2ace1c58c5f9683507c43ed8554c3186e"
+                "reference": "553675b818ade3ce55aca8bba5630c6d1fa92b83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Wotuu/opensearch-laravel/zipball/df2f7fc2ace1c58c5f9683507c43ed8554c3186e",
-                "reference": "df2f7fc2ace1c58c5f9683507c43ed8554c3186e",
+                "url": "https://api.github.com/repos/Wotuu/opensearch-laravel/zipball/553675b818ade3ce55aca8bba5630c6d1fa92b83",
+                "reference": "553675b818ade3ce55aca8bba5630c6d1fa92b83",
                 "shasum": ""
             },
             "require": {
@@ -629,7 +629,7 @@
             "support": {
                 "source": "https://github.com/Wotuu/opensearch-laravel/tree/master"
             },
-            "time": "2024-04-26T20:58:25+00:00"
+            "time": "2025-03-31T18:47:38+00:00"
         },
         {
             "name": "composer/class-map-generator",

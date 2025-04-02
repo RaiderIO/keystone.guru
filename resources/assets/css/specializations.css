@@ -3,7 +3,7 @@
 .spec_icon_deathknight-blood, .spec_icon_deathknight-frost, .spec_icon_deathknight-unholy,
 .spec_icon_demonhunter-havoc, .spec_icon_demonhunter-vengeance,
 .spec_icon_druid-balance, .spec_icon_druid-feral, .spec_icon_druid-guardian, .spec_icon_druid-restoration,
-.spec_icon_hunter-beast_mastery, .spec_icon_hunter-marksman, .spec_icon_hunter-survival,
+.spec_icon_hunter-beast_mastery, .spec_icon_hunter-marksmanship, .spec_icon_hunter-survival,
 .spec_icon_mage-arcane, .spec_icon_mage-fire, .spec_icon_mage-frost,
 .spec_icon_monk-brewmaster, .spec_icon_monk-mistweaver, .spec_icon_monk-windwalker,
 .spec_icon_paladin-holy, .spec_icon_paladin-protection, .spec_icon_paladin-retribution,
@@ -68,7 +68,7 @@
     background-size: 100%;
 }
 
-.spec_icon_hunter-marksman {
+.spec_icon_hunter-marksmanship {
     background-position: 0 calc((100% / 38) * 10);
     background-size: 100%;
 }
