@@ -11,8 +11,6 @@ class RowElementKillZone extends RowElement {
         console.assert(killZonesSidebar instanceof CommonMapsKillzonessidebar, 'killZonesSidebar is not a CommonMapsKillzonessidebar', this);
         console.assert(killZone instanceof KillZone, 'killZone is not a KillZone', this);
 
-        let self = this;
-
         /** @type Boolean */
         this.initialized = false;
         /** @type Boolean */
@@ -361,6 +359,11 @@ class RowElementKillZone extends RowElement {
             let $killzone = $(`#map_killzonessidebar_killzone_${this.killZone.id}`);
             if ($killzone.length > 0 && !$killzone.visible()) {
                 $killzone[0].scrollIntoView({behavior: 'smooth'});
+            }
+
+            // // If we're editing a pull through the workbench, open this pull instead now
+            if (this.killZonesSidebar.pullWorkBench.isActive()) {
+                this.killZonesSidebar.pullWorkBench.editPull(this.killZone.id)
             }
         }
 

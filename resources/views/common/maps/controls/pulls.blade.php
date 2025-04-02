@@ -109,13 +109,6 @@ $showAds                ??= true;
                     </div>
                 </div>
             @endif
-            <div id="killzones_description_container" class="row no-gutters pb-2" style="display: none;">
-                <div class="col px-2">
-                    <span id="killzones_description">
-
-                    </span>
-                </div>
-            </div>
         @endif
 
         <div class="data_container {{ $dungeon->speedrun_enabled ? 'has_speedrun' : '' }}" data-simplebar>
@@ -123,6 +116,13 @@ $showAds                ??= true;
             <div id="killzones_loading" class="row no-gutters">
                 <div class="col text-center">
                     <h5>{{ __('view_common.maps.controls.pulls.loading') }}</h5>
+                </div>
+            </div>
+            <div id="killzones_description_container" class="row no-gutters pb-2" style="display: none;">
+                <div class="col px-2">
+                    <span id="killzones_description">
+
+                    </span>
                 </div>
             </div>
             <div id="killzones_no_pulls" class="row no-gutters" style="display: none;">
