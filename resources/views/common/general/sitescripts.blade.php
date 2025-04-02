@@ -11,6 +11,7 @@ $showLegalModal ??= true;
 
     let correlationId = "{{ correlationId() }}";
 
+    /** This is just for some client display - don't bother trying to edit it and gain access - there's server side checks */
     var isUserAdmin = {{ Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN) ? 'true' : 'false' }};
 
     var _legalStartTimer = new Date().getTime();
