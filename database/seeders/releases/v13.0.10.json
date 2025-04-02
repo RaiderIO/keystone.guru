@@ -1,0 +1,67 @@
+{
+    "id": 290,
+    "release_changelog_id": 297,
+    "version": "v13.0.10",
+    "title": "Many bugfixes and minor tweaks",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-04-02T14:27:56+00:00",
+    "updated_at": "2025-04-02T14:27:56+00:00",
+    "changelog": {
+        "id": 297,
+        "release_id": 290,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 297,
+                "release_changelog_category_id": 2,
+                "ticket_id": 2795,
+                "change": "The dominant affix (Fortified, Tyrannical) is no longer showing on the route's detail cards. This information is no longer relevant."
+            },
+            {
+                "release_changelog_id": 297,
+                "release_changelog_category_id": 2,
+                "ticket_id": 2797,
+                "change": "Route descriptions now show up in the route tables when having the listview with the thumbnails selected."
+            },
+            {
+                "release_changelog_id": 297,
+                "release_changelog_category_id": 2,
+                "ticket_id": 2798,
+                "change": "Route descriptions are now displayed in the pulls sidebar."
+            },
+            {
+                "release_changelog_id": 297,
+                "release_changelog_category_id": 2,
+                "ticket_id": 2799,
+                "change": "Route detail cards now show Xal'Atath's Guile when the min key level is above or equal to 12."
+            },
+            {
+                "release_changelog_id": 297,
+                "release_changelog_category_id": 2,
+                "ticket_id": 2801,
+                "change": "Selecting a new pull while having the pull workbench open now switches the workbench to also select that pull."
+            },
+            {
+                "release_changelog_id": 297,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2796,
+                "change": "Route thumbnails now properly load once again in the route tables. They now also load properly when navigating a Team."
+            },
+            {
+                "release_changelog_id": 297,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2802,
+                "change": "Editing a route's composition no longer empties out the race selection when you select a class."
+            },
+            {
+                "release_changelog_id": 297,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2804,
+                "change": "Death Knight, Demon Hunter and Hunter's Markmanship icons are now displayed properly."
+            }
+        ]
+    }
+}
