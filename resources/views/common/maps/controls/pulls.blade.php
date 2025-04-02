@@ -109,6 +109,13 @@ $showAds                ??= true;
                     </div>
                 </div>
             @endif
+            <div id="killzones_description_container" class="row no-gutters pb-2" style="display: none;">
+                <div class="col px-2">
+                    <span id="killzones_description">
+
+                    </span>
+                </div>
+            </div>
         @endif
 
         <div class="data_container {{ $dungeon->speedrun_enabled ? 'has_speedrun' : '' }}" data-simplebar>
