@@ -9,6 +9,7 @@ use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
+use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
@@ -428,82 +429,152 @@ class CombatLogEventService implements CombatLogEventServiceInterface
     }
 
     /**
-     * @param Season $season
-     * @param string $type
-     * @param int    $count
-     * @param int    $eventsPerRun
+     * @param Season                  $season
+     * @param CombatLogEventEventType $type
+     * @param int                     $runCount
+     * @param int                     $eventsPerRun
      * @return Collection
      * @throws OpenSearchCreateException
      */
-    public function generateCombatLogEvents(Season $season, string $type, int $count = 1, int $eventsPerRun = 5): Collection
-    {
-        $combatLogEventAttributes = collect();
-
+    public function generateCombatLogEvents(
+        Season                  $season,
+        CombatLogEventEventType $type,
+        int                     $runCount = 1,
+        int                     $eventsPerRun = 5,
+        ?Dungeon                $dungeon = null
+    ): Collection {
         // 24 weeks, 24 hours
         $now               = Carbon::now();
-        $seasonLengthHours = 24 * 7 * 24;
+        $seasonLengthWeeks = 24;
+        $seasonLengthHours = ($seasonLengthWeeks * 7) * 24;
 
-        $runId         = null;
-        $runStart      = null;
-        $runDurationMs = null;
-        $affixGroup    = null;
-        $level         = null;
-        for ($i = 0; $i < $count; $i++) {
+        $result = true;
+
+        for ($i = 0; $i < $runCount; $i++) {
+            $combatLogEventAttributes = collect();
+
             /** @var Dungeon $dungeon */
-            $dungeon = $season->dungeons->random();
+            $dungeon = $dungeon ?? $season->dungeons->random();
             // Cannot load directly on the relation - need to fix
             $dungeon = $dungeon->load('currentMappingVersion');
 
-            if ($i % $eventsPerRun === 0) {
-                $dungeon->currentMappingVersion->load('enemies');
+            $dungeon->currentMappingVersion->load('enemies');
 
-                $runId         = sprintf('Generated run ID %d', rand(1000, 1000000));
-                $runStart      = $season->start->copy()->addHours(rand(0, $seasonLengthHours));
-                $runDurationMs = rand(600, $dungeon->currentMappingVersion->timer_max_seconds) * 1000;
+            $runId         = rand(1000, 100000000);
+            $keystoneRunId = rand(1000, 100000000);
+            $loggedRunId   = rand(1000, 100000000);
+            $runStart      = $season->start->copy()->addHours(rand(0, $seasonLengthHours));
+            $runPeriod     = $season->start_period + rand(0, $seasonLengthWeeks);
+            // RaiderIO regions
+            $regions       = array_values(GameServerRegion::ALL);
+            $regionId      = match ($regions[array_rand($regions)]) {
+                GameServerRegion::EUROPE => 3,
+                GameServerRegion::AMERICAS => 2,
+                GameServerRegion::CHINA => 6,
+                GameServerRegion::KOREA => 4,
+                GameServerRegion::TAIWAN => 5,
+                default => 2, // US
+            };
+            $runDurationMs = rand(600, $dungeon->currentMappingVersion->timer_max_seconds) * 1000;
+            $timerFraction = $runDurationMs / ($dungeon->currentMappingVersion->timer_max_seconds * 1000);
 
-                /** @var AffixGroup $affixGroup */
-                $affixGroup = $season->affixGroups->random();
+            $success = $dungeon->currentMappingVersion->timer_max_seconds > ($runDurationMs / 1000);
+            $start = $runStart->toDateTimeString();
+            $end   = $runStart->addMilliseconds($runDurationMs)->toDateTimeString();
 
-                $level = rand($season->key_level_min, $season->key_level_max);
+            /** @var AffixGroup $affixGroup */
+            $affixGroup = $season->affixGroups->random();
+            $affixIds = json_encode($affixGroup->affixes->pluck('affix_id')->toArray());
+
+            $level            = rand($season->key_level_min, $season->key_level_max);
+            $averageItemLevel = rand($season->item_level_min, $season->item_level_max);
+
+            $dateTime   = $now->toDateTimeString();
+            for ($j = 0; $j < $eventsPerRun; $j++) {
+                /** @var Enemy $enemy */
+                $enemy = $dungeon->currentMappingVersion->enemies->random();
+                // Not ideal but I can't get the relation to load properly whenever the run is generated
+                $enemy->load(['floor']);
+
+                // We place all events exactly on a random enemy in the dungeon so that it appears something happened at this enemy,
+                // instead of randomly somewhere on the map, which may be way out of dungeon bounds.
+                $enemyIngameXY     = $this->coordinatesService->calculateIngameLocationForMapLocation($enemy->getLatLng());
+                $enemyGridIngameXY = $this->coordinatesService->calculateGridLocationForIngameLocation(
+                    $enemyIngameXY,
+                    config('keystoneguru.heatmap.service.data.player.size_x'),
+                    config('keystoneguru.heatmap.service.data.player.size_y')
+                );
+
+                // @TODO This uses old format - needs to use new format IF you were to use this again, right now this function appears not to be used
+                // See #2632
+                $attributes = [
+                    'run_id'             => $runId,
+                    'keystone_run_id'    => $keystoneRunId,
+                    'logged_run_id'      => $loggedRunId,
+                    'period'             => $runPeriod,
+                    'season'             => sprintf('season-%s-%d', $season->expansion->shortname, $season->index),
+                    'region_id'          => $regionId,
+                    'realm_type'         => 'generated',
+                    'wow_instance_id'    => $dungeon->instance_id,
+                    'challenge_mode_id'  => $dungeon->challenge_mode_id,
+                    'level'              => $level,
+                    'affix_ids'          => $affixIds,
+                    'success'            => $success,
+                    'start'              => $start,
+                    'end'                => $end,
+                    'duration_ms'        => $runDurationMs,
+                    'par_time_ms'        => $runDurationMs,
+                    'timer_fraction'     => $timerFraction,
+                    'num_deaths'         => 0,
+                    'ui_map_id'          => $enemyIngameXY->getFloor()->ui_map_id,
+                    'pos_x'              => $enemyIngameXY->getX(2),
+                    'pos_y'              => $enemyIngameXY->getY(2),
+                    'pos_grid_x'         => $enemyGridIngameXY->getX(2),
+                    'pos_grid_y'         => $enemyGridIngameXY->getY(2),
+                    'num_members'        => 5,
+                    'average_item_level' => $averageItemLevel,
+                    'event_type'         => $type,
+                    'characters'         => '[]',
+                    'created_at'         => $dateTime,
+                    'updated_at'         => $dateTime,
+                ];
+
+                if ($type === CombatLogEventEventType::NpcDeath) {
+                    $attributes['context'] = json_encode([
+                        '@timestamp'       => $now->unix(),
+                        'pos_enemy_x'      => $enemyIngameXY->getX(2),
+                        'pos_enemy_y'      => $enemyIngameXY->getY(2),
+                        'pos_enemy_grid_x' => $enemyGridIngameXY->getX(2),
+                        'pos_enemy_grid_y' => $enemyGridIngameXY->getY(2),
+                    ]);
+                } else if ($type === CombatLogEventEventType::PlayerDeath) {
+                    $attributes['context'] = json_encode([
+                        '@timestamp' => $now->unix(),
+                        'npc_id'     => $enemy->npc_id,
+                    ]);
+                } else if ($type === CombatLogEventEventType::PlayerSpell) {
+                    $attributes['context'] = json_encode([
+                        '@timestamp' => $now->unix(),
+                        'spell_id'   => rand(10000, 1000000),
+                    ]);
+                }
+
+                $combatLogEventAttributes->push($attributes);
             }
 
-            /** @var Enemy $enemy */
-            $enemy = $dungeon->currentMappingVersion->enemies->random();
-            // Not ideal but I can't get the relation to load properly whenever the run is generated
-            $enemy->load(['floor']);
-            // We place all events exactly on a random enemy in the dungeon so that it appears something happened at this enemy,
-            // instead of randomly somewhere on the map, which may be way out of dungeon bounds.
-            $enemyIngameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($enemy->getLatLng());
+            CombatLogEvent::insert($combatLogEventAttributes->toArray());
 
-            // @TODO This uses old format - needs to use new format IF you were to use this again, right now this function appears not to be used
-            // See #2632
-            $combatLogEventAttributes->push([
-                '@timestamp'        => $now->unix(),
-                'run_id'            => $runId,
-                'challenge_mode_id' => $dungeon->challenge_mode_id,
-                'level'             => $level,
-                'affix_ids'         => json_encode($affixGroup->affixes->pluck('affix_id')->toArray()),
-                'ui_map_id'         => $enemyIngameXY->getFloor()->ui_map_id,
-                'pos_x'             => $enemyIngameXY->getX(2),
-                'pos_y'             => $enemyIngameXY->getY(2),
-                'pos_enemy_x'       => $enemyIngameXY->getX(2),
-                'pos_enemy_y'       => $enemyIngameXY->getY(2),
-                'event_type'        => $type,
-                'start'             => $runStart->toDateTimeString(),
-                'end'               => $runStart->addMilliseconds($runDurationMs)->toDateTimeString(),
-                'duration_ms'       => $runDurationMs,
-                'success'           => $dungeon->currentMappingVersion->timer_max_seconds > ($runDurationMs / 1000),
-            ]);
+            $result = CombatLogEvent::orderByDesc('id')->take($eventsPerRun)->get();
+
+            // Insert into OS
+            CombatLogEvent::opensearch()
+                ->documents()
+                ->create($result->pluck('id')->toArray());
+
+            if(($i + 1) % 100 === 0) {
+                echo sprintf('Inserted run %d/%d', $i + 1, $runCount) . PHP_EOL;
+            }
         }
-
-        CombatLogEvent::insert($combatLogEventAttributes->toArray());
-
-        $result = CombatLogEvent::orderByDesc('id')->take($count)->get();
-
-        // Insert into OS
-        CombatLogEvent::opensearch()
-            ->documents()
-            ->create($combatLogEventAttributes->pluck('id')->toArray());
 
         return $result;
     }

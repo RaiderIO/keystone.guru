@@ -2,6 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
+use App\Models\CombatLog\CombatLogEventEventType;
+use App\Models\Dungeon;
+use App\Models\Season;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\CombatLog\CombatLogDataExtractionService;
@@ -43,8 +47,15 @@ class Random extends Command
         WowheadServiceInterface              $wowheadService,
         DungeonRouteServiceInterface         $dungeonRouteService,
     ): int {
+        $combatLogEvents = $combatLogEventService->generateCombatLogEvents(
+            Season::findOrFail(Season::SEASON_TWW_S2),
+            CombatLogEventEventType::PlayerDeath,
+            1000000,
+            100,
+            Dungeon::firstWhere('key', Dungeon::DUNGEON_THE_MOTHERLODE)
+        );
 
-        $dungeonRouteService->refreshOutdatedThumbnails();
+//        $dungeonRouteService->refreshOutdatedThumbnails();
 
 //        $wowheadService->getSpellData(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL), 720);
 
