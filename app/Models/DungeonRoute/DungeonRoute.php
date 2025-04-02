@@ -1065,6 +1065,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             // Do not clone team_id, user assigns the team himself
             'team_id'            => null,
             'title'              => __('models.dungeonroute.title_clone', ['routeTitle' => $this->title]),
+            'description'        => $this->description,
             'seasonal_index'     => $this->seasonal_index,
             'teeming'            => $this->teeming,
             'enemy_forces'       => $this->enemy_forces,

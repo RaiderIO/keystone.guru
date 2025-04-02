@@ -72,7 +72,7 @@ class ProfileTableView extends TableView {
             ],
             biglist: [
                 {name: 'preview', width: '15%', clickable: false},
-                {name: 'title', width: '15%'},
+                {name: 'title_description', width: '15%'},
                 {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell', defaultSearch: defaultDungeonId},
                 {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
                 {name: 'enemy_forces', width: '10%'},
@@ -112,7 +112,7 @@ class UserProfileTableView extends TableView {
             ],
             biglist: [
                 {name: 'preview', width: '15%', clickable: false},
-                {name: 'title', width: '15%'},
+                {name: 'title_description', width: '15%'},
                 {name: 'dungeon', width: '13%', className: 'd-none d-md-table-cell', defaultSearch: defaultDungeonId},
                 {name: 'features', width: '25%', className: 'd-none d-lg-table-cell'},
                 {name: 'enemy_forces', width: '10%'},
@@ -212,7 +212,7 @@ class TeamTableView extends TableView {
             ],
             biglist: [
                 {name: 'preview', width: '15%', clickable: false},
-                {name: 'title', width: '15%'},
+                {name: 'title_description', width: '15%'},
                 {name: 'dungeon', width: '15%', className: 'd-none d-lg-table-cell', defaultSearch: defaultDungeonId},
                 {name: 'features', width: '25%'},
                 {name: 'author', width: '10%', className: 'd-none d-lg-table-cell'},

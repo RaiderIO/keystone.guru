@@ -1,0 +1,14 @@
+{{#ifCond published '==' 'unpublished'}}
+    <i class="fas fa-plane-arrival text-warning" data-toggle="tooltip"
+       title="{{ route_table_published_state_unpublished }}"></i>
+{{/ifCond}}
+{{#ifCond published '==' 'team'}}
+    <i class="fas fa-users text-success" data-toggle="tooltip" title="{{ route_table_published_state_team }}"></i>
+{{/ifCond}}
+{{#ifCond published '==' 'world'}}
+    <i class="fas fa-globe text-success" data-toggle="tooltip" title="{{ route_table_published_state_world }}"></i>
+{{/ifCond}}
+{{#ifCond published '==' 'world_with_link'}}
+    <i class="fas fa-link text-success" data-toggle="tooltip"
+       title="{{ route_table_published_state_world_with_link }}"></i>
+{{/ifCond}}

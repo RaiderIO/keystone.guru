@@ -260,57 +260,16 @@ class DungeonrouteTable extends InlineCode {
                 'name': 'title',
                 'className': 'test',
                 'render': function (data, type, row, meta) {
-                    let result = '';
-
-
-                    let published = '';
-                    switch (row.published) {
-                        case 'unpublished':
-                            published = `<i class="fas fa-plane-arrival text-warning" data-toggle="tooltip" title="${lang.get('messages.route_table_published_state_unpublished')}"></i>`
-                            break;
-                        case 'team':
-                            published = `<i class="fas fa-users text-success" data-toggle="tooltip" title="${lang.get('messages.route_table_published_state_team')}"></i>`
-                            break;
-                        case 'world':
-                            published = `<i class="fas fa-globe text-success" data-toggle="tooltip" title="${lang.get('messages.route_table_published_state_world')}"></i>`
-                            break;
-                        case 'world_with_link':
-                            published = `<i class="fas fa-link text-success" data-toggle="tooltip" title="${lang.get('messages.route_table_published_state_world_with_link')}"></i>`
-                            break;
-                    }
-
-                    result = `${published} ${row.title}`;
-
-                    if ((row.hasOwnProperty('tagspersonal') && row.tagspersonal.length > 0) ||
-                        (row.hasOwnProperty('tagsteam') && row.tagsteam.length > 0)) {
-                        let template = Handlebars.templates['dungeonroute_table_title_template'];
-
-                        let rowTags = row.hasOwnProperty('tagspersonal') ? row.tagspersonal : row.tagsteam;
-
-                        let tags = [];
-                        for (let index in rowTags) {
-                            if (rowTags.hasOwnProperty(index)) {
-                                let tag = rowTags[index];
-
-                                let template = Handlebars.templates['tag_render_template'];
-
-                                let data = $.extend({}, {
-                                    edit: false,
-                                    dark: tag.color === null ? false : isColorDark(tag.color)
-                                }, tag);
-
-                                tags.push(template(data));
-                            }
-                        }
-
-                        // Build the status bar from the template
-                        result = template({
-                            title: result,
-                            tags: tags.join('')
-                        });
-                    }
-
-                    return result;
+                    return self._renderTitle(data, type, row, meta, false);
+                }
+            },
+            title_description: {
+                'title': lang.get('messages.title_label'),
+                'data': 'title',
+                'name': 'title',
+                'className': 'test',
+                'render': function (data, type, row, meta) {
+                    return self._renderTitle(data, type, row, meta, true);
                 }
             },
             dungeon: {
@@ -506,6 +465,51 @@ class DungeonrouteTable extends InlineCode {
         }
 
         return result;
+    }
+
+    _renderTitle(data, type, row, meta, showDescription) {
+        let result = '';
+
+        let published = Handlebars.templates['dungeonroute_table_title_published'](
+            $.extend({}, getHandlebarsDefaultVariables(), {
+                published: row.published,
+            })
+        );
+
+        result = `${published} ${row.title}`;
+
+        let template = Handlebars.templates['dungeonroute_table_title'];
+        let templateData = $.extend({}, getHandlebarsDefaultVariables(), {
+            title: result,
+            description: showDescription ? row.description : null,
+        });
+
+        if ((row.hasOwnProperty('tagspersonal') && row.tagspersonal.length > 0) ||
+            (row.hasOwnProperty('tagsteam') && row.tagsteam.length > 0)) {
+
+            let rowTags = row.hasOwnProperty('tagspersonal') ? row.tagspersonal : row.tagsteam;
+
+            let tags = [];
+            for (let index in rowTags) {
+                if (rowTags.hasOwnProperty(index)) {
+                    let tag = rowTags[index];
+
+                    let template = Handlebars.templates['tag_render_template'];
+
+                    let data = $.extend({}, {
+                        edit: false,
+                        dark: tag.color === null ? false : isColorDark(tag.color)
+                    }, tag);
+
+                    tags.push(template(data));
+                }
+            }
+
+            // Build the status bar from the template
+            templateData.tags = tags.join('');
+        }
+
+        return template(templateData);
     }
 
     /**
