@@ -472,6 +472,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 224729
+            },
+            {
                 "spell_id": 434786
             },
             {
@@ -622,6 +625,9 @@
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 433002
             }
@@ -912,6 +918,9 @@
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 453583
             },
@@ -2482,6 +2491,9 @@
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 434786
             },

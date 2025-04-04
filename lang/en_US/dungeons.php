@@ -127,6 +127,16 @@ return [
                 'ruins_of_ahnqiraj' => 'Ruins of Ahn\'Qiraj',
             ],
         ],
+        'scarlet_enclave'             => [
+            'name'   => 'Scarlet Enclave',
+            'floors' => [
+                'tyrs_hand'              => 'Tyr\'s Hand',
+                'the_forbidding_expanse' => 'The Forbidding Expanse',
+                'scarlet_cathedral'      => 'Scarlet Cathedral',
+                'avalon_monastery'       => 'Avalon Monastery',
+                'ashbringer_chapel'      => 'Ashbringer Chapel',
+            ],
+        ],
         'scarlet_monastery_armory'    => [
             'name'   => 'Scarlet Monastery Armory',
             'floors' => [

@@ -1,0 +1,24 @@
+[
+    {
+        "id": 2023,
+        "mapping_version_id": 526,
+        "floor_id": 378,
+        "source_floor_id": null,
+        "target_floor_id": 376,
+        "linked_dungeon_floor_switch_marker_id": null,
+        "direction": null,
+        "lat": -225.27,
+        "lng": 84.44
+    },
+    {
+        "id": 2024,
+        "mapping_version_id": 526,
+        "floor_id": 378,
+        "source_floor_id": null,
+        "target_floor_id": 379,
+        "linked_dungeon_floor_switch_marker_id": null,
+        "direction": null,
+        "lat": -10.25,
+        "lng": 138.47
+    }
+]

@@ -67,9 +67,8 @@ class CombatLogVersion extends SpecialEvent
         $this->buildVersion       = $parameters[4];
         $this->projectID          = $parameters[6];
 
-
         if (!isset(CombatLogVersionConstant::ALL[$this->getVersionLong()])) {
-            throw new Exception(sprintf('Unable to find combat log version %d!', $this->version));
+            throw new Exception(sprintf('Unable to find combat log version %d!', $this->getVersionLong()));
         }
 
         return $this;

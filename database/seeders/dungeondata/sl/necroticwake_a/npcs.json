@@ -702,6 +702,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 224729
+            },
+            {
                 "spell_id": 320462
             },
             {
@@ -1602,6 +1605,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
+                "spell_id": 224729
+            },
+            {
                 "spell_id": 320614
             },
             {
@@ -1834,6 +1840,9 @@
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 321821
             },
@@ -2173,6 +2182,9 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 338022
             }
@@ -2932,6 +2944,9 @@
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 334747
             },

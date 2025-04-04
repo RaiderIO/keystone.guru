@@ -148,6 +148,7 @@ class DungeonrouteTable extends InlineCode {
                         // For each td in the row
                         $.each($(trValue).find('td'), function (tdIndex, tdValue) {
                             $(tdValue).data('publickey', settings.json.data[trIndex].public_key);
+                            $(tdValue).data('authorid', settings.json.data[trIndex].author.id);
                         });
                     });
                 }
@@ -198,9 +199,16 @@ class DungeonrouteTable extends InlineCode {
         });
 
         self._dt.on('click', 'tbody td.clickable', function (clickEvent) {
-            let key = $(clickEvent.currentTarget).data('publickey');
+            let $currentTarget = $(clickEvent.currentTarget);
+            let key = $currentTarget.data('publickey');
+            let authorId = parseInt($currentTarget.data('authorid'));
 
-            window.open((self._tableView.getName() === 'profile' ? '/replace_me/edit' : '/replace_me').replace('replace_me', key));
+            window.open(
+                // Only link to edit page when YOU are the author of the route.
+                // Maybe you have access to edit the route through a team but we're not checking that here
+                (self._tableView.getName() === 'profile' && authorId === self.options.currentUserId ?
+                `/${key}/edit` : `/${key}`)
+            );
         });
 
         self._dt.on('mouseenter', 'tbody tr', function () {
@@ -386,6 +394,10 @@ class DungeonrouteTable extends InlineCode {
             actions: {
                 'title': lang.get('messages.actions_label'),
                 'render': function (data, type, row, meta) {
+                    if(row.author.id !== self.options.currentUserId  && !isUserAdmin) {
+                        return '';
+                    }
+
                     let template = Handlebars.templates['dungeonroute_table_profile_actions_template'];
 
                     let rowHasAffix = function (row, targetAffix) {

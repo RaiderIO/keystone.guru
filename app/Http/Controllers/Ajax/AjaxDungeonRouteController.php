@@ -140,17 +140,17 @@ class AjaxDungeonRouteController extends Controller
         if ($user !== null) {
             $mine = $request->get('mine', false);
 
-            // Filter by our own user if logged in
-            if ($mine) {
-                $routes = $routes->where('author_id', $user->id);
-            }
-
             // Handle favorites
             if (in_array('favorite', $requirements, true) || $request->get('favorites', false)) {
                 $routes = $routes->whereHas('favorites', function ($query) use (&$user) {
                     /** @var $query Builder */
                     $query->where('dungeon_route_favorites.user_id', $user->id);
                 });
+            } else {
+                // Filter by our own user if logged in
+                if ($mine) {
+                    $routes = $routes->where('author_id', $user->id);
+                }
             }
 
             // Handle team if set

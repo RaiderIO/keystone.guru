@@ -54,6 +54,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 224729
+            },
+            {
                 "spell_id": 441119
             },
             {
@@ -597,6 +600,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 224729
+            },
+            {
                 "spell_id": 441434
             },
             {
@@ -780,7 +786,17 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 431896
+            },
+            {
+                "spell_id": 431897
+            },
+            {
+                "spell_id": 452418
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -979,6 +995,9 @@
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 434505
             },
@@ -1326,6 +1345,9 @@
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 441214
             },

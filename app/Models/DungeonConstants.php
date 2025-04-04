@@ -59,6 +59,7 @@ trait DungeonConstants
     public const RAID_RUINS_OF_AHN_QIRAJ  = 'ruins_of_ahnqiraj_classic';  // 20-man (classic)
     public const RAID_TEMPLE_OF_AHN_QIRAJ = 'temple_of_ahnqiraj_classic'; // 40-man (classic)
     public const RAID_NAXXRAMAS           = 'naxxramas_classic';
+    public const RAID_SCARLET_ENCLAVE     = 'scarlet_enclave';
 
 
     // The Burning Crusade
@@ -392,6 +393,7 @@ trait DungeonConstants
             self::RAID_RUINS_OF_AHN_QIRAJ_SOD,
             self::RAID_TEMPLE_OF_AHN_QIRAJ_SOD,
             self::RAID_NAXXRAMAS,
+            self::RAID_SCARLET_ENCLAVE,
         ],
         Expansion::EXPANSION_WOTLK     => [
             self::RAID_ICECROWN_CITADEL,

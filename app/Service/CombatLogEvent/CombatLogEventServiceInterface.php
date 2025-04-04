@@ -3,6 +3,8 @@
 namespace App\Service\CombatLogEvent;
 
 use App\Models\CombatLog\CombatLogEvent;
+use App\Models\CombatLog\CombatLogEventEventType;
+use App\Models\Dungeon;
 use App\Models\Season;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
@@ -23,5 +25,5 @@ interface CombatLogEventServiceInterface
     public function getAvailableDateRange(CombatLogEventFilter $filters): ?CarbonPeriod;
 
     /** @return Collection<CombatLogEvent> */
-    public function generateCombatLogEvents(Season $season, string $type, int $count = 1, int $eventsPerRun = 5): Collection;
+    public function generateCombatLogEvents(Season $season, CombatLogEventEventType $type, int $runCount = 1, int $eventsPerRun = 5, ?Dungeon $dungeon = null): Collection;
 }

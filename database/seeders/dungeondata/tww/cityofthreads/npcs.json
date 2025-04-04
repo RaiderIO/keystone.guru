@@ -359,6 +359,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 224729
+            },
+            {
                 "spell_id": 446086
             }
         ],
@@ -489,6 +492,9 @@
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 453583
             },
@@ -675,6 +681,9 @@
                 "spell_id": 439697
             },
             {
+                "spell_id": 439985
+            },
+            {
                 "spell_id": 440049
             },
             {
@@ -730,6 +739,9 @@
         "npc_spells": [
             {
                 "spell_id": 439518
+            },
+            {
+                "spell_id": 439985
             },
             {
                 "spell_id": 440049
@@ -940,6 +952,9 @@
         "npc_spells": [
             {
                 "spell_id": 451218
+            },
+            {
+                "spell_id": 451221
             },
             {
                 "spell_id": 451222
@@ -2968,6 +2983,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 224729
+            },
+            {
                 "spell_id": 451238
             },
             {
@@ -3315,6 +3333,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 224729
+            },
+            {
                 "spell_id": 452151
             }
         ],
@@ -3438,6 +3459,9 @@
             }
         ],
         "npc_spells": [
+            {
+                "spell_id": 224729
+            },
             {
                 "spell_id": 442536
             },

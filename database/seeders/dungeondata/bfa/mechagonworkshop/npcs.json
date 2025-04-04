@@ -1321,6 +1321,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 224729
+            },
+            {
                 "spell_id": 294195
             }
         ],
@@ -1807,6 +1810,35 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 153203,
+        "dungeon_id": 25,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 23767,
+        "encounter_id": null,
+        "name": "Piston Smasher",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 282943
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 153204,
         "dungeon_id": 25,
         "classification_id": 2,
@@ -1828,7 +1860,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 282943
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1865,6 +1901,31 @@
         "display_id": 78839,
         "encounter_id": null,
         "name": "Copper Hopper",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 154789,
+        "dungeon_id": 25,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 75350,
+        "encounter_id": null,
+        "name": "Alloyed Alleyrat",
         "base_health": 0,
         "health_percentage": null,
         "level": null,
