@@ -10,6 +10,7 @@ class CombatLogVersion
     public const RETAIL_10_1_0      = 20_010_001_000;
     public const RETAIL_11_0_2      = 21_011_000_002;
     public const RETAIL_11_0_5      = 22_011_000_005;
+    public const RETAIL_11_0_7      = 22_011_000_007;
     public const RETAIL_11_1_0      = 22_011_001_000;
 
     public const ALL = [
@@ -19,6 +20,7 @@ class CombatLogVersion
         self::RETAIL_11_0_5      => 4,
         self::CLASSIC_SOD_1_15_5 => 5,
         self::CLASSIC_SOD_1_15_6 => 6,
-        self::RETAIL_11_1_0      => 7,
+        self::RETAIL_11_0_7      => 7,
+        self::RETAIL_11_1_0      => 8,
     ];
 }

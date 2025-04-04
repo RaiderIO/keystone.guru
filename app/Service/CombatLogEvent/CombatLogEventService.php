@@ -176,19 +176,6 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 $dataType = CombatLogEventDataType::PlayerPosition;
             }
 
-            $size = match ($dataType) {
-                CombatLogEventDataType::PlayerPosition => [
-                    ':sizeX'  => config('keystoneguru.heatmap.service.data.player.size_x'),
-                    ':sizeY'  => config('keystoneguru.heatmap.service.data.player.size_y'),
-                    ':player' => 'true',
-                ],
-                CombatLogEventDataType::EnemyPosition => [
-                    ':sizeX'  => config('keystoneguru.heatmap.service.data.enemy.size_x'),
-                    ':sizeY'  => config('keystoneguru.heatmap.service.data.enemy.size_y'),
-                    ':player' => 'false',
-                ]
-            };
-
             // Repeat this query for each floor
             foreach ($filters->getDungeon()->floors()->where('facade', false)->get() as $floor) {
                 /** @var Floor $floor */
