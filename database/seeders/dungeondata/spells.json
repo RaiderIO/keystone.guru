@@ -758,7 +758,7 @@
     {
         "id": 5512,
         "category": "spells.category.general",
-        "cooldown_group": "spells.cooldown_group.unknown",
+        "cooldown_group": "all",
         "dispel_type": "N\/A",
         "mechanic": null,
         "icon_name": "trade_engineering",
@@ -769,7 +769,7 @@
         "debuff": null,
         "cast_time": 5000,
         "duration": null,
-        "selectable": true,
+        "selectable": false,
         "hidden_on_map": false,
         "fetched_data_at": "2025-02-12T10:24:43+00:00",
         "spell_dungeons": []
@@ -83713,7 +83713,7 @@
     },
     {
         "id": 381301,
-        "category": "general",
+        "category": "spells.category.general",
         "cooldown_group": "spells.cooldown_group.unknown",
         "dispel_type": "Magic",
         "mechanic": null,

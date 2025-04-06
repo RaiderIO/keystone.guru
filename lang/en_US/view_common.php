@@ -325,10 +325,11 @@ return [
                 'disabled'               => 'Disabled',
                 'event_type'             => 'Event type',
                 'data_type'              => 'Data type',
+                'data_type_title'        => 'Enemy position uses the original position of the enemy that was engaged (powered by Auto-Route Creator), player position uses the position of the player when an enemy was engaged (combat log position).',
+                'player_spells'          => 'Spells',
                 'npc_death_alt'          => 'Enemy death',
                 'player_death_alt'       => 'Player death',
-                'bloodlust_alt'          => 'Bloodlust',
-                'data_type_title'        => 'Enemy position uses the original position of the enemy that was engaged (powered by Auto-Route Creator), player position uses the position of the player when an enemy was engaged (combat log position).',
+                'spell_casts_alt'        => 'Spell casts',
                 'filter'                 => 'Filter',
                 'key_level'              => 'Key level',
                 'item_level'             => 'Item level',
@@ -407,23 +408,23 @@ return [
                 'no_pulls_created_view'       => 'No pulls created.',
             ],
             'pullsworkbench' => [
-                'modal'             => [
-                    'description' => [
+                'modal'            => [
+                    'description'       => [
                         'label'               => 'Description',
                         'supported_html_tags' => 'Supported HTML tags: ',
                         'save'                => 'Save',
                     ],
                     'supported_domains' => 'Supported hyperlink domains (include https://): ',
-                    'spells'      => [
+                    'spells'            => [
                         'label' => 'Spells',
                         'save'  => 'Save',
                     ],
                 ],
-                'description'       => 'Edit description',
-                'spells'            => 'Edit spells',
-                'add_kill_area'     => 'Add kill area',
-                'remove_kill_area'  => 'Remove kill area',
-                'delete_killzone'   => 'Delete pull',
+                'description'      => 'Edit description',
+                'spells'           => 'Edit spells',
+                'add_kill_area'    => 'Add kill area',
+                'remove_kill_area' => 'Remove kill area',
+                'delete_killzone'  => 'Delete pull',
             ],
             'view'           => [
                 'edit_this_route_title'          => 'Edit',

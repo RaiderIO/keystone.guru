@@ -11,6 +11,7 @@ use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\GameServerRegion;
 use App\Models\Season;
+use App\Models\Spell\Spell;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 
@@ -19,13 +20,15 @@ use Illuminate\Support\Collection;
  */
 class HeatmapDataFilter implements Arrayable
 {
-    private ?string $region          = null;
-    private ?int    $keyLevelMin     = null;
-    private ?int    $keyLevelMax     = null;
-    private ?int    $itemLevelMin    = null;
-    private ?int    $itemLevelMax    = null;
-    private ?int    $playerDeathsMin = null;
-    private ?int    $playerDeathsMax = null;
+    /** @var Collection<Spell> */
+    private Collection $includePlayerSpellIds;
+    private ?string    $region          = null;
+    private ?int       $keyLevelMin     = null;
+    private ?int       $keyLevelMax     = null;
+    private ?int       $itemLevelMin    = null;
+    private ?int       $itemLevelMax    = null;
+    private ?int       $playerDeathsMin = null;
+    private ?int       $playerDeathsMax = null;
     /** @var Collection<Affix> */
     private Collection $includeAffixIds;
     /** @var Collection<CharacterClass> */
@@ -48,7 +51,6 @@ class HeatmapDataFilter implements Arrayable
     private ?string $excludeSpecIds;
     private ?string $excludePlayerDeathSpecIds;
     private ?string $excludePlayerDeathClassIds;
-    private ?string $includePlayerSpellIds;
     private ?string $token;
 
     public function __construct(
@@ -77,6 +79,25 @@ class HeatmapDataFilter implements Arrayable
     public function getDataType(): CombatLogEventDataType
     {
         return $this->dataType;
+    }
+
+    /**
+     * @return Collection<Spell>
+     */
+    public function getIncludePlayerSpellIds(): Collection
+    {
+        return $this->includePlayerSpellIds;
+    }
+
+    /**
+     * @param Collection<Spell> $includePlayerSpellIds
+     * @return $this
+     */
+    public function setIncludePlayerSpellIds(Collection $includePlayerSpellIds): HeatmapDataFilter
+    {
+        $this->includePlayerSpellIds = $includePlayerSpellIds;
+
+        return $this;
     }
 
     public function getRegion(): ?string
@@ -382,18 +403,6 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
-    public function getIncludePlayerSpellIds(): ?string
-    {
-        return $this->includePlayerSpellIds;
-    }
-
-    public function setIncludePlayerSpellIds(?string $includePlayerSpellIds): HeatmapDataFilter
-    {
-        $this->includePlayerSpellIds = $includePlayerSpellIds;
-
-        return $this;
-    }
-
     public function getToken(): ?string
     {
         return $this->token;
@@ -439,6 +448,12 @@ class HeatmapDataFilter implements Arrayable
             'excludePlayerDeathClassIds' => $this->getExcludePlayerDeathClassIds(),
             'includePlayerSpellIds'      => $this->getIncludePlayerSpellIds(),
         ];
+
+        if ($this->getIncludePlayerSpellIds()->isNotEmpty()) {
+            $result['includePlayerSpellIds'] = implode(',', $this->getIncludePlayerSpellIds()->map(
+                fn(Spell $spell) => $spell->id
+            )->toArray());
+        }
 
         if ($this->getRegion() !== GameServerRegion::WORLD) {
             $result['region'] = $this->getRegion();
@@ -513,6 +528,8 @@ class HeatmapDataFilter implements Arrayable
             dataType: CombatLogEventDataType::from($requestArray['dataType'] ?? CombatLogEventDataType::PlayerPosition->value)
         );
 
+        $heatmapDataFilter->setIncludePlayerSpellIds(isset($requestArray['includePlayerSpellIds']) ?
+            Spell::whereIn('id', $requestArray['includePlayerSpellIds'])->get() : collect());
         $heatmapDataFilter->setRegion($requestArray['region'] ?? null);
         $heatmapDataFilter->setKeyLevelMin(isset($requestArray['minMythicLevel']) ? (int)$requestArray['minMythicLevel'] : null);
         $heatmapDataFilter->setKeyLevelMax(isset($requestArray['maxMythicLevel']) ? (int)$requestArray['maxMythicLevel'] : null);
@@ -552,7 +569,6 @@ class HeatmapDataFilter implements Arrayable
         $heatmapDataFilter->setExcludeSpecIds($requestArray['excludeSpecIds'] ?? null);
         $heatmapDataFilter->setExcludePlayerDeathSpecIds($requestArray['excludePlayerDeathSpecIds'] ?? null);
         $heatmapDataFilter->setExcludePlayerDeathClassIds($requestArray['excludePlayerDeathClassIds'] ?? null);
-        $heatmapDataFilter->setIncludePlayerSpellIds($requestArray['includePlayerSpellIds'] ?? null);
         $heatmapDataFilter->setToken($requestArray['token'] ?? null);
 
         return $heatmapDataFilter;

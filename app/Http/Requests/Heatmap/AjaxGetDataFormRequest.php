@@ -6,6 +6,7 @@ use App\Models\Affix;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\Dungeon;
+use App\Models\Spell\Spell;
 use Illuminate\Validation\Rule;
 
 /**
@@ -39,6 +40,8 @@ class AjaxGetDataFormRequest extends ExploreUrlFormRequest
             'includePlayerDeathClassIds.*' => ['integer', Rule::exists(CharacterClass::class, 'class_id')],
             'includePlayerDeathSpecIds'    => ['nullable', 'array'],
             'includePlayerDeathSpecIds.*'  => ['integer', Rule::exists(CharacterClassSpecialization::class, 'specialization_id')],
+            'includePlayerSpellIds'        => ['nullable', 'array'],
+            'includePlayerSpellIds.*'      => ['integer', Rule::exists(Spell::class, 'id')],
         ]);
     }
 }

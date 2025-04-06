@@ -10,6 +10,7 @@ use App\Models\Dungeon;
 use App\Models\GameServerRegion;
 use App\Models\Laratrust\Role;
 use App\Models\Season;
+use App\Models\Spell\Spell;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
 
@@ -25,6 +26,7 @@ use Illuminate\Support\Collection;
  * @var bool                                     $showAllEnabled
  * @var Collection<AffixGroup>                   $allAffixGroupsByActiveExpansion
  * @var Collection<Affix>                        $featuredAffixesByActiveExpansion
+ * @var Collection                               $selectableSpellsByCategory
  * @var int                                      $keyLevelMin
  * @var int                                      $keyLevelMax
  * @var int                                      $itemLevelMin
@@ -80,6 +82,17 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
     ];
 })->toArray();
 
+$selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn(Collection $spells, string $categoryName) => [
+    __($categoryName) => $spells->mapWithKeys(
+        static fn(Spell $spell) => [
+            $spell->id => [
+                'icon_url' => $spell['icon_url'],
+                'name'     => __($spell['name']),
+            ]
+        ]
+    )
+])->toArray();
+
 ?>
 @include('common.general.inline', ['path' => 'common/maps/heatmapsearchsidebar', 'options' => [
     'stateCookie' => 'heatmap_search_sidebar_state',
@@ -105,6 +118,8 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
     'filterEventTypeSelector' => 'input[name="event_type"]',
     'filterDataTypeContainerSelector' => '#filter_data_type_container',
     'filterDataTypeSelector' => 'input[name="data_type"]',
+    'filterPlayerSpellsContainerSelector' => '#filter_player_spells_container',
+    'filterPlayerSpellsSelector' => '#filter_player_spells',
     'filterRegionContainerSelector' => '#filter_region_container',
     'filterRegionSelector' => 'input[name="region"]',
     'filterKeyLevelSelector' => '#filter_key_level',
@@ -222,8 +237,8 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                             <input type="radio" name="event_type"
                                    class="{{ CombatLogEventEventType::PlayerSpell->value }}"
                                    value="{{ CombatLogEventEventType::PlayerSpell->value }}">
-                            <img src="{{ url('images/spells/spell_nature_bloodlust.jpg') }}"
-                                 alt="{{ __('view_common.maps.controls.heatmapsearch.bloodlust_alt') }}"
+                            <img src="{{ url('images/spells/spell_nature_lightning.jpg') }}"
+                                 alt="{{ __('view_common.maps.controls.heatmapsearch.spell_casts_alt') }}"
                                  class="filter_event_type_icon">
                             {{ __('combatlogeventtypes.player_spell') }}
                         </label>
@@ -235,6 +250,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                     'name' => 'filter_data_type',
                     'label' => __('view_common.maps.controls.heatmapsearch.data_type'),
                     'title' => __('view_common.maps.controls.heatmapsearch.data_type_title'),
+                    'hidden' => true,
                 ])
                     <div class="btn-group btn-group-toggle w-100 mb-1"
                          data-toggle="buttons">
@@ -252,6 +268,20 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                             <i class="fas fa-map-marked-alt"></i> {{ __('combatlogdatatypes.enemy_position') }}
                         </label>
                     </div>
+                @endcomponent
+
+                @component('common.forms.labelinput', [
+                    'id' => 'filter_player_spells_container',
+                    'name' => 'filter_player_spells',
+                    'label' => __('view_common.maps.controls.heatmapsearch.player_spells'),
+                    'hidden' => true,
+                ])
+                    @include('common.forms.select.imageselectcategories', [
+                        'id' => 'filter_player_spells',
+                        'name' => 'filter_player_spells[]',
+                        'valuesByCategory' => $selectableSpellsByCategory,
+                        'multiple' => true
+                    ])
                 @endcomponent
 
 
@@ -419,47 +449,47 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                     @endcomponent
 
 
-                        @component('common.forms.labelinput', [
-                            'id' => 'filter_classes_player_deaths_container',
-                            'name' => 'filter_classes_player_deaths',
-                            'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths'),
-                            'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths_title'),
-                        ])
-                            {!!
-                                Form::select(
-                                    'filter_classes_player_deaths[]',
-                                    $characterClassSelectOptions,
-                                    [],
-                                    [
-                                        'id' => 'filter_classes_player_deaths',
-                                        'name' => 'classes_player_deaths',
-                                        'class' => 'form-control selectpicker',
-                                        'multiple' => 'multiple'
-                                    ]
-                                )
-                             !!}
-                        @endcomponent
+                    @component('common.forms.labelinput', [
+                        'id' => 'filter_classes_player_deaths_container',
+                        'name' => 'filter_classes_player_deaths',
+                        'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths'),
+                        'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths_title'),
+                    ])
+                        {!!
+                            Form::select(
+                                'filter_classes_player_deaths[]',
+                                $characterClassSelectOptions,
+                                [],
+                                [
+                                    'id' => 'filter_classes_player_deaths',
+                                    'name' => 'classes_player_deaths',
+                                    'class' => 'form-control selectpicker',
+                                    'multiple' => 'multiple'
+                                ]
+                            )
+                         !!}
+                    @endcomponent
 
-                        @component('common.forms.labelinput', [
-                            'id' => 'filter_specializations_player_deaths_container',
-                            'name' => 'filter_specializations_player_deaths',
-                            'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths'),
-                            'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths_title'),
-                        ])
-                            {!!
-                                Form::select(
-                                    'filter_specializations_player_deaths[]',
-                                    $characterClassSpecializationsSelectOptions,
-                                    [],
-                                    [
-                                        'id' => 'filter_specializations_player_deaths',
-                                        'name' => 'specializations_player_deaths',
-                                        'class' => 'form-control selectpicker',
-                                        'multiple' => 'multiple'
-                                    ]
-                                )
-                             !!}
-                        @endcomponent
+                    @component('common.forms.labelinput', [
+                        'id' => 'filter_specializations_player_deaths_container',
+                        'name' => 'filter_specializations_player_deaths',
+                        'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths'),
+                        'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths_title'),
+                    ])
+                        {!!
+                            Form::select(
+                                'filter_specializations_player_deaths[]',
+                                $characterClassSpecializationsSelectOptions,
+                                [],
+                                [
+                                    'id' => 'filter_specializations_player_deaths',
+                                    'name' => 'specializations_player_deaths',
+                                    'class' => 'form-control selectpicker',
+                                    'multiple' => 'multiple'
+                                ]
+                            )
+                         !!}
+                    @endcomponent
 
                 @endcomponent
 

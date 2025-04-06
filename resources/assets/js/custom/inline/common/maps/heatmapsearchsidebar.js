@@ -23,6 +23,8 @@
  * @property {String} filterEventTypeSelector
  * @property {String} filterDataTypeContainerSelector
  * @property {String} filterDataTypeSelector
+ * @property {String} filterPlayerSpellsContainerSelector
+ * @property {String} filterPlayerSpellsSelector
  * @property {String} filterRegionContainerSelector
  * @property {String} filterRegionSelector
  * @property {String} filterKeyLevelSelector
@@ -91,9 +93,15 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
                 self.filters['includePlayerDeathClassIds'].toggle(isPlayerDeath);
                 self.filters['includePlayerDeathSpecIds'].toggle(isPlayerDeath);
 
+
+                let isPlayerSpell = $this.val() === COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_SPELL;
+                $(self.options.filterPlayerSpellsContainerSelector).toggle(isPlayerSpell);
+                self.filters['includePlayerSpellIds'].toggle(isPlayerSpell);
+
                 self._search();
             }),
             'dataType': new SearchFilterRadioDataType(this.options.filterDataTypeContainerSelector, this.options.filterDataTypeSelector, this._search.bind(this)),
+            'includePlayerSpellIds':new SearchFilterPlayerSpells(this.options.filterPlayerSpellsSelector, this._search.bind(this)),
             'region': new SearchFilterRadioRegion(this.options.filterRegionContainerSelector, this.options.filterRegionSelector, this._search.bind(this)),
             'keyLevel': new SearchFilterKeyLevel(this.options.filterKeyLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
             'itemLevel': new SearchFilterItemLevel(this.options.filterItemLevelSelector, this._search.bind(this), this.options.itemLevelMin, this.options.itemLevelMax),
@@ -123,7 +131,6 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'excludeAffixIds': new SearchFilterPassThrough(),
             'excludePlayerDeathSpecIds': new SearchFilterPassThrough(),
             'excludePlayerDeathClassIds': new SearchFilterPassThrough(),
-            'includePlayerSpellIds': new SearchFilterPassThrough(),
             'token': new SearchFilterPassThrough(),
         };
 

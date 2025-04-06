@@ -1,11 +1,22 @@
 <?php
 
+use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
 // map_killzonessidebar_killzone_description_modal_supported_html_tags
 /** @var Collection $spellsSelect */
-?>
 
+$spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string $categoryName) => [
+    __($categoryName) => $spells->mapWithKeys(
+        static fn(Spell $spell) => [
+            $spell->id => [
+                'icon_url' => $spell['icon_url'],
+                'name'     => __($spell['name']),
+            ]
+        ]
+    )
+])->toArray();
+?>
 <div id="pull_sidebar_workbench" class="pull_workbench p-2" style="display: none;">
     <div class="row no-gutters pull_workbench_row pull_workbench_header">
         <div class="col">
@@ -94,7 +105,8 @@ use Illuminate\Support\Collection;
 
                 </span>
             </div>
-            <div id="map_killzonessidebar_killzone_description_modal_remaining_characters" class="form-group text-warning" style="display: none;">
+            <div id="map_killzonessidebar_killzone_description_modal_remaining_characters"
+                 class="form-group text-warning" style="display: none;">
             </div>
             {{ Form::textarea('map_killzonessidebar_killzone_description_modal_textarea', '', [
                 'class' => 'form-control',
@@ -115,26 +127,11 @@ use Illuminate\Support\Collection;
                 __('view_common.maps.controls.pullsworkbench.modal.spells.label'),
                 ['id' => 'map_killzonessidebar_killzone_spells_modal_label']
             ) !!}
-            <select id="map_killzonessidebar_killzone_spells_modal_select"
-                    class="form-control selectpicker"
-                    data-live-search="true"
-                    multiple>
-                @foreach($spellsSelect as $group => $spells)
-                    <optgroup label="{{$group}}">
-                        @foreach($spells as $spell)
-                                <?php ob_start() ?>
-
-                            @include('common.forms.select.imageoption', [
-                                'url' => $spell['icon_url'],
-                                'name' => $spell['name'],
-                            ])
-
-                                <?php $html = ob_get_clean(); ?>
-                            <option value="{{ $spell['id'] }}" data-content="{{{$html}}}">{{ $spell['name'] }}</option>
-                        @endforeach
-                    </optgroup>
-                @endforeach
-            </select>
+            @include('common.forms.select.imageselectcategories', [
+                'id' => 'map_killzonessidebar_killzone_spells_modal_select',
+                'valuesByCategory' => $spellsSelect,
+                'multiple' => true,
+            ])
         </div>
         <div class="form-group">
             <div id="map_killzonessidebar_killzone_spells_modal_save" class="btn btn-primary" data-dismiss="modal">

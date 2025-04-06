@@ -106,8 +106,7 @@ class ViewService implements ViewServiceInterface
                 ->orderBy('category')
                 ->orderBy('name')
                 ->get()
-                ->groupBy('category')
-                ->mapWithKeys(static fn(Collection $spells, string $key) => [__($key) => $spells]);
+                ->groupBy('category');
 
             $appRevision = trim(file_get_contents(base_path('version')));
 
