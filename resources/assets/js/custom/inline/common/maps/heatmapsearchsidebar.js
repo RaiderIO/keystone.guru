@@ -123,6 +123,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'excludeAffixIds': new SearchFilterPassThrough(),
             'excludePlayerDeathSpecIds': new SearchFilterPassThrough(),
             'excludePlayerDeathClassIds': new SearchFilterPassThrough(),
+            'includePlayerSpellIds': new SearchFilterPassThrough(),
             'token': new SearchFilterPassThrough(),
         };
 

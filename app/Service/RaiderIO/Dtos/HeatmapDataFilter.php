@@ -48,6 +48,7 @@ class HeatmapDataFilter implements Arrayable
     private ?string $excludeSpecIds;
     private ?string $excludePlayerDeathSpecIds;
     private ?string $excludePlayerDeathClassIds;
+    private ?string $includePlayerSpellIds;
     private ?string $token;
 
     public function __construct(
@@ -60,6 +61,7 @@ class HeatmapDataFilter implements Arrayable
         $this->includeSpecIds             = collect();
         $this->includePlayerDeathClassIds = collect();
         $this->includePlayerDeathSpecIds  = collect();
+        $this->includePlayerSpellIds      = collect();
     }
 
     public function getDungeon(): Dungeon
@@ -380,6 +382,18 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
+    public function getIncludePlayerSpellIds(): ?string
+    {
+        return $this->includePlayerSpellIds;
+    }
+
+    public function setIncludePlayerSpellIds(?string $includePlayerSpellIds): HeatmapDataFilter
+    {
+        $this->includePlayerSpellIds = $includePlayerSpellIds;
+
+        return $this;
+    }
+
     public function getToken(): ?string
     {
         return $this->token;
@@ -423,6 +437,7 @@ class HeatmapDataFilter implements Arrayable
             'excludeSpecIds'             => $this->getExcludeSpecIds(),
             'excludePlayerDeathSpecIds'  => $this->getExcludePlayerDeathSpecIds(),
             'excludePlayerDeathClassIds' => $this->getExcludePlayerDeathClassIds(),
+            'includePlayerSpellIds'      => $this->getIncludePlayerSpellIds(),
         ];
 
         if ($this->getRegion() !== GameServerRegion::WORLD) {
@@ -484,7 +499,12 @@ class HeatmapDataFilter implements Arrayable
         return array_filter($result);
     }
 
-
+    /**
+     * Populates a new HeatmapDataFilter object from the request array.
+     *
+     * @param array $requestArray
+     * @return HeatmapDataFilter
+     */
     public static function fromArray(array $requestArray): HeatmapDataFilter
     {
         $heatmapDataFilter = new HeatmapDataFilter(
@@ -532,6 +552,7 @@ class HeatmapDataFilter implements Arrayable
         $heatmapDataFilter->setExcludeSpecIds($requestArray['excludeSpecIds'] ?? null);
         $heatmapDataFilter->setExcludePlayerDeathSpecIds($requestArray['excludePlayerDeathSpecIds'] ?? null);
         $heatmapDataFilter->setExcludePlayerDeathClassIds($requestArray['excludePlayerDeathClassIds'] ?? null);
+        $heatmapDataFilter->setIncludePlayerSpellIds($requestArray['includePlayerSpellIds'] ?? null);
         $heatmapDataFilter->setToken($requestArray['token'] ?? null);
 
         return $heatmapDataFilter;
