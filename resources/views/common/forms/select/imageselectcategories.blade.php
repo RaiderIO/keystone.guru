@@ -1,0 +1,36 @@
+<?php
+/**
+ * @var string       $id
+ * @var string|null  $name
+ * @var array        $valuesByCategory
+ * @var boolean|null $multiple
+ */
+
+$multiple = $multiple ?? false;
+?>
+<select id="{{ $id }}"
+        @isset($name)
+            name="{{ $name }}"
+        @endisset
+        class="form-control selectpicker"
+        data-live-search="true"
+        @if($multiple)
+            multiple
+    @endif
+>
+    @foreach($valuesByCategory as $group => $values)
+        <optgroup label="{{$group}}">
+            @foreach($values as $key => $value)
+                    <?php ob_start() ?>
+
+                @include('common.forms.select.imageoption', [
+                    'url' => $value['icon_url'],
+                    'name' => $value['name'],
+                ])
+
+                    <?php $html = ob_get_clean(); ?>
+                <option value="{{ $key }}" data-content="{{{$html}}}">{{ $value['name'] }}</option>
+            @endforeach
+        </optgroup>
+    @endforeach
+</select>

@@ -622,6 +622,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
             $view->with('characterClassSpecializations', $globalViewVariables['characterClassSpecializations']);
             $view->with('characterClasses', $globalViewVariables['characterClasses']);
+            $view->with('selectableSpellsByCategory', $globalViewVariables['selectableSpellsByCategory']);
             $view->with('allRegions', $globalViewVariables['allRegions']);
         });
         view()->composer('common.maps.controls.pulls', static function (View $view) {
