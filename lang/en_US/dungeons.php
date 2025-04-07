@@ -276,7 +276,7 @@ return [
             ],
         ],
         'naxxramas_classic'           => [
-            'name'   => 'Naxxramas',
+            'name'   => 'Naxxramas (Classic)',
             'floors' => [
                 'the_construct_quarter' => 'The Construct Quarter',
                 'the_arachnid_quarter'  => 'The Arachnid Quarter',
