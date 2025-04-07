@@ -46,6 +46,7 @@ class ExploreUrlFormRequest extends DungeonRouteBaseUrlFormRequest
             'excludePlayerDeathSpecIds'  => ['nullable', 'string'], // csv
             'includePlayerDeathClassIds' => ['nullable', 'string'], // csv
             'excludePlayerDeathClassIds' => ['nullable', 'string'], // csv
+            'includePlayerSpellIds'      => ['nullable', 'string'], // csv
             'minPeriod'                  => ['nullable', 'integer'],
             'maxPeriod'                  => ['nullable', 'integer'],
             'minTimerFraction'           => ['nullable', 'numeric'],
