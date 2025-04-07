@@ -90,7 +90,7 @@ $dungeonSelectId = 'dungeon_id_select';
             'dungeonroute'     => $dungeonroute ?? null,
             'dungeonSelector' => sprintf('#%s', $dungeonSelectId),
             'teemingSelector'  => '#teeming',
-            'collapseSelector' => '#createRouteAdvancedCollapse',
+            'collapseSelector' => '#create_route_advanced_collapse',
             'defaultSelected'  => $defaultSelectedAffixes,
             ])
     @endif
@@ -144,7 +144,7 @@ $dungeonSelectId = 'dungeon_id_select';
                         <p>{{ __('view_common.forms.createroute.group_composition') }}</p>
                         <div class="form-group">
                             @include('common.group.composition', [
-                                'collapseSelector' => '#createRouteAdvancedCollapse',
+                                'collapseSelector' => '#create_route_advanced_collapse',
                                 'dungeonroute'     => $dungeonroute ?? null,
                                 ])
                         </div>
