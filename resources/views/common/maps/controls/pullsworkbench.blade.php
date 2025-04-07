@@ -125,6 +125,7 @@ $spellsSelect = $spellsSelect->mapWithKeys(static fn(Collection $spells, string 
                 'id' => 'map_killzonessidebar_killzone_spells_modal_select',
                 'valuesByCategory' => $spellsSelect,
                 'multiple' => true,
+                'liveSearch' => true,
             ])
         </div>
         <div class="form-group">

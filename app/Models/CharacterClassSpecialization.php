@@ -6,6 +6,7 @@ use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Str;
 
 /**
  * @property int    $id
@@ -14,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int    $icon_file_id
  * @property string $key
  * @property string $name
+ *
+ * @property string         $icon_url Appended
  *
  * @property CharacterClass $class
  *
@@ -38,6 +41,19 @@ class CharacterClassSpecialization extends CacheModel
         'name',
         'icon_file_id',
     ];
+
+    /**
+     * @return string
+     */
+    public function getIconUrlAttribute(): string
+    {
+        $className = Str::replace('_', '', $this->class->key);
+        return url(sprintf('/images/specializations/%s/%s_%s.png',
+            $className,
+            $className,
+            Str::replace('_', '', $this->key)
+        ));
+    }
 
     public function class(): BelongsTo
     {
