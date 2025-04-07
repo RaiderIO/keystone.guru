@@ -10,6 +10,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
+use Str;
 
 /**
  * @property int                                      $id
@@ -17,6 +18,8 @@ use Illuminate\Support\Collection;
  * @property string                                   $key
  * @property string                                   $name
  * @property string                                   $color
+ *
+ * @property string                                   $icon_url Appended
  *
  * @property Collection<CharacterClassSpecialization> $specializations
  * @property Collection<DungeonRoutePlayerClass>      $dungeonRoutePlayerClasses
@@ -34,6 +37,8 @@ class CharacterClass extends CacheModel
     public $hidden = ['icon_file_id', 'pivot'];
 
     public $fillable = ['class_id', 'key', 'name', 'color', 'icon_file_id'];
+
+    protected $appends = ['icon_url'];
 
     public const CHARACTER_CLASS_WARRIOR      = 'warrior';
     public const CHARACTER_CLASS_HUNTER       = 'hunter';
@@ -65,6 +70,14 @@ class CharacterClass extends CacheModel
         self::CHARACTER_CLASS_DEMON_HUNTER,
         self::CHARACTER_CLASS_EVOKER,
     ];
+
+    /**
+     * @return string
+     */
+    public function getIconUrlAttribute(): string
+    {
+        return url(sprintf('/images/classes/%s.png', Str::replace('_', '', $this->key)));
+    }
 
     public function specializations(): HasMany
     {

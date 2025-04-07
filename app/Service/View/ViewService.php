@@ -103,6 +103,7 @@ class ViewService implements ViewServiceInterface
 
             // Spells
             $selectableSpellsByCategory = Spell::where('selectable', true)
+                ->orderByRaw("CASE WHEN category = 'spells.category.general' THEN 0 ELSE 1 END")
                 ->orderBy('category')
                 ->orderBy('name')
                 ->get()

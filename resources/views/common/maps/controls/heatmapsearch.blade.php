@@ -70,7 +70,10 @@ $characterClassSpecializationsSelectOptions = $characterClassSpecializations->gr
     return [
         $className => $specializations->mapWithKeys(function (CharacterClassSpecialization $characterClassSpecialization) {
             return [
-                $characterClassSpecialization->specialization_id => __($characterClassSpecialization->name)
+                $characterClassSpecialization->specialization_id => [
+                    'icon_url' => $characterClassSpecialization->icon_url,
+                    'name' => __($characterClassSpecialization->name),
+                ]
             ];
         })
     ];
@@ -78,7 +81,10 @@ $characterClassSpecializationsSelectOptions = $characterClassSpecializations->gr
 
 $characterClassSelectOptions = $characterClasses->mapWithKeys(function (CharacterClass $characterClass) {
     return [
-        $characterClass->class_id => __($characterClass->name)
+        $characterClass->class_id => [
+            'icon_url' => $characterClass->icon_url,
+            'name' => __($characterClass->name),
+        ]
     ];
 })->toArray();
 
@@ -280,7 +286,8 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                         'id' => 'filter_player_spells',
                         'name' => 'filter_player_spells[]',
                         'valuesByCategory' => $selectableSpellsByCategory,
-                        'multiple' => true
+                        'multiple' => true,
+                        'liveSearch' => true,
                     ])
                 @endcomponent
 
@@ -413,19 +420,12 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                         'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes'),
                         'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_title'),
                     ])
-                        {!!
-                            Form::select(
-                                'filter_classes[]',
-                                $characterClassSelectOptions,
-                                [],
-                                [
-                                    'id' => 'filter_classes',
-                                    'name' => 'classes',
-                                    'class' => 'form-control selectpicker',
-                                    'multiple' => 'multiple'
-                                ]
-                            )
-                         !!}
+                        @include('common.forms.select.imageselect', [
+                            'id' => 'filter_classes',
+                            'name' => 'classes',
+                            'values' => $characterClassSelectOptions,
+                            'multiple' => true
+                        ])
                     @endcomponent
 
                     @component('common.forms.labelinput', [
@@ -433,19 +433,13 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                         'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations'),
                         'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_title'),
                     ])
-                        {!!
-                            Form::select(
-                                'filter_specializations[]',
-                                $characterClassSpecializationsSelectOptions,
-                                [],
-                                [
-                                    'id' => 'filter_specializations',
-                                    'name' => 'specializations',
-                                    'class' => 'form-control selectpicker',
-                                    'multiple' => 'multiple'
-                                ]
-                            )
-                         !!}
+                        @include('common.forms.select.imageselectcategories', [
+                            'id' => 'filter_specializations',
+                            'name' => 'filter_specializations[]',
+                            'valuesByCategory' => $characterClassSpecializationsSelectOptions,
+                            'multiple' => true,
+                            'liveSearch' => true,
+                        ])
                     @endcomponent
 
 
@@ -455,19 +449,12 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                         'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths'),
                         'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths_title'),
                     ])
-                        {!!
-                            Form::select(
-                                'filter_classes_player_deaths[]',
-                                $characterClassSelectOptions,
-                                [],
-                                [
-                                    'id' => 'filter_classes_player_deaths',
-                                    'name' => 'classes_player_deaths',
-                                    'class' => 'form-control selectpicker',
-                                    'multiple' => 'multiple'
-                                ]
-                            )
-                         !!}
+                        @include('common.forms.select.imageselect', [
+                            'id' => 'filter_classes_player_deaths',
+                            'name' => 'classes_player_deaths[]',
+                            'values' => $characterClassSelectOptions,
+                            'multiple' => true
+                        ])
                     @endcomponent
 
                     @component('common.forms.labelinput', [
@@ -476,19 +463,13 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                         'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths'),
                         'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths_title'),
                     ])
-                        {!!
-                            Form::select(
-                                'filter_specializations_player_deaths[]',
-                                $characterClassSpecializationsSelectOptions,
-                                [],
-                                [
-                                    'id' => 'filter_specializations_player_deaths',
-                                    'name' => 'specializations_player_deaths',
-                                    'class' => 'form-control selectpicker',
-                                    'multiple' => 'multiple'
-                                ]
-                            )
-                         !!}
+                        @include('common.forms.select.imageselectcategories', [
+                            'id' => 'filter_specializations_player_deaths',
+                            'name' => 'filter_specializations_player_deaths[]',
+                            'valuesByCategory' => $characterClassSpecializationsSelectOptions,
+                            'multiple' => true,
+                            'liveSearch' => true,
+                        ])
                     @endcomponent
 
                 @endcomponent

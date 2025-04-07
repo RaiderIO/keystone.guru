@@ -4,16 +4,20 @@
  * @var string|null  $name
  * @var array        $valuesByCategory
  * @var boolean|null $multiple
+ * @var boolean|null $liveSearch
  */
 
 $multiple = $multiple ?? false;
+$liveSearch = $liveSearch ?? false;
 ?>
 <select id="{{ $id }}"
         @isset($name)
             name="{{ $name }}"
         @endisset
         class="form-control selectpicker"
-        data-live-search="true"
+        @if($liveSearch)
+            data-live-search="true"
+        @endif
         @if($multiple)
             multiple
     @endif
