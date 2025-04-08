@@ -255,6 +255,8 @@ let c = {
             // Used when adjusting the map zoom level
             wheelPxPerZoomLevelMin: 60, // faster
             wheelPxPerZoomLevelMax: 600, // slower
+            tileWidth: 384,
+            tileHeight: 256
         },
         leafletSettings: {
             // Context menu when right clicking stuff
