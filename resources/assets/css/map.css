@@ -1307,6 +1307,12 @@ html, body, #map, #app, .wrapper {
     z-index: 1001;
 }
 
+/** The attribution svg should not be affected by the above */
+#map .leaflet-control-attribution svg {
+    position: static;
+    z-index: auto;
+}
+
 .flash:not(.map_enemy_forces_too_little_warning) {
     animation-name: flash-animation;
     animation-duration: 0.75s;

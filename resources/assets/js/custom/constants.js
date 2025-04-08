@@ -251,6 +251,7 @@ let c = {
     map: {
         settings: {
             defaultMaxZoom: 5,
+            zoomStep: 0.5,
         },
         leafletSettings: {
             // Context menu when right clicking stuff
