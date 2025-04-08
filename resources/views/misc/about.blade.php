@@ -82,6 +82,14 @@
         fit
         casual people best, but I'm looking to include features down the line which more hardcore players find useful.
     </p>
+    <h5>
+        Acquisition by Raider.io
+    </h5>
+    <p>
+        In July 2023 Keystone.guru was acquired by Raider.io. I am still the main developer of the website, with the
+        backing of Raider.io I can work on projects that I could otherwise never do on my own. This will in the end
+        make for a much better site for the community. I am very excited about this and I hope you are too!
+    </p>
 
     <h5>
         Can I help?
