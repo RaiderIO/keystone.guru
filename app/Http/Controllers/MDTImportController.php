@@ -88,7 +88,14 @@ class MDTImportController extends Controller
             try {
                 $dungeonRoute = $mdtImportStringService
                     ->setEncodedString($string)
-                    ->getDungeonRoute(collect(), collect(), $sandbox, true, $validated['import_as_this_week'] ?? false);
+                    ->getDungeonRoute(
+                        collect(),
+                        collect(),
+                        $sandbox,
+                        true,
+                        $validated['assign_notes_to_pulls'] ?? false,
+                        $validated['import_as_this_week'] ?? false
+                    );
 
                 // Ensure team_id is set
                 if (!$sandbox) {

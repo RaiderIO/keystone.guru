@@ -30,7 +30,7 @@ class LayoutsApp extends InlineCode {
         this.$warnings = this.$root.find('.mdt_string_warnings');
         this.$errors = this.$root.find('.mdt_string_errors');
         this.$importAsThisWeekContainer = this.$root.find('.import_as_this_week_container');
-        this.$importAsThisWeek = this.$root.find('.import_as_this_week');
+        this.$importAsThisWeek = this.$root.find('#import_as_this_week');
         this.$importString = this.$root.find('.import_string');
         this.$submitBtn = this.$root.find('input[type="submit"]');
         this.$resetBtn = this.$root.find('.import_mdt_string_reset_btn').unbind('click').bind('click', this._resetMdtModal.bind(this));
@@ -188,13 +188,8 @@ class LayoutsApp extends InlineCode {
                 }
 
                 // If the route did not contain this week's affixes, offer to import it as such anyways
-                self.$importAsThisWeek.prop('checked', false);
-
-                if (responseData.has_this_weeks_affix_group) {
-                    self.$importAsThisWeekContainer.hide();
-                } else {
-                    self.$importAsThisWeekContainer.show();
-                }
+                self.$importAsThisWeek.prop('checked', !responseData.has_this_weeks_affix_group);
+                self.$importAsThisWeekContainer.toggle(!responseData.has_this_weeks_affix_group);
 
                 // Tooltips may be added above
                 refreshTooltips();

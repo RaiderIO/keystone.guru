@@ -22,7 +22,7 @@ interface MDTImportStringServiceInterface
      */
     public function getDetails(Collection $warnings, Collection $errors): ImportStringDetails;
 
-    public function getDungeonRoute(Collection $warnings, Collection $errors, bool $sandbox = false, bool $save = false, bool $importAsThisWeek = false): DungeonRoute;
+    public function getDungeonRoute(Collection $warnings, Collection $errors, bool $sandbox = false, bool $save = false, bool $assignNotesToPulls = true, bool $importAsThisWeek = false): DungeonRoute;
 
     public function setEncodedString(string $encodedString): self;
 }

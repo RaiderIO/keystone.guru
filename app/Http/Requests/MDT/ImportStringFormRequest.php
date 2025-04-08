@@ -22,11 +22,12 @@ class ImportStringFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'import_string'       => 'required|string',
-            'mdt_import_sandbox'  => 'bool',
-            'import_as_this_week' => 'bool',
+            'import_string'         => 'required|string',
+            'mdt_import_sandbox'    => 'bool',
+            'assign_notes_to_pulls' => 'bool',
+            'import_as_this_week'   => 'bool',
             // May be -1 (unset) or must be part of the user's teams
-            'team_id'             => [Rule::in(
+            'team_id'               => [Rule::in(
                 array_merge(Auth::check() ? Auth::user()->teams->pluck('id')->toArray() : [], [null, -1])
             )],
         ];
