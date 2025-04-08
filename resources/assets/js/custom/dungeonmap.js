@@ -76,6 +76,9 @@ class DungeonMap extends Signalable {
         state.register('floorid:changed', this, function (floorIdChangedEvent) {
             self.refreshLeafletMap(false, floorIdChangedEvent.data.center, floorIdChangedEvent.data.zoom);
         });
+        state.register('mapzoomspeed:changed', this, function (mapZoomLevelChangedEvent) {
+            self._applyMapZoomSpeed();
+        });
 
         // How many map objects have returned a success status
         if (!this.options.readonly) {
@@ -211,6 +214,8 @@ class DungeonMap extends Signalable {
             crs: L.CRS.Simple,
             gestureHandling: this.options.gestureHandling
         }, c.map.leafletSettings));
+        this._applyMapZoomSpeed();
+
         // Make sure we can place things in the center of the map
         this._createAdditionalControlPlaceholders();
         // Top left is reserved for the sidebar
@@ -429,6 +434,19 @@ class DungeonMap extends Signalable {
             this.leafletMap.keyboard.disable();
             if (this.leafletMap.tap) this.leafletMap.tap.disable();
             document.getElementById('map').style.cursor = 'default';
+        }
+    }
+
+    _applyMapZoomSpeed() {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
+        if (this.leafletMap !== null) {
+            L.setOptions(this.leafletMap, {
+                wheelPxPerZoomLevel: c.map.settings.wheelPxPerZoomLevelMax - (
+                    (c.map.settings.wheelPxPerZoomLevelMax - c.map.settings.wheelPxPerZoomLevelMin) *
+                    (getState().getMapZoomSpeed() / 100)
+                )
+            });
         }
     }
 

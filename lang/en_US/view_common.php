@@ -113,6 +113,9 @@ return [
             'map_facade_style_split_floors_option'          => 'Use split floors',
             'map_facade_style_change_requires_page_refresh' => 'Note: Changing this setting requires a page reload before changes take effect',
 
+            'zoom_speed'       => 'Zoom speed',
+            'zoom_speed_title' => 'This controls the speed at which the map zooms in and out when you use the mouse wheel.',
+
             'heatmap'                     => 'Heatmap',
             'show_heatmap_tooltips'       => 'Show mouse over tooltips',
             'show_heatmap_tooltips_title' => 'Enabling this setting will show tooltips when you mouse over the heatmap. This can be useful to see the exact values of the heatmap at a specific location.',
@@ -408,23 +411,23 @@ return [
                 'no_pulls_created_view'       => 'No pulls created.',
             ],
             'pullsworkbench' => [
-                'modal'             => [
-                    'description' => [
+                'modal'            => [
+                    'description'       => [
                         'label'               => 'Description',
                         'supported_html_tags' => 'Supported HTML tags: ',
                         'save'                => 'Save',
                     ],
                     'supported_domains' => 'Supported hyperlink domains (include https://): ',
-                    'spells'      => [
+                    'spells'            => [
                         'label' => 'Spells',
                         'save'  => 'Save',
                     ],
                 ],
-                'description'       => 'Edit description',
-                'spells'            => 'Edit spells',
-                'add_kill_area'     => 'Add kill area',
-                'remove_kill_area'  => 'Remove kill area',
-                'delete_killzone'   => 'Delete pull',
+                'description'      => 'Edit description',
+                'spells'           => 'Edit spells',
+                'add_kill_area'    => 'Add kill area',
+                'remove_kill_area' => 'Remove kill area',
+                'delete_killzone'  => 'Delete pull',
             ],
             'view'           => [
                 'edit_this_route_title'          => 'Edit',

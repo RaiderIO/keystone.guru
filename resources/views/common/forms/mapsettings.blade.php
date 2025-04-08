@@ -3,6 +3,7 @@
 use App\Models\User;
 
 $mapFacadeStyleChecked            = User::getCurrentUserMapFacadeStyle() === User::MAP_FACADE_STYLE_FACADE;
+$mapZoomSpeed                     = $_COOKIE['map_zoom_speed'] ?? '50';
 $mapNumberStyleChecked            = ($_COOKIE['map_number_style'] ?? 'percentage') === 'percentage';
 $mapHeatmapShowTooltips           = $_COOKIE['map_heatmap_show_tooltips'] ?? 1;
 $mapUnkilledEnemyOpacity          = $_COOKIE['map_unkilled_enemy_opacity'] ?? '50';
@@ -38,6 +39,30 @@ $mapEnemyDangerousBorder          = $_COOKIE['map_enemy_dangerous_border'] ?? 0;
         <div class="row">
             <div class="col">
                 {{ __('view_common.forms.mapsettings.map_facade_style_change_requires_page_refresh') }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Map zoom speed -->
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                <label for="map_settings_zoom_speed">
+                    {{ __('view_common.forms.mapsettings.zoom_speed') }}
+                    <i class="fas fa-info-circle" data-toggle="tooltip"
+                       title="{{ __('view_common.forms.mapsettings.zoom_speed_title') }}">
+
+                    </i>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <input id="map_settings_zoom_speed" class="form-control-range" type="range" min="0"
+                       max="100" value="{{ $mapZoomSpeed }}">
+            </div>
+            <div class="col-auto value">
+                {{ $mapZoomSpeed }}
             </div>
         </div>
     </div>

@@ -256,6 +256,27 @@ class StateManager extends Signalable {
     }
 
     /**
+     * @param zoomSpeed {Number}
+     */
+    setMapZoomSpeed(zoomSpeed) {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        Cookies.set('map_zoom_speed', zoomSpeed, cookieDefaultAttributes);
+
+        this.signal('mapzoomspeed:changed', {zoomSpeed: zoomSpeed});
+    }
+
+    /**
+     *
+     * @returns {number}
+     */
+    getMapZoomSpeed() {
+        console.assert(this instanceof StateManager, 'this is not a StateManager', this);
+
+        return parseInt(Cookies.get('map_zoom_speed'));
+    }
+
+    /**
      * Sets the current map zoom level.
      * @param {Number} zoom
      */
