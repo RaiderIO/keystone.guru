@@ -680,17 +680,15 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
         // Second to last and last point
         $lastPoint    = [
-            $line[count($line) - 2],
-            last($line),
+            (float)$line[count($line) - 2],
+            (float)last($line),
         ];
-        $lastPoint[0] = (float)$lastPoint[0];
-        $lastPoint[1] = (float)$lastPoint[1];
 
         $lastPointLatLng = new LatLng($lastPoint[0], $lastPoint[1], $floor);
         // Create the left part of the arrow
         $leftPartLatLng = (new LatLng($lastPointLatLng->getLat() + 5, $lastPointLatLng->getLng() + 5, $floor))->rotate(
             $lastPointLatLng,
-            rad2deg($rotationRad)
+            rad2deg(-$rotationRad)
         );
 
         $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, array_merge(
@@ -701,7 +699,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         // Create the right part of the arrow
         $rightPartLatLng = (new LatLng($lastPointLatLng->getLat() + 5, $lastPointLatLng->getLng() - 5, $floor))->rotate(
             $lastPointLatLng,
-            rad2deg($rotationRad)
+            rad2deg(-$rotationRad)
         );
         $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, array_merge(
             $lastPoint,
