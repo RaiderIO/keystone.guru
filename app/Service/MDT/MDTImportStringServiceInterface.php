@@ -2,6 +2,7 @@
 
 namespace App\Service\MDT;
 
+use App\Logic\MDT\Exception\CliWeakaurasParserNotFoundException;
 use App\Logic\MDT\Exception\InvalidMDTDungeonException;
 use App\Logic\MDT\Exception\InvalidMDTStringException;
 use App\Logic\MDT\Exception\MDTStringParseException;
@@ -17,6 +18,7 @@ interface MDTImportStringServiceInterface
      * @throws InvalidMDTDungeonException
      * @throws InvalidMDTStringException
      * @throws MDTStringParseException
+     * @throws CliWeakaurasParserNotFoundException
      */
     public function getDetails(Collection $warnings, Collection $errors): ImportStringDetails;
 

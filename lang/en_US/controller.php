@@ -6,6 +6,7 @@ return [
         'error' => [
             'mdt_string_parsing_failed'           => 'MDT string parsing failed. Did you really paste an MDT string?',
             'mdt_string_format_not_recognized'    => 'The MDT string format was not recognized.',
+            'cli_weakauras_parser_not_found'      => 'cli_weakauras_parser not installed.',
             'invalid_mdt_string'                  => 'Invalid MDT string',
             'invalid_mdt_string_exception'        => 'Invalid MDT string: %s',
             'mdt_importer_not_configured'         => 'MDT importer is not configured properly. Please contact the admin about this issue.',
@@ -132,6 +133,7 @@ return [
         'error'           => [
             'mdt_string_parsing_failed'             => 'MDT string parsing failed. Did you really paste an MDT string?',
             'mdt_string_format_not_recognized'      => 'The MDT string format was not recognized.',
+            'cli_weakauras_parser_not_found'      => 'cli_weakauras_parser not installed.',
             'invalid_mdt_string_exception'          => 'Invalid MDT string: %s',
             'invalid_mdt_string'                    => 'Invalid MDT string',
             'mdt_importer_not_configured_properly'  => 'MDT importer is not configured properly. Please contact the admin about this issue.',
