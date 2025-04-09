@@ -146,7 +146,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .header_embed_text_ellipsis > a,
-.header_embed_text_ellipsis > a > h4 {
+.header_embed_text_ellipsis > h4 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -207,6 +207,11 @@ html, body, #map, #app, .wrapper {
 
 .sidebar .sidebar-content .card-body {
     padding: 0.75rem 1.25rem;
+}
+
+#route_title {
+    overflow: hidden;
+    height: 1.5rem;
 }
 
 .route_sidebar.right,
@@ -1300,6 +1305,12 @@ html, body, #map, #app, .wrapper {
 #map svg {
     position: absolute;
     z-index: 1001;
+}
+
+/** The attribution svg should not be affected by the above */
+#map .leaflet-control-attribution svg {
+    position: static;
+    z-index: auto;
 }
 
 .flash:not(.map_enemy_forces_too_little_warning) {

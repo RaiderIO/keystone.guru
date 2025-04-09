@@ -29,6 +29,7 @@ use Illuminate\Support\Collection;
 abstract class DungeonRouteBuilder
 {
     private const DUNGEON_ENEMY_FLOOR_CHECK_ENABLED = [
+        //        Dungeon::DUNGEON_THE_ROOKERY,
         //        Dungeon::DUNGEON_WAYCREST_MANOR
         //        Dungeon::DUNGEON_THEATER_OF_PAIN
     ];
@@ -43,6 +44,14 @@ abstract class DungeonRouteBuilder
 
     /** @var float Value between 0..1 for how much the distance between enemies matters vrs distance of previous pull */
     private const ENEMY_DISTANCE_WEIGHT_RATIO = 0.75;
+
+    /**
+     * @var float Determines how heavy the kill priority skews the weight towards this enemy. A lower value means the pull is stronger.
+     * Note: this value is divided by 10 because the kill_priority high = 10, low = -10. Instead of dividing these values by 10,
+     * we divide this factor by 10. -0.50 means that a kill_priority of 10 the distance is multiplied by * 0.5 (so it appears much closer)
+     * and a kill_priority of -10 the distance is multiplied by * 1.5 (so it appears much further away).
+     */
+    private const ENEMY_KILL_PRIORITY_WEIGHT_RATIO = (-0.50 / 10);
 
     /**
      * @var int If the last pull was this many yards away, cap the distance since you've just skipped a lot of enemies.
@@ -274,7 +283,7 @@ abstract class DungeonRouteBuilder
                     $closestEnemy->getDistanceBetweenLastPullAndEnemy(),
                     $closestEnemy->getEnemy()->enemyPack->group
                 );
-            } else {
+            } else if (in_array($this->dungeonRoute->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_ENABLED)) {
                 $this->findClosestEnemyInPreferredFloor(
                     $filteredEnemies,
                     $activePullEnemy,
@@ -360,31 +369,27 @@ abstract class DungeonRouteBuilder
         ?LatLng         $previousPullLatLng,
         ClosestEnemy    $closestEnemy
     ): void {
-        // Disabled - it's not working as intended because Blizzard's floor IDs are all over the place
-        return;
+        try {
+            $this->log->findClosestEnemyInPreferredFloorStart($this->currentFloor->id);
 
-//        try {
-//            $this->log->findClosestEnemyInPreferredFloorStart($this->currentFloor->id);
-//
-//            /** @var Collection<Enemy> $preferredEnemiesOnCurrentFloor */
-//            $preferredEnemiesOnCurrentFloor = $filteredEnemies->filter(
-//                fn(Enemy $availableEnemy) => // Only if we have floor checks enabled for this dungeon
-//                    in_array($availableEnemy->floor->dungeon->key, self::DUNGEON_ENEMY_FLOOR_CHECK_ENABLED) &&
-//                    $availableEnemy->floor_id == $this->currentFloor->id
-//            );
-//
-//            if ($preferredEnemiesOnCurrentFloor->isNotEmpty()) {
-//                $this->findClosestEnemyAndDistanceFromList(
-//                    $preferredEnemiesOnCurrentFloor,
-//                    $activePullEnemy,
-//                    $previousPullLatLng,
-//                    $closestEnemy
-//                );
-//            }
-//
-//        } finally {
-//            $this->log->findClosestEnemyInPreferredFloorEnd();
-//        }
+            /** @var Collection<Enemy> $preferredEnemiesOnCurrentFloor */
+            $preferredEnemiesOnCurrentFloor = $filteredEnemies->filter(
+                fn(Enemy $availableEnemy) => // Only if we have floor checks enabled for this dungeon
+                    $availableEnemy->floor_id == $this->currentFloor->id
+            );
+
+            if ($preferredEnemiesOnCurrentFloor->isNotEmpty()) {
+                $this->findClosestEnemyAndDistanceFromList(
+                    $preferredEnemiesOnCurrentFloor,
+                    $activePullEnemy,
+                    $previousPullLatLng,
+                    $closestEnemy
+                );
+            }
+
+        } finally {
+            $this->log->findClosestEnemyInPreferredFloorEnd();
+        }
     }
 
     /**
@@ -456,49 +461,35 @@ abstract class DungeonRouteBuilder
 
         $this->log->findClosestEnemyAndDistanceFromList($enemies->count(), $considerPatrols);
 
-        // Sort descending - higher priorities go first
-        $enemiesByKillPriority = $enemies->groupBy(static fn(Enemy $enemy) => $enemy->kill_priority ?? 0)->sortKeysDesc();
+        // For each group of enemies
+        foreach ($enemies as $availableEnemy) {
+            if ($considerPatrols) {
+                if (!($availableEnemy->enemyPatrol instanceof EnemyPatrol)) {
+                    continue;
+                }
 
-        foreach ($enemiesByKillPriority as $killPriority => $availableEnemies) {
-            /** @var Collection<Enemy> $availableEnemies */
-            $this->log->findClosestEnemyAndDistanceFromListPriority($killPriority, $availableEnemies->count());
+                // If this enemy is part of a patrol, consider all patrol vertices as a location of this enemy as well.
+                $vertices = $availableEnemy->enemyPatrol->polyline->getDecodedLatLngs($availableEnemy->floor);
 
-            // For each group of enemies
-            foreach ($availableEnemies as $availableEnemy) {
-                if ($considerPatrols) {
-                    if (!($availableEnemy->enemyPatrol instanceof EnemyPatrol)) {
-                        continue;
-                    }
-
-                    // If this enemy is part of a patrol, consider all patrol vertices as a location of this enemy as well.
-                    $vertices = $availableEnemy->enemyPatrol->polyline->getDecodedLatLngs($availableEnemy->floor);
-
-                    foreach ($vertices as $latLng) {
-                        $foundNewClosestEnemy = $this->findClosestEnemyAndDistance(
-                            $availableEnemy,
-                            $latLng,
-                            $previousPullLatLng,
-                            $enemy->getIngameXY(),
-                            $closestEnemy
-                        );
-                        $result               = $result || $foundNewClosestEnemy;
-                    }
-                } else {
+                foreach ($vertices as $latLng) {
                     $foundNewClosestEnemy = $this->findClosestEnemyAndDistance(
                         $availableEnemy,
-                        $availableEnemy->getLatLng(),
+                        $latLng,
                         $previousPullLatLng,
                         $enemy->getIngameXY(),
                         $closestEnemy
                     );
                     $result               = $result || $foundNewClosestEnemy;
                 }
-            }
-
-            // If we found a matching enemy in the above list, stop completely
-            if ($result) {
-                $this->log->findClosestEnemyAndDistanceFromListFoundEnemy();
-                break;
+            } else {
+                $foundNewClosestEnemy = $this->findClosestEnemyAndDistance(
+                    $availableEnemy,
+                    $availableEnemy->getLatLng(),
+                    $previousPullLatLng,
+                    $enemy->getIngameXY(),
+                    $closestEnemy
+                );
+                $result               = $result || $foundNewClosestEnemy;
             }
         }
 
@@ -550,9 +541,9 @@ abstract class DungeonRouteBuilder
             // Calculate the weighted total distance which is a combination of the distance between our event enemy
             // and the candidate enemy, AND the candidate enemy with the kill location of the previous pull
             $weightedTotalDistance = (
-                ($distanceBetweenEnemies * self::ENEMY_DISTANCE_WEIGHT_RATIO) +
-                ($distanceBetweenPreviousPullAndEnemy * (1 - self::ENEMY_DISTANCE_WEIGHT_RATIO))
-            );
+                    ($distanceBetweenEnemies * self::ENEMY_DISTANCE_WEIGHT_RATIO) +
+                    ($distanceBetweenPreviousPullAndEnemy * (1 - self::ENEMY_DISTANCE_WEIGHT_RATIO))
+                ) * (1 + ($availableEnemy->kill_priority * self::ENEMY_KILL_PRIORITY_WEIGHT_RATIO));
 
             // If a combination of these factors yields a "distance" closer than the enemy we had before, we found a "closer" enemy.
             if ($closestEnemy->getWeightedTotalDistance() > $weightedTotalDistance) {

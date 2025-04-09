@@ -36,9 +36,41 @@ Breadcrumbs::for('misc.affixes', static function (Generator $trail) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.affixes'), route('misc.affixes'));
 });
+Breadcrumbs::for('misc.about', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.about'), route('misc.about'));
+});
+Breadcrumbs::for('misc.credits', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.credits'), route('misc.credits'));
+});
+
+/**
+ * Legal
+ */
+Breadcrumbs::for('legal.cookies', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.legal.cookies'), route('legal.cookies'));
+});
+Breadcrumbs::for('legal.privacy', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.legal.privacy'), route('legal.privacy'));
+});
+Breadcrumbs::for('legal.terms', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.legal.terms'), route('legal.terms'));
+});
+
+/**
+ * Releases
+ */
 Breadcrumbs::for('misc.changelog', static function (Generator $trail) {
     $trail->parent('home');
-    $trail->push(__('breadcrumbs.home.changelog'), route('misc.changelog'));
+    $trail->push(__('breadcrumbs.home.changelog.list'), route('misc.changelog'));
+});
+Breadcrumbs::for('release.view', static function (Generator $trail, Release $release) {
+    $trail->parent('misc.changelog');
+    $trail->push(__('breadcrumbs.home.changelog.release.view', ['version' => $release->version]), route('release.view', ['release' => $release]));
 });
 
 /**

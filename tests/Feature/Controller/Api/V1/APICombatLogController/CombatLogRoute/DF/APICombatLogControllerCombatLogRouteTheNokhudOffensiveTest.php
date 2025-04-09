@@ -12,7 +12,7 @@ use Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute\APICom
 #[Group('API')]
 #[Group('APICombatLog')]
 #[Group('CombatLogRoute')]
-#[Group('NokhudOffensive')]
+#[Group('TheNokhudOffensive')]
 class APICombatLogControllerCombatLogRouteTheNokhudOffensiveTest extends APICombatLogControllerCombatLogRouteTestBase
 {
 

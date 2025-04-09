@@ -9,6 +9,7 @@ use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAffixGroupRepositoryInterface;
@@ -37,6 +38,21 @@ use Random\RandomException;
  */
 class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
 {
+    /**
+     * A list of spell IDs that can be assigned to pulls through ARC. We really don't want to assign dozens of spells
+     * to a single pull, so we limit it to a few that are actually useful.
+     */
+    private const VALID_SPELL_IDS = [
+        Spell::SPELL_BLOODLUST,
+        Spell::SPELL_HEROISM,
+        Spell::SPELL_TIME_WARP,
+        Spell::SPELL_FURY_OF_THE_ASPECTS,
+        Spell::SPELL_ANCIENT_HYSTERIA,
+        Spell::SPELL_PRIMAL_RAGE,
+        Spell::SPELL_FERAL_HIDE_DRUMS,
+        Spell::SPELL_SHROUD_OF_CONCEALMENT,
+    ];
+
     private CombatLogRouteDungeonRouteBuilderLoggingInterface $log;
 
     /** @var Collection<int> */
@@ -83,9 +99,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
             $log
         );
 
-        $this->validSpellIds = $this->spellRepository->findAllById(
-            $combatLogRoute->spells->map(fn(CombatLogRouteSpellRequestModel $spell) => $spell->spellId)
-        );
+        $this->validSpellIds = $this->spellRepository->findAllById(collect(self::VALID_SPELL_IDS));
 
         /** @var CombatLogRouteDungeonRouteBuilderLoggingInterface $log */
         $this->log = $log;

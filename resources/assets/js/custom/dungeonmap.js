@@ -76,6 +76,9 @@ class DungeonMap extends Signalable {
         state.register('floorid:changed', this, function (floorIdChangedEvent) {
             self.refreshLeafletMap(false, floorIdChangedEvent.data.center, floorIdChangedEvent.data.zoom);
         });
+        state.register('mapzoomspeed:changed', this, function (mapZoomLevelChangedEvent) {
+            self._applyMapZoomSpeed();
+        });
 
         // How many map objects have returned a success status
         if (!this.options.readonly) {
@@ -211,6 +214,8 @@ class DungeonMap extends Signalable {
             crs: L.CRS.Simple,
             gestureHandling: this.options.gestureHandling
         }, c.map.leafletSettings));
+        this._applyMapZoomSpeed();
+
         // Make sure we can place things in the center of the map
         this._createAdditionalControlPlaceholders();
         // Top left is reserved for the sidebar
@@ -401,6 +406,13 @@ class DungeonMap extends Signalable {
                 getState().setMapZoomLevel(self.leafletMap.getZoom());
             }
         });
+
+        // After zooming or moving the map, fix the seam. Yeah, very hacky but it works
+        this.leafletMap.on('moveend', function () {
+            if (typeof self.leafletMap !== 'undefined') {
+                self._fixMapTileSeam();
+            }
+        });
     }
 
     /**
@@ -430,6 +442,30 @@ class DungeonMap extends Signalable {
             if (this.leafletMap.tap) this.leafletMap.tap.disable();
             document.getElementById('map').style.cursor = 'default';
         }
+    }
+
+    _applyMapZoomSpeed() {
+        console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
+
+        if (this.leafletMap !== null) {
+            L.setOptions(this.leafletMap, {
+                wheelPxPerZoomLevel: c.map.settings.wheelPxPerZoomLevelMax - (
+                    (c.map.settings.wheelPxPerZoomLevelMax - c.map.settings.wheelPxPerZoomLevelMin) *
+                    (getState().getMapZoomSpeed() / 100)
+                )
+            });
+        }
+    }
+
+    /**
+     * Really really shitty hack that will fix the map seam that can shine through when zooming. I tried a lot of things
+     * to fix it but this is the only thing that sticks unfortunately. I don't see any downsides at this time so I'm keeping it
+     *
+     *
+     * @private
+     */
+    _fixMapTileSeam() {
+        $('.leaflet-tile-container img').css('width', `${c.map.settings.tileWidth + 1}px`).css('height', `${c.map.settings.tileHeight + 1}px`);
     }
 
     /**
@@ -698,7 +734,7 @@ class DungeonMap extends Signalable {
         }
         this.leafletMap.setView(center ?? [-128, 192], zoom ?? this.options.defaultZoom);
 
-        let tileSize = L.point(384, 256);
+        let tileSize = L.point(c.map.settings.tileWidth, c.map.settings.tileHeight);
         let currentFloor = getState().getCurrentFloor();
         let floorMaxZoomLevel = currentFloor.zoom_max ?? this.options.defaultZoomMax;
         let zoomSizeFactor = Math.pow(2, floorMaxZoomLevel);
@@ -712,12 +748,14 @@ class DungeonMap extends Signalable {
             maxZoom: floorMaxZoomLevel,
             attribution: 'Map data © Blizzard Entertainment',
             tileSize: tileSize,
+            edgeBufferTiles: 1,
             noWrap: true,
             continuousWorld: true,
             bounds: new L.LatLngBounds(southWest, northEast)
         }).addTo(this.leafletMap);
 
         this.leafletMap.setMaxZoom(floorMaxZoomLevel);
+        this._fixMapTileSeam();
 
         // if( typeof this.drawnLayers !== 'undefined' ) {
         //     this.leafletMap.removeLayer(this.drawnLayers);

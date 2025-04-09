@@ -1,0 +1,2217 @@
+{
+    "data": {
+        "metadata": {
+            "runId": "season-tww-2-ptr - logged: #28213 - run: #4493",
+            "keystoneRunId": 4493,
+            "loggedRunId": 28213,
+            "period": 999,
+            "season": "season-tww-2-ptr",
+            "regionId": 2,
+            "realmType": "ptr",
+            "wowInstanceId": 2293
+        },
+        "settings": {
+            "temporary": true,
+            "debugIcons": false
+        },
+        "challengeMode": {
+            "start": "2025-02-24T19:24:28.544+00:00",
+            "end": "2025-02-24T20:07:44.895+00:00",
+            "success": false,
+            "durationMs": 2843263,
+            "parTimeMs": 2040999,
+            "timerFraction": 1.3930741759305125,
+            "challengeModeId": 382,
+            "level": 14,
+            "numDeaths": 12,
+            "affixes": [
+                165,
+                9,
+                10,
+                147
+            ]
+        },
+        "roster": {
+            "numMembers": 5,
+            "averageItemLevel": 629,
+            "characterIds": [
+                234257676,
+                234353287,
+                234380883,
+                234934284,
+                235562540
+            ],
+            "specIds": [
+                104,
+                252,
+                256,
+                261,
+                262
+            ],
+            "classIds": [
+                6,
+                11,
+                7,
+                4,
+                5
+            ]
+        },
+        "npcs": [
+            {
+                "npcId": 170850,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:24:44.941+00:00",
+                "diedAt": "2025-02-24T19:25:22.156+00:00",
+                "coord": {
+                    "x": 2535.32,
+                    "y": 2770.23,
+                    "uiMapId": 1683
+                },
+                "coordEnemy": {
+                    "x": 2545.58,
+                    "y": 2768.64,
+                    "uiMapId": 1683
+                },
+                "gridCoord": {
+                    "x": 2537.69,
+                    "y": 2767.38,
+                    "uiMapId": 1683
+                },
+                "gridCoordEnemy": {
+                    "x": 2546.5,
+                    "y": 2767.38,
+                    "uiMapId": 1683
+                }
+            },
+            {
+                "npcId": 164451,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:24:49.619+00:00",
+                "diedAt": "2025-02-24T19:26:47.651+00:00",
+                "coord": {
+                    "x": 2545.88,
+                    "y": 2835.12,
+                    "uiMapId": 1683
+                },
+                "coordEnemy": {
+                    "x": 2545.85,
+                    "y": 2816.73,
+                    "uiMapId": 1683
+                },
+                "gridCoord": {
+                    "x": 2546.5,
+                    "y": 2834.94,
+                    "uiMapId": 1683
+                },
+                "gridCoordEnemy": {
+                    "x": 2546.5,
+                    "y": 2814.38,
+                    "uiMapId": 1683
+                }
+            },
+            {
+                "npcId": 164463,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:24:50.632+00:00",
+                "diedAt": "2025-02-24T19:26:47.653+00:00",
+                "coord": {
+                    "x": 2540.96,
+                    "y": 2835.18,
+                    "uiMapId": 1683
+                },
+                "coordEnemy": {
+                    "x": 2532.8,
+                    "y": 2835.99,
+                    "uiMapId": 1683
+                },
+                "gridCoord": {
+                    "x": 2543.56,
+                    "y": 2834.94,
+                    "uiMapId": 1683
+                },
+                "gridCoordEnemy": {
+                    "x": 2534.75,
+                    "y": 2834.94,
+                    "uiMapId": 1683
+                }
+            },
+            {
+                "npcId": 164510,
+                "spawnUid": "00013CC76B",
+                "engagedAt": "2025-02-24T19:27:24.394+00:00",
+                "diedAt": "2025-02-24T19:29:08.781+00:00",
+                "coord": {
+                    "x": 2599.89,
+                    "y": 2759.8,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2602.79,
+                    "y": 2757.16,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2600.1,
+                    "y": 2759.6,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2603.5,
+                    "y": 2756.2,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "npcId": 170690,
+                "spawnUid": "0000BCC76B",
+                "engagedAt": "2025-02-24T19:27:34.646+00:00",
+                "diedAt": "2025-02-24T19:28:13.512+00:00",
+                "coord": {
+                    "x": 2463.41,
+                    "y": 2855.58,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2466.74,
+                    "y": 2857.05,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2464.1,
+                    "y": 2854.8,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2466.8,
+                    "y": 2856.74,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "00013CC76B",
+                "engagedAt": "2025-02-24T19:27:36.006+00:00",
+                "diedAt": "2025-02-24T19:27:54.746+00:00",
+                "coord": {
+                    "x": 2455,
+                    "y": 2868.31,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2454.75,
+                    "y": 2870.22,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2455.6,
+                    "y": 2866.7,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2455.62,
+                    "y": 2869.95,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:27:38.155+00:00",
+                "diedAt": "2025-02-24T19:27:56.134+00:00",
+                "coord": {
+                    "x": 2464.36,
+                    "y": 2863.34,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2462.93,
+                    "y": 2866.9,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2465.8,
+                    "y": 2863.3,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2463.75,
+                    "y": 2865.89,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "0000BCC76B",
+                "engagedAt": "2025-02-24T19:27:38.155+00:00",
+                "diedAt": "2025-02-24T19:27:56.052+00:00",
+                "coord": {
+                    "x": 2465.78,
+                    "y": 2862.68,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2459.39,
+                    "y": 2863.92,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2465.8,
+                    "y": 2861.6,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2459.68,
+                    "y": 2863.85,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 174210,
+                "spawnUid": "00013CC76B",
+                "engagedAt": "2025-02-24T19:27:38.155+00:00",
+                "diedAt": "2025-02-24T19:28:25.840+00:00",
+                "coord": {
+                    "x": 2462.34,
+                    "y": 2863.67,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2455.23,
+                    "y": 2865.37,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2462.4,
+                    "y": 2863.3,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2455.62,
+                    "y": 2864.87,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "0001BCC76B",
+                "engagedAt": "2025-02-24T19:27:38.883+00:00",
+                "diedAt": "2025-02-24T19:27:55.444+00:00",
+                "coord": {
+                    "x": 2475.21,
+                    "y": 2855.74,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2458.91,
+                    "y": 2868.07,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2476,
+                    "y": 2854.8,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2459.68,
+                    "y": 2867.92,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 169927,
+                "spawnUid": "00013CC76B",
+                "engagedAt": "2025-02-24T19:27:39.954+00:00",
+                "diedAt": "2025-02-24T19:28:14.565+00:00",
+                "coord": {
+                    "x": 2439.2,
+                    "y": 2872.3,
+                    "uiMapId": 1686
+                },
+                "coordEnemy": {
+                    "x": 2438.15,
+                    "y": 2872.42,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2439.35,
+                    "y": 2871.99,
+                    "uiMapId": 1686
+                },
+                "gridCoordEnemy": {
+                    "x": 2438.33,
+                    "y": 2871.99,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 174210,
+                "spawnUid": "0002BCC76B",
+                "engagedAt": "2025-02-24T19:27:39.954+00:00",
+                "diedAt": "2025-02-24T19:28:05.517+00:00",
+                "coord": {
+                    "x": 2426.66,
+                    "y": 2868.9,
+                    "uiMapId": 1686
+                },
+                "coordEnemy": {
+                    "x": 2430.9,
+                    "y": 2868.08,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2427.15,
+                    "y": 2867.92,
+                    "uiMapId": 1686
+                },
+                "gridCoordEnemy": {
+                    "x": 2431.22,
+                    "y": 2867.92,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "0005BCC76B",
+                "engagedAt": "2025-02-24T19:27:41.031+00:00",
+                "diedAt": "2025-02-24T19:27:58.203+00:00",
+                "coord": {
+                    "x": 2427.4,
+                    "y": 2866.84,
+                    "uiMapId": 1686
+                },
+                "coordEnemy": {
+                    "x": 2425.63,
+                    "y": 2863.43,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2428.17,
+                    "y": 2865.89,
+                    "uiMapId": 1686
+                },
+                "gridCoordEnemy": {
+                    "x": 2426.13,
+                    "y": 2862.84,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "00063CC76B",
+                "engagedAt": "2025-02-24T19:27:42.741+00:00",
+                "diedAt": "2025-02-24T19:27:54.643+00:00",
+                "coord": {
+                    "x": 2448.23,
+                    "y": 2865.49,
+                    "uiMapId": 1686
+                },
+                "coordEnemy": {
+                    "x": 2431.52,
+                    "y": 2861.28,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2448.5,
+                    "y": 2864.87,
+                    "uiMapId": 1686
+                },
+                "gridCoordEnemy": {
+                    "x": 2432.23,
+                    "y": 2860.8,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "0006BCC76B",
+                "engagedAt": "2025-02-24T19:27:42.741+00:00",
+                "diedAt": "2025-02-24T19:27:54.747+00:00",
+                "coord": {
+                    "x": 2448.2,
+                    "y": 2859.62,
+                    "uiMapId": 1686
+                },
+                "coordEnemy": {
+                    "x": 2423.14,
+                    "y": 2869.6,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2448.5,
+                    "y": 2858.77,
+                    "uiMapId": 1686
+                },
+                "gridCoordEnemy": {
+                    "x": 2424.1,
+                    "y": 2868.94,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "00073CC76B",
+                "engagedAt": "2025-02-24T19:27:43.269+00:00",
+                "diedAt": "2025-02-24T19:27:57.125+00:00",
+                "coord": {
+                    "x": 2445.71,
+                    "y": 2864.52,
+                    "uiMapId": 1686
+                },
+                "coordEnemy": {
+                    "x": 2419.67,
+                    "y": 2864.61,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2446.47,
+                    "y": 2863.85,
+                    "uiMapId": 1686
+                },
+                "gridCoordEnemy": {
+                    "x": 2420.03,
+                    "y": 2863.85,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 169927,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:28:30.416+00:00",
+                "diedAt": "2025-02-24T19:29:17.575+00:00",
+                "coord": {
+                    "x": 2409.88,
+                    "y": 2878.1,
+                    "uiMapId": 1686
+                },
+                "coordEnemy": {
+                    "x": 2403.52,
+                    "y": 2878.03,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2410.88,
+                    "y": 2878.09,
+                    "uiMapId": 1686
+                },
+                "gridCoordEnemy": {
+                    "x": 2403.77,
+                    "y": 2877.07,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 174210,
+                "spawnUid": "0000BCC76B",
+                "engagedAt": "2025-02-24T19:28:31.732+00:00",
+                "diedAt": "2025-02-24T19:29:22.332+00:00",
+                "coord": {
+                    "x": 2412.62,
+                    "y": 2875.23,
+                    "uiMapId": 1686
+                },
+                "coordEnemy": {
+                    "x": 2383.3,
+                    "y": 2883.07,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2412.92,
+                    "y": 2875.04,
+                    "uiMapId": 1686
+                },
+                "gridCoordEnemy": {
+                    "x": 2383.43,
+                    "y": 2882.15,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 174210,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:28:31.733+00:00",
+                "diedAt": "2025-02-24T19:29:26.322+00:00",
+                "coord": {
+                    "x": 2414.24,
+                    "y": 2878.12,
+                    "uiMapId": 1686
+                },
+                "coordEnemy": {
+                    "x": 2385.44,
+                    "y": 2888.87,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2414.95,
+                    "y": 2878.09,
+                    "uiMapId": 1686
+                },
+                "gridCoordEnemy": {
+                    "x": 2385.47,
+                    "y": 2888.25,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 163086,
+                "spawnUid": "00013CC76B",
+                "engagedAt": "2025-02-24T19:29:41.394+00:00",
+                "diedAt": "2025-02-24T19:30:32.916+00:00",
+                "coord": {
+                    "x": 2353.63,
+                    "y": 2889.52,
+                    "uiMapId": 1686
+                },
+                "coordEnemy": {
+                    "x": 2350.82,
+                    "y": 2898.11,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2353.95,
+                    "y": 2889.27,
+                    "uiMapId": 1686
+                },
+                "gridCoordEnemy": {
+                    "x": 2350.9,
+                    "y": 2897.4,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 169927,
+                "spawnUid": "0000BCC76B",
+                "engagedAt": "2025-02-24T19:30:44.430+00:00",
+                "diedAt": "2025-02-24T19:31:39.019+00:00",
+                "coord": {
+                    "x": 2320.64,
+                    "y": 2901.43,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2322.55,
+                    "y": 2902.32,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2321.42,
+                    "y": 2900.45,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2323.45,
+                    "y": 2901.47,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 174210,
+                "spawnUid": "00023CC76B",
+                "engagedAt": "2025-02-24T19:30:44.483+00:00",
+                "diedAt": "2025-02-24T19:31:18.388+00:00",
+                "coord": {
+                    "x": 2323.27,
+                    "y": 2897.49,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2329.78,
+                    "y": 2905.14,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2323.45,
+                    "y": 2897.4,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2330.57,
+                    "y": 2904.52,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "0004BCC76B",
+                "engagedAt": "2025-02-24T19:30:44.484+00:00",
+                "diedAt": "2025-02-24T19:30:58.961+00:00",
+                "coord": {
+                    "x": 2322.86,
+                    "y": 2905.47,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2328.19,
+                    "y": 2898.2,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2323.45,
+                    "y": 2904.52,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2328.53,
+                    "y": 2897.4,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "00053CC76B",
+                "engagedAt": "2025-02-24T19:30:45.630+00:00",
+                "diedAt": "2025-02-24T19:30:59.226+00:00",
+                "coord": {
+                    "x": 2324.65,
+                    "y": 2906.29,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2331.73,
+                    "y": 2910.49,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2325.48,
+                    "y": 2905.53,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2332.6,
+                    "y": 2909.6,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 170690,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:30:46.035+00:00",
+                "diedAt": "2025-02-24T19:31:42.875+00:00",
+                "coord": {
+                    "x": 2326.32,
+                    "y": 2904.27,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2324.21,
+                    "y": 2909.98,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2326.5,
+                    "y": 2903.5,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2324.47,
+                    "y": 2909.6,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 174210,
+                "spawnUid": "0001BCC76B",
+                "engagedAt": "2025-02-24T19:31:13.237+00:00",
+                "diedAt": "2025-02-24T19:31:42.610+00:00",
+                "coord": {
+                    "x": 2342.79,
+                    "y": 2899.38,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2360.39,
+                    "y": 2889.45,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2343.78,
+                    "y": 2898.42,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2361.07,
+                    "y": 2889.27,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "00033CC76B",
+                "engagedAt": "2025-02-24T19:31:14.078+00:00",
+                "diedAt": "2025-02-24T19:31:32.472+00:00",
+                "coord": {
+                    "x": 2331.32,
+                    "y": 2898.78,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2364.12,
+                    "y": 2896.87,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2331.58,
+                    "y": 2898.42,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2365.13,
+                    "y": 2896.38,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "00043CC76B",
+                "engagedAt": "2025-02-24T19:31:14.078+00:00",
+                "diedAt": "2025-02-24T19:31:32.316+00:00",
+                "coord": {
+                    "x": 2334.82,
+                    "y": 2906.52,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2367.35,
+                    "y": 2886.39,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2335.65,
+                    "y": 2905.53,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2368.18,
+                    "y": 2886.22,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "00023CC76B",
+                "engagedAt": "2025-02-24T19:31:15.478+00:00",
+                "diedAt": "2025-02-24T19:31:35.441+00:00",
+                "coord": {
+                    "x": 2333.63,
+                    "y": 2905.42,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2371.23,
+                    "y": 2893.75,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2334.63,
+                    "y": 2904.52,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2371.23,
+                    "y": 2893.34,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "0002BCC76B",
+                "engagedAt": "2025-02-24T19:31:15.588+00:00",
+                "diedAt": "2025-02-24T19:31:33.769+00:00",
+                "coord": {
+                    "x": 2328.66,
+                    "y": 2907.6,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2374.95,
+                    "y": 2882.67,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2329.55,
+                    "y": 2907.57,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2375.3,
+                    "y": 2882.15,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 163089,
+                "spawnUid": "0003BCC76B",
+                "engagedAt": "2025-02-24T19:31:15.588+00:00",
+                "diedAt": "2025-02-24T19:31:31.372+00:00",
+                "coord": {
+                    "x": 2328.11,
+                    "y": 2907.47,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2378.21,
+                    "y": 2889.86,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2328.53,
+                    "y": 2906.55,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2378.35,
+                    "y": 2889.27,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 163086,
+                "spawnUid": "0000BCC76B",
+                "engagedAt": "2025-02-24T19:31:43.512+00:00",
+                "diedAt": "2025-02-24T19:32:50.064+00:00",
+                "coord": {
+                    "x": 2379.63,
+                    "y": 2887.02,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2337.61,
+                    "y": 2862.61,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2380.38,
+                    "y": 2886.22,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2337.68,
+                    "y": 2861.82,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 170690,
+                "spawnUid": "00013CC76B",
+                "engagedAt": "2025-02-24T19:32:58.358+00:00",
+                "diedAt": "2025-02-24T19:33:56.442+00:00",
+                "coord": {
+                    "x": 2406.55,
+                    "y": 2883.21,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2404.82,
+                    "y": 2883.02,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2406.82,
+                    "y": 2883.17,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2405.8,
+                    "y": 2882.15,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 169927,
+                "spawnUid": "0001BCC76B",
+                "engagedAt": "2025-02-24T19:32:58.678+00:00",
+                "diedAt": "2025-02-24T19:34:01.539+00:00",
+                "coord": {
+                    "x": 2407.17,
+                    "y": 2877.83,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2377.73,
+                    "y": 2888.13,
+                    "uiMapId": 1687
+                },
+                "gridCoord": {
+                    "x": 2407.83,
+                    "y": 2877.07,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2378.35,
+                    "y": 2887.24,
+                    "uiMapId": 1687
+                }
+            },
+            {
+                "npcId": 162317,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:33:05.714+00:00",
+                "diedAt": "2025-02-24T19:36:42.845+00:00",
+                "coord": {
+                    "x": 2447.74,
+                    "y": 2863.37,
+                    "uiMapId": 1687
+                },
+                "coordEnemy": {
+                    "x": 2448.33,
+                    "y": 2866.37,
+                    "uiMapId": 1686
+                },
+                "gridCoord": {
+                    "x": 2448.5,
+                    "y": 2862.84,
+                    "uiMapId": 1687
+                },
+                "gridCoordEnemy": {
+                    "x": 2448.5,
+                    "y": 2865.89,
+                    "uiMapId": 1686
+                }
+            },
+            {
+                "npcId": 167536,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:37:26.932+00:00",
+                "diedAt": "2025-02-24T19:42:50.433+00:00",
+                "coord": {
+                    "x": 2682.91,
+                    "y": 2787.88,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2673.5,
+                    "y": 2790.35,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2683.4,
+                    "y": 2786.8,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2674.9,
+                    "y": 2790.2,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "npcId": 162744,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:37:31.450+00:00",
+                "diedAt": "2025-02-24T19:41:02.426+00:00",
+                "coord": {
+                    "x": 2623.65,
+                    "y": 2737.88,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2606.9,
+                    "y": 2731.75,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2623.9,
+                    "y": 2737.5,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2606.9,
+                    "y": 2730.7,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "npcId": 164510,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:42:54.676+00:00",
+                "diedAt": "2025-02-24T19:43:22.118+00:00",
+                "coord": {
+                    "x": 2697.6,
+                    "y": 2754.07,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2710.14,
+                    "y": 2735.59,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2698.7,
+                    "y": 2752.8,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2710.6,
+                    "y": 2734.1,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "npcId": 164510,
+                "spawnUid": "0000BCC76B",
+                "engagedAt": "2025-02-24T19:42:55.001+00:00",
+                "diedAt": "2025-02-24T19:43:24.613+00:00",
+                "coord": {
+                    "x": 2701.61,
+                    "y": 2757.03,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2716.6,
+                    "y": 2739.77,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2702.1,
+                    "y": 2756.2,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2717.4,
+                    "y": 2739.2,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "npcId": 167994,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:42:55.853+00:00",
+                "diedAt": "2025-02-24T19:43:27.576+00:00",
+                "coord": {
+                    "x": 2698.98,
+                    "y": 2751.56,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2705.44,
+                    "y": 2738.3,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2700.4,
+                    "y": 2751.1,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2705.5,
+                    "y": 2737.5,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "npcId": 164506,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:42:56.103+00:00",
+                "diedAt": "2025-02-24T19:43:16.353+00:00",
+                "coord": {
+                    "x": 2700.16,
+                    "y": 2753.68,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2710.01,
+                    "y": 2742.21,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2700.4,
+                    "y": 2752.8,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2710.6,
+                    "y": 2740.9,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "npcId": 167994,
+                "spawnUid": "0000BCC76B",
+                "engagedAt": "2025-02-24T19:42:56.103+00:00",
+                "diedAt": "2025-02-24T19:43:36.242+00:00",
+                "coord": {
+                    "x": 2701.21,
+                    "y": 2754.96,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2714.91,
+                    "y": 2745.56,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2702.1,
+                    "y": 2754.5,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2715.7,
+                    "y": 2744.3,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "npcId": 167534,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:43:38.752+00:00",
+                "diedAt": "2025-02-24T19:45:10.097+00:00",
+                "coord": {
+                    "x": 2740.59,
+                    "y": 2699.15,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2748.41,
+                    "y": 2706.06,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2741.2,
+                    "y": 2698.4,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2749.7,
+                    "y": 2705.2,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "npcId": 162329,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:45:20.868+00:00",
+                "diedAt": "2025-02-24T19:49:05.181+00:00",
+                "coord": {
+                    "x": 2641.88,
+                    "y": 2690.81,
+                    "uiMapId": 1684
+                },
+                "coordEnemy": {
+                    "x": 2651.44,
+                    "y": 2691.34,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2642.6,
+                    "y": 2689.9,
+                    "uiMapId": 1684
+                },
+                "gridCoordEnemy": {
+                    "x": 2652.8,
+                    "y": 2689.9,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "npcId": 169875,
+                "spawnUid": "00053CC76B",
+                "engagedAt": "2025-02-24T19:49:29.761+00:00",
+                "diedAt": "2025-02-24T19:50:12.712+00:00",
+                "coord": {
+                    "x": 2539.52,
+                    "y": 2938.72,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2541.83,
+                    "y": 2937.19,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2540.18,
+                    "y": 2937.65,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2542.35,
+                    "y": 2935.48,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 169875,
+                "spawnUid": "0005BCC76B",
+                "engagedAt": "2025-02-24T19:49:29.762+00:00",
+                "diedAt": "2025-02-24T19:50:11.746+00:00",
+                "coord": {
+                    "x": 2550.42,
+                    "y": 2938.86,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2554,
+                    "y": 2937.08,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2551.05,
+                    "y": 2937.65,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2555.4,
+                    "y": 2935.48,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 169875,
+                "spawnUid": "0004BCC76B",
+                "engagedAt": "2025-02-24T19:49:31.263+00:00",
+                "diedAt": "2025-02-24T19:50:13.599+00:00",
+                "coord": {
+                    "x": 2542.59,
+                    "y": 2945.5,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2547.76,
+                    "y": 2947.32,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2544.53,
+                    "y": 2944.18,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2548.88,
+                    "y": 2946.35,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 169875,
+                "spawnUid": "00093CC76B",
+                "engagedAt": "2025-02-24T19:49:33.043+00:00",
+                "diedAt": "2025-02-24T19:50:17.727+00:00",
+                "coord": {
+                    "x": 2522.7,
+                    "y": 2942.3,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2522.97,
+                    "y": 2943.16,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2522.78,
+                    "y": 2942,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2524.95,
+                    "y": 2942,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 169875,
+                "spawnUid": "0009BCC76B",
+                "engagedAt": "2025-02-24T19:49:34.261+00:00",
+                "diedAt": "2025-02-24T19:50:17.249+00:00",
+                "coord": {
+                    "x": 2511.35,
+                    "y": 2947.21,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2515.91,
+                    "y": 2947.5,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2511.9,
+                    "y": 2946.35,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2516.25,
+                    "y": 2946.35,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 169875,
+                "spawnUid": "000A3CC76B",
+                "engagedAt": "2025-02-24T19:49:35.258+00:00",
+                "diedAt": "2025-02-24T19:50:13.575+00:00",
+                "coord": {
+                    "x": 2506.95,
+                    "y": 2947.2,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2515.64,
+                    "y": 2940.44,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2507.55,
+                    "y": 2946.35,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2516.25,
+                    "y": 2939.83,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 169875,
+                "spawnUid": "00033CC76B",
+                "engagedAt": "2025-02-24T19:49:36.190+00:00",
+                "diedAt": "2025-02-24T19:50:14.073+00:00",
+                "coord": {
+                    "x": 2499.81,
+                    "y": 2961.6,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2502.44,
+                    "y": 2964.59,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2501.03,
+                    "y": 2961.58,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2503.2,
+                    "y": 2963.75,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 169875,
+                "spawnUid": "00043CC76B",
+                "engagedAt": "2025-02-24T19:49:37.899+00:00",
+                "diedAt": "2025-02-24T19:50:15.387+00:00",
+                "coord": {
+                    "x": 2499.1,
+                    "y": 2966.74,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2494.39,
+                    "y": 2962.96,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2501.03,
+                    "y": 2965.93,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2494.5,
+                    "y": 2961.58,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 169875,
+                "spawnUid": "0003BCC76B",
+                "engagedAt": "2025-02-24T19:49:38.946+00:00",
+                "diedAt": "2025-02-24T19:50:12.715+00:00",
+                "coord": {
+                    "x": 2495.85,
+                    "y": 2980.14,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2499.72,
+                    "y": 2956.18,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2496.68,
+                    "y": 2978.98,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2501.03,
+                    "y": 2955.05,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 169875,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:49:39.939+00:00",
+                "diedAt": "2025-02-24T19:50:09.774+00:00",
+                "coord": {
+                    "x": 2493.15,
+                    "y": 2988.04,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2494.39,
+                    "y": 2987.02,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2494.5,
+                    "y": 2987.68,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2494.5,
+                    "y": 2985.5,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 169875,
+                "spawnUid": "00013CC76B",
+                "engagedAt": "2025-02-24T19:49:40.267+00:00",
+                "diedAt": "2025-02-24T19:50:15.547+00:00",
+                "coord": {
+                    "x": 2503.07,
+                    "y": 2988.77,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2501.35,
+                    "y": 2988.56,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2503.2,
+                    "y": 2987.68,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2503.2,
+                    "y": 2987.68,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 169875,
+                "spawnUid": "0000BCC76B",
+                "engagedAt": "2025-02-24T19:49:50.231+00:00",
+                "diedAt": "2025-02-24T19:50:18.052+00:00",
+                "coord": {
+                    "x": 2480.03,
+                    "y": 2992.05,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2497.73,
+                    "y": 2994.16,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2481.45,
+                    "y": 2992.03,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2498.85,
+                    "y": 2992.03,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 167998,
+                "spawnUid": "0000BCC76B",
+                "engagedAt": "2025-02-24T19:50:00.051+00:00",
+                "diedAt": "2025-02-24T19:50:44.332+00:00",
+                "coord": {
+                    "x": 2422.16,
+                    "y": 2998.34,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2423.69,
+                    "y": 2990.64,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2422.73,
+                    "y": 2996.38,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2424.9,
+                    "y": 2989.85,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 170882,
+                "spawnUid": "00023CC76B",
+                "engagedAt": "2025-02-24T19:51:00.632+00:00",
+                "diedAt": "2025-02-24T19:51:09.538+00:00",
+                "coord": {
+                    "x": 2402.85,
+                    "y": 3090.68,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2403.44,
+                    "y": 3087.7,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2403.15,
+                    "y": 3089.9,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2405.33,
+                    "y": 3085.55,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 170882,
+                "spawnUid": "0001BCC76B",
+                "engagedAt": "2025-02-24T19:51:01.683+00:00",
+                "diedAt": "2025-02-24T19:51:12.692+00:00",
+                "coord": {
+                    "x": 2411.56,
+                    "y": 3096.99,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2412.68,
+                    "y": 3094.99,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2411.85,
+                    "y": 3096.43,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2414.03,
+                    "y": 3094.25,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 170882,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:51:28.724+00:00",
+                "diedAt": "2025-02-24T19:51:47.975+00:00",
+                "coord": {
+                    "x": 2252.62,
+                    "y": 3103.96,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2249.13,
+                    "y": 3106.04,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2253.08,
+                    "y": 3102.95,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2250.9,
+                    "y": 3105.13,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 160495,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:51:29.200+00:00",
+                "diedAt": "2025-02-24T19:52:06.808+00:00",
+                "coord": {
+                    "x": 2251.61,
+                    "y": 3098.74,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2247.24,
+                    "y": 3092.1,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2253.08,
+                    "y": 3098.6,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2248.73,
+                    "y": 3092.08,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 167998,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:51:29.200+00:00",
+                "diedAt": "2025-02-24T19:51:59.472+00:00",
+                "coord": {
+                    "x": 2255.03,
+                    "y": 3101.38,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2264.15,
+                    "y": 3099.89,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2255.25,
+                    "y": 3100.78,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2266.13,
+                    "y": 3098.6,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 169893,
+                "spawnUid": "0000BCC76B",
+                "engagedAt": "2025-02-24T19:52:21.810+00:00",
+                "diedAt": "2025-02-24T19:54:08.611+00:00",
+                "coord": {
+                    "x": 2365.19,
+                    "y": 3194.89,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2366.91,
+                    "y": 3185.61,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2366.18,
+                    "y": 3194.3,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2368.35,
+                    "y": 3185.6,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 169893,
+                "spawnUid": "00013CC76B",
+                "engagedAt": "2025-02-24T19:52:22.346+00:00",
+                "diedAt": "2025-02-24T19:53:36.128+00:00",
+                "coord": {
+                    "x": 2356.51,
+                    "y": 3183.79,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2356.57,
+                    "y": 3185.14,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2357.48,
+                    "y": 3183.43,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2357.48,
+                    "y": 3183.43,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 160495,
+                "spawnUid": "00023CC76B",
+                "engagedAt": "2025-02-24T19:54:25.676+00:00",
+                "diedAt": "2025-02-24T19:54:59.795+00:00",
+                "coord": {
+                    "x": 2606.48,
+                    "y": 3142.9,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2610.88,
+                    "y": 3140.09,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2607.6,
+                    "y": 3142.1,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2611.95,
+                    "y": 3139.93,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 169893,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:54:26.115+00:00",
+                "diedAt": "2025-02-24T19:54:57.569+00:00",
+                "coord": {
+                    "x": 2615.17,
+                    "y": 3145.94,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2613.44,
+                    "y": 3147.75,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2616.3,
+                    "y": 3144.28,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2614.13,
+                    "y": 3146.45,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 170882,
+                "spawnUid": "0002BCC76B",
+                "engagedAt": "2025-02-24T19:54:27.865+00:00",
+                "diedAt": "2025-02-24T19:54:48.861+00:00",
+                "coord": {
+                    "x": 2608.36,
+                    "y": 3148.71,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2604.61,
+                    "y": 3144.38,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2609.78,
+                    "y": 3148.63,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2605.43,
+                    "y": 3144.28,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 162309,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:55:24.883+00:00",
+                "diedAt": "2025-02-24T19:58:36.868+00:00",
+                "coord": {
+                    "x": 2546,
+                    "y": 2989.97,
+                    "uiMapId": 1685
+                },
+                "coordEnemy": {
+                    "x": 2545.85,
+                    "y": 2989.39,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2546.7,
+                    "y": 2989.85,
+                    "uiMapId": 1685
+                },
+                "gridCoordEnemy": {
+                    "x": 2546.7,
+                    "y": 2987.68,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "npcId": 170838,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:59:20.229+00:00",
+                "diedAt": "2025-02-24T20:00:23.586+00:00",
+                "coord": {
+                    "x": 2540.24,
+                    "y": 2758.47,
+                    "uiMapId": 1683
+                },
+                "coordEnemy": {
+                    "x": 2540.46,
+                    "y": 2740.53,
+                    "uiMapId": 1683
+                },
+                "gridCoord": {
+                    "x": 2540.63,
+                    "y": 2755.63,
+                    "uiMapId": 1683
+                },
+                "gridCoordEnemy": {
+                    "x": 2540.63,
+                    "y": 2738,
+                    "uiMapId": 1683
+                }
+            },
+            {
+                "npcId": 174197,
+                "spawnUid": "00003CC76B",
+                "engagedAt": "2025-02-24T19:59:20.572+00:00",
+                "diedAt": "2025-02-24T20:00:03.246+00:00",
+                "coord": {
+                    "x": 2546.59,
+                    "y": 2763.53,
+                    "uiMapId": 1683
+                },
+                "coordEnemy": {
+                    "x": 2544.85,
+                    "y": 2748.3,
+                    "uiMapId": 1683
+                },
+                "gridCoord": {
+                    "x": 2549.44,
+                    "y": 2761.5,
+                    "uiMapId": 1683
+                },
+                "gridCoordEnemy": {
+                    "x": 2546.5,
+                    "y": 2746.81,
+                    "uiMapId": 1683
+                }
+            },
+            {
+                "npcId": 170838,
+                "spawnUid": "0000BCC76B",
+                "engagedAt": "2025-02-24T19:59:22.130+00:00",
+                "diedAt": "2025-02-24T20:00:26.637+00:00",
+                "coord": {
+                    "x": 2547.57,
+                    "y": 2764.71,
+                    "uiMapId": 1683
+                },
+                "coordEnemy": {
+                    "x": 2550.85,
+                    "y": 2740.83,
+                    "uiMapId": 1683
+                },
+                "gridCoord": {
+                    "x": 2549.44,
+                    "y": 2764.44,
+                    "uiMapId": 1683
+                },
+                "gridCoordEnemy": {
+                    "x": 2552.38,
+                    "y": 2738,
+                    "uiMapId": 1683
+                }
+            },
+            {
+                "npcId": 165946,
+                "spawnUid": "00003CD0A2",
+                "engagedAt": "2025-02-24T20:03:59.145+00:00",
+                "diedAt": "2025-02-24T20:07:44.465+00:00",
+                "coord": {
+                    "x": 2544.7,
+                    "y": 2856.32,
+                    "uiMapId": 1683
+                },
+                "coordEnemy": {
+                    "x": 2546.49,
+                    "y": 2895.36,
+                    "uiMapId": 1683
+                },
+                "gridCoord": {
+                    "x": 2546.5,
+                    "y": 2855.5,
+                    "uiMapId": 1683
+                },
+                "gridCoordEnemy": {
+                    "x": 2546.5,
+                    "y": 2893.69,
+                    "uiMapId": 1683
+                }
+            }
+        ],
+        "spells": [
+            {
+                "spellId": 2825,
+                "playerUid": "Player-5765-42187B",
+                "castAt": "2025-02-24T19:24:51.000+00:00",
+                "coord": {
+                    "x": 2533.6,
+                    "y": 2816.86,
+                    "uiMapId": 1683
+                },
+                "gridCoord": {
+                    "x": 2534.75,
+                    "y": 2814.38,
+                    "uiMapId": 1683
+                }
+            },
+            {
+                "spellId": 2825,
+                "playerUid": "Player-5765-42187B",
+                "castAt": "2025-02-24T19:45:22.000+00:00",
+                "coord": {
+                    "x": 2659.39,
+                    "y": 2686.94,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2659.6,
+                    "y": 2686.5,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "spellId": 2825,
+                "playerUid": "Player-5765-42187B",
+                "castAt": "2025-02-24T19:55:26.000+00:00",
+                "coord": {
+                    "x": 2559.56,
+                    "y": 2998.64,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2559.75,
+                    "y": 2998.55,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "spellId": 2825,
+                "playerUid": "Player-5765-42187B",
+                "castAt": "2025-02-24T20:00:35.000+00:00",
+                "coord": {
+                    "x": 2544.05,
+                    "y": 2825.83,
+                    "uiMapId": 1683
+                },
+                "gridCoord": {
+                    "x": 2546.5,
+                    "y": 2823.19,
+                    "uiMapId": 1683
+                }
+            },
+            {
+                "spellId": 2825,
+                "playerUid": "Player-5765-42187B",
+                "castAt": "2025-02-24T20:05:57.000+00:00",
+                "coord": {
+                    "x": 2524.86,
+                    "y": 2847.36,
+                    "uiMapId": 1683
+                },
+                "gridCoord": {
+                    "x": 2525.94,
+                    "y": 2846.69,
+                    "uiMapId": 1683
+                }
+            }
+        ],
+        "playerDeaths": [
+            {
+                "characterId": 234934284,
+                "classId": 7,
+                "specId": 262,
+                "itemLevel": 629,
+                "diedAt": "2025-02-24T19:38:09.179+00:00",
+                "coord": {
+                    "x": 2663.81,
+                    "y": 2775.84,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2664.7,
+                    "y": 2774.9,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "characterId": 235562540,
+                "classId": 6,
+                "specId": 252,
+                "itemLevel": 629,
+                "diedAt": "2025-02-24T19:38:09.256+00:00",
+                "coord": {
+                    "x": 2671.94,
+                    "y": 2782.67,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2673.2,
+                    "y": 2781.7,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "characterId": 234380883,
+                "classId": 5,
+                "specId": 256,
+                "itemLevel": 629,
+                "diedAt": "2025-02-24T19:38:18.921+00:00",
+                "coord": {
+                    "x": 2668.64,
+                    "y": 2781.54,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2669.8,
+                    "y": 2780,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "characterId": 234934284,
+                "classId": 7,
+                "specId": 262,
+                "itemLevel": 629,
+                "diedAt": "2025-02-24T19:38:18.922+00:00",
+                "coord": {
+                    "x": 2681.63,
+                    "y": 2781.84,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2681.7,
+                    "y": 2781.7,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "characterId": 234353287,
+                "classId": 4,
+                "specId": 261,
+                "itemLevel": 629,
+                "diedAt": "2025-02-24T19:38:22.235+00:00",
+                "coord": {
+                    "x": 2671.75,
+                    "y": 2797.55,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2673.2,
+                    "y": 2797,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "characterId": 234257676,
+                "classId": 11,
+                "specId": 104,
+                "itemLevel": 629,
+                "diedAt": "2025-02-24T19:38:30.055+00:00",
+                "coord": {
+                    "x": 2669.46,
+                    "y": 2797.92,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2669.8,
+                    "y": 2797,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "characterId": 234934284,
+                "classId": 7,
+                "specId": 262,
+                "itemLevel": 629,
+                "diedAt": "2025-02-24T19:39:11.976+00:00",
+                "coord": {
+                    "x": 2610.48,
+                    "y": 2728.75,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2612,
+                    "y": 2727.3,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "characterId": 234353287,
+                "classId": 4,
+                "specId": 261,
+                "itemLevel": 629,
+                "diedAt": "2025-02-24T19:39:38.229+00:00",
+                "coord": {
+                    "x": 2607.74,
+                    "y": 2754.28,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2608.6,
+                    "y": 2752.8,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "characterId": 234934284,
+                "classId": 7,
+                "specId": 262,
+                "itemLevel": 629,
+                "diedAt": "2025-02-24T19:39:38.231+00:00",
+                "coord": {
+                    "x": 2607.55,
+                    "y": 2752.6,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2608.6,
+                    "y": 2751.1,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "characterId": 235562540,
+                "classId": 6,
+                "specId": 252,
+                "itemLevel": 629,
+                "diedAt": "2025-02-24T19:39:38.653+00:00",
+                "coord": {
+                    "x": 2607.58,
+                    "y": 2755.82,
+                    "uiMapId": 1684
+                },
+                "gridCoord": {
+                    "x": 2608.6,
+                    "y": 2754.5,
+                    "uiMapId": 1684
+                }
+            },
+            {
+                "characterId": 235562540,
+                "classId": 6,
+                "specId": 252,
+                "itemLevel": 629,
+                "diedAt": "2025-02-24T19:52:44.050+00:00",
+                "coord": {
+                    "x": 2366.47,
+                    "y": 3185.09,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2368.35,
+                    "y": 3183.43,
+                    "uiMapId": 1685
+                }
+            },
+            {
+                "characterId": 234934284,
+                "classId": 7,
+                "specId": 262,
+                "itemLevel": 629,
+                "diedAt": "2025-02-24T19:53:08.948+00:00",
+                "coord": {
+                    "x": 2364.37,
+                    "y": 3185.89,
+                    "uiMapId": 1685
+                },
+                "gridCoord": {
+                    "x": 2366.18,
+                    "y": 3185.6,
+                    "uiMapId": 1685
+                }
+            }
+        ]
+    }
+}

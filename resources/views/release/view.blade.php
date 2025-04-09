@@ -8,7 +8,11 @@ use App\Models\Release;
 
 $title = sprintf('%s (%s)', $release->version, $release->created_at->format('Y/m/d'));
 ?>
-@extends('layouts.sitepage', ['showLegalModal' => true, 'title' => $title])
+@extends('layouts.sitepage', [
+    'showLegalModal' => true,
+    'title' => $title,
+    'breadcrumbsParams' => [$release]
+])
 
 @section('header-title', sprintf(__('view_release.header'), $title))
 @include('common.general.inline', ['path' => 'release/view', 'options' => ['max_release' => $release->id]])

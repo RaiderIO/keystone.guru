@@ -137,16 +137,6 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function findClosestEnemyAndDistanceFromListPriority(int $killPriority, int $enemyCount): void
-    {
-        $this->debug(__METHOD__, get_defined_vars());
-    }
-
-    public function findClosestEnemyAndDistanceFromListFoundEnemy(): void
-    {
-        $this->debug(__METHOD__, get_defined_vars());
-    }
-
     public function findClosestEnemyAndDistanceFromListResult(?int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void
     {
         $this->debug(__METHOD__, get_defined_vars());

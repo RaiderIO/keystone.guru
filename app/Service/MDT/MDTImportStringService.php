@@ -560,7 +560,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     /**
      * Parse any saved objects from the MDT string to a $dungeonRoute, optionally $save'ing the objects to the database.
      */
-    private function parseObjects(ImportStringObjects $importStringObjects): ImportStringObjects
+    private function parseObjects(ImportStringObjects $importStringObjects, bool $assignNotesToPulls): ImportStringObjects
     {
         if (count($importStringObjects->getMdtObjects()) > config('keystoneguru.dungeon_route_limits.map_icons')) {
             $importStringObjects->getErrors()->push(
@@ -653,7 +653,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 // Map comment (n = note)
                 // MethodDungeonTools.lua:2523
                 else if (isset($object['n']) && $object['n']) {
-                    $this->parseObjectComment($importStringObjects, $mappingVersion, $floor, $details);
+                    $this->parseObjectComment($importStringObjects, $mappingVersion, $floor, $details, $assignNotesToPulls);
                 }
 
             } catch (ImportWarning $warning) {
@@ -679,18 +679,16 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, $line);
 
         // Second to last and last point
-        $lastPoint    = [
-            $line[count($line) - 2],
-            last($line),
+        $lastPoint = [
+            (float)$line[count($line) - 2],
+            (float)last($line),
         ];
-        $lastPoint[0] = (float)$lastPoint[0];
-        $lastPoint[1] = (float)$lastPoint[1];
 
         $lastPointLatLng = new LatLng($lastPoint[0], $lastPoint[1], $floor);
         // Create the left part of the arrow
         $leftPartLatLng = (new LatLng($lastPointLatLng->getLat() + 5, $lastPointLatLng->getLng() + 5, $floor))->rotate(
             $lastPointLatLng,
-            rad2deg($rotationRad)
+            rad2deg(-$rotationRad)
         );
 
         $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, array_merge(
@@ -701,7 +699,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         // Create the right part of the arrow
         $rightPartLatLng = (new LatLng($lastPointLatLng->getLat() + 5, $lastPointLatLng->getLng() - 5, $floor))->rotate(
             $lastPointLatLng,
-            rad2deg($rotationRad)
+            rad2deg(-$rotationRad)
         );
         $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, array_merge(
             $lastPoint,
@@ -788,8 +786,9 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         ImportStringObjects $importStringObjects,
         MappingVersion      $mappingVersion,
         Floor               $floor,
-        array               $details): void
-    {
+        array               $details,
+        bool                $assignNotesToPulls
+    ): void {
         $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]], $floor);
 
         if ($floor->facade) {
@@ -853,9 +852,16 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                         $newAttributes = $killZoneAttribute['spells'][] = [
                             'spell_id' => $spellId,
                         ];
-                    } else {
+                    } else if ($assignNotesToPulls) {
                         // Add it as a comment instead
                         $newAttributes = ['description' => $details[4]];
+                    }
+
+                    // If a description was already set and we're trying to set it again..
+                    if (empty($newAttributes) || (!empty($killZoneAttribute['description']) && !empty($newAttributes['description']))) {
+                        // Tough luck - the pull was already assigned a description, can't do it again
+                        // But do render them on the map as usual
+                        break 2;
                     }
 
                     // Set description directly on the object
@@ -933,7 +939,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $dungeon,
                 $importStringPulls->getKillZoneAttributes(),
                 $decoded['objects']
-            ));
+            ), false);
 
             $currentSeason               = $this->seasonService->getCurrentSeason($dungeon->expansion);
             $currentAffixGroupForDungeon = $currentSeason?->getCurrentAffixGroup();
@@ -977,6 +983,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         Collection $errors,
         bool       $sandbox = false,
         bool       $save = false,
+        bool       $assignNotesToPulls = true,
         bool       $importAsThisWeek = false
     ): DungeonRoute {
         $error = null;
@@ -1072,7 +1079,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $dungeonRoute->dungeon,
                 $importStringPulls->getKillZoneAttributes(),
                 $decoded['objects']
-            ));
+            ), $assignNotesToPulls);
 
             if ($errors->isNotEmpty()) {
                 // Get rid of it again!
