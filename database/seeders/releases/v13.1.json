@@ -1,0 +1,25 @@
+{
+    "id": 293,
+    "release_changelog_id": 300,
+    "version": "v13.1",
+    "title": "Naxxramas Classic added.",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-04-07T15:22:14+00:00",
+    "updated_at": "2025-04-07T15:22:14+00:00",
+    "changelog": {
+        "id": 300,
+        "release_id": 293,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 300,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2773,
+                "change": "Added Naxxramas Classic - along with SoD speedrun enemies."
+            }
+        ]
+    }
+}
