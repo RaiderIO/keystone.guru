@@ -939,7 +939,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $dungeon,
                 $importStringPulls->getKillZoneAttributes(),
                 $decoded['objects']
-            ));
+            ), false);
 
             $currentSeason               = $this->seasonService->getCurrentSeason($dungeon->expansion);
             $currentAffixGroupForDungeon = $currentSeason?->getCurrentAffixGroup();
