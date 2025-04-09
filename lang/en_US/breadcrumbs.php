@@ -5,12 +5,24 @@ return [
     'home' => [
         'keystone_guru'    => 'Keystone.guru',
         'affixes'          => 'Affixes',
-        'changelog'        => 'Changelog',
+        'about'            => 'About',
+        'credits'          => 'Credits',
+        'changelog'        => [
+            'list'    => 'Changelog',
+            'release' => [
+                'view' => 'Release :version',
+            ],
+        ],
+        'legal'            => [
+            'cookies' => 'Cookies',
+            'privacy' => 'Privacy',
+            'terms'   => 'Terms',
+        ],
         'routes'           => 'Routes',
         'routes_expansion' => ':expansion routes',
-        'gameversion' => [
-            'update' => ':gameVersion',
-            'dungeon'          => [
+        'gameversion'      => [
+            'update'  => ':gameVersion',
+            'dungeon' => [
                 'explore' => 'Explore',
             ],
         ],

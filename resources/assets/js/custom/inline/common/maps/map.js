@@ -76,6 +76,7 @@ class CommonMapsMap extends InlineCode {
             this._setupFloorSelection();
             this._setupMapObjectGroupVisibility();
             this._setupEnemyVisualTypes();
+            this._setupZoomControl();
             this._setupFavorite();
             this._setupLabelToggle();
 
@@ -134,6 +135,7 @@ class CommonMapsMap extends InlineCode {
             hidden_map_object_groups: '["mountablearea"]',
             hidden_map_object_groups_added_mountablearea: 0,
             map_facade_style: 'split_floors',
+            map_zoom_speed: '50',
             map_number_style: 'enemy_forces',
             kill_zones_number_style: 'percentage',
             pulls_sidebar_floor_switch_visibility: 1,
@@ -372,6 +374,25 @@ class CommonMapsMap extends InlineCode {
 
             // Now toggled this visual on
             $this.addClass('active');
+        });
+    }
+
+    /**
+     *
+     * @private
+     */
+    _setupZoomControl() {
+        let self = this;
+
+        $('#map_map_zoom_out_btn').unbind('click').bind('click', function () {
+            self._dungeonMap.leafletMap.setZoom(
+                self._dungeonMap.leafletMap.getZoom() - c.map.settings.zoomStep
+            );
+        });
+        $('#map_map_zoom_in_btn').unbind('click').bind('click', function () {
+            self._dungeonMap.leafletMap.setZoom(
+                self._dungeonMap.leafletMap.getZoom() + c.map.settings.zoomStep
+            );
         });
     }
 

@@ -251,6 +251,12 @@ let c = {
     map: {
         settings: {
             defaultMaxZoom: 5,
+            zoomStep: 0.5,
+            // Used when adjusting the map zoom level
+            wheelPxPerZoomLevelMin: 60, // faster
+            wheelPxPerZoomLevelMax: 600, // slower
+            tileWidth: 384,
+            tileHeight: 256
         },
         leafletSettings: {
             // Context menu when right clicking stuff
@@ -262,7 +268,8 @@ let c = {
             zoomSnap: 0,
             boxZoom: false,
             wheelDebounceTime: 100,
-            wheelPxPerZoomLevel: 400
+            // Controlled through the map zoom speed now
+            // wheelPxPerZoomLevel: 400
         },
         heatmapSettings: {
             minOpacity: 0.1,

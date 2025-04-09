@@ -88,11 +88,25 @@
     </div>
 </div>
 
-<div class="form-group import_as_this_week_container" style="display: none;">
-    <label for="import_as_this_week">
-        {{ __('view_common.forms.mdtimport.import_as_this_week') }}
-    </label>
-    {!! Form::checkbox('import_as_this_week', 1, false, ['id' => 'import_as_this_week', 'class' => 'form-control left_checkbox']) !!}
+<div class="form-group">
+    <div class="row">
+        <div class="col">
+            <div class="assign_notes_to_pulls_container">
+                <label for="assign_notes_to_pulls">
+                    {{ __('view_common.forms.mdtimport.assign_notes_to_pulls') }}
+                </label>
+                {!! Form::checkbox('assign_notes_to_pulls', 1, true, ['id' => 'assign_notes_to_pulls', 'class' => 'form-control left_checkbox']) !!}
+            </div>
+        </div>
+        <div class="col">
+            <div class="import_as_this_week_container" style="display: none;">
+                <label for="import_as_this_week">
+                    {{ __('view_common.forms.mdtimport.import_as_this_week') }}
+                </label>
+                {!! Form::checkbox('import_as_this_week', 1, false, ['id' => 'import_as_this_week', 'class' => 'form-control left_checkbox']) !!}
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="form-group">

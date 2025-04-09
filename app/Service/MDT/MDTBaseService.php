@@ -2,6 +2,7 @@
 
 namespace App\Service\MDT;
 
+use App\Logic\MDT\Exception\CliWeakaurasParserNotFoundException;
 use Illuminate\Support\Facades\Artisan;
 use Lua;
 
@@ -29,7 +30,13 @@ abstract class MDTBaseService
     {
         Artisan::call('mdt:encode', ['string' => json_encode($contents)]);
 
-        return trim(Artisan::output());
+        $output = trim(Artisan::output());
+
+        if (str_contains($output, 'cli_weakauras_parser: command not found')) {
+            throw new CliWeakaurasParserNotFoundException($output);
+        }
+
+        return $output;
     }
 
     /**
@@ -39,6 +46,12 @@ abstract class MDTBaseService
     {
         Artisan::call('mdt:decode', ['string' => $string]);
 
-        return json_decode(trim(Artisan::output()), true);
+        $output = trim(Artisan::output());
+
+        if (str_contains($output, 'cli_weakauras_parser: command not found')) {
+            throw new CliWeakaurasParserNotFoundException($output);
+        }
+
+        return json_decode($output, true);
     }
 }

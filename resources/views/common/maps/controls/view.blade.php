@@ -39,6 +39,8 @@ use Illuminate\Support\Collection;
             @include('common.maps.controls.elements.enemyvisualtype')
 
             @include('common.maps.controls.elements.mapobjectgroupvisibility', ['floors' => $floors])
+
+            @include('common.maps.controls.elements.mapzoom')
         </div>
 
         <div id="view_route_misc_actions_container">

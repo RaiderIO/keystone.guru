@@ -271,6 +271,14 @@
         </tr>
         <tr>
             <td>
+                map_zoom_speed
+            </td>
+            <td>
+                Remembers how fast you want the map to zoom in and out when scrolling.
+            </td>
+        </tr>
+        <tr>
+            <td>
                 map_number_style
             </td>
             <td>

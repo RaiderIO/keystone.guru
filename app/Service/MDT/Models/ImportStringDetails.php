@@ -16,8 +16,19 @@ class ImportStringDetails implements Arrayable
      * @param Collection<ImportWarning> $warnings
      * @param Collection<string>        $affixes
      */
-    public function __construct(private readonly Collection $warnings, private readonly Collection $errors, private readonly Dungeon $dungeon, private readonly Collection $affixes, private readonly bool $hasThisWeeksAffixGroup, private readonly int $pulls, private readonly int $paths, private readonly int $lines, private readonly int $notes, private readonly int $enemyForces, private readonly int $enemyForcesMax)
-    {
+    public function __construct(
+        private readonly Collection $warnings,
+        private readonly Collection $errors,
+        private readonly Dungeon    $dungeon,
+        private readonly Collection $affixes,
+        private readonly bool       $hasThisWeeksAffixGroup,
+        private readonly int        $pulls,
+        private readonly int        $paths,
+        private readonly int        $lines,
+        private readonly int        $notes,
+        private readonly int        $enemyForces,
+        private readonly int        $enemyForcesMax
+    ) {
     }
 
     /**

@@ -113,6 +113,9 @@ return [
             'map_facade_style_split_floors_option'          => 'Use split floors',
             'map_facade_style_change_requires_page_refresh' => 'Note: Changing this setting requires a page reload before changes take effect',
 
+            'zoom_speed'       => 'Zoom speed',
+            'zoom_speed_title' => 'This controls the speed at which the map zooms in and out when you use the mouse wheel.',
+
             'heatmap'                     => 'Heatmap',
             'show_heatmap_tooltips'       => 'Show mouse over tooltips',
             'show_heatmap_tooltips_title' => 'Enabling this setting will show tooltips when you mouse over the heatmap. This can be useful to see the exact values of the heatmap at a specific location.',
@@ -143,6 +146,7 @@ return [
             'temporary_route'                        => 'Temporary route',
             'temporary_route_title'                  => 'A temporary route will not show up in your profile and will be deleted automatically after %d hours unless it is claimed before that time.',
             'parsing_your_string'                    => 'Parsing your string...',
+            'assign_notes_to_pulls'                  => 'Assign notes to pulls when close enough',
             'import_as_this_week'                    => 'Import with this week\'s affixes instead',
             'import_route'                           => 'Import route',
         ],

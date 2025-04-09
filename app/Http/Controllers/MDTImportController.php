@@ -5,6 +5,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MDT\ImportStringFormRequest;
+use App\Logic\MDT\Exception\CliWeakaurasParserNotFoundException;
 use App\Logic\MDT\Exception\InvalidMDTStringException;
 use App\Logic\MDT\Exception\MDTStringParseException;
 use App\Service\MDT\MDTImportStringServiceInterface;
@@ -44,6 +45,8 @@ class MDTImportController extends Controller
             return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_parsing_failed'));
         } catch (InvalidMDTStringException $ex) {
             return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_format_not_recognized'));
+        } catch (CliWeakaurasParserNotFoundException $ex) {
+            return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.cli_weakauras_parser_not_found'));
         } catch (Exception $ex) {
             // Different message based on our deployment settings
             if (config('app.debug')) {
@@ -85,7 +88,14 @@ class MDTImportController extends Controller
             try {
                 $dungeonRoute = $mdtImportStringService
                     ->setEncodedString($string)
-                    ->getDungeonRoute(collect(), collect(), $sandbox, true, $validated['import_as_this_week'] ?? false);
+                    ->getDungeonRoute(
+                        collect(),
+                        collect(),
+                        $sandbox,
+                        true,
+                        $validated['assign_notes_to_pulls'] ?? false,
+                        $validated['import_as_this_week'] ?? false
+                    );
 
                 // Ensure team_id is set
                 if (!$sandbox) {

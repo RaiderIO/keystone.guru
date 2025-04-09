@@ -71,6 +71,11 @@ class SettingsTabMap extends SettingsTab {
                 });
         });
 
+        // Zoom speed
+        $('#map_settings_zoom_speed').bind('change', function () {
+            getState().setMapZoomSpeed(parseInt($(this).val()));
+        });
+
         // Heatmap show tooltips
         $('#map_settings_heatmap_show_tooltips').bind('change', function () {
             getState().setHeatmapShowTooltips($(this).is(':checked'));

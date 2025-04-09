@@ -39,17 +39,18 @@ class FetchSpellData extends Command
 
         /** @var Dungeon|null $dungeon */
         $dungeon = null;
-        if ($dungeonKey !== null) {
-            $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
-
-            $spells = $dungeon->spells;
-        } else if ($spellId > 0) {
-            $spells = collect([Spell::findOrFail($spellId)]);
-        } else {
-            $spells = Spell::whereNull('fetched_data_at')
-                ->orWhere('fetched_data_at', '<=', Carbon::now()->subYear())
-                ->get();
-        }
+//        if ($dungeonKey !== null) {
+//            $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
+//
+//            $spells = $dungeon->spells;
+//        } else if ($spellId > 0) {
+//            $spells = collect([Spell::findOrFail($spellId)]);
+//        } else {
+//            $spells = Spell::whereNull('fetched_data_at')
+//                ->orWhere('fetched_data_at', '<=', Carbon::now()->subYear())
+//                ->get();
+//        }
+        $spells = Spell::where('icon_name', '')->get();
 
         // If it's just one.. whatever
         if ($spells->count() > 1) {

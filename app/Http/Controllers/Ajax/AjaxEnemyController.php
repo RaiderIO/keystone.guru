@@ -53,7 +53,6 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             $previousFloor = $previousEnemy->floor;
         }
 
-        // -1 is a special value that means 'default' in the database
         $validated['kill_priority'] = (int)$validated['kill_priority'] === 0 ? null : (int)$validated['kill_priority'];
 
         return $this->storeModel($coordinatesService, $mappingVersion, $validated, Enemy::class, $enemy, static function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {

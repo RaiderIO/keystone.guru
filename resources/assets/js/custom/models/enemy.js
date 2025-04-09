@@ -369,9 +369,11 @@ class Enemy extends VersionableMapObject {
                 admin: true,
                 default: null,
                 values: [
+                    {id: -19, name: 'Very low'},
                     {id: -10, name: 'Low'},
                     {id: 0, name: 'Normal'},
                     {id: 10, name: 'High'},
+                    {id: 19, name: 'Very high'},
                 ],
                 category: 'advanced',
             })

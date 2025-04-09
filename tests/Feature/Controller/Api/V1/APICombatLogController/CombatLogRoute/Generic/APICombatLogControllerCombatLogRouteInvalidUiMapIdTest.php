@@ -37,7 +37,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($responseArr, 25, 499);
-        $this->validateSpells($responseArr, 89);
+        $this->validateSpells($responseArr, 2);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
@@ -60,7 +60,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($responseArr, 25, 499);
-        $this->validateSpells($responseArr, 89);
+        $this->validateSpells($responseArr, 2);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
@@ -83,7 +83,7 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($responseArr, 25, 499);
-        $this->validateSpells($responseArr, 89);
+        $this->validateSpells($responseArr, 2);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
@@ -106,8 +106,8 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($responseArr, 25, 499);
-        // One cast spell falls outside the existing pulls, so is excluded (there's 11 casts, 10 assignments)
-        $this->validateSpells($responseArr, 89, array_fill(0, 10, 403631));
+        // One cast spell falls outside the existing pulls, so is excluded
+        $this->validateSpells($responseArr, 1, [2825]);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
@@ -130,8 +130,8 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($responseArr, 25, 499);
-        // One cast spell falls outside the existing pulls, so is excluded (there's 11 casts, 10 assignments)
-        $this->validateSpells($responseArr, 89, array_fill(0, 10, 403631));
+        // One cast spell falls outside the existing pulls, so is excluded
+        $this->validateSpells($responseArr, 1, [2825]);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
@@ -155,7 +155,31 @@ class APICombatLogControllerCombatLogRouteInvalidUiMapIdTest extends APICombatLo
         $this->validateDungeon($responseArr);
         $this->validatePulls($responseArr, 25, 499);
         // One cast spell falls outside the existing pulls, so is excluded (there's 11 casts, 10 assignments)
-        $this->validateSpells($responseArr, 89, array_fill(0, 10, 403631));
+        $this->validateSpells($responseArr, 3, [2825]);
+        // This was a log which did not have full affixes set - see #2483
+//        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
+    }
+
+    #[Test]
+    #[Group('CombatLogRouteGenericSpell')]
+    public function create_givenTwwS1TheStonevault4InvalidSpellIdJson_shouldReturnValidDungeonRoute(): void
+    {
+        // Arrange
+        $postBody = $this->getJsonData('Generic/tww_s1_the_stonevault_4_spell_multiple_invalid_ui_map_id', self::FIXTURES_ROOT_DIR);
+
+        // Act
+        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+
+        // Assert
+        $response->assertCreated();
+
+        $responseArr = json_decode($response->content(), true);
+
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($responseArr, 25, 499);
+        // One cast spell falls outside the existing pulls, so is excluded (there's 11 casts, 10 assignments)
+        $this->validateSpells($responseArr, 3, [2825]);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
