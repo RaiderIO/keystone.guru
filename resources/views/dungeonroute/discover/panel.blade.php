@@ -38,7 +38,7 @@ $cache            ??= true;
                     <div class="offset-2">
                     </div>
                     <div class="col-8">
-                        @include('common.affixgroup.affixgroup', ['affixgroup' => $affixgroup, 'cols' => 1, 'center' => true])
+                        @include('common.affixgroup.affixgroup', ['affixgroup' => $affixgroup, 'cols' => 1, 'center' => true, 'isFirst' => true])
                     </div>
                 </div>
             @endisset

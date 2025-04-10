@@ -145,11 +145,22 @@ html, body, #map, #app, .wrapper {
     text-shadow: black 2px 2px;
 }
 
-.header_embed_text_ellipsis > a,
-.header_embed_text_ellipsis > h4 {
+.header_embed_compact_logo {
+    width: 164px;
+}
+
+@media (max-width: 576px) { /* Bootstrap 'sm' breakpoint */
+    .header_embed_compact_logo {
+        width: 120px;
+    }
+}
+
+
+.header_embed_text_ellipsis {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    min-width: 0;
 }
 
 #embed_copy_mdt_string {

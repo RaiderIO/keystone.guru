@@ -59,18 +59,18 @@ $characterClassSpecializationsSelectOptions = $characterClassSpecializations->gr
 @section('content')
     <div class="form-group row">
         <div class="col">
-            @include('common.forms.select.imageselectcategories', [
-                'id' => 'filter_specializations',
-                'name' => 'filter_specializations[]',
-                'valuesByCategory' => $characterClassSpecializationsSelectOptions,
-                'multiple' => true,
-                'liveSearch' => true,
-            ])
+{{--            @include('common.forms.select.imageselectcategories', [--}}
+{{--                'id' => 'filter_specializations',--}}
+{{--                'name' => 'filter_specializations[]',--}}
+{{--                'valuesByCategory' => $characterClassSpecializationsSelectOptions,--}}
+{{--                'multiple' => true,--}}
+{{--                'liveSearch' => true,--}}
+{{--            ])--}}
         </div>
     </div>
 
-    <div class="row justify-content-center">
-        <div class="col-6">
+    <div class="row justify-content-lg-center">
+        <div class="col">
             @if(!empty($parameters))
                 <iframe
                     id="ksg_iframe"
@@ -79,7 +79,7 @@ $characterClassSpecializationsSelectOptions = $characterClassSpecializations->gr
                         'dungeon' => $model,
                         'floorIndex' => $floorIndex,
                     ], $parameters)) }}"
-                    style="width: 800px; height: 600px; border: none;"></iframe>
+                    style="width: 100%; height: 600px; border: none;"></iframe>
             @elseif($showStyle === 'compact')
                 <iframe
                     id="ksg_iframe"
@@ -92,7 +92,7 @@ $characterClassSpecializationsSelectOptions = $characterClassSpecializations->gr
                         'mapBackgroundColor' => '#F00',
                         'showEnemyInfo' => 0,
                     ]) }}"
-                    style="width: 800px; height: 600px; border: none;"></iframe>
+                    style="width: 100%; height: 600px; border: none;"></iframe>
             @endif
         </div>
     </div>

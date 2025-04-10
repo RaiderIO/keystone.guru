@@ -15,7 +15,7 @@ $routeParams     = ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dung
 $presentRouteUrl = route('dungeonroute.present', $routeParams);
 $viewRouteUrl    = route('dungeonroute.view', $routeParams);
 ?>
-<header class="header_embed_regular py-2"
+<header class="header_embed_regular p-2"
         style="
         @if($embedOptions['headerBackgroundColor'] !== null)
             background-color: {{ $embedOptions['headerBackgroundColor'] }};
@@ -23,10 +23,16 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
             background-image: url({{ $dungeon->getImageUrl() }}); background-size: cover;
         @endif">
     <div class="row no-gutters pb-2">
+        <div class="col-auto text-right pr-2">
+            <a href="{{ route('home') }}" target="_blank">
+                <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
+                     height="44px;" width="200px;">
+            </a>
+        </div>
         @if($embedOptions['show']['title'])
-        <div class="col-8 pt-2">
-                <div class="row no-gutters">
-                    <div class="col header_embed_text_ellipsis">
+            <div class="col">
+                <div class="row no-gutters align-items-center" style="height: 44px;">
+                    <div class="col">
                         <h4 class="mb-0">
                             <a class="text-white"
                                href="{{ $viewRouteUrl }}"
@@ -36,18 +42,12 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
                         </h4>
                     </div>
                 </div>
-        </div>
+            </div>
         @else
-        <?php // Spacers ?>
-        <div class="col">
-        </div>
+                <?php // Spacers ?>
+            <div class="col">
+            </div>
         @endif
-        <div class="col-auto text-right">
-            <a href="{{ route('home') }}" target="_blank">
-                <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
-                     height="44px;" width="200px;">
-            </a>
-        </div>
     </div>
     <div class="row no-gutters">
         <div class="col-auto pr-1">
@@ -56,20 +56,27 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
                 // This is normally in the pulls sidebar - but for embedding it's in the header - see pulls.blade.php
                 ?>
                 @if($embedOptions['show']['enemyForces'])
-                    <div id="edit_route_enemy_forces_container" class="pt-1"></div>
+                    <div class="row no-gutters align-items-center" style="height: 36px;">
+                            <?php
+                            // This is normally in the pulls sidebar - but for embedding it's in the header - see pulls.blade.php
+                            ?>
+                        <div id="edit_route_enemy_forces_container"></div>
+                    </div>
                 @endif
             </div>
         </div>
-        <div class="col-md-auto px-1 d-md-flex d-none">
-            @if($embedOptions['show']['affixes'])
-                    <?php
-                    $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
-                    ?>
-                @if($mostRelevantAffixGroup !== null)
-                    @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100'])
-                @endif
-            @endif
-        </div>
+        @if($embedOptions['show']['affixes'])
+            <div class="row no-gutters align-items-center" style="height: 36px;">
+                <div class="col-md-auto px-1 d-md-flex d-none">
+                            <?php
+                            $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
+                            ?>
+                        @if($mostRelevantAffixGroup !== null)
+                            @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100', 'isFirst' => true])
+                        @endif
+                </div>
+            </div>
+        @endif
         <div class="col">
         </div>
         @if($embedOptions['show']['presenterButton'])

@@ -15,8 +15,8 @@ $showStyle = 'regular';
 @section('header-title', __('view_misc.embed.header'))
 
 @section('content')
-    <div class="row justify-content-center">
-        <div class="col-6">
+    <div class="row justify-content-lg-center">
+        <div class="col">
             @if(!empty($parameters))
                 <iframe
                     id="ksg_iframe"
@@ -26,7 +26,7 @@ $showStyle = 'regular';
                         'title' => Str::slug($model->title)],
                         $parameters
                     )) }}"
-                        style="width: 800px; height: 600px; border: none;"></iframe>
+                    style="width: 100%; height: 600px; border: none;"></iframe>
             @elseif($showStyle === 'compact')
                 <iframe
                     id="ksg_iframe"
@@ -63,7 +63,7 @@ $showStyle = 'regular';
                         'showAffixes' => 1,
                         'showTitle' => 1,
                     ]) }}"
-                        style="width: 800px; height: 600px; border: none;"></iframe>
+                    style="width: 100%; height: 600px; border: none;"></iframe>
             @endif
         </div>
     </div>

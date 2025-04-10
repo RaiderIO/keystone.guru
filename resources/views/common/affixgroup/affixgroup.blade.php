@@ -13,6 +13,7 @@ $showText ??= true;
 $class    ??= '';
 $dungeon  ??= null;
 $center   ??= false;
+$isFirst  ??= false;
 
 $count = $affixgroup->affixes->count();
 $cols  ??= $count;
@@ -21,7 +22,7 @@ $chunkCount = ceil($count / $cols);
 $chunks     = $affixgroup->affixes->chunk($chunkCount);
 ?>
 @foreach($chunks as $chunk)
-    <div class="row no-gutters px-1 affix_group_row {{ $class }}">
+    <div class="row no-gutters px-1 affix_group_row {{ $isFirst ? '' : 'mt-2' }} {{ $class }}">
             <?php
             /** @var Collection $chunk */
             $affixIndex = 0;

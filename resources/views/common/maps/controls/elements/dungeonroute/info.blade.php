@@ -40,8 +40,9 @@ ob_start();
         </div>
     </div>
     @foreach($dungeonroute->affixes as $affixGroup)
+        <?php /** @var object{first: bool} $loop */ ?>
         <div class="row no-gutters">
-            @include('common.affixgroup.affixgroup', ['affixgroup' => $affixGroup, 'showText' => false, 'class' => 'w-100', 'cols' => 1])
+            @include('common.affixgroup.affixgroup', ['affixgroup' => $affixGroup, 'showText' => false, 'isFirst' => $loop->first, 'class' => 'w-100', 'cols' => 1])
         </div>
     @endforeach
 </div>

@@ -81,6 +81,7 @@ $seasonSelect = collect($seasons)->pluck('name_long', 'id')->mapWithKeys(static 
                         'showText' => false,
                         'cols' => $selectedSeason->seasonal_affix_id === null ? 1 : 2,
                         'center' => true,
+                        'isFirst' => true, // Hard coded since these affixes are horizontal and not vertical
                     ])
                 </th>
             @endforeach
