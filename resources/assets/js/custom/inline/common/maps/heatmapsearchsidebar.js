@@ -235,6 +235,9 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         this._restoreFiltersFromQueryParams(filters);
 
         this._search();
+
+        // Make sure the select dropdowns are updated properly - external changes don't cause a UI refresh
+        refreshSelectPickers();
     }
 
     _toggleHeatmap(enabled) {
