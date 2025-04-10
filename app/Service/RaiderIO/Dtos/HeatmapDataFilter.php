@@ -454,7 +454,6 @@ class HeatmapDataFilter implements Arrayable
             'excludeSpecIds'             => $this->getExcludeSpecIds(),
             'excludePlayerDeathSpecIds'  => $this->getExcludePlayerDeathSpecIds(),
             'excludePlayerDeathClassIds' => $this->getExcludePlayerDeathClassIds(),
-            'includePlayerSpellIds'      => $this->getIncludePlayerSpellIds(),
             'token'                      => $this->getToken(),
             'season'                     => $this->getSeason(),
         ];
