@@ -145,6 +145,16 @@ html, body, #map, #app, .wrapper {
     text-shadow: black 2px 2px;
 }
 
+.header_embed_regular_logo {
+    width: 200px;
+}
+
+@media (max-width: 576px) { /* Bootstrap 'sm' breakpoint */
+    .header_embed_regular_logo {
+        width: 120px;
+    }
+}
+
 .header_embed_compact_logo {
     width: 164px;
 }
