@@ -6122,7 +6122,7 @@
     {
         "id": 526,
         "dungeon_id": 138,
-        "version": 1,
+        "version": 2,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": null,
         "enemy_forces_shrouded": null,
@@ -6137,7 +6137,7 @@
     {
         "id": 538,
         "dungeon_id": 138,
-        "version": 13,
+        "version": 1,
         "enemy_forces_required": 0,
         "enemy_forces_required_teeming": null,
         "enemy_forces_shrouded": null,
