@@ -30,11 +30,7 @@ class RotateIngameCoords extends Command
     public function handle(): int
     {
         /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::where('key', $this->argument('dungeon'))->first();
-
-        if ($dungeon === null) {
-            throw new Exception('Unable to find dungeon!');
-        }
+        $dungeon = Dungeon::where('key', $this->argument('dungeon'))->firstOrFail();
 
         foreach ($dungeon->floors as $floor) {
             $newCoordinates = [

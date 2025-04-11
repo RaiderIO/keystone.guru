@@ -21,4 +21,6 @@ interface DungeonRepositoryInterface extends BaseRepositoryInterface
     public function getAllMapIds(): Collection;
 
     public function getByChallengeModeIdOrFail(int $challengeModeId): Dungeon;
+
+    public function getByInstanceId(int $instanceId): ?Dungeon;
 }

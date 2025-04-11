@@ -23,7 +23,7 @@ class DamageSplitBuilder implements SpecialEventBuilderInterface
         string $rawEvent
     ): SpecialEvent {
         return match ($combatLogVersion) {
-            CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6 => new DamageSplitV9SoD($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
+            CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6, CombatLogVersion::CLASSIC_SOD_1_15_7 => new DamageSplitV9SoD($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
             CombatLogVersion::CLASSIC, CombatLogVersion::RETAIL_10_1_0, CombatLogVersion::RETAIL_11_0_2 => new DamageSplitV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
             default => new DamageSplitV22($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
         };
