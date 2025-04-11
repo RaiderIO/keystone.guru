@@ -13736,6 +13736,25 @@
         ]
     },
     {
+        "id": 114018,
+        "category": "spells.category.rogue",
+        "cooldown_group": "spells.cooldown_group.unknown",
+        "dispel_type": "N\/A",
+        "mechanic": null,
+        "icon_name": "ability_rogue_shroudofconcealment",
+        "name": "Shroud of Concealment",
+        "schools_mask": 0,
+        "miss_types_mask": 0,
+        "aura": false,
+        "debuff": null,
+        "cast_time": 0,
+        "duration": 15000,
+        "selectable": true,
+        "hidden_on_map": false,
+        "fetched_data_at": "2025-04-09T11:28:30+00:00",
+        "spell_dungeons": []
+    },
+    {
         "id": 114049,
         "category": "spells.category.shaman",
         "cooldown_group": "spells.cooldown_group.unknown",
