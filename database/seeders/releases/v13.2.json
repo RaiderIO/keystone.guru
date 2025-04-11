@@ -3,7 +3,7 @@
     "release_changelog_id": 301,
     "version": "v13.2",
     "title": "Scarlet Enclave mapping up to the 2nd boss",
-    "backup_db": 1,
+    "backup_db": 0,
     "silent": 0,
     "spotlight": 0,
     "released": 0,
