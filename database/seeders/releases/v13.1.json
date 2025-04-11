@@ -2,13 +2,13 @@
     "id": 293,
     "release_changelog_id": 300,
     "version": "v13.1",
-    "title": "Naxxramas Classic added.",
+    "title": "Naxxramas Classic added - ARC fixes and various map improvements",
     "backup_db": 1,
     "silent": 0,
     "spotlight": 0,
     "released": 0,
     "created_at": "2025-04-07T15:22:14+00:00",
-    "updated_at": "2025-04-07T15:22:14+00:00",
+    "updated_at": "2025-04-09T10:07:19+00:00",
     "changelog": {
         "id": 300,
         "release_id": 293,
@@ -16,9 +16,69 @@
         "changes": [
             {
                 "release_changelog_id": 300,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2807,
+                "change": "Several pages that didn't have breadcrumbs now have them."
+            },
+            {
+                "release_changelog_id": 300,
+                "release_changelog_category_id": 3,
+                "ticket_id": 2571,
+                "change": "Zooming the map is now a bit quicker by default. Added a new zoom speed slider in the map settings."
+            },
+            {
+                "release_changelog_id": 300,
+                "release_changelog_category_id": 3,
+                "ticket_id": 2710,
+                "change": "Added zoom controls to the map."
+            },
+            {
+                "release_changelog_id": 300,
                 "release_changelog_category_id": 4,
                 "ticket_id": 2773,
                 "change": "Added Naxxramas Classic - along with SoD speedrun enemies."
+            },
+            {
+                "release_changelog_id": 300,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2800,
+                "change": "Notes that couldn't be assigned to a pull are no longer discarded inadvertently."
+            },
+            {
+                "release_changelog_id": 300,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2818,
+                "change": "Map seams are no longer showing through the tiles."
+            },
+            {
+                "release_changelog_id": 300,
+                "release_changelog_category_id": 6,
+                "ticket_id": 2800,
+                "change": "Arrows imported from MDT no longer have their arrowhead rotated incorrectly."
+            },
+            {
+                "release_changelog_id": 300,
+                "release_changelog_category_id": 6,
+                "ticket_id": 2800,
+                "change": "Added an option to disable assigning notes to pulls automatically."
+            },
+            {
+                "release_changelog_id": 300,
+                "release_changelog_category_id": 11,
+                "ticket_id": 2803,
+                "change": "Fixed some issues with the Priory of the Sacred Flame."
+            },
+            {
+                "release_changelog_id": 300,
+                "release_changelog_category_id": 11,
+                "ticket_id": 2820,
+                "change": "Fixes some issues with the Rookery."
+            },
+            {
+                "release_changelog_id": 300,
+                "release_changelog_category_id": 11,
+                "ticket_id": 2821,
+                "change": "From now on - only Bloodlusty spells and Shroud of Concealment are added to pulls automatically."
             }
         ]
     }

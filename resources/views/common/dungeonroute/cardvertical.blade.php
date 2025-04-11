@@ -156,12 +156,14 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                                             ob_start();
                                             ?>
                                         @foreach($dungeonroute->affixes as $affixgroup)
+                                            <?php /** @var object{first: bool} $loop */ ?>
                                             <div
                                                 class="row no-gutters {{ isset($currentAffixGroup) && $currentAffixGroup->id === $affixgroup->id ? 'current' : '' }}">
                                                 @include('common.affixgroup.affixgroup', [
                                                     'affixgroup' => $affixgroup,
                                                     'showText' => false,
                                                     'dungeon' => $dungeonroute->dungeon,
+                                                    'isFirst' => $loop->first,
                                                 ])
                                             </div>
                                         @endforeach

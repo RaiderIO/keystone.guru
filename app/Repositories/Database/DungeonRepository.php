@@ -22,4 +22,9 @@ class DungeonRepository extends DatabaseRepository implements DungeonRepositoryI
     {
         return Dungeon::where('challenge_mode_id', $challengeModeId)->firstOrFail();
     }
+
+    public function getByInstanceId(int $instanceId): ?Dungeon
+    {
+        return Dungeon::where('instance_id', $instanceId)->first();
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\CombatLog;
 
+use App\Models\Dungeon;
 use App\Service\CombatLog\CombatLogServiceInterface;
 
 class DetermineBounds extends BaseCombatLogCommand
@@ -11,7 +12,7 @@ class DetermineBounds extends BaseCombatLogCommand
      *
      * @var string
      */
-    protected $signature = 'combatlog:determinebounds {filePath}';
+    protected $signature = 'combatlog:determinebounds {filePath} {dungeon}';
 
     /**
      * The console command description.
@@ -28,13 +29,17 @@ class DetermineBounds extends BaseCombatLogCommand
         ini_set('memory_limit', '2G');
 
         $filePath = $this->argument('filePath');
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::where('key', $this->argument('dungeon'))->firstOrFail();
 
-        return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->extractUiMapIds($combatLogService, $filePath));
+        return $this->parseCombatLogRecursively($filePath,
+            fn(string $filePath) => $this->extractUiMapIds($combatLogService, $filePath, $dungeon)
+        );
     }
 
-    private function extractUiMapIds(CombatLogServiceInterface $combatLogService, string $filePath): int
+    private function extractUiMapIds(CombatLogServiceInterface $combatLogService, string $filePath, Dungeon $dungeon): int
     {
-        $mapBounds = $combatLogService->getBoundsFromEvents($filePath);
+        $mapBounds = $combatLogService->getBoundsFromEvents($filePath, $dungeon);
 
         $this->info(
             sprintf(

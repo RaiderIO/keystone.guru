@@ -15,7 +15,7 @@ $routeParams     = ['dungeon' => $dungeonRoute->dungeon, 'dungeonroute' => $dung
 $presentRouteUrl = route('dungeonroute.present', $routeParams);
 $viewRouteUrl    = route('dungeonroute.view', $routeParams);
 ?>
-<header class="header_embed_compact"
+<header class="header_embed_compact  px-0 px-md-2"
         style="
         @if($embedOptions['headerBackgroundColor'] !== null)
             background-color: {{ $embedOptions['headerBackgroundColor'] }};
@@ -25,27 +25,35 @@ $viewRouteUrl    = route('dungeonroute.view', $routeParams);
         ">
     <div class="row no-gutters py-2">
         <div class="col-auto text-right pr-1">
-            <a href="{{ route('home') }}" target="_blank">
-                <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
-                     height="36px;" width="164px;">
-            </a>
+            <div class="row no-gutters align-items-center" style="height: 36px;">
+                <div class="col">
+                    <a href="{{ route('home') }}" target="_blank">
+                        <img src="{{ url('/images/logo/logo_and_text.png') }}" class="header_embed_compact_logo"
+                             alt="{{ config('app.name') }}">
+                    </a>
+                </div>
+            </div>
         </div>
         @if($embedOptions['show']['enemyForces'])
-            <div class="col-auto px-1">
-                    <?php
-                    // This is normally in the pulls sidebar - but for embedding it's in the header - see pulls.blade.php
-                    ?>
-                <div id="edit_route_enemy_forces_container" class="pt-1"></div>
+            <div class="row no-gutters align-items-center" style="height: 36px;">
+                <div class="col-auto px-1">
+                        <?php
+                        // This is normally in the pulls sidebar - but for embedding it's in the header - see pulls.blade.php
+                        ?>
+                    <div id="edit_route_enemy_forces_container"></div>
+                </div>
             </div>
         @endif
         @if($embedOptions['show']['affixes'])
-            <div class="col-md-auto px-1 d-md-flex d-none">
-                    <?php
-                    $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
-                    ?>
-                @if($mostRelevantAffixGroup !== null)
-                    @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100'])
-                @endif
+            <div class="row no-gutters align-items-center" style="height: 36px;">
+                <div class="col-md-auto px-1 d-md-flex d-none">
+                        <?php
+                        $mostRelevantAffixGroup = $dungeonRoute->getMostRelevantAffixGroup();
+                        ?>
+                    @if($mostRelevantAffixGroup !== null)
+                        @include('common.affixgroup.affixgroup', ['affixgroup' => $mostRelevantAffixGroup, 'showText' => false, 'class' => 'w-100', 'isFirst' => true])
+                    @endif
+                </div>
             </div>
         @endif
         <?php // Fills up any remaining space space ?>

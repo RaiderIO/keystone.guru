@@ -215,12 +215,13 @@ use App\Models\Spell\Spell;
         {!! Form::label('spells[]', __('view_admin.npc.edit.spells'), [], false) !!}
         @php($selectedSpells = isset($npc) ? $npc->spells(false)->get()->pluck(['id'])->toArray() : [])
         <!--suppress HtmlFormInputWithoutLabel -->
-        <select class="form-control selectpicker" name="spells[]" multiple="multiple"
+        <select class="form-control" name="spells[]" multiple="multiple"
                 data-live-search="true" data-selected-text-format="count > 1"
                 data-count-selected-text="{{ __('view_admin.npc.edit.spells_count') }}">
             @foreach($spells as $spell)
                 <option value="{{$spell->id}}" {{in_array($spell->id, $selectedSpells) ? 'selected="selected"' : ''}}
-                data-content="<span><img src='{{$spell->icon_url}}' width='24px'/> {{$spell->name}} ({{$spell->id}}) </span>">
+                data-content="<span><img src='{{$spell->icon_url}}' width='24px'/> {{$spell->name}} ({{$spell->id}}) </span>"
+                >
                 </option>
             @endforeach
         </select>

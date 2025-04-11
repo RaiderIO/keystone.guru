@@ -10,9 +10,11 @@ use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart as ChallengeModeStartEv
 use App\Logic\CombatLog\SpecialEvents\CombatLogVersion as CombatLogVersionEvent;
 use App\Logic\CombatLog\SpecialEvents\MapChange as MapChangeEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
+use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Logic\Structs\MapBounds;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\CombatLog\Dtos\ChallengeMode;
 use App\Service\CombatLog\Exceptions\AdvancedLogNotEnabledException;
@@ -34,6 +36,7 @@ class CombatLogService implements CombatLogServiceInterface
     public function __construct(
         private readonly SeasonServiceInterface           $seasonService,
         private readonly NpcRepositoryInterface           $npcRepository,
+        private readonly DungeonRepositoryInterface       $dungeonRepository,
         private readonly CombatLogServiceLoggingInterface $log)
     {
     }
@@ -136,27 +139,39 @@ class CombatLogService implements CombatLogServiceInterface
         return $result;
     }
 
-    public function getBoundsFromEvents(string $filePath): MapBounds
+    public function getBoundsFromEvents(string $filePath, Dungeon $dungeon): MapBounds
     {
         $ingameMinX = $ingameMinY = 9999999;
         $ingameMaxX = $ingameMaxY = -9999999;
 
-        $this->parseCombatLog($filePath, static function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) use (
-            &$ingameMinX, &$ingameMinY, &$ingameMaxX, &$ingameMaxY
+        $currentDungeon = null;
+
+        $this->parseCombatLog($filePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) use (
+            &$dungeon, &$ingameMinX, &$ingameMinY, &$ingameMaxX, &$ingameMaxY, &$currentDungeon
         ) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
-            if ($parsedEvent instanceof AdvancedCombatLogEvent) {
-                $advancedData = $parsedEvent->getAdvancedData();
+            if ($parsedEvent instanceof ZoneChange) {
+                $currentDungeon = $this->dungeonRepository->getByInstanceId($parsedEvent->getZoneId());
+            }
 
-                // Skip events if they're the default due to some issue
-                if (abs($advancedData->getPositionX()) < PHP_FLOAT_EPSILON || abs($advancedData->getPositionY()) < PHP_FLOAT_EPSILON) {
-                    return $parsedEvent;
+            // Only if the current dungeon matches! Otherwise, ignore events
+            if ($currentDungeon?->id == $dungeon->id) {
+                if ($parsedEvent instanceof AdvancedCombatLogEvent) {
+                    $advancedData = $parsedEvent->getAdvancedData();
+
+                    // Skip events if they're the default due to some issue
+                    if (abs($advancedData->getPositionX()) < PHP_FLOAT_EPSILON || abs($advancedData->getPositionY()) < PHP_FLOAT_EPSILON) {
+                        return $parsedEvent;
+                    }
+
+
+                    if ($advancedData->getUiMapId() === 0) {
+                        $ingameMinX = min($ingameMinX, $advancedData->getPositionX());
+                        $ingameMinY = min($ingameMinY, $advancedData->getPositionY());
+                        $ingameMaxX = max($ingameMaxX, $advancedData->getPositionX());
+                        $ingameMaxY = max($ingameMaxY, $advancedData->getPositionY());
+                    }
                 }
-
-                $ingameMinX = min($ingameMinX, $advancedData->getPositionX());
-                $ingameMinY = min($ingameMinY, $advancedData->getPositionY());
-                $ingameMaxX = max($ingameMaxX, $advancedData->getPositionX());
-                $ingameMaxY = max($ingameMaxY, $advancedData->getPositionY());
             }
 
 

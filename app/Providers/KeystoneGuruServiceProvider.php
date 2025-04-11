@@ -335,6 +335,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
+        view()->composer('misc.embedexplore', static function (View $view) use ($viewService, $globalViewVariables) {
+            $view->with('characterClassSpecializations', $globalViewVariables['characterClassSpecializations']);
+        });
+
         view()->composer([
             'dungeonroute.discover.category',
             'dungeonroute.discover.dungeon.category',

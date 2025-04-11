@@ -84,6 +84,8 @@ class NpcController extends Controller
         }
 
         if ($saveResult) {
+            $npc->load('dungeon');
+
             // Bolstering whitelist, if set
             $bolsteringWhitelistNpcs = $validated['bolstering_whitelist_npcs'] ?? [];
             // Clear current whitelists
@@ -142,7 +144,7 @@ class NpcController extends Controller
             // Broadcast notifications so that any open mapping sessions get these changes immediately
             // If no dungeon is set, user selected 'All Dungeons'
             $npcAllDungeon       = ($npc->dungeon === null);
-            $npcBeforeAllDungeon = ($npcBefore->dungeon === null);
+            $npcBeforeAllDungeon = ($oldDungeonId === -1);
 
             // Prevent sending multiple messages for the same dungeon
             $messagesSentToDungeons = collect();
@@ -173,8 +175,7 @@ class NpcController extends Controller
                 }
 
                 if (!$npcBeforeAllDungeon && $messagesSentToDungeons->search($npc->dungeon->id) === false) {
-                    broadcast(new NpcChangedEvent($npcBefore->dungeon, $user, $npc));
-                    $messagesSentToDungeons->push($npc->dungeon->id);
+                    broadcast(new NpcChangedEvent($npcBefore->dungeon, $user, $npcBefore));
                 }
             }
 

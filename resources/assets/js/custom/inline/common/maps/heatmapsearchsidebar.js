@@ -95,7 +95,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             }),
             'dataType': new SearchFilterRadioDataType(this.options.filterDataTypeContainerSelector, this.options.filterDataTypeSelector, this._search.bind(this)),
             'region': new SearchFilterRadioRegion(this.options.filterRegionContainerSelector, this.options.filterRegionSelector, this._search.bind(this)),
-            'keyLevel': new SearchFilterKeyLevel(this.options.filterKeyLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
+            'keyLevel': new SearchFilterMythicLevel(this.options.filterKeyLevelSelector, this._search.bind(this), this.options.keyLevelMin, this.options.keyLevelMax),
             'itemLevel': new SearchFilterItemLevel(this.options.filterItemLevelSelector, this._search.bind(this), this.options.itemLevelMin, this.options.itemLevelMax),
             'playerDeaths': new SearchFilterPlayerDeaths(this.options.filterPlayerDeathsSelector, this._search.bind(this), this.options.playerDeathsMin, this.options.playerDeathsMax),
             'includeAffixIds': new SearchFilterAffixes(this.options.filterAffixesSelector, this._search.bind(this)),
@@ -235,6 +235,9 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         this._restoreFiltersFromQueryParams(filters);
 
         this._search();
+
+        // Make sure the select dropdowns are updated properly - external changes don't cause a UI refresh
+        refreshSelectPickers();
     }
 
     _toggleHeatmap(enabled) {

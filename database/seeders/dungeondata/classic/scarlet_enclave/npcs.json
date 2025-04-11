@@ -1,1 +1,4459 @@
-[]
+[
+    {
+        "id": 1275,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 1444,
+        "encounter_id": null,
+        "name": "Kyra Boucher",
+        "base_health": 1324,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 1432,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 5074,
+        "encounter_id": null,
+        "name": "Renato Gallina",
+        "base_health": 4130,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 5951,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 1560,
+        "encounter_id": null,
+        "name": "Hare",
+        "base_health": 8,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 6827,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 5557,
+        "encounter_id": null,
+        "name": "Crab",
+        "base_health": 42,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 8534,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 7854,
+        "encounter_id": null,
+        "name": "Putrid Gargoyle",
+        "base_health": 6156,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 16573
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 8596,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 7890,
+        "encounter_id": null,
+        "name": "Plaguehound Runt",
+        "base_health": 5927,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 9447,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 10376,
+        "encounter_id": null,
+        "name": "Scarlet Warder",
+        "base_health": 10940,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 9600,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 8816,
+        "encounter_id": null,
+        "name": "Parrot",
+        "base_health": 42,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 14439,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 14493,
+        "encounter_id": null,
+        "name": "Officer Brady",
+        "base_health": 18912,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 238954,
+        "dungeon_id": 138,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 126697,
+        "encounter_id": null,
+        "name": "Solistrasza",
+        "base_health": 8526849,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 20477
+            },
+            {
+                "spell_id": 1227520
+            },
+            {
+                "spell_id": 1227696
+            },
+            {
+                "spell_id": 1227879
+            },
+            {
+                "spell_id": 1228044
+            },
+            {
+                "spell_id": 1228046
+            },
+            {
+                "spell_id": 1231993
+            },
+            {
+                "spell_id": 1232018
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 239047,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 10324,
+        "encounter_id": null,
+        "name": "Scarlet Siege Commander",
+        "base_health": 14652,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240779,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128093,
+        "encounter_id": null,
+        "name": "Scarlet Warder",
+        "base_health": 807315,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 14518
+            },
+            {
+                "spell_id": 15572
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240780,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 8180,
+        "encounter_id": null,
+        "name": "Scarlet Bloodhound",
+        "base_health": 207536,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240781,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128097,
+        "encounter_id": null,
+        "name": "Scarlet Praetorian",
+        "base_health": 831909,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1232676
+            },
+            {
+                "spell_id": 1232678
+            },
+            {
+                "spell_id": 1232679
+            },
+            {
+                "spell_id": 1234870
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240782,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128723,
+        "encounter_id": null,
+        "name": "Scarlet Cleric",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 403233
+            },
+            {
+                "spell_id": 1232741
+            },
+            {
+                "spell_id": 1232743
+            },
+            {
+                "spell_id": 1232745
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240783,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 10398,
+        "encounter_id": null,
+        "name": "Scarlet Curate",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 25054
+            },
+            {
+                "spell_id": 25058
+            },
+            {
+                "spell_id": 403233
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240785,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
+        "display_id": 128740,
+        "encounter_id": null,
+        "name": "Scarlet Alchemist",
+        "base_health": 310341,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 25055
+            },
+            {
+                "spell_id": 403233
+            },
+            {
+                "spell_id": 1235327
+            },
+            {
+                "spell_id": 1235328
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240786,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 4,
+        "display_id": 128725,
+        "encounter_id": null,
+        "name": "Scarlet Medic",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 403233
+            },
+            {
+                "spell_id": 1232734
+            },
+            {
+                "spell_id": 1232755
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240787,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 6,
+        "display_id": 128727,
+        "encounter_id": null,
+        "name": "Scarlet Priest",
+        "base_health": 310341,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1232734
+            },
+            {
+                "spell_id": 1232741
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240788,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128745,
+        "encounter_id": null,
+        "name": "Scarlet Spellbinder",
+        "base_health": 310341,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 11436
+            },
+            {
+                "spell_id": 11831
+            },
+            {
+                "spell_id": 1232762
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240789,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128816,
+        "encounter_id": null,
+        "name": "Scarlet Spellbreaker",
+        "base_health": 807315,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 17741
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240790,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 10299,
+        "encounter_id": null,
+        "name": "Scarlet Lumberjack",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240792,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 10346,
+        "encounter_id": null,
+        "name": "Scarlet Smith",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240793,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 2522,
+        "encounter_id": null,
+        "name": "Scarlet Soldier",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 3639
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240794,
+        "dungeon_id": 138,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128013,
+        "encounter_id": null,
+        "name": "Alexei the Beastlord",
+        "base_health": 21970081,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1230099
+            },
+            {
+                "spell_id": 1230102
+            },
+            {
+                "spell_id": 1230242
+            },
+            {
+                "spell_id": 1230255
+            },
+            {
+                "spell_id": 1230319
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240795,
+        "dungeon_id": 138,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 127989,
+        "encounter_id": null,
+        "name": "Herod",
+        "base_health": 13665599,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1231264
+            },
+            {
+                "spell_id": 1231312
+            },
+            {
+                "spell_id": 1231314
+            },
+            {
+                "spell_id": 1231493
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240796,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128858,
+        "encounter_id": null,
+        "name": "Scarlet Cavalier",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240797,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128857,
+        "encounter_id": null,
+        "name": "Scarlet Executioner",
+        "base_health": 2495727,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1232686
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240798,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128091,
+        "encounter_id": null,
+        "name": "Scarlet Knight",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 6713
+            },
+            {
+                "spell_id": 8242
+            },
+            {
+                "spell_id": 1232703
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240799,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128729,
+        "encounter_id": null,
+        "name": "Scarlet Ranger",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240800,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128818,
+        "encounter_id": null,
+        "name": "Scarlet Invoker",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 12675
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240801,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
+        "display_id": 128820,
+        "encounter_id": null,
+        "name": "Scarlet Mage",
+        "base_health": 310341,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 403233
+            },
+            {
+                "spell_id": 1232762
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240802,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128860,
+        "encounter_id": null,
+        "name": "Scarlet Paladin",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 17143
+            },
+            {
+                "spell_id": 1232703
+            },
+            {
+                "spell_id": 1232710
+            },
+            {
+                "spell_id": 1233069
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240803,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128003,
+        "encounter_id": null,
+        "name": "Commander Granis Darkhammer",
+        "base_health": 3741255,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240804,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128004,
+        "encounter_id": null,
+        "name": "Inquisitor Tenn Flamecaster",
+        "base_health": 3742299,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1231248
+            },
+            {
+                "spell_id": 1232762
+            },
+            {
+                "spell_id": 1233625
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240805,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 127829,
+        "encounter_id": null,
+        "name": "Captain Manadar",
+        "base_health": 3741255,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 8269
+            },
+            {
+                "spell_id": 14518
+            },
+            {
+                "spell_id": 16856
+            },
+            {
+                "spell_id": 17143
+            },
+            {
+                "spell_id": 1233293
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240806,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 10325,
+        "encounter_id": null,
+        "name": "Captain Buzan",
+        "base_health": 3741255,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240807,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128006,
+        "encounter_id": null,
+        "name": "Captain Jorn",
+        "base_health": 3741255,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 8269
+            },
+            {
+                "spell_id": 14518
+            },
+            {
+                "spell_id": 17143
+            },
+            {
+                "spell_id": 17177
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240808,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128007,
+        "encounter_id": null,
+        "name": "Captain Karnwield",
+        "base_health": 3741255,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 8269
+            },
+            {
+                "spell_id": 14518
+            },
+            {
+                "spell_id": 17143
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240809,
+        "dungeon_id": 138,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 127990,
+        "encounter_id": null,
+        "name": "Vishas",
+        "base_health": 12982320,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1231095
+            },
+            {
+                "spell_id": 1231384
+            },
+            {
+                "spell_id": 1231386
+            },
+            {
+                "spell_id": 1231387
+            },
+            {
+                "spell_id": 1236125
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240810,
+        "dungeon_id": 138,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 127991,
+        "encounter_id": null,
+        "name": "Doan",
+        "base_health": 12299040,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1230996
+            },
+            {
+                "spell_id": 1231200
+            },
+            {
+                "spell_id": 1231538
+            },
+            {
+                "spell_id": 1236220
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240811,
+        "dungeon_id": 138,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129113,
+        "encounter_id": null,
+        "name": "Balnazzar",
+        "base_health": 15578785,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 9853
+            },
+            {
+                "spell_id": 10161
+            },
+            {
+                "spell_id": 12494
+            },
+            {
+                "spell_id": 12579
+            },
+            {
+                "spell_id": 17402
+            },
+            {
+                "spell_id": 17926
+            },
+            {
+                "spell_id": 17928
+            },
+            {
+                "spell_id": 26018
+            },
+            {
+                "spell_id": 412609
+            },
+            {
+                "spell_id": 440667
+            },
+            {
+                "spell_id": 440809
+            },
+            {
+                "spell_id": 1214170
+            },
+            {
+                "spell_id": 1227435
+            },
+            {
+                "spell_id": 1228049
+            },
+            {
+                "spell_id": 1231343
+            },
+            {
+                "spell_id": 1231776
+            },
+            {
+                "spell_id": 1231842
+            },
+            {
+                "spell_id": 1231843
+            },
+            {
+                "spell_id": 1231844
+            },
+            {
+                "spell_id": 1231845
+            },
+            {
+                "spell_id": 1231906
+            },
+            {
+                "spell_id": 1232291
+            },
+            {
+                "spell_id": 1234809
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 240812,
+        "dungeon_id": 138,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 127686,
+        "encounter_id": null,
+        "name": "High Commander Beatrix",
+        "base_health": 14049288,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241021,
+        "dungeon_id": 138,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 127818,
+        "encounter_id": null,
+        "name": "Mason the Echo",
+        "base_health": 23967360,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 24647
+            },
+            {
+                "spell_id": 27680
+            },
+            {
+                "spell_id": 1228370
+            },
+            {
+                "spell_id": 1229005
+            },
+            {
+                "spell_id": 1231592
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241048,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 2,
+        "display_id": 128731,
+        "encounter_id": null,
+        "name": "Scarlet Hunter",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 6660
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241120,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129075,
+        "encounter_id": null,
+        "name": "Scarlet Footman",
+        "base_health": 14567,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 13444
+            },
+            {
+                "spell_id": 22120
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241406,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 5,
+        "display_id": 128823,
+        "encounter_id": null,
+        "name": "Scarlet Battle Mage",
+        "base_health": 310341,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1235318
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241407,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128862,
+        "encounter_id": null,
+        "name": "Scarlet Defender",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 8258
+            },
+            {
+                "spell_id": 13005
+            },
+            {
+                "spell_id": 403233
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241409,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 10637,
+        "encounter_id": null,
+        "name": "Scarlet Armorer",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 17445
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241411,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128733,
+        "encounter_id": null,
+        "name": "Scarlet Rifleman",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 17353
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241434,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 2520,
+        "encounter_id": null,
+        "name": "Scarlet Sentry",
+        "base_health": 311304,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241492,
+        "dungeon_id": 138,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 10691,
+        "encounter_id": null,
+        "name": "Balnazzar",
+        "base_health": 123456,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241518,
+        "dungeon_id": 138,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 126218,
+        "encounter_id": null,
+        "name": "Grand Crusader Caldoran",
+        "base_health": 6662500,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1232364
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241665,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128008,
+        "encounter_id": null,
+        "name": "Archmagus Nilas Arcanister",
+        "base_health": 3741255,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241772,
+        "dungeon_id": 138,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 126218,
+        "encounter_id": null,
+        "name": "Grand Crusader Caldoran",
+        "base_health": 6662500,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241778,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128827,
+        "encounter_id": null,
+        "name": "Scarlet Thaumaturgist",
+        "base_health": 831622,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241785,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "Ritual",
+        "base_health": 102,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241787,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "Ritual",
+        "base_health": 102,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241828,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2467,
+        "encounter_id": null,
+        "name": "Scarlet Trainee",
+        "base_health": 311304,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 403233
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241906,
+        "dungeon_id": 138,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128330,
+        "encounter_id": null,
+        "name": "Sir Dornel",
+        "base_health": 21970081,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1228295
+            },
+            {
+                "spell_id": 1230105
+            },
+            {
+                "spell_id": 1230123
+            },
+            {
+                "spell_id": 1230200
+            },
+            {
+                "spell_id": 1230319
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242009,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "Scarlet Cannon",
+        "base_health": 2289,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1228376
+            },
+            {
+                "spell_id": 1228444
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242106,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 3827,
+        "encounter_id": null,
+        "name": "Eastsea Cannoneer",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242107,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 6938,
+        "encounter_id": null,
+        "name": "Eastsea Dockworker",
+        "base_health": 311304,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 3148
+            },
+            {
+                "spell_id": 403233
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242109,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 6950,
+        "encounter_id": null,
+        "name": "Eastsea Swashbuckler",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242111,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 6955,
+        "encounter_id": null,
+        "name": "Eastsea Buccaneer",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242112,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 3833,
+        "encounter_id": null,
+        "name": "Eastsea Privateer",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242113,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 797,
+        "encounter_id": null,
+        "name": "First Mate Kip",
+        "base_health": 3741972,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 6253
+            },
+            {
+                "spell_id": 6713
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242114,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128092,
+        "encounter_id": null,
+        "name": "Scarlet Infantry",
+        "base_health": 289080,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236176
+            },
+            {
+                "spell_id": 1236177
+            },
+            {
+                "spell_id": 1236179
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242148,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129164,
+        "encounter_id": null,
+        "name": "Scarlet Cavalry",
+        "base_health": 289080,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236182
+            },
+            {
+                "spell_id": 1236183
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242216,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129176,
+        "encounter_id": null,
+        "name": "Scarlet Archer",
+        "base_health": 289080,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1232840
+            },
+            {
+                "spell_id": 1236188
+            },
+            {
+                "spell_id": 1236190
+            },
+            {
+                "spell_id": 1236191
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242224,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128341,
+        "encounter_id": null,
+        "name": "Cardinal Stiltz",
+        "base_health": 3741166,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236151
+            },
+            {
+                "spell_id": 1236154
+            },
+            {
+                "spell_id": 1236156
+            },
+            {
+                "spell_id": 1236159
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242271,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 6,
+        "display_id": 128344,
+        "encounter_id": null,
+        "name": "Scarlet Priest",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242272,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129176,
+        "encounter_id": null,
+        "name": "Scarlet Archer",
+        "base_health": 831390,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1232840
+            },
+            {
+                "spell_id": 1236188
+            },
+            {
+                "spell_id": 1236190
+            },
+            {
+                "spell_id": 1236191
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242279,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129164,
+        "encounter_id": null,
+        "name": "Scarlet Cavalry",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242282,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128092,
+        "encounter_id": null,
+        "name": "Scarlet Infantry",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242283,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
+        "display_id": 129170,
+        "encounter_id": null,
+        "name": "Scarlet Mage",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242296,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 2,
+        "display_id": 128517,
+        "encounter_id": null,
+        "name": "Bowmaster Puck",
+        "base_health": 3739960,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1232840
+            },
+            {
+                "spell_id": 1236188
+            },
+            {
+                "spell_id": 1236190
+            },
+            {
+                "spell_id": 1236191
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242301,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128509,
+        "encounter_id": null,
+        "name": "Cannon Mistress Lind",
+        "base_health": 3741972,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236269
+            },
+            {
+                "spell_id": 1236270
+            },
+            {
+                "spell_id": 1236271
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242304,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128516,
+        "encounter_id": null,
+        "name": "Knight-Captain Fratley",
+        "base_health": 3741972,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1232390
+            },
+            {
+                "spell_id": 1236182
+            },
+            {
+                "spell_id": 1236183
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242308,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128510,
+        "encounter_id": null,
+        "name": "Shield Warden Stein",
+        "base_health": 3741972,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 19134
+            },
+            {
+                "spell_id": 20615
+            },
+            {
+                "spell_id": 27577
+            },
+            {
+                "spell_id": 29544
+            },
+            {
+                "spell_id": 1236176
+            },
+            {
+                "spell_id": 1236177
+            },
+            {
+                "spell_id": 1236179
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242310,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128511,
+        "encounter_id": null,
+        "name": "Arcanist Hilda",
+        "base_health": 3741166,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236172
+            },
+            {
+                "spell_id": 1236175
+            },
+            {
+                "spell_id": 1236290
+            },
+            {
+                "spell_id": 1236291
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242386,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 10299,
+        "encounter_id": null,
+        "name": "Scarlet Firefighter",
+        "base_health": 4120,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242547,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128097,
+        "encounter_id": null,
+        "name": "Scarlet Praetorian",
+        "base_health": 831390,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 17143
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242660,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "Molten Basin",
+        "base_health": 102,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242788,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 2,
+        "display_id": 128517,
+        "encounter_id": null,
+        "name": "Bowmaster Puck",
+        "base_health": 123456,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242853,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128565,
+        "encounter_id": null,
+        "name": "Eastsea Scallywag",
+        "base_health": 599184,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 15708
+            },
+            {
+                "spell_id": 1234347
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242886,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128611,
+        "encounter_id": null,
+        "name": "Eastsea Long Barrel",
+        "base_health": 102,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242908,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129176,
+        "encounter_id": null,
+        "name": "Scarlet Archer",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242926,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129164,
+        "encounter_id": null,
+        "name": "Scarlet Cavalry",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1231712
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242927,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129164,
+        "encounter_id": null,
+        "name": "Scarlet Cavalry",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242957,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128092,
+        "encounter_id": null,
+        "name": "Scarlet Infantry",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242958,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128092,
+        "encounter_id": null,
+        "name": "Scarlet Infantry",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1231775
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 243001,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 6,
+        "display_id": 128344,
+        "encounter_id": null,
+        "name": "Scarlet Priest",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 243027,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
+        "display_id": 129170,
+        "encounter_id": null,
+        "name": "Scarlet Mage",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 243047,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128092,
+        "encounter_id": null,
+        "name": "Scarlet Infantry",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 243076,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 2492,
+        "encounter_id": null,
+        "name": "Scarlet Lightbearer",
+        "base_health": 32370,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 243100,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 10543,
+        "encounter_id": null,
+        "name": "Shade of Balnazzar",
+        "base_health": 3237,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 243139,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129030,
+        "encounter_id": null,
+        "name": "Lightgorged Whelp",
+        "base_health": 599184,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 243158,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129038,
+        "encounter_id": null,
+        "name": "Cardinal Martell",
+        "base_health": 2494170,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 15587
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 243159,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 6,
+        "display_id": 10335,
+        "encounter_id": null,
+        "name": "Scarlet Priest",
+        "base_health": 378021,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 13864
+            },
+            {
+                "spell_id": 15498
+            },
+            {
+                "spell_id": 403233
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 243193,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 16016,
+        "encounter_id": null,
+        "name": "Angela Dosantos",
+        "base_health": 2136,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1232393
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 243702,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128861,
+        "encounter_id": null,
+        "name": "Scarlet Paladin",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 17143
+            },
+            {
+                "spell_id": 1232703
+            },
+            {
+                "spell_id": 1233069
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 243737,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129058,
+        "encounter_id": null,
+        "name": "Scarlet Myrmidon",
+        "base_health": 424440,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 8269
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 243904,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128861,
+        "encounter_id": null,
+        "name": "Scarlet Paladin",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244005,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 6,
+        "display_id": 128344,
+        "encounter_id": null,
+        "name": "Scarlet Priest",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236151
+            },
+            {
+                "spell_id": 1236154
+            },
+            {
+                "spell_id": 1236156
+            },
+            {
+                "spell_id": 1236159
+            },
+            {
+                "spell_id": 1236162
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244006,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
+        "display_id": 129170,
+        "encounter_id": null,
+        "name": "Scarlet Mage",
+        "base_health": 310341,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236172
+            },
+            {
+                "spell_id": 1236173
+            },
+            {
+                "spell_id": 1236174
+            },
+            {
+                "spell_id": 1236175
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244007,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128092,
+        "encounter_id": null,
+        "name": "Scarlet Infantry",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236176
+            },
+            {
+                "spell_id": 1236177
+            },
+            {
+                "spell_id": 1236179
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244008,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129164,
+        "encounter_id": null,
+        "name": "Scarlet Cavalry",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236182
+            },
+            {
+                "spell_id": 1236183
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244009,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 3127,
+        "encounter_id": null,
+        "name": "Scarlet Artillery",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244010,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129176,
+        "encounter_id": null,
+        "name": "Scarlet Archer",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 403233
+            },
+            {
+                "spell_id": 1232840
+            },
+            {
+                "spell_id": 1236188
+            },
+            {
+                "spell_id": 1236190
+            },
+            {
+                "spell_id": 1236191
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244013,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
+        "display_id": 129170,
+        "encounter_id": null,
+        "name": "Scarlet Mage",
+        "base_health": 310341,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 403233
+            },
+            {
+                "spell_id": 1236172
+            },
+            {
+                "spell_id": 1236173
+            },
+            {
+                "spell_id": 1236174
+            },
+            {
+                "spell_id": 1236175
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244014,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 6,
+        "display_id": 128344,
+        "encounter_id": null,
+        "name": "Scarlet Priest",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236151
+            },
+            {
+                "spell_id": 1236154
+            },
+            {
+                "spell_id": 1236156
+            },
+            {
+                "spell_id": 1236159
+            },
+            {
+                "spell_id": 1236162
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244015,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128092,
+        "encounter_id": null,
+        "name": "Scarlet Infantry",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236176
+            },
+            {
+                "spell_id": 1236177
+            },
+            {
+                "spell_id": 1236179
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244016,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129164,
+        "encounter_id": null,
+        "name": "Scarlet Cavalry",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236182
+            },
+            {
+                "spell_id": 1236183
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244017,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 3127,
+        "encounter_id": null,
+        "name": "Scarlet Artillery",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244018,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129176,
+        "encounter_id": null,
+        "name": "Scarlet Archer",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1232840
+            },
+            {
+                "spell_id": 1236188
+            },
+            {
+                "spell_id": 1236190
+            },
+            {
+                "spell_id": 1236191
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244019,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 6,
+        "display_id": 128344,
+        "encounter_id": null,
+        "name": "Scarlet Priest",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 403233
+            },
+            {
+                "spell_id": 1236151
+            },
+            {
+                "spell_id": 1236154
+            },
+            {
+                "spell_id": 1236156
+            },
+            {
+                "spell_id": 1236159
+            },
+            {
+                "spell_id": 1236162
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244020,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
+        "display_id": 129170,
+        "encounter_id": null,
+        "name": "Scarlet Mage",
+        "base_health": 310341,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 403233
+            },
+            {
+                "spell_id": 1236172
+            },
+            {
+                "spell_id": 1236173
+            },
+            {
+                "spell_id": 1236174
+            },
+            {
+                "spell_id": 1236175
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244021,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128092,
+        "encounter_id": null,
+        "name": "Scarlet Infantry",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236176
+            },
+            {
+                "spell_id": 1236177
+            },
+            {
+                "spell_id": 1236179
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244022,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129164,
+        "encounter_id": null,
+        "name": "Scarlet Cavalry",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236182
+            },
+            {
+                "spell_id": 1236183
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244024,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129176,
+        "encounter_id": null,
+        "name": "Scarlet Archer",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1232840
+            },
+            {
+                "spell_id": 1236188
+            },
+            {
+                "spell_id": 1236190
+            },
+            {
+                "spell_id": 1236191
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244064,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129176,
+        "encounter_id": null,
+        "name": "Scarlet Archer",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 403233
+            },
+            {
+                "spell_id": 1232840
+            },
+            {
+                "spell_id": 1236188
+            },
+            {
+                "spell_id": 1236190
+            },
+            {
+                "spell_id": 1236191
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244066,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129164,
+        "encounter_id": null,
+        "name": "Scarlet Cavalry",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236182
+            },
+            {
+                "spell_id": 1236183
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244067,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128092,
+        "encounter_id": null,
+        "name": "Scarlet Infantry",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236176
+            },
+            {
+                "spell_id": 1236177
+            },
+            {
+                "spell_id": 1236179
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244068,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
+        "display_id": 129170,
+        "encounter_id": null,
+        "name": "Scarlet Mage",
+        "base_health": 310341,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236172
+            },
+            {
+                "spell_id": 1236174
+            },
+            {
+                "spell_id": 1236175
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244069,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128344,
+        "encounter_id": null,
+        "name": "Scarlet Priest",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236151
+            },
+            {
+                "spell_id": 1236154
+            },
+            {
+                "spell_id": 1236159
+            },
+            {
+                "spell_id": 1236162
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244102,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128344,
+        "encounter_id": null,
+        "name": "Scarlet Priest",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236151
+            },
+            {
+                "spell_id": 1236154
+            },
+            {
+                "spell_id": 1236156
+            },
+            {
+                "spell_id": 1236159
+            },
+            {
+                "spell_id": 1236162
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244103,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
+        "display_id": 129170,
+        "encounter_id": null,
+        "name": "Scarlet Mage",
+        "base_health": 310341,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236172
+            },
+            {
+                "spell_id": 1236173
+            },
+            {
+                "spell_id": 1236174
+            },
+            {
+                "spell_id": 1236175
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244104,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128092,
+        "encounter_id": null,
+        "name": "Scarlet Infantry",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236176
+            },
+            {
+                "spell_id": 1236177
+            },
+            {
+                "spell_id": 1236179
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244105,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129164,
+        "encounter_id": null,
+        "name": "Scarlet Cavalry",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236182
+            },
+            {
+                "spell_id": 1236183
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244106,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129229,
+        "encounter_id": null,
+        "name": "Scarlet Artillery",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244107,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129176,
+        "encounter_id": null,
+        "name": "Scarlet Archer",
+        "base_health": 12345,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244122,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 3827,
+        "encounter_id": null,
+        "name": "Eastsea Cannoneer",
+        "base_health": 113184,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 6660
+            },
+            {
+                "spell_id": 403233
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244131,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 6,
+        "display_id": 128344,
+        "encounter_id": null,
+        "name": "Scarlet Priest",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236151
+            },
+            {
+                "spell_id": 1236154
+            },
+            {
+                "spell_id": 1236156
+            },
+            {
+                "spell_id": 1236159
+            },
+            {
+                "spell_id": 1236162
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244132,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 3,
+        "display_id": 129170,
+        "encounter_id": null,
+        "name": "Scarlet Mage",
+        "base_health": 310341,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 403233
+            },
+            {
+                "spell_id": 1236172
+            },
+            {
+                "spell_id": 1236174
+            },
+            {
+                "spell_id": 1236175
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244133,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128092,
+        "encounter_id": null,
+        "name": "Scarlet Infantry",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 1236176
+            },
+            {
+                "spell_id": 1236177
+            },
+            {
+                "spell_id": 1236179
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244136,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 129176,
+        "encounter_id": null,
+        "name": "Scarlet Archer",
+        "base_health": 311860,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 403233
+            },
+            {
+                "spell_id": 1232840
+            },
+            {
+                "spell_id": 1236188
+            },
+            {
+                "spell_id": 1236190
+            },
+            {
+                "spell_id": 1236191
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244151,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 16236,
+        "encounter_id": null,
+        "name": "Argent Dawn Cleric",
+        "base_health": 9620,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 244819,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 16925,
+        "encounter_id": null,
+        "name": "Primordial Flame",
+        "base_health": 6104,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 245234,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 16622,
+        "encounter_id": null,
+        "name": "Mr. Bigglesworth",
+        "base_health": 26,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    }
+]

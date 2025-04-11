@@ -22,7 +22,7 @@ class EnvironmentalDamageBuilder implements SpecialEventBuilderInterface
     ): SpecialEvent {
         return match ($combatLogVersion) {
             CombatLogVersion::CLASSIC => new EnvironmentalDamageV9($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
-            CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6 => new EnvironmentalDamageV9SoD($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
+            CombatLogVersion::CLASSIC_SOD_1_15_5, CombatLogVersion::CLASSIC_SOD_1_15_6, CombatLogVersion::CLASSIC_SOD_1_15_7 => new EnvironmentalDamageV9SoD($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
             CombatLogVersion::RETAIL_10_1_0, CombatLogVersion::RETAIL_11_0_2 => new EnvironmentalDamageV20($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
             default => new EnvironmentalDamageV22($combatLogVersion, $timestamp, $eventName, $parameters, $rawEvent),
         };

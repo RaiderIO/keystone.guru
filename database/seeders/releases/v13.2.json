@@ -1,0 +1,37 @@
+{
+    "id": 294,
+    "release_changelog_id": 301,
+    "version": "v13.2",
+    "title": "Scarlet Enclave mapping up to the 2nd boss",
+    "backup_db": 1,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-04-11T20:45:12+00:00",
+    "updated_at": "2025-04-11T20:45:12+00:00",
+    "changelog": {
+        "id": 301,
+        "release_id": 294,
+        "description": "Happy Scarlet Enclave release day!",
+        "changes": [
+            {
+                "release_changelog_id": 301,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2825,
+                "change": "Route search key filter is now functioning again."
+            },
+            {
+                "release_changelog_id": 301,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2823,
+                "change": "Various embed pages now respond better to having a (very) small screen."
+            },
+            {
+                "release_changelog_id": 301,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2809,
+                "change": "Added the Scarlet Enclave mapping. This is still a work in progress!"
+            }
+        ]
+    }
+}
