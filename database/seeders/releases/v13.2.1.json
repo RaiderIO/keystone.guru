@@ -1,0 +1,25 @@
+{
+    "id": 295,
+    "release_changelog_id": 302,
+    "version": "v13.2.1",
+    "title": "Scarlet Enclave mapping update",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-04-17T12:18:00+00:00",
+    "updated_at": "2025-04-17T12:18:00+00:00",
+    "changelog": {
+        "id": 302,
+        "release_id": 295,
+        "description": "The Scarlet Enclave is now mostly complete. Some areas that nobody seems to visit have not been mapped - but I will catch up on that when I receive some custom footage to tackle this.",
+        "changes": [
+            {
+                "release_changelog_id": 302,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2809,
+                "change": "Added Scarlet Enclave mapping of the remaining raid."
+            }
+        ]
+    }
+}
