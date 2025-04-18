@@ -16,6 +16,10 @@ class FloorRepository extends DatabaseRepository implements FloorRepositoryInter
 
     public function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor
     {
+        if ($uiMapId === 0) {
+            return null;
+        }
+
         return Floor::where('ui_map_id', Floor::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
             ->when($dungeonId !== null, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
             ->first();

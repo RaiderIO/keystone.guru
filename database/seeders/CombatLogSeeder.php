@@ -8,6 +8,7 @@ use App\Models\CombatLog\ParsedCombatLog;
 use FilesystemIterator;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Str;
 
 class CombatLogSeeder extends Seeder implements TableSeederInterface
@@ -57,12 +58,19 @@ class CombatLogSeeder extends Seeder implements TableSeederInterface
             }
         }
 
-        CombatLogNpcSpellAssignment::from(DatabaseSeeder::getTempTableName(CombatLogNpcSpellAssignment::class))
-            ->insert($combatLogNpcSpellAssignmentAttributes) &&
-        CombatLogSpellUpdate::from(DatabaseSeeder::getTempTableName(CombatLogSpellUpdate::class))
-            ->insert($combatLogSpellUpdateAttributes) &&
-        ParsedCombatLog::from(DatabaseSeeder::getTempTableName(ParsedCombatLog::class))
-            ->insert($parsedCombatLogAttributes);
+        // Insert the data into the database
+        collect($combatLogNpcSpellAssignmentAttributes)->chunk(1000)->each(function (Collection $chunk) {
+            CombatLogNpcSpellAssignment::from(DatabaseSeeder::getTempTableName(CombatLogNpcSpellAssignment::class))
+                ->insert($chunk->toArray());
+        });
+        collect($combatLogSpellUpdateAttributes)->chunk(1000)->each(function (Collection $chunk) {
+            CombatLogSpellUpdate::from(DatabaseSeeder::getTempTableName(CombatLogSpellUpdate::class))
+                ->insert($chunk->toArray());
+        });
+        collect($parsedCombatLogAttributes)->chunk(1000)->each(function (Collection $chunk) {
+            ParsedCombatLog::from(DatabaseSeeder::getTempTableName(ParsedCombatLog::class))
+                ->insert($chunk->toArray());
+        });
     }
 
     public static function getAffectedModelClasses(): array

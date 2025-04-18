@@ -193,10 +193,12 @@ class KillZone extends Model
                 $floorTotals[$enemy->floor_id]++;
             }
 
-            // Will get a random floor if there's equal counts on multiple floors, that's ok
-            $floorId = array_search(max($floorTotals), $floorTotals, true);
+            if (!empty($floorTotals)) {
+                // Will get a random floor if there's equal counts on multiple floors, that's ok
+                $floorId = array_search(max($floorTotals), $floorTotals, true);
 
-            $result = Floor::findOrFail($floorId);
+                $result = Floor::findOrFail($floorId);
+            }
         }
 
         return $this->dominantFloorCache = $result;

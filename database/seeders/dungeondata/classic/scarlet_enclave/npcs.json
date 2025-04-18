@@ -472,6 +472,38 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 240784,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128736,
+        "encounter_id": null,
+        "name": "Scarlet Archmage",
+        "base_health": 251520,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 14518
+            },
+            {
+                "spell_id": 15572
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 240785,
         "dungeon_id": 138,
         "classification_id": 2,
@@ -1692,7 +1724,7 @@
         "display_id": 126218,
         "encounter_id": null,
         "name": "Grand Crusader Caldoran",
-        "base_health": 6662500,
+        "base_health": 59030718,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -1746,7 +1778,7 @@
         "display_id": 126218,
         "encounter_id": null,
         "name": "Grand Crusader Caldoran",
-        "base_health": 6662500,
+        "base_health": 59030718,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -1867,6 +1899,38 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 241895,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128098,
+        "encounter_id": null,
+        "name": "Manath Magesinger",
+        "base_health": 2490000,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 14518
+            },
+            {
+                "spell_id": 15572
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 241906,
         "dungeon_id": 138,
         "classification_id": 3,
@@ -1905,6 +1969,31 @@
                 "spell_id": 1230319
             }
         ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 241921,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 128110,
+        "encounter_id": null,
+        "name": "Morlune the Mighty",
+        "base_health": 3741166,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
         "npc_enemy_forces": []
     },
     {
@@ -2139,6 +2228,31 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 242135,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 1,
+        "npc_class_id": 1,
+        "display_id": 3829,
+        "encounter_id": null,
+        "name": "Eastsea Handler",
+        "base_health": 311256,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 242148,
         "dungeon_id": 138,
         "classification_id": 2,
@@ -2166,6 +2280,38 @@
             },
             {
                 "spell_id": 1236183
+            }
+        ],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 242161,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 15183,
+        "encounter_id": null,
+        "name": "Scarlet Miner",
+        "base_health": 251520,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 14518
+            },
+            {
+                "spell_id": 15572
             }
         ],
         "npc_enemy_forces": []
@@ -2894,6 +3040,38 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
         "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 243021,
+        "dungeon_id": 138,
+        "classification_id": 3,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 128659,
+        "encounter_id": null,
+        "name": "Lillian Voss",
+        "base_health": 20222460,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 14518
+            },
+            {
+                "spell_id": 15572
+            }
+        ],
         "npc_enemy_forces": []
     },
     {

@@ -3932,7 +3932,7 @@
                 "name": "dungeons.sl.theater_of_pain.floors.upper_barrow_of_carnage",
                 "default": 0,
                 "facade": 0,
-                "min_enemy_size": null,
+                "min_enemy_size": 18,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 100,
                 "enemy_engagement_max_range_patrols": null,
@@ -3945,13 +3945,13 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1067,
+                        "id": 1109,
                         "floor1_id": 96,
                         "floor2_id": 93,
                         "direction": "right"
                     },
                     {
-                        "id": 1068,
+                        "id": 1110,
                         "floor1_id": 96,
                         "floor2_id": 95,
                         "direction": "down"
@@ -3969,7 +3969,7 @@
                 "name": "dungeons.sl.theater_of_pain.floors.lower_barrow_of_carnage",
                 "default": 0,
                 "facade": 0,
-                "min_enemy_size": null,
+                "min_enemy_size": 18,
                 "max_enemy_size": null,
                 "enemy_engagement_max_range": 100,
                 "enemy_engagement_max_range_patrols": null,
@@ -3982,13 +3982,13 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1069,
+                        "id": 1111,
                         "floor1_id": 95,
                         "floor2_id": 93,
                         "direction": "right"
                     },
                     {
-                        "id": 1070,
+                        "id": 1112,
                         "floor1_id": 95,
                         "floor2_id": 96,
                         "direction": "up"
@@ -16505,13 +16505,13 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1096,
+                        "id": 1105,
                         "floor1_id": 376,
                         "floor2_id": 375,
                         "direction": "down"
                     },
                     {
-                        "id": 1097,
+                        "id": 1106,
                         "floor1_id": 376,
                         "floor2_id": 378,
                         "direction": "up"
@@ -16597,8 +16597,8 @@
                 "name": "dungeons.classic.scarlet_enclave.floors.ashbringer_chapel",
                 "default": 0,
                 "facade": 0,
-                "min_enemy_size": null,
-                "max_enemy_size": null,
+                "min_enemy_size": 26,
+                "max_enemy_size": 38,
                 "enemy_engagement_max_range": null,
                 "enemy_engagement_max_range_patrols": null,
                 "ingame_min_x": 0,
@@ -16610,7 +16610,7 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1100,
+                        "id": 1108,
                         "floor1_id": 379,
                         "floor2_id": 378,
                         "direction": "down"

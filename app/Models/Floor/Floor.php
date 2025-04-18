@@ -121,6 +121,8 @@ class Floor extends CacheModel implements MappingModelInterface
      * Some IDs which are open world, and we cannot resolve to a dungeon floor.
      */
     public const UI_MAP_ID_OPEN_WORLD = [
+        0, // Unknown
+        1536, // Maldraxxus
         1550, // The Shadowlands
         1490, // Mechagon
         1493, // Mechagon
@@ -128,6 +130,7 @@ class Floor extends CacheModel implements MappingModelInterface
         2248, // Isle of Dorn
         2274, // Khaz Algar
         2339, // Dornogal
+        2346, // Undermine
     ];
 
     public const DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID = 2304;

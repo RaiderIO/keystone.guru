@@ -38,44 +38,32 @@ class AssignMDTIDs extends Command
 
         foreach ($mappingVersions as $mappingVersion) {
             if (empty($dungeonWhitelist) || in_array($mappingVersion->dungeon->key, $dungeonWhitelist)) {
-                $index   = 1;
-                $enemies = $mappingVersion->enemies->sortBy('npc_id');
+                $enemies = $mappingVersion->enemies()
+                    ->orderBy('npc_id')
+                    ->orderBy('id')
+                    ->get();
 
                 if ($enemies->isEmpty()) {
                     // We don't care for empty mapping versions
                     continue;
                 }
 
-                if ($enemies->filter(static fn(Enemy $enemy) => $enemy->mdt_id > 0)->isNotEmpty()) {
-                    $this->comment(
-                        sprintf(
-                            '- Skipping mapping version %d (%s) - already has assigned MDT IDs',
-                            $mappingVersion->id,
-                            __($mappingVersion->dungeon->name, [], 'en_US')
-                        )
-                    );
-
-                    continue;
-                }
-
-                $this->info(
-                    sprintf('Assigning MDT IDs for mapping version %d (%s)',
-                        $mappingVersion->id,
-                        __($mappingVersion->dungeon->name, [], 'en_US')
-                    )
-                );
-
-                $previousNpcId = 0;
-                foreach ($enemies as $enemy) {
-
-                    if ($previousNpcId !== $enemy->npc_id) {
-                        $index         = 1;
-                        $previousNpcId = $enemy->npc_id;
+                foreach ($enemies->groupBy('npc_id') as $npcId => $enemiesByNpcId) {
+                    $enemiesByNpcId = $enemiesByNpcId->sortBy('id');
+                    $maxId = 0;
+                    // Determine the max ID first, then assign the max ID to any NPCs that don't have an ID yet
+                    foreach ($enemiesByNpcId as $enemy) {
+                        if ($enemy->mdt_id > 0 && $maxId <= $enemy->mdt_id) {
+                            $maxId = $enemy->mdt_id;
+                        }
                     }
 
-                    $enemy->update(['mdt_id' => $index]);
-
-                    $index++;
+                    foreach($enemiesByNpcId as $enemy) {
+                        if(empty($enemy->mdt_id)){
+                            // Increment first, then write
+                            $enemy->update(['mdt_id' => ++$maxId]);
+                        }
+                    }
                 }
             }
 

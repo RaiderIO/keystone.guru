@@ -22,6 +22,10 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
 
     public function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor
     {
+        if ($uiMapId === 0) {
+            return null;
+        }
+
         $key = sprintf('%d-%s', $uiMapId, $dungeonId ?? 'null');
 
         if ($this->floorsByUiMapIdAndDungeonId->has($key)) {

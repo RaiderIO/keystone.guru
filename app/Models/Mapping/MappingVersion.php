@@ -184,7 +184,7 @@ class MappingVersion extends Model
         if ($this->isLatestForDungeonCache === null) {
             $this->isLatestForDungeonCache = MappingVersion::query()
                     ->where('dungeon_id', $this->dungeon_id)
-                    ->max('id') === $this->id;
+                    ->max('version') === $this->version;
         }
 
         return $this->isLatestForDungeonCache;
