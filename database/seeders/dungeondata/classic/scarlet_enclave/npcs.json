@@ -312,7 +312,7 @@
         "display_id": 128093,
         "encounter_id": null,
         "name": "Scarlet Warder",
-        "base_health": 807315,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -369,7 +369,7 @@
         "display_id": 128097,
         "encounter_id": null,
         "name": "Scarlet Praetorian",
-        "base_health": 831909,
+        "base_health": 556764,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -407,7 +407,7 @@
         "display_id": 128723,
         "encounter_id": null,
         "name": "Scarlet Cleric",
-        "base_health": 311860,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -617,7 +617,7 @@
         "display_id": 128745,
         "encounter_id": null,
         "name": "Scarlet Spellbinder",
-        "base_health": 310341,
+        "base_health": 248713,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -731,7 +731,7 @@
         "display_id": 2522,
         "encounter_id": null,
         "name": "Scarlet Soldier",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -839,7 +839,7 @@
         "display_id": 128858,
         "encounter_id": null,
         "name": "Scarlet Cavalier",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -852,7 +852,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 1235538
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -893,7 +897,7 @@
         "display_id": 128091,
         "encounter_id": null,
         "name": "Scarlet Knight",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -928,7 +932,7 @@
         "display_id": 128729,
         "encounter_id": null,
         "name": "Scarlet Ranger",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -982,7 +986,7 @@
         "display_id": 128820,
         "encounter_id": null,
         "name": "Scarlet Mage",
-        "base_health": 310341,
+        "base_health": 248713,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -1014,7 +1018,7 @@
         "display_id": 128860,
         "encounter_id": null,
         "name": "Scarlet Paladin",
-        "base_health": 311860,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -1112,7 +1116,7 @@
         "display_id": 127829,
         "encounter_id": null,
         "name": "Captain Manadar",
-        "base_health": 3741255,
+        "base_health": 2494170,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -1216,7 +1220,7 @@
         "display_id": 128007,
         "encounter_id": null,
         "name": "Captain Karnwield",
-        "base_health": 3741255,
+        "base_health": 2494170,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -1348,13 +1352,25 @@
                 "spell_id": 9853
             },
             {
+                "spell_id": 10151
+            },
+            {
                 "spell_id": 10161
+            },
+            {
+                "spell_id": 10187
+            },
+            {
+                "spell_id": 10216
             },
             {
                 "spell_id": 12494
             },
             {
                 "spell_id": 12579
+            },
+            {
+                "spell_id": 14295
             },
             {
                 "spell_id": 17402
@@ -1364,6 +1380,15 @@
             },
             {
                 "spell_id": 17928
+            },
+            {
+                "spell_id": 18809
+            },
+            {
+                "spell_id": 24977
+            },
+            {
+                "spell_id": 25295
             },
             {
                 "spell_id": 26018
@@ -1425,7 +1450,7 @@
         "display_id": 127686,
         "encounter_id": null,
         "name": "High Commander Beatrix",
-        "base_health": 14049288,
+        "base_health": 10000000,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -1438,7 +1463,20 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 1232389
+            },
+            {
+                "spell_id": 1232390
+            },
+            {
+                "spell_id": 1232637
+            },
+            {
+                "spell_id": 1235571
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -1581,7 +1619,7 @@
         "display_id": 128862,
         "encounter_id": null,
         "name": "Scarlet Defender",
-        "base_health": 311860,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -1645,7 +1683,7 @@
         "display_id": 128733,
         "encounter_id": null,
         "name": "Scarlet Rifleman",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -1724,7 +1762,7 @@
         "display_id": 126218,
         "encounter_id": null,
         "name": "Grand Crusader Caldoran",
-        "base_health": 59030718,
+        "base_health": 6662500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -2201,7 +2239,7 @@
         "display_id": 128092,
         "encounter_id": null,
         "name": "Scarlet Infantry",
-        "base_health": 289080,
+        "base_health": 216936,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -2261,7 +2299,7 @@
         "display_id": 129164,
         "encounter_id": null,
         "name": "Scarlet Cavalry",
-        "base_health": 289080,
+        "base_health": 216290,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -2325,7 +2363,7 @@
         "display_id": 129176,
         "encounter_id": null,
         "name": "Scarlet Archer",
-        "base_health": 289080,
+        "base_health": 216290,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -2363,7 +2401,7 @@
         "display_id": 128341,
         "encounter_id": null,
         "name": "Cardinal Stiltz",
-        "base_health": 3741166,
+        "base_health": 2494866,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -2388,6 +2426,9 @@
             },
             {
                 "spell_id": 1236159
+            },
+            {
+                "spell_id": 1236287
             }
         ],
         "npc_enemy_forces": []
@@ -2426,7 +2467,7 @@
         "display_id": 129176,
         "encounter_id": null,
         "name": "Scarlet Archer",
-        "base_health": 831390,
+        "base_health": 554260,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -2539,7 +2580,7 @@
         "display_id": 128517,
         "encounter_id": null,
         "name": "Bowmaster Puck",
-        "base_health": 3739960,
+        "base_health": 2494170,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -2577,7 +2618,7 @@
         "display_id": 128509,
         "encounter_id": null,
         "name": "Cannon Mistress Lind",
-        "base_health": 3741972,
+        "base_health": 2495727,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -2612,7 +2653,7 @@
         "display_id": 128516,
         "encounter_id": null,
         "name": "Knight-Captain Fratley",
-        "base_health": 3741972,
+        "base_health": 2495727,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -2647,7 +2688,7 @@
         "display_id": 128510,
         "encounter_id": null,
         "name": "Shield Warden Stein",
-        "base_health": 3741972,
+        "base_health": 2495727,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -2694,7 +2735,7 @@
         "display_id": 128511,
         "encounter_id": null,
         "name": "Arcanist Hilda",
-        "base_health": 3741166,
+        "base_health": 2494866,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -2906,7 +2947,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 1231669
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -3171,7 +3216,11 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 1231645
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -3196,7 +3245,14 @@
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 1232332
+            },
+            {
+                "spell_id": 1232333
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
@@ -3390,7 +3446,7 @@
         "display_id": 128344,
         "encounter_id": null,
         "name": "Scarlet Priest",
-        "base_health": 311860,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3431,7 +3487,7 @@
         "display_id": 129170,
         "encounter_id": null,
         "name": "Scarlet Mage",
-        "base_health": 310341,
+        "base_health": 248713,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3469,7 +3525,7 @@
         "display_id": 128092,
         "encounter_id": null,
         "name": "Scarlet Infantry",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3504,7 +3560,7 @@
         "display_id": 129164,
         "encounter_id": null,
         "name": "Scarlet Cavalry",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3536,7 +3592,7 @@
         "display_id": 3127,
         "encounter_id": null,
         "name": "Scarlet Artillery",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3561,7 +3617,7 @@
         "display_id": 129176,
         "encounter_id": null,
         "name": "Scarlet Archer",
-        "base_health": 311860,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3602,7 +3658,7 @@
         "display_id": 129170,
         "encounter_id": null,
         "name": "Scarlet Mage",
-        "base_health": 310341,
+        "base_health": 248713,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3643,7 +3699,7 @@
         "display_id": 128344,
         "encounter_id": null,
         "name": "Scarlet Priest",
-        "base_health": 311860,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3657,6 +3713,9 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
         "npc_spells": [
+            {
+                "spell_id": 403233
+            },
             {
                 "spell_id": 1236151
             },
@@ -3684,7 +3743,7 @@
         "display_id": 128092,
         "encounter_id": null,
         "name": "Scarlet Infantry",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3719,7 +3778,7 @@
         "display_id": 129164,
         "encounter_id": null,
         "name": "Scarlet Cavalry",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3751,7 +3810,7 @@
         "display_id": 3127,
         "encounter_id": null,
         "name": "Scarlet Artillery",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3776,7 +3835,7 @@
         "display_id": 129176,
         "encounter_id": null,
         "name": "Scarlet Archer",
-        "base_health": 311860,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3814,7 +3873,7 @@
         "display_id": 128344,
         "encounter_id": null,
         "name": "Scarlet Priest",
-        "base_health": 311860,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3858,7 +3917,7 @@
         "display_id": 129170,
         "encounter_id": null,
         "name": "Scarlet Mage",
-        "base_health": 310341,
+        "base_health": 248713,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3899,7 +3958,7 @@
         "display_id": 128092,
         "encounter_id": null,
         "name": "Scarlet Infantry",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -3966,7 +4025,7 @@
         "display_id": 129176,
         "encounter_id": null,
         "name": "Scarlet Archer",
-        "base_health": 311860,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -4004,7 +4063,7 @@
         "display_id": 129176,
         "encounter_id": null,
         "name": "Scarlet Archer",
-        "base_health": 311860,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -4045,7 +4104,7 @@
         "display_id": 129164,
         "encounter_id": null,
         "name": "Scarlet Cavalry",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -4077,7 +4136,7 @@
         "display_id": 128092,
         "encounter_id": null,
         "name": "Scarlet Infantry",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -4112,7 +4171,7 @@
         "display_id": 129170,
         "encounter_id": null,
         "name": "Scarlet Mage",
-        "base_health": 310341,
+        "base_health": 248713,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -4128,6 +4187,9 @@
         "npc_spells": [
             {
                 "spell_id": 1236172
+            },
+            {
+                "spell_id": 1236173
             },
             {
                 "spell_id": 1236174
@@ -4147,7 +4209,7 @@
         "display_id": 128344,
         "encounter_id": null,
         "name": "Scarlet Priest",
-        "base_health": 311860,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -4185,7 +4247,7 @@
         "display_id": 128344,
         "encounter_id": null,
         "name": "Scarlet Priest",
-        "base_health": 311860,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -4226,7 +4288,7 @@
         "display_id": 129170,
         "encounter_id": null,
         "name": "Scarlet Mage",
-        "base_health": 310341,
+        "base_health": 248713,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -4264,7 +4326,7 @@
         "display_id": 128092,
         "encounter_id": null,
         "name": "Scarlet Infantry",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -4331,7 +4393,7 @@
         "display_id": 129229,
         "encounter_id": null,
         "name": "Scarlet Artillery",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -4413,7 +4475,7 @@
         "display_id": 128344,
         "encounter_id": null,
         "name": "Scarlet Priest",
-        "base_health": 311860,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -4492,7 +4554,7 @@
         "display_id": 128092,
         "encounter_id": null,
         "name": "Scarlet Infantry",
-        "base_health": 311256,
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -4519,6 +4581,31 @@
         "npc_enemy_forces": []
     },
     {
+        "id": 244135,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "Scarlet Artillery",
+        "base_health": 251520,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
         "id": 244136,
         "dungeon_id": 138,
         "classification_id": 2,
@@ -4527,7 +4614,7 @@
         "display_id": 129176,
         "encounter_id": null,
         "name": "Scarlet Archer",
-        "base_health": 311860,
+        "base_health": 251500,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
@@ -4594,6 +4681,31 @@
         "encounter_id": null,
         "name": "Primordial Flame",
         "base_health": 6104,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 245070,
+        "dungeon_id": 138,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "Lightgorged Whelp",
+        "base_health": 251520,
         "health_percentage": null,
         "level": null,
         "mdt_scale": null,
