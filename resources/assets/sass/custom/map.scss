@@ -44,6 +44,7 @@
   .route_manipulation_tools:not(.top) {
     top: unset;
     align-items: center !important;
+    height: 100%;
   }
 
   .route_manipulation_tools.left .bg-header {

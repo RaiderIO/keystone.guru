@@ -37,12 +37,12 @@ class HeatPlugin extends MapPlugin {
             self.mouseTooltipEnabled = heatmapShowTooltipsChangedEvent.data.visible;
         });
 
-        let fnRef = this._onLeafletMapMouseMove.bind(this);
-        this.map.register('map:refresh', this, function () {
-            self.map.leafletMap.off('mousemove', fnRef).on('mousemove', fnRef);
-        });
-
-
+        if (!isMobile()) {
+            let fnRef = this._onLeafletMapMouseMove.bind(this);
+            this.map.register('map:refresh', this, function () {
+                self.map.leafletMap.off('mousemove', fnRef).on('mousemove', fnRef);
+            });
+        }
     }
 
     _getGridPositionForLatLng(latLng) {
@@ -97,8 +97,9 @@ class HeatPlugin extends MapPlugin {
         console.assert(this instanceof HeatPlugin, 'this is not an instance of HeatPlugin', this);
 
         let weight = 0;
+        let latLng = event.latlng;
+        // Can be undefined on mobile
         if (this.mouseTooltipEnabled) {
-            let latLng = event.latlng;
             let gridPosition = this._getGridPositionForLatLng(latLng);
             weight = this._getWeightAt(getState().getCurrentFloor().id, gridPosition.x, gridPosition.y, this.weightCacheRadius[this.dataType]);
 
