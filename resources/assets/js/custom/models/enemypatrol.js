@@ -77,6 +77,41 @@ class EnemyPatrol extends Polyline {
     }
 
     /**
+     * Smoothes out the patrol a bit so the edges aren't that sharp
+     *
+     * @returns {L.Layer|null}
+     */
+    _updateOffsetLayer() {
+        console.assert(this instanceof EnemyPatrol, 'this is not an EnemyPatrol', this);
+
+        // Build a layer based off a hull if we're supposed to
+        let vertices = this.getVertices();
+
+
+        let latLngs = [];
+        for (let index in vertices) {
+            let vertex = vertices[index];
+            latLngs.push([vertex.lat, vertex.lng]);
+        }
+
+        // Must have at least 3 points to create a polygon
+        if (latLngs.length > 3) {
+            try {
+                latLngs = (new Offset()).data(latLngs).arcSegments(c.map.enemypatrol.arcSegments(latLngs.length))
+                    .margin(c.map.enemypatrol.margin);
+
+                // Sometimes the offset creates 2 polygons - not passing just the 1st entry will suddenly create
+                // multiple lines. The 2nd entry will be a line inside the polygon, somehow
+                this.layer.setLatLngs(latLngs[0]);
+                this.rebindTooltip();
+            } catch (error) {
+                // Not particularly interesting to spam the console with
+                console.error('Unable to create offset for patrol', this.id, error, vertices, latLngs);
+            }
+        }
+    }
+
+    /**
      * Gets the actual decorator for this map object.
      * @returns {*}
      * @private
@@ -125,6 +160,18 @@ class EnemyPatrol extends Polyline {
         }
 
         return result;
+    }
+
+    /**
+     * @inheritDoc
+     **/
+    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
+        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
+
+        // Only called when not in admin state
+        if (!(getState().getMapContext() instanceof MapContextMappingVersionEdit)) {
+            this._updateOffsetLayer();
+        }
     }
 
     /**
