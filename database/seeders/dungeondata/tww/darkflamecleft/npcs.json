@@ -1119,6 +1119,9 @@
         ],
         "npc_spells": [
             {
+                "spell_id": 224729
+            },
+            {
                 "spell_id": 425561
             },
             {
@@ -2238,6 +2241,41 @@
         "npcbolsteringwhitelists": [],
         "npc_characteristics": [],
         "npc_spells": [],
+        "npc_enemy_forces": []
+    },
+    {
+        "id": 233152,
+        "dungeon_id": 111,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 114467,
+        "encounter_id": null,
+        "name": "Wandering Candle",
+        "base_health": 0,
+        "health_percentage": null,
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_characteristics": [],
+        "npc_spells": [
+            {
+                "spell_id": 430171
+            },
+            {
+                "spell_id": 440652
+            },
+            {
+                "spell_id": 440653
+            }
+        ],
         "npc_enemy_forces": []
     }
 ]
