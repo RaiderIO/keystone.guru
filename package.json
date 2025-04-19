@@ -70,7 +70,6 @@
         "npm-force-resolutions": "0.0.10",
         "offset-polygon": "^0.9.2",
         "password-strength-meter": "^2.1.0",
-        "polygon-offset": "github:Wotuu/polygon-offset#wotuufix",
         "popper.js": "^1.15.0",
         "puppeteer": "^19.9.0",
         "simplebar": "^5.3.8",

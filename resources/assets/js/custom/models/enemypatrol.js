@@ -87,44 +87,11 @@ class EnemyPatrol extends Polyline {
         // Build a layer based off a hull if we're supposed to
         let vertices = this.getVertices();
 
-        let latLngs = vertices.map(point => ({x: point.lng, y: point.lat}));
-
-        // Snap first and last vertex together if they're within ~1 unit (e.g., degree/meters depending on projection)
-        let lastPopped = false;
-        if (latLngs.length > 1) {
-            const first = latLngs[0];
-            const last = latLngs[latLngs.length - 1];
-
-            if (getDistanceSquared([first.x, first.y], [last.x, last.y]) < 1) {
-                latLngs.pop();
-                lastPopped = true;
-            }
-        }
-
-        // Must have at least 3 points to create a polygon
-        if (latLngs.length > 3) {
-            try {
-                // Ensure consistent winding: reverse if clockwise
-                if (isClockwise(latLngs)) {
-                    latLngs.reverse();
-                }
-
-                let arcSegments = c.map.enemypatrol.arcSegments(latLngs.length);
-                latLngs = offsetPolygon(latLngs, c.map.enemypatrol.margin, arcSegments);
-                latLngs = offsetPolygon(latLngs, c.map.enemypatrol.margin * -0.75, 0);
-
-                latLngs = latLngs.map(point => [point.y, point.x]);
-
-                // Connect the line up again to the beginning
-                if (lastPopped) {
-                    latLngs[latLngs.length - 1] = latLngs[0];
-                }
-                this.layer.setLatLngs(latLngs);
-                this.rebindTooltip();
-            } catch (error) {
-                // Not particularly interesting to spam the console with
-                console.error('Unable to create offset for patrol', this.id, error, vertices, latLngs);
-            }
+        let arcSegments = c.map.enemypatrol.arcSegments(vertices.length);
+        let offsetLatLngs = createOffsetPolygon(vertices, c.map.enemypatrol.margin, arcSegments, true);
+        if (offsetLatLngs.length > 3) {
+            this.layer.setLatLngs(offsetLatLngs);
+            this.rebindTooltip();
         }
     }
 

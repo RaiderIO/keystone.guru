@@ -68,6 +68,7 @@ class Enemy extends VersionableMapObject {
         this.is_mdt = false;
 
         // The visual display of this enemy
+        /** @type {EnemyVisual} */
         this.visual = null;
         this.isPopupEnabled = false;
         this.overpulledKillZoneId = null;

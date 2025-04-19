@@ -42,7 +42,54 @@ function convertToSlug(text) {
         .replace(/ +/g, '-');
 }
 
-function isClockwise(points) {
+function createOffsetPolygon(vertices, offset, arcSegments, roundCornersOnly = false) {
+    let latLngs = vertices.map(point => ({x: point.lng, y: point.lat}));
+
+    // Snap first and last vertex together if they're within ~1 unit (e.g., degree/meters depending on projection)
+    let lastPopped = false;
+    if (latLngs.length > 1) {
+        const first = latLngs[0];
+        const last = latLngs[latLngs.length - 1];
+
+        if (getDistanceSquared([first.x, first.y], [last.x, last.y]) < 1) {
+            latLngs.pop();
+            lastPopped = true;
+        }
+    }
+
+    // Must have at least 2 points to create a polygon
+    if (latLngs.length > 1) {
+        try {
+            // Ensure consistent winding: reverse if clockwise
+            if (isPolygonClockwise(latLngs)) {
+                latLngs.reverse();
+            }
+
+            latLngs = offsetPolygon(latLngs, offset, arcSegments);
+            // Bring it back to how it was - roughly
+            if (roundCornersOnly) {
+                latLngs = offsetPolygon(latLngs, offset * -0.9, 0);
+            }
+        } catch (error) {
+            // Not particularly interesting to spam the console with
+            console.error('Unable to create offset for vertices', this.id, error, vertices, latLngs);
+        }
+    }
+
+    // Check for non-NaN values
+    latLngs = latLngs
+        .filter(point => !isNaN(point.x) && !isNaN(point.y))
+        .map(point => [point.y, point.x]);
+
+    // Connect the line up again to the beginning
+    if (lastPopped) {
+        latLngs[latLngs.length - 1] = latLngs[0];
+    }
+
+    return latLngs;
+}
+
+function isPolygonClockwise(points) {
     let sum = 0;
     for (let i = 0; i < points.length; i++) {
         const curr = points[i];
@@ -227,7 +274,7 @@ function filterHTML(input, allowedTags, allowedDomains) {
 
     let allElements = tempDiv.querySelectorAll('*');
 
-    allElements.forEach(function(element) {
+    allElements.forEach(function (element) {
         let tagName = element.tagName.toLowerCase();
 
         if (!allowedTags.includes(tagName)) {
