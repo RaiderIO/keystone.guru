@@ -439,7 +439,7 @@ let c = {
             defaultColor: function () {
                 return '#003280';
             },
-            margin: 0.4,
+            margin: 0.6,
             arcSegments: function (nr) {
                 return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
             },

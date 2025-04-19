@@ -87,22 +87,39 @@ class EnemyPatrol extends Polyline {
         // Build a layer based off a hull if we're supposed to
         let vertices = this.getVertices();
 
+        let latLngs = vertices.map(point => ({x: point.lng, y: point.lat}));
 
-        let latLngs = [];
-        for (let index in vertices) {
-            let vertex = vertices[index];
-            latLngs.push([vertex.lat, vertex.lng]);
+        // Snap first and last vertex together if they're within ~1 unit (e.g., degree/meters depending on projection)
+        let lastPopped = false;
+        if (latLngs.length > 1) {
+            const first = latLngs[0];
+            const last = latLngs[latLngs.length - 1];
+
+            if (getDistanceSquared([first.x, first.y], [last.x, last.y]) < 1) {
+                latLngs.pop();
+                lastPopped = true;
+            }
         }
 
         // Must have at least 3 points to create a polygon
         if (latLngs.length > 3) {
             try {
-                latLngs = (new Offset()).data(latLngs).arcSegments(c.map.enemypatrol.arcSegments(latLngs.length))
-                    .margin(c.map.enemypatrol.margin);
+                // Ensure consistent winding: reverse if clockwise
+                if (isClockwise(latLngs)) {
+                    latLngs.reverse();
+                }
 
-                // Sometimes the offset creates 2 polygons - not passing just the 1st entry will suddenly create
-                // multiple lines. The 2nd entry will be a line inside the polygon, somehow
-                this.layer.setLatLngs(latLngs[0]);
+                let arcSegments = c.map.enemypatrol.arcSegments(latLngs.length);
+                latLngs = offsetPolygon(latLngs, c.map.enemypatrol.margin, arcSegments);
+                latLngs = offsetPolygon(latLngs, c.map.enemypatrol.margin * -0.75, 0);
+
+                latLngs = latLngs.map(point => [point.y, point.x]);
+
+                // Connect the line up again to the beginning
+                if (lastPopped) {
+                    latLngs[latLngs.length - 1] = latLngs[0];
+                }
+                this.layer.setLatLngs(latLngs);
                 this.rebindTooltip();
             } catch (error) {
                 // Not particularly interesting to spam the console with

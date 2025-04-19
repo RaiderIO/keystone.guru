@@ -42,6 +42,16 @@ function convertToSlug(text) {
         .replace(/ +/g, '-');
 }
 
+function isClockwise(points) {
+    let sum = 0;
+    for (let i = 0; i < points.length; i++) {
+        const curr = points[i];
+        const next = points[(i + 1) % points.length];
+        sum += (next.x - curr.x) * (next.y + curr.y);
+    }
+    return sum > 0; // If true → clockwise
+}
+
 function getDistance(xy1, xy2) {
     return Math.sqrt(getDistanceSquared(xy1, xy2));
 }

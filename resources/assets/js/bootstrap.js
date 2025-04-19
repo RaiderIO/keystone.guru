@@ -8,6 +8,7 @@ window._ = require('lodash');
 
 window.$ = window.jQuery = require('jquery');
 window.Popper = require('popper.js').default;
+window.offsetPolygon = require('offset-polygon').default;
 
 require('bootstrap');
 
@@ -81,6 +82,7 @@ window.jarallax = require('jarallax/dist/jarallax.min');
 window.swipe = require('jquery-touchswipe');
 window.lazysizes = require('lazysizes');
 window.ionRangeSlider = require('ion-rangeslider');
+const offsetPolygon = require("offset-polygon");
 
 require('@fortawesome/fontawesome-free');
 
