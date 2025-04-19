@@ -510,10 +510,15 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         // Admin
-        view()->composer('admin.dungeon.edit', static function (View $view) use ($mappingService) {
+        view()->composer('admin.dungeon.edit', static function (View $view) use ($mappingService, $globalViewVariables) {
             /** @var Dungeon|null $dungeon */
             $dungeon = $view->getData()['dungeon'] ?? null;
             $view->with('hasUnmergedMappingVersion', $dungeon && $mappingService->getDungeonsWithUnmergedMappingChanges()->has($dungeon->id));
+
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
+        });
+        view()->composer('admin.spell.edit', static function (View $view) use ($globalViewVariables) {
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
         // Team selector

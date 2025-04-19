@@ -207,8 +207,7 @@ class WowheadService implements WowheadServiceInterface
                 $iconName = $matches[1];
             } else if (preg_match(self::IDENTIFYING_REGEX_SPELL_CATEGORY, $line, $matches)) {
                 $category = Str::slug($matches[1], '_');
-            }
-            // Mechanic
+            } // Mechanic
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_MECHANIC)) {
                 $mechanicFound = true;
             } // Triggered on the next line
@@ -329,10 +328,7 @@ class WowheadService implements WowheadServiceInterface
     public function getSpellPageHtml(GameVersion $gameVersion, int $spellId): string
     {
         return $this->curlGet(
-            sprintf('https://wowhead.com/%sspell=%s',
-                $gameVersion->key === GameVersion::GAME_VERSION_RETAIL ? '' : $gameVersion->key . '/',
-                $spellId
-            )
+            Spell::getWowheadLink($gameVersion->id, $spellId)
         );
     }
 

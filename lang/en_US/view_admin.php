@@ -275,6 +275,7 @@ return [
             'title_edit'        => 'Edit spell',
             'header_edit'       => 'Edit spell',
             'game_id'           => 'Game ID',
+            'game_version_id'   => 'Game version',
             'name'              => 'Name',
             'icon_name'         => 'Icon name',
             'category'          => 'Category',

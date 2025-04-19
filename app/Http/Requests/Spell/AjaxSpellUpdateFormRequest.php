@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Spell;
 
+use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\Spell\Spell;
 use Auth;
@@ -24,16 +25,17 @@ class AjaxSpellUpdateFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'           => 'string',
-            'icon_name'      => 'string',
-            'category'       => Rule::in(Spell::ALL_CATEGORIES),
-            'dispel_type'    => Rule::in(Spell::ALL_DISPEL_TYPES),
-            'cooldown_group' => Rule::in(Spell::ALL_COOLDOWN_GROUPS),
-            'schools'        => 'array',
-            'schools.*'      => Rule::in(Spell::ALL_SCHOOLS),
-            'aura'           => 'boolean',
-            'selectable'     => 'boolean',
-            'hidden_on_map'  => 'boolean',
+            'name'            => 'string',
+            'game_version_id' => ['nullable', Rule::exists(GameVersion::class, 'id')],
+            'icon_name'       => 'string',
+            'category'        => Rule::in(Spell::ALL_CATEGORIES),
+            'dispel_type'     => Rule::in(Spell::ALL_DISPEL_TYPES),
+            'cooldown_group'  => Rule::in(Spell::ALL_COOLDOWN_GROUPS),
+            'schools'         => 'array',
+            'schools.*'       => Rule::in(Spell::ALL_SCHOOLS),
+            'aura'            => 'boolean',
+            'selectable'      => 'boolean',
+            'hidden_on_map'   => 'boolean',
         ];
     }
 }

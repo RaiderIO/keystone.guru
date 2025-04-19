@@ -571,10 +571,13 @@ class Enemy extends VersionableMapObject {
                 let spellHtml = '';
                 let count = 0;
                 let spellTemplate = Handlebars.templates['spell_template'];
+                let gameVersion = mapContext.getDungeon().game_version;
 
                 for (let index in this.npc.spells) {
                     if (this.npc.spells.hasOwnProperty(index)) {
                         let spell = this.npc.spells[index];
+
+                        spell.wowhead_url = this.getWowheadLinkForGameVersion(gameVersion, spell);
 
                         spellHtml += spellTemplate(spell);
                         // Stop before the end
@@ -595,6 +598,26 @@ class Enemy extends VersionableMapObject {
         }
 
         return result;
+    }
+
+    getWowheadLinkForGameVersion(gameVersion, spell) {
+        let wowheadBaseUrl = 'https://www.wowhead.com';
+
+        switch (gameVersion.key) {
+            case GAME_VERSION_WOTLK:
+                wowheadBaseUrl += '/wrath';
+                break;
+            case GAME_VERSION_CLASSIC:
+                wowheadBaseUrl += '/classic';
+                break;
+        }
+
+        const slug = spell.name
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')   // Replace non-alphanumeric with dashes
+            .replace(/^-+|-+$/g, '');      // Trim leading/trailing dashes
+
+        return `${wowheadBaseUrl}/spell=${spell.id}/${slug}`;
     }
 
     /**

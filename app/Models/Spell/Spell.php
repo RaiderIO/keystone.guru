@@ -4,12 +4,14 @@ namespace App\Models\Spell;
 
 use App\Models\CacheModel;
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Traits\SeederModel;
 use App\Models\Traits\SerializesDates;
 use Carbon\Exceptions\InvalidFormatException;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
@@ -18,6 +20,7 @@ use Str;
 
 /**
  * @property int                      $id
+ * @property int                      $game_version_id
  * @property string|null              $category
  * @property string|null              $cooldown_group
  * @property string                   $dispel_type
@@ -36,6 +39,7 @@ use Str;
  *
  * @property string                   $icon_url
  *
+ * @property GameVersion              $gameVersion
  * @property Collection<Dungeon>      $dungeons
  * @property Collection<SpellDungeon> $spellDungeons
  *
@@ -55,10 +59,11 @@ class Spell extends CacheModel implements MappingModelInterface
 
     public $hidden = ['pivot'];
 
-    protected $appends = ['icon_url'];
+    protected $appends = ['icon_url', 'wowhead_url'];
 
     protected $fillable = [
         'id',
+        'game_version_id',
         'category',
         'cooldown_group',
         'dispel_type',
@@ -79,6 +84,7 @@ class Spell extends CacheModel implements MappingModelInterface
 
     protected $casts = [
         'id'              => 'integer',
+        'game_version_id' => 'integer',
         'schools_mask'    => 'integer',
         'miss_types_mask' => 'integer',
         'aura'            => 'boolean',
@@ -89,6 +95,11 @@ class Spell extends CacheModel implements MappingModelInterface
         'hidden_on_map'   => 'boolean',
         'fetched_data_at' => 'datetime',
     ];
+
+    public function getWowheadUrlAttribute(): string
+    {
+        return self::getWowheadLink($this->game_version_id, $this->id, $this->name);
+    }
 
     public function setFetchedDataAtAttribute($value): void
     {
@@ -119,6 +130,11 @@ class Spell extends CacheModel implements MappingModelInterface
         return $this->where('hidden_on_map', false);
     }
 
+    public function gameVersion(): BelongsTo
+    {
+        return $this->belongsTo(GameVersion::class);
+    }
+
     public function dungeons(): HasManyThrough
     {
         return $this->hasManyThrough(Dungeon::class, SpellDungeon::class);
@@ -143,11 +159,6 @@ class Spell extends CacheModel implements MappingModelInterface
         return 0;
     }
 
-    public function getWowheadLink(): string
-    {
-        return sprintf('https://wowhead.com/spell=%d/%s', $this->id, Str::slug($this->name));
-    }
-
     public function isAssignedDungeon(Dungeon $dungeon): bool
     {
         $result = false;
@@ -156,6 +167,26 @@ class Spell extends CacheModel implements MappingModelInterface
                 $result = true;
                 break;
             }
+        }
+
+        return $result;
+    }
+
+    public static function getWowheadLink(int $gameVersionId, int $spellId, string $name = null): string
+    {
+        $wowheadBaseUrl = 'https://www.wowhead.com';
+        switch ($gameVersionId) {
+            case GameVersion::ALL[GameVersion::GAME_VERSION_WRATH]:
+                $wowheadBaseUrl .= '/wrath';
+                break;
+            case GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA]:
+                $wowheadBaseUrl .= '/classic';
+                break;
+        }
+
+        $result = sprintf('%s/spell=%d', $wowheadBaseUrl, $spellId);
+        if ($name !== null) {
+            $result .= '/' . Str::slug($name);
         }
 
         return $result;

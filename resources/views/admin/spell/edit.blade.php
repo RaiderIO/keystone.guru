@@ -1,15 +1,21 @@
 <?php
 
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
+use Illuminate\Support\Collection;
 
 /**
- * @var Spell $spell
- * @var Floor $floor
- * @var array<string> $categories
- * @var array<string> $dispelTypes
- * @var array<string> $cooldownGroups
+ * @var Spell                   $spell
+ * @var Floor                   $floor
+ * @var array<string>           $categories
+ * @var array<string>           $dispelTypes
+ * @var array<string>           $cooldownGroups
+ * @var Collection<GameVersion> $allGameVersions
  */
+
+$gameVersionsSelect = $allGameVersions
+    ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 ?>
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$spell ?? null],
@@ -30,6 +36,13 @@ use App\Models\Spell\Spell;
         {!! Form::label('id', __('view_admin.spell.edit.game_id') . '<span class="form-required">*</span>', [], false) !!}
         {!! Form::text('id', null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'id'])
+    </div>
+
+    <div class="form-group{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
+        {!! Form::label('game_version_id', __('view_admin.spell.edit.game_version_id'), [], false) !!}
+        <span class="form-required">*</span>
+        {!! Form::select('game_version_id', $gameVersionsSelect, null, ['class' => 'form-control selectpicker']) !!}
+        @include('common.forms.form-error', ['key' => 'game_version_id'])
     </div>
 
     <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">

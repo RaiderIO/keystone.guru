@@ -16,5 +16,7 @@ class Spell {
         this.aura = remoteObject.aura;
         /** @type string */
         this.icon_url = remoteObject.icon_url;
+        /** @type string */
+        this.wowhead_url = remoteObject.wowhead_url;
     }
 }

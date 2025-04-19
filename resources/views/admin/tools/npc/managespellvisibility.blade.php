@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Dungeon;
-use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
@@ -43,6 +42,33 @@ use Illuminate\Support\Collection;
                     }
                 });
             });
+
+            $('.change_game_version').bind('click', function () {
+                if ($(this).hasClass('disabled')) {
+                    return;
+                }
+
+                let spellId = $(this).data('spell-id');
+                let gameVersionId = $(this).data('game-version-id');
+
+                $.ajax({
+                    type: 'PUT',
+                    url: `/ajax/admin/spell/${spellId}`,
+                    data: {
+                        game_version_id: gameVersionId
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        showSuccessNotification(lang.get('messages.change_spell_game_version_success'));
+
+                        $(`.change_game_version-${spellId}`).addClass('disabled');
+                        $(`.spell_wowhead_url-${spellId}`).attr('href', data.wowhead_url);
+                    },
+                    error: function () {
+                        showErrorNotification(lang.get('messages.change_spell_game_version_error'));
+                    }
+                });
+            });
         });
     </script>
 @endsection
@@ -81,7 +107,8 @@ use Illuminate\Support\Collection;
                     @if($spell === null)
                         <div class="col">
                             <div class="form-element">
-                                {{ __('view_admin.tools.npc.managespellvisibility.spell_not_found') }} ({{ $npcSpell->spell_id }})
+                                {{ __('view_admin.tools.npc.managespellvisibility.spell_not_found') }}
+                                ({{ $npcSpell->spell_id }})
                             </div>
                         </div>
                     @else
@@ -92,9 +119,29 @@ use Illuminate\Support\Collection;
                                    data-id="{{ $npcSpell->spell_id }}"
                                    value="{{ $npcSpell->spell_id }}" {{ $spell->hidden_on_map ? '' : 'checked' }}>
                         </div>
+                        @if($dungeon !== null)
+                            <div class="col-2">
+                                    <?php
+                                    $canChangeGameVersion = $spell->gameVersion->id !== $dungeon->gameVersion->id;
+                                    ?>
+                                <button type="button"
+                                        class="btn btn-warning btn-sm change_game_version change_game_version-{{ $spell->id }}"
+                                        {{ $canChangeGameVersion ? '' : 'disabled' }}
+                                        data-spell-id="{{ $spell->id }}"
+                                        data-game-version-id="{{ $dungeon->gameVersion->id }}"
+                                >
+                                    @if($canChangeGameVersion)
+                                        {{ __($spell->gameVersion->name) }} -> {{ __($dungeon->gameVersion->name) }}
+                                    @else
+                                        {{ __($spell->gameVersion->name) }}
+                                    @endif
+                                </button>
+                            </div>
+                        @endif
                         <div class="col">
                             <div class="form-element" style="line-height: 2.5">
-                                <a href="https://www.wowhead.com/{{ $dungeon?->gameVersion?->key === GameVersion::GAME_VERSION_CLASSIC_ERA ? 'classic/' : '' }}spell={{$npcSpell->spell_id}}"
+                                <a class="spell_wowhead_url-{{ $spell->id }}"
+                                    href="{{ Spell::getWowheadLink($spell->game_version_id, $spell->id, $spell->name) }}"
                                    data-wh-icon-size="medium"
                                 >
                                     <img src="{{$spell->icon_url}}" width="32px" alt="{{ __($spell->name) }}"/>

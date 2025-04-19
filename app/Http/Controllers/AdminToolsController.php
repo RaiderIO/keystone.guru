@@ -235,7 +235,7 @@ class AdminToolsController extends Controller
             })->with('npcSpells')
                 ->has('npcSpells')
                 ->paginate(50),
-            'spells'  => Spell::when($dungeon !== null, function (Builder $builder) use ($dungeon) {
+            'spells'  => Spell::with('gameVersion')->when($dungeon !== null, function (Builder $builder) use ($dungeon) {
                 return $builder->whereRelation('spellDungeons', 'dungeon_id', $dungeon->id);
             })->get()
                 ->keyBy('id'),
