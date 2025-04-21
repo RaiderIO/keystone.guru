@@ -299,7 +299,7 @@ return [
         ],
     ],
     'tools'                      => [
-        'datadump'     => [
+        'datadump'      => [
             'viewexporteddungeondata' => [
                 'title'   => 'Exported!',
                 'header'  => 'Dumped dungeon data',
@@ -311,7 +311,7 @@ return [
                 'content' => 'Exported!',
             ],
         ],
-        'dungeonroute' => [
+        'dungeonroute'  => [
             'view'            => [
                 'title'      => 'View dungeonroute',
                 'header'     => 'View dungeonroute',
@@ -330,7 +330,7 @@ return [
                 'table_header_actions'              => 'Actions',
             ],
         ],
-        'enemyforces'  => [
+        'enemyforces'   => [
             'title'                    => 'Import Enemy Forces',
             'header'                   => 'Import Enemy Forces',
             'paste_mennos_export_json' => 'Paste Menno\'s Export Json',
@@ -341,7 +341,7 @@ return [
                 'submit' => 'Submit',
             ],
         ],
-        'exception'    => [
+        'exception'     => [
             'select' => [
                 'title'                     => 'Throw an exception',
                 'header'                    => 'Throw an exception',
@@ -349,7 +349,7 @@ return [
                 'submit'                    => 'Submit',
             ],
         ],
-        'features'     => [
+        'features'      => [
             'list' => [
                 'title'        => 'Feature management',
                 'header'       => 'Feature management',
@@ -364,7 +364,15 @@ return [
                 ],
             ],
         ],
-        'mdt'          => [
+        'messagebanner' => [
+            'set' => [
+                'title'   => 'Set message banner',
+                'header'  => 'Set message banner',
+                'message' => 'Message',
+                'submit'  => 'Submit',
+            ],
+        ],
+        'mdt'           => [
             'diff'                              => [
                 'title'                 => 'MDT Diff',
                 'header'                => 'MDT Diff',
@@ -420,7 +428,7 @@ return [
                 'submit' => 'Submit',
             ],
         ],
-        'npc'          => [
+        'npc'           => [
             'import'                => [
                 'title'                   => 'Mass import NPCs',
                 'header'                  => 'Mass import NPCs',
@@ -434,10 +442,14 @@ return [
                 'spell_not_found' => 'Spell not found',
             ],
         ],
-        'list'         => [
-            'title'                   => 'Admin tools',
-            'header'                  => 'Admin tools',
-            'header_tools'            => 'Tools',
+        'list'          => [
+            'title'        => 'Admin tools',
+            'header'       => 'Admin tools',
+            'header_tools' => 'Tools',
+
+            'subheader_message_banner' => 'Message banner',
+            'set_message_banner'       => 'Set message banner',
+
             'subheader_npcs'          => 'NPCs',
             'mass_import_npcs'        => 'Mass import NPCs',
             'manage_spell_visibility' => 'Manage NPC spell visibility',
@@ -480,7 +492,7 @@ return [
             'subheader_thumbnails'  => 'Thumbnails',
             'thumbnails_regenerate' => 'Mass regenerate thumbnails',
         ],
-        'thumbnails'   => [
+        'thumbnails'    => [
             'regenerate' => [
                 'title'        => 'Mass regenerate thumbnails',
                 'header'       => 'Mass regenerate thumbnails',
@@ -488,7 +500,7 @@ return [
                 'submit'       => 'Submit',
             ],
         ],
-        'wowtools'     => [
+        'wowtools'      => [
             'importingamecoordinates' => [
                 'title'                                  => 'Import in-game coordinates',
                 'header'                                 => 'Import in-game coordinates',

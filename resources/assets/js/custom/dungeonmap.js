@@ -741,7 +741,6 @@ class DungeonMap extends Signalable {
         let southWest = this.leafletMap.unproject([0, tileSize.y * zoomSizeFactor], floorMaxZoomLevel);
         let northEast = this.leafletMap.unproject([tileSize.x * zoomSizeFactor, 0], floorMaxZoomLevel);
 
-
         let dungeonData = getState().getMapContext().getDungeon();
         this.mapTileLayer = L.tileLayer(`/images/tiles/${dungeonData.expansion.shortname}/${dungeonData.key}/${currentFloor.index}/{z}/{x}_{y}.png`, {
             maxNativeZoom: c.map.leafletSettings.maxNativeZoom,

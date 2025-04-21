@@ -19,15 +19,16 @@ return [
             'mdt_invalid_category'                => 'Invalid category',
         ],
         'flash' => [
-            'thumbnail_regenerate_result' => 'Dispatched :success jobs for :total routes. :failed failed.',
-            'caches_dropped_successfully' => 'Caches dropped successfully',
-            'releases_exported'           => 'Releases exported',
-            'exception'                   => [
+            'message_banner_set_successfully' => 'Message banner set successfully',
+            'thumbnail_regenerate_result'     => 'Dispatched :success jobs for :total routes. :failed failed.',
+            'caches_dropped_successfully'     => 'Caches dropped successfully',
+            'releases_exported'               => 'Releases exported',
+            'exception'                       => [
                 'internal_server_error' => 'Exception thrown in admin panel',
             ],
-            'feature_toggle_activated'    => 'Feature :feature is now activated',
-            'feature_toggle_deactivated'  => 'Feature :feature is now deactivated',
-            'feature_forgotten'           => 'Feature :feature successfully forgotten',
+            'feature_toggle_activated'        => 'Feature :feature is now activated',
+            'feature_toggle_deactivated'      => 'Feature :feature is now deactivated',
+            'feature_forgotten'               => 'Feature :feature successfully forgotten',
         ],
     ],
     'apidungeonroute'             => [
@@ -133,7 +134,7 @@ return [
         'error'           => [
             'mdt_string_parsing_failed'             => 'MDT string parsing failed. Did you really paste an MDT string?',
             'mdt_string_format_not_recognized'      => 'The MDT string format was not recognized.',
-            'cli_weakauras_parser_not_found'      => 'cli_weakauras_parser not installed.',
+            'cli_weakauras_parser_not_found'        => 'cli_weakauras_parser not installed.',
             'invalid_mdt_string_exception'          => 'Invalid MDT string: %s',
             'invalid_mdt_string'                    => 'Invalid MDT string',
             'mdt_importer_not_configured_properly'  => 'MDT importer is not configured properly. Please contact the admin about this issue.',

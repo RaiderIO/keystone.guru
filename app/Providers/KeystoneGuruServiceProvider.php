@@ -84,6 +84,8 @@ use App\Service\MDT\MDTMappingExportService;
 use App\Service\MDT\MDTMappingExportServiceInterface;
 use App\Service\MDT\MDTMappingImportService;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use App\Service\MessageBanner\MessageBannerService;
+use App\Service\MessageBanner\MessageBannerServiceInterface;
 use App\Service\Metric\MetricService;
 use App\Service\Metric\MetricServiceInterface;
 use App\Service\Npc\NpcService;
@@ -169,6 +171,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CookieServiceInterface::class, CookieService::class);
         $this->app->bind(DungeonRouteServiceInterface::class, DungeonRouteService::class);
         $this->app->bind(ImageServiceInterface::class, ImageService::class);
+        $this->app->bind(MessageBannerServiceInterface::class, MessageBannerService::class);
 
         // Depends on CookieService
         $this->app->bind(GameVersionServiceInterface::class, GameVersionService::class);
@@ -227,7 +230,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         ExpansionServiceInterface          $expansionService,
         AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
         MappingServiceInterface            $mappingService,
-        GameVersionServiceInterface        $gameVersionService
+        GameVersionServiceInterface        $gameVersionService,
+        MessageBannerServiceInterface      $messageBannerService,
     ): void {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
         if (!app()->runningUnitTests()) {
@@ -305,12 +309,13 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Main view
         view()->composer(['layouts.app', 'layouts.sitepage', 'layouts.map', 'admin.dashboard.layouts.app'],
-            static function (View $view) use ($globalViewVariables) {
+            static function (View $view) use ($globalViewVariables, $messageBannerService) {
                 $view->with('version', $globalViewVariables['appVersion']);
                 $view->with('revision', $globalViewVariables['appRevision']);
                 $view->with('nameAndVersion', $globalViewVariables['appVersionAndName']);
                 $view->with('latestRelease', $globalViewVariables['latestRelease']);
                 $view->with('latestReleaseSpotlight', $globalViewVariables['latestReleaseSpotlight']);
+                $view->with('messageBanner', $messageBannerService->getMessage());
             });
 
         view()->composer(['layouts.app', 'common.layout.footer'], static function (View $view) use ($globalViewVariables) {
@@ -519,6 +524,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
         view()->composer('admin.spell.edit', static function (View $view) use ($globalViewVariables) {
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
+        });
+        view()->composer('admin.tools.messagebanner.set', static function (View $view) use ($messageBannerService) {
+            $view->with('messageBanner', $messageBannerService->getMessage());
         });
 
         // Team selector

@@ -28,6 +28,7 @@ use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\MDTMappingExportServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
+use App\Service\MessageBanner\MessageBannerServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Artisan;
 use Exception;
@@ -107,6 +108,29 @@ class AdminToolsController extends Controller
             'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonRoute, $floor),
             'floorIndex'   => 1,
         ]);
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function messageBanner(): View
+    {
+        return view('admin.tools.messagebanner.set');
+    }
+
+    /**
+     * @return RedirectResponse
+     */
+    public function messageBannerSubmit(
+        Request                       $request,
+        MessageBannerServiceInterface $messageBannerService
+    ): RedirectResponse {
+        $message = $request->get('message');
+        $messageBannerService->setMessage(empty($message) ? null : $message);
+
+        Session::flash('status', __('controller.admintools.flash.message_banner_set_successfully'));
+
+        return redirect()->route('admin.tools.messagebanner.set');
     }
 
     /**
@@ -273,9 +297,9 @@ class AdminToolsController extends Controller
             'faction', 'specializations', 'classes', 'races', 'affixes',
             'brushlines', 'paths', 'author', 'killZones', 'pridefulEnemies', 'publishedstate',
             'ratings', 'favorites', 'enemyraidmarkers', 'mapicons', 'mdtImport', 'team',
-        ])->when(is_numeric($publicKey), function(Builder $builder) use ($publicKey) {
+        ])->when(is_numeric($publicKey), function (Builder $builder) use ($publicKey) {
             $builder->where('id', $publicKey);
-        }, function(Builder $builder) use ($publicKey) {
+        }, function (Builder $builder) use ($publicKey) {
             $builder->where('public_key', $publicKey);
         })->firstOrFail();
 
@@ -506,9 +530,9 @@ class AdminToolsController extends Controller
     {
         $publicKey = $request->get('public_key');
 
-        $dungeonRoute = DungeonRoute::when(is_numeric($publicKey), function(Builder $builder) use ($publicKey) {
+        $dungeonRoute = DungeonRoute::when(is_numeric($publicKey), function (Builder $builder) use ($publicKey) {
             $builder->where('id', $publicKey);
-        }, function(Builder $builder) use ($publicKey) {
+        }, function (Builder $builder) use ($publicKey) {
             $builder->where('public_key', $publicKey);
         })->firstOrFail();
 

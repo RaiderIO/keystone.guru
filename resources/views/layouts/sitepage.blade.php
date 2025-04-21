@@ -5,13 +5,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @var Model[] $menuModels
- * @var string  $viewName
- * @var string  $isProduction
- * @var boolean $isMobile
- * @var string  $nameAndVersion
- * @var string  $theme
- * @var Model   $menuModelEdit
+ * @var Model[]     $menuModels
+ * @var string      $viewName
+ * @var string      $isProduction
+ * @var boolean     $isMobile
+ * @var string      $nameAndVersion
+ * @var string      $theme
+ * @var Model       $menuModelEdit
+ * @var string|null $messageBanner
  */
 
 $user = Auth::user();
@@ -104,15 +105,19 @@ $breadcrumbsParams ??= [];
     @else
 
         @if (!$isProduction && (!Auth::check() || !$user->hasRole(Role::ROLE_ADMIN)))
-            <div class="container-fluid alert alert-warning text-center mt-4">
+            @component('common.layout.messagebanner')
                 <i class="fa fa-exclamation-triangle"></i>
                 {{ __('view_layouts.sitepage.staging_banner_description') }}
                 <br>
                 <a href="https://keystone.guru/">{{ __('view_layouts.sitepage.staging_banner_take_me_away') }}</a>
-            </div>
+            @endcomponent
         @endif
 
-        @yield('global-message')
+        @if($messageBanner !== null)
+            @component('common.layout.messagebanner')
+                {!! $messageBanner !!}
+            @endcomponent
+        @endif
 
         <div
             class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill pl-lg-3 pr-lg-3" : ($disableDefaultRootClasses ? "" :  "col-md-8 offset-md-2") }}">
