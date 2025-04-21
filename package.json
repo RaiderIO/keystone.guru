@@ -61,6 +61,7 @@
         "leaflet-ant-path": "^1.3.0",
         "leaflet-contextmenu": "^1.4.0",
         "leaflet-draw": "^1.0.4",
+        "leaflet-edgebuffer": "^1.0.6",
         "leaflet-editable": "^1.2.0",
         "leaflet-gesture-handling": "^1.2.2",
         "leaflet-pather": "github:Wotuu/L.Pather#7e885ee28ec5f946ae97c1cd8aedc56a4b5e23c2",

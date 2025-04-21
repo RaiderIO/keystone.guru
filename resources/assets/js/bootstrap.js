@@ -51,6 +51,7 @@ window.leaflet = require('leaflet');
 window.leafletdraw = require('leaflet-draw');
 // window.leafleteditable = require('leaflet-editable');
 window.leafletcontextmenu = require('leaflet-contextmenu');
+window.edgeBuffer = require('leaflet-edgebuffer');
 window.GestureHandling = require('leaflet-gesture-handling');
 // window.interpolate = require('color-interpolate');
 window.gju = require('geojson-utils');
