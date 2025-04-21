@@ -90,6 +90,12 @@ class FetchSpellData extends Command
                     $spellAttributes                    = $spellDataResult->toArray();
                     $spellAttributes['game_version_id'] = $gameVersion->id;
                     $spellAttributes['fetched_data_at'] = Carbon::now();
+
+                    // Prevent category updates when we change it manually
+                    if (in_array($spell->id, Spell::BLOODLUSTY_SPELLS)) {
+                        unset($spellAttributes['category']);
+                    }
+
                     $spell->update($spellAttributes);
 
                     $this->info(sprintf('- %s', $spellDataResult->getName()));
@@ -103,7 +109,7 @@ class FetchSpellData extends Command
             $i++;
 
             // Don't DDOS - sleep for .5 seconds
-            usleep(500000);
+//            usleep(500000);
         }
     }
 }
