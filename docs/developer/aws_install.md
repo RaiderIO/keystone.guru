@@ -1,43 +1,46 @@
-# WSL2 Shell
-## Install AWS CLI v2 on Ubuntu 22.04
+# 🚀 Deploying Keystone.guru to AWS
+
+## 🔧 Install AWS CLI v2 on WSL2 (Ubuntu 22.04)
+
 ```bash
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-```
-## Install unzip if not already installed
-```bash
 sudo apt install unzip
-```
-
-## Unzip the downloaded file
-```bash
 unzip awscliv2.zip
-```
-
-## Install the AWS CLI
-```bash
 sudo ./aws/install
 ```
+
+Verify installation:
 
 ```bash
 /usr/local/bin/aws --version
 ```
 
-Output:
-`aws-cli/2.27.8 Python/3.13.2 Linux/5.15.167.4-microsoft-standard-WSL2 exe/x86_64.ubuntu.22`
+Expected output:
 
-# Configuring AWS CLI
-https://raiderio.awsapps.com/start/#/?tab=accounts
-
-This shows "Access Keys". Hit it, a prompt shows and in option 2 is what you should paste in `~/.aws/credentials`. These credentials are short lived (hours), so be ready to change them often
 ```
+aws-cli/2.x.x Python/3.x.x Linux/5.x WSL2
+```
+
+---
+
+## 🔐 Configuring AWS CLI with Temporary Credentials
+
+Visit:
+[🔗 AWS SSO Portal](https://raiderio.awsapps.com/start/#/?tab=accounts)
+
+1. Click **Access Keys**
+2. Copy the **Option 2** output into `~/.aws/credentials`:
+
+```ini
 [868970774940_AdministratorAccess]
 aws_access_key_id=ASIA4UUVzzzzzzzzzz
 aws_secret_access_key=lrY2QHMOqTifitwWdNzzzzzzzzzzz
 aws_session_token=IQoJb3JpZ2luX2VjEJ7//////////wEazzzzzzzzzzzzzz
 ```
 
-Then, I also had this in `~/.aws/config`.
-```
+Then in `~/.aws/config`:
+
+```ini
 [default]
 region = us-east-1
 output = json
@@ -47,45 +50,73 @@ region = us-east-1
 output = json
 ```
 
-# AWS CLI Login
+> ℹ️ These are **session-based credentials**. They expire periodically and must be refreshed from the AWS portal.
+
+---
+
+## 🔑 Authenticate with AWS CLI and ECR
+
 ```bash
 export AWS_PROFILE=868970774940_AdministratorAccess
+
+# Confirm identity
 aws sts get-caller-identity
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 868970774940.dkr.ecr.us-east-1.amazonaws.com
+
+# Login to ECR
+aws ecr get-login-password --region us-east-1 \
+  | docker login --username AWS --password-stdin 868970774940.dkr.ecr.us-east-1.amazonaws.com
 ```
 
-# Building images
-## Build the keystone.guru-app image
+---
+
+## 🛠️ Building Docker Images
+
+```bash
+cd ~/Git/private/keystone.guru
+```
+
+### Build `keystone.guru-app` image
+
 ```bash
 docker build -t keystone.guru-app:latest docker-compose/app/
 ```
 
-## Build the keystone.guru-echo-server image
+### Build `keystone.guru-echo-server` image
+
 ```bash
 docker build -t keystone.guru-echo-server:latest docker-compose/laravel-echo-server/
 ```
 
-# Tagging and pushing images
-## ksg-echo-server repository
+---
+
+## 📦 Tag & Push Docker Images to AWS ECR
+
+### `ksg-echo-server`
+
 ```bash
 docker tag keystone.guru-echo-server:latest 868970774940.dkr.ecr.us-east-1.amazonaws.com/ksg-echo-server:latest
 docker push 868970774940.dkr.ecr.us-east-1.amazonaws.com/ksg-echo-server:latest
 ```
 
-## ksg-php-fpm repository
+### `ksg-php-fpm`
+
 ```bash
 docker tag keystone.guru-app:latest 868970774940.dkr.ecr.us-east-1.amazonaws.com/ksg-php-fpm:latest
 docker push 868970774940.dkr.ecr.us-east-1.amazonaws.com/ksg-php-fpm:latest
 ```
 
-## ksg-swoole repository
-For now uses the same image as `ksg-php-fpm`
+### `ksg-swoole` (same image as `ksg-php-fpm` for now)
+
 ```bash
 docker tag keystone.guru-app:latest 868970774940.dkr.ecr.us-east-1.amazonaws.com/ksg-swoole:latest
 docker push 868970774940.dkr.ecr.us-east-1.amazonaws.com/ksg-swoole:latest
 ```
 
-# Redeploying the application on AWS
+---
+
+## 🚀 Redeploy to AWS
+
 ```bash
+cd ~/Git/private/keystoneguru-infra/cdk
 cdk deploy keystoneguru-services
 ```
