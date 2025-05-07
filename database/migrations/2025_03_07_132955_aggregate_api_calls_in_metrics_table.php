@@ -17,7 +17,8 @@ return new class extends Migration {
         $metricsService = app(MetricServiceInterface::class);
         $consoleOutput  = new ConsoleOutput();
 
-        DB::statement('CREATE TABLE IF NOT EXISTS `metrics_temp` LIKE `metrics`');
+        DB::statement('DROP TABLE IF EXISTS `metrics_temp`');
+        DB::statement('CREATE TABLE `metrics_temp` LIKE `metrics`');
 
         DB::statement('ALTER TABLE metrics_temp ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;');
 
