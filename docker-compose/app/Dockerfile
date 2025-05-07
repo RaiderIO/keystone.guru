@@ -22,7 +22,9 @@ RUN apt-get update && apt-get install -y \
     unzip \
     default-mysql-client  \
     wget \
-    gettext
+    gettext \
+    awscli
+
 
 # Install global packages
 RUN npm i -g handlebars puppeteer@19.9.0
@@ -107,6 +109,8 @@ RUN unzip /tmp/LuaBitOp-1.0.3.zip -d /tmp && \
     make && \
     sudo mkdir -p /usr/lib/lua/5.3/ && \
     cp bit.so /usr/lib/lua/5.3/
+
+RUN docker-php-ext-enable lua
 
 # Setup files/folders
 COPY etc/ /etc/

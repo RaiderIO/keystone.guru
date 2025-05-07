@@ -139,6 +139,32 @@ services:
     networks:
       - keystone.guru
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.2.2
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "34016:80"
+    networks:
+      - keystone.guru
+
+  phpmyadmin-combatlog:
+    image: phpmyadmin/phpmyadmin:5.2.2
+    restart: always
+    depends_on:
+      - db-combatlog
+    environment:
+      PMA_HOST: db-combatlog
+      MYSQL_ROOT_PASSWORD: ${DB_COMBATLOG_PASSWORD}
+    ports:
+      - "34017:80"
+    networks:
+      - keystone.guru
+
   nginx:
     image: nginx:alpine
     container_name: keystone.guru-nginx

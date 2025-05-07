@@ -11,8 +11,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('metric_aggregations', function (Blueprint $table) {
-            $table->integer('model_id')->nullable();
-            $table->string('model_class')->nullable();
+            $table->integer('model_id');
+            $table->string('model_class');
             $table->integer('category');
             $table->string('tag');
             $table->integer('value');
