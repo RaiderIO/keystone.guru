@@ -17,7 +17,8 @@ use App\Console\Commands\CombatLog\SplitZoneChange;
 use App\Console\Commands\CombatLogEvent\SaveToOpensearch;
 use App\Console\Commands\Database\Backup;
 use App\Console\Commands\Database\SeedOne;
-use App\Console\Commands\Database\SetupCombatlogDatabase;
+use App\Console\Commands\Database\SetupCombatLogDatabase;
+use App\Console\Commands\Database\SetupMainDatabase;
 use App\Console\Commands\Dungeon\CreateMissing;
 use App\Console\Commands\Dungeon\CreateMissingFloors;
 use App\Console\Commands\Dungeon\ImportInstanceIds;
@@ -121,7 +122,8 @@ class Kernel extends ConsoleKernel
         // Database
         Backup::class,
         SeedOne::class,
-        SetupCombatlogDatabase::class,
+        SetupCombatLogDatabase::class,
+        SetupMainDatabase::class,
 
         // Discover
         DiscoverCache::class,

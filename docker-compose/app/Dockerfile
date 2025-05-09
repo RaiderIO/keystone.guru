@@ -110,8 +110,6 @@ RUN unzip /tmp/LuaBitOp-1.0.3.zip -d /tmp && \
     sudo mkdir -p /usr/lib/lua/5.3/ && \
     cp bit.so /usr/lib/lua/5.3/
 
-RUN docker-php-ext-enable lua
-
 # Setup files/folders
 COPY etc/ /etc/
 
