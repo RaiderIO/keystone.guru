@@ -95,6 +95,8 @@ docker build -t keystone.guru-echo-server:latest docker-compose/laravel-echo-ser
 
 ```bash
 docker tag keystone.guru-echo-server:latest 868970774940.dkr.ecr.us-east-1.amazonaws.com/ksg-echo-server:latest
+```
+```bash
 docker push 868970774940.dkr.ecr.us-east-1.amazonaws.com/ksg-echo-server:latest
 ```
 
@@ -102,6 +104,8 @@ docker push 868970774940.dkr.ecr.us-east-1.amazonaws.com/ksg-echo-server:latest
 
 ```bash
 docker tag keystone.guru-app:latest 868970774940.dkr.ecr.us-east-1.amazonaws.com/ksg-php-fpm:latest
+```
+```bash
 docker push 868970774940.dkr.ecr.us-east-1.amazonaws.com/ksg-php-fpm:latest
 ```
 
@@ -109,6 +113,8 @@ docker push 868970774940.dkr.ecr.us-east-1.amazonaws.com/ksg-php-fpm:latest
 
 ```bash
 docker tag keystone.guru-app:latest 868970774940.dkr.ecr.us-east-1.amazonaws.com/ksg-swoole:latest
+```
+```bash
 docker push 868970774940.dkr.ecr.us-east-1.amazonaws.com/ksg-swoole:latest
 ```
 

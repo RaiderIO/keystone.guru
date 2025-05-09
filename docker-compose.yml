@@ -13,7 +13,6 @@ services:
     working_dir: /var/www/
     volumes:
       - ./:/var/www
-      - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ~/.ssh:/root/.ssh
     networks:
       - keystone.guru
@@ -34,7 +33,6 @@ services:
     command: php /var/www/artisan octane:start --host=0.0.0.0 --port=9501 --workers=1 --task-workers=1
     volumes:
       - ./:/var/www
-      - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ~/.ssh:/root/.ssh
     networks:
       - keystone.guru
@@ -55,7 +53,6 @@ services:
     working_dir: /var/www/
     volumes:
       - ./:/var/www
-      - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ~/.ssh:/root/.ssh
     networks:
       - keystone.guru

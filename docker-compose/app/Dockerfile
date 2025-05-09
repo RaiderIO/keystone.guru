@@ -121,6 +121,8 @@ COPY .env /tmp/.env
 
 COPY root/ /root/
 
+COPY usr/ /usr/
+
 COPY var/ /var/
 
 # Import .env file and apply it to the current environment
