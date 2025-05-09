@@ -1,6 +1,8 @@
 <?php
 
 return [
+    // Custom added to disable influxdb - temp for AWS migration
+    'enabled'   => env('INFLUXDB_ENABLED', true),
     'host'      => env('INFLUXDB_HOST', 'localhost'),
     'port'      => env('INFLUXDB_PORT', 8086),
     'dbname'    => env('INFLUXDB_DBNAME', ''),

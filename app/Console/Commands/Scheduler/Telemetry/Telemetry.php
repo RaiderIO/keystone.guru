@@ -64,14 +64,15 @@ class Telemetry extends SchedulerCommand
     public function handle(): int
     {
         return $this->trackTime(function () {
-            $points = [];
+            if (config('influxdb.enabled')) {
+                $points = [];
 
-            foreach ($this->measurements as $measurement) {
-                $points = array_merge($points, $measurement->getPoints());
+                foreach ($this->measurements as $measurement) {
+                    $points = array_merge($points, $measurement->getPoints());
+                }
+
+                InfluxDB::writePoints($points, Database::PRECISION_SECONDS);
             }
-
-            // This function does actually exist
-            InfluxDB::writePoints($points, Database::PRECISION_SECONDS);
 
             return 0;
         });

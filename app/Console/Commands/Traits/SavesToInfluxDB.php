@@ -3,19 +3,25 @@
 namespace App\Console\Commands\Traits;
 
 use InfluxDB\Database;
+use InfluxDB\Exception;
 use InfluxDB\Point;
 use TrayLabs\InfluxDB\Facades\InfluxDB;
 
 trait SavesToInfluxDB
 {
+    /**
+     * @throws Exception
+     * @throws Database\Exception
+     */
     public function savePointToInfluxDB(string $measurement, array $tags, array $fields, int $timestamp = null): void
     {
-        $tags = array_merge($this->getTags(), $tags);
+        if (config('influxdb.enabled')) {
+            $tags = array_merge($this->getTags(), $tags);
 
-        $point = new Point($measurement, null, $tags, $fields, $timestamp ?? time());
+            $point = new Point($measurement, null, $tags, $fields, $timestamp ?? time());
 
-        // This function does actually exist
-        InfluxDB::writePoints([$point], Database::PRECISION_SECONDS);
+            InfluxDB::writePoints([$point], Database::PRECISION_SECONDS);
+        }
     }
 
     protected function getTags()
