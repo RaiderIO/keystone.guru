@@ -93,7 +93,7 @@ class ViewService implements ViewServiceInterface
             $latestReleaseSpotlight = $latestReleaseBuilder->where('spotlight', true)
                 ->whereDate('created_at', '>',
                     Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))->toDateTimeString()
-                )->latest()->first();
+                )->first();
 
             $allRegions    = GameServerRegion::all();
             $allExpansions = Expansion::with(['dungeons', 'raids'])->orderBy('released_at', 'desc')->get();

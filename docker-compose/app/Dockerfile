@@ -22,8 +22,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     default-mysql-client  \
     wget \
-    gettext \
-    awscli
+    gettext
 
 
 # Install global packages
@@ -110,6 +109,9 @@ RUN unzip /tmp/LuaBitOp-1.0.3.zip -d /tmp && \
     sudo mkdir -p /usr/lib/lua/5.3/ && \
     cp bit.so /usr/lib/lua/5.3/
 
+# Enable LUA
+RUN docker-php-ext-enable lua
+
 # Setup files/folders
 COPY etc/ /etc/
 
@@ -119,7 +121,8 @@ COPY .env /tmp/.env
 
 COPY root/ /root/
 
-COPY usr/ /usr/
+# Only copy this file over to prevent overriding the entire folder which will be changed by docker-php-ext-enable
+COPY usr/local/etc/php/conf.d/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 
 COPY var/ /var/
 

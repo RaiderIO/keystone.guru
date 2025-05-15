@@ -67,6 +67,11 @@ aws ecr get-login-password --region us-east-1 \
   | docker login --username AWS --password-stdin 868970774940.dkr.ecr.us-east-1.amazonaws.com
 ```
 
+Useful oneliner for `.bash_aliases`:
+```bash
+alias auth_aws="export AWS_PROFILE=868970774940_AdministratorAccess && aws sts get-caller-identity && aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 868970774940.dkr.ecr.us-east-1.amazonaws.com"`
+```
+
 ---
 
 ## 🛠️ Building Docker Images
@@ -78,7 +83,7 @@ cd ~/Git/private/keystone.guru
 ### Build `keystone.guru-app` image
 
 ```bash
-docker build -t keystone.guru-app:latest docker-compose/app/
+docker build --build-arg STAGE=production -t keystone.guru-app:latest docker-compose/app-aws/
 ```
 
 ### Build `keystone.guru-echo-server` image
