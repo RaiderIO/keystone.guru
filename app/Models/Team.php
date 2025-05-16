@@ -42,6 +42,8 @@ class Team extends Model
 
     protected $fillable = ['default_role'];
 
+    protected $with = ['iconfile'];
+
     /**
      * https://stackoverflow.com/a/34485411/771270
      */

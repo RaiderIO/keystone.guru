@@ -86,8 +86,13 @@ class File extends Model
      */
     public function getFullPath(): string
     {
-        // @TODO May need to do something with $this->disk here?
-        return public_path($this->path);
+        $driver = config(sprintf('filesystems.disks.%s.driver', $this->disk));
+
+        if ($driver !== 'local') {
+            throw new \RuntimeException('getFullPath() is only available for local disks.');
+        }
+
+        return Storage::disk($this->disk)->path($this->path);
     }
 
     /**
@@ -97,12 +102,7 @@ class File extends Model
      */
     public function getURL(): string
     {
-        // @TODO May need to do something with $this->disk here?
-        if (config('app.env') === 'local') {
-            return url($this->path);
-        } else {
-            return url('storage/' . $this->path);
-        }
+        return Storage::disk($this->disk)->url($this->path);
     }
 
     /**
@@ -115,31 +115,35 @@ class File extends Model
      *
      * @throws Exception
      */
-    public static function saveFileToDB(UploadedFile $uploadedFile, Model $model, string $dir = 'upload'): File
-    {
-        $disk = config('app.env') === 'local' ? 'public_local' : 'public';
+    public static function saveFileToDB(
+        UploadedFile $uploadedFile,
+        Model        $model,
+        string       $dir = '',
+        string       $disk = null
+    ): File {
+        // Use explicitly provided disk or fallback to default per environment
+        $disk ??= config('filesystems.default',
+            'public'
+        );
 
-        // Ensure the path exists
-        $rootDir    = config(sprintf('filesystems.disks.%s.root', $disk));
-        $storageDir = sprintf('%s/%s', $rootDir, $dir);
-        if (!is_dir($storageDir)) {
-            mkdir($storageDir, 755, true);
-        }
+        // Store the file using Laravel's Storage facade
+        $path = $uploadedFile->store($dir, $disk);
 
-        $newFile              = new File();
-        $newFile->model_id    = $model->id;
-        $newFile->model_class = $model::class;
-        $newFile->disk        = $disk;
-        $newFile->path        = $uploadedFile->store($dir, $disk);
-        $saveResult           = $newFile->save();
+        $file = File::create([
+            'model_id'    => $model->id,
+            'model_class' => $model::class,
+            'disk'        => $disk,
+            'path'        => $path,
+        ]);
 
-        if (!$saveResult) {
-            // Remove the uploaded file from disk
-            $newFile->deleteFromDisk();
+        if (!$file->exists()) {
+            // Delete uploaded file only if it was saved and DB insert fails
+            Storage::disk($disk)->delete($path);
 
             throw new Exception('Unable to save file to DB!');
         }
 
-        return $newFile;
+        return $file;
     }
+
 }

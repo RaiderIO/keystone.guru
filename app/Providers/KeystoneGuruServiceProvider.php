@@ -290,7 +290,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             } else if (!isset($view->getData()['viewName'])) {
                 $view->with('viewName', 'home');
             }
-            $view->with('theme', $_COOKIE['theme'] ?? 'darkly');
+            $view->with('theme', $_COOKIE['theme'] ?? User::THEME_DARKLY);
             $view->with('isUserAdmin', $isUserAdmin);
             $view->with('adFree', $adFree);
             $view->with('userOrDefaultRegion', $userOrDefaultRegion);
@@ -317,6 +317,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 $view->with('latestReleaseSpotlight', $globalViewVariables['latestReleaseSpotlight']);
                 $view->with('messageBanner', $messageBannerService->getMessage());
             });
+
+        view()->composer(['common.maps.map'], static function (View $view) use ($globalViewVariables) {
+            $view->with('tilesBaseUrl', config('keystoneguru.tiles_base_url'));
+        });
 
         view()->composer(['layouts.app', 'common.layout.footer'], static function (View $view) use ($globalViewVariables) {
             $view->with('hasNewChangelog',

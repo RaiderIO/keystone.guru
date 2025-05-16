@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\CharacterClass;
+use App\Models\GameServerRegion;
 use App\Models\User;
 use Illuminate\Support\Collection;
 
@@ -15,9 +16,13 @@ use Illuminate\Support\Collection;
         {{ $menuTitle }}
     </h4>
 
+    @csrf
+    @method('PATCH')
+
     <div class="form-group{{ $errors->has('avatar') ? ' has-error' : '' }}">
         {!! Form::label('avatar', __('view_profile.edit.avatar')) !!}
         {!! Form::file('avatar', ['class' => 'form-control']) !!}
+        @include('common.forms.form-error', ['key' => 'avatar'])
     </div>
 
     @if(isset($user->iconfile))
@@ -39,6 +44,7 @@ use Illuminate\Support\Collection;
             @include('common.forms.form-error', ['key' => 'name'])
         </div>
     @endif
+
     @if(!$isOAuth)
         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
             {!! Form::label('email', __('view_profile.edit.email')) !!}
@@ -46,17 +52,20 @@ use Illuminate\Support\Collection;
             @include('common.forms.form-error', ['key' => 'email'])
         </div>
     @endif
+
     <div class="form-group{{ $errors->has('game_server_region_id') ? ' has-error' : '' }}">
         {!! Form::label('game_server_region_id', __('view_profile.edit.region')) !!}
-        {!! Form::select('game_server_region_id', array_merge(['-1' => __('view_profile.edit.select_region')],
-            $allRegions->mapWithKeys(function (\App\Models\GameServerRegion $region){
+        {!! Form::select('game_server_region_id', array_merge(['0' => __('view_profile.edit.select_region')],
+            $allRegions->mapWithKeys(function (GameServerRegion $region){
                 return [$region->id => __($region->name)];
             })->toArray()), null, ['class' => 'form-control']) !!}
         @include('common.forms.form-error', ['key' => 'game_server_region_id'])
     </div>
+
     <div class="form-group{{ $errors->has('timezone') ? ' has-error' : '' }}">
         @include('common.forms.timezoneselect', ['selected' => $user->timezone])
     </div>
+
     <div class="form-group{{ $errors->has('echo_anonymous') ? ' has-error' : '' }}">
         <label for="echo_anonymous">
             {{ __('view_profile.edit.show_as_anonymous') }}
@@ -65,6 +74,7 @@ use Illuminate\Support\Collection;
         </label>
         {!! Form::checkbox('echo_anonymous', 1, $user->echo_anonymous, ['class' => 'form-control left_checkbox']) !!}
     </div>
+
     <div class="form-group{{ $errors->has('echo_color') ? ' has-error' : '' }}">
         <label for="echo_color">
             {{ __('view_profile.edit.echo_color') }}

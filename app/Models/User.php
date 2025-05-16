@@ -71,7 +71,6 @@ class User extends Authenticatable implements LaratrustUser
     use Notifiable;
 
     public const MAP_FACADE_STYLE_SPLIT_FLOORS = 'split_floors';
-
     public const MAP_FACADE_STYLE_FACADE = 'facade';
 
     public const MAP_FACADE_STYLE_ALL = [
@@ -80,6 +79,14 @@ class User extends Authenticatable implements LaratrustUser
     ];
 
     public const DEFAULT_MAP_FACADE_STYLE = 'split_floors';
+
+    public const THEME_DARKLY = 'darkly';
+    public const THEME_LUX = 'lux';
+
+    public const THEME_ALL = [
+        self::THEME_DARKLY,
+        self::THEME_LUX,
+    ];
 
     /**
      * @var string Have to specify connection explicitly so that Tracker still works (has its own DB)

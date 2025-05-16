@@ -1,7 +1,9 @@
 <?php
 /** @var string $theme */
 
-$isDarkMode = $theme === 'darkly';
+use App\Models\User;
+
+$isDarkMode = $theme === User::THEME_DARKLY;
 ?>
 <li>
     <div class="btn-group btn-group-toggle" data-toggle="buttons">

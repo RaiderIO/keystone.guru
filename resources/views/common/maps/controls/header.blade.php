@@ -10,6 +10,7 @@ use App\Models\Floor\Floor;
 use App\Models\LiveSession;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Team;
+use App\Models\User;
 
 /**
  * @var string              $theme
@@ -30,7 +31,7 @@ $showShare   = !empty($show['share']) && in_array(true, $show['share'], true);
 $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 ?>
 <nav id="map_header"
-     class="map_fade_out navbar navbar-expand-xl {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
+     class="map_fade_out navbar navbar-expand-xl {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }}">
     <div class="container bg-header">
         <a class="navbar-brand" href="/">
             <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"

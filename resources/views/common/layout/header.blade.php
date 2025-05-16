@@ -3,6 +3,7 @@
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -17,12 +18,12 @@ use Illuminate\Support\Str;
 $navs = [
     route('dungeonroutes.search') => [
         'fa'   => 'fas fa-search',
-        'text' => __('view_common.layout.header.search')
+        'text' => __('view_common.layout.header.search'),
     ],
     route('dungeon.explore.list') => [
         'fa'   => 'fas fa-compass',
-        'text' => __('view_common.layout.header.explore')
-    ]
+        'text' => __('view_common.layout.header.explore'),
+    ],
 ];
 
 $expansionRoutes = [];
@@ -46,19 +47,19 @@ if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
     }
 
     $navs[route('dungeonroutes.season', ['expansion' => $currentSeason->expansion, 'season' => $currentSeason->index])] = [
-        'text' => $currentSeason->name
+        'text' => $currentSeason->name,
     ];
 }
 
 $navs[__('view_common.layout.header.expansion_routes')] = $expansionRoutes;
 
 $navs[route('misc.affixes')] = [
-    'text' => __('view_common.layout.header.affixes')
+    'text' => __('view_common.layout.header.affixes'),
 ];
 
 ?>
 <div
-    class="game_version_header navbar-first d-none d-lg-block fixed-top bg-dark {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }}">
+    class="game_version_header navbar-first d-none d-lg-block fixed-top bg-dark {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }}">
     <div class="container">
         <div class="row">
             @foreach ($allGameVersions as $gameVersion)
@@ -68,7 +69,7 @@ $navs[route('misc.affixes')] = [
                        href="{{ route('gameversion.update', ['gameVersion' => $gameVersion]) }}">
                         @include('common.gameversion.gameversionheader', [
                             'gameVersion' => $gameVersion,
-                            'iconType' => $isSelectedGameVersion ? 'black' : 'white'
+                            'iconType' => $isSelectedGameVersion ? 'black' : 'white',
                         ])
                     </a>
                 </div>
@@ -81,7 +82,7 @@ $navs[route('misc.affixes')] = [
 </div>
 <div class="navbar-top-fixed-spacer"></div>
 <nav
-    class="navbar navbar-second fixed-top navbar-expand-lg {{ $theme === 'lux' ? 'navbar-light' : 'navbar-dark' }} bg-header"
+    class="navbar navbar-second fixed-top navbar-expand-lg {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }} bg-header"
     data-toggle="navbar-shrink">
     <div class="container">
         <a class="navbar-brand" href="/">
@@ -145,8 +146,8 @@ $navs[route('misc.affixes')] = [
                 @include('vendor.language.flags')
                 @include('common.layout.nav.user')
                 @include('common.layout.nav.themeswitch')
-{{--                <li class="nav-item nav-item-divider"></li>--}}
-{{--                @include('common.layout.nav.uploadlogs')--}}
+                {{--                <li class="nav-item nav-item-divider"></li>--}}
+                {{--                @include('common.layout.nav.uploadlogs')--}}
             </ul>
         </div>
     </div>

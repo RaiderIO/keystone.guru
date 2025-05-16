@@ -1,7 +1,9 @@
 <?php
 /** @var string $theme */
 
-$isDarkMode = $theme === 'darkly';
+use App\Models\User;
+
+$isDarkMode = $theme === User::THEME_DARKLY;
 ?>
 <li class="nav-item">
     <div class="btn btn-success"

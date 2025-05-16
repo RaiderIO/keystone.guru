@@ -133,6 +133,7 @@ if ($isAdmin) {
     'defaultZoomMax' => $defaultZoomMax,
     'showAttribution' => $showAttribution,
     'dungeonroute' => $dungeonroute ?? null,
+    'tilesBaseUrl' => $tilesBaseUrl,
     'parameters' => $parameters,
 ], $adminOptions)])
 
