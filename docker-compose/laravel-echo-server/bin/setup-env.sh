@@ -27,6 +27,7 @@ if [[ "$1" == 'start' ]] || [[ "$1" == 'client:add' ]] || [[ "$1" == 'client:rem
             echo -n "."
         done
     elif [[ ! -f /app/docker-compose/laravel-echo-server/laravel-echo-server.json ]]; then
+        echo "Creating /app/docker-compose/laravel-echo-server/laravel-echo-server.json"
         cp /usr/local/src/laravel-echo-server-template.json /app/docker-compose/laravel-echo-server/laravel-echo-server.json
         # Replace with environment variables
         sed -i "s|LARAVEL_ECHO_SERVER_AUTH_URL|${LARAVEL_ECHO_SERVER_AUTH_URL:-${LARAVEL_ECHO_SERVER_HOST:-localhost}}|i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
@@ -51,9 +52,5 @@ fi
 
 # first arg is `-f` or `--some-option`
 if [[ "${1#-}" != "$1" ]]; then
-	set -- laravel-echo-server "$@"
+    set -- laravel-echo-server "$@"
 fi
-
-echo "$@" "--config /app/docker-compose/laravel-echo-server/laravel-echo-server.json"
-
-laravel-echo-server start --config /app/docker-compose/laravel-echo-server/laravel-echo-server.json

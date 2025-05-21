@@ -19,5 +19,12 @@ RUN git config --global --add safe.directory /tmp/keystone.guru && \
         rm -rf /tmp/keystone.guru
 
 # Install NPM packages and compile code
-RUN NPM_CMD=$([ "$STAGE" = "production" ] && echo "production" || echo "dev") && \
-    npm install
+RUN npm install && \
+    npm i express@5.1.0 --save
+
+COPY bin/* /usr/local/bin/
+COPY src/* /usr/local/src/
+
+RUN chmod +x /usr/local/bin/start-laravel-echo-server-healthchecks.sh
+
+ENTRYPOINT ["/usr/local/bin/start-laravel-echo-server-healthchecks.sh"]
