@@ -8,6 +8,7 @@ use App\Overrides\CustomRateLimiter;
 use Auth;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Rollbar\Payload\Level;
 use Rollbar\Rollbar;
@@ -21,6 +22,12 @@ class AppServiceProvider extends ServiceProvider
     {
 
         Model::preventLazyLoading(!app()->isProduction());
+
+        // Force HTTPS in production - these environments are running in AWS which terminates https at the load balancer
+        // instead of at nginx, so the site will think it's serving http if it's not forced to https
+        if(!$this->app->environment('local')) {
+            URL::forceScheme('https');
+        }
 
         $this->app->booted(function () {
 //            /** @var User|null $user */
