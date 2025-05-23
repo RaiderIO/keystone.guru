@@ -147,9 +147,6 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                                     </small>
                                 </div>
 
-
-
-
                                 @if( $showAffixes )
                                     <div class="col-auto pl-1 pr-0">
                                             <?php
