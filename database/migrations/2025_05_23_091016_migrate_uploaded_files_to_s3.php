@@ -51,7 +51,7 @@ return new class extends Migration {
                 if (!unlink($tmpPath)) {
                     $consoleOutput->writeln(sprintf(' - File %d: Failed to delete local temp file %s', $file->id, $tmpPath));
                 } else {
-                    $consoleOutput->writeln(sprintf(' - File %d: Migrated file %s to S3', $fullPath, $file->id));
+                    $consoleOutput->writeln(sprintf(' - File %d: Migrated file %s to S3', $file->id, $fullPath));
                 }
             } catch (Exception $e) {
                 // Log the error
