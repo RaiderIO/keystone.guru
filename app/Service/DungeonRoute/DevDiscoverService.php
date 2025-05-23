@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Collection;
 
 class DevDiscoverService extends BaseDiscoverService
@@ -21,7 +22,14 @@ class DevDiscoverService extends BaseDiscoverService
         return DungeonRoute::query()->limit(8)
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
-            ->with(['author', 'affixes', 'ratings', 'mappingVersion', 'dungeon', 'dungeon.activeFloors'])
+            ->with([
+                'author',
+                'affixes',
+                'ratings',
+                'mappingVersion',
+                'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
+                'season'  => fn(BelongsTo $query) => $query->without(['affixGroups', 'dungeons']),
+            ])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->when($this->season === null, function (Builder $builder) {
@@ -46,7 +54,14 @@ class DevDiscoverService extends BaseDiscoverService
         return DungeonRoute::query()->limit(8)
             ->when($this->closure !== null, $this->closure)
             ->select('dungeon_routes.*')
-            ->with(['author', 'affixes', 'ratings', 'mappingVersion', 'dungeon', 'dungeon.activeFloors'])
+            ->with([
+                'author',
+                'affixes',
+                'ratings',
+                'mappingVersion',
+                'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
+                'season'  => fn(BelongsTo $query) => $query->without(['affixGroups', 'dungeons']),
+            ])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->when($this->season === null, function (Builder $builder) {
