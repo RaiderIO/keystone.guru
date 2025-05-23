@@ -63,7 +63,7 @@ class CacheService implements CacheServiceInterface
         // So if we're caching something, do not populate the model cache for the queries inside $value()
         // Otherwise we're caching things twice, and that's not what we want
         // The results will likely explode the model cache (and redis usage as a result) so don't use it
-        return app('model-cache')->runDisabled(function () use($key, $value, $ttl) {
+        return app('model-cache')->runDisabled(function () use ($key, $value, $ttl) {
             $result = null;
 
             //        $lock = Cache::lock(sprintf('%s:lock', $key), 10);
@@ -168,8 +168,14 @@ class CacheService implements CacheServiceInterface
         $prefix = config('database.redis.options.prefix');
 
         return $this->deleteKeysByPattern([
-            sprintf('/%s[a-zA-Z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
-        ], $seconds);
+                sprintf('/%s[a-zA-Z0-9]{40}(?::[a-z0-9]{40})*/', $prefix),
+            ], $seconds) +
+            $this->deleteKeysByPattern([
+                // publicKeys are 7 characters long
+                sprintf('/%spresence-%s-route-edit.[a-zA-Z0-9]{7}*/', $prefix, config('app.type')),
+                sprintf('/%spresence-%s-live-session.[a-zA-Z0-9]{7}*/', $prefix, config('app.type')),
+                // Special - these keys should be cleared after 24 hours, regardless of what $seconds say
+            ], 24 * 3600);
     }
 
     public function lock(string $key, callable $callable, int $waitFor = 10): mixed

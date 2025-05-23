@@ -54,7 +54,7 @@ abstract class SetupDatabase extends Command
 
     public function setupUserForDatabase(Connection $connection, string $database, string $username, string $password): int
     {
-        $this->info(sprintf("👤 Creating user '%s' for database '%s'...", $username, $database));
+        $this->info(sprintf("👤 Creating user (if not exists) '%s' for database '%s'...", $username, $database));
         $connection->statement(sprintf("CREATE USER IF NOT EXISTS '%s'@'%%' IDENTIFIED BY '%s';", $username, $password));
         $connection->statement(sprintf("GRANT ALL PRIVILEGES ON %s.* TO '%s'@'%%';", $database, $username));
         $connection->statement('FLUSH PRIVILEGES;');

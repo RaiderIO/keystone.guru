@@ -172,16 +172,18 @@ class Spell extends CacheModel implements MappingModelInterface
         return $result;
     }
 
-    public static function getWowheadLink(int $gameVersionId, int $spellId, string $name = null): string
+    public static function getWowheadLink(?int $gameVersionId, int $spellId, string $name = null): string
     {
         $wowheadBaseUrl = 'https://www.wowhead.com';
-        switch ($gameVersionId) {
-            case GameVersion::ALL[GameVersion::GAME_VERSION_WRATH]:
-                $wowheadBaseUrl .= '/wrath';
-                break;
-            case GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA]:
-                $wowheadBaseUrl .= '/classic';
-                break;
+        if ($gameVersionId !== null) {
+            switch ($gameVersionId) {
+                case GameVersion::ALL[GameVersion::GAME_VERSION_WRATH]:
+                    $wowheadBaseUrl .= '/wrath';
+                    break;
+                case GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA]:
+                    $wowheadBaseUrl .= '/classic';
+                    break;
+            }
         }
 
         $result = sprintf('%s/spell=%d', $wowheadBaseUrl, $spellId);

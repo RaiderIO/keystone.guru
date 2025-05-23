@@ -49,13 +49,13 @@ return [
             'ttl' => '1 hour',
         ],
         'dungeonData'            => [
-            'ttl' => '1 hour',
+            'ttl' => '10 minutes',
         ],
         'static_data'            => [
             'ttl' => '1 day',
         ],
         'mdt'                    => [
-            'ttl' => '1 day',
+            'ttl' => '1 hour',
         ],
         'displayed_affix_groups' => [
             'ttl' => '15 minutes',
