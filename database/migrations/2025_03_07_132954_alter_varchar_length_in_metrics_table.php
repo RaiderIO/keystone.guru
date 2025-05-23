@@ -27,6 +27,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-
+        DB::statement('ALTER TABLE metrics MODIFY model_class VARCHAR(255);');
+        DB::statement('ALTER TABLE metrics MODIFY tag VARCHAR(255);');
     }
 };

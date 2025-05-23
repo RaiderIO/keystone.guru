@@ -17,6 +17,7 @@ use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
@@ -52,6 +53,11 @@ abstract class MapContext
 
     abstract public function getEchoChannelName(): string;
 
+    public function onlyLoadInUseNpcs(): bool
+    {
+        return true;
+    }
+
     public function getMapFacadeStyle(): string
     {
         return $this->mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle();
@@ -83,24 +89,32 @@ abstract class MapContext
                 // Filter out floors that we do not need
                 $dungeon->setRelation('floors', $this->getFloors());
 
-                $auras = Spell::where('aura', true)
-                    ->get()
-                    ->each(fn(Spell $spell) => $spell->setVisible(['id', 'name', 'icon_url']));
+                // Temporarily disabled to improve performance - not using this anyway
+                $auras = collect();
+//                $auras = Spell::where('aura', true)
+//                    ->get()
+//                    ->each(fn(Spell $spell) => $spell->setVisible(['id', 'name', 'icon_url']));
+
+                $enemies = $this->mappingVersion->mapContextEnemies($this->coordinatesService, $useFacade);
 
                 return array_merge($dungeon->toArray(), $this->getEnemies(), [
                     'latestMappingVersion'      => $this->floor->dungeon->currentMappingVersion,
-                    'npcs'                      => $this->floor->dungeon->npcs()->with([
-                        'spells',
-                        // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
-                        'enemyForces' => fn(HasOne $query) => $query->where('mapping_version_id', $this->mappingVersion->id),
-                    ])
+                    'npcs'                      => $this->floor->dungeon->npcs()
+                        // @TODO #2772 Prevent loading NPCs that are not used (ie. those with dungeon_id = -1
+                        ->when($this->onlyLoadInUseNpcs(), function (Builder $query) use ($enemies) {
+                            $query->whereIn('id', $enemies->pluck('id'));
+                        })->with([
+                            'spells',
+                            // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
+                            'enemyForces' => fn(HasOne $query) => $query->where('mapping_version_id', $this->mappingVersion->id),
+                        ])
                         // Disable cache for this query though! Since NpcEnemyForces is a cache model, it can otherwise return values from another mapping version
                         ->disableCache()
                         ->get()
                         // Only show what we need in the FE
                         ->each(fn(Npc $npc) => $npc->enemyForces?->setVisible(['enemy_forces', 'enemy_forces_teeming'])),
                     'auras'                     => $auras,
-                    'enemies'                   => $this->mappingVersion->mapContextEnemies($this->coordinatesService, $useFacade),
+                    'enemies'                   => $enemies,
                     'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
                     'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $useFacade),
                     'mapIcons'                  => $this->mappingVersion->mapContextMapIcons($this->coordinatesService, $useFacade),
@@ -109,16 +123,19 @@ abstract class MapContext
                     'floorUnions'               => $this->mappingVersion->mapContextFloorUnions($this->coordinatesService, $useFacade),
                     'floorUnionAreas'           => $this->mappingVersion->mapContextFloorUnionAreas($this->coordinatesService, $useFacade),
                 ]);
-            }, config('keystoneguru.cache.dungeonData.ttl'));
+            }, config('keystoneguru.cache.dungeonData.ttl')
+        );
 
         $selectableSpells = Spell::where('selectable', true)->get();
+        $characterClasses = CharacterClass::all();
+        $mapIconTypes     = MapIconType::all()->keyBy('id');
         $static           = $this->cacheService->remember('static_data', static fn() => [
             'selectableSpells'                  => $selectableSpells,
-            'mapIconTypes'                      => MapIconType::all(),
-            'unknownMapIconType'                => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
-            'awakenedObeliskGatewayMapIconType' => MapIconType::find(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),
-            'classColors'                       => CharacterClass::all()->pluck('color'),
-            'characterClasses'                  => CharacterClass::all(),
+            'mapIconTypes'                      => $mapIconTypes->values(),
+            'unknownMapIconType'                => $mapIconTypes->get(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
+            'awakenedObeliskGatewayMapIconType' => $mapIconTypes->get(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),
+            'classColors'                       => $characterClasses->pluck('color'),
+            'characterClasses'                  => $characterClasses,
             'characterClassSpecializations'     => CharacterClassSpecialization::all(),
             'raidMarkers'                       => RaidMarker::all(),
             'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),

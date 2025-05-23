@@ -26,6 +26,11 @@ class MapContextMappingVersionEdit extends MapContextMappingVersion
         return 'both';
     }
 
+    public function onlyLoadInUseNpcs(): bool
+    {
+        return false;
+    }
+
     public function getType(): string
     {
         return 'mappingVersionEdit';

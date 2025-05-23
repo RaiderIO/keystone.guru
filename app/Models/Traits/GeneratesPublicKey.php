@@ -14,6 +14,9 @@ trait GeneratesPublicKey
 {
     /**
      * Generates a random public key that is displayed to the user in the URL.
+     *
+     * Note: if you change the length of the key, change it in the CacheService->clearIdleKeys() as well
+     *
      * @throws RandomException
      */
     public static function generateRandomPublicKey(int $length = 7, string $column = 'public_key', bool $checkUsages = true): string
