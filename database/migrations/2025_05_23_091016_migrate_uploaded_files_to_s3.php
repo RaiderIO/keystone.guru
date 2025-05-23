@@ -24,7 +24,7 @@ return new class extends Migration {
             ->whereNotIn('disk', ['s3', 's3_user_uploads'])
             ->get();
 
-        $consoleOutput->writeln(sprintf('Starting migration of %d files to %s', $files->count(), $diskName));
+        $consoleOutput->writeln(sprintf(' - Starting migration of %d files to %s', $files->count(), $diskName));
 
         foreach ($files as $file) {
             try {
@@ -43,15 +43,13 @@ return new class extends Migration {
                 ]);
 
                 if (!unlink($tmpPath)) {
-                    $consoleOutput->writeln(sprintf('File %d: Failed to delete local temp file %s', $file->id, $tmpPath));
+                    $consoleOutput->writeln(sprintf(' - File %d: Failed to delete local temp file %s', $file->id, $tmpPath));
                 } else {
-                    $consoleOutput->writeln(sprintf('File %d: Migrated file to S3', $file->id));
+                    $consoleOutput->writeln(sprintf(' - File %d: Migrated file to S3', $file->id));
                 }
             } catch (Exception $e) {
                 // Log the error
-                $consoleOutput->writeln(sprintf('File %d: Failed to migrate file %s to S3 -> %s', $file->id, $file->path, $e->getMessage()));
-
-                break;
+                $consoleOutput->writeln(sprintf(' - File %d: Failed to migrate file %s to S3 -> %s', $file->id, $file->path, $e->getMessage()));
             }
         }
 
