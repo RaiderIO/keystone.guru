@@ -24,15 +24,21 @@ return new class extends Migration {
             ->whereNotIn('disk', ['s3', 's3_user_uploads'])
             ->get();
 
-        $consoleOutput->writeln(sprintf(' - Starting migration of %d files to %s', $files->count(), $diskName));
+        $consoleOutput->writeln(sprintf('Starting migration of %d files to %s', $files->count(), $diskName));
 
         foreach ($files as $file) {
+            $fullPath = Storage::disk($file->disk)->path($file->path);
             try {
                 $tmpPath = tempnam(sys_get_temp_dir(), 'file_');
 
+                if (!exif_imagetype($fullPath)) {
+                    $consoleOutput->writeln(sprintf(' - File %d: File %s is not a valid image', $fullPath, $file->id));
+                    continue;
+                }
+
                 // Make sure the dimensions never exceed 256x256 but maintain their aspect ratio
                 (new ImageManager(new ImagickDriver()))
-                    ->read(Storage::disk($file->disk)->path($file->path))
+                    ->read($fullPath)
                     ->scaleDown(256, 256)
                     ->save($tmpPath, 90);
 
@@ -45,11 +51,11 @@ return new class extends Migration {
                 if (!unlink($tmpPath)) {
                     $consoleOutput->writeln(sprintf(' - File %d: Failed to delete local temp file %s', $file->id, $tmpPath));
                 } else {
-                    $consoleOutput->writeln(sprintf(' - File %d: Migrated file to S3', $file->id));
+                    $consoleOutput->writeln(sprintf(' - File %d: Migrated file %s to S3', $fullPath, $file->id));
                 }
             } catch (Exception $e) {
                 // Log the error
-                $consoleOutput->writeln(sprintf(' - File %d: Failed to migrate file %s to S3 -> %s', $file->id, $file->path, $e->getMessage()));
+                $consoleOutput->writeln(sprintf(' - File %d: Failed to migrate file %s to S3 -> %s', $file->id, $fullPath, $e->getMessage()));
             }
         }
 

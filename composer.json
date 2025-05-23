@@ -70,6 +70,7 @@
     "require": {
         "php": ">=8.2",
         "ext-curl": "*",
+        "ext-exif": "*",
         "ext-imagick": "*",
         "ext-json": "*",
         "ext-lua": "*",
