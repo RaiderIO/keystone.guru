@@ -1,0 +1,28 @@
+ARG STAGE=staging
+
+FROM keystone.guru-cron
+
+# Set working directory
+WORKDIR /var/www/html
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV STAGE=${STAGE}
+
+# Re-copy since the paths are different
+COPY etc/cron.d /etc/cron.d
+
+RUN apt-get update && apt-get install -y awscli
+
+# Checkout the correct version of the repo
+RUN git config --global --add safe.directory /var/www/html && \
+    BRANCH=$([ "$STAGE" = "production" ] && echo "master" || echo "development") && \
+    git clone --depth 1 --branch "$BRANCH" https://github.com/RaiderIO/keystone.guru.git . && \
+    git rev-list HEAD -1 > version
+
+# Install composer packages (token is already configured in main image)
+RUN composer install --no-dev --optimize-autoloader && \
+      php artisan vendor:publish --tag=laravel-assets --ansi --force
+
+# Ensure that storage and bootstrap/cache are writable for the web server
+RUN chmod o+w ./storage/ -R && \
+      chown -R www-data:www-data storage bootstrap/cache

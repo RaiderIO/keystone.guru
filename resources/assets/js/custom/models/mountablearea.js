@@ -116,19 +116,16 @@ class MountableArea extends VersionableMapObject {
             }
 
             let hullPoints = hull(vertices, 100);
-
             // Only if we can actually make an offset
             if (hullPoints.length > 1) {
                 try {
-                    hullPoints = (new Offset())
-                        .data(hullPoints)
-                        .arcSegments(c.map.mountablearea.arcSegments(hullPoints.length))
-                        .margin(c.map.mountablearea.margin);
+                    let offsetLatLngs = createOffsetPolygon(
+                        hullPoints.map(point => ({lat: point[0], lng: point[1]})),
+                        c.map.mountablearea.margin,
+                        c.map.mountablearea.arcSegments(hullPoints.length)
+                    );
 
-                    result = L.polygon(hullPoints, c.map.mountablearea.polygonOptions);
-                    result.off('click').on('click', function () {
-
-                    });
+                    result = L.polygon([offsetLatLngs], c.map.mountablearea.polygonOptions);
                 } catch (error) {
                     // Not particularly interesting to spam the console with
                     console.error('Unable to create offset for mountable area', this.id, error);

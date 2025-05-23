@@ -169,7 +169,7 @@ class WowheadService implements WowheadServiceInterface
         $duration      = null;
 
         // When set to true, the next line will contain the school.
-        $mechanicFound = $schoolFound = $dispelTypeFound = $castTimeFound = $durationFound = false;
+        $categoryFound = $mechanicFound = $schoolFound = $dispelTypeFound = $castTimeFound = $durationFound = false;
         $mechanicSet   = $schoolSet = $dispelTypeSet = $castTimeSet = $durationSet = false;
 
         $lines = explode(PHP_EOL, $response);
@@ -205,10 +205,10 @@ class WowheadService implements WowheadServiceInterface
             } else if ($gameVersion->key === GameVersion::GAME_VERSION_CLASSIC_ERA &&
                 preg_match(self::IDENTIFYING_REGEX_SPELL_ICON_NAME_CLASSIC, $line, $matches)) {
                 $iconName = $matches[1];
-            } else if (preg_match(self::IDENTIFYING_REGEX_SPELL_CATEGORY, $line, $matches)) {
+            } else if (!$categoryFound && preg_match(self::IDENTIFYING_REGEX_SPELL_CATEGORY, $line, $matches)) {
                 $category = Str::slug($matches[1], '_');
-            }
-            // Mechanic
+                $categoryFound = true;
+            } // Mechanic
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_MECHANIC)) {
                 $mechanicFound = true;
             } // Triggered on the next line
@@ -329,10 +329,7 @@ class WowheadService implements WowheadServiceInterface
     public function getSpellPageHtml(GameVersion $gameVersion, int $spellId): string
     {
         return $this->curlGet(
-            sprintf('https://wowhead.com/%sspell=%s',
-                $gameVersion->key === GameVersion::GAME_VERSION_RETAIL ? '' : $gameVersion->key . '/',
-                $spellId
-            )
+            Spell::getWowheadLink($gameVersion->id, $spellId)
         );
     }
 

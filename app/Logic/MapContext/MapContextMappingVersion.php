@@ -54,7 +54,12 @@ abstract class MapContextMappingVersion extends MapContext
     public function getProperties(): array
     {
         // Get or set the NPCs
-        $npcs = $this->cacheService->remember(sprintf('npcs_%s', $this->context->id), fn() => Npc::whereIn('dungeon_id', [$this->context->id, -1])->get()->map(static fn($npc) => ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id])->values(), config('keystoneguru.cache.npcs.ttl'));
+        $npcs = $this->cacheService->remember(sprintf('npcs_%s', $this->context->id), function () {
+            return Npc::whereIn('dungeon_id', [$this->context->id, -1])
+                ->get()
+                ->map(static fn($npc) => ['id' => $npc->id, 'name' => $npc->name, 'dungeon_id' => $npc->dungeon_id])
+                ->values();
+        }, config('keystoneguru.cache.npcs.ttl'));
 
         return array_merge(parent::getProperties(), [
             // First should be unspecified

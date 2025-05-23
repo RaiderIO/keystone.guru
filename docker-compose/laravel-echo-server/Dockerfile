@@ -22,8 +22,7 @@ COPY src/* /usr/local/src/
 
 
 # Make them executable
-RUN chmod +x /usr/local/bin/docker-entrypoint && \
-    chmod +x /usr/local/bin/health-check
+RUN chmod +x /usr/local/bin/setup-env.sh && \
+    chmod +x /usr/local/bin/start-laravel-echo-server.sh
 
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint"]
-CMD ["start"]
+ENTRYPOINT ["/usr/local/bin/start-laravel-echo-server.sh"]

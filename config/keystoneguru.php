@@ -8,6 +8,7 @@ return [
 
     'db_backup_dir'      => env('DB_BACKUP_DIR'),
     'mapping_backup_dir' => env('MAPPING_BACKUP_DIR'),
+    'tiles_base_url'     => env('TILES_BASE_URL', '/images/tiles'),
 
     'github_username' => 'RaiderIO',
 

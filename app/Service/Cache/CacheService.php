@@ -60,48 +60,53 @@ class CacheService implements CacheServiceInterface
      */
     public function remember(string $key, mixed $value, mixed $ttl = null): mixed
     {
-        $result = null;
+        // So if we're caching something, do not populate the model cache for the queries inside $value()
+        // Otherwise we're caching things twice, and that's not what we want
+        // The results will likely explode the model cache (and redis usage as a result) so don't use it
+        return app('model-cache')->runDisabled(function () use($key, $value, $ttl) {
+            $result = null;
 
-//        $lock = Cache::lock(sprintf('%s:lock', $key), 10);
-        try {
-            // Wait up to 20 seconds to acquire the lock...
-//            $lock->block(self::LOCK_BLOCK_TIMEOUT);
+            //        $lock = Cache::lock(sprintf('%s:lock', $key), 10);
+            try {
+                // Wait up to 20 seconds to acquire the lock...
+                //            $lock->block(self::LOCK_BLOCK_TIMEOUT);
 
-            // If we should ignore the cache, or if it's not found
-            if (!$this->cacheEnabled || ($result = $this->get($key)) === null) {
+                // If we should ignore the cache, or if it's not found
+                if (!$this->cacheEnabled || ($result = $this->get($key)) === null) {
 
-                // Get the result by calling the closure
-                if ($value instanceof Closure) {
-                    $value = $value();
-                }
-
-                // Only write it to cache when we're not local
-                if (config('app.env') !== 'local') {
-                    if (is_string($ttl)) {
-                        $ttl = DateInterval::createFromDateString($ttl);
+                    // Get the result by calling the closure
+                    if ($value instanceof Closure) {
+                        $value = $value();
                     }
 
-                    // If not overridden, get the TTL from config, if it's set anyway
-                    try {
-                        if ($this->set($key, $value, $ttl ?? $this->getTtl($key))) {
+                    // Only write it to cache when we're not local
+                    if (config('app.env') !== 'local') {
+                        if (is_string($ttl)) {
+                            $ttl = DateInterval::createFromDateString($ttl);
+                        }
+
+                        // If not overridden, get the TTL from config, if it's set anyway
+                        try {
+                            if ($this->set($key, $value, $ttl ?? $this->getTtl($key))) {
+                                $result = $value;
+                            }
+                        } catch (InvalidArgumentException $e) {
+                            $this->log->rememberFailedToSetCache($key, $e);
+
                             $result = $value;
                         }
-                    } catch (InvalidArgumentException $e) {
-                        $this->log->rememberFailedToSetCache($key, $e);
-
+                    } else {
                         $result = $value;
                     }
-                } else {
-                    $result = $value;
                 }
+            } catch (LockTimeoutException $e) {
+                $this->log->rememberFailedToAcquireLock($key, $e);
+            } finally {
+                //            $lock->release();
             }
-        } catch (LockTimeoutException $e) {
-            $this->log->rememberFailedToAcquireLock($key, $e);
-        } finally {
-//            $lock->release();
-        }
 
-        return $result;
+            return $result;
+        });
     }
 
     public function get(string $key): mixed

@@ -18,7 +18,7 @@
         "redis": {
             "port": "REDIS_PORT",
             "host": "REDIS_HOST",
-            "db": "REDIS_HOST_DB",
+            "db": "REDIS_DB",
             "keyPrefix": "REDIS_PREFIX"
         },
         "sqlite": {

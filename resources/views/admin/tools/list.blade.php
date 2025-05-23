@@ -4,6 +4,10 @@
 
 @section('content')
     <h3>{{ __('view_admin.tools.list.header_tools') }}</h3>
+    <h4>{{ __('view_admin.tools.list.subheader_message_banner') }}</h4>
+    <div class="form-group">
+        <a href="{{ route('admin.tools.messagebanner.set') }}">{{ __('view_admin.tools.list.set_message_banner') }}</a>
+    </div>
     <h4>{{ __('view_admin.tools.list.subheader_npcs') }}</h4>
     <div class="form-group">
         <a href="{{ route('admin.tools.npc.import') }}">{{ __('view_admin.tools.list.mass_import_npcs') }}</a>

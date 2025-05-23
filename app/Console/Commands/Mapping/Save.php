@@ -212,7 +212,7 @@ class Save extends Command
 
         $spells = Spell::with('spellDungeons')->get();
         foreach ($spells as $spell) {
-            $spell->makeHidden(['icon_url'])->makeVisible(['spellDungeons']);
+            $spell->makeHidden(['icon_url', 'wowhead_url'])->makeVisible(['spellDungeons']);
         }
 
         $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');

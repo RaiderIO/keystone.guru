@@ -268,7 +268,7 @@ class Expansion extends CacheModel
             // Save was successful, now do any file handling that may be necessary
             if ($file !== null) {
                 try {
-                    $icon = File::saveFileToDB($file, $this, $fileUploadDirectory);
+                    $icon = File::saveFileToDB($file, $this, $fileUploadDirectory, 'local_public');
 
                     // Update the expansion to reflect the new file ID
                     $this->icon_file_id = $icon->id;

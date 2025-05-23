@@ -472,6 +472,8 @@ return [
     'simulate_pull'                                                        => 'Pull :index',
     'toggle_spell_visibility_success'                                      => 'Spell visibility toggled successfully',
     'toggle_spell_visibility_error'                                        => 'Spell visibility toggle failed',
+    'change_spell_game_version_success'                                    => 'Spell game version changed successfully',
+    'change_spell_game_version_error'                                      => 'Spell game version changed failed',
     'week_label'                                                           => 'Week',
     'loading_label'                                                        => 'Loading',
     'too_much_data_label'                                                  => 'Too much runs found - please further refine your search',

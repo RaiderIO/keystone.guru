@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserColorChangedEvent;
+use App\Http\Requests\ProfileFormRequest;
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
@@ -65,96 +66,83 @@ class ProfileController extends Controller
     /**
      * @throws Exception
      */
-    public function update(Request $request, User $user, EchoServerHttpApiServiceInterface $echoServerHttpApiService): RedirectResponse
+    public function update(ProfileFormRequest $request, User $user, EchoServerHttpApiServiceInterface $echoServerHttpApiService): RedirectResponse
     {
+        $validated = $request->validated();
+
         // Allow username change once!
         if ($user->isOAuth()) {
             // When the user may change the username
-            if ($request->has('name') && !$user->changed_username) {
+            if (isset($validated['name']) && !$user->changed_username) {
                 // Only when the user's name has actually changed
-                if ($user->name !== $request->get('name')) {
-                    $user->name             = $request->get('name');
+                if ($user->name !== $validated['name']) {
+                    $user->name             = $validated['name'];
                     $user->changed_username = true;
                 }
             }
         } // May not change e-mail when OAuth
         else {
-            $user->email = $request->get('email');
+            $user->email = $validated['email'];
         }
 
-        $user->theme                 = $request->get('theme');
-        $user->echo_color            = $request->get('echo_color', randomHexColor());
-        $user->echo_anonymous        = $request->get('echo_anonymous', false);
-        $user->game_server_region_id = $request->get('game_server_region_id');
-        $user->timezone              = $request->get('timezone');
-
-        // Check if these things already exist or not, if so notify the user that they couldn't be saved
-        $emailExists = User::where('email', $user->email)->where('id', '<>', $user->id)->count() > 0;
-        if ($emailExists) {
-            Session::flash('warning', __('controller.profile.flash.email_already_in_use'));
-        }
-
-        $nameExists = User::where('name', $user->name)->where('id', '<>', $user->id)->count() > 0;
-        if ($nameExists) {
-            Session::flash('warning', __('controller.profile.flash.username_already_in_use'));
-        }
+        $user->echo_color            = $validated['echo_color'] ?? randomHexColor();
+        $user->echo_anonymous        = $validated['echo_anonymous'] ?? false;
+        $user->game_server_region_id = $validated['game_server_region_id'];
+        $user->timezone              = $validated['timezone'];
 
         // Only when no duplicates are found!
-        if (!$emailExists && !$nameExists) {
-            if ($user->save()) {
+        if ($user->save()) {
 
-                // Handle changing of avatar if the user did so
-                $avatar = $request->file('avatar');
-                if ($avatar !== null) {
-                    $user->saveUploadedFile($avatar);
-                }
+            // Handle changing of avatar if the user did so
+            if (isset($validated['avatar'])) {
+                $user->saveUploadedFile($validated['avatar']);
+            }
 
-                Session::flash('status', __('controller.profile.flash.profile_updated'));
+            Session::flash('status', __('controller.profile.flash.profile_updated'));
 
-                // Drop the caches for all of their routes since their profile name/icon may have changed
-                foreach ($user->dungeonRoutes as $dungeonroute) {
-                    $dungeonroute->dropCaches($dungeonroute->id);
-                }
+            // Drop the caches for all of their routes since their profile name/icon may have changed
+            foreach ($user->dungeonRoutes as $dungeonroute) {
+                $dungeonroute->dropCaches($dungeonroute->id);
+            }
 
-                // Send an event that the user's color has changed
-                try {
-                    // Propagate changes to any channel the user may be in
-                    foreach ($echoServerHttpApiService->getChannels() as $name => $channel) {
-                        $context = null;
+            // Send an event that the user's color has changed
+            try {
+                // Propagate changes to any channel the user may be in
+                foreach ($echoServerHttpApiService->getChannels() as $name => $channel) {
+                    $context = null;
 
-                        // If it's a route edit page
-                        if (str_contains($name, 'route-edit')) {
-                            $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', $name);
-                            /** @var DungeonRoute $context */
-                            $context = DungeonRoute::where('public_key', $routeKey)->first();
-                        } else if (str_contains($name, 'live-session')) {
-                            $routeKey = str_replace(sprintf('presence-%s-live-session.', config('app.type')), '', $name);
-                            /** @var LiveSession $context */
-                            $context = LiveSession::where('public_key', $routeKey)->first();
-                        }
+                    // If it's a route edit page
+                    if (str_contains($name, 'route-edit')) {
+                        $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', $name);
+                        /** @var DungeonRoute $context */
+                        $context = DungeonRoute::where('public_key', $routeKey)->first();
+                    } else if (str_contains($name, 'live-session')) {
+                        $routeKey = str_replace(sprintf('presence-%s-live-session.', config('app.type')), '', $name);
+                        /** @var LiveSession $context */
+                        $context = LiveSession::where('public_key', $routeKey)->first();
+                    }
 
-                        // Only if we could find a route
-                        if ($context instanceof Model) {
-                            // Check if the user is in this channel..
-                            foreach ($echoServerHttpApiService->getChannelUsers($name) as $channelUser) {
+                    // Only if we could find a route
+                    if ($context instanceof Model) {
+                        // Check if the user is in this channel..
+                        foreach ($echoServerHttpApiService->getChannelUsers($name) as $channelUser) {
 
-                                if ($channelUser['id'] === $user->id) {
-                                    // Broadcast that channel that our user's color has changed
-                                    broadcast(new UserColorChangedEvent($context, $user));
+                            if ($channelUser['id'] === $user->id) {
+                                // Broadcast that channel that our user's color has changed
+                                broadcast(new UserColorChangedEvent($context, $user));
 
-                                    break;
-                                }
+                                break;
                             }
                         }
                     }
-                } catch (Exception $exception) {
-                    report($exception);
-
-                    Log::warning('Echo server is probably not running!');
                 }
-            } else {
-                abort(500, __('controller.profile.flash.unexpected_error_when_saving'));
+            } catch (Exception $exception) {
+                report($exception);
+
+                Log::warning('Echo server is probably not running!');
             }
+        } else {
+            abort(500, __('controller.profile.flash.unexpected_error_when_saving'));
         }
 
         return redirect()->route('profile.edit');

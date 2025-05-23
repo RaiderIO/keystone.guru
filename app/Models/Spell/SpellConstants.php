@@ -233,6 +233,16 @@ trait SpellConstants
     public const SPELL_FERAL_HIDE_DRUMS      = 381301;
     public const SPELL_SHROUD_OF_CONCEALMENT = 114018;
 
+    public const BLOODLUSTY_SPELLS = [
+        self::SPELL_BLOODLUST,
+        self::SPELL_HEROISM,
+        self::SPELL_TIME_WARP,
+        self::SPELL_FURY_OF_THE_ASPECTS,
+        self::SPELL_ANCIENT_HYSTERIA,
+        self::SPELL_PRIMAL_RAGE,
+        self::SPELL_FERAL_HIDE_DRUMS,
+    ];
+
     public const EXCLUDE_MDT_IMPORT_SPELLS = [
         186439, // Shadow Mend, was removed from the game
     ];

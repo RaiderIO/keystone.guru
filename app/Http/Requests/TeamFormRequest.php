@@ -6,6 +6,7 @@ use App\Models\Team;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 class TeamFormRequest extends FormRequest
 {
@@ -34,7 +35,13 @@ class TeamFormRequest extends FormRequest
         return [
             'name'        => $nameRules,
             'description' => 'string|nullable',
-            'logo'        => 'image|mimes:png,jpg|max:256',
+            'logo'        => ['nullable',
+                              File::image()
+                                  ->min(1)
+                                  ->max(500)
+                                  ->dimensions(Rule::dimensions()->maxWidth(512)->maxHeight(512))
+                                  ->extensions(['jpg', 'jpeg', 'png']),
+            ],
         ];
     }
 }

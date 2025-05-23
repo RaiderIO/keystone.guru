@@ -1662,6 +1662,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
+                "spell_id": 224729
+            },
+            {
                 "spell_id": 257641
             }
         ],
@@ -3148,6 +3151,9 @@
         "npc_spells": [
             {
                 "spell_id": 269266
+            },
+            {
+                "spell_id": 270590
             }
         ],
         "npc_enemy_forces": []

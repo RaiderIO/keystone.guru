@@ -42,15 +42,16 @@ class TeamController extends Controller
      */
     public function store(TeamFormRequest $request, ?Team $team = null)
     {
+        $validated = $request->validated();
         $new = $team === null;
 
         if ($new) {
             $team             = new Team();
-            $team->name       = $request->get('name');
+            $team->name       = $validated['name'];
             $team->public_key = Team::generateRandomPublicKey();
         }
 
-        $team->description  = $request->get('description');
+        $team->description  = $validated['description'];
         $team->invite_code  = Team::generateRandomPublicKey(12, 'invite_code');
         $team->icon_file_id = -1;
 
@@ -59,18 +60,8 @@ class TeamController extends Controller
             $logo = $request->file('logo');
 
             // Save was successful, now do any file handling that may be necessary
-            if ($logo !== null) {
-                // Save was successful, now do any file handling that may be necessary
-                try {
-                    $team->saveUploadedFile($logo);
-                } catch (Exception $ex) {
-                    if ($new) {
-                        // Roll back the saving of the expansion since something went wrong with the file.
-                        $team->delete();
-                    }
-
-                    throw $ex;
-                }
+            if (isset($validated['logo'])) {
+                $team->saveUploadedFile($validated['logo']);
             }
 
             if ($new) {

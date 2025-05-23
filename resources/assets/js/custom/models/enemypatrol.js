@@ -77,6 +77,25 @@ class EnemyPatrol extends Polyline {
     }
 
     /**
+     * Smoothes out the patrol a bit so the edges aren't that sharp
+     *
+     * @returns {L.Layer|null}
+     */
+    _updateOffsetLayer() {
+        console.assert(this instanceof EnemyPatrol, 'this is not an EnemyPatrol', this);
+
+        // Build a layer based off a hull if we're supposed to
+        let vertices = this.getVertices();
+
+        let arcSegments = c.map.enemypatrol.arcSegments(vertices.length);
+        let offsetLatLngs = createOffsetPolygon(vertices, c.map.enemypatrol.margin, arcSegments, true);
+        if (offsetLatLngs.length > 3) {
+            this.layer.setLatLngs(offsetLatLngs);
+            this.rebindTooltip();
+        }
+    }
+
+    /**
      * Gets the actual decorator for this map object.
      * @returns {*}
      * @private
@@ -125,6 +144,18 @@ class EnemyPatrol extends Polyline {
         }
 
         return result;
+    }
+
+    /**
+     * @inheritDoc
+     **/
+    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
+        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
+
+        // Only called when not in admin state
+        if (!(getState().getMapContext() instanceof MapContextMappingVersionEdit)) {
+            this._updateOffsetLayer();
+        }
     }
 
     /**

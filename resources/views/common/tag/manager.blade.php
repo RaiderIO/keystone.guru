@@ -1,10 +1,12 @@
 <?php
 
-/** @var string $category */
-
-/** @var string $theme */
+/**
+ * @var string $category
+ * @var string $theme
+ */
 
 use App\Models\Tags\TagCategory;
+use App\Models\User;
 
 $tagCategoryNameMapping = [
     1 => __('view_common.tag.manager.route_personal'),
@@ -12,7 +14,7 @@ $tagCategoryNameMapping = [
 ];
 
 $tags        = Auth::user()->tags(TagCategory::ALL[$category])->groupByRaw('name')->get()->groupBy(['tag_category_id']);
-$isDarkTheme = $theme === 'darkly';
+$isDarkTheme = $theme === User::THEME_DARKLY;
 ?>
 @include('common.general.inline', ['path' => 'common/tag/tagmanager'])
 

@@ -93,7 +93,7 @@ class ViewService implements ViewServiceInterface
             $latestReleaseSpotlight = $latestReleaseBuilder->where('spotlight', true)
                 ->whereDate('created_at', '>',
                     Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))->toDateTimeString()
-                )->latest()->first();
+                )->first();
 
             $allRegions    = GameServerRegion::all();
             $allExpansions = Expansion::with(['dungeons', 'raids'])->orderBy('released_at', 'desc')->get();
@@ -181,6 +181,8 @@ class ViewService implements ViewServiceInterface
         return $this->cacheService->setCacheEnabled($useCache)->remember(
             sprintf('view_variables:game_server_region:%s', $gameServerRegion->short),
             function () use ($gameServerRegion) {
+                // So we're already caching the result of this function, Model Cache doesn't need to be involved at this time
+                // The results will likely explode the model cache (and redis usage as a result) so don't use it
                 $currentExpansion = $this->expansionService->getCurrentExpansion($gameServerRegion);
                 $currentSeason    = $this->expansionService->getCurrentSeason($currentExpansion, $gameServerRegion);
 

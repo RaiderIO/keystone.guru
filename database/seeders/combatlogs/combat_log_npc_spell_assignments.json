@@ -8638,5 +8638,410 @@
         "raw_event": "4\/11\/2025 05:33:27.0971  SPELL_PERIODIC_DAMAGE,Creature-0-5211-0-7127-8534-0000789B28,\"Putrid Gargoyle\",0xa28,0x0,Player-5827-0204321D,\"Carl\u00f8s-LivingFlame-EU\",0x548,0x0,16573,\"Putrid Bile\",0x8,Player-5827-0204321D,0000000000000000,77,100,0,0,0,0,0,-1,0,0,0,2294.86,-5344.84,1423,5.2505,84,14,15,-1,8,0,0,0,nil,nil,nil,ST\r\n",
         "created_at": "2025-04-11T12:13:16+00:00",
         "updated_at": "2025-04-11T12:13:16+00:00"
+    },
+    {
+        "id": 1013,
+        "npc_id": 216336,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-010325_204722_5_ara-kara-city-of-echoes.zip",
+        "raw_event": "1\/3\/2025 20:48:45.4221  SPELL_CAST_SUCCESS,Creature-0-1471-2660-3459-216336-0010783ED5,\"Ravenous Crawler\",0xa48,0x0,Player-1084-0B00EB15,\"Ryerock-TarrenMill-EU\",0x20512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-1471-2660-3459-216336-0010783ED5,0000000000000000,7950696,8921503,0,0,42857,0,0,0,1,0,0,0,-286.84,408.53,2357,1.0263,80\r\n",
+        "created_at": "2025-04-18T14:09:59+00:00",
+        "updated_at": "2025-04-18T14:09:59+00:00"
+    },
+    {
+        "id": 1014,
+        "npc_id": 214840,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-010325_204722_5_ara-kara-city-of-echoes.zip",
+        "raw_event": "1\/3\/2025 20:50:50.6771  SPELL_CAST_SUCCESS,Creature-0-1471-2660-3459-214840-000A783ED5,\"Engorged Crawler\",0xa48,0x0,Player-1084-0B00EB15,\"Ryerock-TarrenMill-EU\",0x20512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-1471-2660-3459-214840-000A783ED5,0000000000000000,14340973,38334581,0,0,42857,0,0,0,1,0,0,0,-167.75,442.64,2357,2.2030,80\r\n",
+        "created_at": "2025-04-18T14:10:00+00:00",
+        "updated_at": "2025-04-18T14:10:00+00:00"
+    },
+    {
+        "id": 1015,
+        "npc_id": 216365,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-010325_204722_5_ara-kara-city-of-echoes.zip",
+        "raw_event": "1\/3\/2025 21:01:33.6601  SPELL_CAST_SUCCESS,Creature-0-1471-2660-3459-216365-0000783ED5,\"Winged Carrier\",0xa48,0x0,Player-1084-0B00EB15,\"Ryerock-TarrenMill-EU\",0x20512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-1471-2660-3459-216365-0000783ED5,0000000000000000,14343607,24394734,0,0,42857,0,0,0,1,0,0,0,-334.64,970.15,2358,2.7138,80\r\n",
+        "created_at": "2025-04-18T14:10:04+00:00",
+        "updated_at": "2025-04-18T14:10:04+00:00"
+    },
+    {
+        "id": 1016,
+        "npc_id": 224219,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-011325_210141_9_grim-batol.zip",
+        "raw_event": "1\/13\/2025 22:36:46.3521  SPELL_CAST_SUCCESS,Creature-0-3767-670-13522-224219-00030586FD,\"Twilight Earthcaller\",0xa48,0x0,Player-1084-0A5F4542,\"Paltalin-TarrenMill-EU\",0x20512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-3767-670-13522-224219-00030586FD,0000000000000000,3196166,34053963,0,0,42857,0,0,0,0,7988,7988,0,-507.87,-308.60,293,1.2086,80\r\n",
+        "created_at": "2025-04-18T14:10:45+00:00",
+        "updated_at": "2025-04-18T14:10:45+00:00"
+    },
+    {
+        "id": 1017,
+        "npc_id": 224152,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-011325_210141_9_grim-batol.zip",
+        "raw_event": "1\/13\/2025 22:36:46.3521  SPELL_CAST_SUCCESS,Creature-0-3767-670-13522-224152-00050586FD,\"Twilight Brute\",0xa48,0x0,Player-1084-0A5F4542,\"Paltalin-TarrenMill-EU\",0x20512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-3767-670-13522-224152-00050586FD,0000000000000000,9693362,42567454,0,0,42857,0,0,0,1,0,0,0,-507.30,-307.02,293,4.4182,80\r\n",
+        "created_at": "2025-04-18T14:10:45+00:00",
+        "updated_at": "2025-04-18T14:10:45+00:00"
+    },
+    {
+        "id": 1018,
+        "npc_id": 136006,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-040625_183304_10_the-motherlode.zip",
+        "raw_event": "4\/6\/2025 22:33:09.6681  SPELL_CAST_SUCCESS,Creature-0-4249-1594-6460-136006-000772F28F,\"Rowdy Reveler\",0xa28,0x0,Player-1084-0A5F453F,\"M\u00e1lic-TarrenMill-EU\",0x512,0x20,224729,\"Bursting Shot\",0x1,Creature-0-4249-1594-6460-136006-000772F28F,0000000000000000,14903807,19552058,0,0,42857,0,0,0,1,0,0,0,824.92,-3669.25,1010,6.1588,80\r\n",
+        "created_at": "2025-04-18T14:16:25+00:00",
+        "updated_at": "2025-04-18T14:16:25+00:00"
+    },
+    {
+        "id": 1019,
+        "npc_id": 136005,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-040625_183304_10_the-motherlode.zip",
+        "raw_event": "4\/6\/2025 22:33:09.6681  SPELL_CAST_SUCCESS,Creature-0-4249-1594-6460-136005-000DF2F28F,\"Rowdy Reveler\",0xa28,0x0,Player-1084-0A5F8492,\"Jaxeek-TarrenMill-EU\",0x512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-4249-1594-6460-136005-000DF2F28F,0000000000000000,15811175,19552058,0,0,42857,0,0,0,1,0,0,0,824.81,-3676.39,1010,0.4594,80\r\n",
+        "created_at": "2025-04-18T14:16:25+00:00",
+        "updated_at": "2025-04-18T14:16:25+00:00"
+    },
+    {
+        "id": 1020,
+        "npc_id": 206697,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-040625_183304_11_priory-of-the-sacred-flame.zip",
+        "raw_event": "4\/6\/2025 22:03:16.8161  SPELL_CAST_SUCCESS,Creature-0-3103-2649-19020-206697-000372E712,\"Devout Priest\",0xa48,0x0,Player-1084-0A5F453F,\"M\u00e1lic-TarrenMill-EU\",0x512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-3103-2649-19020-206697-000372E712,0000000000000000,33841504,91225222,0,0,42857,0,0,0,0,7988,7988,0,2968.59,1555.32,2309,1.2148,80\r\n",
+        "created_at": "2025-04-18T14:16:58+00:00",
+        "updated_at": "2025-04-18T14:16:58+00:00"
+    },
+    {
+        "id": 1021,
+        "npc_id": 211140,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-040625_183304_11_priory-of-the-sacred-flame.zip",
+        "raw_event": "4\/6\/2025 22:10:54.7331  SPELL_CAST_SUCCESS,Creature-0-3103-2649-19020-211140-0004F2EDC8,\"Arathi Neophyte\",0xa48,0x0,Player-1084-0B0D8966,\"Ryersham-TarrenMill-EU\",0x512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-3103-2649-19020-211140-0004F2EDC8,Creature-0-3103-2649-19020-211138-0000F2E712,7890664,143098398,0,0,42857,0,0,0,1,0,0,0,2927.14,1822.76,2309,4.3277,80\r\n",
+        "created_at": "2025-04-18T14:17:01+00:00",
+        "updated_at": "2025-04-18T14:17:01+00:00"
+    },
+    {
+        "id": 1022,
+        "npc_id": 211977,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-040625_183304_12_darkflame-cleft.zip",
+        "raw_event": "4\/6\/2025 23:09:23.6631  SPELL_CAST_SUCCESS,Creature-0-4252-2651-26850-211977-0000F2FAEF,\"Pack Mole\",0xa48,0x0,Player-1084-0A5F453F,\"M\u00e1lic-TarrenMill-EU\",0x512,0x20,224729,\"Bursting Shot\",0x1,Creature-0-4252-2651-26850-211977-0000F2FAEF,0000000000000000,106899237,123847406,0,0,42857,0,0,0,1,0,0,0,452.68,50.38,2303,0.6916,80\r\n",
+        "created_at": "2025-04-18T14:17:04+00:00",
+        "updated_at": "2025-04-18T14:17:04+00:00"
+    },
+    {
+        "id": 1023,
+        "npc_id": 231223,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-040725_201523_10_operation-floodgate.zip",
+        "raw_event": "4\/7\/2025 23:08:36.8701  SPELL_CAST_SUCCESS,Creature-0-4243-2773-13248-231223-00007447E2,\"Disturbed Kelp\",0x10a48,0x0,Player-1084-0B09BDCA,\"Giada-Dentarg-EU\",0x512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-4243-2773-13248-231223-00007447E2,0000000000000000,13027389,97760291,0,0,42857,0,0,0,1,0,0,0,1618.51,-2736.85,2387,6.1690,80\r\n",
+        "created_at": "2025-04-18T14:17:58+00:00",
+        "updated_at": "2025-04-18T14:17:58+00:00"
+    },
+    {
+        "id": 1024,
+        "npc_id": 233152,
+        "spell_id": 430171,
+        "combat_log_path": "tmp\/WoWCombatLog-040725_201523_3_darkflame-cleft.zip",
+        "raw_event": "4\/7\/2025 21:08:15.0731  SPELL_DAMAGE,Creature-0-4252-2651-24804-233152-0000742E33,\"Wandering Candle\",0x10a48,0x0,Player-1084-0A5EFED9,\"W\u00farmy-TarrenMill-EU\",0x511,0x0,430171,\"Quenching Blast\",0x4,Player-1084-0A5EFED9,0000000000000000,3944671,5406600,7060,62329,14204,532,0,0,0,2441400,2500000,0,302.24,-149.13,2303,3.4185,619,1461929,2016137,-1,4,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-04-18T14:18:32+00:00",
+        "updated_at": "2025-04-18T14:18:32+00:00"
+    },
+    {
+        "id": 1025,
+        "npc_id": 233152,
+        "spell_id": 440652,
+        "combat_log_path": "tmp\/WoWCombatLog-040725_201523_3_darkflame-cleft.zip",
+        "raw_event": "4\/7\/2025 21:08:47.6381  SPELL_DAMAGE,Creature-0-4252-2651-24804-233152-0000742E33,\"Wandering Candle\",0x10a48,0x0,Player-1084-0B09BDCA,\"Giada-Dentarg-EU\",0x512,0x0,440652,\"Surging Flame\",0x4,Player-1084-0B09BDCA,0000000000000000,3045516,8951520,106871,12360,68411,470,0,0,1,436,1300,0,274.41,-157.52,2303,1.2766,652,5906004,6720458,-1,4,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-04-18T14:18:32+00:00",
+        "updated_at": "2025-04-18T14:18:32+00:00"
+    },
+    {
+        "id": 1026,
+        "npc_id": 233152,
+        "spell_id": 440653,
+        "combat_log_path": "tmp\/WoWCombatLog-040725_201523_3_darkflame-cleft.zip",
+        "raw_event": "4\/7\/2025 21:08:47.7031  SPELL_AURA_APPLIED,Creature-0-4252-2651-24804-233152-0000742E33,\"Wandering Candle\",0x10a48,0x0,Player-1084-0B09BDCA,\"Giada-Dentarg-EU\",0x512,0x0,440653,\"Surging Flame\",0x4,DEBUFF\r\n",
+        "created_at": "2025-04-18T14:18:32+00:00",
+        "updated_at": "2025-04-18T14:18:32+00:00"
+    },
+    {
+        "id": 1027,
+        "npc_id": 163126,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-102424_230612_8_the-necrotic-wake.zip",
+        "raw_event": "10\/24\/2024 23:48:11.9612  SPELL_CAST_SUCCESS,Creature-0-3767-2286-6299-163126-00011ABF6A,\"Brittlebone Mage\",0xa48,0x0,Player-1084-05D21C13,\"Noctus-TarrenMill-EU\",0x512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-3767-2286-6299-163126-00011ABF6A,0000000000000000,8854910,13963718,0,0,42857,0,0,0,0,79880,79880,0,-3353.08,-3519.72,1666,5.4353,80\r\n",
+        "created_at": "2025-04-18T14:21:08+00:00",
+        "updated_at": "2025-04-18T14:21:08+00:00"
+    },
+    {
+        "id": 1028,
+        "npc_id": 220599,
+        "spell_id": 181089,
+        "combat_log_path": "tmp\/WoWCombatLog-110424_220624_9_ara-kara-city-of-echoes.zip",
+        "raw_event": "11\/4\/2024 22:56:37.0601  SPELL_AURA_APPLIED,Creature-0-3895-2660-20634-220599-0000294306,\"Bloodstained Webmage\",0x2248,0x0,Creature-0-3895-2660-20634-220599-0000294306,\"Bloodstained Webmage\",0x2248,0x0,181089,\"Encounter Event\",0x1,BUFF\r\n",
+        "created_at": "2025-04-18T14:22:11+00:00",
+        "updated_at": "2025-04-18T14:22:11+00:00"
+    },
+    {
+        "id": 1029,
+        "npc_id": 220599,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-110824_210518_8_ara-kara-city-of-echoes.zip",
+        "raw_event": "11\/8\/2024 21:25:30.5871  SPELL_CAST_SUCCESS,Creature-0-4252-2660-16672-220599-00002E73A3,\"Bloodstained Webmage\",0x2248,0x0,Player-1084-0A5F453F,\"M\u00e1lic-TarrenMill-EU\",0x20512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-4252-2660-16672-220599-00002E73A3,Creature-0-4252-2660-16672-215405-00002E7094,12421786,13963715,0,0,42857,0,0,0,1,0,0,0,-179.07,874.18,2357,2.6483,82\r\n",
+        "created_at": "2025-04-18T14:22:34+00:00",
+        "updated_at": "2025-04-18T14:22:34+00:00"
+    },
+    {
+        "id": 1030,
+        "npc_id": 220195,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-110824_210518_8_city-of-threads.zip",
+        "raw_event": "11\/9\/2024 00:18:35.2011  SPELL_CAST_SUCCESS,Creature-0-3112-2669-18023-220195-0002AE9BF1,\"Sureki Silkbinder\",0x10a48,0x0,Player-1084-0A5F8492,\"Jaxeek-TarrenMill-EU\",0x511,0x0,224729,\"Bursting Shot\",0x1,Creature-0-3112-2669-18023-220195-0002AE9BF1,0000000000000000,22354768,40029323,0,0,42857,0,0,0,0,7988,7988,0,-1694.41,-911.33,2343,2.3527,80\r\n",
+        "created_at": "2025-04-18T14:22:36+00:00",
+        "updated_at": "2025-04-18T14:22:36+00:00"
+    },
+    {
+        "id": 1031,
+        "npc_id": 164921,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-111024_215523_10_mists-of-tirna-scithe.zip",
+        "raw_event": "11\/10\/2024 23:22:58.2011  SPELL_CAST_SUCCESS,Creature-0-4247-2290-21354-164921-000031315F,\"Drust Harvester\",0x10a48,0x0,Player-1084-0A5F453F,\"M\u00e1lic-TarrenMill-EU\",0x20512,0x20,224729,\"Bursting Shot\",0x1,Creature-0-4247-2290-21354-164921-000031315F,0000000000000000,41128676,50699036,0,0,42857,0,0,0,0,7988,7988,0,-6995.08,1982.53,1669,0.4487,80\r\n",
+        "created_at": "2025-04-18T14:23:14+00:00",
+        "updated_at": "2025-04-18T14:23:14+00:00"
+    },
+    {
+        "id": 1032,
+        "npc_id": 163619,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-111024_215523_9_the-necrotic-wake.zip",
+        "raw_event": "11\/10\/2024 22:09:43.8661  SPELL_CAST_SUCCESS,Creature-0-4245-2286-2880-163619-0002B11ECD,\"Zolramus Bonecarver\",0xa48,0x0,Player-1084-0A5F453F,\"M\u00e1lic-TarrenMill-EU\",0x20512,0x20,224729,\"Bursting Shot\",0x1,Creature-0-4245-2286-2880-163619-0002B11ECD,0000000000000000,19322381,51080945,0,0,42857,0,0,0,0,79880,79880,0,-3274.10,-3502.85,1666,1.5404,80\r\n",
+        "created_at": "2025-04-18T14:23:26+00:00",
+        "updated_at": "2025-04-18T14:23:26+00:00"
+    },
+    {
+        "id": 1033,
+        "npc_id": 167117,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-111824_215935_10_mists-of-tirna-scithe.zip",
+        "raw_event": "11\/18\/2024 23:02:37.7251  SPELL_CAST_SUCCESS,Creature-0-4247-2290-1192-167117-0007BBB876,\"Spinemaw Larva\",0xa48,0x0,Player-1084-0AD43A4A,\"R\u00eda-Dentarg-EU\",0x20512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-4247-2290-1192-167117-0007BBB876,0000000000000000,10598522,11266452,0,0,42857,0,0,0,0,7988,7988,0,-7417.19,2682.66,1669,4.9727,80\r\n",
+        "created_at": "2025-04-18T14:24:15+00:00",
+        "updated_at": "2025-04-18T14:24:15+00:00"
+    },
+    {
+        "id": 1034,
+        "npc_id": 40167,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-111824_215935_9_grim-batol.zip",
+        "raw_event": "11\/18\/2024 22:12:40.5271  SPELL_CAST_SUCCESS,Creature-0-3112-670-3664-40167-0004BBAAA3,\"Twilight Beguiler\",0x10a48,0x0,Player-1084-0B09BDCA,\"Giada-Dentarg-EU\",0x20512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-3112-670-3664-40167-0004BBAAA3,0000000000000000,8344396,34053963,0,0,42857,0,0,0,0,79880,79880,0,-538.52,-492.87,293,5.5757,80\r\n",
+        "created_at": "2025-04-18T14:24:27+00:00",
+        "updated_at": "2025-04-18T14:24:27+00:00"
+    },
+    {
+        "id": 1035,
+        "npc_id": 224271,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-111824_215935_9_grim-batol.zip",
+        "raw_event": "11\/18\/2024 22:20:23.9781  SPELL_CAST_SUCCESS,Creature-0-3112-670-3664-224271-0007BBAAA3,\"Twilight Warlock\",0x10a48,0x0,Player-1084-0B09BDCA,\"Giada-Dentarg-EU\",0x20512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-3112-670-3664-224271-0007BBAAA3,0000000000000000,25461879,42567454,0,0,42857,0,0,0,0,39940,39940,0,-670.38,-691.49,293,2.2757,80\r\n",
+        "created_at": "2025-04-18T14:24:29+00:00",
+        "updated_at": "2025-04-18T14:24:29+00:00"
+    },
+    {
+        "id": 1036,
+        "npc_id": 137626,
+        "spell_id": 270590,
+        "combat_log_path": "tmp\/WoWCombatLog-112424_220508_10_siege-of-boralus.zip",
+        "raw_event": "11\/24\/2024 23:38:02.0921  SPELL_DAMAGE,Creature-0-4248-1822-22671-137626-000043AA98,\"Demolishing Terror\",0xa48,0x0,Player-1084-0AADE63F,\"Wurm\u00ede-TarrenMill-EU\",0x512,0x0,270590,\"Hull Cracker\",0x1,Player-1084-0AADE63F,0000000000000000,0,6019040,66251,18354,64010,796,0,0,0,2625000,2625000,0,149.85,-172.75,1162,1.4372,619,5040255,9296235,3810323,1,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-04-18T14:24:51+00:00",
+        "updated_at": "2025-04-18T14:24:51+00:00"
+    },
+    {
+        "id": 1037,
+        "npc_id": 129989,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-120224_221034_10_siege-of-boralus.zip",
+        "raw_event": "12\/2\/2024 22:53:06.6241  SPELL_CAST_SUCCESS,Creature-0-3103-1822-26608-129989-00004E2C1F,\"Irontide Powdershot\",0xa48,0x0,Player-1084-0AD43A4A,\"R\u00eda-Dentarg-EU\",0x20512,0x0,224729,\"Bursting Shot\",0x1,Creature-0-3103-1822-26608-129989-00004E2C1F,0000000000000000,7418588,9388710,0,0,42857,0,0,0,1,0,0,0,1007.83,-336.65,1162,4.5486,80\r\n",
+        "created_at": "2025-04-18T14:25:26+00:00",
+        "updated_at": "2025-04-18T14:25:26+00:00"
+    },
+    {
+        "id": 1038,
+        "npc_id": 212403,
+        "spell_id": 224729,
+        "combat_log_path": "tmp\/WoWCombatLog-121624_213841_9_the-stonevault.zip",
+        "raw_event": "12\/16\/2024 22:20:33.8261  SPELL_CAST_SUCCESS,Creature-0-4247-2652-5746-212403-0000E09859,\"Cursedheart Invader\",0x10a48,0x0,Player-1084-0A5F8492,\"Jaxeek-TarrenMill-EU\",0x511,0x0,224729,\"Bursting Shot\",0x1,Creature-0-4247-2652-5746-212403-0000E09859,0000000000000000,24267160,42567454,0,0,42857,0,0,0,1,0,0,0,-31.70,-41.95,2341,4.3378,80\r\n",
+        "created_at": "2025-04-18T14:27:02+00:00",
+        "updated_at": "2025-04-18T14:27:02+00:00"
+    },
+    {
+        "id": 1039,
+        "npc_id": 243100,
+        "spell_id": 1231645,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:14:48.679-7  SPELL_DAMAGE,Creature-0-5177-2856-14454-243100-0000005608,\"Shade of Balnazzar\",0xa28,0x0,Player-5813-024D2035,\"Addictedqt-WildGrowth-US\",0x514,0x0,1231645,\"Prey on the Weak\",0x20,Player-5813-024D2035,0000000000000000,74,100,0,0,0,0,0,-1,0,0,0,1666.13,-5372.96,0,0.9828,85,1728,1728,-1,32,0,0,0,nil,nil,nil,ST\r\n",
+        "created_at": "2025-04-18T21:18:50+00:00",
+        "updated_at": "2025-04-18T21:18:50+00:00"
+    },
+    {
+        "id": 1040,
+        "npc_id": 240811,
+        "spell_id": 14295,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:17:04.215-7  SPELL_AURA_REMOVED,Creature-0-5177-2856-14454-240811-000000545A,\"Balnazzar\",0xa48,0x0,Player-5813-01CCD5E1,\"Gazzle-WildGrowth-US\",0x40512,0x0,14295,\"Volley\",0x40,DEBUFF\r\n",
+        "created_at": "2025-04-18T21:18:52+00:00",
+        "updated_at": "2025-04-18T21:18:52+00:00"
+    },
+    {
+        "id": 1041,
+        "npc_id": 240811,
+        "spell_id": 25295,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:17:40.085-7  SPELL_PERIODIC_DAMAGE,Creature-0-5177-2856-14454-240811-000000545A,\"Balnazzar\",0x10a48,0x0,Player-5813-01CCD5E1,\"Gazzle-WildGrowth-US\",0x40512,0x0,25295,\"Serpent Sting\",0x8,Player-5813-01CCD5E1,0000000000000000,92,100,0,0,0,0,0,-1,0,0,0,1675.27,-5355.40,0,1.1592,87,475,485,-1,8,0,0,0,nil,nil,nil,ST\r\n",
+        "created_at": "2025-04-18T21:18:53+00:00",
+        "updated_at": "2025-04-18T21:18:53+00:00"
+    },
+    {
+        "id": 1042,
+        "npc_id": 240811,
+        "spell_id": 24977,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:20:04.390-7  SPELL_PERIODIC_MISSED,Creature-0-5177-2856-14454-240811-000000545A,\"Balnazzar\",0x10a48,0x0,Player-5813-025BABF5,\"Squidheals-WildGrowth-US\",0x514,0x0,24977,\"Insect Swarm\",0x8,ABSORB,nil,213,220,ST\r\n",
+        "created_at": "2025-04-18T21:18:55+00:00",
+        "updated_at": "2025-04-18T21:18:55+00:00"
+    },
+    {
+        "id": 1043,
+        "npc_id": 240811,
+        "spell_id": 18809,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:28:20.140-7  SPELL_PERIODIC_MISSED,Creature-0-5177-2856-14454-240811-0000005789,\"Balnazzar\",0x10a48,0x0,Player-5813-02250E21,\"Papylepewpew-WildGrowth-US\",0x514,0x0,18809,\"Pyroblast\",0x4,ABSORB,nil,287,294,ST\r\n",
+        "created_at": "2025-04-18T21:18:59+00:00",
+        "updated_at": "2025-04-18T21:18:59+00:00"
+    },
+    {
+        "id": 1044,
+        "npc_id": 240811,
+        "spell_id": 10151,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:28:21.615-7  SPELL_PERIODIC_MISSED,Creature-0-5177-2856-14454-240811-0000005789,\"Balnazzar\",0x10a48,0x0,Player-5813-01CCD5E1,\"Gazzle-WildGrowth-US\",0x40512,0x0,10151,\"Fireball\",0x4,ABSORB,nil,21,21,ST\r\n",
+        "created_at": "2025-04-18T21:19:00+00:00",
+        "updated_at": "2025-04-18T21:19:00+00:00"
+    },
+    {
+        "id": 1045,
+        "npc_id": 240811,
+        "spell_id": 10216,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:29:03.658-7  SPELL_PERIODIC_DAMAGE,Creature-0-5177-2856-14454-240811-0000005789,\"Balnazzar\",0x10a48,0x0,Player-5813-01CD53A4,\"Pambeasly-WildGrowth-US\",0x512,0x0,10216,\"Flamestrike\",0x4,Player-5813-01CD53A4,0000000000000000,91,100,0,0,0,0,0,-1,0,0,0,1685.05,-5334.17,0,3.8340,85,79,85,-1,4,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-04-18T21:19:01+00:00",
+        "updated_at": "2025-04-18T21:19:01+00:00"
+    },
+    {
+        "id": 1046,
+        "npc_id": 240811,
+        "spell_id": 10187,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:29:04.512-7  SPELL_AURA_REMOVED,Creature-0-5177-2856-14454-240811-0000005789,\"Balnazzar\",0x10a48,0x0,Player-5813-01CD53A4,\"Pambeasly-WildGrowth-US\",0x512,0x0,10187,\"Blizzard\",0x10,DEBUFF\r\n",
+        "created_at": "2025-04-18T21:19:02+00:00",
+        "updated_at": "2025-04-18T21:19:02+00:00"
+    },
+    {
+        "id": 1047,
+        "npc_id": 242224,
+        "spell_id": 1236287,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:33:15.692-7  SPELL_DAMAGE,Creature-0-5177-2856-14454-242224-000000598D,\"Cardinal Stiltz\",0xa48,0x0,Player-5813-024D2035,\"Addictedqt-WildGrowth-US\",0x514,0x0,1236287,\"Holy Fire\",0x2,Player-5813-024D2035,0000000000000000,86,100,0,0,0,0,0,-1,0,0,0,1399.31,-5702.33,0,2.4293,85,957,957,-1,2,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-04-18T21:19:04+00:00",
+        "updated_at": "2025-04-18T21:19:04+00:00"
+    },
+    {
+        "id": 1048,
+        "npc_id": 244014,
+        "spell_id": 403233,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:38:45.151-7  SPELL_AURA_APPLIED,Creature-0-5177-2856-14454-244014-000000598D,\"Scarlet Priest\",0xa48,0x0,Creature-0-5177-2856-14454-244014-000000598D,\"Scarlet Priest\",0xa48,0x0,403233,\"Meathook\",0x1,BUFF\r\n",
+        "created_at": "2025-04-18T21:19:06+00:00",
+        "updated_at": "2025-04-18T21:19:06+00:00"
+    },
+    {
+        "id": 1049,
+        "npc_id": 244068,
+        "spell_id": 1236173,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:46:52.248-7  SPELL_CAST_SUCCESS,Creature-0-5177-2856-14454-244068-000080598D,\"Scarlet Mage\",0xa48,0x0,Player-5813-01D5BF65,\"Sin\u00e6d-WildGrowth-US\",0x40514,0x0,1236173,\"Pyroblast\",0x4,Creature-0-5177-2856-14454-244068-000080598D,0000000000000000,126033,248713,0,0,0,0,0,-1,0,0,0,1464.64,-5786.27,0,0.2808,61\r\n",
+        "created_at": "2025-04-18T21:19:10+00:00",
+        "updated_at": "2025-04-18T21:19:10+00:00"
+    },
+    {
+        "id": 1050,
+        "npc_id": 240812,
+        "spell_id": 1235571,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:50:39.647-7  SPELL_DAMAGE,Creature-0-5177-2856-14454-240812-0000005DB4,\"High Commander Beatrix\",0xa48,0x0,Player-5813-02569091,\"Jennirebecca-WildGrowth-US\",0x512,0x0,1235571,\"Out of Bounds\",0x2,Player-5813-02569091,0000000000000000,62,100,0,0,0,0,0,-1,0,0,0,1684.60,-5881.32,0,1.0921,86,2500,2500,-1,2,0,0,0,nil,nil,nil,ST\r\n",
+        "created_at": "2025-04-18T21:19:11+00:00",
+        "updated_at": "2025-04-18T21:19:11+00:00"
+    },
+    {
+        "id": 1051,
+        "npc_id": 240812,
+        "spell_id": 1232389,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:52:32.747-7  SPELL_CAST_SUCCESS,Creature-0-5177-2856-14454-240812-0000005DB4,\"High Commander Beatrix\",0x10a48,0x0,Player-5813-01D5BF65,\"Sin\u00e6d-WildGrowth-US\",0x40514,0x0,1232389,\"Unwavering Blade\",0x2,Creature-0-5177-2856-14454-240812-0000005DB4,0000000000000000,9267989,10000000,0,0,0,0,0,-1,0,0,0,1706.05,-5825.14,0,1.3955,63\r\n",
+        "created_at": "2025-04-18T21:19:11+00:00",
+        "updated_at": "2025-04-18T21:19:11+00:00"
+    },
+    {
+        "id": 1052,
+        "npc_id": 242908,
+        "spell_id": 1231669,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:52:35.572-7  SPELL_DAMAGE,Creature-0-5177-2856-14454-242908-000B005E6E,\"Scarlet Archer\",0xa48,0x0,Player-5813-01CCD5E1,\"Gazzle-WildGrowth-US\",0x40512,0x4,1231669,\"Scarlet Arrows\",0x4,Player-5813-01CCD5E1,0000000000000000,98,100,0,0,0,0,0,-1,0,0,0,1707.39,-5828.29,0,2.9066,87,283,452,-1,4,0,0,0,nil,nil,nil,ST\r\n",
+        "created_at": "2025-04-18T21:19:12+00:00",
+        "updated_at": "2025-04-18T21:19:12+00:00"
+    },
+    {
+        "id": 1053,
+        "npc_id": 240812,
+        "spell_id": 1232390,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:52:40.423-7  SPELL_AURA_APPLIED,Creature-0-5177-2856-14454-240812-0000005DB4,\"High Commander Beatrix\",0x10a48,0x0,Player-5813-01CD2D3F,\"Yakamo-WildGrowth-US\",0x514,0x0,1232390,\"Rose's Thorn\",0x1,DEBUFF\r\n",
+        "created_at": "2025-04-18T21:19:12+00:00",
+        "updated_at": "2025-04-18T21:19:12+00:00"
+    },
+    {
+        "id": 1054,
+        "npc_id": 240812,
+        "spell_id": 1232637,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 18:53:05.316-7  SPELL_DAMAGE,Creature-0-5177-2856-14454-240812-0000005DB4,\"High Commander Beatrix\",0x10a48,0x0,Player-5813-02569091,\"Jennirebecca-WildGrowth-US\",0x512,0x0,1232637,\"Stock Break\",0x2,Player-5813-02569091,0000000000000000,17,100,0,0,0,0,0,-1,0,0,0,1711.90,-5831.47,0,2.2947,86,5425,6500,-1,2,0,0,1075,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-04-18T21:19:13+00:00",
+        "updated_at": "2025-04-18T21:19:13+00:00"
+    },
+    {
+        "id": 1055,
+        "npc_id": 240796,
+        "spell_id": 1235538,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 19:45:47.848-7  SPELL_CAST_SUCCESS,Creature-0-5177-2856-14454-240796-0000004F19,\"Scarlet Cavalier\",0xa48,0x0,Player-5813-026A13DF,\"Farmvael-WildGrowth-US\",0x514,0x0,1235538,\"Charge\",0x1,Creature-0-5177-2856-14454-240796-0000004F19,0000000000000000,73629,251520,0,0,0,0,0,-1,0,0,0,1848.63,-5817.31,0,2.6657,61\r\n",
+        "created_at": "2025-04-18T21:19:29+00:00",
+        "updated_at": "2025-04-18T21:19:29+00:00"
+    },
+    {
+        "id": 1056,
+        "npc_id": 243139,
+        "spell_id": 1232333,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 19:54:19.759-7  SPELL_AURA_APPLIED,Creature-0-5177-2856-14454-243139-0000006D5B,\"Lightgorged Whelp\",0xa48,0x0,Creature-0-5177-2856-14454-243139-0000006D5B,\"Lightgorged Whelp\",0xa48,0x0,1232333,\"Aberrant Bloat\",0x1,BUFF\r\n",
+        "created_at": "2025-04-18T21:19:31+00:00",
+        "updated_at": "2025-04-18T21:19:31+00:00"
+    },
+    {
+        "id": 1057,
+        "npc_id": 243139,
+        "spell_id": 1232332,
+        "combat_log_path": "tmp4-scarlet-enclave\/WoWCombatLog-041625_180556.zip",
+        "raw_event": "4\/16\/2025 19:54:35.274-7  SPELL_DAMAGE,Creature-0-5177-2856-14454-243139-0000006D5B,\"Lightgorged Whelp\",0xa48,0x80,Player-5813-026A13DF,\"Farmvael-WildGrowth-US\",0x514,0x0,1232332,\"Unstable Detonation\",0x2,Player-5813-026A13DF,0000000000000000,77,100,0,0,0,0,0,-1,0,0,0,2000.09,-5779.90,0,2.5895,86,1000,1000,-1,2,0,0,0,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-04-18T21:19:31+00:00",
+        "updated_at": "2025-04-18T21:19:31+00:00"
     }
 ]

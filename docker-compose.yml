@@ -13,7 +13,6 @@ services:
     working_dir: /var/www/
     volumes:
       - ./:/var/www
-      - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ~/.ssh:/root/.ssh
     networks:
       - keystone.guru
@@ -34,7 +33,6 @@ services:
     command: php /var/www/artisan octane:start --host=0.0.0.0 --port=9501 --workers=1 --task-workers=1
     volumes:
       - ./:/var/www
-      - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ~/.ssh:/root/.ssh
     networks:
       - keystone.guru
@@ -55,7 +53,6 @@ services:
     working_dir: /var/www/
     volumes:
       - ./:/var/www
-      - ./docker-compose/app/usr/local/etc/php/conf.d/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
       - ~/.ssh:/root/.ssh
     networks:
       - keystone.guru
@@ -136,6 +133,32 @@ services:
     volumes:
       - ./docker-compose/mysql-combatlog:/var/lib/mysql
       - ./docker-compose/data:/tmp/data
+    networks:
+      - keystone.guru
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.2.2
+    restart: always
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "34016:80"
+    networks:
+      - keystone.guru
+
+  phpmyadmin-combatlog:
+    image: phpmyadmin/phpmyadmin:5.2.2
+    restart: always
+    depends_on:
+      - db-combatlog
+    environment:
+      PMA_HOST: db-combatlog
+      MYSQL_ROOT_PASSWORD: ${DB_COMBATLOG_PASSWORD}
+    ports:
+      - "34017:80"
     networks:
       - keystone.guru
 

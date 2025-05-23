@@ -438,9 +438,18 @@ let c = {
             // Function so that you could do custom stuff with it if you want
             defaultColor: function () {
                 return '#003280';
-            }, // #003280
-            defaultWeight: 2,
+            },
+            margin: 0.6,
+            arcSegments: function (nr) {
+                return Math.max(5, (9 - nr) + (getState().getMapZoomLevel() * 2));
+            },
+            polygonOptions: {
+                weight: 1,
+                fillOpacity: 0,
+                opacity: 1
+            },
 
+            defaultWeight: 2,
             polylineOptions: {
                 color: '#090',
                 weight: 2,

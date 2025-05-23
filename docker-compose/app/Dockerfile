@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     gettext
 
+
 # Install global packages
 RUN npm i -g handlebars puppeteer@19.9.0
 
@@ -108,6 +109,9 @@ RUN unzip /tmp/LuaBitOp-1.0.3.zip -d /tmp && \
     sudo mkdir -p /usr/lib/lua/5.3/ && \
     cp bit.so /usr/lib/lua/5.3/
 
+# Enable LUA
+RUN docker-php-ext-enable lua
+
 # Setup files/folders
 COPY etc/ /etc/
 
@@ -116,6 +120,9 @@ RUN chmod -R 440 /etc/sudoers.d/
 COPY .env /tmp/.env
 
 COPY root/ /root/
+
+# Only copy this file over to prevent overriding the entire folder which will be changed by docker-php-ext-enable
+COPY usr/local/etc/php/conf.d/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 
 COPY var/ /var/
 

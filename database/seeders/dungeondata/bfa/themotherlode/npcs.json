@@ -2024,6 +2024,9 @@
         "npc_characteristics": [],
         "npc_spells": [
             {
+                "spell_id": 224729
+            },
+            {
                 "spell_id": 276304
             }
         ],
@@ -2073,7 +2076,11 @@
                 "characteristic_id": 19
             }
         ],
-        "npc_spells": [],
+        "npc_spells": [
+            {
+                "spell_id": 224729
+            }
+        ],
         "npc_enemy_forces": []
     },
     {
