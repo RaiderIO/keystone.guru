@@ -29,7 +29,8 @@ class RedisClearIdleKeys extends SchedulerCommand
         return $this->trackTime(function () use ($cacheService) {
             $seconds = (int)$this->argument('seconds');
 
-            $cacheService->clearIdleKeys($seconds);
+            $keysCleared = $cacheService->clearIdleKeys($seconds);
+            $this->info(sprintf('Cleared %d keys', $keysCleared));
 
             return 0;
         });
