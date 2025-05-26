@@ -22,12 +22,25 @@ class File extends Model
     /**
      * @var array None of this really matters for externals
      */
-    public $hidden = ['id', 'disk', 'path', 'model_id', 'model_class', 'created_at', 'updated_at'];
+    public $hidden = [
+        'id',
+        'disk',
+        'path',
+        'model_id',
+        'model_class',
+        'created_at',
+        'updated_at',
+        'pivot'
+    ];
 
     /**
      * @var array Only this really matters when we're echoing the file.
      */
-    public $appends = ['url', 'icon_url'];
+    public $appends = [
+        'url',
+        // @TODO remove this? Find usages in .js files though
+        'icon_url'
+    ];
 
     protected $fillable = ['model_id', 'model_class', 'disk', 'path'];
 
@@ -57,14 +70,6 @@ class File extends Model
     public function getIconUrlAttribute(): string
     {
         return $this->getURL();
-        // Unavailable since switching to different Image library - but we don't use it anyways
-        //        $iconUrl = '';
-        //        // Only if it's an image!
-        //        if(Image::format($this->getUrl()) !== null){
-        //            // Send as little data as possible, fetch the url, but strip it off the full path
-        //            $iconUrl = @parse_url(Image::url($this->getUrl(), 32, 32))['path'];
-        //        }
-        //        return $iconUrl;
     }
 
     /**
@@ -144,6 +149,16 @@ class File extends Model
         }
 
         return $file;
+    }
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::deleting(function (File $file) {
+            // Delete the file from disk when the model is deleted
+            $file->deleteFromDisk();
+        });
     }
 
 }

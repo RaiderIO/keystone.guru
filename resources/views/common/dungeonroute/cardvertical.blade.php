@@ -52,10 +52,10 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                 <div class="{{ $owlClass }} light-slider-container">
                     <ul class="light-slider {{ $owlClass }}">
                         @if( $dungeonroute->has_thumbnail )
-                            @foreach($activeFloors as $floor)
+                            @foreach($dungeonroute->thumbnails as $thumbnail)
                                 <li>
                                     <img class="thumbnail"
-                                         src="{{ $dungeonroute->getThumbnailUrl($floor->index) }}"
+                                         src="{{ $thumbnail->getURL() }}"
                                          style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"
                                          alt="Thumbnail"/>
                                 </li>

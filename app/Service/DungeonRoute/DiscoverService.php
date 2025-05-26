@@ -48,6 +48,7 @@ class DiscoverService extends BaseDiscoverService
                 'affixes',
                 'ratings',
                 'mappingVersion',
+                'thumbnails',
                 'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
                 'season'  => fn(BelongsTo $query) => $query->without(['affixGroups', 'dungeons']),
             ])
@@ -108,6 +109,7 @@ class DiscoverService extends BaseDiscoverService
                 'affixes',
                 'ratings',
                 'mappingVersion',
+                'thumbnails',
                 'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
                 'season'  => fn(BelongsTo $query) => $query->without(['affixGroups', 'dungeons']),
             ])

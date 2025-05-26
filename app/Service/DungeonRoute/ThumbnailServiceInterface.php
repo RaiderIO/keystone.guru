@@ -3,12 +3,15 @@
 namespace App\Service\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use Illuminate\Support\Collection;
 
 interface ThumbnailServiceInterface
 {
-    public function queueThumbnailRefresh(DungeonRoute $dungeonRoute): bool;
+    public function queueThumbnailRefresh(DungeonRoute $dungeonRoute, bool $force = false): bool;
+
+    public function queueThumbnailRefreshIfMissing(Collection $dungeonRoutes, bool $force = false): bool;
 
     /**
      * @return Collection<DungeonRouteThumbnailJob>
@@ -27,7 +30,7 @@ interface ThumbnailServiceInterface
         DungeonRoute $dungeonRoute,
         int          $floorIndex,
         int          $attempts
-    ): bool;
+    ): ?DungeonRouteThumbnail;
 
     public function createThumbnailCustom(
         DungeonRoute $dungeonRoute,
@@ -39,12 +42,9 @@ interface ThumbnailServiceInterface
         ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
         ?int         $quality = null
-    ): bool;
+    ): ?DungeonRouteThumbnail;
 
-    /**
-     * @return void
-     */
-    public function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): bool;
+    public function copyThumbnails(DungeonRoute $sourceDungeonRoute, DungeonRoute $targetDungeonRoute): ?Collection;
 
     public function hasThumbnailsGenerated(DungeonRoute $dungeonRoute): bool;
 }

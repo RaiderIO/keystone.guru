@@ -78,7 +78,7 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function get(Request $request)
+    public function get(Request $request, ThumbnailServiceInterface $thumbnailService)
     {
         // Check if we're filtering based on team or not
         $teamPublicKey = $request->get('team_public_key', false);
@@ -90,7 +90,7 @@ class AjaxDungeonRouteController extends Controller
         // Which relationship should be load?
         $tagsRelationshipName = $teamPublicKey ? 'tagsteam' : 'tagspersonal';
 
-        $routes = DungeonRoute::with(['faction', 'specializations', 'classes', 'races', 'dungeon', 'affixes',
+        $routes = DungeonRoute::with(['faction', 'specializations', 'classes', 'races', 'dungeon', 'affixes', 'thumbnails',
                                       'author', 'routeattributes', 'ratings', 'metricAggregations', $tagsRelationshipName])
             ->without(['season'])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
@@ -200,7 +200,7 @@ class AjaxDungeonRouteController extends Controller
 
         $dtHandler = new DungeonRoutesDatatablesHandler($request);
 
-        return $dtHandler->setBuilder($routes)->addColumnHandler([
+        $result = $dtHandler->setBuilder($routes)->addColumnHandler([
             // Route titles
             new TitleColumnHandler($dtHandler),
             // Handles any searching/filtering based on dungeon
@@ -218,6 +218,13 @@ class AjaxDungeonRouteController extends Controller
             // Allow sorting by rating
             new RatingColumnHandler($dtHandler),
         ])->applyRequestToBuilder()->getResult();
+
+        // Ensure that the resulting routes have their thumbnails refreshed if they are missing
+        if (isset($result['data'])) {
+            $thumbnailService->queueThumbnailRefreshIfMissing(collect($result['data']));
+        }
+
+        return $result;
     }
 
     /**
@@ -225,8 +232,11 @@ class AjaxDungeonRouteController extends Controller
      *
      * @throws Exception
      */
-    public function htmlsearch(AjaxDungeonRouteSearchFormRequest $request, ExpansionServiceInterface $expansionService)
-    {
+    public function htmlsearch(
+        AjaxDungeonRouteSearchFormRequest $request,
+        ExpansionServiceInterface         $expansionService,
+        ThumbnailServiceInterface         $thumbnailService
+    ) {
         // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
         // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
         // May be modified/adjusted later on
@@ -240,7 +250,7 @@ class AjaxDungeonRouteController extends Controller
             $season = Season::find($request->get('season'));
         }
 
-        $query = DungeonRoute::with(['faction', 'specializations', 'classes', 'races', 'author', 'affixes',
+        $query = DungeonRoute::with(['faction', 'specializations', 'classes', 'races', 'author', 'affixes', 'thumbnails',
                                      'ratings', 'routeattributes', 'dungeon', 'dungeon.activeFloors', 'mappingVersion'])
             ->join('dungeons', 'dungeon_routes.dungeon_id', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
@@ -331,13 +341,10 @@ class AjaxDungeonRouteController extends Controller
         // Disable some checks when we're local - otherwise we'd get no routes at all
         $query->when(config('app.env') !== 'local', static function (Builder $builder) {
             $builder->where('published_state_id', PublishedState::ALL[PublishedState::WORLD])
-//                ->where('demo', 0)
                 ->where('dungeons.active', 1);
         })->offset((int)$request->get('offset', 0))
             ->limit((int)$request->get('limit', 20))
             ->selectRaw($selectRaw);
-
-        //        $query->dd();
 
         $result = $query->get();
 
@@ -345,6 +352,9 @@ class AjaxDungeonRouteController extends Controller
             return response()->noContent();
         } else {
             $userRegion = GameServerRegion::getUserOrDefaultRegion();
+
+            // Ensure that the resulting routes have their thumbnails refreshed if they are missing
+            $thumbnailService->queueThumbnailRefreshIfMissing($result);
 
             return view('common.dungeonroute.cardlist', [
                 'currentAffixGroup' =>
@@ -362,8 +372,13 @@ class AjaxDungeonRouteController extends Controller
     /**
      * @return Response|string
      */
-    public function htmlsearchcategory(Request $request, string $category, DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService)
-    {
+    public function htmlsearchcategory(
+        Request $request,
+        string $category,
+        DiscoverServiceInterface $discoverService,
+        ExpansionServiceInterface $expansionService,
+        ThumbnailServiceInterface $thumbnailService
+    ) {
         $result = collect();
 
         // Prevent jokesters from playing around
@@ -435,6 +450,8 @@ class AjaxDungeonRouteController extends Controller
         if ($result->isEmpty()) {
             return response()->noContent();
         } else {
+            $thumbnailService->queueThumbnailRefreshIfMissing($result);
+
             return view('common.dungeonroute.cardlist', [
                 'currentAffixGroup' => $currentAffixGroup,
                 'dungeonroutes'     => $result,
@@ -785,7 +802,7 @@ class AjaxDungeonRouteController extends Controller
 
     public function refreshThumbnail(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute): Response
     {
-        $thumbnailService->queueThumbnailRefresh($dungeonroute);
+        $thumbnailService->queueThumbnailRefresh($dungeonroute, true);
 
         return response()->noContent();
     }

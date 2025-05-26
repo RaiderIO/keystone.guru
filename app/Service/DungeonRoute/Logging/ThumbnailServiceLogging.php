@@ -4,6 +4,7 @@ namespace App\Service\DungeonRoute\Logging;
 
 use App\Logging\StructuredLogging;
 use Exception;
+use Throwable;
 
 class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServiceLoggingInterface
 {
@@ -62,6 +63,11 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->info(__METHOD__, get_defined_vars());
     }
 
+    public function doCreateThumbnailException(Throwable|Exception $e): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
     public function doCreateThumbnailRemovedTmpFileSuccess(): void
     {
         $this->debug(__METHOD__);
@@ -81,6 +87,12 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
     {
         $this->error(__METHOD__, get_defined_vars());
     }
+
+    public function queueThumbnailRefreshAlreadyQueued(string $publicKey): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
 
     public function doCreateThumbnailEnd(): void
     {

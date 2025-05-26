@@ -18,6 +18,7 @@ use App\Models\Enemies\PridefulEnemy;
 use App\Models\Enemy;
 use App\Models\Expansion;
 use App\Models\Faction;
+use App\Models\File;
 use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Models\Interfaces\ConvertsVerticesInterface;
@@ -44,7 +45,6 @@ use App\Models\Traits\Reportable;
 use App\Models\Traits\SerializesDates;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
-use App\Service\DungeonRoute\ThumbnailService;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\Season\SeasonService;
@@ -139,6 +139,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection<RouteAttribute>              $routeattributes
  * @property Collection<DungeonRouteAttribute>       $routeattributesraw
  * @property Collection<DungeonRouteThumbnailJob>    $dungeonRouteThumbnailJobs
+ * @property Collection<DungeonRouteThumbnail> $dungeonRouteThumbnails
+ * @property Collection<File>                  $thumbnails
  *
  * @method static Builder visible()
  * @method static Builder visibleWithUnlisted()
@@ -163,7 +165,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
      *
      * @var array
      */
-    protected $appends = ['setup', 'has_thumbnail', 'png_thumbnails', 'has_team', 'published'];
+    protected $appends = ['setup', 'has_thumbnail', 'has_team', 'published'];
 
     protected $hidden = [
         'id',
@@ -222,6 +224,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'classes',
         'races',
         'affixes',
+        'thumbnails',
     ];
 
     protected $casts = [
@@ -402,6 +405,16 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function dungeonRouteThumbnailJobs(): HasMany
     {
         return $this->hasMany(DungeonRouteThumbnailJob::class);
+    }
+
+    public function dungeonRouteThumbnails(): HasMany
+    {
+        return $this->hasMany(DungeonRouteThumbnail::class);
+    }
+
+    public function thumbnails(): BelongsToMany
+    {
+        return $this->belongsToMany(File::class, 'dungeon_route_thumbnails');
     }
 
     public function mapicons(): HasMany
@@ -605,15 +618,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
     public function getHasThumbnailAttribute(): bool
     {
-        return Carbon::createFromTimeString($this->thumbnail_updated_at)->diffInYears(Carbon::now()) === 0;
-    }
-
-    public function getPngThumbnailsAttribute(): bool
-    {
-        // A bit of a hack but it works, it's complicated otherwise
-        return Carbon::createFromTimeString($this->thumbnail_updated_at)->isBefore(
-            Carbon::createFromDate(2024, 02, 05)->setTime(21, 13)
-        );
+        return $this->thumbnails->isNotEmpty();
     }
 
     /**
@@ -1088,7 +1093,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         ]);
 
         // Copy the thumbnails to this newly cloned route
-        if ($thumbnailService->copyThumbnails($this, $dungeonroute)) {
+        if ($thumbnailService->copyThumbnails($this, $dungeonroute)?->isNotEmpty()) {
             $dungeonroute->update([
                 'thumbnail_refresh_queued_at' => $this->thumbnail_refresh_queued_at,
                 'thumbnail_updated_at'        => $this->thumbnail_updated_at,
@@ -1483,34 +1488,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         return $subTitle;
     }
 
-    public function getThumbnailUrl(int $floorIndex): string
-    {
-        return url($this->getRelativeThumbnailPath($floorIndex));
-    }
-
-    public function getRelativeThumbnailPath(int $floorIndex): string
-    {
-        $relativePath    = sprintf('%s/%s_%s.jpg', ThumbnailService::THUMBNAIL_FOLDER_PATH, $this->public_key, $floorIndex);
-        $relativePathPng = str_replace('.jpg', '.png', $relativePath);
-
-        $publicPath = public_path($relativePath);
-        // If we don't have a .jpg file, check if we should use .png instead
-
-        if (!file_exists($publicPath)) {
-            $publicPathPng = str_replace('.jpg', '.png', $publicPath);
-            if (file_exists($publicPathPng)) {
-                $relativePath = $relativePathPng;
-            }
-        }
-
-        return $relativePath;
-    }
-
-    public function getAbsoluteThumbnailPath(int $floorIndex): string
-    {
-        return public_path($this->getRelativeThumbnailPath($floorIndex));
-    }
-
     public function trackPageView(int $source): bool
     {
         // Handle route views counting
@@ -1625,14 +1602,14 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         static::deleting(static function (DungeonRoute $dungeonRoute) {
             $dungeonRoute->load(['dungeonRouteThumbnailJobs', 'brushlines', 'paths', 'killZones', 'livesessions']);
 
-            // Delete thumbnails
-            foreach ($dungeonRoute->dungeon->floors as $floor) {
-                // @ because we don't care if it fails
-                @unlink($dungeonRoute->getAbsoluteThumbnailPath($floor->index));
-            }
-
             $dungeonRoute->setConnection('combatlog')->challengeModeRun()->delete();
             $dungeonRoute->setConnection(null);
+
+            // Delete thumbnails
+            foreach ($dungeonRoute->dungeonRouteThumbnails as $dungeonRouteThumbnail) {
+                // This deletes the file from the database, and then from S3 as well
+                $dungeonRouteThumbnail->delete();
+            }
 
             // Delete all API thumbnail jobs/thumbnails generated for it
             foreach ($dungeonRoute->dungeonRouteThumbnailJobs as $dungeonRouteThumbnailJob) {

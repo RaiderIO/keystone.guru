@@ -22,7 +22,6 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
         $this->assertTrue($this->isValidUrl($response['data']['links']['edit']));
         $this->assertTrue($this->isValidUrl($response['data']['links']['embed']));
 
-        $this->assertNotEmpty($response['data']['links']['thumbnails']);
         foreach ($response['data']['links']['thumbnails'] as $thumbnail) {
             $this->assertTrue($this->isValidUrl($thumbnail));
         }
