@@ -6,7 +6,7 @@ use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Teapot\StatusCode\Http;
+use Teapot\StatusCode\RFC\RFC7231;
 
 class ReadOnlyMode
 {
@@ -20,7 +20,13 @@ class ReadOnlyMode
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->method() !== 'GET' && $this->readOnlyModeService->isReadOnly()) {
-            return response('Service Unavailable - site is in read-only mode', Http::SERVICE_UNAVAILABLE);
+            if ($request->ajax()) {
+                return response(json_encode([
+                    'message' => 'Service Unavailable - site is in read-only mode',
+                ]), RFC7231::SERVICE_UNAVAILABLE);
+            } else {
+                return response('Service Unavailable - site is in read-only mode', RFC7231::SERVICE_UNAVAILABLE);
+            }
         }
 
         return $next($request);

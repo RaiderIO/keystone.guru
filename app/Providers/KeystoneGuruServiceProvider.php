@@ -232,6 +232,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         MappingServiceInterface            $mappingService,
         GameVersionServiceInterface        $gameVersionService,
         MessageBannerServiceInterface      $messageBannerService,
+        ReadOnlyModeServiceInterface       $readOnlyModeService
     ): void {
         // There really is nothing here that's useful for console apps - migrations may fail trying to do the below anyway
         if (!app()->runningUnitTests()) {
@@ -309,13 +310,14 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Main view
         view()->composer(['layouts.app', 'layouts.sitepage', 'layouts.map', 'admin.dashboard.layouts.app'],
-            static function (View $view) use ($globalViewVariables, $messageBannerService) {
+            static function (View $view) use ($globalViewVariables, $messageBannerService, $readOnlyModeService) {
                 $view->with('version', $globalViewVariables['appVersion']);
                 $view->with('revision', $globalViewVariables['appRevision']);
                 $view->with('nameAndVersion', $globalViewVariables['appVersionAndName']);
                 $view->with('latestRelease', $globalViewVariables['latestRelease']);
                 $view->with('latestReleaseSpotlight', $globalViewVariables['latestReleaseSpotlight']);
                 $view->with('messageBanner', $messageBannerService->getMessage());
+                $view->with('readOnlyEnabled', $readOnlyModeService->isReadOnly());
             });
 
         view()->composer(['common.maps.map'], static function (View $view) use ($globalViewVariables) {

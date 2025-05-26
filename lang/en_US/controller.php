@@ -29,6 +29,8 @@ return [
             'feature_toggle_activated'        => 'Feature :feature is now activated',
             'feature_toggle_deactivated'      => 'Feature :feature is now deactivated',
             'feature_forgotten'               => 'Feature :feature successfully forgotten',
+            'read_only_mode_disabled'         => 'Read-only mode disabled',
+            'read_only_mode_enabled'          => 'Read-only mode enabled',
         ],
     ],
     'apidungeonroute'             => [

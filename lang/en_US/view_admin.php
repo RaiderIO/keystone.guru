@@ -483,9 +483,10 @@ return [
             'subheader_features' => 'Features',
             'manage_features'    => 'Manage features',
 
-            'subheader_actions'   => 'Actions',
-            'export_dungeon_data' => 'Export dungeon data',
-            'export_releases'     => 'Export releases',
+            'subheader_actions'    => 'Actions',
+            'export_dungeon_data'  => 'Export dungeon data',
+            'export_releases'      => 'Export releases',
+            'toggle_readonly_mode' => 'Toggle read-only mode',
 
             'enemy_forces_recalculate' => 'Mass recalculate enemy forces for routes',
 

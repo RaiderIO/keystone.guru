@@ -29,6 +29,7 @@ use App\Service\MDT\MDTImportStringServiceInterface;
 use App\Service\MDT\MDTMappingExportServiceInterface;
 use App\Service\MDT\MDTMappingImportServiceInterface;
 use App\Service\MessageBanner\MessageBannerServiceInterface;
+use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use App\Traits\SavesArrayToJsonFile;
 use Artisan;
 use Exception;
@@ -974,6 +975,19 @@ class AdminToolsController extends Controller
         Session::flash('status', __('controller.admintools.flash.releases_exported'));
 
         return view('admin.tools.list');
+    }
+
+    public function toggleReadOnlyMode(Request $request, ReadOnlyModeServiceInterface $readOnlyModeService): RedirectResponse
+    {
+        if ($readOnlyModeService->isReadOnly()) {
+            $readOnlyModeService->setReadOnly(false);
+            Session::flash('status', __('controller.admintools.flash.read_only_mode_disabled'));
+        } else {
+            $readOnlyModeService->setReadOnly(true);
+            Session::flash('status', __('controller.admintools.flash.read_only_mode_enabled'));
+        }
+
+        return redirect()->route('admin.tools');
     }
 
     /**
