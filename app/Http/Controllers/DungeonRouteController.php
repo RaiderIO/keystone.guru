@@ -77,6 +77,7 @@ class DungeonRouteController extends Controller
     public function viewFloor(
         DungeonRouteBaseUrlFormRequest $request,
         MapContextServiceInterface     $mapContextService,
+        ThumbnailServiceInterface      $thumbnailService,
         Dungeon                        $dungeon,
         DungeonRoute                   $dungeonroute,
         string                         $title,
@@ -135,6 +136,9 @@ class DungeonRouteController extends Controller
                         'floorIndex'   => $floor->index,
                     ] + $request->validated());
             }
+
+            // If we viewed a route, then there should also be a thumbnail for it
+            $thumbnailService->queueThumbnailRefreshIfMissing(collect([$dungeonroute]));
 
             return view('dungeonroute.view', [
                 'dungeon'        => $dungeonroute->dungeon,

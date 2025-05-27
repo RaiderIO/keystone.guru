@@ -96,4 +96,8 @@
         <a class="btn btn-primary"
            href="{{ route('admin.tools.datadump.exportreleases') }}">{{ __('view_admin.tools.list.export_releases') }}</a>
     </div>
+    <div class="form-group">
+        <a class="btn btn-primary"
+           href="{{ route('admin.tools.readonly.toggle') }}">{{ __('view_admin.tools.list.toggle_readonly_mode') }}</a>
+    </div>
 @endsection

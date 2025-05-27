@@ -76,6 +76,7 @@
         "ext-lua": "*",
         "ext-zip": "*",
         "akaunting/laravel-language": "^1.0",
+        "aws/aws-sdk-php": "~3.0",
         "barryvdh/laravel-ide-helper": "^3.0",
         "beyondcode/laravel-server-timing": "^1.4",
         "bramus/monolog-colored-line-formatter": "~3.1",

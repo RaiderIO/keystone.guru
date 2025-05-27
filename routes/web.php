@@ -382,6 +382,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('mapping/forcesync', (new AdminToolsController())->mappingForceSync(...))->name('admin.tools.mapping.forcesync');
                 Route::get('datadump/exportdungeondata', (new AdminToolsController())->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
                 Route::get('datadump/exportreleases', (new AdminToolsController())->exportreleases(...))->name('admin.tools.datadump.exportreleases');
+                Route::get('readonly/toggle', (new AdminToolsController())->toggleReadOnlyMode(...))->name('admin.tools.readonly.toggle');
             });
         });
     });

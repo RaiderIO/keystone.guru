@@ -13,7 +13,7 @@ use JsonSerializable;
  * @OA\Property(property="view", type="string", example="https://keystone.guru/route/ara-kara-city-of-echoes/01ta7yg/ara-kara-city-of-echoes")
  * @OA\Property(property="edit", type="string", example="https://keystone.guru/route/ara-kara-city-of-echoes/01ta7yg/ara-kara-city-of-echoes/edit")
  * @OA\Property(property="embed", type="string", example="https://keystone.guru/route/ara-kara-city-of-echoes/01ta7yg/ara-kara-city-of-echoes/embed")
- * @OA\Property(property="thumbnails", type="array", @OA\Items(type="string", example="https://keystone.guru/images/route_thumbnails/01ta7yg_1.jpg"))
+ * @OA\Property(property="thumbnails", type="array", @OA\Items(type="string", example="https://uploads.keystone.guru/route_thumbnails/01ta7yg_1.jpg"))
  *
  * @mixin DungeonRoute
  */
@@ -27,8 +27,8 @@ class DungeonRouteLinksResource extends JsonResource
     public function toArray(Request $request): array
     {
         $thumbnailUrls = [];
-        foreach ($this->dungeon->floors()->where('facade', 0)->get() as $floor) {
-            $thumbnailUrls[] = $this->getThumbnailUrl($floor->index);
+        foreach($this->thumbnails as $thumbnail) {
+            $thumbnailUrls[] = $thumbnail->getURL();
         }
 
         $dungeonRouteUrlParams = ['dungeon' => $this->dungeon, 'dungeonroute' => $this, 'title' => $this->getTitleSlug()];

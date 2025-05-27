@@ -172,10 +172,10 @@ class CacheService implements CacheServiceInterface
             ], $seconds) +
             $this->deleteKeysByPattern([
                 // publicKeys are 7 characters long
-                sprintf('/%spresence-%s-route-edit.[a-zA-Z0-9]{7}*/', $prefix, config('app.type')),
-                sprintf('/%spresence-%s-live-session.[a-zA-Z0-9]{7}*/', $prefix, config('app.type')),
+                sprintf('/%spresence-%s-route-edit\.[a-zA-Z0-9]{7}.*/', $prefix, config('app.type')),
+                sprintf('/%spresence-%s-live-session\.[a-zA-Z0-9]{7}.*/', $prefix, config('app.type')),
                 // Special - these keys should be cleared after 24 hours, regardless of what $seconds say
-            ], 24 * 3600);
+            ], $seconds);
     }
 
     public function lock(string $key, callable $callable, int $waitFor = 10): mixed

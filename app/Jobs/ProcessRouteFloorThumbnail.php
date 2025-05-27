@@ -25,7 +25,8 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
     public function __construct(
         protected DungeonRoute $dungeonRoute,
         protected int          $floorIndex,
-        protected int          $attempts = 0
+        protected bool         $force = false,
+        protected int          $attempts = 0,
     ) {
         $this->queue = sprintf('%s-%s-thumbnail', config('app.type'), config('app.env'));
     }
@@ -53,14 +54,14 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
             if ((int)config('keystoneguru.thumbnail.max_attempts') > $this->attempts) {
                 // Give some additional space since we're refreshing ALL floors - the first floor may get processed,
                 // but the floors after that will otherwise think "oh the thumbnail is up-to-date" and not refresh.
-                if ($this->dungeonRoute->thumbnail_updated_at->isBefore($this->dungeonRoute->updated_at->addHour())) {
+                if ($this->dungeonRoute->thumbnail_updated_at->isBefore($this->dungeonRoute->updated_at->addHour()) || $this->force) {
                     $result = $thumbnailService->createThumbnail($this->dungeonRoute, $this->floorIndex, $this->attempts);
 
                     if (!$result) {
                         $log->handleCreateThumbnailError();
 
                         // If there were errors, try again
-                        ProcessRouteFloorThumbnail::dispatch($this->dungeonRoute, $this->floorIndex, ++$this->attempts);
+                        ProcessRouteFloorThumbnail::dispatch($this->dungeonRoute, $this->floorIndex, $this->force, ++$this->attempts);
                     }
                 } else {
                     $log->handleThumbnailAlreadyUpToDate();
@@ -69,7 +70,7 @@ class ProcessRouteFloorThumbnail implements ShouldQueue
                 $log->handleMaxAttemptsReached();
             }
         } finally {
-            $log->handleEnd($result);
+            $log->handleEnd($result !== null);
         }
     }
 }

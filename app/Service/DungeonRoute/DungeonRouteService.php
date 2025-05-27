@@ -116,6 +116,8 @@ class DungeonRouteService implements DungeonRouteServiceInterface
                     $builder->whereColumn('updated_at', '>', 'thumbnail_updated_at')
                         ->whereDate('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail.refresh_min'))->toDateTimeString());
                 })
+                // But only routes that have been recently updated/viewed/accessed
+                ->where('popularity', '>', 0)
                 // Published routes get priority! This is only really relevant initially while processing the thumbnail queue
                 ->orderBy('published_state_id', 'desc')
                 // Newest first
@@ -125,9 +127,7 @@ class DungeonRouteService implements DungeonRouteServiceInterface
                 ->get();
 
             // All routes that come from the above will need their thumbnails regenerated, loop over them and queue the jobs at once
-            foreach ($routes as $dungeonRoute) {
-                $this->thumbnailService->queueThumbnailRefresh($dungeonRoute);
-            }
+            $this->thumbnailService->queueThumbnailRefreshIfMissing($routes);
         } finally {
             $this->log->refreshOutdatedThumbnailsEnd($routes->count());
         }

@@ -2,8 +2,8 @@
 
 namespace App\Models\DungeonRoute;
 
+use App\Models\File;
 use App\Models\Floor\Floor;
-use App\Service\DungeonRoute\ThumbnailService;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
  * @property int          $id
  * @property int          $dungeon_route_id
  * @property int          $floor_id
+ * @property int|null     $file_id
  * @property string       $status
  * @property int|null     $viewport_width
  * @property int|null     $viewport_height
@@ -23,6 +24,7 @@ use Illuminate\Support\Carbon;
  *
  * @property DungeonRoute $dungeonRoute
  * @property Floor        $floor
+ * @property File|null    $file The generated thumbnail file, if available
  *
  * @property Carbon       $created_at
  * @property Carbon       $updated_at
@@ -31,17 +33,15 @@ use Illuminate\Support\Carbon;
  */
 class DungeonRouteThumbnailJob extends Model
 {
-    public const STATUS_QUEUED = 'queued';
-
+    public const STATUS_QUEUED    = 'queued';
     public const STATUS_COMPLETED = 'completed';
-
-    public const STATUS_EXPIRED = 'expired';
-
-    public const STATUS_ERROR = 'error';
+    public const STATUS_EXPIRED   = 'expired';
+    public const STATUS_ERROR     = 'error';
 
     protected $fillable = [
         'dungeon_route_id',
         'floor_id',
+        'file_id',
         'status',
         'viewport_width',
         'viewport_height',
@@ -68,23 +68,18 @@ class DungeonRouteThumbnailJob extends Model
         return $this->belongsTo(Floor::class);
     }
 
+    public function file(): BelongsTo
+    {
+        return $this->belongsTo(File::class);
+    }
+
     public function expire(): bool
     {
         // Always try to delete the image, but always return OK if it wasn't successful (there may not be an image then).
-        $result = true;
-
-        if ($this->dungeonRoute instanceof DungeonRoute) {
-            $result = @unlink(
-                    ThumbnailService::getTargetFilePath(
-                        $this->dungeonRoute,
-                        $this->floor->index,
-                        ThumbnailService::THUMBNAIL_CUSTOM_FOLDER_PATH
-                    )
-                ) || $this->status !== self::STATUS_COMPLETED;
+        if ($this->file instanceof File) {
+            $this->file->delete();
         }
 
-        $this->update(['status' => self::STATUS_EXPIRED]);
-
-        return $result;
+        return $this->update(['status' => self::STATUS_EXPIRED]);
     }
 }

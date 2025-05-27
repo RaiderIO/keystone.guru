@@ -3,6 +3,7 @@
 namespace App\Service\DungeonRoute\Logging;
 
 use Exception;
+use Throwable;
 
 interface ThumbnailServiceLoggingInterface
 {
@@ -29,6 +30,8 @@ interface ThumbnailServiceLoggingInterface
 
     public function doCreateThumbnailSuccess(string $target, bool $fileExists): void;
 
+    public function doCreateThumbnailException(Throwable|Exception $e): void;
+
     public function doCreateThumbnailRemovedTmpFileSuccess(): void;
 
     public function doCreateThumbnailRemovedTmpFileFailure(): void;
@@ -36,6 +39,8 @@ interface ThumbnailServiceLoggingInterface
     public function doCreateThumbnailError(string $errors): void;
 
     public function queueThumbnailRefreshMappingVersionNull(string $publicKey): void;
+
+    public function queueThumbnailRefreshAlreadyQueued(string $publicKey): void;
 
     public function doCreateThumbnailEnd(): void;
 

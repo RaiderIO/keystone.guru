@@ -113,6 +113,13 @@ $breadcrumbsParams ??= [];
             @endcomponent
         @endif
 
+        @if($readOnlyEnabled)
+            @component('common.layout.messagebanner')
+                <i class="fa fa-exclamation-triangle"></i>
+                {{ __('view_layouts.sitepage.readonly_mode_enabled_description') }}
+            @endcomponent
+        @endif
+
         @if($messageBanner !== null)
             @component('common.layout.messagebanner')
                 {!! $messageBanner !!}

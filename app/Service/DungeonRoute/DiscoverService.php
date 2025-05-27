@@ -9,6 +9,7 @@ use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\PublishedState;
 use App\Models\Season;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 
@@ -42,7 +43,15 @@ class DiscoverService extends BaseDiscoverService
             ->selectRaw('DISTINCT `dungeon_routes`.*')
             ->limit($this->limit)
             ->when($this->closure !== null, $this->closure)
-            ->with(['author', 'affixes', 'ratings', 'mappingVersion'])
+            ->with([
+                'author',
+                'affixes',
+                'ratings',
+                'mappingVersion',
+                'thumbnails',
+                'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
+                'season'  => fn(BelongsTo $query) => $query->without(['affixGroups', 'dungeons']),
+            ])
             ->without(['faction', 'specializations', 'classes', 'races'])
             // This query makes sure that routes which are 'catch all' for affixes drop down since they aren't as specific
             // as routes who only have say 1 or 2 affixes assigned to them.
@@ -95,7 +104,15 @@ class DiscoverService extends BaseDiscoverService
 
         return DungeonRoute::query()->limit($this->limit)
             ->when($this->closure !== null, $this->closure)
-            ->with(['author', 'affixes', 'ratings', 'mappingVersion'])
+            ->with([
+                'author',
+                'affixes',
+                'ratings',
+                'mappingVersion',
+                'thumbnails',
+                'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
+                'season'  => fn(BelongsTo $query) => $query->without(['affixGroups', 'dungeons']),
+            ])
             ->without(['faction', 'specializations', 'classes', 'races'])
             ->select('dungeon_routes.*')
             ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')

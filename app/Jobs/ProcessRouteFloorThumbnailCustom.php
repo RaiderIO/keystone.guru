@@ -29,7 +29,7 @@ class ProcessRouteFloorThumbnailCustom
         protected int                             $attempts = 0
     ) {
         // Not passed as a constructor parameter since it's not serializable
-        $this->queue            = sprintf('%s-%s-thumbnail-api', config('app.type'), config('app.env'));
+        $this->queue = sprintf('%s-%s-thumbnail-api', config('app.type'), config('app.env'));
     }
 
     /**
@@ -81,7 +81,10 @@ class ProcessRouteFloorThumbnailCustom
                 } else {
                     $log->handleFinishedProcessing();
 
-                    $this->dungeonRouteThumbnailJob->update(['status' => DungeonRouteThumbnailJob::STATUS_COMPLETED]);
+                    $this->dungeonRouteThumbnailJob->update([
+                        'file_id' => $result->file_id,
+                        'status'  => DungeonRouteThumbnailJob::STATUS_COMPLETED,
+                    ]);
                 }
             } else {
                 $log->handleMaxAttemptsReached();
