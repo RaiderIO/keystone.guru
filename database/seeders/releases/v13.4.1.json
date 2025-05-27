@@ -1,0 +1,25 @@
+{
+    "id": 299,
+    "release_changelog_id": 306,
+    "version": "v13.4.1",
+    "title": "Hotfixes while migrating",
+    "backup_db": 0,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-05-27T13:14:39+00:00",
+    "updated_at": "2025-05-27T13:14:39+00:00",
+    "changelog": {
+        "id": 306,
+        "release_id": 299,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 306,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2851,
+                "change": "Various hotfixes that were needed while in the process of migrating the database."
+            }
+        ]
+    }
+}

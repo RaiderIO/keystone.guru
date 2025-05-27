@@ -10,6 +10,11 @@ use Teapot\StatusCode\RFC\RFC7231;
 
 class ReadOnlyMode
 {
+    private const ROUTE_WHITELIST = [
+        'login',
+        'logout',
+    ];
+
     public function __construct(private readonly ReadOnlyModeServiceInterface $readOnlyModeService)
     {
     }
@@ -19,7 +24,11 @@ class ReadOnlyMode
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->method() !== 'GET' && $this->readOnlyModeService->isReadOnly()) {
+        if ($request->method() !== 'GET' &&
+            $this->readOnlyModeService->isReadOnlyForUser(\Auth::user()) &&
+            // Some routes are allowed to be accessed in read-only mode
+            !in_array($request->path(), self::ROUTE_WHITELIST)
+        ) {
             if ($request->ajax() || $request->isJson()) {
                 return response(json_encode([
                     'message' => 'Service Unavailable - site is in read-only mode',
