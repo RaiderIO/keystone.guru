@@ -39,12 +39,16 @@ class ViewService implements ViewServiceInterface
         '/benchmark',
     ];
 
+    private string $release;
 
     public function __construct(
         private readonly CacheServiceInterface              $cacheService,
         private readonly ExpansionServiceInterface          $expansionService,
         private readonly AffixGroupEaseTierServiceInterface $easeTierService,
     ) {
+        // Load the release version from the file, this is used to cache view variables
+        // We want to cache view variables per release so we don't mix up view variables between releases
+        $this->release = file_get_contents(base_path('version')) ?: 'unknown';
     }
 
     /**
@@ -52,7 +56,7 @@ class ViewService implements ViewServiceInterface
      */
     public function getGlobalViewVariables(bool $useCache = true): array
     {
-        return $this->cacheService->setCacheEnabled($useCache)->remember('view_variables:global', function () {
+        return $this->cacheService->setCacheEnabled($useCache)->remember(sprintf('view_variables:%s:global', $this->release), function () {
             // Build a list of some common
             $demoRoutes = DungeonRoute::where('demo', true)
                 // @TODO Temp fix for testing environment
@@ -181,7 +185,7 @@ class ViewService implements ViewServiceInterface
     public function getGameServerRegionViewVariables(GameServerRegion $gameServerRegion, bool $useCache = true): array
     {
         return $this->cacheService->setCacheEnabled($useCache)->remember(
-            sprintf('view_variables:game_server_region:%s', $gameServerRegion->short),
+            sprintf('view_variables:%s:game_server_region:%s', $this->release, $gameServerRegion->short),
             function () use ($gameServerRegion) {
                 // So we're already caching the result of this function, Model Cache doesn't need to be involved at this time
                 // The results will likely explode the model cache (and redis usage as a result) so don't use it
