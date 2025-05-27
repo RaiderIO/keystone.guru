@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Str;
 
+$release = file_get_contents(base_path('version')) ?: 'unknown';
+
 return [
 
     /*
@@ -204,9 +206,11 @@ return [
             'prefix'  => env('REDIS_PREFIX',
                 sprintf('%s-%s-cache:',
                     Str::slug(env('APP_NAME', 'laravel')),
-                    Str::slug(env('APP_TYPE', 'local'))
+                    Str::slug(env('APP_TYPE', 'local')),
+
                 )
-            ),
+                // Always add the release version to the prefix so we don't get mixed up with other releases
+            ) . sprintf('%s:', $release),
         ],
 
         'default' => [
