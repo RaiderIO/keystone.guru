@@ -1600,7 +1600,14 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         // Delete route properly if it gets deleted
         static::deleting(static function (DungeonRoute $dungeonRoute) {
-            $dungeonRoute->load(['dungeonRouteThumbnailJobs', 'brushlines', 'paths', 'killZones', 'livesessions']);
+            $dungeonRoute->load([
+                'dungeonRouteThumbnails',
+                'dungeonRouteThumbnailJobs',
+                'brushlines',
+                'paths',
+                'killZones',
+                'livesessions'
+            ]);
 
             $dungeonRoute->setConnection('combatlog')->challengeModeRun()->delete();
             $dungeonRoute->setConnection(null);
