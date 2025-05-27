@@ -107,6 +107,7 @@ return [
             'user_exists'             => 'There is already a user with username %s. Did you already register before?',
             'email_exists'            => 'There is already a user with e-mail address %s. Did you already register before?',
             'permission_denied'       => 'Unable to register - the request was denied. Please try again.',
+            'read_only_mode_enabled'  => 'Read-only mode is enabled. You cannot register at this time.',
         ],
     ],
     'register'                    => [

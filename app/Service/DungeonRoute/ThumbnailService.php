@@ -127,8 +127,8 @@ class ThumbnailService implements ThumbnailServiceInterface
 
             $filename = self::getFilename($dungeonRoute, $floorIndex);
 
-            $tmpFile            = sprintf('/tmp/%s', $filename);
-            $tmpFileAfterResize = sprintf('/tmp/resized_%s', $filename);
+            $tmpFile            = sprintf('/tmp/%s_%s', $dungeonRoute->public_key, $filename);
+            $tmpFileAfterResize = sprintf('/tmp/%s_resized_%s', $dungeonRoute->public_key, $filename);
 
             // puppeteer chromium-browser
             $process = new Process([
@@ -238,8 +238,7 @@ class ThumbnailService implements ThumbnailServiceInterface
     {
         $result = false;
 
-        if ($dungeonRoute->thumbnail_refresh_queued_at
-            ->addHours(config('keystoneguru.thumbnail.refresh_requeue_hours'))
+        if ($dungeonRoute->thumbnail_refresh_queued_at?->addHours(config('keystoneguru.thumbnail.refresh_requeue_hours'))
             ->isPast()
         ) {
             if ($dungeonRoute->mappingVersion === null) {

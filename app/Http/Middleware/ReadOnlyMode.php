@@ -20,7 +20,7 @@ class ReadOnlyMode
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->method() !== 'GET' && $this->readOnlyModeService->isReadOnly()) {
-            if ($request->ajax()) {
+            if ($request->ajax() || $request->isJson()) {
                 return response(json_encode([
                     'message' => 'Service Unavailable - site is in read-only mode',
                 ]), RFC7231::SERVICE_UNAVAILABLE);
