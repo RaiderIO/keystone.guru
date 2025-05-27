@@ -54,4 +54,13 @@ class DungeonRouteThumbnail extends Model
     {
         return $this->belongsTo(File::class);
     }
+
+    public static function booted(): void
+    {
+        parent::booted();
+
+        static::deleting(function (DungeonRouteThumbnail $thumbnail) {
+            $thumbnail->file?->delete();
+        });
+    }
 }

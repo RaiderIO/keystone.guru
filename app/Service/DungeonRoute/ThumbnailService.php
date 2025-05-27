@@ -339,12 +339,12 @@ class ThumbnailService implements ThumbnailServiceInterface
 
     public static function getFileName(DungeonRoute $dungeonRoute, int $floorIndex): string
     {
-        return sprintf('%s_%s.jpg', $dungeonRoute->public_key, $floorIndex);
+        return sprintf('%s.jpg', $floorIndex);
     }
 
     public static function getTargetFilePath(DungeonRoute $dungeonRoute, int $floorIndex, string $targetFolder): string
     {
-        return sprintf('%s/%s', $targetFolder, self::getFilename($dungeonRoute, $floorIndex));
+        return sprintf('%s/%s/%s', $targetFolder, $dungeonRoute->public_key, self::getFilename($dungeonRoute, $floorIndex));
     }
 
     /**
