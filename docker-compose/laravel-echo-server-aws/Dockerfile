@@ -11,6 +11,7 @@ RUN apk add --no-cache python3 py3-pip git
 RUN pip install --no-cache-dir awscli && \
     aws --version
 
+ARG STAGE
 # Checkout the correct version of the repo
 RUN git config --global --add safe.directory /tmp/keystone.guru && \
     BRANCH=$([ "$STAGE" = "production" ] && echo "master" || echo "development") && \

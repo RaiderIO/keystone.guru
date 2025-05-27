@@ -3,23 +3,26 @@ ARG STAGE=staging
 FROM keystone.guru
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV STAGE=${STAGE}
 
 # Set working directory
 WORKDIR /var/www/html
 
 RUN apt-get update && apt-get install -y awscli
 
+ARG STAGE
 # Checkout the correct version of the repo
 RUN git config --global --add safe.directory /var/www/html && \
-    BRANCH=$([ "$STAGE" = "production" ] && echo "master" || echo "development") && \
+    BRANCH=$([ "${STAGE}" = "production" ] && echo "master" || echo "development") && \
+    echo "Using branch: $BRANCH" && \
     git clone --depth 1 --branch "$BRANCH" https://github.com/RaiderIO/keystone.guru.git . && \
-    git rev-list HEAD -1 > version
+    git rev-list HEAD -1 > version && \
+    cat version
 
 # Install composer packages (token is already configured in main image)
 RUN composer install --no-dev --optimize-autoloader && \
       php artisan vendor:publish --tag=laravel-assets --ansi --force
 
+ARG STAGE
 # Install NPM packages and compile code
 RUN NPM_CMD=$([ "$STAGE" = "production" ] && echo "production" || echo "dev") && \
     GIT_VERSION=$(cat version) && \

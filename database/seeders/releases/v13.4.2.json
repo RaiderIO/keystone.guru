@@ -1,0 +1,25 @@
+{
+    "id": 300,
+    "release_changelog_id": 307,
+    "version": "v13.4.2",
+    "title": "More hotfixes for AWS deployment",
+    "backup_db": 0,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-05-27T19:50:40+00:00",
+    "updated_at": "2025-05-27T19:50:40+00:00",
+    "changelog": {
+        "id": 307,
+        "release_id": 300,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 307,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2838,
+                "change": "Various other fixes to make AWS deployment possible."
+            }
+        ]
+    }
+}

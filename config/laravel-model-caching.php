@@ -4,10 +4,11 @@
 // base_path() will be /var/www/html/<project name>/releases/350
 // realpath will ensure symlinks are resolved
 // basename will get the last part of the path which is 350
-$release = env('APP_TYPE', 'local') !== 'local' ? basename(realpath(base_path())) : 'local';
+$release = file_get_contents(base_path('version')) ?: 'unknown';
 
+// This may give a double release number, but it is not a problem for now
 return [
-    'cache-prefix' => sprintf('release_%s:', $release),
+    'cache-prefix' => sprintf('laravel-model-caching:%s:', $release),
 
     'enabled' => env('MODEL_CACHE_ENABLED', true),
 
