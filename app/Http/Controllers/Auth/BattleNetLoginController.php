@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\GameServerRegion;
 use App\Models\User;
+use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use SocialiteProviders\Battlenet\Provider;
@@ -31,7 +32,7 @@ class BattleNetLoginController extends OAuthLoginController
         return 'battlenet';
     }
 
-    public function redirectToProvider(Request $request): RedirectResponse
+    public function redirectToProvider(Request $request, ReadOnlyModeServiceInterface $readOnlyModeService): RedirectResponse
     {
         $this->redirectTo = $request->get('redirect', '/');
 
@@ -42,6 +43,6 @@ class BattleNetLoginController extends OAuthLoginController
 
         Provider::setRegion($region);
 
-        return parent::redirectToProvider($request);
+        return parent::redirectToProvider($request, $readOnlyModeService);
     }
 }

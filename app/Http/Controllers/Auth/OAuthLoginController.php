@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\Laratrust\Role;
 use App\Models\User;
+use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -58,8 +59,17 @@ abstract class OAuthLoginController extends LoginController
     /**
      * Redirect the user to the OAuth authentication page.
      */
-    public function redirectToProvider(Request $request): RedirectResponse
-    {
+    public function redirectToProvider(
+        Request                      $request,
+        ReadOnlyModeServiceInterface $readOnlyModeService
+    ) {
+        if ($readOnlyModeService->isReadOnly()) {
+            Session::flash('warning', __('controller.oauthlogin.flash.read_only_mode_enabled'));
+            $this->redirectTo = '/';
+
+            return redirect($this->redirectTo);
+        }
+
         $this->redirectTo = $request->get('redirect', '/');
 
         return Socialite::driver($this->getDriver())->redirect();
