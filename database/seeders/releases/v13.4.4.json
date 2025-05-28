@@ -1,0 +1,25 @@
+{
+    "id": 302,
+    "release_changelog_id": 309,
+    "version": "v13.4.4",
+    "title": "Even even more fixes for AWS deployment",
+    "backup_db": 0,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-05-28T14:16:22+00:00",
+    "updated_at": "2025-05-28T14:16:22+00:00",
+    "changelog": {
+        "id": 309,
+        "release_id": 302,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 309,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2838,
+                "change": "Many more changes for AWS deployment"
+            }
+        ]
+    }
+}
