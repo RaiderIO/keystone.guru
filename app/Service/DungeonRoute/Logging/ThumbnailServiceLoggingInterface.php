@@ -40,6 +40,8 @@ interface ThumbnailServiceLoggingInterface
 
     public function queueThumbnailRefreshMappingVersionNull(string $publicKey): void;
 
+    public function queueThumbnailRefreshDispatchedJob(string $publicKey, int $index, bool $force): void;
+
     public function doCreateThumbnailEnd(): void;
 
     public function copyThumbnailsError(string $sourcePublicKey, string $targetPublicKey, int $id, Exception $exception): void;
