@@ -19,4 +19,6 @@ use Illuminate\Support\Collection;
 interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
 {
     public function generateRandomPublicKey(): string;
+
+    public function getDungeonRoutesWithExpiredThumbnails(?Collection $dungeonRoutes = null): Collection;
 }

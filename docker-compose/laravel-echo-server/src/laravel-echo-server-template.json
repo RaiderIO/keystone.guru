@@ -16,8 +16,8 @@
     "database": "redis",
     "databaseConfig": {
         "redis": {
-            "port": "REDIS_PORT",
             "host": "REDIS_HOST",
+            "port": "REDIS_PORT",
             "db": "REDIS_DB",
             "keyPrefix": "REDIS_PREFIX"
         },
@@ -26,7 +26,7 @@
         },
         "publishPresence": true
     },
-    "devMode": true,
+    "devMode": "APP_DEBUG",
     "host": null,
     "port": 6001,
     "protocol": "http",

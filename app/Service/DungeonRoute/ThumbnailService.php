@@ -9,6 +9,7 @@ use App\Models\DungeonRoute\DungeonRouteThumbnail;
 use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use App\Models\File;
 use App\Models\Floor\Floor;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -26,7 +27,8 @@ class ThumbnailService implements ThumbnailServiceInterface
     public const THUMBNAIL_CUSTOM_FOLDER_PATH = '/thumbnails_custom';
 
     public function __construct(
-        private ThumbnailServiceLoggingInterface $log
+        private readonly DungeonRouteRepositoryInterface  $dungeonRouteRepository,
+        private readonly ThumbnailServiceLoggingInterface $log
     ) {
     }
 
@@ -238,32 +240,26 @@ class ThumbnailService implements ThumbnailServiceInterface
     {
         $result = false;
 
-        if ($dungeonRoute->thumbnail_refresh_queued_at?->addHours(config('keystoneguru.thumbnail.refresh_requeue_hours'))
-            ->isPast()
-        ) {
-            if ($dungeonRoute->mappingVersion === null) {
-                $this->log->queueThumbnailRefreshMappingVersionNull($dungeonRoute->public_key);
-                // Do not return - we just assume the thumbnail is generated. Otherwise this will keep spamming
-                // the logs with this error when it really isn't that important.
-            } else {
-                foreach ($dungeonRoute->dungeon->floorsForMapFacade($dungeonRoute->mappingVersion, true)->active()->get() as $floor) {
-                    /** @var Floor $floor */
-                    // Set it for processing in a queue
-                    ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, $force);
-                    $result = true;
-                }
-            }
-
-            // Temporarily disable timestamps since we don't want this action to update the updated_at
-            $dungeonRoute->timestamps                  = false;
-            $dungeonRoute->thumbnail_refresh_queued_at = Carbon::now()->toDateTimeString();
-            $dungeonRoute->save();
-
-            // Re-enable them
-            $dungeonRoute->timestamps = true;
+        if ($dungeonRoute->mappingVersion === null) {
+            $this->log->queueThumbnailRefreshMappingVersionNull($dungeonRoute->public_key);
+            // Do not return - we just assume the thumbnail is generated. Otherwise this will keep spamming
+            // the logs with this error when it really isn't that important.
         } else {
-            $this->log->queueThumbnailRefreshAlreadyQueued($dungeonRoute->public_key);
+            foreach ($dungeonRoute->dungeon->floorsForMapFacade($dungeonRoute->mappingVersion, true)->active()->get() as $floor) {
+                /** @var Floor $floor */
+                // Set it for processing in a queue
+                ProcessRouteFloorThumbnail::dispatch($dungeonRoute, $floor->index, $force);
+                $result = true;
+            }
         }
+
+        // Temporarily disable timestamps since we don't want this action to update the updated_at
+        $dungeonRoute->timestamps = false;
+        $dungeonRoute->update([
+            'thumbnail_refresh_queued_at' => Carbon::now()->toDateTimeString(),
+        ]);
+        // Re-enable them
+        $dungeonRoute->timestamps = true;
 
         return $result;
     }
@@ -277,11 +273,11 @@ class ThumbnailService implements ThumbnailServiceInterface
     {
         $result = false;
 
-        foreach ($dungeonRoutes as $dungeonRoute) {
-            if ($dungeonRoute->has_thumbnail) {
-                continue;
-            }
+        $dungeonRoutesWithExpiredThumbnails = $this->dungeonRouteRepository->getDungeonRoutesWithExpiredThumbnails(
+            $dungeonRoutes
+        );
 
+        foreach ($dungeonRoutesWithExpiredThumbnails as $dungeonRoute) {
             /** @var DungeonRoute $dungeonRoute */
             if ($this->queueThumbnailRefresh($dungeonRoute, $force)) {
                 $result = true;

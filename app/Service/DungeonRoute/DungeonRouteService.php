@@ -4,15 +4,15 @@ namespace App\Service\DungeonRoute;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\PublishedState;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\Logging\DungeonRouteServiceLoggingInterface;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class DungeonRouteService implements DungeonRouteServiceInterface
 {
     public function __construct(
+        private readonly DungeonRouteRepositoryInterface     $dungeonRouteRepository,
         private readonly ThumbnailServiceInterface           $thumbnailService,
         private readonly DungeonRouteServiceLoggingInterface $log
     ) {
@@ -93,43 +93,21 @@ class DungeonRouteService implements DungeonRouteServiceInterface
         return $updatedRouteCount;
     }
 
-    public function refreshOutdatedThumbnails(): int
-    {
+    public function refreshOutdatedThumbnails(): int {
         $routes = collect();
 
+        $sendResult = true;
         try {
             $this->log->refreshOutdatedThumbnailsStart();
 
-            /** @var Collection<DungeonRoute> $routes */
-            $routes = DungeonRoute::where('author_id', '>', '0')
-                // Check if in queue, if so skip, unless the queue age is longer than keystoneguru.thumbnail.refresh_requeue_hours
-                ->where(static function (Builder $builder) {
-                    $builder->whereColumn('thumbnail_refresh_queued_at', '<', 'thumbnail_updated_at')
-                        ->orWhere(static function (Builder $builder) {
-                            // If it is in the queue to be refreshed
-                            $builder->whereColumn('thumbnail_refresh_queued_at', '>', 'thumbnail_updated_at')
-                                ->whereDate('thumbnail_refresh_queued_at', '<', now()->subHours(config('keystoneguru.thumbnail.refresh_requeue_hours'))->toDateTimeString());
-                        });
-                })
-                ->where(static function (Builder $builder) {
-                    // Only if it's not already queued!
-                    $builder->whereColumn('updated_at', '>', 'thumbnail_updated_at')
-                        ->whereDate('updated_at', '<', now()->subMinutes(config('keystoneguru.thumbnail.refresh_min'))->toDateTimeString());
-                })
-                // But only routes that have been recently updated/viewed/accessed
-                ->where('popularity', '>', 0)
-                // Published routes get priority! This is only really relevant initially while processing the thumbnail queue
-                ->orderBy('published_state_id', 'desc')
-                // Newest first
-                ->orderBy('id', 'desc')
-                // Limit the amount of routes at a time, do not overflow the queue since we cannot process more anyway
-                ->limit(config('keystoneguru.thumbnail.refresh_outdated_count'))
-                ->get();
+            $dungeonRoutesWithExpiredThumbnails = $this->dungeonRouteRepository->getDungeonRoutesWithExpiredThumbnails();
 
             // All routes that come from the above will need their thumbnails regenerated, loop over them and queue the jobs at once
-            $this->thumbnailService->queueThumbnailRefreshIfMissing($routes);
+            foreach($dungeonRoutesWithExpiredThumbnails as $dungeonRoute) {
+                $sendResult = $this->thumbnailService->queueThumbnailRefresh($dungeonRoute) && $sendResult;
+            }
         } finally {
-            $this->log->refreshOutdatedThumbnailsEnd($routes->count());
+            $this->log->refreshOutdatedThumbnailsEnd($routes->count(), $sendResult);
         }
 
         return 0;

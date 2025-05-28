@@ -31,7 +31,7 @@ class DungeonRouteServiceLogging extends RollbarStructuredLogging implements Dun
         $this->start(__METHOD__);
     }
 
-    public function refreshOutdatedThumbnailsEnd(int $queuedRouteCount): void
+    public function refreshOutdatedThumbnailsEnd(int $queuedRouteCount, bool $sendResult): void
     {
         $this->end(__METHOD__, get_defined_vars());
     }
