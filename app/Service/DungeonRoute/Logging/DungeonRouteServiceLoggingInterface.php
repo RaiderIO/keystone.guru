@@ -15,7 +15,7 @@ interface DungeonRouteServiceLoggingInterface
 
     public function refreshOutdatedThumbnailsStart(): void;
 
-    public function refreshOutdatedThumbnailsEnd(int $queuedRouteCount): void;
+    public function refreshOutdatedThumbnailsEnd(int $queuedRouteCount, bool $sendResult): void;
 
     public function deleteOutdatedDungeonRoutesStart(): void;
 

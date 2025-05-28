@@ -3,7 +3,7 @@
 # Read all environment variables from .env file
 set -e
 set -o allexport
-source .env
+source /app/.env
 set +o allexport
 
 # laravel-echo-server init
@@ -44,6 +44,7 @@ if [[ "$1" == 'start' ]] || [[ "$1" == 'client:add' ]] || [[ "$1" == 'client:rem
         sed -i "s|REDIS_PASSWORD|${REDIS_PASSWORD}|i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
         sed -i "s|REDIS_PREFIX|${REDIS_PREFIX}|i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
         sed -i "s|REDIS_DB|${REDIS_DB:-0}|i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
+        sed -i "s|APP_DEBUG|${APP_DEBUG:-true}|i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
         # Remove password config if it is empty
         sed -i "s|\"password\": \"\",||i" /app/docker-compose/laravel-echo-server/laravel-echo-server.json
     fi

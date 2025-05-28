@@ -60,50 +60,7 @@ $breadcrumbsParams ??= [];
             </div>
         @endisset
 
-    @elseif(isset($menuItems))
-        <div class="container container_wide mb-4 {{$rootClass}}">
-
-            @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
-
-            <div class="row">
-                <div class="col-xl-3 bg-secondary p-3">
-                    <h4>{{ $menuTitle }}</h4>
-                    <hr>
-                    @isset($menuModels)
-                        <select id="selected_model_id" class="form-control selectpicker">
-                            @foreach($menuModels as $menuModel)
-                                @php($hasIcon = isset($menuModel->iconfile))
-                                <option
-                                    data-url="{{ route($menuModelsRoute, [$menuModelsRouteParameterName => $menuModel->getRouteKey()]) }}"
-                                    @if($hasIcon)
-                                        data-content="<img src='{{ $menuModel->iconfile->getURL() }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
-                                    @endif
-                                    {{ $menuModelEdit->getKey() === $menuModel->getKey() ? 'selected' : '' }}
-                                >{{ $hasIcon ? '' : $menuModel->name }}</option>
-                            @endforeach
-                        </select>
-                        <hr>
-                    @endisset
-                    <ul class="nav flex-column nav-pills">
-                        @foreach($menuItems as $index => $menuItem)
-                            <li class="nav-item">
-                                <a class="nav-link {{ $index === 0 ? 'active' : '' }}"
-                                   data-toggle="tab" href="{{ $menuItem['target'] }}" role="tab"
-                                   aria-controls="routes" aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
-                                    <i class="fas {{ $menuItem['icon'] }}"></i> {{ $menuItem['text'] }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-                <div class="col-xl-9 bg-secondary ml-0 mt-xl-0 mt-3 p-3">
-                    @yield('content')
-                </div>
-            </div>
-        </div>
-
     @else
-
         @if (!$isProduction && (!Auth::check() || !$user->hasRole(Role::ROLE_ADMIN)))
             @component('common.layout.messagebanner')
                 <i class="fa fa-exclamation-triangle"></i>
@@ -126,32 +83,76 @@ $breadcrumbsParams ??= [];
             @endcomponent
         @endif
 
-        <div
-            class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill pl-lg-3 pr-lg-3" : ($disableDefaultRootClasses ? "" :  "col-md-8 offset-md-2") }}">
+        @if(isset($menuItems))
+            <div class="container container_wide mb-4 {{$rootClass}}">
 
-            @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
+                @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
 
-            @hasSection('header-title')
-                <div class="row my-4">
-                    @hasSection('header-addition')
-                        <div class="col text-center">
-                            <h4>@yield('header-title')</h4>
-                        </div>
-                        <div class="ml-auto">
-                            @yield('header-addition')
-                        </div>
-                    @else
-                        <div class="col-lg-12 text-center">
-                            <h4>@yield('header-title')</h4>
-                        </div>
-                    @endif
+                <div class="row">
+                    <div class="col-xl-3 bg-secondary p-3">
+                        <h4>{{ $menuTitle }}</h4>
+                        <hr>
+                        @isset($menuModels)
+                            <select id="selected_model_id" class="form-control selectpicker">
+                                @foreach($menuModels as $menuModel)
+                                    @php($hasIcon = isset($menuModel->iconfile))
+                                    <option
+                                        data-url="{{ route($menuModelsRoute, [$menuModelsRouteParameterName => $menuModel->getRouteKey()]) }}"
+                                        @if($hasIcon)
+                                            data-content="<img src='{{ $menuModel->iconfile->getURL() }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
+                                        @endif
+                                        {{ $menuModelEdit->getKey() === $menuModel->getKey() ? 'selected' : '' }}
+                                    >{{ $hasIcon ? '' : $menuModel->name }}</option>
+                                @endforeach
+                            </select>
+                            <hr>
+                        @endisset
+                        <ul class="nav flex-column nav-pills">
+                            @foreach($menuItems as $index => $menuItem)
+                                <li class="nav-item">
+                                    <a class="nav-link {{ $index === 0 ? 'active' : '' }}"
+                                       data-toggle="tab" href="{{ $menuItem['target'] }}" role="tab"
+                                       aria-controls="routes" aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
+                                        <i class="fas {{ $menuItem['icon'] }}"></i> {{ $menuItem['text'] }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="col-xl-9 bg-secondary ml-0 mt-xl-0 mt-3 p-3">
+                        @yield('content')
+                    </div>
                 </div>
-            @endif
+            </div>
 
-            @include('common.general.messages')
+        @else
+            <div
+                class="container-fluid mb-4 {{$rootClass}} {{ $wide ? "flex-fill pl-lg-3 pr-lg-3" : ($disableDefaultRootClasses ? "" :  "col-md-8 offset-md-2") }}">
 
-            @yield('content')
-        </div>
+                @include('common.layout.breadcrumbs', ['breadcrumbs' => $breadcrumbs, 'breadcrumbsParams' => $breadcrumbsParams])
+
+                @hasSection('header-title')
+                    <div class="row my-4">
+                        @hasSection('header-addition')
+                            <div class="col text-center">
+                                <h4>@yield('header-title')</h4>
+                            </div>
+                            <div class="ml-auto">
+                                @yield('header-addition')
+                            </div>
+                        @else
+                            <div class="col-lg-12 text-center">
+                                <h4>@yield('header-title')</h4>
+                            </div>
+                        @endif
+                    </div>
+                @endif
+
+                @include('common.general.messages')
+
+                @yield('content')
+            </div>
+        @endif
     @endif
 
     @if($footer)

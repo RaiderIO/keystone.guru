@@ -88,11 +88,10 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->error(__METHOD__, get_defined_vars());
     }
 
-    public function queueThumbnailRefreshAlreadyQueued(string $publicKey): void
+    public function queueThumbnailRefreshDispatchedJob(string $publicKey, int $index, bool $force): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }
-
 
     public function doCreateThumbnailEnd(): void
     {
