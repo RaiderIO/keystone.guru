@@ -248,7 +248,8 @@ return [
 
             /** Popular routes are cached since they are extra heavy and aren't likely to change much at all */
             'popular'                                     => [
-                'ttl' => '2 hours',
+                // Refreshed every 2 hours - cache needs to outlive that
+                'ttl' => '3 hours',
             ],
 
             //            'popular' => [
