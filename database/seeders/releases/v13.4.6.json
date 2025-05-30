@@ -1,0 +1,25 @@
+{
+    "id": 304,
+    "release_changelog_id": 311,
+    "version": "v13.4.6",
+    "title": "More tweaks to cache",
+    "backup_db": 0,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-05-30T07:58:25+00:00",
+    "updated_at": "2025-05-30T07:58:25+00:00",
+    "changelog": {
+        "id": 311,
+        "release_id": 304,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 311,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2838,
+                "change": "Fixed an issue where cache size could balloon."
+            }
+        ]
+    }
+}

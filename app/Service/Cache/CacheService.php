@@ -6,6 +6,7 @@ use App\Service\Cache\Logging\CacheServiceLoggingInterface;
 use Closure;
 use DateInterval;
 use Illuminate\Contracts\Cache\LockTimeoutException;
+use Illuminate\Redis\Connections\Connection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -189,72 +190,95 @@ class CacheService implements CacheServiceInterface
             return 0;
         }
 
-        // Only keys starting with this prefix may be cleaned up by this task, ex.
+        // List of Redis connection names to operate on.
+        $connections = [
+            'default',      // App logic
+            'model_cache',  // Model cache
+            'cache',        // Used by Laravel cache
+        ];
+
+        // Get the key prefix (if any)
         $prefix = config('database.redis.options.prefix');
 
-        $deletedKeysCountTotal = $deletedKeysCount = 0;
+        $totalDeletedCount = 0;
+
+        foreach ($connections as $connection) {
+            // Get the Redis connection once.
+            $redis = Redis::connection($connection);
+            $deletedCountForThisConnection = $this->deleteKeysByPatternOnConnection($redis, $regexes, $idleTimeSeconds, $prefix);
+            $totalDeletedCount += $deletedCountForThisConnection;
+        }
+
+        return $totalDeletedCount;
+    }
+
+    private function deleteKeysByPatternOnConnection(Connection $redis, array $regexes, ?int $idleTimeSeconds, string $prefix): int
+    {
+        $deletedKeysCountTotal = 0;
+        $deletedKeysCount = 0;
+        $i = 0;
+        $nextKey = 0;
+
         try {
-            $this->log->deleteKeysByPatternStart($idleTimeSeconds);
-            $i       = 0;
-            $nextKey = 0;
+            $this->log->deleteKeysByPatternStart($redis->getName(), $idleTimeSeconds);
 
             do {
-                $result = Redis::command('SCAN', [$nextKey]);
-
-                $nextKey = (int)$result[0];
+                // Use SCAN to iterate keys. The SCAN command returns [cursor, keys...]
+                $result = $redis->command('SCAN', [$nextKey]);
+                $nextKey = (int) $result[0];
 
                 $toDelete = [];
+
+                // Iterate over the keys returned by SCAN
                 foreach ($result[1] as $redisKey) {
-                    $output = [];
                     foreach ($regexes as $regex) {
-                        $matchResult = preg_match($regex, (string)$redisKey, $output);
-                        if ($matchResult === false) {
-                            $this->log->deleteKeysByPatternRegexError($regex, $redisKey);
-                            break;
-                        } else if ($matchResult > 0) {
-                            // If we only want to delete keys that have a certain idle time, check that first
+                        if (preg_match($regex, (string) $redisKey)) {
+                            // If an idle time is provided, check key's idle time.
                             if ($idleTimeSeconds !== null) {
-                                $keyIdleTimeSeconds = Redis::command('OBJECT', ['idletime', $redisKey]);
+                                $keyIdleTimeSeconds = $redis->command('OBJECT', ['idletime', $redisKey]);
                                 if ($keyIdleTimeSeconds > $idleTimeSeconds) {
                                     $toDelete[] = $redisKey;
                                 }
                             } else {
-                                // We don't, just delete it
                                 $toDelete[] = $redisKey;
                             }
-
+                            // Break once a match is found on a key for one regex.
                             break;
                         }
                     }
                 }
 
                 if (!empty($toDelete)) {
-                    $toDeleteCount = count($toDelete);
+                    // Remove the prefix from each key if present.
+                    $toDeleteWithoutPrefix = array_map(function ($key) use ($prefix) {
+                        return str_replace($prefix, '', $key);
+                    }, $toDelete);
 
-                    // https://redis.io/commands/del/
-                    $toDeleteWithoutPrefix = [];
-                    foreach ($toDelete as $key) {
-                        $toDeleteWithoutPrefix[] = str_replace($prefix, '', $key);
-                    }
-
-                    $nrOfDeletedKeys  = Redis::command('DEL', $toDeleteWithoutPrefix);
+                    // Delete the keys and sum up the count.
+                    $nrOfDeletedKeys = $redis->command('DEL', $toDeleteWithoutPrefix);
                     $deletedKeysCount += $nrOfDeletedKeys;
-                    if ($nrOfDeletedKeys !== $toDeleteCount) {
-                        $this->log->deleteKeysByPatternFailedToDeleteAllKeys($nrOfDeletedKeys, $toDeleteCount);
+
+                    if ($nrOfDeletedKeys !== count($toDelete)) {
+                        $this->log->deleteKeysByPatternFailedToDeleteAllKeys($nrOfDeletedKeys, count($toDelete));
                     }
                 }
 
                 $i++;
+
                 if ($i % 1000 === 0) {
                     $deletedKeysCountTotal += $deletedKeysCount;
                     $this->log->deleteKeysByPatternProgress($i, $deletedKeysCount);
                     $deletedKeysCount = 0;
                 }
             } while ($nextKey > 0);
+
+            // Final progress update
+            $deletedKeysCountTotal += $deletedKeysCount;
         } finally {
             $this->log->deleteKeysByPatternEnd($deletedKeysCountTotal);
         }
 
-        return $deletedKeysCount;
+        return $deletedKeysCountTotal;
     }
+
 }

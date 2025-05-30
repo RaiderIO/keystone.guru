@@ -10,7 +10,7 @@ interface CacheServiceLoggingInterface
 
     public function rememberFailedToAcquireLock(string $key, Exception $e): void;
 
-    public function deleteKeysByPatternStart(?int $seconds): void;
+    public function deleteKeysByPatternStart(string $connection, ?int $seconds): void;
 
     public function deleteKeysByPatternRegexError(string $regex, string $redisKey): void;
 
