@@ -8,4 +8,4 @@ SHELL=/bin/sh
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 # m h dom mon dow  user  command
-  * * *   *   *    root  php /var/www/html/artisan schedule:run >> /var/log/cron.log 2>&1
+  * * *   *   *    root  /usr/local/bin/php /var/www/html/artisan schedule:run >> /var/log/cron.log 2>&1

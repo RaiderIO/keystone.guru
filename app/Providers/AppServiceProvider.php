@@ -2,16 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\Release;
-use App\Models\User;
 use App\Overrides\CustomRateLimiter;
-use Auth;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use Rollbar\Payload\Level;
-use Rollbar\Rollbar;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,7 +15,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
         Model::preventLazyLoading(!app()->isProduction());
 
         // Force HTTPS in production - these environments are running in AWS which terminates https at the load balancer

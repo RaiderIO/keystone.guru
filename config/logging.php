@@ -59,6 +59,18 @@ return [
             'ignore_exceptions' => false,
         ],
 
+        'stack_docker' => [
+            'driver'            => 'stack',
+            'channels'          => ['stderr', 'daily', 'discord', /*'rollbar'*/],
+            'ignore_exceptions' => false,
+        ],
+
+        'stack_docker_local' => [
+            'driver'            => 'stack',
+            'channels'          => ['stderr', 'daily', /*'rollbar'*/],
+            'ignore_exceptions' => false,
+        ],
+
         'scheduler' => [
             'driver'   => 'stack',
             'channels' => ['scheduler_file', 'discord'],
@@ -107,6 +119,19 @@ return [
             'processors'   => [PsrLogMessageProcessor::class],
         ],
 
+        'stdout' => [
+            'driver'     => 'monolog',
+            'level'      => env('LOG_LEVEL', 'debug'),
+            'tap'        => [ColoredLineFormatter::class],
+            'handler'    => StreamHandler::class,
+            'formatter'  => env('LOG_STDOUT_FORMATTER'),
+            'with'       => [
+                'stream' => 'php://stdout',
+                'level' => env('LOG_LEVEL', 'debug'),
+            ],
+            'processors' => [PsrLogMessageProcessor::class],
+        ],
+
         'stderr' => [
             'driver'     => 'monolog',
             'level'      => env('LOG_LEVEL', 'debug'),
@@ -115,6 +140,7 @@ return [
             'formatter'  => env('LOG_STDERR_FORMATTER'),
             'with'       => [
                 'stream' => 'php://stderr',
+                'level' => env('LOG_LEVEL', 'debug'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
         ],
