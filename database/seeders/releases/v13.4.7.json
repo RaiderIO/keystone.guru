@@ -1,0 +1,25 @@
+{
+    "id": 305,
+    "release_changelog_id": 312,
+    "version": "v13.4.7",
+    "title": "Fixed site going down after some time.",
+    "backup_db": 0,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-05-30T19:54:54+00:00",
+    "updated_at": "2025-05-30T19:54:54+00:00",
+    "changelog": {
+        "id": 312,
+        "release_id": 305,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 312,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2838,
+                "change": "php-fpm should no longer run out of resources and take the site down."
+            }
+        ]
+    }
+}
