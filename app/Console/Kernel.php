@@ -239,60 +239,63 @@ class Kernel extends ConsoleKernel
         try {
             Log::channel('scheduler')->debug('Starting scheduler');
 
-            if ($this->app->runningInConsole() && !$this->app->runningUnitTests()) {
-                StructuredLogging::setChannel('stderr');
-            }
-
             $debug   = config('app.debug');
             $appType = config('app.type');
 
-            $schedule->command('dungeonroute:updatepopularity')->hourly();
-            $schedule->command('dungeonroute:updaterating')->everyFifteenMinutes();
+            $commands = [];
 
-            $schedule->command('dungeonroute:refreshoutdatedthumbnails')->everyFifteenMinutes();
-            $schedule->command('dungeonroute:deleteexpired')->hourly();
-            $schedule->command('dungeonroute:touch', ['teamId' => config('keystoneguru.raider_io.team_id')])->weeklyOn(3, '0');
+            $commands[] = $schedule->command('dungeonroute:updatepopularity')->hourly();
+            $commands[] = $schedule->command('dungeonroute:updaterating')->everyFifteenMinutes();
+
+            $commands[] = $schedule->command('dungeonroute:refreshoutdatedthumbnails')->everyFifteenMinutes();
+            $commands[] = $schedule->command('dungeonroute:deleteexpired')->hourly();
+            $commands[] = $schedule->command('dungeonroute:touch', ['teamId' => config('keystoneguru.raider_io.team_id')])->weeklyOn(3, '0');
 
             if (in_array($appType, ['mapping', 'local'])) {
-                $schedule->command('mapping:sync')->everyFiveMinutes();
+                $commands[] = $schedule->command('mapping:sync')->everyFiveMinutes();
 
                 // Ensure display IDs are set
-                $schedule->command('wowhead:refreshdisplayids')->hourly();
+                $commands[] = $schedule->command('wowhead:refreshdisplayids')->hourly();
             }
 
-            $schedule->command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours
+            $commands[] = $schedule->command('affixgroupeasetiers:refresh')->cron('0 */8 * * *'); // Every 8 hours
 
             // https://laravel.com/docs/8.x/horizon
-            $schedule->command('horizon:snapshot')->everyFiveMinutes();
+            $commands[] = $schedule->command('horizon:snapshot')->everyFiveMinutes();
 
             if ($appType === 'production') {
-                $schedule->command('scheduler:telemetry')->everyFiveMinutes();
+                $commands[] = $schedule->command('scheduler:telemetry')->everyFiveMinutes();
             }
 
             // https://laravel.com/docs/8.x/telescope#data-pruning
-            $schedule->command('telescope:prune --hours=48')->daily();
+            $commands[] = $schedule->command('telescope:prune --hours=48')->daily();
 
             // Refresh any membership status - if they're unsubbed, revoke their access. If they're subbed, add access
-            $schedule->command('patreon:refreshmembers')->hourly();
+            $commands[] = $schedule->command('patreon:refreshmembers')->hourly();
 
             // We don't want the cache when we're debugging to ensure fresh data every time
             if (!$debug) {
-                $schedule->command('discover:cache')->everyTwoHours();
-                $schedule->command('keystoneguru:view cache')->everyTenMinutes();
+                $commands[] = $schedule->command('discover:cache')->everyTwoHours();
+                $commands[] = $schedule->command('keystoneguru:view cache')->everyTenMinutes();
             }
 
             // Ensure redis remains healthy
-            $schedule->command('redis:clearidlekeys 900')->everyFifteenMinutes();
+            $commands[] = $schedule->command('redis:clearidlekeys 900')->everyMinute();
 
             // Aggregate all metrics so they're nice and snappy to load
-            $schedule->command('metric:aggregate')->everyFiveMinutes();
-            $schedule->command('metric:savepending')->everyMinute();
+            $commands[] = $schedule->command('metric:aggregate')->everyFiveMinutes();
+            $commands[] = $schedule->command('metric:savepending')->everyMinute();
 
             // Sync ads.txt
-            $schedule->command('adprovider:syncadstxt')->everyFifteenMinutes();
+            $commands[] = $schedule->command('adprovider:syncadstxt')->everyFifteenMinutes();
 
             // Cleanup the generated custom thumbnails
-            $schedule->command('thumbnail:deleteexpiredjobs')->everyFifteenMinutes();
+            $commands[] = $schedule->command('thumbnail:deleteexpiredjobs')->everyFifteenMinutes();
+
+            foreach($commands as $command) {
+                // php://stdout is used to ensure that the output is always logged, even when running in a Docker container
+                $command->appendOutputTo('/proc/1/fd/1');
+            }
         } finally {
             Log::channel('scheduler')->debug('Finished scheduler');
         }

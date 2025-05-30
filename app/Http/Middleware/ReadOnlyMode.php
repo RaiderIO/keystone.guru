@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
+use Auth;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +14,7 @@ class ReadOnlyMode
     private const ROUTE_WHITELIST = [
         'login',
         'logout',
+        'ajax/heatmap/data',
     ];
 
     public function __construct(private readonly ReadOnlyModeServiceInterface $readOnlyModeService)
@@ -25,7 +27,7 @@ class ReadOnlyMode
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->method() !== 'GET' &&
-            $this->readOnlyModeService->isReadOnlyForUser(\Auth::user()) &&
+            $this->readOnlyModeService->isReadOnlyForUser(Auth::user()) &&
             // Some routes are allowed to be accessed in read-only mode
             !in_array($request->path(), self::ROUTE_WHITELIST)
         ) {

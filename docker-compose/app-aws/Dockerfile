@@ -38,3 +38,6 @@ RUN php artisan l5-swagger:generate --all && \
 # Ensure that storage and bootstrap/cache are writable for the web server
 RUN chmod o+w ./storage/ -R && \
       chown -R www-data:www-data storage bootstrap/cache
+
+COPY /usr/local/etc/php-fpm.d/zz-overrides.conf /usr/local/etc/php-fpm.d/zz-overrides.conf
+
