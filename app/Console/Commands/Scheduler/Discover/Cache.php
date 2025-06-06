@@ -86,6 +86,9 @@ class Cache extends SchedulerCommand
 //                        $discoverService->popularGroupedByDungeonByAffixGroup($affixGroup);
 //                    }
 
+                    $discoverService->popularBySeason($season);
+                    $discoverService->newBySeason($season);
+
                     $discoverService = $discoverService->withSeason($season);
                     foreach ($season->dungeons()->active()->get() as $dungeon) {
                         $this->info(sprintf('-- Dungeon %s', $dungeon->key));
