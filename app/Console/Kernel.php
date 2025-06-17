@@ -286,9 +286,6 @@ class Kernel extends ConsoleKernel
             $commands[] = $schedule->command('metric:aggregate')->everyFiveMinutes();
             $commands[] = $schedule->command('metric:savepending')->everyMinute();
 
-            // Sync ads.txt
-            $commands[] = $schedule->command('adprovider:syncadstxt')->everyFifteenMinutes();
-
             // Cleanup the generated custom thumbnails
             $commands[] = $schedule->command('thumbnail:deleteexpiredjobs')->everyFifteenMinutes();
 
