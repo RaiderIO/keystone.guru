@@ -13,9 +13,22 @@ services:
     working_dir: /var/www/
     volumes:
       - ./:/var/www
+      - ../keystone.guru.assets:/var/keystone.guru.assets
       - ~/.ssh:/root/.ssh
     networks:
       - keystone.guru
+
+  app-assets:
+    image: nginx:1.27-alpine
+    container_name: keystone.guru-app-assets
+    restart: no
+    volumes:
+      # static files go straight into Nginx’s html dir (read-only is safest)
+      - ../keystone.guru.assets:/usr/share/nginx/html:ro
+    networks:
+      - keystone.guru
+    ports:
+      - "8009:80"
 
   app-swoole:
     build:
@@ -199,9 +212,9 @@ services:
     ports:
       - "6381:80"
     environment:
-        - REDIS_1_HOST=redis
-        - REDIS_1_name="Keystone.guru Redis"
-        - REDIS_1_PORT=6380
+      - REDIS_1_HOST=redis
+      - REDIS_1_name="Keystone.guru Redis"
+      - REDIS_1_PORT=6380
     networks:
       - keystone.guru
 
@@ -291,8 +304,8 @@ services:
     environment:
       - 'OPENSEARCH_HOSTS: ["https://keystone.guru-opensearch-node1:9201","https://keystone.guru-opensearch-node2:9201"]'
       - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true"
-#    volumes:
-#      - /docker-compose/opensearch/opensearch_dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
+    #    volumes:
+    #      - /docker-compose/opensearch/opensearch_dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
     networks:
       - keystone.guru
 

@@ -840,53 +840,6 @@ html, body, #map, #app, .wrapper {
     background-color: black;
 }
 
-/*
- * Enemy classes
- */
-.melee {
-    background-image: url('/images/enemyclasses/melee.png') !important;
-}
-
-.caster {
-    background-image: url('/images/enemyclasses/caster.png') !important;
-}
-
-.ranged {
-    background-image: url('/images/enemyclasses/ranged.png') !important;
-}
-
-.healer {
-    background-image: url('/images/enemyclasses/healer.png') !important;
-}
-
-.boss {
-    background-image: url('/images/enemyclassifications/boss.png') !important;
-}
-
-.castermelee {
-    background-image: url('/images/enemyclasses/castermelee.png') !important;
-}
-
-.healercaster {
-    background-image: url('/images/enemyclasses/healercaster.png') !important;
-}
-
-.healermelee {
-    background-image: url('/images/enemyclasses/healermelee.png') !important;
-}
-
-.rangedcaster {
-    background-image: url('/images/enemyclasses/rangedcaster.png') !important;
-}
-
-.rangedhealer {
-    background-image: url('/images/enemyclasses/rangedhealer.png') !important;
-}
-
-.rangedmelee {
-    background-image: url('/images/enemyclasses/rangedmelee.png') !important;
-}
-
 .enemy_icon.mdt {
     background-color: hotpink;
 }
@@ -980,48 +933,7 @@ html, body, #map, #app, .wrapper {
     background-color: #9200c4 !important;
 }
 
-.aberration {
-    background-image: url('/images/enemytypes/aberration.png') !important;
-}
-
-.beast {
-    background-image: url('/images/enemytypes/beast.png') !important;
-}
-
-.critter {
-    background-image: url('/images/enemytypes/critter.png') !important;
-}
-
-.demon {
-    background-image: url('/images/enemytypes/demon.png') !important;
-}
-
-.dragonkin {
-    background-image: url('/images/enemytypes/dragonkin.png') !important;
-}
-
-.elemental {
-    background-image: url('/images/enemytypes/elemental.png') !important;
-}
-
-.giant {
-    background-image: url('/images/enemytypes/giant.png') !important;
-}
-
-.humanoid {
-    background-image: url('/images/enemytypes/humanoid.png') !important;
-}
-
-.mechanical {
-    background-image: url('/images/enemytypes/mechanical.png') !important;
-}
-
-.undead {
-    background-image: url('/images/enemytypes/undead.png') !important;
-}
-
 .aggressive_enemy_icon {
-    background-image: url('/images/mapicon/unset.png') !important; /* no-repeat center !important; */
     background-color: #dc3c3c;
 }
 
@@ -1081,48 +993,37 @@ html, body, #map, #app, .wrapper {
     border-radius: unset;
 }
 
-.classification_icon_elite {
-    background-image: url('/images/enemyclassifications/elite.png') !important;
-}
-
 .truesight {
-    background: white url('/images/enemymodifiers/truesight.png') no-repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
 
 .teeming {
-    background: white url('/images/enemymodifiers/teeming.png') no-repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
 
 .modifier_awakened {
-    background: white url('/images/enemymodifiers/awakened.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
 
 .modifier_encrypted {
-    background: white url('/images/enemymodifiers/encrypted.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
 
 .modifier_inspiring {
-    background: white url('/images/enemymodifiers/inspiring.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
 
 .modifier_prideful {
-    background: white url('/images/enemymodifiers/prideful.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
 
 .modifier_tormented {
-    background: white url('/images/enemymodifiers/tormented.png') repeat center !important;
     border: 1px black solid;
     border-radius: 18px;
 }
@@ -1145,10 +1046,6 @@ html, body, #map, #app, .wrapper {
     background-color: #15c415 !important;
 }
 
-.boss_enemy_icon {
-    background: url('/images/enemyclassifications/boss.png') no-repeat center !important;
-}
-
 .flagged_enemy_icon {
     background-color: #cccc2d !important;
 }
@@ -1163,42 +1060,6 @@ html, body, #map, #app, .wrapper {
 
 .mdt_ok_enemy_icon {
     background-color: #15c415 !important;
-}
-
-.door_icon {
-    background: url('/images/mapicon/door.png') no-repeat center !important;
-}
-
-.door_locked_icon {
-    background: url('/images/mapicon/door_locked.png') no-repeat center !important;
-}
-
-.door_up_icon {
-    background: url('/images/mapicon/door_up.png') no-repeat center !important;
-}
-
-.door_down_icon {
-    background: url('/images/mapicon/door_down.png') no-repeat center !important;
-}
-
-.door_left_icon {
-    background: url('/images/mapicon/door_left.png') no-repeat center !important;
-}
-
-.door_right_icon {
-    background: url('/images/mapicon/door_right.png') no-repeat center !important;
-}
-
-.dungeon_start_icon {
-    background: url('/images/mapicon/dungeon_start.png') no-repeat center !important;
-}
-
-.graveyard_icon {
-    background: url('/images/mapicon/graveyard.png') no-repeat center !important;
-}
-
-.warlock_gateway_icon {
-    background: url('/images/mapicon/warlock_gateway.png') no-repeat center !important;
 }
 
 .killzone_icon_big {

@@ -129,7 +129,7 @@ class WebhookController extends Controller
                 // Add footer to the last embed
                 $lastKey                    = array_key_last($embeds);
                 $embeds[$lastKey]['footer'] = [
-                    'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
+                    'icon_url' => ksgAssetImage('external/discord/footer_image.png'),
                     'text'     => 'Keystone.guru Discord Bot',
                 ];
 

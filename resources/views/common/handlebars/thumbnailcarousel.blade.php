@@ -18,7 +18,7 @@
             }
         } else {
             items.push({
-                src: `/images/dungeons/${row.dungeon.expansion.shortname}/${row.dungeon.key}_3-2.jpg`
+                src: `{{ trim(ksgAssetImage(), '/') }}/dungeons/${row.dungeon.expansion.shortname}/${row.dungeon.key}_3-2.jpg`
             });
         }
 

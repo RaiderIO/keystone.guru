@@ -1,3 +1,5 @@
+require('dotenv').config();   // <-- add this line first
+
 const mix = require('laravel-mix');
 const {GitRevisionPlugin} = require('git-revision-webpack-plugin');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
@@ -50,7 +52,13 @@ mix.options({
             // Matches all PHP or JSON files in `resources/lang` directory.
             test: /lang.+\.(php|json)$/,
             loader: 'laravel-localization-loader',
-        }]
+        }, {
+            test: /\.s[ac]ss$/i,
+            loader: 'sass-loader',
+            options: {
+                additionalData: `$asset-url: "${process.env.ASSETS_BASE_URL}";`,
+            }
+        }],
     },
     plugins: [
         // Compile handlebars
@@ -65,10 +73,17 @@ mix.options({
                 parallel: false
             },
             onBuildEnd: []
-        })
+        }),
+        // new webpack.DefinePlugin({
+        //     'process.env.ASSETS_BASE_URL': JSON.stringify(process.env.ASSETS_BASE_URL)
+        // })
         // Use git version to output our files
     ].concat(gitRevisionPluginList)
 });
+
+let sassOptions = {
+    // additionalData: `$asset-url: "${process.env.ASSETS_BASE_URL}";`,
+};
 
 /*
  |--------------------------------------------------------------------------
@@ -321,6 +336,7 @@ mix.js('resources/assets/js/app.js', `public/js/app-${version}.js`)
     .sass('resources/assets/sass/theme/theme.scss', `public/css/theme-${version}.css`)
     .sass('resources/assets/sass/home.scss', `public/css/home-${version}.css`)
     .sass('resources/assets/sass/custom/custom.scss', `public/css/custom-compiled-${version}.css`)
+    .sass('resources/assets/sass/custom/assets/assets.scss', `public/css/assets-compiled-${version}.css`, sassOptions)
     // Lib processing
     // .styles(['resources/assets/lib/**/*.css'], `public/css/lib-${version}.css`)
     .babel('resources/assets/lib/**/*.js', `public/js/lib-${version}.js`);
@@ -334,31 +350,31 @@ if (images) {
     // } else {
     // Allow import of pure JS
     // mix.copy('resources/assets/js/custom', 'public/js/custom');
-
-    mix.copy('resources/assets/images/affixes', 'public/images/affixes');
-    mix.copy('resources/assets/images/classes', 'public/images/classes');
-    mix.copy('resources/assets/images/dungeons', 'public/images/dungeons');
-    mix.copy('resources/assets/images/echo', 'public/images/echo');
-    mix.copy('resources/assets/images/enemyclasses', 'public/images/enemyclasses');
-    mix.copy('resources/assets/images/enemyclassifications', 'public/images/enemyclassifications');
-    mix.copy('resources/assets/images/enemymodifiers', 'public/images/enemymodifiers');
-    mix.copy('resources/assets/images/enemyportraits', 'public/images/enemyportraits');
-    mix.copy('resources/assets/images/enemytypes', 'public/images/enemytypes');
-    mix.copy('resources/assets/images/expansions', 'public/images/expansions');
-    mix.copy('resources/assets/images/external', 'public/images/external');
-    mix.copy('resources/assets/images/factions', 'public/images/factions');
-    mix.copy('resources/assets/images/flags', 'public/images/flags');
-    mix.copy('resources/assets/images/gameversions', 'public/images/gameversions');
-    mix.copy('resources/assets/images/heatmap', 'public/images/heatmap');
-    mix.copy('resources/assets/images/home', 'public/images/home');
-    mix.copy('resources/assets/images/icon', 'public/images/icon');
-    mix.copy('resources/assets/images/lib', 'public/images/lib');
-    mix.copy('resources/assets/images/logo', 'public/images/logo');
-    mix.copy('resources/assets/images/mapicon', 'public/images/mapicon');
-    mix.copy('resources/assets/images/oauth', 'public/images/oauth');
-    mix.copy('resources/assets/images/raidmarkers', 'public/images/raidmarkers');
-    mix.copy('resources/assets/images/routeattributes', 'public/images/routeattributes');
-    mix.copy('resources/assets/images/specializations', 'public/images/specializations');
-    mix.copy('resources/assets/images/spells', 'public/images/spells');
+    //
+    // mix.copy('resources/assets/images/affixes', 'public/images/affixes');
+    // mix.copy('resources/assets/images/classes', 'public/images/classes');
+    // mix.copy('resources/assets/images/dungeons', 'public/images/dungeons');
+    // mix.copy('resources/assets/images/echo', 'public/images/echo');
+    // mix.copy('resources/assets/images/enemyclasses', 'public/images/enemyclasses');
+    // mix.copy('resources/assets/images/enemyclassifications', 'public/images/enemyclassifications');
+    // mix.copy('resources/assets/images/enemymodifiers', 'public/images/enemymodifiers');
+    // mix.copy('resources/assets/images/enemyportraits', 'public/images/enemyportraits');
+    // mix.copy('resources/assets/images/enemytypes', 'public/images/enemytypes');
+    // mix.copy('resources/assets/images/expansions', 'public/images/expansions');
+    // mix.copy('resources/assets/images/external', 'public/images/external');
+    // mix.copy('resources/assets/images/factions', 'public/images/factions');
+    // mix.copy('resources/assets/images/flags', 'public/images/flags');
+    // mix.copy('resources/assets/images/gameversions', 'public/images/gameversions');
+    // mix.copy('resources/assets/images/heatmap', 'public/images/heatmap');
+    // mix.copy('resources/assets/images/home', 'public/images/home');
+    // mix.copy('resources/assets/images/icon', 'public/images/icon');
+    // mix.copy('resources/assets/images/lib', 'public/images/lib');
+    // mix.copy('resources/assets/images/logo', 'public/images/logo');
+    // mix.copy('resources/assets/images/mapicon', 'public/images/mapicon');
+    // mix.copy('resources/assets/images/oauth', 'public/images/oauth');
+    // mix.copy('resources/assets/images/raidmarkers', 'public/images/raidmarkers');
+    // mix.copy('resources/assets/images/routeattributes', 'public/images/routeattributes');
+    // mix.copy('resources/assets/images/specializations', 'public/images/specializations');
+    // mix.copy('resources/assets/images/spells', 'public/images/spells');
     // }
 }

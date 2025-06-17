@@ -17,13 +17,8 @@
 }
 
 .google_login_image {
-    background-image: url('/images/oauth/btn_google_signin_dark_normal_web.png');
     width: 191px;
     height: 46px;
-}
-
-.google_login_image:hover {
-    background-image: url('/images/oauth/btn_google_signin_dark_pressed_web.png');
 }
 
 /* Modals */

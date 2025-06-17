@@ -13,7 +13,7 @@ use JsonSerializable;
 /**
  * @OA\Schema(schema="RouteThumbnailJobLinks")
  * @OA\Property(type="string",property="status",example="https://keystone.guru/api/v1/thumbnailJob/1")
- * @OA\Property(type="string",property="result",example="https://keystone.guru/images/route_thumbnails_custom/MS4cR1S_1.jpg")
+ * @OA\Property(type="string",property="result",example="https://uploads.keystone.guru/thumbnails_custom/MS4cR1S/1.jpg")
  *
  * @mixin DungeonRouteThumbnailJob
  */

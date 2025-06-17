@@ -6,8 +6,8 @@
 
 $url          ??= URL::current();
 $description  ??= '';
-$image        ??= url('/images/logo/logo_and_text_big.png');
-$imageTwitter = $image ?? url('/images/external/twitter/logo_and_text_big.png');
+$image        ??= ksgAssetImage('logo/logo_and_text_big.png');
+$imageTwitter = $image ?? ksgAssetImage('external/twitter/logo_and_text_big.png');
 ?>
 <meta property="og:type" content="website">
 <meta property="og:url" content="{{ $url }}">

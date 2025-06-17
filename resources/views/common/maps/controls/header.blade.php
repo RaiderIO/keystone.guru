@@ -34,7 +34,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
      class="map_fade_out navbar navbar-expand-xl {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }}">
     <div class="container bg-header">
         <a class="navbar-brand" href="/">
-            <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
+            <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
                  height="44px;" width="200px;">
         </a>
 
@@ -115,7 +115,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                                     @php($seasonalAffixKey = strtolower(Str::slug($seasonalAffix, '_')))
                                     <div class="col-auto">
                                         <img class="select_icon mr-1"
-                                             src="{{ url(sprintf('/images/affixes/%s.jpg', $seasonalAffixKey)) }}"
+                                             src="{{ ksgAssetImage(sprintf('affixes/%s.jpg', $seasonalAffixKey)) }}"
                                              alt="{{ __('view_common.maps.controls.header.seasonal_affix') }}"
                                              data-toggle="tooltip"
                                              title="{{ __(sprintf('affixes.%s.name', $seasonalAffixKey)) }}"

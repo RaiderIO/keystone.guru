@@ -242,7 +242,7 @@ class Expansion extends CacheModel
 
     public function getWallpaperUrl(): string
     {
-        return url(sprintf('/images/dungeons/%s/wallpaper.jpg', $this->shortname));
+        return ksgAssetImage(sprintf('dungeons/%s/wallpaper.jpg', $this->shortname));
     }
 
     /**

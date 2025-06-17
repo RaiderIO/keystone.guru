@@ -13,7 +13,7 @@ use JsonSerializable;
  * @OA\Property(property="publicKey",type="string",example="MS4cR1S")
  * @OA\Property(property="name",type="string",example="John Doe")
  * @OA\Property(property="links",type="object",ref="#/components/schemas/UserLinks")
- * @OA\Property(property="avatar",type="string",example="https://keystone.guru/images/avatar/MS4cR1S.jpg")
+ * @OA\Property(property="avatar",type="string",example="https://uploads.keystone.guru/uploads/5kf5hGB0jalkkxewRio6XEQP0KIaS9XJDFropTn7.png")
  *
  * @mixin User
  */

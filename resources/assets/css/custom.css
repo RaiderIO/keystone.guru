@@ -1,22 +1,4 @@
-.sorting_asc {
-    background: url('/images/lib/datatables/sort_asc.png') no-repeat center right !important;
-}
 
-.sorting_desc {
-    background: url('/images/lib/datatables/sort_desc.png') no-repeat center right !important;
-}
-
-.sorting {
-    background: url('/images/lib/datatables/sort_both.png') no-repeat center right !important;
-}
-
-.sorting_asc_disabled {
-    background: url('/images/lib/datatables/sort_asc_disabled.png') no-repeat center right !important;
-}
-
-.sorting_desc_disabled {
-    background: url('/images/lib/datatables/sort_desc_disabled.png') no-repeat center right !important;
-}
 
 /** GENERAL ICONS */
 .username_menu {
@@ -298,7 +280,6 @@ ul.light-slider {
 }
 
 .affixes_overview_table tr.timewalking.legion {
-    background-image: url('../images/dungeons/legion/wallpaper.jpg');
     background-position-x: center;
     background-position-y: -437px;
 }

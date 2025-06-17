@@ -150,7 +150,7 @@ class Spell extends CacheModel implements MappingModelInterface
      */
     public function getIconUrlAttribute(): string
     {
-        return url(sprintf('/images/spells/%s.jpg', $this->icon_name));
+        return ksgAssetImage(sprintf('spells/%s.jpg', $this->icon_name));
     }
 
     public function getDungeonId(): ?int

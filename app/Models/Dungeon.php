@@ -424,26 +424,27 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public function getImageUrl(): string
     {
-        return url(sprintf('images/dungeons/%s/%s.jpg', $this->expansion->shortname, $this->key));
+        return ksgAssetImage(sprintf('dungeons/%s/%s.jpg', $this->expansion->shortname, $this->key));
     }
 
     public function getImage32Url(): string
     {
-        return url(sprintf('images/dungeons/%s/%s_3-2.jpg', $this->expansion->shortname, $this->key));
+        return ksgAssetImage(sprintf('dungeons/%s/%s_3-2.jpg', $this->expansion->shortname, $this->key));
     }
 
     public function getImageTransparentUrl(): string
     {
-        return url(sprintf('images/dungeons/%s/%s_transparent.png', $this->expansion->shortname, $this->key));
+        return ksgAssetImage(sprintf('dungeons/%s/%s_transparent.png', $this->expansion->shortname, $this->key));
     }
 
     public function getImageWallpaperUrl(): string
     {
-        return url(sprintf('images/dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key));
+        return ksgAssetImage(sprintf('dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key));
     }
 
     public function hasImageWallpaper(): bool
     {
+        // @TODO Add column to expansion table to indicate whether this dungeon has a wallpaper image or not?
         return file_exists(resource_path(sprintf('assets/images/dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key)));
     }
 

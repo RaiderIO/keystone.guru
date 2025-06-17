@@ -8,7 +8,9 @@ return [
 
     'db_backup_dir'      => env('DB_BACKUP_DIR'),
     'mapping_backup_dir' => env('MAPPING_BACKUP_DIR'),
-    'tiles_base_url'     => env('TILES_BASE_URL', '/images/tiles'),
+    'assets_base_url'    => env('ASSETS_BASE_URL', '/'),
+    'images_base_url'    => sprintf('%s/images', env('ASSETS_BASE_URL', '')),
+    'tiles_base_url'     => sprintf('%s/tiles', env('ASSETS_BASE_URL', '/images')),
 
     'github_username' => 'RaiderIO',
 
