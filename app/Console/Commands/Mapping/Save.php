@@ -193,9 +193,9 @@ class Save extends Command
             ->get()
             ->values();
 
-        $npcs->makeHidden(['type', 'class']);
-        foreach ($npcs as $item) {
-            $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
+        foreach ($npcs as $npc) {
+            $npc->makeHidden(['type', 'class', 'enemy_portrait_url']);
+            $npc->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
         }
 
         $this->saveDataToJsonFile($npcs->toArray(), $dungeonDataDir, 'npcs.json');
@@ -293,7 +293,7 @@ class Save extends Command
             $demoRoute->setHidden(['id', 'updated_at', 'thumbnail_refresh_queued_at', 'thumbnail_updated_at', 'unlisted',
                                    'published_at', 'faction', 'specializations', 'classes', 'races', 'affixes',
                                    'expires_at', 'views', 'views_embed', 'popularity', 'pageviews', 'dungeon', 'mappingVersion',
-                                   'season']);
+                                   'season', 'thumbnails']);
             $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
                               'routeattributesraw', 'affixGroups', 'brushlines', 'paths', 'killZones', 'enemyRaidMarkers',
                               'pridefulEnemies', 'mapicons']);
@@ -382,15 +382,16 @@ class Save extends Command
      */
     private function saveDungeonNpcs(Dungeon $dungeon, string $rootDirPath): void
     {
+        /** @var Collection<Npc> $npcs */
         $npcs = Npc::without(['characteristics', 'spells', 'enemyForces'])
             ->with(['npcCharacteristics', 'npcSpells', 'npcEnemyForces'])
             ->where('dungeon_id', $dungeon->id)
             ->get()
-            ->makeHidden(['type', 'class'])
+            ->makeHidden(['type', 'class', 'enemy_portrait_url'])
             ->values();
 
-        foreach ($npcs as $item) {
-            $item->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
+        foreach ($npcs as $npc) {
+            $npc->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
         }
 
         // Save NPC data in the root of the dungeon folder

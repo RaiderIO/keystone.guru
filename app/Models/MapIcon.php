@@ -70,7 +70,10 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
         'seasonal_index',
     ];
 
-    protected $appends = ['linked_awakened_obelisk_id', 'is_admin'];
+    protected $appends = [
+        'linked_awakened_obelisk_id',
+        'is_admin',
+    ];
 
     protected $casts = [
         'mapping_version_id'         => 'integer',
@@ -86,6 +89,11 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
     ];
 
     protected $with = ['mapIconType', 'linkedawakenedobelisks'];
+
+    public function getIsAdminAttribute(): bool
+    {
+        return $this->mapping_version_id !== null;
+    }
 
     public function floor(): BelongsTo
     {
@@ -110,11 +118,6 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
-    }
-
-    public function getIsAdminAttribute(): bool
-    {
-        return $this->mapping_version_id !== null;
     }
 
     public function isAwakenedObelisk(): bool

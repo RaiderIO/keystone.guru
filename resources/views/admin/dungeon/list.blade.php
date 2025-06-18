@@ -71,14 +71,14 @@ use Illuminate\Support\Collection;
                     </td>
                 @endif
                 <td data-order="{{ $dungeon->expansion_id }}">
-                    <img src="{{ url(sprintf('images/expansions/%s.png', $dungeon->expansion->shortname)) }}"
+                    <img src="{{ ksgAssetImage(sprintf('expansions/%s.png', $dungeon->expansion->shortname)) }}"
                          alt="{{ __($dungeon->expansion->name) }}"
                          title="{{ __($dungeon->expansion->name) }}"
                          data-toggle="tooltip"
                          style="width: 50px;"/>
                 </td>
                 <td data-order="{{ $dungeon->game_version_id }}">
-                    <img src="{{ url(sprintf('images/gameversions/%s.png', $dungeon->gameVersion->key)) }}"
+                    <img src="{{ ksgAssetImage(sprintf('gameversions/%s.png', $dungeon->gameVersion->key)) }}"
                          alt="{{ __($dungeon->gameVersion->name) }}"
                          title="{{ __($dungeon->gameVersion->name) }}"
                          data-toggle="tooltip"

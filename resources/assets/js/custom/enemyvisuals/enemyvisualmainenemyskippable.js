@@ -24,7 +24,7 @@ class EnemyVisualMainEnemySkippable extends EnemyVisualMain {
         let displayText = this._getDisplayText();
         let mainVisualData = $.extend({}, getHandlebarsDefaultVariables(), {
             id: this.enemyvisual.enemy.id,
-            displayText: displayText,
+            display_text: displayText,
             skippable: this.enemyvisual.enemy.skippable ? 1 : 0,
             width: this._getTextWidth(displayText.length),
         });

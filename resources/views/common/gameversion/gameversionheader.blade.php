@@ -11,7 +11,7 @@ $iconType ??= 'black';
 <div class="row no-gutters">
     <div class="col-auto">
         <span class="align-middle">
-            <img src="{{ asset(sprintf('images/gameversions/logo_%s_small.webp', $iconType)) }}"
+            <img src="{{ ksgAssetImage(sprintf('gameversions/logo_%s_small.webp', $iconType)) }}"
                  alt="{{ __($gameVersion->name) }}"
                  height="15px"
                  <?php // WHY ?>

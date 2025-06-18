@@ -3,6 +3,7 @@ class RowElement extends Signalable {
     constructor(killZonesSidebar, handlebarsTemplate) {
         super();
 
+        /** @type {CommonMapsKillzonessidebar} */
         this.killZonesSidebar = killZonesSidebar;
         this.handlebarsTemplate = handlebarsTemplate;
         // Shortcut

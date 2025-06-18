@@ -30,7 +30,7 @@ $expansionRoutes = [];
 foreach ($activeExpansions as $expansion) {
     $expansionRoutes[route('dungeonroutes.expansion', ['expansion' => $expansion])] =
         sprintf('<img src="%s" alt="%s" style="width: 50px"/> %s',
-            url(sprintf('images/expansions/%s.png', $expansion->shortname),
+            ksgAssetImage(sprintf('expansions/%s.png', $expansion->shortname),
             ),
             __($expansion->name),
 //            $expansion->hasTimewalkingEvent() ?

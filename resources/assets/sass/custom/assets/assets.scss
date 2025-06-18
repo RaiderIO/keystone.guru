@@ -333,3 +333,55 @@ table.dataTable thead .sorting_desc_disabled {
 .warlock_gateway_icon {
   background: url('#{$asset-url}/images/mapicon/warlock_gateway.png') no-repeat center !important;
 }
+
+/**
+  * Custom styles for the Darkly theme
+ */
+.darkly {
+  .cid-s48MCQYojq {
+    //noinspection CssUnknownTarget
+    background-image: url('#{$asset-url}/images/home/darkly_header.jpg');
+  }
+
+  .cid-soU9jtw47v {
+    //noinspection CssUnknownTarget
+    background-image: url('#{$asset-url}/images/home/darkly_footer.jpg');
+  }
+}
+
+/**
+  * Custom styles for the Lux theme
+ */
+.darkly {
+  .cid-s48MCQYojq {
+    //noinspection CssUnknownTarget
+    background-image: url('#{$asset-url}/images/home/darkly_header.jpg');
+  }
+
+  .cid-soU9jtw47v {
+    //noinspection CssUnknownTarget
+    background-image: url('#{$asset-url}/images/home/darkly_footer.jpg');
+  }
+}
+
+.lux {
+  .cid-s48MCQYojq {
+    //noinspection CssUnknownTarget
+    background-image: url('#{$asset-url}/images/home/lux_header.jpg');
+  }
+
+  .cid-soU9jtw47v {
+    //noinspection CssUnknownTarget
+    background-image: url('#{$asset-url}/images/home/lux_footer.jpg');
+  }
+}
+
+.superhero {
+  .cid-s48MCQYojq {
+    background-image: url('#{$asset-url}/images/home/superhero_header.jpg');
+  }
+
+  .cid-soU9jtw47v {
+    background-image: url('#{$asset-url}/images/home/superhero_footer.jpg');
+  }
+}

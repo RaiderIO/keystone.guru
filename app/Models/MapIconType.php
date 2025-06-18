@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int     $width
  * @property int     $height
  * @property bool    $admin_only
+ * @property string  $icon_url
+ *
  * @property MapIcon $mapIcons
  *
  * @mixin Eloquent
@@ -29,6 +31,10 @@ class MapIconType extends CacheModel
         'width',
         'height',
         'admin_only',
+    ];
+
+    protected $appends = [
+        'icon_url',
     ];
 
     public const MAP_ICON_TYPE_UNKNOWN                               = 'unknown';
@@ -263,6 +269,10 @@ class MapIconType extends CacheModel
         self::MAP_ICON_TYPE_PRIORY_BLESSING_OF_THE_SACRED_FLAME   => 102,
         self::MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION => 103,
     ];
+
+    public function getIconUrlAttribute(): string {
+        return ksgAssetImage(sprintf('mapicon/%s.png', $this->key));
+    }
 
     public function mapIcons(): HasMany
     {

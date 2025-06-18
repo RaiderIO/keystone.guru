@@ -204,7 +204,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                                    class="{{ CombatLogEventEventType::NpcDeath->value }}"
                                    value="{{ CombatLogEventEventType::NpcDeath->value }}"
                                    checked>
-                            <img src="{{ url('images/spells/achievement_bg_killxenemies_generalsroom.jpg') }}"
+                            <img src="{{ ksgAssetImage('spells/achievement_bg_killxenemies_generalsroom.jpg') }}"
                                  alt="{{ __('view_common.maps.controls.heatmapsearch.npc_death_alt') }}"
                                  class="filter_event_type_icon">
                             {{ __('combatlogeventtypes.npc_death') }}
@@ -213,7 +213,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                             <input type="radio" name="event_type"
                                    class="{{ CombatLogEventEventType::PlayerDeath->value }}"
                                    value="{{ CombatLogEventEventType::PlayerDeath->value }}">
-                            <img src="{{ url('images/spells/ability_rogue_feigndeath.jpg') }}"
+                            <img src="{{ ksgAssetImage('spells/ability_rogue_feigndeath.jpg') }}"
                                  alt="{{ __('view_common.maps.controls.heatmapsearch.player_death_alt') }}"
                                  class="filter_event_type_icon">
                             {{ __('combatlogeventtypes.player_death') }}
@@ -222,7 +222,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                             <input type="radio" name="event_type"
                                    class="{{ CombatLogEventEventType::PlayerSpell->value }}"
                                    value="{{ CombatLogEventEventType::PlayerSpell->value }}">
-                            <img src="{{ url('images/spells/spell_nature_bloodlust.jpg') }}"
+                            <img src="{{ ksgAssetImage('spells/spell_nature_bloodlust.jpg') }}"
                                  alt="{{ __('view_common.maps.controls.heatmapsearch.bloodlust_alt') }}"
                                  class="filter_event_type_icon">
                             {{ __('combatlogeventtypes.player_spell') }}
@@ -268,7 +268,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                                        value="{{ $region->short }}"
                                     {{ $region->short === $defaultRegion ? 'checked' : '' }}
                                 >
-                                <img src="{{ url(sprintf('images/flags/%s.png', $region->short)) }}"
+                                <img src="{{ ksgAssetImage(sprintf('flags/%s.png', $region->short)) }}"
                                      alt="{{ __($region->name) }}"
                                      class="filter_region_icon">
                                 {{ __($region->name) }}

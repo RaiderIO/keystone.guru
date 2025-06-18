@@ -46,6 +46,7 @@ use Mockery\Exception;
  * @property bool                                   $speedrun_difficulty_25_man_enabled True if this dungeon's speedrun is for 25-man.
  * @property int                                    $views The amount of views this dungeon has had.
  * @property bool                                   $active True if this dungeon is active, false if it is not.
+ * @property bool                                   $has_wallpaper True if this dungeon has a wallpaper to show as a background.
  * @property bool                                   $mdt_supported True if MDT is supported for this dungeon, false if it is not.
  *
  * @property Expansion                              $expansion
@@ -92,6 +93,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         'expansion_id',
         'game_version_id',
         'active',
+        'has_wallpaper',
         'raid',
         'heatmap_enabled',
         'speedrun_enabled',
@@ -444,8 +446,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public function hasImageWallpaper(): bool
     {
-        // @TODO Add column to expansion table to indicate whether this dungeon has a wallpaper image or not?
-        return file_exists(resource_path(sprintf('assets/images/dungeons/%s/%s_wallpaper.jpg', $this->expansion->shortname, $this->key)));
+        return $this->has_wallpaper;
     }
 
     public static function findExpansionByKey(string $key): ?string

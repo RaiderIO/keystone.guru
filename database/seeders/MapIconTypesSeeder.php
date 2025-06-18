@@ -147,34 +147,12 @@ class MapIconTypesSeeder extends Seeder implements TableSeederInterface
 
         $mapIconTypeAttributes = [];
         foreach ($mapIconTypes as $key => $mapIconType) {
-            // Just in case it doesn't exist
-            if (isset($mapIconType['width']) && isset($mapIconType['height'])) {
-                $imageSize = [$mapIconType['width'], $mapIconType['height']];
-            } else {
-                $filePath = resource_path(sprintf('assets/images/mapicon/%s.png', $key));
-                if (file_exists($filePath)) {
-                    $imageSize = getimagesize($filePath);
-                } else {
-                    $this->command->warn(sprintf('Unable to find file %s', $filePath));
-                    $imageSize = [16, 16];
-                }
-
-                // Overrides
-                if (isset($mapIconType['width'])) {
-                    $imageSize[0] = $mapIconType['width'];
-                }
-
-                if (isset($mapIconType['height'])) {
-                    $imageSize[1] = $mapIconType['height'];
-                }
-            }
-
             $mapIconTypeAttributes[] = [
                 'id'         => MapIconType::ALL[$key],
                 'key'        => $key,
                 'name'       => $mapIconType['name'],
-                'width'      => $imageSize[0],
-                'height'     => $imageSize[1],
+                'width'      => $mapIconType['width'] ?? 32,
+                'height'     => $mapIconType['height'] ?? 32,
                 'admin_only' => $mapIconType['admin_only'] ?? 0,
             ];
         }

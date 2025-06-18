@@ -20,6 +20,7 @@ use Illuminate\Support\Collection;
  * @property int                   $id
  * @property int                   $icon_file_id
  * @property bool                  $active
+ * @property bool                  $has_wallpaper
  * @property string                $name
  * @property string                $shortname
  * @property string                $color

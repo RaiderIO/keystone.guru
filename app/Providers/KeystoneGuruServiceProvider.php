@@ -321,6 +321,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             });
 
         view()->composer(['common.maps.map'], static function (View $view) use ($globalViewVariables) {
+            $view->with('assetsBaseUrl', config('keystoneguru.assets_base_url'));
             $view->with('tilesBaseUrl', config('keystoneguru.tiles_base_url'));
         });
 

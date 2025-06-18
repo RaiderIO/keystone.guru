@@ -13,7 +13,7 @@ $showName ??= false;
 
 $name = __($gameVersion->name);
 ?>
-<img src="{{ asset(sprintf('images/gameversions/%s.png', $gameVersion->key)) }}"
+<img src="{{ ksgAssetImage(sprintf('gameversions/%s.png', $gameVersion->key)) }}"
      alt="{{ $name }}"
      @isset($width) width="{{ $width }}px" @endisset
      height="17px"/>

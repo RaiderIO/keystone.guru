@@ -26,6 +26,7 @@ class DungeonFormRequest extends FormRequest
     {
         return [
             'active'                             => 'nullable|boolean',
+            'has_wallpaper'                      => 'nullable|boolean',
             'raid'                               => 'nullable|boolean',
             'heatmap_enabled'                    => 'nullable|boolean',
             'speedrun_enabled'                   => 'nullable|boolean',

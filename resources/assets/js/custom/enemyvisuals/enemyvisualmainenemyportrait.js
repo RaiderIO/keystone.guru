@@ -19,12 +19,14 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
         // Just append a single class
         data.main_visual_outer_classes += ' enemy_icon_npc_enemy_portrait text-white text-center';
 
-        let npcId = this.enemyvisual.enemy.npc === null ? 'unknown' : this.enemyvisual.enemy.npc.id;
+        let enemyPortraitUrl = this.enemyvisual.enemy.npc === null ?
+            `${this.enemyvisual.map.options.assetsBaseUrl}/images/enemyportraits/unknown.png` :
+            this.enemyvisual.enemy.npc.enemy_portrait_url;
         let template = Handlebars.templates['map_enemy_visual_enemy_portrait_template'];
 
         let mainVisualData = $.extend({}, getHandlebarsDefaultVariables(), {
             id: this.enemyvisual.enemy.id,
-            npcId: npcId,
+            enemy_portrait_url: enemyPortraitUrl,
             // Expensive calculation - only do it when we're going to use it
             width: this.enemyvisual.enemy.isObsolete() || this.enemyvisual.enemy.getOverpulledKillZoneId() !== null ? this._getTextWidth() : 0,
             obsolete: this.enemyvisual.enemy.isObsolete(),

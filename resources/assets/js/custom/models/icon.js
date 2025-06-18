@@ -48,7 +48,7 @@ function getLeafletIcon(mapIconType, editModeEnabled, deleteModeEnabled) {
             outer_width: width + (isSelectable ? 8 : 0),
             outer_height: height + (isSelectable ? 8 : 0),
             inner_width: width,
-            inner_height: height
+            inner_height: height,
         });
 
         icon = L.divIcon({
