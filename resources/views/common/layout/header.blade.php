@@ -30,7 +30,7 @@ $expansionRoutes = [];
 foreach ($activeExpansions as $expansion) {
     $expansionRoutes[route('dungeonroutes.expansion', ['expansion' => $expansion])] =
         sprintf('<img src="%s" alt="%s" style="width: 50px"/> %s',
-            url(sprintf('images/expansions/%s.png', $expansion->shortname),
+            ksgAssetImage(sprintf('expansions/%s.png', $expansion->shortname),
             ),
             __($expansion->name),
 //            $expansion->hasTimewalkingEvent() ?
@@ -86,7 +86,7 @@ $navs[route('misc.affixes')] = [
     data-toggle="navbar-shrink">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <img src="{{ url('/images/logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
+            <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
                  height="44px;" width="200px;">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"

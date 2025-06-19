@@ -90,3 +90,13 @@ if (!function_exists('onSwooleServer')) {
         return (extension_loaded('swoole') || extension_loaded('openswoole')) && app()->bound(Server::class);
     }
 }
+
+function ksgAsset(string $path): string
+{
+    return sprintf('%s/%s', config('keystoneguru.assets_base_url'), $path);
+}
+
+function ksgAssetImage(string $path = ''): string
+{
+    return sprintf('%s/%s', config('keystoneguru.images_base_url'), trim($path, '/'));
+}

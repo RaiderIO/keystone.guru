@@ -16,6 +16,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -61,6 +62,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -316,6 +318,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -457,6 +460,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -502,6 +506,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -547,6 +552,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -592,6 +598,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -712,6 +719,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -991,6 +999,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1111,6 +1120,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1156,6 +1166,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1461,6 +1472,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1506,6 +1518,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1626,6 +1639,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1709,6 +1723,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1754,6 +1769,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1799,6 +1815,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1882,6 +1899,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -1951,6 +1969,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2034,6 +2053,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2079,6 +2099,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2162,6 +2183,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2430,6 +2452,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2648,6 +2671,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2731,6 +2755,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -2875,6 +2900,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -2958,6 +2984,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -3003,6 +3030,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -3160,6 +3188,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -3280,6 +3309,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -3349,6 +3379,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -3432,6 +3463,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -3515,6 +3547,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -3672,6 +3705,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -3816,6 +3850,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -4040,6 +4075,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -4197,6 +4233,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -4354,6 +4391,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -4399,6 +4437,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -4444,6 +4483,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4489,6 +4529,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -4646,6 +4687,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -4691,6 +4733,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -4811,6 +4854,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -4894,6 +4938,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -4939,6 +4984,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5022,6 +5068,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5067,6 +5114,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5112,6 +5160,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5157,6 +5206,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5240,6 +5290,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5285,6 +5336,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5330,6 +5382,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5524,6 +5577,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5569,6 +5623,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5614,6 +5669,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5734,6 +5790,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -5817,6 +5874,7 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 1,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -6152,6 +6210,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -6197,6 +6256,7 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 1,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -6821,6 +6881,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -6890,6 +6951,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -6935,6 +6997,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -6980,6 +7043,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -7025,6 +7089,7 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 1,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -7824,6 +7889,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -7869,6 +7935,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -8032,6 +8099,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -8152,6 +8220,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -8272,6 +8341,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -8392,6 +8462,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -8468,6 +8539,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -8588,6 +8660,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -8837,6 +8910,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -8957,6 +9031,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -9077,6 +9152,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -9122,6 +9198,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -9167,6 +9244,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9287,6 +9365,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9370,6 +9449,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9453,6 +9533,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9573,6 +9654,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9730,6 +9812,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -9991,6 +10074,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10074,6 +10158,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10119,6 +10204,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10164,6 +10250,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10209,6 +10296,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10254,6 +10342,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10299,6 +10388,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10344,6 +10434,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10389,6 +10480,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10558,6 +10650,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10832,6 +10925,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10915,6 +11009,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -10960,6 +11055,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -11166,6 +11262,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -11249,6 +11346,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -11294,6 +11392,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -11339,6 +11438,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -11384,6 +11484,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -11467,6 +11568,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -11550,6 +11652,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -11657,6 +11760,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -11777,6 +11881,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -12038,6 +12143,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -12409,6 +12515,7 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -12657,6 +12764,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -12764,6 +12872,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -12809,6 +12918,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -12916,6 +13026,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -13023,6 +13134,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -13130,6 +13242,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -13199,6 +13312,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -13484,6 +13598,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -13553,6 +13668,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -13622,6 +13738,7 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 1,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -13756,6 +13873,7 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 1,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -13970,6 +14088,7 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 1,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -14015,6 +14134,7 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 1,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -14135,6 +14255,7 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 1,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -14324,6 +14445,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -14369,6 +14491,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -14414,6 +14537,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -14540,6 +14664,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -14585,6 +14710,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -14855,6 +14981,7 @@
         "speedrun_enabled": 1,
         "speedrun_difficulty_10_man_enabled": 1,
         "speedrun_difficulty_25_man_enabled": 1,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -15436,6 +15563,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -15505,6 +15633,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -15598,6 +15727,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -15667,6 +15797,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -15736,6 +15867,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -15853,6 +15985,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -15970,6 +16103,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -16063,6 +16197,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -16180,6 +16315,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {
@@ -16337,6 +16473,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": true,
         "floors": [
             {
@@ -16444,6 +16581,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 0,
         "mdt_supported": false,
         "floors": [
             {

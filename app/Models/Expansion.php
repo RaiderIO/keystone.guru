@@ -20,6 +20,7 @@ use Illuminate\Support\Collection;
  * @property int                   $id
  * @property int                   $icon_file_id
  * @property bool                  $active
+ * @property bool                  $has_wallpaper
  * @property string                $name
  * @property string                $shortname
  * @property string                $color
@@ -242,7 +243,7 @@ class Expansion extends CacheModel
 
     public function getWallpaperUrl(): string
     {
-        return url(sprintf('/images/dungeons/%s/wallpaper.jpg', $this->shortname));
+        return ksgAssetImage(sprintf('dungeons/%s/wallpaper.jpg', $this->shortname));
     }
 
     /**

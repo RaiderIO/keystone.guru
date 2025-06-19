@@ -28,7 +28,7 @@ $editHeatmapUrl = route('dungeon.explore.gameversion.view.floor', $routeParams);
             <div class="row no-gutters align-items-center" style="height: 36px;">
                 <div class="col">
                 <a href="{{ route('home') }}" target="_blank">
-                    <img src="{{ url('/images/logo/logo_and_text.png') }}" class="header_embed_compact_logo"
+                    <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" class="header_embed_compact_logo"
                          alt="{{ config('app.name') }}">
                 </a>
                 </div>

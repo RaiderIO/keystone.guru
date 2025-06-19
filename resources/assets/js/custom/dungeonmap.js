@@ -20,6 +20,7 @@
  * @property {Number} defaultZoomMax
  * @property {boolean} showAttribution
  * @property {Object} dungeonroute
+ * @property {String} assetsBaseUrl
  * @property {String} tilesBaseUrl
  * @property {DungeonMapOptionsParamters} parameters
  */

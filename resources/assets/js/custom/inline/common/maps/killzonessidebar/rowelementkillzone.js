@@ -32,7 +32,13 @@ class RowElementKillZone extends RowElement {
         return {
             'id': this.killZone.id,
             'color': this.killZone.color, // For viewing
-            'has_kill_area': this.killZone.hasKillArea() ? '1' : '0'
+            'has_kill_area': this.killZone.hasKillArea() ? '1' : '0',
+            'icon_boss_url': `${this.map.options.assetsBaseUrl}/images/mapicon/raid_marker_skull.png`,
+            'icon_modifier_awakened_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/awakened.png`,
+            'icon_modifier_prideful_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/prideful.png`,
+            'icon_modifier_shrouded_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/shrouded.png`,
+            'icon_modifier_shrouded_zul_gamux_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/shrouded_zul_gamux.png`,
+            'icon_modifier_inspiring_url': `${this.map.options.assetsBaseUrl}/images/enemymodifiers/inspiring.png`,
         };
     }
 
@@ -262,7 +268,8 @@ class RowElementKillZone extends RowElement {
                 'overpulled': npc.overpulled,
                 'obsolete': npc.obsolete,
                 'boss': npc.enemy.isBossNpc(),
-                'dangerous': npc.enemy.npc.dangerous === 1
+                'dangerous': npc.enemy.npc.dangerous === 1,
+                'enemy_portrait_url': npc.enemy.npc.enemy_portrait_url,
             });
 
             let $enemy = $(template(data));

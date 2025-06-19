@@ -29,6 +29,8 @@ use App\Models\User;
  * @var bool              $adFree
  * @var string|null       $mapBackgroundColor
  * @var string|null       $mapFacadeStyle
+ * @var string            $assetsBaseUrl
+ * @var string            $tilesBaseUrl
  * @var array|null        $parameters
  */
 
@@ -133,6 +135,7 @@ if ($isAdmin) {
     'defaultZoomMax' => $defaultZoomMax,
     'showAttribution' => $showAttribution,
     'dungeonroute' => $dungeonroute ?? null,
+    'assetsBaseUrl' => $assetsBaseUrl,
     'tilesBaseUrl' => $tilesBaseUrl,
     'parameters' => $parameters,
 ], $adminOptions)])

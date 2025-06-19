@@ -115,6 +115,14 @@ class Npc extends CacheModel implements MappingModelInterface
         'mdt_scale'         => 'float',
     ];
 
+    protected $appends = [
+        'enemy_portrait_url',
+    ];
+
+    public function getEnemyPortraitUrlAttribute(): string {
+        return ksgAssetImage(sprintf('enemyportraits/%d.png', $this->id));
+    }
+
     /**
      * Gets all derived enemies from this Npc.
      */

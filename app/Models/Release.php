@@ -180,7 +180,7 @@ class Release extends CacheModel
                 'url'         => sprintf('%s/release/%s', config('app.url'), $this->version),
                 'timestamp'   => Carbon::now()->toIso8601String(),
                 'footer'      => [
-                    'icon_url' => 'https://keystone.guru/images/external/discord/footer_image.png',
+                    'icon_url' => ksgAssetImage('external/discord/footer_image.png'),
                     'text'     => 'Keystone.guru Discord Bot',
                 ],
             ],

@@ -13,6 +13,7 @@ return [
             'speedrun_enabled'                   => 'Speedrun enabled',
             'speedrun_difficulty_10_man_enabled' => 'Speedrun 10-man enabled',
             'speedrun_difficulty_25_man_enabled' => 'Speedrun 25-man enabled',
+            'has_wallpaper'                      => 'Has wallpaper',
             'facade_enabled'                     => 'Facade enabled',
             'id'                                 => 'ID',
             'game_version_id'                    => 'Game version ID',

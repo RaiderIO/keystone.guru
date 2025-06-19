@@ -2,6 +2,7 @@ class EnemyVisualIcon extends Signalable {
     constructor(enemyvisual) {
         super();
         console.assert(enemyvisual instanceof EnemyVisual, 'enemyvisual was not an EnemyVisual', enemyvisual);
+        /** @type EnemyVisual */
         this.enemyvisual = enemyvisual;
         this.iconName = '';
     }

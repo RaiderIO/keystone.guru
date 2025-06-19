@@ -15,21 +15,22 @@ class RaidMarker extends CacheModel
 {
     use SeederModel;
 
-    public const RAID_MARKER_STAR = 'star';
+    public $timestamps = false;
 
-    public const RAID_MARKER_CIRCLE = 'circle';
+    protected $fillable = ['id', 'name'];
 
-    public const RAID_MARKER_DIAMOND = 'diamond';
+    protected $appends = [
+        'image_url',
+    ];
 
+    public const RAID_MARKER_STAR     = 'star';
+    public const RAID_MARKER_CIRCLE   = 'circle';
+    public const RAID_MARKER_DIAMOND  = 'diamond';
     public const RAID_MARKER_TRIANGLE = 'triangle';
-
-    public const RAID_MARKER_MOON = 'moon';
-
-    public const RAID_MARKER_SQUARE = 'square';
-
-    public const RAID_MARKER_CROSS = 'cross';
-
-    public const RAID_MARKER_SKULL = 'skull';
+    public const RAID_MARKER_MOON     = 'moon';
+    public const RAID_MARKER_SQUARE   = 'square';
+    public const RAID_MARKER_CROSS    = 'cross';
+    public const RAID_MARKER_SKULL    = 'skull';
 
     public const ALL = [
         self::RAID_MARKER_STAR     => 1,
@@ -42,7 +43,8 @@ class RaidMarker extends CacheModel
         self::RAID_MARKER_SKULL    => 8,
     ];
 
-    public $timestamps = false;
-
-    protected $fillable = ['id', 'name'];
+    public function getImageUrlAttribute(): string
+    {
+        return ksgAssetImage(sprintf('mapicon/raid_marker_%s.png', $this->name));
+    }
 }

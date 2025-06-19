@@ -155,7 +155,7 @@ class Affix extends CacheModel
 
     public function getImageUrlAttribute(): string
     {
-        return sprintf('images/affixes/%s.jpg', $this->getImageNameAttribute());
+        return ksgAssetImage(sprintf('affixes/%s.jpg', $this->getImageNameAttribute()));
     }
 
     public function affixGroups(): BelongsToMany

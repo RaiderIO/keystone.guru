@@ -76,10 +76,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
             <div class="row align-items-center">
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
-                        <img class="darkly_image" src="{{ url('images/home/darkly_feature_discover_new_routes.jpg') }}"
+                        <img class="darkly_image" src="{{ ksgAssetImage('home/darkly_feature_discover_new_routes.jpg') }}"
                              alt="{{ __('view_home.discover_new_routes') }}"
                              style="display: {{ $theme === User::THEME_DARKLY ? 'block' : 'none' }}">
-                        <img class="lux_image" src="{{ url('images/home/lux_feature_discover_new_routes.jpg') }}"
+                        <img class="lux_image" src="{{ ksgAssetImage('home/lux_feature_discover_new_routes.jpg') }}"
                              alt="{{ __('view_home.discover_new_routes') }}"
                              style="display: {{ $theme === User::THEME_LUX ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
@@ -108,11 +108,11 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
                         <img class="darkly_image"
-                             src="{{ url('images/home/darkly_feature_create_your_own_routes.jpg') }}"
+                             src="{{ ksgAssetImage('home/darkly_feature_create_your_own_routes.jpg') }}"
                              alt="{{ __('view_home.create_your_own_routes') }}"
                              style="display: {{ $theme === User::THEME_DARKLY ? 'block' : 'none' }}">
                         <img class="lux_image"
-                             src="{{ url('images/home/lux_feature_create_your_own_routes.jpg') }}"
+                             src="{{ ksgAssetImage('home/lux_feature_create_your_own_routes.jpg') }}"
                              alt="{{ __('view_home.create_your_own_routes') }}"
                              style="display: {{ $theme === User::THEME_LUX ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
@@ -141,10 +141,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
                         <img class="darkly_image"
-                             src="{{ url('images/home/darkly_feature_get_organized.jpg') }}"
+                             src="{{ ksgAssetImage('home/darkly_feature_get_organized.jpg') }}"
                              alt="{{ __('view_home.get_organized') }}"
                              style="display: {{ $theme === User::THEME_DARKLY ? 'block' : 'none' }}">
-                        <img class="lux_image" src="{{ url('images/home/lux_feature_get_organized.jpg') }}"
+                        <img class="lux_image" src="{{ ksgAssetImage('home/lux_feature_get_organized.jpg') }}"
                              alt="{{ __('view_home.get_organized') }}"
                              style="display: {{ $theme === User::THEME_LUX ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
@@ -171,10 +171,10 @@ $demoRoutesIFrameId = 'demo_routes_iframe';
                 <div class="col-12 col-lg-6">
                     <div class="image-wrapper">
                         <img class="darkly_image"
-                             src="{{ url('images/home/darkly_feature_custom_dungeon_mapping.jpg') }}"
+                             src="{{ ksgAssetImage('home/darkly_feature_custom_dungeon_mapping.jpg') }}"
                              alt="{{ __('view_home.custom_dungeon_mapping') }}"
                              style="display: {{ $theme === User::THEME_DARKLY ? 'block' : 'none' }}">
-                        <img class="lux_image" src="{{ url('images/home/lux_feature_custom_dungeon_mapping.jpg') }}"
+                        <img class="lux_image" src="{{ ksgAssetImage('home/lux_feature_custom_dungeon_mapping.jpg') }}"
                              alt="{{ __('view_home.custom_dungeon_mapping') }}"
                              style="display: {{ $theme === User::THEME_LUX ? 'block' : 'none' }}">
                         <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">

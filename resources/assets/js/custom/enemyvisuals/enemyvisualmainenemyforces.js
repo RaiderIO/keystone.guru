@@ -24,7 +24,7 @@ class EnemyVisualMainEnemyForces extends EnemyVisualMain {
         let displayText = this._getDisplayText();
         let mainVisualData = $.extend({}, getHandlebarsDefaultVariables(), {
             id: this.enemyvisual.enemy.id,
-            displayText: displayText,
+            display_text: displayText,
             width: this._getTextWidth(displayText.length),
         });
 

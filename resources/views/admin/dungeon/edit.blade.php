@@ -70,6 +70,12 @@ $gameVersionsSelect = $allGameVersions
                 {!! Form::checkbox('speedrun_difficulty_25_man_enabled', 1, $dungeon?->speedrun_difficulty_25_man_enabled ?? 0, ['class' => 'form-control left_checkbox']) !!}
                 @include('common.forms.form-error', ['key' => 'speedrun_difficulty_25_man_enabled'])
             </div>
+
+            <div class="col {{ $errors->has('has_wallpaper') ? ' has-error' : '' }}">
+                {!! Form::label('has_wallpaper', __('view_admin.dungeon.edit.has_wallpaper')) !!}
+                {!! Form::checkbox('has_wallpaper', 1, $dungeon?->has_wallpaper ?? 0, ['class' => 'form-control left_checkbox']) !!}
+                @include('common.forms.form-error', ['key' => 'has_wallpaper'])
+            </div>
         </div>
 
         <div class="form-group{{ $errors->has('key') ? ' has-error' : '' }}">

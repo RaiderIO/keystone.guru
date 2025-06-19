@@ -1,0 +1,25 @@
+{
+    "id": 306,
+    "release_changelog_id": 313,
+    "version": "v13.5",
+    "title": "Assets are now loaded through assets.keystone.guru",
+    "backup_db": 0,
+    "silent": 1,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-06-19T12:30:30+00:00",
+    "updated_at": "2025-06-19T12:30:30+00:00",
+    "changelog": {
+        "id": 313,
+        "release_id": 306,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 313,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2871,
+                "change": "Assets are now loaded through assets.keystone.guru. This allows a CDN to serve images much more efficiently. This was already done for map tiles, but not yet for all other images (affix icons, npc portraits etc.)"
+            }
+        ]
+    }
+}

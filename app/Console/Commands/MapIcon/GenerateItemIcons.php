@@ -30,7 +30,6 @@ class GenerateItemIcons extends Command
         ImageServiceInterface $imageService
     ): int {
         $imagePaths = [
-            'spell_animabastion_orb.jpg'            => 'nw_item_anima.png',
             '171750.png'                            => 'nw_item_goliath.png',
             'inv_mace_1h_bastionquest_b_01.png'     => 'nw_item_hammer.png',
             'inv_shield_1h_bastionquest_b_01.jpg'   => 'nw_item_shield.png',
@@ -43,14 +42,14 @@ class GenerateItemIcons extends Command
             'inv_misc_web_02.jpg'                   => 'ara_kara_item_silk_wrap.png',
             'inv_egg_01.jpg'                        => 'karazhan_crypts_spider_nest.png',
             'spell_holy_rebuke.jpg'                 => 'priory_blessing_of_the_sacred_flame.png',
+            'spell_animabastion_orb.jpg'            => 'nw_item_anima.png',
             'inv_eng_crate.jpg'                     => 'floodgate_weapons_stockpile_explosion.png',
         ];
 
-
         foreach ($imagePaths as $sourceImage => $targetImage) {
             $imageService->convertToItemImage(
-                resource_path(sprintf('assets/images/mapicon_gen/%s', $sourceImage)),
-                resource_path(sprintf('assets/images/mapicon/%s', $targetImage))
+                realpath(base_path(sprintf('../keystone.guru.assets/images/mapicon_gen/%s', $sourceImage))),
+                realpath(base_path(sprintf('../keystone.guru.assets/images/mapicon/%s', $targetImage))),
             );
         }
 

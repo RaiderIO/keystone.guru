@@ -28,8 +28,10 @@ $menuItems[] = ['icon' => 'fa-flag', 'text' => __('view_profile.edit.reports'), 
 
 $menuTitle = sprintf(__('view_profile.edit.menu_title'), $user->name);
 ?>
-@extends('layouts.sitepage', ['wide' => true,
+@extends('layouts.sitepage', [
+    'wide' => true,
     'title' => __('view_profile.edit.title'),
+    'showAds' => false,
     'menuTitle' => $menuTitle,
     'menuItems' => $menuItems,
     'menuModelEdit' => $user,

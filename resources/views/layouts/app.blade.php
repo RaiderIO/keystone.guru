@@ -83,7 +83,8 @@ if ($showSpotlight && $latestReleaseSpotlight instanceof Release) {
     <link href="{{ asset(sprintf('css/theme-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset(sprintf('css/home-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
     <link href="{{ asset(sprintf('css/custom-compiled-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
-    <link rel="icon" href="{{ url("/images/icon/favicon.ico") }}">
+    <link href="{{ asset(sprintf('css/assets-compiled-%s.css', $revision)) . $devCacheBuster }}" rel="stylesheet">
+    <link rel="icon" href="{{ ksgAssetImage('icon/favicon.ico') }}">
     @yield('head')
 
     @include('common.general.inlinemanager')
