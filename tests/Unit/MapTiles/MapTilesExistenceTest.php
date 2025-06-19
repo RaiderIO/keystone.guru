@@ -31,9 +31,10 @@ final class MapTilesExistenceTest extends PublicTestCase
             }
 
             foreach ($dungeon->floors as $floor) {
-
-                $floorDirectory = public_path(
-                    sprintf('images/tiles/%s/%s/%d', $dungeon->expansion->shortname, $dungeon->key, $floor->index)
+                $floorDirectory = realpath(
+                    base_path(
+                        sprintf('../keystone.guru.assets/tiles/%s/%s/%d', $dungeon->expansion->shortname, $dungeon->key, $floor->index)
+                    )
                 );
                 Assert::assertDirectoryExists($floorDirectory);
 
