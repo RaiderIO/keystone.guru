@@ -22,14 +22,9 @@ RUN git config --global --add safe.directory /var/www/html && \
 RUN composer install --no-dev --optimize-autoloader && \
       php artisan vendor:publish --tag=laravel-assets --ansi --force
 
-ARG STAGE
-# Install NPM packages and compile code
-RUN NPM_CMD=$([ "$STAGE" = "production" ] && echo "production" || echo "dev") && \
-    GIT_VERSION=$(cat version) && \
-    npm install && \
-    npm --full=true --output_version=$GIT_VERSION --images=true run "$NPM_CMD" && \
+# Install NPM packages
+RUN npm install && \
     node node_modules/puppeteer/install.js
-
 
 # Generate Swagger related files
 RUN php artisan l5-swagger:generate --all && \

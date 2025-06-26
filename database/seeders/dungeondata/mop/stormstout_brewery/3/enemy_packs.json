@@ -1,1 +1,26 @@
-[]
+[
+    {
+        "id": 14983,
+        "mapping_version_id": 541,
+        "floor_id": 362,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-115.9478,\"lng\":242.9029},{\"lat\":-134.7003,\"lng\":247.1129},{\"lat\":-131.391,\"lng\":264.1034},{\"lat\":-113.4061,\"lng\":259.9685}]"
+    },
+    {
+        "id": 14984,
+        "mapping_version_id": 541,
+        "floor_id": 362,
+        "group": null,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-75.3409,\"lng\":286.2302},{\"lat\":-97.3667,\"lng\":291.8482},{\"lat\":-91.8982,\"lng\":301.1104},{\"lat\":-72.1509,\"lng\":295.4924}]"
+    }
+]

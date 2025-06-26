@@ -365,8 +365,12 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 });
 
                 // Wow.tools
-                Route::get('wowtools/importingamecoordinates', (new AdminToolsController())->importingamecoordinates(...))->name('admin.tools.wowtools.import_ingame_coordinates');
-                Route::post('wowtools/importingamecoordinates', (new AdminToolsController())->importingamecoordinatessubmit(...))->name('admin.tools.wowtools.import_ingame_coordinates.submit');
+                Route::get('wowtools/importingamecoordinates', (new AdminToolsController())->wowToolsImportIngameCoordinates(...))->name('admin.tools.wowtools.import_ingame_coordinates');
+                Route::post('wowtools/importingamecoordinates', (new AdminToolsController())->wowToolsImportIngameCoordinatesSubmit(...))->name('admin.tools.wowtools.import_ingame_coordinates.submit');
+
+                // Wago.gg
+                Route::get('wagogg/importingamecoordinates', (new AdminToolsController())->wagoggImportIngameCoordinates(...))->name('admin.tools.wagogg.import_ingame_coordinates');
+                Route::post('wagogg/importingamecoordinates', (new AdminToolsController())->wagoggImportIngameCoordinatesSubmit(...))->name('admin.tools.wagogg.import_ingame_coordinates.submit');
 
                 // Feature management
                 Route::get('features', (new AdminToolsController())->listFeatures(...))->name('admin.tools.features.list');

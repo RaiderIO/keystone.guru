@@ -474,6 +474,9 @@ return [
             'subheader_wowtools'                 => 'WoW.tools',
             'wowtools_import_ingame_coordinates' => 'Import in-game coordinates',
 
+            'subheader_wagogg'                 => 'Wago.gg',
+            'wagogg_import_ingame_coordinates' => 'Import in-game coordinates',
+
             'subheader_misc'     => 'Misc',
             'drop_caches'        => 'Drop caches',
             'throw_an_exception' => 'Throw an exception',
@@ -500,6 +503,14 @@ return [
                 'header'       => 'Mass regenerate thumbnails',
                 'only_missing' => 'Only queue routes with missing thumbnails',
                 'submit'       => 'Submit',
+            ],
+        ],
+        'wagogg'        => [
+            'importingamecoordinates' => [
+                'title'                       => 'Import in-game coordinates',
+                'header'                      => 'Import in-game coordinates',
+                'ui_map_assignment_table_csv' => 'UI map assignment table csv (https://wago.tools/db2/UiMapAssignment export as csv, all rows)',
+                'submit'                      => 'Submit',
             ],
         ],
         'wowtools'      => [

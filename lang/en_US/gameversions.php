@@ -21,4 +21,8 @@ return [
         'name'        => 'Cata',
         'description' => 'Cataclysm',
     ],
+    'mop'   => [
+        'name'        => 'Mists',
+        'description' => 'Mists of Pandaria',
+    ],
 ];
