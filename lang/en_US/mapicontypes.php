@@ -105,4 +105,5 @@ return [
     'karazhan_crypts_spider_nest'           => 'Spider Nest',
     'priory_blessing_of_the_sacred_flame'   => 'Blessing of the Sacred Flame',
     'floodgate_weapons_stockpile_explosion' => 'Weapons Stockpile Explosion',
+    'gate_of_the_setting_sun_brazier'       => 'Signal Brazier',
 ];

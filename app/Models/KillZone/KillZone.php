@@ -365,6 +365,7 @@ class KillZone extends Model
         // Delete kill zone properly if it gets deleted
         static::deleting(static function (KillZone $item) {
             $item->killZoneEnemies()->delete();
+            $item->killZoneSpells()->delete();
         });
     }
 }

@@ -338,6 +338,9 @@ class Save extends Command
             foreach ($demoRoute->killZones as $item) {
                 // Hidden by default to save data
                 $item->makeVisible(['floor_id']);
+                foreach($item->spells as $spell) {
+                    $spell->makeHidden(['icon_name', 'icon_url', 'wowhead_url']);
+                }
                 $toHide->add($item);
             }
 

@@ -52,6 +52,7 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
             $enemyIds = $killZoneData['enemies'];
             unset($killZoneData['enemies']);
 
+            /** @var array{id: int} $spells */
             $spells = $killZoneData['spells'];
             unset($killZoneData['spells']);
 
@@ -85,19 +86,17 @@ class DungeonRouteKillZoneRelationParser implements RelationParserInterface
             }
 
             if (count($spells) > 0) {
-
                 $savedSpells = collect();
-
-                foreach ($spells as $key => $spellId) {
+                foreach ($spells as $key => $spell) {
                     // Do not doubly save spells if the file somehow contained doubles (#1473)
-                    if ($savedSpells->contains($spellId)) {
+                    if ($savedSpells->contains($spell['id'])) {
                         continue;
                     }
 
                     // Make sure the spell's relation with the kill zone is restored.
                     $killZoneSpellAttributes[] = [
                         'kill_zone_id' => $killZone->id,
-                        'spell_id'     => $spellId,
+                        'spell_id'     => $spell['id'],
                     ];
                 }
             }
