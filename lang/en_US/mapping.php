@@ -7,6 +7,9 @@ return [
             'gate_of_the_setting_sun' => [
                 'krik_thik_spawn_note' => 'Keystone.guru: Krik\'thik Conscripts only spawn after defeating Commander Ri\'mok',
             ],
+            'mogu_shan_palace' => [
+                'door_unlocks_after_trial_of_the_king' => 'Door unlocks after defeating the Trial of the King',
+            ]
         ],
         'legion' => [
             'court_of_stars'   => [
