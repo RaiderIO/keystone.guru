@@ -16123,7 +16123,7 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1136,
+                        "id": 1137,
                         "floor1_id": 355,
                         "floor2_id": 353,
                         "direction": "right"
@@ -16198,7 +16198,14 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1142,
+                        "floor1_id": 357,
+                        "floor2_id": 359,
+                        "direction": "right"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -16209,7 +16216,7 @@
                 "ui_map_id": 458,
                 "map_name": null,
                 "name": "dungeons.mop.siege_of_niu_zao_temple.floors.the_hollowed_out_tree",
-                "default": 0,
+                "default": 1,
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
@@ -16222,7 +16229,14 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1138,
+                        "floor1_id": 358,
+                        "floor2_id": 359,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -16246,7 +16260,20 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1139,
+                        "floor1_id": 359,
+                        "floor2_id": 357,
+                        "direction": "left"
+                    },
+                    {
+                        "id": 1140,
+                        "floor1_id": 359,
+                        "floor2_id": 358,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }

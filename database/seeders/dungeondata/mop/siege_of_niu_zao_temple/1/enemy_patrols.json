@@ -1,1 +1,93 @@
-[]
+[
+    {
+        "id": 21070,
+        "mapping_version_id": 545,
+        "floor_id": 357,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-112.0696,\"lng\":143.9257},{\"lat\":-119.397,\"lng\":141.4843},{\"lat\":-137.0728,\"lng\":141.2915},{\"lat\":-137.1371,\"lng\":143.0905},{\"lat\":-119.2685,\"lng\":142.8335},{\"lat\":-112.4553,\"lng\":145.2107},{\"lat\":-111.8125,\"lng\":143.5402}]"
+        }
+    },
+    {
+        "id": 21072,
+        "mapping_version_id": 545,
+        "floor_id": 357,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-90.9165,\"lng\":151.9897},{\"lat\":-108.8197,\"lng\":173.6694},{\"lat\":-107.522,\"lng\":174.4953},{\"lat\":-89.8047,\"lng\":153.1473},{\"lat\":-90.8637,\"lng\":151.9953}]"
+        }
+    },
+    {
+        "id": 21073,
+        "mapping_version_id": 545,
+        "floor_id": 357,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-98.2501,\"lng\":136.3437},{\"lat\":-99.2705,\"lng\":137.1324},{\"lat\":-97.1068,\"lng\":141.4185},{\"lat\":-93.9203,\"lng\":143.9745},{\"lat\":-90.0938,\"lng\":144.625},{\"lat\":-87.744,\"lng\":143.542},{\"lat\":-85.541,\"lng\":140.9467},{\"lat\":-86.5638,\"lng\":140.0029},{\"lat\":-88.2948,\"lng\":142.323},{\"lat\":-90.4584,\"lng\":143.3454},{\"lat\":-93.5662,\"lng\":142.6375},{\"lat\":-96.0053,\"lng\":140.3961},{\"lat\":-98.25,\"lng\":136.3437}]"
+        }
+    },
+    {
+        "id": 21074,
+        "mapping_version_id": 545,
+        "floor_id": 357,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-118.0066,\"lng\":181.5232},{\"lat\":-131.642,\"lng\":198.4392},{\"lat\":-130.3158,\"lng\":199.8024},{\"lat\":-116.7616,\"lng\":182.4713},{\"lat\":-118.1844,\"lng\":181.1676}]"
+        }
+    },
+    {
+        "id": 21075,
+        "mapping_version_id": 545,
+        "floor_id": 357,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-113.5704,\"lng\":229.3686},{\"lat\":-125.4084,\"lng\":221.4799},{\"lat\":-108.0072,\"lng\":192.7703},{\"lat\":-96.8808,\"lng\":201.5642},{\"lat\":-98.0452,\"lng\":203.4394},{\"lat\":-107.2956,\"lng\":195.7447},{\"lat\":-122.7562,\"lng\":220.8333},{\"lat\":-112.4863,\"lng\":227.6614},{\"lat\":-113.5515,\"lng\":229.3866}]"
+        }
+    },
+    {
+        "id": 21076,
+        "mapping_version_id": 545,
+        "floor_id": 357,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-70.5621,\"lng\":201.0311},{\"lat\":-74.9063,\"lng\":206.5625},{\"lat\":-78.6245,\"lng\":202.6561},{\"lat\":-73.6556,\"lng\":197.1248},{\"lat\":-72.9994,\"lng\":197.8123},{\"lat\":-77.4995,\"lng\":202.7185},{\"lat\":-74.9687,\"lng\":205.5},{\"lat\":-71.2183,\"lng\":200.4998},{\"lat\":-70.5308,\"lng\":201.0623},{\"lat\":-71.2944,\"lng\":199.8011}]"
+        }
+    },
+    {
+        "id": 21077,
+        "mapping_version_id": 545,
+        "floor_id": 357,
+        "teeming": null,
+        "faction": "any",
+        "polyline": {
+            "color": "#003280",
+            "color_animated": null,
+            "weight": 3,
+            "vertices_json": "[{\"lat\":-61.6873,\"lng\":208.7187},{\"lat\":-66.381,\"lng\":204.7156},{\"lat\":-70.6948,\"lng\":210.215},{\"lat\":-66.381,\"lng\":214.3082},{\"lat\":-61.7188,\"lng\":208.7187}]"
+        }
+    }
+]
