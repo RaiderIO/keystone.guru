@@ -62,16 +62,21 @@ class CreateMappingVersion extends BaseCombatLogCommand
         $hasMappingVersion = $mappingVersion !== null;
 
         $mappingVersion = $combatLogMappingVersionService->createMappingVersionFromDungeonOrRaid($filePath, $mappingVersion, $enemyConnections);
-        $this->info(
-            sprintf(
-                '- %s mapping version %s (%s, %d, %d enemies)',
-                $hasMappingVersion ? 'Updated' : 'Created',
-                $mappingVersion->version,
-                __($mappingVersion->dungeon->name, [], 'en_US'),
-                $mappingVersion->id,
-                $mappingVersion->enemies()->count(),
-            )
-        );
+
+        if($mappingVersion === null ) {
+            $this->error(sprintf('Failed to create mapping version: %s', $filePath));
+        } else {
+            $this->info(
+                sprintf(
+                    '- %s mapping version %s (%s, %d, %d enemies)',
+                    $hasMappingVersion ? 'Updated' : 'Created',
+                    $mappingVersion->version,
+                    __($mappingVersion->dungeon->name, [], 'en_US'),
+                    $mappingVersion->id,
+                    $mappingVersion->enemies()->count(),
+                )
+            );
+        }
 
         return 0;
     }

@@ -15843,7 +15843,7 @@
                 "id": 347,
                 "index": 1,
                 "mdt_sub_level": null,
-                "ui_map_id": 804,
+                "ui_map_id": 435,
                 "map_name": null,
                 "name": "dungeons.mop.scarlet_monastery_mop.floors.forlorn_cloister",
                 "default": 1,
@@ -15859,7 +15859,14 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1143,
+                        "floor1_id": 347,
+                        "floor2_id": 348,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             },
@@ -15867,7 +15874,7 @@
                 "id": 348,
                 "index": 2,
                 "mdt_sub_level": null,
-                "ui_map_id": 805,
+                "ui_map_id": 436,
                 "map_name": null,
                 "name": "dungeons.mop.scarlet_monastery_mop.floors.crusaders_chapel",
                 "default": 0,
@@ -15883,7 +15890,14 @@
                 "percentage_display_zoom": null,
                 "zoom_max": null,
                 "active": 1,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1144,
+                        "floor1_id": 348,
+                        "floor2_id": 347,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
