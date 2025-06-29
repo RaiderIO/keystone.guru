@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Mapping;
 
 use App\Models\Dungeon;
-use App\Models\Enemy;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -33,7 +32,15 @@ class AssignMDTIDs extends Command
         $mappingVersions = MappingVersion::with(['enemies', 'dungeon'])->get();
 
         $dungeonWhitelist = [
-            Dungeon::RAID_SCARLET_ENCLAVE,
+            Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN,
+            Dungeon::DUNGEON_MOGU_SHAN_PALACE,
+            Dungeon::DUNGEON_SCARLET_HALLS_MOP,
+            Dungeon::DUNGEON_SCARLET_MONASTERY_MOP,
+            Dungeon::DUNGEON_SCHOLOMANCE_MOP,
+            Dungeon::DUNGEON_SHADO_PAN_MONASTERY,
+            Dungeon::DUNGEON_SIEGE_OF_NIUZAO_TEMPLE,
+            Dungeon::DUNGEON_STORMSTOUT_BREWERY,
+            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
         ];
 
         foreach ($mappingVersions as $mappingVersion) {

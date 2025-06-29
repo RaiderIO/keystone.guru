@@ -539,7 +539,7 @@ return [
             ],
         ],
         'scholomance_mop'            => [
-            'name'   => 'Scholomance',
+            'name'   => 'Scholomance (MoP)',
             'floors' => [
                 'the_reliquary'        => 'The Reliquary',
                 'chamber_of_summoning' => 'Chamber of Summoning',

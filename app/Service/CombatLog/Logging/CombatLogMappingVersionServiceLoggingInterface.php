@@ -26,7 +26,7 @@ interface CombatLogMappingVersionServiceLoggingInterface
 
     public function createMappingVersionFromCombatLogAddedNewFloorConnection(int $previousFloorId, int $currentFloorId): void;
 
-    public function createMappingVersionFromCombatLogSkipEntryMapChangeFloorNotFound(): void;
+    public function createMappingVersionFromCombatLogSkipEntryMapChangeFloorNotFound(int $uiMapId, int $dungeonId): void;
 
     public function createMappingVersionFromCombatLogSkipEntryNoFloor(): void;
 

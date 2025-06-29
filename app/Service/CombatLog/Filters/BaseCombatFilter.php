@@ -71,6 +71,9 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         56472  => 0.01, // Fragrant Lotus becomes friendly at 1hp
         56541  => 0.01, // Master Snowdrift becomes friendly at 1hp
         56884  => 0.01, // Corrupted Taran Zhu despawns and becomes friendly Taran Zhu at 1hp
+
+        // Scholomance
+        58722 => 0.01, // Lilian Voss
     ];
 
     /** @var array Some enemies are summoned that we DO want to track in the route */
