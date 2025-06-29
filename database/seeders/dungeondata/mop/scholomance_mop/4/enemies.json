@@ -6,7 +6,7 @@
         "enemy_patrol_id": null,
         "npc_id": 59080,
         "floor_id": 352,
-        "mdt_id": null,
+        "mdt_id": 1,
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": null,
