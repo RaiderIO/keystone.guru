@@ -18,17 +18,18 @@ class DungeonColumnHandler extends SimpleColumnHandler
 {
     public function __construct(DatatablesHandler $dtHandler)
     {
-        parent::__construct($dtHandler, 'dungeon_names', 'dungeons.name');
+        parent::__construct($dtHandler, 'dungeon_id', 'dungeons_names');
     }
 
-    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
+    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder, $columnData, $order, $generalSearch): void
     {
         // Only order
-//        $this->getDtHandler()->getBuilder()->leftJoin('translations', static function (JoinClause $clause) {
-//            $clause->on('translations.key', 'dungeons.name')
-//                ->on('translations.locale', DB::raw('"en_US"'));
-//        });
-
-        $subBuilder->orWhere('translations.translation', 'LIKE', sprintf('%%%s%%', $generalSearch));
+        $subBuilder
+            ->join('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')
+            ->join('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
+            ->leftJoin('translations', static function (JoinClause $clause) {
+                $clause->on('translations.key', 'dungeons.name')
+                    ->on('translations.locale', DB::raw('"en_US"'));
+            })->orWhere('translations.translation', 'LIKE', sprintf('%%%s%%', $generalSearch));
     }
 }

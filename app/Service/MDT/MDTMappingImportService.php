@@ -165,10 +165,18 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npc->npc_type_id       = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::UNCATEGORIZED;
                 $npc->truesight         = $mdtNpc->getStealthDetect();
 
-                $npcDungeonsAttributes[] = [
-                    'npc_id'     => $npc->id,
-                    'dungeon_id' => $dungeon->id,
-                ];
+                foreach($npc->npcDungeons as $npcDungeon) {
+                // Check if it's already associated
+                    if ($npcDungeon->dungeon_id === $dungeon->id) {
+                        // It is, don't save the attributes
+                        continue;
+                    }
+
+                    $npcDungeonsAttributes[] = [
+                        'npc_id'     => $npc->id,
+                        'dungeon_id' => $dungeon->id,
+                    ];
+                }
 
                 // Save characteristics
                 foreach ($mdtNpc->getCharacteristics() as $characteristicName => $enabled) {
@@ -241,7 +249,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $npcCharacteristicsDeleted = NpcCharacteristic::whereIn('npc_id', $affectedNpcIds)->delete();
             // Do not delete existing spells - we're only interested in new ones
 //            $npcSpellsDeleted          = NpcSpell::whereIn('npc_id', $affectedNpcIds)->delete();
-            $npcDungeonsDeleted = NpcDungeon::whereIn('npc_id', $affectedNpcIds)->delete();
+            // Do not delete existing dungeons - we're only interested in new ones
+//            $npcDungeonsDeleted = NpcDungeon::whereIn('npc_id', $affectedNpcIds)->delete();
 
             // Insert new ones
             NpcCharacteristic::insert($npcCharacteristicsAttributes);
