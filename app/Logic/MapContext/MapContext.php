@@ -100,9 +100,8 @@ abstract class MapContext
                 return array_merge($dungeon->toArray(), $this->getEnemies(), [
                     'latestMappingVersion'      => $this->floor->dungeon->currentMappingVersion,
                     'npcs'                      => $this->floor->dungeon->npcs()
-                        // @TODO #2772 Prevent loading NPCs that are not used (ie. those with dungeon_id = -1
                         ->when($this->onlyLoadInUseNpcs(), function (Builder $query) use ($enemies) {
-                            $query->whereIn('id', $enemies->pluck('id'));
+                            $query->whereIn('npcs.id', $enemies->pluck('npc_id')->unique());
                         })->with([
                             'spells',
                             // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
@@ -112,7 +111,10 @@ abstract class MapContext
                         ->disableCache()
                         ->get()
                         // Only show what we need in the FE
-                        ->each(fn(Npc $npc) => $npc->enemyForces?->setVisible(['enemy_forces', 'enemy_forces_teeming'])),
+                        ->each(function(Npc $npc) {
+                            $npc->enemyForces?->setVisible(['enemy_forces', 'enemy_forces_teeming']);
+                            $npc->setHidden(['pivot']);
+                        }),
                     'auras'                     => $auras,
                     'enemies'                   => $enemies,
                     'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),

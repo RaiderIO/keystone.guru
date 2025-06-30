@@ -39,9 +39,7 @@ class FetchDisplayIds extends Command
         }
 
         foreach ($dungeon->npcs as $npc) {
-            if ($npc->dungeon_id === -1) {
-                continue;
-            } else if ($npc->display_id !== null) {
+            if ($npc->display_id !== null) {
                 $this->info(sprintf('Skipping already set display ID for %s (%d)', $npc->name, $npc->id));
 
                 continue;

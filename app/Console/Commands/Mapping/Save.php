@@ -183,19 +183,21 @@ class Save extends Command
     private function saveNpcs(string $dungeonDataDir): void
     {
         // Save NPC data in the root of folder
-        $this->info('Saving global NPCs');
+        $this->info('Saving NPCs');
 
         // Save all NPCs which aren't directly tied to a dungeon
         /** @var Collection<Npc> $npcs */
         $npcs = Npc::without(['characteristics', 'spells', 'enemyForces'])
-            ->with(['npcCharacteristics', 'npcSpells', 'npcEnemyForces'])
-            ->where('dungeon_id', -1)
+            ->with(['npcCharacteristics', 'npcSpells', 'npcEnemyForces', 'npcDungeons'])
             ->get()
             ->values();
 
         foreach ($npcs as $npc) {
             $npc->makeHidden(['type', 'class', 'enemy_portrait_url']);
             $npc->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
+            foreach($npc->npcDungeons as $npcDungeon) {
+                $npcDungeon->makeHidden(['dungeon']);
+            }
         }
 
         $this->saveDataToJsonFile($npcs->toArray(), $dungeonDataDir, 'npcs.json');
@@ -254,7 +256,6 @@ class Save extends Command
             $rootDirPath = sprintf('%s%s/%s', $dungeonDataDir, $dungeon->expansion->shortname, $dungeon->key);
 
             $this->saveDungeonDungeonRoutes($dungeon, $rootDirPath);
-            $this->saveDungeonNpcs($dungeon, $rootDirPath);
 
             $floors = $dungeon->floors()->with([
                 'enemyPacksForExport',
@@ -378,31 +379,6 @@ class Save extends Command
 //        }
 
         $this->saveDataToJsonFile($dungeon->dungeonRoutesForExport->toArray(), $rootDirPath, 'dungeonroutes.json');
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function saveDungeonNpcs(Dungeon $dungeon, string $rootDirPath): void
-    {
-        /** @var Collection<Npc> $npcs */
-        $npcs = Npc::without(['characteristics', 'spells', 'enemyForces'])
-            ->with(['npcCharacteristics', 'npcSpells', 'npcEnemyForces'])
-            ->where('dungeon_id', $dungeon->id)
-            ->get()
-            ->makeHidden(['type', 'class', 'enemy_portrait_url'])
-            ->values();
-
-        foreach ($npcs as $npc) {
-            $npc->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
-        }
-
-        // Save NPC data in the root of the dungeon folder
-//        if ($npcs->count() > 0) {
-//            $this->info(sprintf('-- Saving %s npcs', $npcs->count()));
-//        }
-
-        $this->saveDataToJsonFile($npcs, $rootDirPath, 'npcs.json');
     }
 
     /**

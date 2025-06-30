@@ -11,6 +11,7 @@ use App\Logic\CombatLog\Guid\Creature;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClass;
 use App\Models\Npc\NpcClassification;
+use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcType;
 use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\DataExtractors\Logging\CreateMissingNpcDataExtractorLoggingInterface;
@@ -98,7 +99,6 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
 
             $createdNpc = Npc::create([
                 'id'                => $guid->getId(),
-                'dungeon_id'        => $currentDungeon->dungeon->id,
                 'classification_id' => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
                 'npc_type_id'       => NpcType::HUMANOID,
                 'npc_class_id'      => NpcClass::ALL[NpcClass::NPC_CLASS_MELEE],
@@ -121,6 +121,11 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
                             $currentDungeon->affixGroup->affixes->pluck('key')->toArray()
                         ));
                 }
+
+                NpcDungeon::create([
+                    'npc_id'     => $createdNpc->id,
+                    'dungeon_id' => $currentDungeon->dungeon->id,
+                ]);
 
                 // @TODO For now don't update base health - I may be doing the calculation wrong, MDT's got it?
 //                $createdNpc->update([

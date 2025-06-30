@@ -10,6 +10,7 @@ use App\Models\Enemy;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcBolsteringWhitelist;
 use App\Models\Npc\NpcClassification;
+use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
@@ -17,8 +18,10 @@ use App\Models\User;
 use App\Service\Npc\NpcServiceInterface;
 use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Session;
@@ -42,14 +45,14 @@ class NpcController extends Controller
      */
     public function store(NpcFormRequest $request, ?Npc $npc = null)
     {
-        $oldId        = null;
-        $oldDungeonId = null;
+        $oldId         = null;
+        $oldDungeonIds = null;
         // If we're saving as new, make a new NPC and save that instead
         if ($npc === null || $this->isSaveAsNew($request)) {
             $npc = new Npc();
         } else {
-            $oldId        = $npc->id;
-            $oldDungeonId = $npc->dungeon_id;
+            $oldId         = $npc->id;
+            $oldDungeonIds = $npc->dungeons->pluck('id')->toArray();
         }
 
         $npcBefore = clone $npc;
@@ -57,7 +60,6 @@ class NpcController extends Controller
         $validated  = $request->validated();
         $attributes = [
             'id'                => $validated['id'],
-            'dungeon_id'        => $validated['dungeon_id'],
             'classification_id' => $validated['classification_id'],
             'npc_type_id'       => $validated['npc_type_id'],
             'npc_class_id'      => $validated['npc_class_id'],
@@ -84,7 +86,19 @@ class NpcController extends Controller
         }
 
         if ($saveResult) {
-            $npc->load('dungeon');
+            // Dungeons
+            $dungeonIds = $validated['dungeon_ids'] ?? [];
+            // Clear current whitelists
+            $npc->npcDungeons()->delete();
+            $dungeonAttributes = [];
+            foreach ($dungeonIds as $dungeonId) {
+                $dungeonAttributes[] = [
+                    'npc_id'     => $npc->id,
+                    'dungeon_id' => $dungeonId,
+                ];
+            }
+            NpcDungeon::insert($dungeonAttributes);
+            $npc->load('dungeons');
 
             // Bolstering whitelist, if set
             $bolsteringWhitelistNpcs = $validated['bolstering_whitelist_npcs'] ?? [];
@@ -120,63 +134,37 @@ class NpcController extends Controller
                 Enemy::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
                 NpcEnemyForces::where('npc_id', $oldId)->update(['npc_id' => $npc->id]);
 
-                $changes = $npc->getChanges();
-
                 // If we changed the dungeon our enemy forces no longer match up with the mapping version, so get rid of them
                 // But we can keep them if the dungeon is now the generic dungeon, then all mapping versions are valid
-                if (isset($changes['dungeon_id']) && $changes['dungeon_id'] !== -1) {
+                if (!empty(array_diff($oldDungeonIds, $npc->dungeons->pluck('id')->toArray()))) {
                     // Change all existing enemy forces for all older mapping versions
-                    $currentDungeonMappingVersionId = Dungeon::findOrFail($oldDungeonId)->currentMappingVersion->id;
+                    /** @var Collection<Dungeon> $dungeons */
+                    $dungeons = Dungeon::whereIn('id', $oldDungeonIds)->get();
+                    foreach ($dungeons as $dungeon) {
+                        $currentDungeonMappingVersionId = $dungeon->currentMappingVersion->id;
 
-                    $npc->npcEnemyForces()
-                        ->where('mapping_version_id', '!=', $currentDungeonMappingVersionId)
-                        ->delete();
+                        $npc->npcEnemyForces()
+                            ->where('mapping_version_id', '!=', $currentDungeonMappingVersionId)
+                            ->delete();
 
-                    // Update the latest mapping version enemy forces to the new latest mapping version
-                    $npc->npcEnemyForces()
-                        ->where('mapping_version_id', $currentDungeonMappingVersionId)
-                        ->update([
-                            'mapping_version_id' => Dungeon::findOrFail($changes['dungeon_id'])->currentMappingVersion->id,
-                        ]);
+                        // Update the latest mapping version enemy forces to the new latest mapping version
+                        $npc->npcEnemyForces()
+                            ->where('mapping_version_id', $currentDungeonMappingVersionId)
+                            ->update([
+                                'mapping_version_id' => $dungeon->currentMappingVersion->id,
+                            ]);
+                    }
                 }
             }
 
-            // Broadcast notifications so that any open mapping sessions get these changes immediately
-            // If no dungeon is set, user selected 'All Dungeons'
-            $npcAllDungeon       = ($npc->dungeon === null);
-            $npcBeforeAllDungeon = ($oldDungeonId === -1);
-
-            // Prevent sending multiple messages for the same dungeon
-            $messagesSentToDungeons = collect();
             /** @var User $user */
             $user = Auth::user();
-            if ($npcAllDungeon || $npcBeforeAllDungeon) {
-                // Broadcast the event for all dungeons
-                foreach (Dungeon::all() as $dungeon) {
-                    if ($npc->dungeon === null && $messagesSentToDungeons->search($dungeon->id) === false) {
-                        broadcast(new NpcChangedEvent($dungeon, $user, $npc));
-                        $messagesSentToDungeons->push($dungeon->id);
-                    }
-
-                    if ($npcBefore->dungeon === null && $messagesSentToDungeons->search($dungeon->id) === false) {
-                        broadcast(new NpcChangedEvent($dungeon, $user, $npcBefore));
-                        $messagesSentToDungeons->push($dungeon->id);
-                    }
-                }
+            foreach ($npc->dungeons as $dungeon) {
+                broadcast(new NpcChangedEvent($dungeon, $user, $npc));
             }
 
-            // If we're now for all dungeons we don't have a current dungeon so we can't do these checks
-            // We already sent messages above in this case so we're already good
-            if (!$npcAllDungeon) {
-                // Let previous dungeon know that this NPC is no longer available
-                if ($messagesSentToDungeons->search($npc->dungeon->id) === false) {
-                    broadcast(new NpcChangedEvent($npc->dungeon, $user, $npc));
-                    $messagesSentToDungeons->push($npc->dungeon->id);
-                }
-
-                if (!$npcBeforeAllDungeon && $messagesSentToDungeons->search($npc->dungeon->id) === false) {
-                    broadcast(new NpcChangedEvent($npcBefore->dungeon, $user, $npcBefore));
-                }
+            foreach ($npcBefore->dungeons as $dungeon) {
+                broadcast(new NpcChangedEvent($dungeon, $user, $npcBefore));
             }
 
             // Re-load the relations so we're echoing back a fully updated npc
@@ -202,12 +190,19 @@ class NpcController extends Controller
         return view('admin.npc.edit', [
             'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(string $name, int $id) => [$id => __($name)]),
             'spells'          => Spell::all(),
-            'bolsteringNpcs'  => Npc::orderByRaw('dungeon_id, name')
+            'bolsteringNpcs'  => Npc::join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+                ->join('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
+                ->join('translations', static function (JoinClause $join) {
+                    $join->on('translations.key', '=', 'npcs.name')
+                        ->where('translations.locale', '=', 'en_US');
+                })
+                ->selectRaw('npcs.*, npc_dungeons.dungeon_id as dungeon_id')
+                ->orderByRaw('npc_dungeons.dungeon_id, name')
                 ->get()
                 ->groupBy('dungeon_id')
                 ->mapWithKeys(static function ($value, $key) {
                     // Halls of Valor => [npcs]
-                    $dungeonName = $key === -1 ? __('view_admin.npc.edit.all_dungeons') : __(Dungeon::find($key)->name);
+                    $dungeonName = __(Dungeon::find($key)?->name);
 
                     return [
                         $dungeonName => $value->pluck('name', 'id')
@@ -227,7 +222,7 @@ class NpcController extends Controller
             'npc'             => $npc,
             'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(string $name, int $id) => [$id => __($name)]),
             'spells'          => Spell::all(),
-            'bolsteringNpcs'  => $npc->dungeon === null ? [] : $npcService->getNpcsForDropdown($npc->dungeon, true),
+            'bolsteringNpcs'  => $npcService->getNpcsForDropdown($npc->dungeons),
         ]);
     }
 

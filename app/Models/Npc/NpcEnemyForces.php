@@ -51,6 +51,6 @@ class NpcEnemyForces extends CacheModel implements MappingModelCloneableInterfac
 
     public function getDungeonId(): ?int
     {
-        return $this->npc->dungeon_id;
+        return $this->npc->getDungeonId();
     }
 }

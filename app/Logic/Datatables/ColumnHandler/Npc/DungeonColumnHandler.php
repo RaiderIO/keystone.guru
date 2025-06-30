@@ -18,16 +18,16 @@ class DungeonColumnHandler extends SimpleColumnHandler
 {
     public function __construct(DatatablesHandler $dtHandler)
     {
-        parent::__construct($dtHandler, 'dungeon_id', 'dungeons.name');
+        parent::__construct($dtHandler, 'dungeon_names', 'dungeons.name');
     }
 
     protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
     {
         // Only order
-        $this->getDtHandler()->getBuilder()->leftJoin('translations', static function (JoinClause $clause) {
-            $clause->on('translations.key', 'dungeons.name')
-                ->on('translations.locale', DB::raw('"en_US"'));
-        });
+//        $this->getDtHandler()->getBuilder()->leftJoin('translations', static function (JoinClause $clause) {
+//            $clause->on('translations.key', 'dungeons.name')
+//                ->on('translations.locale', DB::raw('"en_US"'));
+//        });
 
         $subBuilder->orWhere('translations.translation', 'LIKE', sprintf('%%%s%%', $generalSearch));
     }
