@@ -16,6 +16,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\MDTImport;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
+use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcType;
 use App\Models\Spell\Spell;
@@ -193,9 +194,9 @@ class AdminToolsController extends Controller
                 $beforeModel = clone $npcCandidate;
 
                 /** @var Dungeon $dungeon */
-                $dungeon = Dungeon::where('zone_id', $npcData['location'][0])->first();
-                if ($dungeon === null) {
-                    $log[] = sprintf('*** Unable to find dungeon with zone_id %s; npc %s (%s) NOT added; needs manual work', $npcData['location'][0], $npcData['id'], $npcData['name']);
+                $dungeons = Dungeon::whereIn('zone_id', $npcData['location'])->get();
+                if ($dungeons->isEmpty()) {
+                    $log[] = sprintf('*** Unable to find dungeon(s) with zone_id(s) %s; npc %s (%s) NOT added; needs manual work', implode(', ', $npcData['location']), $npcData['id'], $npcData['name']);
 
                     continue;
                 }
@@ -214,8 +215,6 @@ class AdminToolsController extends Controller
                 }
 
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
-                // 8 since we start the expansion with 8 dungeons usually
-                $npcCandidate->dungeon_id = count($npcData['location']) > 1 ? -1 : $dungeon->id;
                 $npcCandidate->name       = $npcData['name'];
                 // Do not overwrite health if it was set already
                 if ($npcCandidate->base_health <= 0) {
@@ -226,16 +225,23 @@ class AdminToolsController extends Controller
 
                 $existed = $npcCandidate->exists;
                 if ($npcCandidate->save()) {
-                    if ($existed) {
-                        $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
-                    } else {
-                        // Now create new enemy forces. Default to 0
-                        $npcCandidate->createNpcEnemyForcesForExistingMappingVersions();
+                    foreach($dungeons as $dungeon) {
+                        NpcDungeon::create([
+                            'npc_id' => $npcCandidate->id,
+                            'dungeon_id' => $dungeon->id,
+                        ]);
 
-                        $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                        if ($existed) {
+                            $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                        } else {
+                            // Now create new enemy forces. Default to 0
+                            $npcCandidate->createNpcEnemyForcesForExistingMappingVersions();
+
+                            $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                        }
                     }
                 } else {
-                    $log[] = sprintf('*** Error saving NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                    $log[] = sprintf('*** Error saving NPC %s (%s)', $npcData['id'], $npcData['name']);
                 }
 
                 // Changed the mapping; so make sure we synchronize it
@@ -256,7 +262,9 @@ class AdminToolsController extends Controller
     {
         return view('admin.tools.npc.managespellvisibility', [
             'npcs'    => Npc::when($dungeon !== null, function (Builder $builder) use ($dungeon) {
-                return $builder->where('dungeon_id', $dungeon->id);
+                return $builder->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+                    ->select('npcs.*')
+                    ->where('npc_dungeons.dungeon_id', $dungeon->id);
             })->with('npcSpells')
                 ->has('npcSpells')
                 ->paginate(50),
@@ -997,12 +1005,14 @@ class AdminToolsController extends Controller
      */
     public function applychange(Request $request)
     {
-        $category = $request->get('category');
-        $npcId    = $request->get('npc_id');
-        $value    = $request->get('value');
+        $category  = $request->get('category');
+        $npcId     = $request->get('npc_id');
+        $dungeonId = $request->get('dungeon_id');
+        $value     = $request->get('value');
 
         /** @var \App\Models\Npc\Npc $npc */
-        $npc = Npc::with(['enemyForces'])->find($npcId);
+        $npc     = Npc::with(['enemyForces'])->find($npcId);
+        $dungeon = Dungeon::findOrFail($dungeonId);
 
         switch ($category) {
             case 'mismatched_health':
@@ -1010,9 +1020,7 @@ class AdminToolsController extends Controller
                 $npc->save();
                 break;
             case 'mismatched_enemy_forces':
-                if ($npc->dungeon_id !== -1) {
-                    $npc->setEnemyForces($value);
-                }
+                $npc->setEnemyForces($value, $dungeon->currentMappingVersion);
 
                 break;
             // Teeming is deprecated pretty much

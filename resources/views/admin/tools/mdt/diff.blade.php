@@ -1,6 +1,7 @@
 <?php
 
 use App\Logic\MDT\Exception\ImportWarning;
+use App\Models\Npc\Npc;
 use Illuminate\Support\Collection;
 
 /**
@@ -76,13 +77,14 @@ use Illuminate\Support\Collection;
                 </tr>
                 @foreach($category as $importWarning)
                         <?php /** @var ImportWarning $importWarning */
+                        /** @var $data array{old: ?string, new: ?string, npc: ?Npc} */
                         $data   = ($importWarning->getData());
                         $mdtNpc = $data['mdt_npc'];
 
                         $old         = $data['old'] ?? '';
                         $new         = $data['new'] ?? '';
                         $count       = isset($data['npc']) ? $data['npc']->enemies->count() : 0;
-                        $dungeonName = isset($data['npc']) && isset($data['npc']->dungeon) ? $data['npc']->dungeon->name : __('view_admin.tools.mdt.diff.no_dungeon_name_found');
+                        $dungeonName = isset($data['npc']) && $data['npc']->dungeons->isNotEmpty() ? $data['npc']->dungeons->first()->name : __('view_admin.tools.mdt.diff.no_dungeon_name_found');
                         ?>
                     <tr id="{{ $key . '_' . $mdtNpc->id }}">
                         <td>
@@ -103,7 +105,9 @@ use Illuminate\Support\Collection;
                         <td>
                             @if( $key === 'mismatched_health' || $key === 'mismatched_enemy_forces' || $key === 'mismatched_enemy_forces_teeming' || $key === 'mismatched_enemy_type')
                                 <button class="btn btn-primary apply_btn"
-                                        data-id="{{ $mdtNpc->id }}" data-category="{{ $key }}"
+                                        data-id="{{ $mdtNpc->id }}"
+                                        data-dungeon_id="{{ $data['npc']->dungeons->first()->id }}"
+                                        data-category="{{ $key }}"
                                         data-new="{{ $new }}">
                                     {{ __('view_admin.tools.mdt.diff.apply_mdt_kg') }}
                                 </button>

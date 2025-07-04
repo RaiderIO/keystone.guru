@@ -12,8 +12,10 @@ use App\Logic\Datatables\NpcsDatatablesHandler;
 use App\Models\Npc\Npc;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Teapot\StatusCode\Http;
 
 class AjaxNpcController extends Controller
@@ -29,7 +31,9 @@ class AjaxNpcController extends Controller
             if ($npc->delete()) {
                 /** @var User $user */
                 $user = Auth::user();
-                broadcast(new NpcDeletedEvent($npc->dungeon, $user, $npc));
+                foreach ($npc->dungeons as $dungeon) {
+                    broadcast(new NpcDeletedEvent($dungeon, $user, $npc));
+                }
             }
 
             // Trigger mapping changed event so the mapping gets saved across all environments
@@ -48,9 +52,14 @@ class AjaxNpcController extends Controller
      */
     public function get(Request $request): array
     {
-        $npcs = Npc::with(['dungeon', 'type', 'classification', 'enemyForces'])
-            ->selectRaw('npcs.*, COUNT(enemies.id) as enemy_count')
-            ->leftJoin('dungeons', 'npcs.dungeon_id', '=', 'dungeons.id')
+        $npcs = Npc::with(['type', 'classification', 'enemyForces'])
+            ->selectRaw('npcs.*, GROUP_CONCAT(DISTINCT translations.translation SEPARATOR ", ") AS dungeon_names, COUNT(enemies.id) as enemy_count')
+            ->join('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')
+            ->leftJoin('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
+            ->leftJoin('translations', static function (JoinClause $clause) {
+                $clause->on('translations.key', 'dungeons.name')
+                    ->on('translations.locale', DB::raw('"en_US"'));
+            })
             ->leftJoin('enemies', 'npcs.id', '=', 'enemies.npc_id')
             ->groupBy('npcs.id');
         //            ->leftJoin('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')

@@ -19,6 +19,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcClassification;
+use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcSpell;
 use App\Models\Npc\NpcType;
@@ -132,6 +133,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $npcsUpdated                  = $npcsInserted = 0;
             $npcCharacteristicsAttributes = [];
             $npcSpellsAttributes          = [];
+            $npcDungeonsAttributes        = [];
             $affectedNpcIds               = [];
 
             /** @var Npc|null $npc */
@@ -151,7 +153,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                 $npc->id = $mdtNpc->getId();
                 // Allow manual override to -1
-                $npc->dungeon_id        = $npc->dungeon_id === -1 ? -1 : $dungeon->id;
                 $npc->display_id        = $mdtNpc->getDisplayId();
                 $npc->encounter_id      = $mdtNpc->getEncounterId();
                 $npc->classification_id ??= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE];
@@ -163,6 +164,19 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npc->mdt_scale         = $mdtNpc->getScale();
                 $npc->npc_type_id       = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::UNCATEGORIZED;
                 $npc->truesight         = $mdtNpc->getStealthDetect();
+
+                foreach($npc->npcDungeons as $npcDungeon) {
+                // Check if it's already associated
+                    if ($npcDungeon->dungeon_id === $dungeon->id) {
+                        // It is, don't save the attributes
+                        continue;
+                    }
+
+                    $npcDungeonsAttributes[] = [
+                        'npc_id'     => $npc->id,
+                        'dungeon_id' => $dungeon->id,
+                    ];
+                }
 
                 // Save characteristics
                 foreach ($mdtNpc->getCharacteristics() as $characteristicName => $enabled) {
@@ -235,10 +249,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $npcCharacteristicsDeleted = NpcCharacteristic::whereIn('npc_id', $affectedNpcIds)->delete();
             // Do not delete existing spells - we're only interested in new ones
 //            $npcSpellsDeleted          = NpcSpell::whereIn('npc_id', $affectedNpcIds)->delete();
+            // Do not delete existing dungeons - we're only interested in new ones
+//            $npcDungeonsDeleted = NpcDungeon::whereIn('npc_id', $affectedNpcIds)->delete();
 
             // Insert new ones
             NpcCharacteristic::insert($npcCharacteristicsAttributes);
             NpcSpell::insert($npcSpellsAttributes);
+            NpcDungeon::insert($npcDungeonsAttributes);
 
             $this->log->importNpcsDataFromMDTCharacteristicsAndSpellsUpdate(
                 $npcsUpdated,
@@ -246,7 +263,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npcCharacteristicsDeleted,
                 count($npcCharacteristicsAttributes),
                 0,
-                count($npcSpellsAttributes)
+                count($npcSpellsAttributes),
+                $npcDungeonsDeleted,
+                count($npcDungeonsAttributes)
             );
         } finally {
             $this->log->importNpcsDataFromMDTEnd();

@@ -5,6 +5,7 @@ namespace App\Models\Npc;
 use App\Models\Affix;
 use App\Models\CacheModel;
 use App\Models\Characteristic;
+use App\Models\CharacterRace;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\Mapping\MappingModelInterface;
@@ -54,6 +55,8 @@ use InvalidArgumentException;
  * @property Collection<Spell>                  $spells
  * @property Collection<NpcSpell>               $npcSpells
  * @property Collection<NpcBolsteringWhitelist> $npcbolsteringwhitelists
+ * @property Collection<Dungeon>                $dungeons
+ * @property Collection<NpcDungeon>             $npcDungeons
  *
  * @mixin Eloquent
  */
@@ -119,7 +122,8 @@ class Npc extends CacheModel implements MappingModelInterface
         'enemy_portrait_url',
     ];
 
-    public function getEnemyPortraitUrlAttribute(): string {
+    public function getEnemyPortraitUrlAttribute(): string
+    {
         return ksgAssetImage(sprintf('enemyportraits/%d.png', $this->id));
     }
 
@@ -139,6 +143,16 @@ class Npc extends CacheModel implements MappingModelInterface
     public function dungeon(): BelongsTo
     {
         return $this->belongsTo(Dungeon::class);
+    }
+
+    public function dungeons(): BelongsToMany
+    {
+        return $this->belongsToMany(Dungeon::class, 'npc_dungeons');
+    }
+
+    public function npcDungeons(): HasMany
+    {
+        return $this->hasMany(NpcDungeon::class);
     }
 
     public function classification(): BelongsTo
@@ -190,17 +204,13 @@ class Npc extends CacheModel implements MappingModelInterface
         return $this->hasOne(NpcEnemyForces::class)->orderByDesc('mapping_version_id');
     }
 
-    public function setEnemyForces(int $enemyForces, ?MappingVersion $mappingVersion = null): NpcEnemyForces
+    public function setEnemyForces(int $enemyForces, MappingVersion $mappingVersion): NpcEnemyForces
     {
-        if ($this->dungeon_id === -1 && $mappingVersion === null) {
-            throw new InvalidArgumentException('Unable to set enemy forces for global npc without a mapping version!');
-        }
-
-        $npcEnemyForces = $this->enemyForcesByMappingVersion($mappingVersion)->first();
+        $npcEnemyForces = $this->enemyForcesByMappingVersion($mappingVersion->id)->first();
 
         if ($npcEnemyForces === null) {
             $npcEnemyForces = NpcEnemyForces::create([
-                'mapping_version_id' => ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id,
+                'mapping_version_id' => $mappingVersion->id,
                 'npc_id'             => $this->id,
                 'enemy_forces'       => $enemyForces,
             ]);
@@ -311,17 +321,19 @@ class Npc extends CacheModel implements MappingModelInterface
         $result = true;
 
         if ($existingEnemyForces > 0) {
-            $this->load('dungeon');
+            $this->load('dungeons');
+
             // Create new enemy forces for this enemy for each relevant mapping version
             // If no dungeon is found (dungeon_id = -1) we grab all mapping versions instead
-            $mappingVersions = $this->dungeon?->mappingVersions ?? MappingVersion::all();
-            foreach ($mappingVersions as $mappingVersion) {
-                $result = $result && NpcEnemyForces::create([
-                        'npc_id'               => $this->id,
-                        'mapping_version_id'   => $mappingVersion->id,
-                        'enemy_forces'         => $existingEnemyForces ?? 0,
-                        'enemy_forces_teeming' => null,
-                    ]);
+            foreach ($this->dungeons as $dungeon) {
+                foreach ($dungeon->mappingVersions as $mappingVersion) {
+                    $result = $result && NpcEnemyForces::create([
+                            'npc_id'               => $this->id,
+                            'mapping_version_id'   => $mappingVersion->id,
+                            'enemy_forces'         => $existingEnemyForces,
+                            'enemy_forces_teeming' => null,
+                        ]);
+                }
             }
         }
 
@@ -330,7 +342,9 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function getDungeonId(): ?int
     {
-        return $this->dungeon_id ?? null;
+        /** @var Dungeon|null $dungeon */
+        $dungeon = $this->dungeons->first();
+        return $dungeon?->id ?? null;
     }
 
     protected static function booted(): void
@@ -343,6 +357,7 @@ class Npc extends CacheModel implements MappingModelInterface
             $npc->npcCharacteristics()->delete();
             $npc->npcSpells()->delete();
             $npc->npcEnemyForces()->delete();
+            $npc->npcDungeons()->delete();
         });
     }
 }

@@ -36,7 +36,9 @@ interface MDTMappingImportServiceLoggingInterface
         int $npcCharacteristicsDeleted,
         int $npcCharacteristicsInserted,
         int $npcSpellsDeleted,
-        int $npcSpellsInserted
+        int $npcSpellsInserted,
+        int $npcDungeonsDeleted,
+        int $npcDungeonsInserted
     ): void;
 
     public function importNpcsDataFromMDTNpcNotMarkedForAllDungeons(int $npcId): void;

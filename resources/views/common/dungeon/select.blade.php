@@ -30,6 +30,7 @@ $activeOnly        ??= true; // !config('app.debug');
 $showSiegeWarning  ??= false;
 $selected          ??= null;
 $ignoreGameVersion ??= false;
+$multiple          ??= false;
 $dungeonsSelect    = [];
 
 // If we didn't get any specific dungeons to display, resort to some defaults we may have set
@@ -99,8 +100,7 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
 
     if ($expansion->active || !$activeOnly) {
         $dungeonsOfExpansionFiltered = $dungeonsOfExpansion
-            ->when(!$ignoreGameVersion, static fn(Collection $collection) =>
-                $collection->filter(static fn(Dungeon $dungeon) => $dungeon->game_version_id === $currentUserGameVersion->id)
+            ->when(!$ignoreGameVersion, static fn(Collection $collection) => $collection->filter(static fn(Dungeon $dungeon) => $dungeon->game_version_id === $currentUserGameVersion->id)
             );
 
         // Only if there's something to display for this expansion
@@ -141,7 +141,11 @@ foreach ($dungeonsByExpansion as $expansionId => $dungeonsOfExpansion) {
     @if($label !== false)
         {!! Form::label($name, $label . ($required ? '<span class="form-required">*</span>' : ''), [], false) !!}
     @endif
-    {!! Form::select($name, $dungeonsSelect, $selected, array_merge(['id' => $id], ['class' => 'form-control selectpicker', 'data-live-search' => 'true'])) !!}
+    {!! Form::select($name, $dungeonsSelect, $selected, array_merge(['id' => $id],
+        $multiple ? ['multiple' => 'multiple'] : [], [
+            'class' => 'form-control selectpicker', 'data-live-search' => 'true'
+        ])
+    ) !!}
     @if( $showSiegeWarning )
         <div id="siege_of_boralus_faction_warning" class="text-warning mt-2" style="display: none;">
             <i class="fa fa-exclamation-triangle"></i> {{ __('view_common.dungeon.select.siege_of_boralus_warning') }}

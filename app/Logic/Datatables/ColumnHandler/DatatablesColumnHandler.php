@@ -85,7 +85,7 @@ abstract class DatatablesColumnHandler
             }
         }
 
-        // If the column we're supposed to represent is not found
+        // If the column we're supposed to represent is found
         if ($column !== null) {
             // == intended
             $order = $order['column'] == $columnIndex ? $order : null;

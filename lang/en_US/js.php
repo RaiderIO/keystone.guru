@@ -389,6 +389,7 @@ return [
     'preview_label'                                                        => 'Preview',
     'title_label'                                                          => 'Title',
     'dungeon_label'                                                        => 'Dungeon',
+    'dungeons_label'                                                       => 'Dungeons',
     'features_label'                                                       => 'Features',
     'author_label'                                                         => 'Author',
     'metrics_label'                                                        => 'Metrics',

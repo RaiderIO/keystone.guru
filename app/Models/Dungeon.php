@@ -264,13 +264,11 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $this->dungeonRoutes()->where('demo', true);
     }
 
-    public function npcs(bool $includeGlobalNpcs = true): HasMany
+    public function npcs(): BelongsToMany
     {
-        return $this->hasMany(Npc::class)
-            ->when($includeGlobalNpcs, static function (Builder $builder) {
-                $builder->orWhere('dungeon_id', -1);
-            });
+        return $this->belongsToMany(Npc::class, 'npc_dungeons', 'dungeon_id', 'npc_id');
     }
+
 
     public function enemies(): HasManyThrough
     {
@@ -397,7 +395,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public function getNpcsMinMaxHealth(MappingVersion $mappingVersion): array
     {
-        $result = $this->npcs(false)
+        $result = $this->npcs()
             ->selectRaw('MIN(npcs.base_health * (COALESCE(npcs.health_percentage, 100) / 100)) AS min_health,
                                    MAX(npcs.base_health * (COALESCE(npcs.health_percentage, 100) / 100)) AS max_health')
             // Ensure that there's at least one enemy by having this join

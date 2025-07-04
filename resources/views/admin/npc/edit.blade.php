@@ -55,7 +55,14 @@ use App\Models\Spell\Spell;
         @include('common.forms.form-error', ['key' => 'id'])
     </div>
 
-    @include('common.dungeon.select', ['activeOnly' => false, 'ignoreGameVersion' => true])
+    @include('common.dungeon.select', [
+        'name' => 'dungeon_ids[]',
+        'selected' => isset($npc) ? $npc->dungeons->pluck('id')->toArray() : [],
+        'multiple' => true,
+        'showAll' => false,
+        'activeOnly' => false,
+        'ignoreGameVersion' => true
+    ])
 
     <div class="form-group{{ $errors->has('classification_id') ? ' has-error' : '' }}">
         {!! Form::label('classification_id', __('view_admin.npc.edit.classification'), [], false) !!}
