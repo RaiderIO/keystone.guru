@@ -467,9 +467,9 @@ class Enemy extends VersionableMapObject {
         let result = null;
 
         if (this.npc !== null) {
-            let scaledHealth = this.npc.base_health * ((this.npc.health_percentage ?? 100) / 100);
-
             let mapContext = getState().getMapContext();
+            let scaledHealth = mapContext.getNpcHealth(this.npc);
+
             let keyLevelLabel = '';
             let affixes = [];
 
@@ -492,7 +492,8 @@ class Enemy extends VersionableMapObject {
                 scaledHealth = Math.round(scaledHealth);
             }
 
-            let percentageString = this.npc.health_percentage !== null && this.npc.health_percentage !== 100 ? ` (${this.npc.health_percentage}%)` : ``;
+            let healthPercentage = mapContext.getNpcHealthPercentage(this.npc);
+            let percentageString = healthPercentage !== 100 ? ` (${healthPercentage}%)` : ``;
 
             result = {info: [], custom: []};
             // @formatter:off
@@ -501,7 +502,7 @@ class Enemy extends VersionableMapObject {
                 value: scaledHealth.toLocaleString() + percentageString,
                 info: affixes.length === 0 ? false : lang.get('messages.sidebar_enemy_health_affixes_label', {
                     affixes: affixes.join(', '),
-                    baseHealth: this.npc.base_health.toLocaleString(),
+                    baseHealth: mapContext.getNpcHealth(this.npc).toLocaleString(),
                     factor: Math.round(c.map.enemy.getKeyScalingFactor(mapContext.getLevelMin(), affixes) * 100)
                 })
             });
@@ -607,7 +608,7 @@ class Enemy extends VersionableMapObject {
             case GAME_VERSION_WOTLK:
                 wowheadBaseUrl += '/wrath';
                 break;
-            case GAME_VERSION_CLASSIC:
+            case GAME_VERSION_CLASSIC_ERA:
                 wowheadBaseUrl += '/classic';
                 break;
         }

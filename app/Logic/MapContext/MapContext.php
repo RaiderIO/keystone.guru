@@ -8,6 +8,7 @@ use App\Models\CharacterClassSpecialization;
 use App\Models\Dungeon;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
@@ -111,7 +112,7 @@ abstract class MapContext
                         ->disableCache()
                         ->get()
                         // Only show what we need in the FE
-                        ->each(function(Npc $npc) {
+                        ->each(function (Npc $npc) {
                             $npc->enemyForces?->setVisible(['enemy_forces', 'enemy_forces_teeming']);
                             $npc->setHidden(['pivot']);
                         }),
@@ -142,6 +143,7 @@ abstract class MapContext
             'raidMarkers'                       => RaidMarker::all(),
             'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
             'publishStates'                     => PublishedState::all(),
+            'gameVersions'                      => GameVersion::all(),
         ], config('keystoneguru.cache.static_data.ttl'));
 
         [$npcMinHealth, $npcMaxHealth] = $this->floor->dungeon->getNpcsMinMaxHealth($this->mappingVersion);

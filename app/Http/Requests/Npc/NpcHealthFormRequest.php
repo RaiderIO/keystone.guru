@@ -25,6 +25,11 @@ class NpcHealthFormRequest extends FormRequest
                 'percentage' => null,
             ]);
         }
+
+        // Remove commas or dots in the name; we want the integer value
+        $this->merge([
+            'health' => str_replace([',', '.'], '', (string)$this->input('health')),
+        ]);
     }
 
 
@@ -35,7 +40,10 @@ class NpcHealthFormRequest extends FormRequest
     {
         return [
             'game_version_id' => Rule::in(GameVersion::ALL),
-            'health'          => 'required|int',
+            'health'          => [
+                'required',
+                'regex:/^[\d\s,]*$/',
+            ],
             'percentage'      => 'nullable|int',
         ];
     }

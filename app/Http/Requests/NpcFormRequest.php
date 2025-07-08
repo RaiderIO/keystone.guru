@@ -33,10 +33,6 @@ class NpcFormRequest extends FormRequest
             'npc_class_id'              => Rule::exists('npc_classes', 'id'),
             'classification_id'         => [Rule::exists('npc_classifications', 'id'), 'required'],
             'aggressiveness'            => Rule::in(Npc::ALL_AGGRESSIVENESS),
-            'base_health'               => [
-                'required',
-                'regex:/^[\d\s,]*$/',
-            ],
             'health_percentage'         => 'int|nullable',
             'level'                     => 'int|nullable',
             'dangerous'                 => 'bool',

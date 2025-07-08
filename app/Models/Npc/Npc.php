@@ -27,8 +27,6 @@ use Illuminate\Support\Collection;
  * @property int|null                           $display_id
  * @property int|null                           $encounter_id
  * @property string                             $name
- * @property int                                $base_health
- * @property int|null                           $health_percentage Null = 100% health
  * @property int|null                           $level
  * @property float|null                         $mdt_scale
  * @property string                             $aggressiveness

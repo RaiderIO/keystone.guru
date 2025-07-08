@@ -234,7 +234,7 @@ class MDTDungeon
                                 // We don't care for the relationships here - just want to know if the NPC exists or not
                                 'type', 'class', 'npcbolsteringwhitelists', 'characteristics', 'spells'
                             ]) ??
-                            new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId, 'base_health' => 76000, 'enemy_forces' => -1])
+                            new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId])
                         );
 
                         if ($enemy->npc->isEmissary()) {

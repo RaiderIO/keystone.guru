@@ -261,11 +261,12 @@ MDT.mapPOIs[dungeonIndex] = {};
             $isBoss = $npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS] ?
                 true : null;
 
+            $npcHealth    = $npc->getHealthByGameVersion($mappingVersion->dungeon->gameVersion);
             $dungeonEnemy = array_filter([
                 'name'             => addslashes($npc->name),
                 'id'               => $npc->id,
                 'count'            => $enemyForces,
-                'health' => $npc->getHealthByGameVersion($mappingVersion->dungeon->gameVersion)?->health ?? 123456,
+                'health'           => $npcHealth?->health ?? 123456,
                 'scale'            => $npc->mdt_scale ?? $scaleMapping[$npc->classification_id],
                 'stealthDetect'    => $npc->truesight ? true : null,
                 'displayId'        => $npc->display_id,
@@ -282,7 +283,7 @@ MDT.mapPOIs[dungeonIndex] = {};
                     return [$spell->id => []];
                 })->toArray(),
                 'clones'           => [],
-                'healthPercentage' => $npc->health_percentage ?? null,
+                'healthPercentage' => $npcHealth?->percentage ?? null,
             ], fn($value) => $value !== null);
 
             $translations->push($npc->name);

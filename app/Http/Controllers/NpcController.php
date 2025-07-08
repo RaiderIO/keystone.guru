@@ -64,8 +64,6 @@ class NpcController extends Controller
             'npc_type_id'       => $validated['npc_type_id'],
             'npc_class_id'      => $validated['npc_class_id'],
             'name'              => $validated['name'],
-            // Remove commas or dots in the name; we want the integer value
-            'base_health'       => str_replace([',', '.'], '', (string)$validated['base_health']),
             'health_percentage' => (int)$validated['health_percentage'] === 100 ? null : $validated['health_percentage'],
             'level'             => $validated['level'],
             'aggressiveness'    => $validated['aggressiveness'],

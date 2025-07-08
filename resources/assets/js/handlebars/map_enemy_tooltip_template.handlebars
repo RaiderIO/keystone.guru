@@ -8,9 +8,14 @@
         <div class="col-7 no-gutters">{{{ enemy_forces }}}</div>
     </div>
     <div class="row">
-        <div class="col-5 no-gutters">{{ base_health_label }}</div>
-        <div class="col-7 no-gutters">{{ base_health }}</div>
+        <div class="col-12 font-weight-bold">{{ health_section_label }}</div>
     </div>
+    {{#each healths}}
+        <div class="row">
+            <div class="col-5 no-gutters">{{ game_version }}</div>
+            <div class="col-7 no-gutters">{{ health }} @ {{percentage}}%</div>
+        </div>
+    {{/each}}
     {{#if is_teeming}}
         <div class="row">
             <div class="col-5 no-gutters">{{ teeming_label }}</div>

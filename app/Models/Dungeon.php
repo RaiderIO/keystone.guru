@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Mockery\Exception;
 
@@ -396,10 +397,14 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
     public function getNpcsMinMaxHealth(MappingVersion $mappingVersion): array
     {
         $result = $this->npcs()
-            ->selectRaw('MIN(npcs.base_health * (COALESCE(npcs.health_percentage, 100) / 100)) AS min_health,
-                                   MAX(npcs.base_health * (COALESCE(npcs.health_percentage, 100) / 100)) AS max_health')
+            ->selectRaw('MIN(nh.health * (COALESCE(nh.percentage, 100) / 100)) AS min_health,
+                     MAX(nh.health * (COALESCE(nh.percentage, 100) / 100)) AS max_health')
             // Ensure that there's at least one enemy by having this join
             ->join('enemies', 'enemies.npc_id', 'npcs.id')
+            ->join('npc_healths as nh', function (JoinClause $join) use ($mappingVersion) {
+                $join->on('nh.npc_id', '=', 'npcs.id')
+                    ->where('nh.game_version_id', '=', $mappingVersion->dungeon->game_version_id);
+            })
             ->where('enemies.mapping_version_id', $mappingVersion->id)
             ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('npc_type_id', '!=', NpcType::CRITTER)

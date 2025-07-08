@@ -5,6 +5,7 @@ return [
     'npc_name_label'                                                       => 'Name',
     'enemy_forces_label'                                                   => 'Enemy forces',
     'enemy_display_type_label'                                             => 'Enemy display type',
+    'health_section_label'                                                 => 'Health section',
     'mdt_enemy_mapping_label'                                              => 'MDT enemy mapping',
     'base_health_label'                                                    => 'Base health',
     'no_npc_found_label'                                                   => 'No NPC found for this enemy',
