@@ -20,21 +20,23 @@ use App\Models\Dungeon;
     </script>
 @endsection
 
-<h4>{{ __('view_admin.dungeon.edit.mapping_versions.title') }}</h4>
-{{--@if(!$hasUnmergedMappingVersion)--}}
-<div class="float-right">
-    <a href="{{ route('admin.mappingversion.new', ['dungeon' => $dungeon->slug]) }}"
-       class="btn btn-success text-white pull-right" role="button">
-        <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_mapping_version') }}
-    </a>
+<div class="row">
+    <div class="col">
+        <h4>{{ __('view_admin.dungeon.edit.mapping_versions.title') }}</h4>
+    </div>
+    <div class="col-auto">
+        <a href="{{ route('admin.mappingversion.new', ['dungeon' => $dungeon->slug]) }}"
+           class="btn btn-success text-white pull-right" role="button">
+            <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_mapping_version') }}
+        </a>
+    </div>
+    <div class="col-auto">
+        <a href="{{ route('admin.mappingversion.newbare', ['dungeon' => $dungeon->slug]) }}"
+           class="btn btn-success text-white pull-right" role="button">
+            <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_bare_mapping_version') }}
+        </a>
+    </div>
 </div>
-<div class="float-right mr-2">
-    <a href="{{ route('admin.mappingversion.newbare', ['dungeon' => $dungeon->slug]) }}"
-       class="btn btn-success text-white pull-right" role="button">
-        <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_bare_mapping_version') }}
-    </a>
-</div>
-{{--@endif--}}
 
 <table id="admin_dungeon_mapping_versions_table" class="tablesorter default_table table-striped">
     <thead>

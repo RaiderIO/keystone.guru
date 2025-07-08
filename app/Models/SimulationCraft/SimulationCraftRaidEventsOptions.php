@@ -30,7 +30,8 @@ use Random\RandomException;
  *                                                 don't have to always walk from center of previous pull to center of next pull. This reduces the delay between pulls making the sims more accurate
  * @property bool         $use_mounts Premium: yes to enable mount usage to further reduce delay between pulls
  * @property string       $simulate_bloodlust_per_pull The killzone IDs, comma separated, that Bloodlust/Heroism should be used on
- * @property DungeonRoute $dungeonroute
+ *
+ * @property DungeonRoute $dungeonRoute
  *
  * @author Wouter
  *
@@ -59,7 +60,7 @@ class SimulationCraftRaidEventsOptions extends Model
         'use_mounts',
     ];
 
-    protected $with = ['dungeonroute'];
+    protected $with = ['dungeonRoute'];
 
     protected $casts = [
         'id'                             => 'int',
@@ -95,7 +96,7 @@ class SimulationCraftRaidEventsOptions extends Model
         self::AFFIX_TYRANNICAL,
     ];
 
-    public function dungeonroute(): BelongsTo
+    public function dungeonRoute(): BelongsTo
     {
         return $this->belongsTo(DungeonRoute::class);
     }
@@ -173,7 +174,7 @@ class SimulationCraftRaidEventsOptions extends Model
             'ranged_pull_compensation_yards' => $hasAdvancedSimulation ? (int)$request->get('ranged_pull_compensation_yards') : 0,
             'use_mounts'                     => $hasAdvancedSimulation ? (int)$request->get('use_mounts') : 0,
         ]));
-        $result->dungeonroute = $dungeonRoute;
+        $result->dungeonRoute = $dungeonRoute;
 
         return $result;
     }

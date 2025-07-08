@@ -21,6 +21,7 @@ use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\Npc\NpcHealth;
 use App\Models\Npc\NpcSpell;
 use App\Models\Npc\NpcType;
 use App\Models\Polyline;
@@ -157,7 +158,6 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npc->encounter_id      = $mdtNpc->getEncounterId();
                 $npc->classification_id ??= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE];
                 $npc->name              = $mdtNpc->getName();
-                $npc->base_health       = $mdtNpc->getHealth();
                 // MDT doesn't always get this right - don't trust it (Watcher Irideus for example)
                 $npc->health_percentage = $npc->health_percentage ?? $mdtNpc->getHealthPercentage();
                 $npc->level             = $mdtNpc->getLevel();
@@ -165,8 +165,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npc->npc_type_id       = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::UNCATEGORIZED;
                 $npc->truesight         = $mdtNpc->getStealthDetect();
 
-                foreach($npc->npcDungeons as $npcDungeon) {
-                // Check if it's already associated
+                foreach ($npc->npcDungeons as $npcDungeon) {
+                    // Check if it's already associated
                     if ($npcDungeon->dungeon_id === $dungeon->id) {
                         // It is, don't save the attributes
                         continue;
@@ -177,6 +177,19 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         'dungeon_id' => $dungeon->id,
                     ];
                 }
+
+                // Save/update health
+                $npcHealth = $npc->getHealthByGameVersion($dungeon->gameVersion);
+                if ($npcHealth === null) {
+                    $npcHealth = new NpcHealth([
+                        'npc_id'          => $npc->id,
+                        'game_version_id' => $dungeon->gameVersion->id,
+                        'health'          => $mdtNpc->getHealth(),
+                    ]);
+                }
+                $npcHealth->health     = $mdtNpc->getHealth();
+                $npcHealth->percentage = $mdtNpc->getHealthPercentage();
+                $npcHealth->save();
 
                 // Save characteristics
                 foreach ($mdtNpc->getCharacteristics() as $characteristicName => $enabled) {
@@ -264,7 +277,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 count($npcCharacteristicsAttributes),
                 0,
                 count($npcSpellsAttributes),
-                $npcDungeonsDeleted,
+                0,
                 count($npcDungeonsAttributes)
             );
         } finally {

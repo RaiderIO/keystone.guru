@@ -7,6 +7,7 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcHealth;
 use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\DataExtractors\Logging\NpcUpdateDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
@@ -69,11 +70,13 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
         AdvancedCombatLogEvent       $parsedEvent,
         Npc                          $npc): void
     {
+        $npcHealth = $npc->getHealthByGameVersion($currentDungeon->dungeon->gameVersion);
+
         if ($currentDungeon->keyLevel === null) {
             $newBaseHealth = $parsedEvent->getAdvancedData()->getMaxHP();
         } else {
             // @TODO Disabled for now since I think it's calculated incorrectly - we also don't need it now
-            $newBaseHealth = $npc->base_health;
+            $newBaseHealth = $npcHealth->health;
             // Calculate the base health based on the current key level + current max hp
 //            $newBaseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
 //                    $currentDungeon->keyLevel,
@@ -81,12 +84,20 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
 //                ));
         }
 
-        if ($npc->base_health !== $newBaseHealth) {
-            $baseHealth = $npc->base_health;
+        if ($npcHealth === null || $npcHealth->health !== $newBaseHealth) {
+            if ($npcHealth === null) {
+                $npcHealth = NpcHealth::create([
+                    'npc_id'          => $npc->id,
+                    'game_version_id' => $currentDungeon->dungeon->gameVersion->id,
+                    'health'          => $newBaseHealth,
+                ]);
+            } else {
+                $npcHealth->update([
+                    'health' => $newBaseHealth,
+                ]);
+            }
 
-            $npc->update([
-                'base_health' => $newBaseHealth,
-            ]);
+            $baseHealth = $npcHealth?->health;
 
             $result->updatedNpc();
 

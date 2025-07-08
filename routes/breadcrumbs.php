@@ -10,6 +10,7 @@ use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\Npc\NpcHealth;
 use App\Models\Release;
 use App\Models\Season;
 use App\Models\Spell\Spell;
@@ -314,7 +315,7 @@ Breadcrumbs::for('admin.floor.edit', static function (Generator $trail, Dungeon 
 Breadcrumbs::for('admin.dungeonspeedrunrequirednpc.new', static function (Generator $trail, Dungeon $dungeon, Floor $floor, int $difficulty) {
     $trail->parent('admin.floor.edit', $dungeon, $floor);
     $trail->push(
-        $difficulty === \App\Models\Dungeon::DIFFICULTY_10_MAN ?
+        $difficulty === Dungeon::DIFFICULTY_10_MAN ?
             __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc10man') :
             __('breadcrumbs.home.admin.dungeonspeedrunrequirednpc.new_dungeonspeedrunrequirednpc25man'),
         route('admin.dungeonspeedrunrequirednpc.new', ['dungeon' => $dungeon, 'floor' => $floor, 'difficulty' => $difficulty]));
@@ -330,7 +331,23 @@ Breadcrumbs::for('admin.npc.edit', static function (Generator $trail, ?Npc $npc)
     if ($npc === null) {
         $trail->push(__('breadcrumbs.home.admin.npcs.new_npc'), route('admin.npc.new'));
     } else {
-        $trail->push(__('breadcrumbs.home.admin.npcs.edit_npc'), route('admin.npc.edit', $npc));
+        $trail->push(__('breadcrumbs.home.admin.npcs.edit_npc', ['npc' => __($npc->name)]), route('admin.npc.edit', $npc));
+    }
+});
+
+// Npc health
+Breadcrumbs::for('admin.npchealth.edit', static function (Generator $trail, Npc $npc, ?NpcHealth $npcHealth) {
+    $trail->parent('admin.npc.edit', $npc);
+    if ($npcHealth === null) {
+        $trail->push(
+            __('breadcrumbs.home.admin.npchealth.new_npc_health'),
+            route('admin.npchealth.new', ['npc' => $npc])
+        );
+    } else {
+        $trail->push(
+            __('breadcrumbs.home.admin.npchealth.edit_npc_health'),
+            route('admin.npchealth.edit', ['npc' => $npc, 'npcHealth' => $npcHealth])
+        );
     }
 });
 

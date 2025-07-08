@@ -1,4 +1,4 @@
-class AdminNpcEdit extends InlineCode {
+class AdminNpchealthEdit extends InlineCode {
 
     /**
      *
@@ -44,7 +44,7 @@ class AdminNpcEdit extends InlineCode {
 
             let percentage = $(self.options.scaledHealthPercentageSelector).val() || 100;
 
-            $(self.options.baseHealthSelector).val(
+            $(self.options.healthSelector).val(
                 c.map.enemy.calculateBaseHealthForKey(
                     (scaledHealth / percentage) * 100, $scaledHealthLevelInput.val(), self._isFortified(), self._isTyrannical()
                 )

@@ -1,6 +1,7 @@
 <?php
 
 use App\Logic\MDT\Exception\ImportWarning;
+use App\Models\Dungeon;
 use App\Models\Npc\Npc;
 use Illuminate\Support\Collection;
 
@@ -29,6 +30,7 @@ use Illuminate\Support\Collection;
                     dataType: 'json',
                     data: {
                         category: $this.data('category'),
+                        dungeon_id: $this.data('dungeon_id'),
                         npc_id: $this.data('id'),
                         value: $this.data('new')
                     },
@@ -104,9 +106,13 @@ use Illuminate\Support\Collection;
                         </td>
                         <td>
                             @if( $key === 'mismatched_health' || $key === 'mismatched_enemy_forces' || $key === 'mismatched_enemy_forces_teeming' || $key === 'mismatched_enemy_type')
+                                    <?php
+                                    /** @var Dungeon $dungeon */
+                                    $dungeon = $data['npc']->dungeons->first();
+                                    ?>
                                 <button class="btn btn-primary apply_btn"
                                         data-id="{{ $mdtNpc->id }}"
-                                        data-dungeon_id="{{ $data['npc']->dungeons->first()->id }}"
+                                        data-dungeon_id="{{ $dungeon->id }}"
                                         data-category="{{ $key }}"
                                         data-new="{{ $new }}">
                                     {{ __('view_admin.tools.mdt.diff.apply_mdt_kg') }}

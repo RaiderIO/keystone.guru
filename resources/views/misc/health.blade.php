@@ -1,13 +1,13 @@
 <?php
 
 
+use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Affix;
 
-$fortified               = Npc::find(15929);
-$fortified->base_health  = 100000;
-$tyrannical              = Npc::find(15928);
-$tyrannical->base_health = 100000;
+$fortified   = Npc::find(15929);
+$tyrannical  = Npc::find(15928);
+$gameVersion = GameVersion::find(GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL]);
 
 ?>
 @extends('layouts.sitepage', ['cookieConsent' => false, 'showAds' => false, 'analytics' => false, 'title' => __('view_misc.health.title')])
@@ -49,16 +49,16 @@ $tyrannical->base_health = 100000;
                     {{ $fortified->getScalingFactor($i) }}
                 </td>
                 <td>
-                    {{ $fortified->calculateHealthForKey($i, [Affix::AFFIX_FORTIFIED]) }}
+                    {{ $fortified->calculateHealthForKey($gameVersion, $i, [Affix::AFFIX_FORTIFIED]) }}
                 </td>
                 <td>
-                    {{ $fortified->calculateHealthForKey($i, [Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]) }}
+                    {{ $fortified->calculateHealthForKey($gameVersion, $i, [Affix::AFFIX_FORTIFIED, Affix::AFFIX_XALATATHS_GUILE]) }}
                 </td>
                 <td>
-                    {{ $tyrannical->calculateHealthForKey($i, [Affix::AFFIX_TYRANNICAL]) }}
+                    {{ $tyrannical->calculateHealthForKey($gameVersion, $i, [Affix::AFFIX_TYRANNICAL]) }}
                 </td>
                 <td>
-                    {{ $tyrannical->calculateHealthForKey($i, [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE]) }}
+                    {{ $tyrannical->calculateHealthForKey($gameVersion, $i, [Affix::AFFIX_TYRANNICAL, Affix::AFFIX_XALATATHS_GUILE]) }}
                 </td>
             </tr>
         @endfor

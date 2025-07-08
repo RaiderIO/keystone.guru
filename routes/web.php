@@ -56,6 +56,7 @@ use App\Http\Controllers\LiveSessionLegacyController;
 use App\Http\Controllers\MDTImportController;
 use App\Http\Controllers\NpcController;
 use App\Http\Controllers\NpcEnemyForcesController;
+use App\Http\Controllers\NpcHealthController;
 use App\Http\Controllers\PatreonController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReleaseController;
@@ -291,9 +292,20 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::prefix('{npc}')->group(static function () {
                     Route::get('/', (new NpcController())->edit(...))->name('admin.npc.edit');
                     Route::patch('/', (new NpcController())->update(...))->name('admin.npc.update');
+
                     Route::prefix('npcEnemyForces/{npcEnemyForces}')->group(static function () {
                         Route::get('/', (new NpcEnemyForcesController())->edit(...))->name('admin.npcenemyforces.edit');
                         Route::patch('/', (new NpcEnemyForcesController())->update(...))->name('admin.npcenemyforces.update');
+                    });
+                    Route::prefix('health/')->group(static function () {
+                        Route::get('new', (new NpcHealthController())->create(...))->name('admin.npchealth.new');
+                        Route::post('new', (new NpcHealthController())->savenew(...))->name('admin.npchealth.savenew');
+
+                        Route::prefix('{npcHealth}')->group(static function () {
+                            Route::delete('/', (new NpcHealthController())->delete(...))->name('admin.npchealth.delete');
+                            Route::get('/', (new NpcHealthController())->edit(...))->name('admin.npchealth.edit');
+                            Route::patch('/', (new NpcHealthController())->update(...))->name('admin.npchealth.update');
+                        });
                     });
                 });
             });
@@ -480,7 +492,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 });
             });
             Route::put('/userreport/{userreport}/status', (new AjaxUserReportController())->status(...));
-            Route::post('/tools/mdt/diff/apply', (new AdminToolsController())->applychange(...));
+            Route::post('/tools/mdt/diff/apply', (new AdminToolsController())->applyChange(...));
             Route::put('/user/{user}/patreon/benefits', (new UserController())->storePatreonBenefits(...));
         });
         Route::prefix('dungeonRoute')->group(static function () {

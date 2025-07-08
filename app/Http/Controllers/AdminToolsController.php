@@ -215,17 +215,13 @@ class AdminToolsController extends Controller
                 }
 
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
-                $npcCandidate->name       = $npcData['name'];
-                // Do not overwrite health if it was set already
-                if ($npcCandidate->base_health <= 0) {
-                    $npcCandidate->base_health = 12345;
-                }
+                $npcCandidate->name = $npcData['name'];
 
                 $npcCandidate->aggressiveness = isset($npcData['react']) && is_array($npcData['react']) ? $aggressivenessMapping[$npcData['react'][0] ?? -1] : 'aggressive';
 
                 $existed = $npcCandidate->exists;
                 if ($npcCandidate->save()) {
-                    foreach($dungeons as $dungeon) {
+                    foreach ($dungeons as $dungeon) {
                         NpcDungeon::create([
                             'npc_id' => $npcCandidate->id,
                             'dungeon_id' => $dungeon->id,
@@ -918,11 +914,12 @@ class AdminToolsController extends Controller
                 else {
 
                     // Match health
-                    if ($npc->base_health !== $mdtNpc->getHealth()) {
+                    $npcHealth = $npc->getHealthByGameVersion($dungeon->gameVersion);
+                    if ($npcHealth?->health !== $mdtNpc->getHealth()) {
                         $warnings->push(
                             new ImportWarning('mismatched_health',
-                                sprintf(__('controller.admintools.error.mdt_mismatched_health'), $mdtNpc->getId(), $mdtNpc->getHealth(), $npc->base_health),
-                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->base_health, 'new' => $mdtNpc->getHealth()]
+                                sprintf(__('controller.admintools.error.mdt_mismatched_health'), $mdtNpc->getId(), $mdtNpc->getHealth(), $npcHealth->health),
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npcHealth->health, 'new' => $mdtNpc->getHealth()]
                             )
                         );
                     }
@@ -1003,7 +1000,7 @@ class AdminToolsController extends Controller
     /**
      * @return array
      */
-    public function applychange(Request $request)
+    public function applyChange(Request $request)
     {
         $category  = $request->get('category');
         $npcId     = $request->get('npc_id');
@@ -1016,8 +1013,9 @@ class AdminToolsController extends Controller
 
         switch ($category) {
             case 'mismatched_health':
-                $npc->base_health = $value;
-                $npc->save();
+                $npc->getHealthByGameVersion($dungeon->gameVersion)?->update([
+                    'health' => $value,
+                ]);
                 break;
             case 'mismatched_enemy_forces':
                 $npc->setEnemyForces($value, $dungeon->currentMappingVersion);

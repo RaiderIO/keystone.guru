@@ -529,6 +529,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
+        view()->composer('admin.npchealth.edit', static function (View $view) use ($globalViewVariables) {
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
+        });
         view()->composer('admin.spell.edit', static function (View $view) use ($globalViewVariables) {
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });

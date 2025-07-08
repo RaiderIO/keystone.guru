@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Wowhead;
 
 use App\Models\Dungeon;
+use App\Models\Npc\NpcHealth;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Exception;
 use Illuminate\Console\Command;
@@ -39,7 +40,7 @@ class FetchHealth extends Command
         }
 
         foreach ($dungeon->npcs as $npc) {
-            if ($npc->base_health !== 12345) {
+            if ($npc->getHealthByGameVersion($dungeon->gameVersion) !== null) {
                 $this->info(sprintf('Skipping already set health for %s (%d)', $npc->name, $npc->id));
 
                 continue;
@@ -52,7 +53,11 @@ class FetchHealth extends Command
             if (empty($health)) {
                 $this->warn('- Unable to find health for npc!');
             } else {
-                $npc->update(['base_health' => $health]);
+                NpcHealth::insert([
+                    'npc_id'          => $npc->id,
+                    'game_version_id' => $dungeon->gameVersion->id,
+                    'health'          => $health,
+                ]);
 
                 $this->info(sprintf('- %d', $health));
             }

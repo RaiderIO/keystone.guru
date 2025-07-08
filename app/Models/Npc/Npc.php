@@ -5,9 +5,9 @@ namespace App\Models\Npc;
 use App\Models\Affix;
 use App\Models\CacheModel;
 use App\Models\Characteristic;
-use App\Models\CharacterRace;
 use App\Models\Dungeon;
 use App\Models\Enemy;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Spell\Spell;
@@ -18,11 +18,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
-use InvalidArgumentException;
 
 /**
  * @property int                                $id
- * @property int                                $dungeon_id
  * @property int                                $classification_id
  * @property int                                $npc_type_id
  * @property int                                $npc_class_id
@@ -42,7 +40,6 @@ use InvalidArgumentException;
  * @property bool                               $runs_away_in_fear
  * @property bool                               $hyper_respawn
  *
- * @property Dungeon                            $dungeon
  * @property NpcClassification                  $classification
  * @property NpcType                            $type
  * @property NpcClass                           $class
@@ -57,6 +54,7 @@ use InvalidArgumentException;
  * @property Collection<NpcBolsteringWhitelist> $npcbolsteringwhitelists
  * @property Collection<Dungeon>                $dungeons
  * @property Collection<NpcDungeon>             $npcDungeons
+ * @property Collection<NpcHealth> $npcHealths
  *
  * @mixin Eloquent
  */
@@ -82,7 +80,7 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public $timestamps = false;
 
-    protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'characteristics', 'spells'];
+    protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'npcHealths', 'characteristics', 'spells'];
 
     protected $fillable = [
         'id',
@@ -92,8 +90,6 @@ class Npc extends CacheModel implements MappingModelInterface
         'npc_class_id',
         'display_id',
         'name',
-        'base_health',
-        'health_percentage',
         'level',
         'mdt_scale',
         'aggressiveness',
@@ -112,8 +108,6 @@ class Npc extends CacheModel implements MappingModelInterface
         'npc_type_id'       => 'integer',
         'npc_class_id'      => 'integer',
         'display_id'        => 'integer',
-        'base_health'       => 'integer',
-        'health_percentage' => 'integer',
         'level'             => 'integer',
         'mdt_scale'         => 'float',
     ];
@@ -138,11 +132,6 @@ class Npc extends CacheModel implements MappingModelInterface
     public function npcbolsteringwhitelists(): HasMany
     {
         return $this->hasMany(NpcBolsteringWhitelist::class);
-    }
-
-    public function dungeon(): BelongsTo
-    {
-        return $this->belongsTo(Dungeon::class);
     }
 
     public function dungeons(): BelongsToMany
@@ -202,6 +191,11 @@ class Npc extends CacheModel implements MappingModelInterface
     public function enemyForces(): HasOne
     {
         return $this->hasOne(NpcEnemyForces::class)->orderByDesc('mapping_version_id');
+    }
+
+    public function npcHealths(): HasMany
+    {
+        return $this->hasMany(NpcHealth::class);
     }
 
     public function setEnemyForces(int $enemyForces, MappingVersion $mappingVersion): NpcEnemyForces
@@ -303,14 +297,24 @@ class Npc extends CacheModel implements MappingModelInterface
         return round($keyLevelFactor * 100) / 100;
     }
 
+    public function getHealthByGameVersion(GameVersion $gameVersion): ?NpcHealth
+    {
+        return $this->npcHealths->keyBy('game_version_id')->get($gameVersion->id);
+    }
+
     /**
      * @param int   $keyLevel
      * @param array $affixes A list of Affix:: constants
      * @return float
      */
-    public function calculateHealthForKey(int $keyLevel, array $affixes = []): float
+    public function calculateHealthForKey(GameVersion $gameVersion, int $keyLevel, array $affixes = []): float
     {
-        return round($this->base_health * (($this->health_percentage ?? 100) / 100) * $this->getScalingFactor($keyLevel, $affixes));
+        $health = $this->getHealthByGameVersion($gameVersion);
+        if ($health === null) {
+            return 123456; // This is a placeholder value, should never happen
+        }
+
+        return round($health->health * (($health->percentage ?? 100) / 100) * $this->getScalingFactor($keyLevel, $affixes));
     }
 
     /**
@@ -344,6 +348,7 @@ class Npc extends CacheModel implements MappingModelInterface
     {
         /** @var Dungeon|null $dungeon */
         $dungeon = $this->dungeons->first();
+
         return $dungeon?->id ?? null;
     }
 

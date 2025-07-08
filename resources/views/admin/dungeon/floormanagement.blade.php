@@ -24,13 +24,16 @@ $mappingVersionsSelect = $dungeon->mappingVersions
         });
     </script>
 @endsection
-
-<h4>{{ __('view_admin.dungeon.edit.floor_management.title') }}</h4>
-<div class="float-right">
-    <a href="{{ route('admin.floor.new', ['dungeon' => $dungeon->slug]) }}"
-       class="btn btn-success text-white pull-right" role="button">
-        <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.floor_management.add_floor') }}
-    </a>
+<div class="row">
+    <div class="col">
+        <h4>{{ __('view_admin.dungeon.edit.floor_management.title') }}</h4>
+    </div>
+    <div class="col-auto">
+        <a href="{{ route('admin.floor.new', ['dungeon' => $dungeon->slug]) }}"
+           class="btn btn-success text-white pull-right" role="button">
+            <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.floor_management.add_floor') }}
+        </a>
+    </div>
 </div>
 
 <table id="admin_dungeon_floor_table" class="tablesorter default_table table-striped">
