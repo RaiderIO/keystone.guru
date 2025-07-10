@@ -38,7 +38,7 @@ use Illuminate\Support\Collection;
     <div class="wrapper">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
-            'mappingVersion' => $dungeon->currentMappingVersion,
+            'mappingVersion' => $dungeon->getCurrentMappingVersion(),
             'floor' => $floor,
             'edit' => false,
             'echo' => false,

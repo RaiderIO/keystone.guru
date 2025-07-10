@@ -27,7 +27,7 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                     ->where(function (Builder $builder) use ($dungeon) {
                     // Enemy forces may be not set, that means that we assume 0. They MAY be missing entirely for bosses
                     // or for other exceptions listed below
-                    $builder->where('npc_enemy_forces.mapping_version_id', $dungeon->currentMappingVersion->id)
+                    $builder->where('npc_enemy_forces.mapping_version_id', $dungeon->getCurrentMappingVersion()->id)
                         ->orWhereNull('npc_enemy_forces.id');
                 });
             })

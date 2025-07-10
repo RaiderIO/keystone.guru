@@ -227,7 +227,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
                         <a href="{{ route('admin.floor.edit.mapping', [
                                     'dungeon' => $dungeon,
                                     'floor' => $dungeon->floors()->first(),
-                                    'mapping_version' => $dungeon->currentMappingVersion->id
+                                    'mapping_version' => $dungeon->getCurrentMappingVersion()
                                 ]) }}">
                             <button class="btn btn-success btn-sm w-100">
                                 <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
@@ -257,7 +257,7 @@ $seasonalAffix = $dungeonroute?->getSeasonalAffix()?->key;
 
                 </li>
                 @include('common.layout.nav.user')
-{{--                @include('common.layout.nav.themeswitch')--}}
+                {{--                @include('common.layout.nav.themeswitch')--}}
             </ul>
         </div>
     </div>

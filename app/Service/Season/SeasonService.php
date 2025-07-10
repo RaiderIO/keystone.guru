@@ -132,7 +132,7 @@ class SeasonService implements SeasonServiceInterface
 
     public function getMostRecentSeasonForDungeon(Dungeon $dungeon): ?Season
     {
-        if (!$dungeon->gameVersion->has_seasons) {
+        if (!$dungeon->hasMappingVersionWithSeasons()) {
             return null;
         }
 
@@ -141,7 +141,7 @@ class SeasonService implements SeasonServiceInterface
 
     public function getUpcomingSeasonForDungeon(Dungeon $dungeon): ?Season
     {
-        if (!$dungeon->gameVersion->has_seasons) {
+        if (!$dungeon->hasMappingVersionWithSeasons()) {
             return null;
         }
 

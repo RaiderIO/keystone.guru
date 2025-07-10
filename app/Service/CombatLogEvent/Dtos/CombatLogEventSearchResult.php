@@ -62,7 +62,7 @@ class CombatLogEventSearchResult
                 );
 
                 $latLngArray = ($useFacade ?
-                    $this->coordinatesService->convertMapLocationToFacadeMapLocation($dungeon->currentMappingVersion, $latLng) :
+                    $this->coordinatesService->convertMapLocationToFacadeMapLocation($dungeon->getCurrentMappingVersion(), $latLng) :
                     $latLng)->toArrayWithFloor();
 
                 $latLngArray['lat'] = round($latLngArray['lat'], 2);

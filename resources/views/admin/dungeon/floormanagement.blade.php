@@ -5,7 +5,9 @@ use App\Models\Mapping\MappingVersion;
 
 /** @var Dungeon $dungeon */
 
-$mappingVersionsSelect = $dungeon->mappingVersions
+$mappingVersionsSelect = $dungeon
+    ->loadMappingVersions()
+    ->mappingVersions
     ->mapWithKeys(static function (MappingVersion $mappingVersion) {
         if ($mappingVersion->merged) {
             return [$mappingVersion->id => sprintf(__('Version %d (readonly)'), $mappingVersion->version)];

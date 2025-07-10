@@ -68,7 +68,7 @@ class MappingService implements MappingServiceInterface
 
     public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon): MappingVersion
     {
-        $currentMappingVersion = $dungeon->currentMappingVersion;
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
         $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1;
 
         $now = Carbon::now()->toDateTimeString();
@@ -85,31 +85,33 @@ class MappingService implements MappingServiceInterface
 
     public function createNewMappingVersionFromMDTMapping(Dungeon $dungeon, ?string $hash): MappingVersion
     {
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
         $now = Carbon::now()->toDateTimeString();
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([
             'dungeon_id'       => $dungeon->id,
             'mdt_mapping_hash' => $hash,
-            'version'          => ($dungeon->currentMappingVersion?->version ?? 0) + 1,
-            'facade_enabled'   => $dungeon->currentMappingVersion?->facade_enabled ?? false,
+            'version'          => ($currentMappingVersion?->version ?? 0) + 1,
+            'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false,
             'created_at'       => $now,
             'updated_at'       => $now,
         ]);
 
         $newMappingVersion = MappingVersion::find($id);
 
-        return $this->copyMappingVersionContentsToDungeon($dungeon->currentMappingVersion, $newMappingVersion);
+        return $this->copyMappingVersionContentsToDungeon($currentMappingVersion, $newMappingVersion);
     }
 
     public function copyMappingVersionToDungeon(MappingVersion $sourceMappingVersion, Dungeon $dungeon): MappingVersion
     {
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
         $now = Carbon::now()->toDateTimeString();
         // This needs to happen quietly as to not trigger MappingVersion events defined in its class
         $id = MappingVersion::insertGetId([
             'dungeon_id'       => $dungeon->id,
             'mdt_mapping_hash' => $sourceMappingVersion->mdt_mapping_hash,
-            'version'          => ($dungeon->currentMappingVersion?->version ?? 0) + 1,
-            'facade_enabled'   => $dungeon->currentMappingVersion?->facade_enabled ?? false,
+            'version'          => ($currentMappingVersion?->version ?? 0) + 1,
+            'facade_enabled'   => $currentMappingVersion?->facade_enabled ?? false,
             'created_at'       => $now,
             'updated_at'       => $now,
         ]);
@@ -192,7 +194,7 @@ class MappingService implements MappingServiceInterface
      */
     public function getMappingVersionOrNew(Dungeon $dungeon): MappingVersion
     {
-        $currentMappingVersion = $dungeon->currentMappingVersion;
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
         $wasRecentlyChanged = $this->getDungeonsWithUnmergedMappingChanges()->has($dungeon->id);
 

@@ -526,8 +526,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             /** @var Dungeon|null $dungeon */
             $dungeon = $view->getData()['dungeon'] ?? null;
             $view->with('hasUnmergedMappingVersion', $dungeon && $mappingService->getDungeonsWithUnmergedMappingChanges()->has($dungeon->id));
-
-            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
         view()->composer('admin.npchealth.edit', static function (View $view) use ($globalViewVariables) {
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
@@ -577,6 +575,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                         __(sprintf('view_common.modal.simulateoptions.default.raid_buffs_map.%s', Str::lower(Str::snake($raidBuff->name)))),
                 ];
             })->toArray());
+        });
+
+        view()->composer('common.modal.mappingversion', static function (View $view) use ($globalViewVariables) {
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
         // Thirdparty

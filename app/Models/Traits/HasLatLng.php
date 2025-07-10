@@ -47,13 +47,13 @@ trait HasLatLng
             $facadeLatLng      = $splitFloorsLatLng;
             $splitFloorsLatLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
             // Use the direct mapping version, otherwise proxy through dungeonRoute, finally as a fallback use the dungeon's current mapping version
-                $this->mappingVersion ?? $this->dungeonRoute->mappingVersion ?? $this->floor->dungeon->currentMappingVersion,
+                $this->mappingVersion ?? $this->dungeonRoute->mappingVersion ?? $this->floor->dungeon->getCurrentMappingVersion(),
                 $facadeLatLng
             );
         } else {
             $facadeLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
             // Use the direct mapping version, otherwise proxy through dungeonRoute, finally as a fallback use the dungeon's current mapping version
-                $this->mappingVersion ?? $this->dungeonRoute->mappingVersion ?? $this->floor->dungeon->currentMappingVersion,
+                $this->mappingVersion ?? $this->dungeonRoute->mappingVersion ?? $this->floor->dungeon->getCurrentMappingVersion(),
                 $splitFloorsLatLng
             );
         }

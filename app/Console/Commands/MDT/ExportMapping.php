@@ -42,14 +42,14 @@ class ExportMapping extends Command
                 continue;
             }
 
-            $dungeon->load('currentMappingVersion');
-            if ($dungeon->currentMappingVersion === null) {
+            $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+            if ($currentMappingVersion === null) {
                 $this->comment(sprintf('Skipping %s, no current mapping version found', __($dungeon->name)));
 
                 continue;
             }
 
-            $luaString = $mappingExportService->getMDTMappingAsLuaString($dungeon->currentMappingVersion, $excludeTranslations);
+            $luaString = $mappingExportService->getMDTMappingAsLuaString($currentMappingVersion, $excludeTranslations);
 
             if (!Conversion::hasMDTDungeonName($dungeon->key)) {
                 $this->warn(sprintf('Unable to find MDT dungeon for key %s!', $dungeon->key));

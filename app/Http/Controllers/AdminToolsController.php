@@ -12,6 +12,7 @@ use App\Logic\MDT\Exception\InvalidMDTStringException;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MDTImport;
 use App\Models\Npc\Npc;
@@ -914,7 +915,7 @@ class AdminToolsController extends Controller
                 else {
 
                     // Match health
-                    $npcHealth = $npc->getHealthByGameVersion($dungeon->gameVersion);
+                    $npcHealth = $npc->getHealthByGameVersion(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL));
                     if ($npcHealth?->health !== $mdtNpc->getHealth()) {
                         $warnings->push(
                             new ImportWarning('mismatched_health',
@@ -1013,12 +1014,14 @@ class AdminToolsController extends Controller
 
         switch ($category) {
             case 'mismatched_health':
-                $npc->getHealthByGameVersion($dungeon->gameVersion)?->update([
+                $npc->getHealthByGameVersion(
+                    GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL)
+                )?->update([
                     'health' => $value,
                 ]);
                 break;
             case 'mismatched_enemy_forces':
-                $npc->setEnemyForces($value, $dungeon->currentMappingVersion);
+                $npc->setEnemyForces($value, $dungeon->getCurrentMappingVersion());
 
                 break;
             // Teeming is deprecated pretty much

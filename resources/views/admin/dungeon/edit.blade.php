@@ -2,18 +2,13 @@
 
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
-use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 
 /**
  * @var Dungeon                 $dungeon
  * @var Floor                   $floor
  * @var Collection              $availableKeysSelect
- * @var Collection<GameVersion> $allGameVersions
  */
-
-$gameVersionsSelect = $allGameVersions
-    ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 ?>
 
 @extends('layouts.sitepage', [
@@ -96,13 +91,6 @@ $gameVersionsSelect = $allGameVersions
                 @include('common.forms.form-error', ['key' => 'id'])
             </div>
         @endisset
-
-        <div class="form-group{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
-            {!! Form::label('game_version_id', __('view_admin.dungeon.edit.game_version_id'), [], false) !!}
-            <span class="form-required">*</span>
-            {!! Form::select('game_version_id', $gameVersionsSelect, null, ['class' => 'form-control selectpicker']) !!}
-            @include('common.forms.form-error', ['key' => 'game_version_id'])
-        </div>
 
         <div class="form-group{{ $errors->has('zone_id') ? ' has-error' : '' }}">
             {!! Form::label('zone_id', __('view_admin.dungeon.edit.zone_id')) !!}

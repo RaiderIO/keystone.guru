@@ -134,23 +134,16 @@ class NpcController extends Controller
 
                 // If we changed the dungeon our enemy forces no longer match up with the mapping version, so get rid of them
                 // But we can keep them if the dungeon is now the generic dungeon, then all mapping versions are valid
-                if (!empty(array_diff($oldDungeonIds, $npc->dungeons->pluck('id')->toArray()))) {
-                    // Change all existing enemy forces for all older mapping versions
-                    /** @var Collection<Dungeon> $dungeons */
-                    $dungeons = Dungeon::whereIn('id', $oldDungeonIds)->get();
-                    foreach ($dungeons as $dungeon) {
-                        $currentDungeonMappingVersionId = $dungeon->currentMappingVersion->id;
-
+                $removedDungeonIds = array_diff($oldDungeonIds, $npc->dungeons->pluck('id')->toArray());
+                if (!empty($removedDungeonIds)) {
+                    /** @var Collection<Dungeon> $removedDungeons */
+                    $removedDungeons = Dungeon::whereIn('id', $removedDungeonIds)->get();
+                    // For each removed dungeon, delete the enemy forces for all mapping versions
+                    // Any new dungeons assigned will have to have their enemy forces created again
+                    foreach ($removedDungeons as $removedDungeon) {
                         $npc->npcEnemyForces()
-                            ->where('mapping_version_id', '!=', $currentDungeonMappingVersionId)
+                            ->whereIn('mapping_version_id', $removedDungeon->mappingVersions->pluck('id')->toArray())
                             ->delete();
-
-                        // Update the latest mapping version enemy forces to the new latest mapping version
-                        $npc->npcEnemyForces()
-                            ->where('mapping_version_id', $currentDungeonMappingVersionId)
-                            ->update([
-                                'mapping_version_id' => $dungeon->currentMappingVersion->id,
-                            ]);
                     }
                 }
             }

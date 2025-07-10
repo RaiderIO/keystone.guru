@@ -26,7 +26,7 @@ class MappingVersionController extends Controller
 
     public function saveNewBare(Request $request, Dungeon $dungeon, MappingServiceInterface $mappingService): RedirectResponse
     {
-        $currentMappingVersion = $dungeon->currentMappingVersion;
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
         if ($currentMappingVersion === null) {
             return redirect()->route('admin.mappingversion.new', [

@@ -514,7 +514,7 @@ class CombatLogEventFilter implements Arrayable
         $combatLogEventFilter->setPeriodMax($heatmapDataFilter->getMaxPeriod());
 
         if ($heatmapDataFilter->getTimerFractionMin() !== null && $heatmapDataFilter->getTimerFractionMax() !== null) {
-            $timerSeconds = $heatmapDataFilter->getDungeon()->currentMappingVersion->timer_max_seconds;
+            $timerSeconds = $heatmapDataFilter->getDungeon()->getCurrentMappingVersion()->timer_max_seconds;
             $combatLogEventFilter->setDurationMin(($heatmapDataFilter->getTimerFractionMin() * 60) / $timerSeconds);
             $combatLogEventFilter->setDurationMax(($heatmapDataFilter->getTimerFractionMax() * 60) / $timerSeconds);
         }

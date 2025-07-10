@@ -9,6 +9,7 @@ use App\Service\Wowhead\WowheadServiceInterface;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 class FetchSpellData extends Command
 {
@@ -52,15 +53,15 @@ class FetchSpellData extends Command
                 ->get();
         }
 
+        /** @var Collection<Spell> $spells */
+
         // If it's just one.. whatever
         if ($spells->count() > 1) {
             $this->info(sprintf('Fetching spell data for %d spells', $spells->count()));
         }
 
-        $gameVersions = collect();
-        if ($dungeon?->gameVersion !== null) {
-            $gameVersions->push($dungeon->gameVersion);
-        } else {
+        $gameVersions = $dungeon->getMappingVersionGameVersions();
+        if ($gameVersions->isEmpty()) {
             $gameVersions = GameVersion::whereIn('id', [
                 GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA],

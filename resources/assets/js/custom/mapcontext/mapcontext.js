@@ -354,7 +354,7 @@ class MapContext extends Signalable {
      * @returns {{}}
      */
     getGameVersion() {
-        return this._options.dungeon.game_version;
+        return this._options.mappingVersion.game_version;
     }
 
     /**
@@ -455,7 +455,7 @@ class MapContext extends Signalable {
     _getNpcHealthObj(npc, gameVersionId = null) {
         let mapContext = getState().getMapContext();
         // @TODO #2879 Use mapping version's game version ID instead of the dungeon's game version ID
-        gameVersionId = gameVersionId ?? mapContext.getDungeon().game_version.id;
+        gameVersionId = gameVersionId ?? mapContext.getMappingVersion().game_version.id;
 
         let result = null;
         for (let index in npc.npc_healths) {

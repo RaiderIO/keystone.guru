@@ -40,30 +40,34 @@ class FetchHealth extends Command
         }
 
         foreach ($dungeon->npcs as $npc) {
-            if ($npc->getHealthByGameVersion($dungeon->gameVersion) !== null) {
-                $this->info(sprintf('Skipping already set health for %s (%d)', $npc->name, $npc->id));
+            foreach($dungeon->getMappingVersionGameVersions() as $gameVersion) {
+                if ($npc->getHealthByGameVersion($gameVersion) !== null) {
+                    $this->info(sprintf('Skipping already set health for %s (%d)', $npc->name, $npc->id));
 
-                continue;
+                    continue;
+                }
+
+                // Don't DDOS
+                sleep(1);
+
+                $this->info(sprintf('Fetching health for %s (%d)', $npc->name, $npc->id));
+
+                $health = $wowheadService->getNpcHealth($gameVersion, $npc);
+
+                if (empty($health)) {
+                    $this->warn('- Unable to find health for npc!');
+                } else {
+                    NpcHealth::insert([
+                        'npc_id'          => $npc->id,
+                        'game_version_id' => $gameVersion->id,
+                        'health'          => $health,
+                    ]);
+
+                    $this->info(sprintf('- %d', $health));
+                    break;
+                }
+
             }
-
-            $this->info(sprintf('Fetching health for %s (%d)', $npc->name, $npc->id));
-
-            $health = $wowheadService->getNpcHealth($dungeon->gameVersion, $npc);
-
-            if (empty($health)) {
-                $this->warn('- Unable to find health for npc!');
-            } else {
-                NpcHealth::insert([
-                    'npc_id'          => $npc->id,
-                    'game_version_id' => $dungeon->gameVersion->id,
-                    'health'          => $health,
-                ]);
-
-                $this->info(sprintf('- %d', $health));
-            }
-
-            // Don't DDOS
-            sleep(1);
         }
     }
 }

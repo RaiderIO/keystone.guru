@@ -41,17 +41,18 @@ use App\Models\Dungeon;
 <table id="admin_dungeon_mapping_versions_table" class="tablesorter default_table table-striped">
     <thead>
     <tr>
-        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_merged') }}</th>
-        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_facade') }}</th>
-        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_id') }}</th>
-        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_version') }}</th>
-        <th width="50%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_created_at') }}</th>
-        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header_actions') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.merged') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.facade') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.id') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.game_version') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.version') }}</th>
+        <th width="50%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.created_at') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.actions') }}</th>
     </tr>
     </thead>
 
     <tbody>
-    @foreach ($dungeon->mappingVersions as $mappingVersion)
+    @foreach ($dungeon->loadMappingVersions()->mappingVersions as $mappingVersion)
         <tr>
             <td>
                 <i class="fas {{ $mappingVersion->merged ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }}"></i>
@@ -60,6 +61,13 @@ use App\Models\Dungeon;
                 <i class="fas {{ $mappingVersion->facade_enabled ? 'fa-check-circle text-success' : 'fa-times-circle text-danger' }}"></i>
             </td>
             <td>{{ $mappingVersion->id }}</td>
+            <td data-order="{{ $mappingVersion->game_version_id }}">
+                <img src="{{ ksgAssetImage(sprintf('gameversions/%s.png', $mappingVersion->gameVersion->key)) }}"
+                     alt="{{ __($mappingVersion->gameVersion->name) }}"
+                     title="{{ __($mappingVersion->gameVersion->name) }}"
+                     data-toggle="tooltip"
+                     style="width: 50px;"/>
+            </td>
             <td>{{ $mappingVersion->version }}</td>
             <td>{{ $mappingVersion->created_at->toDateTimeString() }}</td>
             <td>

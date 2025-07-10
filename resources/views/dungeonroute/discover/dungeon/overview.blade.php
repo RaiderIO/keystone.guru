@@ -18,6 +18,8 @@ use App\Models\Expansion;
  * @var array      $dungeonroutes
  * @var Expansion  $expansion
  */
+
+$dungeonHasMappingVersionWithSeasons = $dungeon->hasMappingVersionWithSeasons();
 ?>
 
 @include('common.general.inline', ['path' => 'dungeonroute/discover/discover',
@@ -44,7 +46,7 @@ use App\Models\Expansion;
         </div>
     @endif
 
-    @if($dungeon->gameVersion->has_seasons)
+    @if($dungeonHasMappingVersionWithSeasons)
         @include('dungeonroute.discover.panel', [
             'expansion' => $expansion,
             'title' => __('view_dungeonroute.discover.dungeon.overview.popular_by_current_affixes'),
@@ -63,7 +65,7 @@ use App\Models\Expansion;
         </div>
     @endif
 
-    @if($dungeon->gameVersion->has_seasons)
+    @if($dungeonHasMappingVersionWithSeasons)
         @include('dungeonroute.discover.panel', [
             'expansion' => $expansion,
             'title' => __('view_dungeonroute.discover.dungeon.overview.popular_by_next_affixes'),
@@ -76,7 +78,7 @@ use App\Models\Expansion;
         ])
     @endif
 
-    @if( !$adFree && !$isMobile)
+    @if(!$adFree && !$isMobile)
         <div align="center" class="mt-4">
             @include('common.thirdparty.adunit', ['id' => 'site_middle_discover', 'type' => 'header', 'reportAdPosition' => 'top-right'])
         </div>

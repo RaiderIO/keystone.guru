@@ -573,7 +573,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             return $importStringObjects;
         }
 
-        $mappingVersion = $importStringObjects->getDungeon()->currentMappingVersion;
+        $mappingVersion = $importStringObjects->getDungeon()->getCurrentMappingVersion();
 
         $floors = $importStringObjects->getDungeon()->floorsForMapFacade(
             $mappingVersion,
@@ -927,7 +927,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $warnings,
                 $errors,
                 $dungeon,
-                $dungeon->currentMappingVersion,
+                $dungeon->getCurrentMappingVersion(),
                 $affixGroup?->hasAffix(Affix::AFFIX_TEEMING) ?? false,
                 null,
                 $decoded['value']['pulls']
@@ -1013,7 +1013,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             }
 
             $dungeon        = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
-            $mappingVersion = $dungeon->currentMappingVersion;
+            $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
             // Create a dungeon route
             $titleSlug    = Str::slug($decoded['text']);
@@ -1021,7 +1021,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $dungeonRoute = DungeonRoute::create([
                 'author_id'          => $sandbox ? -1 : Auth::id() ?? -1,
                 'dungeon_id'         => $dungeon->id,
-                'mapping_version_id' => $mappingVersion->id,
+                'mapping_version_id' => $currentMappingVersion->id,
                 'season_id'          => $season?->id,
                 // Undefined if not defined, otherwise 1 = horde, 2 = alliance (and default if out of range)
                 'faction_id'         => isset($decoded['faction']) ?
@@ -1040,7 +1040,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
             // Set some relations here so we can reference them later
             $dungeonRoute->setRelation('dungeon', $dungeon);
-            $dungeonRoute->setRelation('mappingVersion', $mappingVersion);
+            $dungeonRoute->setRelation('mappingVersion', $currentMappingVersion);
 
             // Set the affix for this route
             $affixGroup = $this->parseAffixes($warnings, $decoded, $dungeonRoute->dungeon, $importAsThisWeek);
@@ -1052,7 +1052,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $importStringRiftOffsets = $this->parseRiftOffsets(new ImportStringRiftOffsets(
                     $warnings,
                     $dungeon,
-                    $mappingVersion,
+                    $currentMappingVersion,
                     $dungeonRoute->seasonal_index,
                     $decoded['value']['riftOffsets'],
                     $decoded['week'],

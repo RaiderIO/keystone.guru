@@ -783,7 +783,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         $this->dungeon_id         = (int)$request->get('dungeon_id', $this->dungeon_id);
         $dungeon                  = Dungeon::findOrFail($this->dungeon_id);
-        $this->mapping_version_id = $dungeon->currentMappingVersion->id;
+        $this->mapping_version_id = $dungeon->getCurrentMappingVersion()->id;
 
         $activeSeason = $seasonService->getCurrentSeason(
             $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion())
@@ -853,7 +853,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             $this->author_id  = $user?->id ?? -1;
             $this->public_key = DungeonRoute::generateRandomPublicKey();
             $this->setRelation('dungeon', Dungeon::findOrFail($this->dungeon_id));
-            $this->mapping_version_id = $this->dungeon->currentMappingVersion->id;
+            $this->mapping_version_id = $this->dungeon->getCurrentMappingVersion()->id;
         }
 
         $teamIdFromRequest = (int)$request->get('team_id', $this->team_id);
@@ -1434,7 +1434,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         /** @var AffixGroup|null $result */
         $result = null;
 
-        if ($this->dungeon->gameVersion->has_seasons && $this->affixes->isNotEmpty()) {
+        if ($this->dungeon->hasMappingVersionWithSeasons() && $this->affixes->isNotEmpty()) {
             $result = $this->affixes->first();
 
             /** @var SeasonService $seasonService */

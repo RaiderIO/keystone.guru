@@ -70,38 +70,40 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
         AdvancedCombatLogEvent       $parsedEvent,
         Npc                          $npc): void
     {
-        $npcHealth = $npc->getHealthByGameVersion($currentDungeon->dungeon->gameVersion);
+        // This code needs to know the game version of the combat log file, so we can fetch the correct health for the NPC
 
-        if ($currentDungeon->keyLevel === null) {
-            $newBaseHealth = $parsedEvent->getAdvancedData()->getMaxHP();
-        } else {
-            // @TODO Disabled for now since I think it's calculated incorrectly - we also don't need it now
-            $newBaseHealth = $npcHealth->health;
-            // Calculate the base health based on the current key level + current max hp
-//            $newBaseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
-//                    $currentDungeon->keyLevel,
-//                    $currentDungeon->affixGroup->affixes->pluck('key')->toArray()
-//                ));
-        }
-
-        if ($npcHealth === null || $npcHealth->health !== $newBaseHealth) {
-            if ($npcHealth === null) {
-                $npcHealth = NpcHealth::create([
-                    'npc_id'          => $npc->id,
-                    'game_version_id' => $currentDungeon->dungeon->gameVersion->id,
-                    'health'          => $newBaseHealth,
-                ]);
-            } else {
-                $npcHealth->update([
-                    'health' => $newBaseHealth,
-                ]);
-            }
-
-            $baseHealth = $npcHealth?->health;
-
-            $result->updatedNpc();
-
-            $this->log->extractDataUpdatedNpc($npc->id, $baseHealth, $newBaseHealth);
-        }
+//        $npcHealth = $npc->getHealthByGameVersion($currentDungeon->dungeon->gameVersion);
+//
+//        if ($currentDungeon->keyLevel === null) {
+//            $newBaseHealth = $parsedEvent->getAdvancedData()->getMaxHP();
+//        } else {
+//            // @TODO Disabled for now since I think it's calculated incorrectly - we also don't need it now
+//            $newBaseHealth = $npcHealth->health;
+//            // Calculate the base health based on the current key level + current max hp
+////            $newBaseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $npc->getScalingFactor(
+////                    $currentDungeon->keyLevel,
+////                    $currentDungeon->affixGroup->affixes->pluck('key')->toArray()
+////                ));
+//        }
+//
+//        if ($npcHealth === null || $npcHealth->health !== $newBaseHealth) {
+//            if ($npcHealth === null) {
+//                $npcHealth = NpcHealth::create([
+//                    'npc_id'          => $npc->id,
+//                    'game_version_id' => $currentDungeon->dungeon->gameVersion->id,
+//                    'health'          => $newBaseHealth,
+//                ]);
+//            } else {
+//                $npcHealth->update([
+//                    'health' => $newBaseHealth,
+//                ]);
+//            }
+//
+//            $baseHealth = $npcHealth?->health;
+//
+//            $result->updatedNpc();
+//
+//            $this->log->extractDataUpdatedNpc($npc->id, $baseHealth, $newBaseHealth);
+//        }
     }
 }

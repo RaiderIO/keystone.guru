@@ -56,7 +56,7 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         AffixGroupRepositoryInterface             $affixGroupRepository,
         DungeonRouteAffixGroupRepositoryInterface $dungeonRouteAffixGroupRepository,
         DungeonRepositoryInterface                $dungeonRepository,
-        ?int $userId = null
+        ?int                                      $userId = null
     ): DungeonRoute {
         try {
             $dungeon = $dungeonRepository->getByChallengeModeIdOrFail($this->challengeMode->challengeModeId);
@@ -66,13 +66,13 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
             );
         }
 
-        $currentMappingVersion = $dungeon->currentMappingVersion;
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
         $currentSeasonForDungeon = $dungeon->getActiveSeason($seasonService);
 
         $dungeonRoute = $dungeonRouteRepository->create([
             'public_key'         => $dungeonRouteRepository->generateRandomPublicKey(),
-            'author_id' => $userId,
+            'author_id'          => $userId,
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $currentMappingVersion->id,
             'season_id'          => $currentSeasonForDungeon?->id,

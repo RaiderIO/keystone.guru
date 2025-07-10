@@ -261,7 +261,7 @@ MDT.mapPOIs[dungeonIndex] = {};
             $isBoss = $npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS] ?
                 true : null;
 
-            $npcHealth    = $npc->getHealthByGameVersion($mappingVersion->dungeon->gameVersion);
+            $npcHealth    = $npc->getHealthByGameVersion($mappingVersion->gameVersion);
             $dungeonEnemy = array_filter([
                 'name'             => addslashes($npc->name),
                 'id'               => $npc->id,

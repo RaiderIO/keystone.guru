@@ -99,7 +99,7 @@ abstract class MapContext
                 $enemies = $this->mappingVersion->mapContextEnemies($this->coordinatesService, $useFacade);
 
                 return array_merge($dungeon->toArray(), $this->getEnemies(), [
-                    'latestMappingVersion'      => $this->floor->dungeon->currentMappingVersion,
+                    'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion),
                     'npcs'                      => $this->floor->dungeon->npcs()
                         ->when($this->onlyLoadInUseNpcs(), function (Builder $query) use ($enemies) {
                             $query->whereIn('npcs.id', $enemies->pluck('npc_id')->unique());
@@ -156,7 +156,7 @@ abstract class MapContext
         return [
             'environment'         => config('app.env'),
             'type'                => $this->getType(),
-            'mappingVersion'      => $this->mappingVersion,
+            'mappingVersion'      => $this->mappingVersion->makeVisible(['gameVersion']),
             'floorId'             => $this->floor->id,
             'teeming'             => $this->isTeeming(),
             'seasonalIndex'       => $this->getSeasonalIndex(),

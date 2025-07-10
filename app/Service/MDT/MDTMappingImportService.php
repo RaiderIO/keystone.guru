@@ -13,6 +13,7 @@ use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
@@ -71,7 +72,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     {
         $latestMdtMappingHash = $this->getMDTMappingHash($dungeon);
 
-        $currentMappingVersion = $dungeon->currentMappingVersion;
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
         if ($forceImport || $currentMappingVersion->mdt_mapping_hash !== $latestMdtMappingHash) {
             $this->log->importMappingVersionFromMDTMappingChanged($currentMappingVersion->mdt_mapping_hash, $latestMdtMappingHash);
 
@@ -136,6 +137,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $npcSpellsAttributes          = [];
             $npcDungeonsAttributes        = [];
             $affectedNpcIds               = [];
+            $gameVersionRetail = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
 
             /** @var Npc|null $npc */
             foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
@@ -179,11 +181,11 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 }
 
                 // Save/update health
-                $npcHealth = $npc->getHealthByGameVersion($dungeon->gameVersion);
+                $npcHealth = $npc->getHealthByGameVersion($gameVersionRetail);
                 if ($npcHealth === null) {
                     $npcHealth = new NpcHealth([
                         'npc_id'          => $npc->id,
-                        'game_version_id' => $dungeon->gameVersion->id,
+                        'game_version_id' => $gameVersionRetail->id,
                         'health'          => $mdtNpc->getHealth(),
                     ]);
                 }

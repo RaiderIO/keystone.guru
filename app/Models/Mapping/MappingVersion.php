@@ -12,6 +12,7 @@ use App\Models\EnemyPatrol;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorUnion;
 use App\Models\Floor\FloorUnionArea;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\MapIcon;
 use App\Models\MountableArea;
@@ -28,6 +29,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @property int                                  $id
+ * @property int                                  $game_version_id
  * @property int                                  $dungeon_id
  * @property int                                  $version
  * @property int                                  $enemy_forces_required The amount of total enemy forces required to complete the dungeon.
@@ -42,6 +44,7 @@ use Illuminate\Support\Collection;
  * @property Carbon                               $updated_at
  * @property Carbon                               $created_at
  *
+ * @property GameVersion                          $gameVersion
  * @property Dungeon                              $dungeon
  *
  * @property Collection<DungeonRoute>             $dungeonRoutes
@@ -64,6 +67,7 @@ class MappingVersion extends Model
 
     protected $visible = [
         'id',
+        'game_version_id',
         'dungeon_id',
         'version',
         'enemy_forces_required',
@@ -77,6 +81,7 @@ class MappingVersion extends Model
     ];
 
     protected $fillable = [
+        'game_version_id',
         'dungeon_id',
         'version',
         'enemy_forces_required',
@@ -91,6 +96,7 @@ class MappingVersion extends Model
     ];
 
     protected $casts = [
+        'game_version_id'                 => 'integer',
         'dungeon_id'                      => 'integer',
         'version'                         => 'integer',
         'enemy_forces_required'           => 'integer',
@@ -106,7 +112,8 @@ class MappingVersion extends Model
     ];
 
     protected $with = [
-        'dungeon',
+        'gameVersion',
+//        'dungeon',
     ];
 
     public $timestamps = true;
@@ -122,6 +129,11 @@ class MappingVersion extends Model
         $mostRecentlyMergedMappingCommitLog = MappingCommitLog::where('merged', 1)->orderBy('id', 'desc')->first();
 
         return $mostRecentlyMergedMappingCommitLog !== null && $mostRecentlyMergedMappingCommitLog->created_at->gte($this->created_at);
+    }
+
+    public function gameVersion(): BelongsTo
+    {
+        return $this->belongsTo(GameVersion::class);
     }
 
     public function dungeon(): BelongsTo
@@ -192,6 +204,10 @@ class MappingVersion extends Model
 
     public function getPrettyName(): string
     {
+        $this->load([
+            'dungeon' => fn(BelongsTo $query) => $query->without('mappingVersions'),
+        ]);
+
         return sprintf('%s Version %d (%s%d, %s)',
             __($this->dungeon->name),
             $this->version,

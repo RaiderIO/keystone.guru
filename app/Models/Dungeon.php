@@ -31,7 +31,6 @@ use Mockery\Exception;
 /**
  * @property int                                    $id The ID of this Dungeon.
  * @property int                                    $expansion_id The linked expansion to this dungeon.
- * @property int                                    $game_version_id The linked game version to this dungeon.
  * @property int                                    $zone_id The ID of the location that WoW has given this dungeon.
  * @property int                                    $map_id The ID of the map (used internally in the game, used for simulation craft purposes)
  * @property int|null                               $instance_id The ID of the instance (used internally in the game, used for MDT mapping export purposes)
@@ -52,7 +51,6 @@ use Mockery\Exception;
  *
  * @property Expansion                              $expansion
  * @property GameVersion                            $gameVersion
- * @property MappingVersion                         $currentMappingVersion
  *
  * @property Collection<MappingVersion>             $mappingVersions
  * @property Collection<Floor>                      $floors
@@ -92,7 +90,6 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     protected $fillable = [
         'expansion_id',
-        'game_version_id',
         'active',
         'has_wallpaper',
         'raid',
@@ -111,11 +108,10 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         'views',
     ];
 
-    public $with = ['expansion', 'gameVersion', 'floors'];
+    public $with = ['expansion', 'floors'];
 
     public $hidden = [
         'expansion_id',
-        'game_version_id',
         'map_id',
         'challenge_mode_id',
         'heatmap_enabled',
@@ -126,12 +122,21 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         'active',
         'mdt_id',
         'zone_id',
-        'instance_id'
+        'instance_id',
     ];
 
     public $timestamps = false;
 
-    private $activeSeasonCache = null;
+    private ?Season $activeSeasonCache = null;
+
+    private Collection $currentMappingVersionCache;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->currentMappingVersionCache = collect();
+    }
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -199,23 +204,53 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $this->belongsTo(Expansion::class);
     }
 
-    public function gameVersion(): BelongsTo
-    {
-        return $this->belongsTo(GameVersion::class);
-    }
-
     public function mappingVersions(): HasMany
     {
         return $this->hasMany(MappingVersion::class)->orderByDesc('mapping_versions.version');
     }
 
-    public function currentMappingVersion(): HasOne
+    public function getCurrentMappingVersionForGameVersion(GameVersion $gameVersion): ?MappingVersion
     {
-        return $this->hasOne(MappingVersion::class)
-            ->without(['dungeon'])
+        if ($this->currentMappingVersionCache->has($gameVersion->id)) {
+            return $this->currentMappingVersionCache->get($gameVersion->id);
+        }
+
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion = $this->mappingVersions()
+            ->where('game_version_id', $gameVersion->id)
             ->orderByDesc('mapping_versions.version')
-            ->limit(1);
+            ->without('dungeon')
+            ->first();
+
+        $this->currentMappingVersionCache->put($gameVersion->id, $mappingVersion);
+
+        return $mappingVersion;
     }
+
+    public function getCurrentMappingVersion(?GameVersion $gameVersion = null): ?MappingVersion
+    {
+        $result = null;
+
+        // Attempt to load the current mapping version for the given game version
+        if ($gameVersion !== null) {
+            $result = $this->getCurrentMappingVersionForGameVersion($gameVersion);
+        }
+
+        // If we didn't find a mapping version for the given game version, fall back to the default game version
+        if ($result === null) {
+            $result = $this->getCurrentMappingVersionForGameVersion(GameVersion::getUserOrDefaultGameVersion())
+                // It could be that the dungeon has no mapping for the user's game version, so we fall back to the default game version
+                ?? $this->getCurrentMappingVersionForGameVersion(GameVersion::getDefaultGameVersion());
+        }
+
+        return $result;
+    }
+
+    public function hasMappingVersionForGameVersion(GameVersion $gameVersion): bool
+    {
+        return $this->mappingVersions()->where('game_version_id', $gameVersion->id)->exists();
+    }
+
 
     public function floors(): HasMany
     {
@@ -339,12 +374,23 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $query->where('dungeons.active', 0);
     }
 
+    /**
+     * Scope a query to only include active dungeons.
+     */
+    public function scopeForGameVersion(Builder $query, GameVersion $gameVersion): Builder
+    {
+        return $query->whereHas('mappingVersions', function (Builder $query) use ($gameVersion) {
+            $query->where('game_version_id', $gameVersion->id);
+        });
+    }
+
     public function getDungeonStart(): ?MapIcon
     {
         $result = null;
 
         foreach ($this->floors as $floor) {
-            foreach ($floor->mapIcons($this->currentMappingVersion)->get() as $mapIcon) {
+            foreach ($floor->mapIcons()->get() as $mapIcon) {
+                /** @var MapIcon $mapIcon */
                 if ($mapIcon->map_icon_type_id === MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START]) {
                     $result = $mapIcon;
                     break;
@@ -403,7 +449,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
             ->join('enemies', 'enemies.npc_id', 'npcs.id')
             ->join('npc_healths as nh', function (JoinClause $join) use ($mappingVersion) {
                 $join->on('nh.npc_id', '=', 'npcs.id')
-                    ->where('nh.game_version_id', '=', $mappingVersion->dungeon->game_version_id);
+                    ->where('nh.game_version_id', '=', $mappingVersion->game_version_id);
             })
             ->where('enemies.mapping_version_id', $mappingVersion->id)
             ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
@@ -420,6 +466,34 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
             (int)$result->min_health > 0 ? (int)$result->min_health : 10000,
             (int)$result->max_health > 0 ? (int)$result->max_health : 10000,
         ];
+    }
+
+    public function loadMappingVersions(): self
+    {
+        $this->load(['mappingVersions' => function (HasMany $query) {
+            // Prevent circular reference loading - we also don't need it because WE are the dungeon
+            $query->without('dungeon')
+                ->orderByDesc('mapping_versions.version');
+        }]);
+
+        return $this;
+    }
+
+    public function hasMappingVersionWithSeasons(): bool
+    {
+        return $this->loadMappingVersions()->mappingVersions->contains(static function (MappingVersion $mappingVersion) {
+            return $mappingVersion->gameVersion->has_seasons;
+        });
+    }
+
+    /**
+     * @return Collection<GameVersion>
+     */
+    public function getMappingVersionGameVersions(): Collection
+    {
+        return $this->loadMappingVersions()->mappingVersions->map(static function (MappingVersion $mappingVersion) {
+            return $mappingVersion->gameVersion;
+        })->unique('id');
     }
 
     public function isFactionSelectionRequired(): bool

@@ -35,7 +35,7 @@ class DungeonRouteFactory extends Factory
             // Cannot use ->with(), that doesn't work with this relation due to the limit
             $dungeon->load('currentMappingVersion');
             $count++;
-        } while ($dungeon?->currentMappingVersion === null);
+        } while ($dungeon->getCurrentMappingVersion() === null);
 
         $activeSeason = $dungeon->getActiveSeason($seasonService);
 
@@ -43,7 +43,7 @@ class DungeonRouteFactory extends Factory
             'public_key'         => DungeonRoute::generateRandomPublicKey(),
             'author_id'          => 1,
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->currentMappingVersion->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
             'season_id'          => $activeSeason?->id,
             'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
             'team_id'            => null,

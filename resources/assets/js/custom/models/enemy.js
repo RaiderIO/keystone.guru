@@ -473,7 +473,7 @@ class Enemy extends VersionableMapObject {
             let keyLevelLabel = '';
             let affixes = [];
 
-            if (mapContext instanceof MapContextDungeonRoute && mapContext.getGameVersion().key === GAME_VERSION_RETAIL) {
+            if (mapContext instanceof MapContextDungeonRoute && mapContext.getMappingVersion().game_version.key === GAME_VERSION_RETAIL) {
                 // noinspection JSAssignmentUsedAsCondition
                 if ((mapContext.hasAffix(AFFIX_FORTIFIED) && [NPC_CLASSIFICATION_ID_NORMAL, NPC_CLASSIFICATION_ID_ELITE].includes(this.npc.classification_id))) {
                     affixes.push(AFFIX_FORTIFIED);
@@ -520,7 +520,7 @@ class Enemy extends VersionableMapObject {
                 });
             }
 
-            if (mapContext.getGameVersion().key === GAME_VERSION_RETAIL) {
+            if (mapContext.getMappingVersion().game_version.key === GAME_VERSION_RETAIL) {
                 // These affixes have been removed
                 // result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
                 // result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
@@ -572,7 +572,7 @@ class Enemy extends VersionableMapObject {
                 let spellHtml = '';
                 let count = 0;
                 let spellTemplate = Handlebars.templates['spell_template'];
-                let gameVersion = mapContext.getDungeon().game_version;
+                let gameVersion = mapContext.getMappingVersion().game_version;
 
                 for (let index in this.npc.spells) {
                     if (this.npc.spells.hasOwnProperty(index)) {

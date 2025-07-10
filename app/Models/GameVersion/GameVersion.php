@@ -88,6 +88,11 @@ class GameVersion extends CacheModel
             }
         }
 
+        return self::getDefaultGameVersion();
+    }
+
+    public static function getDefaultGameVersion(): GameVersion
+    {
         /** @var CacheServiceInterface $cacheService */
         $cacheService = App::make(CacheServiceInterface::class);
 
