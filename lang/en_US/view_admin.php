@@ -28,16 +28,20 @@ return [
             'submit'                             => 'Submit',
 
             'floor_management' => [
-                'title'                   => 'Floor management',
-                'add_floor'               => 'Add floor',
-                'table_header_active'     => 'Active',
-                'table_header_facade'     => 'Facade',
-                'table_header_id'         => 'Id',
-                'table_header_index'      => 'Index',
-                'table_header_name'       => 'Name',
-                'table_header_actions'    => 'Actions',
-                'floor_edit_edit'         => 'Edit',
-                'floor_edit_edit_mapping' => 'Edit mapping',
+                'title'                    => 'Floor management',
+                'add_floor'                => 'Add floor',
+                'table_header' => [
+                    'id'          => 'Id',
+                    'index'       => 'Index',
+                    'name'        => 'Name',
+                    'active'      => 'Active',
+                    'facade'      => 'Facade',
+                    'actions'     => 'Actions',
+                ],
+                'floor_edit_edit'          => 'Edit',
+                'floor_edit_edit_mapping'  => 'Edit mapping',
+                'mapping_version_readonly' => ':gameVersion version :version (readonly)',
+                'mapping_version'          => ':gameVersion version :version',
             ],
 
             'mapping_versions' => [

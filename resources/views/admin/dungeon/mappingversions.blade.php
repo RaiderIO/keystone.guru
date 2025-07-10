@@ -1,10 +1,18 @@
 <?php
+
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
+use Illuminate\Support\Collection;
 
 /**
- * @var  Dungeon      $dungeon
- * @var  bool $hasUnmergedMappingVersion
+ * @var Dungeon                 $dungeon
+ * @var bool                    $hasUnmergedMappingVersion
+ * @var Collection<GameVersion> $allGameVersions
  */
+$gameVersionsSelect = $allGameVersions
+    ->mapWithKeys(static function ($gameVersion) {
+        return [$gameVersion->id => __($gameVersion->name)];
+    });
 ?>
 
 @section('scripts')
@@ -14,7 +22,7 @@ use App\Models\Dungeon;
     <script type="text/javascript">
         $(function () {
             $('#admin_dungeon_mapping_versions_table').DataTable({
-                'order': [[1, 'desc']]
+                'order': [[2, 'desc']]
             });
         });
     </script>
@@ -25,17 +33,33 @@ use App\Models\Dungeon;
         <h4>{{ __('view_admin.dungeon.edit.mapping_versions.title') }}</h4>
     </div>
     <div class="col-auto">
-        <a href="{{ route('admin.mappingversion.new', ['dungeon' => $dungeon->slug]) }}"
-           class="btn btn-success text-white pull-right" role="button">
-            <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_mapping_version') }}
-        </a>
+        <form method="GET"
+              action="{{ route('admin.mappingversion.new', ['dungeon' => $dungeon->slug]) }}">
+            <div class="row no-gutters">
+                <div class="col pr-1">
+                    {!! Form::select('game_version', $gameVersionsSelect, null, ['class' => 'form-control selectpicker']) !!}
+                </div>
+                <div class="col-auto pr-1">
+                    {!! Form::submit(__('view_admin.dungeon.edit.mapping_versions.add_mapping_version'), ['class' => 'form-control', 'name' => 'action']) !!}
+                </div>
+                <div class="col-auto">
+                    {!! Form::submit(__('view_admin.dungeon.edit.mapping_versions.add_bare_mapping_version'), ['class' => 'form-control', 'name' => 'action']) !!}
+                </div>
+            </div>
+        </form>
     </div>
-    <div class="col-auto">
-        <a href="{{ route('admin.mappingversion.newbare', ['dungeon' => $dungeon->slug]) }}"
-           class="btn btn-success text-white pull-right" role="button">
-            <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_bare_mapping_version') }}
-        </a>
-    </div>
+{{--    <div class="col-auto">--}}
+{{--        <a href="{{ route('admin.mappingversion.new', ['dungeon' => $dungeon->slug]) }}"--}}
+{{--           class="btn btn-success text-white pull-right" role="button">--}}
+{{--            <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_mapping_version') }}--}}
+{{--        </a>--}}
+{{--    </div>--}}
+{{--    <div class="col-auto">--}}
+{{--        <a href="{{ route('admin.mappingversion.newbare', ['dungeon' => $dungeon->slug]) }}"--}}
+{{--           class="btn btn-success text-white pull-right" role="button">--}}
+{{--            <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.mapping_versions.add_bare_mapping_version') }}--}}
+{{--        </a>--}}
+{{--    </div>--}}
 </div>
 
 <table id="admin_dungeon_mapping_versions_table" class="tablesorter default_table table-striped">
@@ -46,8 +70,8 @@ use App\Models\Dungeon;
         <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.id') }}</th>
         <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.game_version') }}</th>
         <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.version') }}</th>
-        <th width="50%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.created_at') }}</th>
-        <th width="10%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.actions') }}</th>
+        <th width="40%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.created_at') }}</th>
+        <th width="20%">{{ __('view_admin.dungeon.edit.mapping_versions.table_header.actions') }}</th>
     </tr>
     </thead>
 

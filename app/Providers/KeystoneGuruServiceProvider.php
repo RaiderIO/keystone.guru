@@ -527,6 +527,12 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $dungeon = $view->getData()['dungeon'] ?? null;
             $view->with('hasUnmergedMappingVersion', $dungeon && $mappingService->getDungeonsWithUnmergedMappingChanges()->has($dungeon->id));
         });
+        view()->composer('admin.dungeon.mappingversions', static function (View $view) use ($globalViewVariables) {
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
+        });
+        view()->composer('admin.dungeon.floormanagement', static function (View $view) use ($globalViewVariables) {
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
+        });
         view()->composer('admin.npchealth.edit', static function (View $view) use ($globalViewVariables) {
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });

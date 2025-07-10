@@ -6,6 +6,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorUnion;
+use App\Models\GameVersion\GameVersion;
 use App\Service\Mapping\MappingService;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
@@ -18,7 +19,7 @@ class Copy extends Command
      *
      * @var string
      */
-    protected $signature = 'mapping:copy {sourceDungeon} {targetDungeon}';
+    protected $signature = 'mapping:copy {gameVersion} {sourceDungeon} {targetDungeon}';
 
     /**
      * The console command description.
@@ -32,9 +33,11 @@ class Copy extends Command
      */
     public function handle(MappingService $mappingService): int
     {
+        $gameVersionKey   = $this->argument('gameVersion');
         $sourceDungeonKey = $this->argument('sourceDungeon');
         $targetDungeonKey = $this->argument('targetDungeon');
 
+        $gameVersion   = GameVersion::firstWhere('key', $gameVersionKey);
         $sourceDungeon = Dungeon::firstWhere('key', $sourceDungeonKey);
         $targetDungeon = Dungeon::firstWhere('key', $targetDungeonKey);
 
@@ -47,7 +50,7 @@ class Copy extends Command
         }
 
         // Create a new mapping version for our dungeon
-        $newMappingVersion = $mappingService->createNewMappingVersionFromPreviousMapping($sourceDungeon);
+        $newMappingVersion = $mappingService->createNewMappingVersionFromPreviousMapping($sourceDungeon, $gameVersion);
 
         $newMappingVersion->update([
             'dungeon_id' => $targetDungeon->id,

@@ -1,19 +1,46 @@
 <?php
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
+use Illuminate\Support\Collection;
 
-/** @var Dungeon $dungeon */
+/**
+ * @var Dungeon                 $dungeon
+ * @var Collection<GameVersion> $allGameVersions
+ */
+
+$allGameVersions = $allGameVersions->keyBy('id');
 
 $mappingVersionsSelect = $dungeon
     ->loadMappingVersions()
     ->mappingVersions
-    ->mapWithKeys(static function (MappingVersion $mappingVersion) {
-        if ($mappingVersion->merged) {
-            return [$mappingVersion->id => sprintf(__('Version %d (readonly)'), $mappingVersion->version)];
-        } else {
-            return [$mappingVersion->id => sprintf(__('Version %d'), $mappingVersion->version)];
-        }
+    ->groupBy('game_version_id')
+    ->mapWithKeys(static function (Collection $mappingVersions, int $gameVersionId) use ($allGameVersions) {
+        /** @var GameVersion $gameVersion */
+        $gameVersion = $allGameVersions->get($gameVersionId);
+
+        return [
+            __($gameVersion->name) => $mappingVersions
+                ->sortByDesc('created_at')
+                ->mapWithKeys(static function (MappingVersion $mappingVersion) use ($gameVersion) {
+                    if ($mappingVersion->merged) {
+                        return [
+                            $mappingVersion->id => __('view_admin.dungeon.edit.floor_management.mapping_version_readonly', [
+                                'gameVersion' => __($gameVersion->name),
+                                'version'     => $mappingVersion->version
+                            ])
+                        ];
+                    } else {
+                        return [
+                            $mappingVersion->id => __('view_admin.dungeon.edit.floor_management.mapping_version', [
+                                'gameVersion' => __($gameVersion->name),
+                                'version'     => $mappingVersion->version
+                            ])
+                        ];
+                    }
+                })->toArray()
+        ];
     });
 ?>
 
@@ -41,12 +68,12 @@ $mappingVersionsSelect = $dungeon
 <table id="admin_dungeon_floor_table" class="tablesorter default_table table-striped">
     <thead>
     <tr>
-        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_active') }}</th>
-        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_facade') }}</th>
-        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_id') }}</th>
-        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_index') }}</th>
-        <th width="20%">{{ __('view_admin.dungeon.edit.floor_management.table_header_name') }}</th>
-        <th width="40%">{{ __('view_admin.dungeon.edit.floor_management.table_header_actions') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header.active') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header.facade') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header.id') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header.index') }}</th>
+        <th width="20%">{{ __('view_admin.dungeon.edit.floor_management.table_header.name') }}</th>
+        <th width="40%">{{ __('view_admin.dungeon.edit.floor_management.table_header.actions') }}</th>
     </tr>
     </thead>
 

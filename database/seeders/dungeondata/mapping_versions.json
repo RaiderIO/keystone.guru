@@ -1169,7 +1169,7 @@
     },
     {
         "id": 75,
-        "game_version_id": 6,
+        "game_version_id": 1,
         "dungeon_id": 76,
         "version": 1,
         "enemy_forces_required": 410,
@@ -1249,7 +1249,7 @@
     },
     {
         "id": 80,
-        "game_version_id": 6,
+        "game_version_id": 1,
         "dungeon_id": 76,
         "version": 2,
         "enemy_forces_required": 410,
@@ -1313,7 +1313,7 @@
     },
     {
         "id": 84,
-        "game_version_id": 6,
+        "game_version_id": 1,
         "dungeon_id": 76,
         "version": 3,
         "enemy_forces_required": 410,
@@ -1553,7 +1553,7 @@
     },
     {
         "id": 99,
-        "game_version_id": 6,
+        "game_version_id": 1,
         "dungeon_id": 76,
         "version": 4,
         "enemy_forces_required": 410,
@@ -6701,6 +6701,22 @@
         "facade_enabled": 0,
         "created_at": "2025-06-29T12:31:57.000000Z",
         "updated_at": "2025-06-29T12:31:57.000000Z",
+        "merged": false
+    },
+    {
+        "id": 561,
+        "game_version_id": 6,
+        "dungeon_id": 76,
+        "version": 1,
+        "enemy_forces_required": 410,
+        "enemy_forces_required_teeming": 1000,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 1800,
+        "mdt_mapping_hash": null,
+        "facade_enabled": 0,
+        "created_at": "2025-07-10T12:22:43.000000Z",
+        "updated_at": "2025-07-10T12:22:43.000000Z",
         "merged": false
     }
 ]

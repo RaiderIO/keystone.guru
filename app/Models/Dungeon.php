@@ -227,6 +227,13 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         return $mappingVersion;
     }
 
+    /**
+     * Gets the current mapping version for the dungeon for the given game version, or otherwise the default game version.
+     * This will aim to return a mapping version for this dungeon as much as possible.
+     *
+     * @param GameVersion|null $gameVersion
+     * @return MappingVersion|null
+     */
     public function getCurrentMappingVersion(?GameVersion $gameVersion = null): ?MappingVersion
     {
         $result = null;
