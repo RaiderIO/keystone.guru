@@ -16089,7 +16089,7 @@
                 "ui_map_id": 443,
                 "map_name": null,
                 "name": "dungeons.mop.shado_pan_monastery.floors.shado_pan_monastery",
-                "default": 1,
+                "default": 0,
                 "facade": 0,
                 "min_enemy_size": null,
                 "max_enemy_size": null,
