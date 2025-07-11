@@ -24,18 +24,5 @@
         "permanent_tooltip": 0,
         "seasonal_index": null,
         "is_admin": true
-    },
-    {
-        "mapping_version_id": 542,
-        "floor_id": 340,
-        "dungeon_route_id": null,
-        "team_id": null,
-        "map_icon_type_id": 2,
-        "lat": -124.3771,
-        "lng": 152.3383,
-        "comment": "mapping.map_icons.mop.gate_of_the_setting_sun.krik_thik_spawn_note",
-        "permanent_tooltip": 0,
-        "seasonal_index": null,
-        "is_admin": true
     }
 ]
