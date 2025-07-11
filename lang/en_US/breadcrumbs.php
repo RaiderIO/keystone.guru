@@ -95,6 +95,7 @@ return [
                 'edit_npc' => 'Edit :npc',
             ],
             'npcenemyforces'             => [
+                'new_npc_enemy_forces'  => 'New NPC enemy forces',
                 'edit_npc_enemy_forces' => 'Edit NPC enemy forces',
             ],
             'npchealth'                  => [

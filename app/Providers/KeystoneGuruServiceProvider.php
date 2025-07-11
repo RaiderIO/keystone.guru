@@ -530,9 +530,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('admin.dungeon.mappingversions', static function (View $view) use ($globalViewVariables) {
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
-        view()->composer('admin.dungeon.floormanagement', static function (View $view) use ($globalViewVariables) {
-            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
-        });
         view()->composer('admin.npchealth.edit', static function (View $view) use ($globalViewVariables) {
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
@@ -584,6 +581,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         });
 
         view()->composer('common.modal.mappingversion', static function (View $view) use ($globalViewVariables) {
+            $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
+        });
+
+        view()->composer('common.mappingversion.select', static function (View $view) use ($globalViewVariables) {
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 

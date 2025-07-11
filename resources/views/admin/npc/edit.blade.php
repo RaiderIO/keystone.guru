@@ -7,11 +7,11 @@ use App\Models\Npc\NpcType;
 use App\Models\Spell\Spell;
 
 /**
- * @var Npc     $npc
- * @var Floor   $floor
- * @var array   $classifications
+ * @var Npc $npc
+ * @var Floor $floor
+ * @var array $classifications
  * @var Spell[] $spells
- * @var array   $bolsteringNpcs
+ * @var array $bolsteringNpcs
  */
 ?>
 
@@ -189,7 +189,7 @@ use App\Models\Spell\Spell;
         </div>
 
         <div class="form-group">
-            @include('admin.npc.enemyforces', ['npc' => $npc])
+            @include('admin.npc.npcenemyforces', ['npc' => $npc])
         </div>
     @endisset
 @endsection

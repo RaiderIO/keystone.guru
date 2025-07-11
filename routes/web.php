@@ -292,18 +292,24 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::get('/', (new NpcController())->edit(...))->name('admin.npc.edit');
                     Route::patch('/', (new NpcController())->update(...))->name('admin.npc.update');
 
-                    Route::prefix('npcEnemyForces/{npcEnemyForces}')->group(static function () {
-                        Route::get('/', (new NpcEnemyForcesController())->edit(...))->name('admin.npcenemyforces.edit');
-                        Route::patch('/', (new NpcEnemyForcesController())->update(...))->name('admin.npcenemyforces.update');
+                    Route::prefix('npcEnemyForces/')->group(static function () {
+                        Route::get('new', (new NpcEnemyForcesController())->create(...))->name('admin.npc.npcenemyforces.new');
+                        Route::post('new', (new NpcEnemyForcesController())->savenew(...))->name('admin.npc.npcenemyforces.savenew');
+
+                        Route::prefix('{npcEnemyForces}')->group(static function () {
+                            Route::delete('/', (new NpcEnemyForcesController())->delete(...))->name('admin.npc.npcenemyforces.delete');
+                            Route::get('/', (new NpcEnemyForcesController())->edit(...))->name('admin.npc.npcenemyforces.edit');
+                            Route::patch('/', (new NpcEnemyForcesController())->update(...))->name('admin.npc.npcenemyforces.update');
+                        });
                     });
                     Route::prefix('health/')->group(static function () {
-                        Route::get('new', (new NpcHealthController())->create(...))->name('admin.npchealth.new');
-                        Route::post('new', (new NpcHealthController())->savenew(...))->name('admin.npchealth.savenew');
+                        Route::get('new', (new NpcHealthController())->create(...))->name('admin.npc.npchealth.new');
+                        Route::post('new', (new NpcHealthController())->savenew(...))->name('admin.npc.npchealth.savenew');
 
                         Route::prefix('{npcHealth}')->group(static function () {
-                            Route::delete('/', (new NpcHealthController())->delete(...))->name('admin.npchealth.delete');
-                            Route::get('/', (new NpcHealthController())->edit(...))->name('admin.npchealth.edit');
-                            Route::patch('/', (new NpcHealthController())->update(...))->name('admin.npchealth.update');
+                            Route::delete('/', (new NpcHealthController())->delete(...))->name('admin.npc.npchealth.delete');
+                            Route::get('/', (new NpcHealthController())->edit(...))->name('admin.npc.npchealth.edit');
+                            Route::patch('/', (new NpcHealthController())->update(...))->name('admin.npc.npchealth.update');
                         });
                     });
                 });

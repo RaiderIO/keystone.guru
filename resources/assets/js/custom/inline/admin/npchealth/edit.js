@@ -12,7 +12,7 @@ class AdminNpchealthEdit extends InlineCode {
                 grid: true,
                 grid_snap: true,
                 type: 'single',
-                min: 2,
+                min: 1,
                 max: 40,
                 onFinish: function (data) {
                     Cookies.set('npc_edit_key_level', $scaledHealthLevelInput.val(), cookieDefaultAttributes);
@@ -44,9 +44,17 @@ class AdminNpchealthEdit extends InlineCode {
 
             let percentage = $(self.options.scaledHealthPercentageSelector).val() || 100;
 
+            let affixes = [];
+            if( self._isFortified() ) {
+                affixes.push(AFFIX_FORTIFIED);
+            }
+            if( self._isTyrannical() ) {
+                affixes.push(AFFIX_TYRANNICAL);
+            }
+
             $(self.options.healthSelector).val(
                 c.map.enemy.calculateBaseHealthForKey(
-                    (scaledHealth / percentage) * 100, $scaledHealthLevelInput.val(), self._isFortified(), self._isTyrannical()
+                    (scaledHealth / percentage) * 100, $scaledHealthLevelInput.val(), affixes
                 )
             );
         });

@@ -41,7 +41,7 @@ class NpcHealthController extends Controller
         // Message to the user
         Session::flash('status', __('view_admin.npchealth.flash.npc_health_created'));
 
-        return redirect()->route('admin.npchealth.edit', [
+        return redirect()->route('admin.npc.npchealth.edit', [
             'npc'       => $npc,
             'npcHealth' => $npcHealth,
         ]);

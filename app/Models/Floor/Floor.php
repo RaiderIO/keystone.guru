@@ -326,13 +326,18 @@ class Floor extends CacheModel implements MappingModelInterface
                 static fn(Builder $builder) => $builder->where('facade', 1)->orWhere('default', 1)
             )->when(
                 !$useFacade,
-                static fn(Builder $builder) => $builder->where('facade', 0)->where(static function (Builder $builder) use ($floorIndex) {
-                    // Either try to resolve the actual floor, or revert to the default if not found
-                    $builder->where('index', $floorIndex)
-                        ->orWhere('default', 1);
-                })
+                static fn(Builder $builder) => $builder->where('facade', 0)
+                    ->where(static function (Builder $builder) use ($floorIndex) {
+                        // Either try to resolve the actual floor, or revert to the default if not found
+                        $builder->where('index', $floorIndex)
+                            ->orWhere('default', 1);
+                    })
             )
-        )->orderByDesc($useFacade ? 'facade' : 'index')
+        )->when($useFacade, static fn(Builder $builder) => $builder->orderByDesc('facade'))
+            ->when(!$useFacade, static fn(Builder $builder) => $builder
+                ->orderByRaw('(`index` = ?) DESC', [$floorIndex]) // preferred match first
+                ->orderByDesc('default') // fallback if index not found
+            )
             ->limit(1);
     }
 

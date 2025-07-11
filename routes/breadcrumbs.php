@@ -341,23 +341,30 @@ Breadcrumbs::for('admin.npchealth.edit', static function (Generator $trail, Npc 
     if ($npcHealth === null) {
         $trail->push(
             __('breadcrumbs.home.admin.npchealth.new_npc_health'),
-            route('admin.npchealth.new', ['npc' => $npc])
+            route('admin.npc.npchealth.new', ['npc' => $npc])
         );
     } else {
         $trail->push(
             __('breadcrumbs.home.admin.npchealth.edit_npc_health'),
-            route('admin.npchealth.edit', ['npc' => $npc, 'npcHealth' => $npcHealth])
+            route('admin.npc.npchealth.edit', ['npc' => $npc, 'npcHealth' => $npcHealth])
         );
     }
 });
 
 // Npc enemy forces
-Breadcrumbs::for('admin.npcenemyforces.edit', static function (Generator $trail, Npc $npc, NpcEnemyForces $npcEnemyForces) {
+Breadcrumbs::for('admin.npcenemyforces.edit', static function (Generator $trail, Npc $npc, ?NpcEnemyForces $npcEnemyForces) {
     $trail->parent('admin.npc.edit', $npc);
-    $trail->push(
-        __('breadcrumbs.home.admin.npcenemyforces.edit_npc_enemy_forces'),
-        route('admin.npcenemyforces.edit', ['npc' => $npc, 'npcEnemyForces' => $npcEnemyForces])
-    );
+    if($npcEnemyForces === null) {
+        $trail->push(
+            __('breadcrumbs.home.admin.npcenemyforces.new_npc_enemy_forces'),
+            route('admin.npc.npcenemyforces.new', ['npc' => $npc])
+        );
+    } else {
+        $trail->push(
+            __('breadcrumbs.home.admin.npcenemyforces.edit_npc_enemy_forces'),
+            route('admin.npc.npcenemyforces.edit', ['npc' => $npc, 'npcEnemyForces' => $npcEnemyForces])
+        );
+    }
 });
 
 // Spells

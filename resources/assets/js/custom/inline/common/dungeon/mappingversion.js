@@ -16,6 +16,7 @@ class CommonDungeonMappingversion extends InlineCode {
             url: `/ajax/admin/mappingVersion/${getState().getMapContext().getMappingVersion().id}`,
             dataType: 'json',
             data: {
+                game_version_id: $('#map_mapping_version_game_version_id').val(),
                 facade_enabled: $('#map_mapping_version_facade_enabled').is(':checked') ? 1 : 0,
                 enemy_forces_required: $('#map_mapping_version_enemy_forces_required').val(),
                 enemy_forces_required_teeming: $('#map_mapping_version_enemy_forces_required_teeming').val(),

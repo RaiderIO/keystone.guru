@@ -18,7 +18,8 @@ $gameVersionsSelect = $allGameVersions
 <div class="form-group{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
     {!! Form::label('game_version_id', __('view_admin.dungeon.edit.game_version_id'), [], false) !!}
     <span class="form-required">*</span>
-    {!! Form::select('game_version_id', $gameVersionsSelect, null, ['class' => 'form-control selectpicker']) !!}
+    {!! Form::select('game_version_id', $gameVersionsSelect, $mappingVersion->game_version_id,
+        ['id' => 'map_mapping_version_game_version_id', 'class' => 'form-control selectpicker']) !!}
     @include('common.forms.form-error', ['key' => 'game_version_id'])
 </div>
 

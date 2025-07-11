@@ -9,39 +9,6 @@ use Illuminate\Support\Collection;
  * @var Dungeon                 $dungeon
  * @var Collection<GameVersion> $allGameVersions
  */
-
-$allGameVersions = $allGameVersions->keyBy('id');
-
-$mappingVersionsSelect = $dungeon
-    ->loadMappingVersions()
-    ->mappingVersions
-    ->groupBy('game_version_id')
-    ->mapWithKeys(static function (Collection $mappingVersions, int $gameVersionId) use ($allGameVersions) {
-        /** @var GameVersion $gameVersion */
-        $gameVersion = $allGameVersions->get($gameVersionId);
-
-        return [
-            __($gameVersion->name) => $mappingVersions
-                ->sortByDesc('created_at')
-                ->mapWithKeys(static function (MappingVersion $mappingVersion) use ($gameVersion) {
-                    if ($mappingVersion->merged) {
-                        return [
-                            $mappingVersion->id => __('view_admin.dungeon.edit.floor_management.mapping_version_readonly', [
-                                'gameVersion' => __($gameVersion->name),
-                                'version'     => $mappingVersion->version
-                            ])
-                        ];
-                    } else {
-                        return [
-                            $mappingVersion->id => __('view_admin.dungeon.edit.floor_management.mapping_version', [
-                                'gameVersion' => __($gameVersion->name),
-                                'version'     => $mappingVersion->version
-                            ])
-                        ];
-                    }
-                })->toArray()
-        ];
-    });
 ?>
 
 @section('scripts')
@@ -100,7 +67,7 @@ $mappingVersionsSelect = $dungeon
                             </a>
                         </div>
                         <div class="col pr-0">
-                            {!! Form::select('mapping_version', $mappingVersionsSelect, null, ['class' => 'form-control selectpicker']) !!}
+                            @include('common.mappingversion.select', ['dungeon' => $dungeon])
                         </div>
                         <div class="col-auto pl-1">
                             {!! Form::submit(__('view_admin.dungeon.edit.floor_management.floor_edit_edit_mapping'), ['class' => 'form-control']) !!}

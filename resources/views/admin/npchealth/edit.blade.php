@@ -49,9 +49,9 @@ $gameVersionsSelect   = $allGameVersions
 
 @section('content')
     @isset($npcHealth)
-        {{ Form::model($npc, ['route' => ['admin.npchealth.update', $npc, $npcHealth], 'autocomplete' => 'off', 'method' => 'patch']) }}
+        {{ Form::model($npc, ['route' => ['admin.npc.npchealth.update', $npc, $npcHealth], 'autocomplete' => 'off', 'method' => 'patch']) }}
     @else
-        {{ Form::model($npc, ['route' => ['admin.npchealth.savenew', $npc], 'autocomplete' => 'off', 'method' => 'post']) }}
+        {{ Form::model($npc, ['route' => ['admin.npc.npchealth.savenew', $npc], 'autocomplete' => 'off', 'method' => 'post']) }}
     @endisset
 
     <div class="form-group{{ $errors->has('game_version_id') ? ' has-error' : '' }}">

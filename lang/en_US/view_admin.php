@@ -28,20 +28,18 @@ return [
             'submit'                             => 'Submit',
 
             'floor_management' => [
-                'title'                    => 'Floor management',
-                'add_floor'                => 'Add floor',
-                'table_header' => [
-                    'id'          => 'Id',
-                    'index'       => 'Index',
-                    'name'        => 'Name',
-                    'active'      => 'Active',
-                    'facade'      => 'Facade',
-                    'actions'     => 'Actions',
+                'title'                   => 'Floor management',
+                'add_floor'               => 'Add floor',
+                'table_header'            => [
+                    'id'      => 'Id',
+                    'index'   => 'Index',
+                    'name'    => 'Name',
+                    'active'  => 'Active',
+                    'facade'  => 'Facade',
+                    'actions' => 'Actions',
                 ],
-                'floor_edit_edit'          => 'Edit',
-                'floor_edit_edit_mapping'  => 'Edit mapping',
-                'mapping_version_readonly' => ':gameVersion version :version (readonly)',
-                'mapping_version'          => ':gameVersion version :version',
+                'floor_edit_edit'         => 'Edit',
+                'floor_edit_edit_mapping' => 'Edit mapping',
             ],
 
             'mapping_versions' => [
@@ -172,11 +170,11 @@ return [
         ],
     ],
     'npc'                        => [
-        'flash'     => [
+        'flash'          => [
             'npc_updated' => 'Npc updated',
             'npc_created' => 'Npc %s created',
         ],
-        'edit'      => [
+        'edit'           => [
             'title_new'                      => 'New NPC',
             'header_new'                     => 'New NPC',
             'title_edit'                     => 'Edit NPC :name',
@@ -205,7 +203,7 @@ return [
             'all_npcs'                       => 'All npcs',
             'all_dungeons'                   => 'All dungeons',
         ],
-        'list'      => [
+        'list'           => [
             'all_dungeons'                => 'All',
             'title'                       => 'Npc listing',
             'header'                      => 'View NPCs',
@@ -218,9 +216,19 @@ return [
             'table_header_classification' => 'Classification',
             'table_header_actions'        => 'Action',
         ],
-        'npchealth' => [
+        'npcenemyforces' => [
+            'add_npc_enemy_forces'         => 'Add enemy forces',
+            'mapping_version_read_only'    => 'Mapping version is read-only',
+            'edit_npc_enemy_forces'        => 'Edit',
+            'delete_npc_enemy_forces'      => 'Delete',
+            'table_header_id'              => 'Id',
+            'table_header_mapping_version' => 'Mapping Version',
+            'table_header_enemy_forces'    => 'Enemy Forces',
+            'table_header_actions'         => 'Actions',
+        ],
+        'npchealth'      => [
             'add_npc_health'    => 'Add health',
-            'edit_npc_health'   => 'Edit health',
+            'edit_npc_health'   => 'Edit',
             'delete_npc_health' => 'Delete',
             'table_header'      => [
                 'id'           => 'Id',
@@ -232,16 +240,16 @@ return [
         ],
     ],
     'npcenemyforces'             => [
-        'title'                        => 'Enemy forces',
-        'mapping_version_read_only'    => 'Mapping version is read-only',
-        'edit_enemy_forces'            => 'Edit enemy forces',
-        'table_header_id'              => 'Id',
-        'table_header_mapping_version' => 'Mapping Version',
-        'table_header_enemy_forces'    => 'Enemy Forces',
-        'table_header_actions'         => 'Actions',
-        'edit'                         => [
+        'flash' => [
+            'enemy_forces_updated' => 'Enemy forces updated',
+            'enemy_forces_created' => 'Enemy forces created',
+            'enemy_forces_deleted' => 'Enemy forces deleted',
+        ],
+        'title' => 'Enemy forces',
+        'edit'  => [
             'title'                => 'Edit enemy forces for :name',
             'header'               => 'Edit enemy forces for :name',
+            'mapping_version'      => 'Mapping version',
             'enemy_forces'         => 'Enemy forces',
             'enemy_forces_teeming' => 'Enemy forces (teeming)',
             'submit'               => 'Submit',
