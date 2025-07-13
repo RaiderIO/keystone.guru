@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Mapping;
 
 use App\Models\Dungeon;
+use App\Models\Enemy;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -56,6 +57,7 @@ class AssignMDTIDs extends Command
                 }
 
                 foreach ($enemies->groupBy('npc_id') as $npcId => $enemiesByNpcId) {
+                    /** @var Collection<Enemy> $enemiesByNpcId */
                     $enemiesByNpcId = $enemiesByNpcId->sortBy('id');
                     $maxId = 0;
                     // Determine the max ID first, then assign the max ID to any NPCs that don't have an ID yet

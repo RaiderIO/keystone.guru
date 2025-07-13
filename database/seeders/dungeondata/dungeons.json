@@ -15732,16 +15732,16 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 1127,
+                        "id": 1152,
                         "floor1_id": 344,
                         "floor2_id": 342,
                         "direction": "up"
                     },
                     {
-                        "id": 1128,
+                        "id": 1153,
                         "floor1_id": 344,
                         "floor2_id": 343,
-                        "direction": "up"
+                        "direction": "down"
                     }
                 ],
                 "dungeon_speedrun_required_npcs10_man": [],

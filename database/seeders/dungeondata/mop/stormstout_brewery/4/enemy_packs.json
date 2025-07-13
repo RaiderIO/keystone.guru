@@ -3,7 +3,7 @@
         "id": 14985,
         "mapping_version_id": 541,
         "floor_id": 363,
-        "group": null,
+        "group": 16,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",

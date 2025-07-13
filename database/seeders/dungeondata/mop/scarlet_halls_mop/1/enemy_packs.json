@@ -3,7 +3,7 @@
         "id": 15094,
         "mapping_version_id": 550,
         "floor_id": 345,
-        "group": null,
+        "group": 1,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -15,7 +15,7 @@
         "id": 15095,
         "mapping_version_id": 550,
         "floor_id": 345,
-        "group": null,
+        "group": 2,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -27,7 +27,7 @@
         "id": 15096,
         "mapping_version_id": 550,
         "floor_id": 345,
-        "group": null,
+        "group": 3,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -39,7 +39,7 @@
         "id": 15097,
         "mapping_version_id": 550,
         "floor_id": 345,
-        "group": null,
+        "group": 4,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -51,7 +51,7 @@
         "id": 15098,
         "mapping_version_id": 550,
         "floor_id": 345,
-        "group": null,
+        "group": 5,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
@@ -60,15 +60,15 @@
         "vertices_json": "[{\"lat\":-88.2201,\"lng\":205.0486},{\"lat\":-97.662,\"lng\":203.7568},{\"lat\":-98.2269,\"lng\":213.0416},{\"lat\":-87.6552,\"lng\":212.3957}]"
     },
     {
-        "id": 15099,
+        "id": 15183,
         "mapping_version_id": 550,
         "floor_id": 345,
-        "group": null,
+        "group": 14,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
         "color_animated": null,
         "label": "Enemy pack",
-        "vertices_json": "[{\"lat\":-46.9043,\"lng\":208.7241},{\"lat\":-54.7629,\"lng\":209.4041},{\"lat\":-55.4426,\"lng\":218.1588},{\"lat\":-46.9893,\"lng\":216.9688}]"
+        "vertices_json": "[{\"lat\":-201.2384,\"lng\":175.1971},{\"lat\":-210.1866,\"lng\":175.9626},{\"lat\":-209.7835,\"lng\":181.9658},{\"lat\":-201.1578,\"lng\":181.0794}]"
     }
 ]

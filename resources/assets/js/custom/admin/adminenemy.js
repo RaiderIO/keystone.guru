@@ -463,13 +463,16 @@ class AdminEnemy extends Enemy {
 
         let mapContext = getState().getMapContext();
 
-        let healths = this.npc.npc_healths.map(function (health) {
-            return {
-                'game_version': lang.get(mapContext.getGameVersionById(health.game_version_id).name),
-                'health': mapContext.getNpcHealth(this.npc, false, health.game_version_id).toLocaleString(),
-                'percentage': health.percentage,
-            }
-        }.bind(this));
+        let healths = [];
+        if (this.npc !== null) {
+            healths = this.npc.npc_healths.map(function (health) {
+                return {
+                    'game_version': lang.get(mapContext.getGameVersionById(health.game_version_id).name),
+                    'health': mapContext.getNpcHealth(this.npc, false, health.game_version_id).toLocaleString(),
+                    'percentage': health.percentage,
+                }
+            }.bind(this));
+        }
 
         let data = $.extend({}, getHandlebarsDefaultVariables(), {
             npc_name: this.npc === null ? lang.get('messages.no_npc_found_label') : this.npc.name,
