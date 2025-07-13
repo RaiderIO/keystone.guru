@@ -247,7 +247,11 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         if ($result === null) {
             $result = $this->getCurrentMappingVersionForGameVersion(GameVersion::getUserOrDefaultGameVersion())
                 // It could be that the dungeon has no mapping for the user's game version, so we fall back to the default game version
-                ?? $this->getCurrentMappingVersionForGameVersion(GameVersion::getDefaultGameVersion());
+                ?? $this->getCurrentMappingVersionForGameVersion(GameVersion::getDefaultGameVersion())
+                // Fall back to the most recent mapping version if no mapping version was found for the default game version
+                // Maybe someone is viewing a dungeon for non-default game version A, while using non-default game version B,
+                // and the mapping for game version B does not exist yet. So just take what we can get.
+                ?? $this->mappingVersions()->orderByDesc('id')->first();
         }
 
         return $result;
