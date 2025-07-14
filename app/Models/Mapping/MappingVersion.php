@@ -208,7 +208,8 @@ class MappingVersion extends Model
             'dungeon' => fn(BelongsTo $query) => $query->without('mappingVersions'),
         ]);
 
-        return sprintf('%s Version %d (%s%d, %s)',
+        return sprintf('%s: %s Version %d (%s%d, %s)',
+            __($this->gameVersion->name),
             __($this->dungeon->name),
             $this->version,
             $this->merged ? 'readonly, ' : '',

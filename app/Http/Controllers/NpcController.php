@@ -64,7 +64,6 @@ class NpcController extends Controller
             'npc_type_id'       => $validated['npc_type_id'],
             'npc_class_id'      => $validated['npc_class_id'],
             'name'              => $validated['name'],
-            'health_percentage' => (int)$validated['health_percentage'] === 100 ? null : $validated['health_percentage'],
             'level'             => $validated['level'],
             'aggressiveness'    => $validated['aggressiveness'],
             'dangerous'         => $validated['dangerous'] ?? 0,
