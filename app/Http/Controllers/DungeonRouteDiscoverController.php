@@ -177,9 +177,8 @@ class DungeonRouteDiscoverController extends Controller
         Expansion                 $expansion,
         string                    $seasonIndex,
         DiscoverServiceInterface  $discoverService,
-        ExpansionServiceInterface $expansionService,
-        SeasonServiceInterface    $seasonService)
-    {
+        ExpansionServiceInterface $expansionService
+    ) {
         $season = Season::where('expansion_id', $expansion->id)->where('index', $seasonIndex)->first();
 
         // Redirect to the current expansion
@@ -423,6 +422,7 @@ class DungeonRouteDiscoverController extends Controller
             'dungeon'       => $dungeon,
             'dungeonroutes' => $discoverService
                 ->withLimit(config('keystoneguru.discover.limits.category'))
+                ->withExpansion($dungeon->expansion)
                 ->popularByDungeon($dungeon),
         ]);
     }
@@ -522,6 +522,7 @@ class DungeonRouteDiscoverController extends Controller
             'title'         => sprintf(__('controller.dungeonroutediscover.dungeon.new'), __($dungeon->name)),
             'dungeon'       => $dungeon,
             'dungeonroutes' => $discoverService
+                ->withExpansion($dungeon->expansion)
                 ->withLimit(config('keystoneguru.discover.limits.category'))
                 ->newByDungeon($dungeon),
         ]);
