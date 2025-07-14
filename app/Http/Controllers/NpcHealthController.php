@@ -53,19 +53,25 @@ class NpcHealthController extends Controller
     public function edit(Request $request, Npc $npc, NpcHealth $npcHealth): \Illuminate\View\View
     {
         return view('admin.npchealth.edit', [
-            'npc'       => $npc,
-            'npcHealth' => $npcHealth,
+            'npc'                    => $npc,
+            'npcHealth'              => $npcHealth,
+            'npcHealthsAutoComplete' => Npc::with('classification')
+                ->selectRaw('npcs.*')
+                ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+                ->whereIn('npc_dungeons.dungeon_id', $npc->dungeons->pluck('id')->toArray())
+                ->orderBy('npcs.id')
+                ->get(),
         ]);
     }
 
-    public function update(NpcHealthFormRequest $request, Npc $npc, NpcHealth $npcHealth): \Illuminate\View\View
+    public function update(NpcHealthFormRequest $request, Npc $npc, NpcHealth $npcHealth): RedirectResponse
     {
         $npcHealth->update($request->validated());
 
         // Message to the user
         Session::flash('status', __('view_admin.npchealth.flash.npc_health_updated'));
 
-        return view('admin.npchealth.edit', [
+        return redirect()->route('admin.npc.npchealth.edit', [
             'npc'       => $npc,
             'npcHealth' => $npcHealth,
         ]);

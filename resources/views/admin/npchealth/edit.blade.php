@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
  * @var Npc                     $npc
  * @var NpcHealth               $npcHealth
  * @var Collection<GameVersion> $allGameVersions
+ * @var Collection<Npc>         $npcHealthsAutoComplete
  */
 
 $npcHealth            = $npcHealth ?? null;
@@ -47,6 +48,26 @@ $gameVersionsSelect   = $allGameVersions
     'healthPercentageSelector' => '#percentage',
 ]])
 
+@section('scripts')
+    @parent
+
+    <script type="text/javascript">
+        $(function () {
+            $('#admin_npc_npc_health_table').DataTable({
+                'order': [[3, 'desc']],
+                // Amount per page
+                'pageLength': 25,
+            });
+
+            $('.apply-health').on('click', function (e) {
+                e.preventDefault();
+                const health = $(this).data('health');
+                $('#health').val(health);
+            });
+        });
+    </script>
+@endsection
+
 @section('content')
     @isset($npcHealth)
         {{ Form::model($npc, ['route' => ['admin.npc.npchealth.update', $npc, $npcHealth], 'autocomplete' => 'off', 'method' => 'patch']) }}
@@ -67,7 +88,7 @@ $gameVersionsSelect   = $allGameVersions
         <span class="form-required">*</span>
         <div class="row">
             <div class="col-3">
-                {!! Form::number('health', $npcHealth?->health, ['class' => 'form-control']) !!}
+                {!! Form::number('health', $npcHealth?->health, ['id' => 'health', 'class' => 'form-control']) !!}
                 @include('common.forms.form-error', ['key' => 'health'])
             </div>
             <div class="col-9">
@@ -122,4 +143,51 @@ $gameVersionsSelect   = $allGameVersions
     </div>
 
     {!! Form::close() !!}
+
+    <div class="form-group">
+        {!! Form::label('admin_npc_npc_health_table', __('view_admin.npchealth.edit.auto_complete_npc_healths')) !!}
+
+        <table id="admin_npc_npc_health_table" class="tablesorter default_table table-striped">
+            <thead>
+            <tr>
+                <th width="10%">{{ __('view_admin.npchealth.edit.table_header.npc_id') }}</th>
+                <th width="40%">{{ __('view_admin.npchealth.edit.table_header.npc_name') }}</th>
+                <th width="10%">{{ __('view_admin.npchealth.edit.table_header.classification') }}</th>
+                <th width="10%">{{ __('view_admin.npchealth.edit.table_header.health') }}</th>
+                <th width="10%">{{ __('view_admin.npchealth.edit.table_header.percentage') }}</th>
+                <th width="20%">{{ __('view_admin.npchealth.edit.table_header.actions') }}</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            @foreach($npcHealthsAutoComplete as $autoCompleteNpc)
+                @if(($autoCompleteNpcHealth = $autoCompleteNpc->getHealthByGameVersion($npcHealth->gameVersion)) && $autoCompleteNpc->id !== $npc->id)
+                    <tr>
+                        <td>{{ __($autoCompleteNpc->id) }}</td>
+                        <td>{{ __($autoCompleteNpc->name) }}</td>
+                        <td>{{ __($autoCompleteNpc->classification->name) }}</td>
+                        <td>{{ number_format($autoCompleteNpcHealth->health) }}</td>
+                        <td>{{ $autoCompleteNpcHealth->percentage }}</td>
+                        <td>
+                            <div class="row no-gutters">
+                                <div class="col">
+                                    <a class="btn btn-success apply-health" data-health="{{ $autoCompleteNpcHealth->health }}">
+                                        <i class="fas fa-check"></i>&nbsp;{{ __('view_admin.npchealth.edit.apply_to_npc_health') }}
+                                    </a>
+                                </div>
+                                <div class="col-auto">
+                                    <a class="btn btn-info"
+                                       href="{{ route('admin.npc.npchealth.edit', ['npc' => $autoCompleteNpc, 'npcHealth' => $autoCompleteNpcHealth]) }}">
+                                        <i class="fas fa-edit"></i>&nbsp;{{ __('view_admin.npchealth.edit.edit_npc_health') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                @endif
+            @endforeach
+            </tbody>
+
+        </table>
+    </div>
 @endsection
