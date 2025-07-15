@@ -129,14 +129,7 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     private ?Season $activeSeasonCache = null;
 
-    private Collection $currentMappingVersionCache;
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        $this->currentMappingVersionCache = collect();
-    }
+    private ?Collection $currentMappingVersionCache = null;
 
     /**
      * https://stackoverflow.com/a/34485411/771270
@@ -211,6 +204,11 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public function getCurrentMappingVersionForGameVersion(GameVersion $gameVersion): ?MappingVersion
     {
+        if ($this->currentMappingVersionCache === null) {
+            // Initialize the cache if it is not set
+            $this->currentMappingVersionCache = collect();
+        }
+
         if ($this->currentMappingVersionCache->has($gameVersion->id)) {
             return $this->currentMappingVersionCache->get($gameVersion->id);
         }
