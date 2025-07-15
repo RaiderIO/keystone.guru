@@ -21,6 +21,7 @@ use App\Models\Npc\NpcBolsteringWhitelist;
 use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\Npc\NpcHealth;
 use App\Models\Npc\NpcSpell;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Spell\Spell;
@@ -457,6 +458,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             NpcEnemyForces::class,
             NpcDungeon::class,
             NpcCharacteristic::class,
+            NpcHealth::class,
             NpcSpell::class,
             Enemy::class,
             EnemyPack::class,
