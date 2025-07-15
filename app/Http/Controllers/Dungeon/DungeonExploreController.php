@@ -12,8 +12,10 @@ use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,18 +23,26 @@ use Laravel\Pennant\Feature;
 
 class DungeonExploreController extends Controller
 {
-    public function get(Request $request): RedirectResponse
-    {
+
+    public function get(
+        Request                     $request,
+        GameVersionServiceInterface $gameVersionService
+    ): RedirectResponse {
         return redirect()->route('dungeon.explore.gameversion.list', [
-            'gameVersion' => GameVersion::getUserOrDefaultGameVersion(),
+            'gameVersion' => $gameVersionService->getGameVersion(Auth::user()),
         ]);
     }
 
-    public function getByGameVersion(Request $request, GameVersion $gameVersion, CombatLogEventServiceInterface $combatLogEventService): View|RedirectResponse
-    {
-        if ($gameVersion->id !== GameVersion::getUserOrDefaultGameVersion()->id) {
+    public function getByGameVersion(
+        Request                        $request,
+        GameVersion                    $gameVersion,
+        CombatLogEventServiceInterface $combatLogEventService,
+        GameVersionServiceInterface    $gameVersionService
+    ): View|RedirectResponse {
+        $userOrDefaultGameVersion = $gameVersionService->getGameVersion(Auth::user());
+        if ($gameVersion->id !== $userOrDefaultGameVersion->id) {
             return redirect()->route('dungeon.explore.gameversion.list', [
-                'gameVersion' => GameVersion::getUserOrDefaultGameVersion(),
+                'gameVersion' => $userOrDefaultGameVersion,
             ]);
         }
 

@@ -15,7 +15,9 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcType;
 use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Spell\Spell;
+use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Auth;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -243,7 +245,8 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
         // If we didn't find a mapping version for the given game version, fall back to the default game version
         if ($result === null) {
-            $result = $this->getCurrentMappingVersionForGameVersion(GameVersion::getUserOrDefaultGameVersion())
+            $gameVersionService = app(GameVersionServiceInterface::class);
+            $result = $this->getCurrentMappingVersionForGameVersion($gameVersionService->getGameVersion(Auth::user()))
                 // It could be that the dungeon has no mapping for the user's game version, so we fall back to the default game version
                 ?? $this->getCurrentMappingVersionForGameVersion(GameVersion::getDefaultGameVersion())
                 // Fall back to the most recent mapping version if no mapping version was found for the default game version
