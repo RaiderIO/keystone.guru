@@ -45,7 +45,7 @@ class DungeonRouteResource extends JsonResource
             'enemyForces'         => $this->enemy_forces,
             'enemyForcesRequired' => $this->mappingVersion->enemy_forces_required,
             'expiresAt'           => $this->expires_at,
-            'pulls'               => $this->killZones->map(
+            'pulls'               => $this->killZones()->with('killZoneEnemies')->get()->map(
                 fn(KillZone $killZone) => new KillZoneResource($killZone)
             )->toArray(),
             'author'              => new UserResource($this->author),

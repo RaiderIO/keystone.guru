@@ -207,7 +207,7 @@
         "id": 15188,
         "mapping_version_id": 545,
         "floor_id": 357,
-        "group": null,
+        "group": 29,
         "teeming": null,
         "faction": "any",
         "color": "#5993D2",
