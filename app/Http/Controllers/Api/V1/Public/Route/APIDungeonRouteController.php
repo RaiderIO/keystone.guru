@@ -30,7 +30,7 @@ class APIDungeonRouteController extends Controller
         $validated = $request->validated();
 
         return new DungeonRouteEnvelopeResource(
-            DungeonRoute::withOnly(['dungeon', 'author', 'killZones', 'affixes'])
+            DungeonRoute::withOnly(['dungeon', 'author', 'killZones', 'affixes', 'thumbnails', 'mappingVersion'])
                 ->where('author_id', Auth::id())
                 ->when($validated['dungeon_id'] ?? false, static function (Builder $builder) use ($validated) {
                     $builder->where('dungeon_id', $validated['dungeon_id']);

@@ -1,0 +1,31 @@
+{
+    "id": 308,
+    "release_changelog_id": 315,
+    "version": "v13.6.1",
+    "title": "Stormstout Brewery and Temple of the Jade Serpent can now be used in routes as intended",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-07-15T14:58:33+00:00",
+    "updated_at": "2025-07-15T14:58:33+00:00",
+    "changelog": {
+        "id": 315,
+        "release_id": 308,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 315,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2880,
+                "change": "Stormstout Brewery and Temple of the Jade Serpent enemies can now be used in routes as intended."
+            },
+            {
+                "release_changelog_id": 315,
+                "release_changelog_category_id": 12,
+                "ticket_id": null,
+                "change": "Added heatmapEnabled and combinedViewEnabled values to each dungeon."
+            }
+        ]
+    }
+}

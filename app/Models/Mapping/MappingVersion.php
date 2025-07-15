@@ -113,7 +113,7 @@ class MappingVersion extends Model
 
     protected $with = [
         'gameVersion',
-//        'dungeon',
+        //        'dungeon',
     ];
 
     public $timestamps = true;
@@ -196,6 +196,7 @@ class MappingVersion extends Model
         if ($this->isLatestForDungeonCache === null) {
             $this->isLatestForDungeonCache = MappingVersion::query()
                     ->where('dungeon_id', $this->dungeon_id)
+                    ->where('game_version_id', $this->game_version_id)
                     ->max('version') === $this->version;
         }
 

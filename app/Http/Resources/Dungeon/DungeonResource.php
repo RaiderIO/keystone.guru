@@ -22,6 +22,8 @@ use JsonSerializable;
  * @OA\Property(property="instanceId", type="integer", example="1269", description="The instance ID of the dungeon. Found on https://wago.tools/db2/JournalInstance")
  * @OA\Property(property="challengeModeId", type="integer", example="501", description="The challenge mode ID of the dungeon. Found on https://wago.tools/db2/MapChallengeMode")
  * @OA\Property(property="raid", type="boolean", example="0", description="True if this dungeon is a raid")
+ * @OA\Property(property="heatmapEnabled", type="boolean", example="0", description="Whether a heatmap is available for this dungeon")
+ * @OA\Property(property="combinedViewEnabled", type="boolean", example="0", description="Whether a combined view (MDT-style) is available for this dungeon")
  * @OA\Property(property="speedrunEnabled", type="boolean", example="0", description="Whether speedrun is enabled for this dungeon")
  * @OA\Property(property="speedrunDifficulty10ManEnabled", type="boolean", example="0", description="Whether 10-man difficulty is enabled for speedrunning")
  * @OA\Property(property="speedrunDifficulty25ManEnabled", type="boolean", example="0", description="Whether 25-man difficulty is enabled for speedrunning")
@@ -29,7 +31,6 @@ use JsonSerializable;
  *
  * @mixin Dungeon
  */
-
 class DungeonResource extends JsonResource
 {
     /**
@@ -50,6 +51,8 @@ class DungeonResource extends JsonResource
             'instanceId'                     => $this->instance_id,
             'challengeModeId'                => $this->challenge_mode_id,
             'raid'                           => $this->raid,
+            'heatmapEnabled'                 => $this->heatmap_enabled,
+            'combinedViewEnabled'            => (int)$this->floors->contains(fn(Floor $floor) => $floor->facade),
             'speedrunEnabled'                => $this->speedrun_enabled,
             'speedrunDifficulty10ManEnabled' => $this->speedrun_difficulty_10_man_enabled,
             'speedrunDifficulty25ManEnabled' => $this->speedrun_difficulty_25_man_enabled,
