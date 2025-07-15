@@ -1,9 +1,7 @@
 <?php
 
-use App\Models\Npc\Npc;
-use App\Models\Npc\NpcDungeon;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration {
     /**
@@ -11,17 +9,21 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Npc::where('dungeon_id', '>', 0)->chunk(100, function (Collection $npcs) {
-            $attributes = [];
-            foreach ($npcs as $npc) {
-                $attributes[] = [
-                    'npc_id'     => $npc->id,
-                    'dungeon_id' => $npc->dungeon_id,
-                ];
-            }
+        DB::table('npcs')
+            ->where('dungeon_id', '>', 0)
+            ->orderBy('id') // ensure chunking is safe and deterministic
+            ->chunk(100, function ($npcs) {
+                $attributes = [];
 
-            NpcDungeon::insert($attributes);
-        });
+                foreach ($npcs as $npc) {
+                    $attributes[] = [
+                        'npc_id'     => $npc->id,
+                        'dungeon_id' => $npc->dungeon_id,
+                    ];
+                }
+
+                DB::table('npc_dungeons')->insert($attributes);
+            });
     }
 
     /**
