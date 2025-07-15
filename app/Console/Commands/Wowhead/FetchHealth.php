@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Wowhead;
 
 use App\Models\Dungeon;
+use App\Models\Npc\NpcHealth;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Exception;
 use Illuminate\Console\Command;
@@ -39,28 +40,34 @@ class FetchHealth extends Command
         }
 
         foreach ($dungeon->npcs as $npc) {
-            if ($npc->dungeon_id === -1) {
-                continue;
-            } else if ($npc->base_health !== 12345) {
-                $this->info(sprintf('Skipping already set health for %s (%d)', $npc->name, $npc->id));
+            foreach($dungeon->getMappingVersionGameVersions() as $gameVersion) {
+                if ($npc->getHealthByGameVersion($gameVersion) !== null) {
+                    $this->info(sprintf('Skipping already set health for %s (%d)', $npc->name, $npc->id));
 
-                continue;
+                    continue;
+                }
+
+                // Don't DDOS
+                sleep(1);
+
+                $this->info(sprintf('Fetching health for %s (%d)', $npc->name, $npc->id));
+
+                $health = $wowheadService->getNpcHealth($gameVersion, $npc);
+
+                if (empty($health)) {
+                    $this->warn('- Unable to find health for npc!');
+                } else {
+                    NpcHealth::insert([
+                        'npc_id'          => $npc->id,
+                        'game_version_id' => $gameVersion->id,
+                        'health'          => $health,
+                    ]);
+
+                    $this->info(sprintf('- %d', $health));
+                    break;
+                }
+
             }
-
-            $this->info(sprintf('Fetching health for %s (%d)', $npc->name, $npc->id));
-
-            $health = $wowheadService->getNpcHealth($dungeon->gameVersion, $npc);
-
-            if (empty($health)) {
-                $this->warn('- Unable to find health for npc!');
-            } else {
-                $npc->update(['base_health' => $health]);
-
-                $this->info(sprintf('- %d', $health));
-            }
-
-            // Don't DDOS
-            sleep(1);
         }
     }
 }

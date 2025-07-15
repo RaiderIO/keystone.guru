@@ -1,6 +1,7 @@
 [
     {
         "id": 1,
+        "game_version_id": 1,
         "dungeon_id": 1,
         "version": 1,
         "enemy_forces_required": 392,
@@ -16,6 +17,7 @@
     },
     {
         "id": 2,
+        "game_version_id": 1,
         "dungeon_id": 2,
         "version": 1,
         "enemy_forces_required": 300,
@@ -31,6 +33,7 @@
     },
     {
         "id": 3,
+        "game_version_id": 1,
         "dungeon_id": 3,
         "version": 1,
         "enemy_forces_required": 0,
@@ -46,6 +49,7 @@
     },
     {
         "id": 4,
+        "game_version_id": 1,
         "dungeon_id": 4,
         "version": 1,
         "enemy_forces_required": 190,
@@ -61,6 +65,7 @@
     },
     {
         "id": 5,
+        "game_version_id": 1,
         "dungeon_id": 5,
         "version": 1,
         "enemy_forces_required": 280,
@@ -76,6 +81,7 @@
     },
     {
         "id": 6,
+        "game_version_id": 1,
         "dungeon_id": 6,
         "version": 1,
         "enemy_forces_required": 206,
@@ -91,6 +97,7 @@
     },
     {
         "id": 7,
+        "game_version_id": 1,
         "dungeon_id": 7,
         "version": 1,
         "enemy_forces_required": 270,
@@ -106,6 +113,7 @@
     },
     {
         "id": 8,
+        "game_version_id": 1,
         "dungeon_id": 8,
         "version": 1,
         "enemy_forces_required": 420,
@@ -121,6 +129,7 @@
     },
     {
         "id": 9,
+        "game_version_id": 1,
         "dungeon_id": 9,
         "version": 1,
         "enemy_forces_required": 0,
@@ -136,6 +145,7 @@
     },
     {
         "id": 10,
+        "game_version_id": 1,
         "dungeon_id": 10,
         "version": 1,
         "enemy_forces_required": 220,
@@ -151,6 +161,7 @@
     },
     {
         "id": 11,
+        "game_version_id": 1,
         "dungeon_id": 11,
         "version": 1,
         "enemy_forces_required": 169,
@@ -166,6 +177,7 @@
     },
     {
         "id": 12,
+        "game_version_id": 1,
         "dungeon_id": 12,
         "version": 1,
         "enemy_forces_required": 0,
@@ -181,6 +193,7 @@
     },
     {
         "id": 13,
+        "game_version_id": 1,
         "dungeon_id": 13,
         "version": 1,
         "enemy_forces_required": 210,
@@ -196,6 +209,7 @@
     },
     {
         "id": 14,
+        "game_version_id": 1,
         "dungeon_id": 14,
         "version": 1,
         "enemy_forces_required": 198,
@@ -211,6 +225,7 @@
     },
     {
         "id": 15,
+        "game_version_id": 1,
         "dungeon_id": 15,
         "version": 1,
         "enemy_forces_required": 400,
@@ -226,6 +241,7 @@
     },
     {
         "id": 16,
+        "game_version_id": 1,
         "dungeon_id": 16,
         "version": 1,
         "enemy_forces_required": 246,
@@ -241,6 +257,7 @@
     },
     {
         "id": 17,
+        "game_version_id": 1,
         "dungeon_id": 17,
         "version": 1,
         "enemy_forces_required": 695,
@@ -256,6 +273,7 @@
     },
     {
         "id": 18,
+        "game_version_id": 1,
         "dungeon_id": 18,
         "version": 1,
         "enemy_forces_required": 319,
@@ -271,6 +289,7 @@
     },
     {
         "id": 19,
+        "game_version_id": 1,
         "dungeon_id": 19,
         "version": 1,
         "enemy_forces_required": 220,
@@ -286,6 +305,7 @@
     },
     {
         "id": 20,
+        "game_version_id": 1,
         "dungeon_id": 20,
         "version": 1,
         "enemy_forces_required": 384,
@@ -301,6 +321,7 @@
     },
     {
         "id": 21,
+        "game_version_id": 1,
         "dungeon_id": 21,
         "version": 1,
         "enemy_forces_required": 320,
@@ -316,6 +337,7 @@
     },
     {
         "id": 22,
+        "game_version_id": 1,
         "dungeon_id": 22,
         "version": 1,
         "enemy_forces_required": 400,
@@ -331,6 +353,7 @@
     },
     {
         "id": 23,
+        "game_version_id": 1,
         "dungeon_id": 23,
         "version": 1,
         "enemy_forces_required": 303,
@@ -346,6 +369,7 @@
     },
     {
         "id": 24,
+        "game_version_id": 1,
         "dungeon_id": 24,
         "version": 1,
         "enemy_forces_required": 332,
@@ -361,6 +385,7 @@
     },
     {
         "id": 25,
+        "game_version_id": 1,
         "dungeon_id": 25,
         "version": 1,
         "enemy_forces_required": 160,
@@ -376,6 +401,7 @@
     },
     {
         "id": 26,
+        "game_version_id": 1,
         "dungeon_id": 26,
         "version": 1,
         "enemy_forces_required": 0,
@@ -391,6 +417,7 @@
     },
     {
         "id": 27,
+        "game_version_id": 1,
         "dungeon_id": 27,
         "version": 1,
         "enemy_forces_required": 0,
@@ -406,6 +433,7 @@
     },
     {
         "id": 28,
+        "game_version_id": 1,
         "dungeon_id": 28,
         "version": 1,
         "enemy_forces_required": 384,
@@ -421,6 +449,7 @@
     },
     {
         "id": 29,
+        "game_version_id": 1,
         "dungeon_id": 29,
         "version": 1,
         "enemy_forces_required": 273,
@@ -436,6 +465,7 @@
     },
     {
         "id": 30,
+        "game_version_id": 1,
         "dungeon_id": 30,
         "version": 1,
         "enemy_forces_required": 260,
@@ -451,6 +481,7 @@
     },
     {
         "id": 31,
+        "game_version_id": 1,
         "dungeon_id": 31,
         "version": 1,
         "enemy_forces_required": 600,
@@ -466,6 +497,7 @@
     },
     {
         "id": 32,
+        "game_version_id": 1,
         "dungeon_id": 32,
         "version": 1,
         "enemy_forces_required": 364,
@@ -481,6 +513,7 @@
     },
     {
         "id": 33,
+        "game_version_id": 1,
         "dungeon_id": 33,
         "version": 1,
         "enemy_forces_required": 285,
@@ -496,6 +529,7 @@
     },
     {
         "id": 34,
+        "game_version_id": 1,
         "dungeon_id": 34,
         "version": 1,
         "enemy_forces_required": 283,
@@ -511,6 +545,7 @@
     },
     {
         "id": 35,
+        "game_version_id": 1,
         "dungeon_id": 35,
         "version": 1,
         "enemy_forces_required": 271,
@@ -526,6 +561,7 @@
     },
     {
         "id": 36,
+        "game_version_id": 1,
         "dungeon_id": 36,
         "version": 1,
         "enemy_forces_required": 290,
@@ -541,6 +577,7 @@
     },
     {
         "id": 37,
+        "game_version_id": 1,
         "dungeon_id": 37,
         "version": 1,
         "enemy_forces_required": 346,
@@ -556,6 +593,7 @@
     },
     {
         "id": 38,
+        "game_version_id": 1,
         "dungeon_id": 38,
         "version": 1,
         "enemy_forces_required": 0,
@@ -571,6 +609,7 @@
     },
     {
         "id": 39,
+        "game_version_id": 1,
         "dungeon_id": 39,
         "version": 1,
         "enemy_forces_required": 0,
@@ -586,6 +625,7 @@
     },
     {
         "id": 40,
+        "game_version_id": 1,
         "dungeon_id": 40,
         "version": 1,
         "enemy_forces_required": 400,
@@ -601,6 +641,7 @@
     },
     {
         "id": 41,
+        "game_version_id": 1,
         "dungeon_id": 41,
         "version": 1,
         "enemy_forces_required": 300,
@@ -616,6 +657,7 @@
     },
     {
         "id": 42,
+        "game_version_id": 3,
         "dungeon_id": 42,
         "version": 1,
         "enemy_forces_required": 0,
@@ -631,6 +673,7 @@
     },
     {
         "id": 43,
+        "game_version_id": 3,
         "dungeon_id": 43,
         "version": 1,
         "enemy_forces_required": 0,
@@ -646,6 +689,7 @@
     },
     {
         "id": 44,
+        "game_version_id": 3,
         "dungeon_id": 44,
         "version": 1,
         "enemy_forces_required": 0,
@@ -661,6 +705,7 @@
     },
     {
         "id": 45,
+        "game_version_id": 3,
         "dungeon_id": 45,
         "version": 1,
         "enemy_forces_required": 0,
@@ -676,6 +721,7 @@
     },
     {
         "id": 46,
+        "game_version_id": 3,
         "dungeon_id": 46,
         "version": 1,
         "enemy_forces_required": 0,
@@ -691,6 +737,7 @@
     },
     {
         "id": 47,
+        "game_version_id": 3,
         "dungeon_id": 47,
         "version": 1,
         "enemy_forces_required": 0,
@@ -706,6 +753,7 @@
     },
     {
         "id": 48,
+        "game_version_id": 3,
         "dungeon_id": 48,
         "version": 1,
         "enemy_forces_required": 0,
@@ -721,6 +769,7 @@
     },
     {
         "id": 49,
+        "game_version_id": 3,
         "dungeon_id": 49,
         "version": 1,
         "enemy_forces_required": 0,
@@ -736,6 +785,7 @@
     },
     {
         "id": 50,
+        "game_version_id": 3,
         "dungeon_id": 50,
         "version": 1,
         "enemy_forces_required": 0,
@@ -751,6 +801,7 @@
     },
     {
         "id": 51,
+        "game_version_id": 3,
         "dungeon_id": 51,
         "version": 1,
         "enemy_forces_required": 0,
@@ -766,6 +817,7 @@
     },
     {
         "id": 52,
+        "game_version_id": 3,
         "dungeon_id": 52,
         "version": 1,
         "enemy_forces_required": 0,
@@ -781,6 +833,7 @@
     },
     {
         "id": 53,
+        "game_version_id": 3,
         "dungeon_id": 53,
         "version": 1,
         "enemy_forces_required": 0,
@@ -796,6 +849,7 @@
     },
     {
         "id": 54,
+        "game_version_id": 3,
         "dungeon_id": 54,
         "version": 1,
         "enemy_forces_required": 0,
@@ -811,6 +865,7 @@
     },
     {
         "id": 55,
+        "game_version_id": 3,
         "dungeon_id": 55,
         "version": 1,
         "enemy_forces_required": 0,
@@ -826,6 +881,7 @@
     },
     {
         "id": 56,
+        "game_version_id": 3,
         "dungeon_id": 56,
         "version": 1,
         "enemy_forces_required": 0,
@@ -841,6 +897,7 @@
     },
     {
         "id": 57,
+        "game_version_id": 3,
         "dungeon_id": 57,
         "version": 1,
         "enemy_forces_required": 0,
@@ -856,6 +913,7 @@
     },
     {
         "id": 59,
+        "game_version_id": 3,
         "dungeon_id": 59,
         "version": 1,
         "enemy_forces_required": 0,
@@ -871,6 +929,7 @@
     },
     {
         "id": 60,
+        "game_version_id": 3,
         "dungeon_id": 60,
         "version": 1,
         "enemy_forces_required": 0,
@@ -886,6 +945,7 @@
     },
     {
         "id": 61,
+        "game_version_id": 3,
         "dungeon_id": 61,
         "version": 1,
         "enemy_forces_required": 0,
@@ -901,6 +961,7 @@
     },
     {
         "id": 62,
+        "game_version_id": 3,
         "dungeon_id": 62,
         "version": 1,
         "enemy_forces_required": 0,
@@ -916,6 +977,7 @@
     },
     {
         "id": 63,
+        "game_version_id": 3,
         "dungeon_id": 63,
         "version": 1,
         "enemy_forces_required": 0,
@@ -931,6 +993,7 @@
     },
     {
         "id": 64,
+        "game_version_id": 3,
         "dungeon_id": 64,
         "version": 1,
         "enemy_forces_required": 0,
@@ -946,6 +1009,7 @@
     },
     {
         "id": 65,
+        "game_version_id": 3,
         "dungeon_id": 65,
         "version": 1,
         "enemy_forces_required": 0,
@@ -961,6 +1025,7 @@
     },
     {
         "id": 66,
+        "game_version_id": 3,
         "dungeon_id": 66,
         "version": 1,
         "enemy_forces_required": 0,
@@ -976,6 +1041,7 @@
     },
     {
         "id": 67,
+        "game_version_id": 1,
         "dungeon_id": 67,
         "version": 1,
         "enemy_forces_required": 450,
@@ -991,6 +1057,7 @@
     },
     {
         "id": 68,
+        "game_version_id": 1,
         "dungeon_id": 68,
         "version": 1,
         "enemy_forces_required": 723,
@@ -1006,6 +1073,7 @@
     },
     {
         "id": 69,
+        "game_version_id": 1,
         "dungeon_id": 71,
         "version": 1,
         "enemy_forces_required": 520,
@@ -1021,6 +1089,7 @@
     },
     {
         "id": 70,
+        "game_version_id": 1,
         "dungeon_id": 72,
         "version": 1,
         "enemy_forces_required": 660,
@@ -1036,6 +1105,7 @@
     },
     {
         "id": 71,
+        "game_version_id": 1,
         "dungeon_id": 73,
         "version": 1,
         "enemy_forces_required": 410,
@@ -1051,6 +1121,7 @@
     },
     {
         "id": 72,
+        "game_version_id": 1,
         "dungeon_id": 4,
         "version": 2,
         "enemy_forces_required": 190,
@@ -1066,6 +1137,7 @@
     },
     {
         "id": 73,
+        "game_version_id": 1,
         "dungeon_id": 7,
         "version": 2,
         "enemy_forces_required": 270,
@@ -1081,6 +1153,7 @@
     },
     {
         "id": 74,
+        "game_version_id": 1,
         "dungeon_id": 75,
         "version": 1,
         "enemy_forces_required": 300,
@@ -1096,6 +1169,7 @@
     },
     {
         "id": 75,
+        "game_version_id": 1,
         "dungeon_id": 76,
         "version": 1,
         "enemy_forces_required": 410,
@@ -1111,6 +1185,7 @@
     },
     {
         "id": 76,
+        "game_version_id": 1,
         "dungeon_id": 67,
         "version": 2,
         "enemy_forces_required": 450,
@@ -1126,6 +1201,7 @@
     },
     {
         "id": 77,
+        "game_version_id": 1,
         "dungeon_id": 72,
         "version": 2,
         "enemy_forces_required": 660,
@@ -1141,6 +1217,7 @@
     },
     {
         "id": 78,
+        "game_version_id": 1,
         "dungeon_id": 73,
         "version": 2,
         "enemy_forces_required": 410,
@@ -1156,6 +1233,7 @@
     },
     {
         "id": 79,
+        "game_version_id": 1,
         "dungeon_id": 71,
         "version": 2,
         "enemy_forces_required": 520,
@@ -1171,6 +1249,7 @@
     },
     {
         "id": 80,
+        "game_version_id": 1,
         "dungeon_id": 76,
         "version": 2,
         "enemy_forces_required": 410,
@@ -1186,6 +1265,7 @@
     },
     {
         "id": 81,
+        "game_version_id": 1,
         "dungeon_id": 75,
         "version": 2,
         "enemy_forces_required": 300,
@@ -1201,6 +1281,7 @@
     },
     {
         "id": 82,
+        "game_version_id": 1,
         "dungeon_id": 7,
         "version": 3,
         "enemy_forces_required": 270,
@@ -1216,6 +1297,7 @@
     },
     {
         "id": 83,
+        "game_version_id": 1,
         "dungeon_id": 4,
         "version": 3,
         "enemy_forces_required": 190,
@@ -1231,6 +1313,7 @@
     },
     {
         "id": 84,
+        "game_version_id": 1,
         "dungeon_id": 76,
         "version": 3,
         "enemy_forces_required": 410,
@@ -1246,6 +1329,7 @@
     },
     {
         "id": 85,
+        "game_version_id": 1,
         "dungeon_id": 71,
         "version": 3,
         "enemy_forces_required": 520,
@@ -1261,6 +1345,7 @@
     },
     {
         "id": 86,
+        "game_version_id": 1,
         "dungeon_id": 73,
         "version": 3,
         "enemy_forces_required": 410,
@@ -1276,6 +1361,7 @@
     },
     {
         "id": 87,
+        "game_version_id": 1,
         "dungeon_id": 67,
         "version": 3,
         "enemy_forces_required": 450,
@@ -1291,6 +1377,7 @@
     },
     {
         "id": 88,
+        "game_version_id": 1,
         "dungeon_id": 71,
         "version": 4,
         "enemy_forces_required": 520,
@@ -1306,6 +1393,7 @@
     },
     {
         "id": 89,
+        "game_version_id": 1,
         "dungeon_id": 4,
         "version": 4,
         "enemy_forces_required": 190,
@@ -1321,6 +1409,7 @@
     },
     {
         "id": 90,
+        "game_version_id": 1,
         "dungeon_id": 72,
         "version": 3,
         "enemy_forces_required": 660,
@@ -1336,6 +1425,7 @@
     },
     {
         "id": 91,
+        "game_version_id": 1,
         "dungeon_id": 75,
         "version": 3,
         "enemy_forces_required": 300,
@@ -1351,6 +1441,7 @@
     },
     {
         "id": 92,
+        "game_version_id": 3,
         "dungeon_id": 65,
         "version": 2,
         "enemy_forces_required": 0,
@@ -1366,6 +1457,7 @@
     },
     {
         "id": 93,
+        "game_version_id": 3,
         "dungeon_id": 65,
         "version": 3,
         "enemy_forces_required": 0,
@@ -1381,6 +1473,7 @@
     },
     {
         "id": 94,
+        "game_version_id": 1,
         "dungeon_id": 67,
         "version": 4,
         "enemy_forces_required": 450,
@@ -1396,6 +1489,7 @@
     },
     {
         "id": 95,
+        "game_version_id": 1,
         "dungeon_id": 72,
         "version": 4,
         "enemy_forces_required": 660,
@@ -1411,6 +1505,7 @@
     },
     {
         "id": 96,
+        "game_version_id": 1,
         "dungeon_id": 71,
         "version": 5,
         "enemy_forces_required": 520,
@@ -1426,6 +1521,7 @@
     },
     {
         "id": 97,
+        "game_version_id": 1,
         "dungeon_id": 4,
         "version": 5,
         "enemy_forces_required": 190,
@@ -1441,6 +1537,7 @@
     },
     {
         "id": 98,
+        "game_version_id": 1,
         "dungeon_id": 7,
         "version": 4,
         "enemy_forces_required": 270,
@@ -1456,6 +1553,7 @@
     },
     {
         "id": 99,
+        "game_version_id": 1,
         "dungeon_id": 76,
         "version": 4,
         "enemy_forces_required": 410,
@@ -1471,6 +1569,7 @@
     },
     {
         "id": 100,
+        "game_version_id": 1,
         "dungeon_id": 77,
         "version": 1,
         "enemy_forces_required": 420,
@@ -1486,6 +1585,7 @@
     },
     {
         "id": 101,
+        "game_version_id": 1,
         "dungeon_id": 69,
         "version": 1,
         "enemy_forces_required": 435,
@@ -1501,6 +1601,7 @@
     },
     {
         "id": 102,
+        "game_version_id": 1,
         "dungeon_id": 74,
         "version": 1,
         "enemy_forces_required": 575,
@@ -1516,6 +1617,7 @@
     },
     {
         "id": 103,
+        "game_version_id": 1,
         "dungeon_id": 68,
         "version": 2,
         "enemy_forces_required": 723,
@@ -1531,6 +1633,7 @@
     },
     {
         "id": 104,
+        "game_version_id": 1,
         "dungeon_id": 70,
         "version": 1,
         "enemy_forces_required": 525,
@@ -1546,6 +1649,7 @@
     },
     {
         "id": 105,
+        "game_version_id": 1,
         "dungeon_id": 15,
         "version": 2,
         "enemy_forces_required": 400,
@@ -1561,6 +1665,7 @@
     },
     {
         "id": 106,
+        "game_version_id": 1,
         "dungeon_id": 21,
         "version": 2,
         "enemy_forces_required": 320,
@@ -1576,6 +1681,7 @@
     },
     {
         "id": 107,
+        "game_version_id": 1,
         "dungeon_id": 8,
         "version": 2,
         "enemy_forces_required": 420,
@@ -1591,6 +1697,7 @@
     },
     {
         "id": 108,
+        "game_version_id": 1,
         "dungeon_id": 69,
         "version": 2,
         "enemy_forces_required": 435,
@@ -1606,6 +1713,7 @@
     },
     {
         "id": 109,
+        "game_version_id": 1,
         "dungeon_id": 70,
         "version": 2,
         "enemy_forces_required": 525,
@@ -1621,6 +1729,7 @@
     },
     {
         "id": 110,
+        "game_version_id": 1,
         "dungeon_id": 69,
         "version": 3,
         "enemy_forces_required": 435,
@@ -1636,6 +1745,7 @@
     },
     {
         "id": 111,
+        "game_version_id": 1,
         "dungeon_id": 69,
         "version": 4,
         "enemy_forces_required": 435,
@@ -1651,6 +1761,7 @@
     },
     {
         "id": 112,
+        "game_version_id": 1,
         "dungeon_id": 69,
         "version": 5,
         "enemy_forces_required": 435,
@@ -1666,6 +1777,7 @@
     },
     {
         "id": 113,
+        "game_version_id": 1,
         "dungeon_id": 68,
         "version": 3,
         "enemy_forces_required": 723,
@@ -1681,6 +1793,7 @@
     },
     {
         "id": 114,
+        "game_version_id": 1,
         "dungeon_id": 74,
         "version": 2,
         "enemy_forces_required": 575,
@@ -1696,6 +1809,7 @@
     },
     {
         "id": 115,
+        "game_version_id": 1,
         "dungeon_id": 70,
         "version": 3,
         "enemy_forces_required": 525,
@@ -1711,6 +1825,7 @@
     },
     {
         "id": 116,
+        "game_version_id": 1,
         "dungeon_id": 10,
         "version": 2,
         "enemy_forces_required": 220,
@@ -1726,6 +1841,7 @@
     },
     {
         "id": 119,
+        "game_version_id": 1,
         "dungeon_id": 77,
         "version": 2,
         "enemy_forces_required": 420,
@@ -1741,6 +1857,7 @@
     },
     {
         "id": 120,
+        "game_version_id": 1,
         "dungeon_id": 15,
         "version": 3,
         "enemy_forces_required": 400,
@@ -1756,6 +1873,7 @@
     },
     {
         "id": 121,
+        "game_version_id": 1,
         "dungeon_id": 21,
         "version": 3,
         "enemy_forces_required": 320,
@@ -1771,6 +1889,7 @@
     },
     {
         "id": 122,
+        "game_version_id": 1,
         "dungeon_id": 68,
         "version": 4,
         "enemy_forces_required": 723,
@@ -1786,6 +1905,7 @@
     },
     {
         "id": 123,
+        "game_version_id": 1,
         "dungeon_id": 74,
         "version": 3,
         "enemy_forces_required": 575,
@@ -1801,6 +1921,7 @@
     },
     {
         "id": 124,
+        "game_version_id": 1,
         "dungeon_id": 10,
         "version": 3,
         "enemy_forces_required": 220,
@@ -1816,6 +1937,7 @@
     },
     {
         "id": 125,
+        "game_version_id": 1,
         "dungeon_id": 15,
         "version": 4,
         "enemy_forces_required": 400,
@@ -1831,6 +1953,7 @@
     },
     {
         "id": 126,
+        "game_version_id": 1,
         "dungeon_id": 21,
         "version": 4,
         "enemy_forces_required": 320,
@@ -1846,6 +1969,7 @@
     },
     {
         "id": 127,
+        "game_version_id": 1,
         "dungeon_id": 77,
         "version": 3,
         "enemy_forces_required": 420,
@@ -1861,6 +1985,7 @@
     },
     {
         "id": 128,
+        "game_version_id": 1,
         "dungeon_id": 21,
         "version": 5,
         "enemy_forces_required": 320,
@@ -1876,6 +2001,7 @@
     },
     {
         "id": 129,
+        "game_version_id": 1,
         "dungeon_id": 74,
         "version": 4,
         "enemy_forces_required": 575,
@@ -1891,6 +2017,7 @@
     },
     {
         "id": 130,
+        "game_version_id": 1,
         "dungeon_id": 69,
         "version": 6,
         "enemy_forces_required": 435,
@@ -1906,6 +2033,7 @@
     },
     {
         "id": 131,
+        "game_version_id": 1,
         "dungeon_id": 68,
         "version": 5,
         "enemy_forces_required": 723,
@@ -1921,6 +2049,7 @@
     },
     {
         "id": 132,
+        "game_version_id": 1,
         "dungeon_id": 74,
         "version": 5,
         "enemy_forces_required": 575,
@@ -1936,6 +2065,7 @@
     },
     {
         "id": 133,
+        "game_version_id": 1,
         "dungeon_id": 70,
         "version": 4,
         "enemy_forces_required": 525,
@@ -1951,6 +2081,7 @@
     },
     {
         "id": 134,
+        "game_version_id": 1,
         "dungeon_id": 10,
         "version": 4,
         "enemy_forces_required": 220,
@@ -1966,6 +2097,7 @@
     },
     {
         "id": 135,
+        "game_version_id": 1,
         "dungeon_id": 15,
         "version": 5,
         "enemy_forces_required": 400,
@@ -1981,6 +2113,7 @@
     },
     {
         "id": 136,
+        "game_version_id": 1,
         "dungeon_id": 21,
         "version": 6,
         "enemy_forces_required": 320,
@@ -1996,6 +2129,7 @@
     },
     {
         "id": 137,
+        "game_version_id": 1,
         "dungeon_id": 77,
         "version": 4,
         "enemy_forces_required": 420,
@@ -2011,6 +2145,7 @@
     },
     {
         "id": 138,
+        "game_version_id": 1,
         "dungeon_id": 68,
         "version": 6,
         "enemy_forces_required": 723,
@@ -2026,6 +2161,7 @@
     },
     {
         "id": 139,
+        "game_version_id": 1,
         "dungeon_id": 68,
         "version": 7,
         "enemy_forces_required": 723,
@@ -2041,6 +2177,7 @@
     },
     {
         "id": 140,
+        "game_version_id": 1,
         "dungeon_id": 10,
         "version": 5,
         "enemy_forces_required": 220,
@@ -2056,6 +2193,7 @@
     },
     {
         "id": 141,
+        "game_version_id": 1,
         "dungeon_id": 15,
         "version": 6,
         "enemy_forces_required": 400,
@@ -2071,6 +2209,7 @@
     },
     {
         "id": 142,
+        "game_version_id": 1,
         "dungeon_id": 77,
         "version": 5,
         "enemy_forces_required": 420,
@@ -2086,6 +2225,7 @@
     },
     {
         "id": 143,
+        "game_version_id": 1,
         "dungeon_id": 10,
         "version": 6,
         "enemy_forces_required": 220,
@@ -2101,6 +2241,7 @@
     },
     {
         "id": 144,
+        "game_version_id": 1,
         "dungeon_id": 69,
         "version": 7,
         "enemy_forces_required": 435,
@@ -2116,6 +2257,7 @@
     },
     {
         "id": 145,
+        "game_version_id": 1,
         "dungeon_id": 68,
         "version": 8,
         "enemy_forces_required": 723,
@@ -2131,6 +2273,7 @@
     },
     {
         "id": 146,
+        "game_version_id": 1,
         "dungeon_id": 74,
         "version": 6,
         "enemy_forces_required": 575,
@@ -2146,6 +2289,7 @@
     },
     {
         "id": 147,
+        "game_version_id": 1,
         "dungeon_id": 70,
         "version": 5,
         "enemy_forces_required": 525,
@@ -2161,6 +2305,7 @@
     },
     {
         "id": 148,
+        "game_version_id": 1,
         "dungeon_id": 10,
         "version": 7,
         "enemy_forces_required": 220,
@@ -2176,6 +2321,7 @@
     },
     {
         "id": 149,
+        "game_version_id": 1,
         "dungeon_id": 15,
         "version": 7,
         "enemy_forces_required": 400,
@@ -2191,6 +2337,7 @@
     },
     {
         "id": 150,
+        "game_version_id": 1,
         "dungeon_id": 21,
         "version": 7,
         "enemy_forces_required": 320,
@@ -2206,6 +2353,7 @@
     },
     {
         "id": 151,
+        "game_version_id": 1,
         "dungeon_id": 77,
         "version": 6,
         "enemy_forces_required": 420,
@@ -2221,6 +2369,7 @@
     },
     {
         "id": 152,
+        "game_version_id": 1,
         "dungeon_id": 69,
         "version": 8,
         "enemy_forces_required": 435,
@@ -2236,6 +2385,7 @@
     },
     {
         "id": 153,
+        "game_version_id": 1,
         "dungeon_id": 68,
         "version": 9,
         "enemy_forces_required": 723,
@@ -2251,6 +2401,7 @@
     },
     {
         "id": 154,
+        "game_version_id": 1,
         "dungeon_id": 74,
         "version": 7,
         "enemy_forces_required": 575,
@@ -2266,6 +2417,7 @@
     },
     {
         "id": 155,
+        "game_version_id": 1,
         "dungeon_id": 70,
         "version": 6,
         "enemy_forces_required": 525,
@@ -2281,6 +2433,7 @@
     },
     {
         "id": 156,
+        "game_version_id": 1,
         "dungeon_id": 10,
         "version": 8,
         "enemy_forces_required": 220,
@@ -2296,6 +2449,7 @@
     },
     {
         "id": 157,
+        "game_version_id": 1,
         "dungeon_id": 15,
         "version": 8,
         "enemy_forces_required": 400,
@@ -2311,6 +2465,7 @@
     },
     {
         "id": 158,
+        "game_version_id": 1,
         "dungeon_id": 21,
         "version": 8,
         "enemy_forces_required": 320,
@@ -2326,6 +2481,7 @@
     },
     {
         "id": 159,
+        "game_version_id": 1,
         "dungeon_id": 77,
         "version": 7,
         "enemy_forces_required": 420,
@@ -2341,6 +2497,7 @@
     },
     {
         "id": 160,
+        "game_version_id": 2,
         "dungeon_id": 78,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2356,6 +2513,7 @@
     },
     {
         "id": 161,
+        "game_version_id": 2,
         "dungeon_id": 79,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2371,6 +2529,7 @@
     },
     {
         "id": 163,
+        "game_version_id": 2,
         "dungeon_id": 81,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2386,6 +2545,7 @@
     },
     {
         "id": 166,
+        "game_version_id": 2,
         "dungeon_id": 84,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2401,6 +2561,7 @@
     },
     {
         "id": 167,
+        "game_version_id": 2,
         "dungeon_id": 85,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2416,6 +2577,7 @@
     },
     {
         "id": 168,
+        "game_version_id": 2,
         "dungeon_id": 86,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2431,6 +2593,7 @@
     },
     {
         "id": 169,
+        "game_version_id": 2,
         "dungeon_id": 87,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2446,6 +2609,7 @@
     },
     {
         "id": 170,
+        "game_version_id": 2,
         "dungeon_id": 88,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2461,6 +2625,7 @@
     },
     {
         "id": 172,
+        "game_version_id": 2,
         "dungeon_id": 90,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2476,6 +2641,7 @@
     },
     {
         "id": 174,
+        "game_version_id": 2,
         "dungeon_id": 92,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2491,6 +2657,7 @@
     },
     {
         "id": 175,
+        "game_version_id": 2,
         "dungeon_id": 93,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2506,6 +2673,7 @@
     },
     {
         "id": 176,
+        "game_version_id": 2,
         "dungeon_id": 94,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2521,6 +2689,7 @@
     },
     {
         "id": 177,
+        "game_version_id": 2,
         "dungeon_id": 95,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2536,6 +2705,7 @@
     },
     {
         "id": 178,
+        "game_version_id": 2,
         "dungeon_id": 96,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2551,6 +2721,7 @@
     },
     {
         "id": 179,
+        "game_version_id": 2,
         "dungeon_id": 97,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2566,6 +2737,7 @@
     },
     {
         "id": 181,
+        "game_version_id": 2,
         "dungeon_id": 99,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2581,6 +2753,7 @@
     },
     {
         "id": 182,
+        "game_version_id": 2,
         "dungeon_id": 101,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2596,6 +2769,7 @@
     },
     {
         "id": 183,
+        "game_version_id": 2,
         "dungeon_id": 100,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2611,6 +2785,7 @@
     },
     {
         "id": 184,
+        "game_version_id": 1,
         "dungeon_id": 68,
         "version": 10,
         "enemy_forces_required": 723,
@@ -2626,6 +2801,7 @@
     },
     {
         "id": 185,
+        "game_version_id": 1,
         "dungeon_id": 69,
         "version": 9,
         "enemy_forces_required": 435,
@@ -2641,6 +2817,7 @@
     },
     {
         "id": 186,
+        "game_version_id": 1,
         "dungeon_id": 15,
         "version": 9,
         "enemy_forces_required": 400,
@@ -2656,6 +2833,7 @@
     },
     {
         "id": 187,
+        "game_version_id": 3,
         "dungeon_id": 58,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2671,6 +2849,7 @@
     },
     {
         "id": 188,
+        "game_version_id": 2,
         "dungeon_id": 85,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2686,6 +2865,7 @@
     },
     {
         "id": 189,
+        "game_version_id": 2,
         "dungeon_id": 95,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2701,6 +2881,7 @@
     },
     {
         "id": 190,
+        "game_version_id": 2,
         "dungeon_id": 93,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2716,6 +2897,7 @@
     },
     {
         "id": 191,
+        "game_version_id": 2,
         "dungeon_id": 91,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2731,6 +2913,7 @@
     },
     {
         "id": 192,
+        "game_version_id": 2,
         "dungeon_id": 89,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2746,6 +2929,7 @@
     },
     {
         "id": 193,
+        "game_version_id": 2,
         "dungeon_id": 88,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2761,6 +2945,7 @@
     },
     {
         "id": 194,
+        "game_version_id": 2,
         "dungeon_id": 90,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2776,6 +2961,7 @@
     },
     {
         "id": 196,
+        "game_version_id": 2,
         "dungeon_id": 80,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2791,6 +2977,7 @@
     },
     {
         "id": 197,
+        "game_version_id": 2,
         "dungeon_id": 78,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2806,6 +2993,7 @@
     },
     {
         "id": 198,
+        "game_version_id": 2,
         "dungeon_id": 82,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2821,6 +3009,7 @@
     },
     {
         "id": 200,
+        "game_version_id": 2,
         "dungeon_id": 98,
         "version": 1,
         "enemy_forces_required": 0,
@@ -2836,6 +3025,7 @@
     },
     {
         "id": 201,
+        "game_version_id": 2,
         "dungeon_id": 82,
         "version": 3,
         "enemy_forces_required": 0,
@@ -2851,6 +3041,7 @@
     },
     {
         "id": 202,
+        "game_version_id": 2,
         "dungeon_id": 90,
         "version": 3,
         "enemy_forces_required": 0,
@@ -2866,6 +3057,7 @@
     },
     {
         "id": 203,
+        "game_version_id": 2,
         "dungeon_id": 84,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2881,6 +3073,7 @@
     },
     {
         "id": 204,
+        "game_version_id": 2,
         "dungeon_id": 99,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2896,6 +3089,7 @@
     },
     {
         "id": 205,
+        "game_version_id": 2,
         "dungeon_id": 79,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2911,6 +3105,7 @@
     },
     {
         "id": 206,
+        "game_version_id": 2,
         "dungeon_id": 79,
         "version": 3,
         "enemy_forces_required": 0,
@@ -2926,6 +3121,7 @@
     },
     {
         "id": 207,
+        "game_version_id": 2,
         "dungeon_id": 101,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2941,6 +3137,7 @@
     },
     {
         "id": 208,
+        "game_version_id": 2,
         "dungeon_id": 100,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2956,6 +3153,7 @@
     },
     {
         "id": 209,
+        "game_version_id": 2,
         "dungeon_id": 81,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2971,6 +3169,7 @@
     },
     {
         "id": 212,
+        "game_version_id": 2,
         "dungeon_id": 97,
         "version": 2,
         "enemy_forces_required": 0,
@@ -2986,6 +3185,7 @@
     },
     {
         "id": 215,
+        "game_version_id": 2,
         "dungeon_id": 94,
         "version": 5,
         "enemy_forces_required": 0,
@@ -3001,6 +3201,7 @@
     },
     {
         "id": 216,
+        "game_version_id": 2,
         "dungeon_id": 81,
         "version": 3,
         "enemy_forces_required": 0,
@@ -3016,6 +3217,7 @@
     },
     {
         "id": 217,
+        "game_version_id": 2,
         "dungeon_id": 101,
         "version": 3,
         "enemy_forces_required": 0,
@@ -3031,6 +3233,7 @@
     },
     {
         "id": 218,
+        "game_version_id": 2,
         "dungeon_id": 100,
         "version": 3,
         "enemy_forces_required": 0,
@@ -3046,6 +3249,7 @@
     },
     {
         "id": 219,
+        "game_version_id": 2,
         "dungeon_id": 92,
         "version": 2,
         "enemy_forces_required": 0,
@@ -3061,6 +3265,7 @@
     },
     {
         "id": 221,
+        "game_version_id": 2,
         "dungeon_id": 97,
         "version": 4,
         "enemy_forces_required": 0,
@@ -3076,6 +3281,7 @@
     },
     {
         "id": 222,
+        "game_version_id": 2,
         "dungeon_id": 97,
         "version": 5,
         "enemy_forces_required": 0,
@@ -3091,6 +3297,7 @@
     },
     {
         "id": 223,
+        "game_version_id": 2,
         "dungeon_id": 96,
         "version": 2,
         "enemy_forces_required": 0,
@@ -3106,6 +3313,7 @@
     },
     {
         "id": 224,
+        "game_version_id": 3,
         "dungeon_id": 58,
         "version": 2,
         "enemy_forces_required": 0,
@@ -3121,6 +3329,7 @@
     },
     {
         "id": 227,
+        "game_version_id": 2,
         "dungeon_id": 87,
         "version": 3,
         "enemy_forces_required": 0,
@@ -3136,6 +3345,7 @@
     },
     {
         "id": 228,
+        "game_version_id": 2,
         "dungeon_id": 86,
         "version": 3,
         "enemy_forces_required": 0,
@@ -3151,6 +3361,7 @@
     },
     {
         "id": 231,
+        "game_version_id": 1,
         "dungeon_id": 102,
         "version": 3,
         "enemy_forces_required": 0,
@@ -3166,6 +3377,7 @@
     },
     {
         "id": 232,
+        "game_version_id": 2,
         "dungeon_id": 88,
         "version": 3,
         "enemy_forces_required": 0,
@@ -3181,6 +3393,7 @@
     },
     {
         "id": 233,
+        "game_version_id": 2,
         "dungeon_id": 89,
         "version": 3,
         "enemy_forces_required": 0,
@@ -3196,6 +3409,7 @@
     },
     {
         "id": 234,
+        "game_version_id": 2,
         "dungeon_id": 91,
         "version": 3,
         "enemy_forces_required": 0,
@@ -3211,6 +3425,7 @@
     },
     {
         "id": 235,
+        "game_version_id": 1,
         "dungeon_id": 103,
         "version": 1,
         "enemy_forces_required": 0,
@@ -3226,6 +3441,7 @@
     },
     {
         "id": 239,
+        "game_version_id": 2,
         "dungeon_id": 83,
         "version": 5,
         "enemy_forces_required": 0,
@@ -3241,6 +3457,7 @@
     },
     {
         "id": 244,
+        "game_version_id": 2,
         "dungeon_id": 104,
         "version": 2,
         "enemy_forces_required": 0,
@@ -3256,6 +3473,7 @@
     },
     {
         "id": 245,
+        "game_version_id": 3,
         "dungeon_id": 58,
         "version": 3,
         "enemy_forces_required": 0,
@@ -3271,6 +3489,7 @@
     },
     {
         "id": 246,
+        "game_version_id": 2,
         "dungeon_id": 104,
         "version": 3,
         "enemy_forces_required": 0,
@@ -3286,6 +3505,7 @@
     },
     {
         "id": 247,
+        "game_version_id": 2,
         "dungeon_id": 83,
         "version": 6,
         "enemy_forces_required": 0,
@@ -3301,6 +3521,7 @@
     },
     {
         "id": 248,
+        "game_version_id": 1,
         "dungeon_id": 106,
         "version": 1,
         "enemy_forces_required": 0,
@@ -3316,6 +3537,7 @@
     },
     {
         "id": 249,
+        "game_version_id": 1,
         "dungeon_id": 105,
         "version": 1,
         "enemy_forces_required": 0,
@@ -3331,6 +3553,7 @@
     },
     {
         "id": 251,
+        "game_version_id": 1,
         "dungeon_id": 105,
         "version": 2,
         "enemy_forces_required": 300,
@@ -3346,6 +3569,7 @@
     },
     {
         "id": 252,
+        "game_version_id": 1,
         "dungeon_id": 105,
         "version": 3,
         "enemy_forces_required": 300,
@@ -3361,6 +3585,7 @@
     },
     {
         "id": 253,
+        "game_version_id": 1,
         "dungeon_id": 106,
         "version": 2,
         "enemy_forces_required": 0,
@@ -3376,6 +3601,7 @@
     },
     {
         "id": 254,
+        "game_version_id": 1,
         "dungeon_id": 106,
         "version": 3,
         "enemy_forces_required": 320,
@@ -3391,6 +3617,7 @@
     },
     {
         "id": 255,
+        "game_version_id": 1,
         "dungeon_id": 103,
         "version": 2,
         "enemy_forces_required": 0,
@@ -3406,6 +3633,7 @@
     },
     {
         "id": 256,
+        "game_version_id": 1,
         "dungeon_id": 103,
         "version": 3,
         "enemy_forces_required": 430,
@@ -3421,6 +3649,7 @@
     },
     {
         "id": 257,
+        "game_version_id": 1,
         "dungeon_id": 102,
         "version": 4,
         "enemy_forces_required": 0,
@@ -3436,6 +3665,7 @@
     },
     {
         "id": 258,
+        "game_version_id": 1,
         "dungeon_id": 102,
         "version": 5,
         "enemy_forces_required": 316,
@@ -3451,6 +3681,7 @@
     },
     {
         "id": 259,
+        "game_version_id": 1,
         "dungeon_id": 5,
         "version": 2,
         "enemy_forces_required": 273,
@@ -3466,6 +3697,7 @@
     },
     {
         "id": 260,
+        "game_version_id": 1,
         "dungeon_id": 2,
         "version": 2,
         "enemy_forces_required": 0,
@@ -3481,6 +3713,7 @@
     },
     {
         "id": 261,
+        "game_version_id": 1,
         "dungeon_id": 23,
         "version": 2,
         "enemy_forces_required": 0,
@@ -3496,6 +3729,7 @@
     },
     {
         "id": 262,
+        "game_version_id": 1,
         "dungeon_id": 2,
         "version": 3,
         "enemy_forces_required": 312,
@@ -3511,6 +3745,7 @@
     },
     {
         "id": 263,
+        "game_version_id": 1,
         "dungeon_id": 23,
         "version": 3,
         "enemy_forces_required": 303,
@@ -3526,6 +3761,7 @@
     },
     {
         "id": 264,
+        "game_version_id": 1,
         "dungeon_id": 103,
         "version": 4,
         "enemy_forces_required": 430,
@@ -3541,6 +3777,7 @@
     },
     {
         "id": 265,
+        "game_version_id": 1,
         "dungeon_id": 2,
         "version": 4,
         "enemy_forces_required": 312,
@@ -3556,6 +3793,7 @@
     },
     {
         "id": 266,
+        "game_version_id": 1,
         "dungeon_id": 5,
         "version": 3,
         "enemy_forces_required": 273,
@@ -3571,6 +3809,7 @@
     },
     {
         "id": 267,
+        "game_version_id": 1,
         "dungeon_id": 14,
         "version": 2,
         "enemy_forces_required": 198,
@@ -3586,6 +3825,7 @@
     },
     {
         "id": 268,
+        "game_version_id": 1,
         "dungeon_id": 23,
         "version": 4,
         "enemy_forces_required": 303,
@@ -3601,6 +3841,7 @@
     },
     {
         "id": 269,
+        "game_version_id": 1,
         "dungeon_id": 105,
         "version": 4,
         "enemy_forces_required": 300,
@@ -3616,6 +3857,7 @@
     },
     {
         "id": 270,
+        "game_version_id": 1,
         "dungeon_id": 106,
         "version": 4,
         "enemy_forces_required": 335,
@@ -3631,6 +3873,7 @@
     },
     {
         "id": 271,
+        "game_version_id": 1,
         "dungeon_id": 102,
         "version": 6,
         "enemy_forces_required": 300,
@@ -3646,6 +3889,7 @@
     },
     {
         "id": 272,
+        "game_version_id": 1,
         "dungeon_id": 23,
         "version": 5,
         "enemy_forces_required": 305,
@@ -3661,6 +3905,7 @@
     },
     {
         "id": 273,
+        "game_version_id": 1,
         "dungeon_id": 105,
         "version": 5,
         "enemy_forces_required": 300,
@@ -3676,6 +3921,7 @@
     },
     {
         "id": 274,
+        "game_version_id": 1,
         "dungeon_id": 14,
         "version": 3,
         "enemy_forces_required": 198,
@@ -3691,6 +3937,7 @@
     },
     {
         "id": 277,
+        "game_version_id": 1,
         "dungeon_id": 14,
         "version": 4,
         "enemy_forces_required": 225,
@@ -3706,6 +3953,7 @@
     },
     {
         "id": 287,
+        "game_version_id": 1,
         "dungeon_id": 105,
         "version": 7,
         "enemy_forces_required": 300,
@@ -3721,6 +3969,7 @@
     },
     {
         "id": 288,
+        "game_version_id": 1,
         "dungeon_id": 2,
         "version": 5,
         "enemy_forces_required": 312,
@@ -3736,6 +3985,7 @@
     },
     {
         "id": 289,
+        "game_version_id": 1,
         "dungeon_id": 23,
         "version": 6,
         "enemy_forces_required": 305,
@@ -3751,6 +4001,7 @@
     },
     {
         "id": 290,
+        "game_version_id": 1,
         "dungeon_id": 103,
         "version": 5,
         "enemy_forces_required": 430,
@@ -3766,6 +4017,7 @@
     },
     {
         "id": 291,
+        "game_version_id": 1,
         "dungeon_id": 106,
         "version": 5,
         "enemy_forces_required": 335,
@@ -3781,6 +4033,7 @@
     },
     {
         "id": 292,
+        "game_version_id": 1,
         "dungeon_id": 103,
         "version": 6,
         "enemy_forces_required": 430,
@@ -3796,6 +4049,7 @@
     },
     {
         "id": 293,
+        "game_version_id": 1,
         "dungeon_id": 102,
         "version": 7,
         "enemy_forces_required": 300,
@@ -3811,6 +4065,7 @@
     },
     {
         "id": 294,
+        "game_version_id": 1,
         "dungeon_id": 2,
         "version": 6,
         "enemy_forces_required": 312,
@@ -3826,6 +4081,7 @@
     },
     {
         "id": 295,
+        "game_version_id": 1,
         "dungeon_id": 5,
         "version": 4,
         "enemy_forces_required": 273,
@@ -3841,6 +4097,7 @@
     },
     {
         "id": 296,
+        "game_version_id": 1,
         "dungeon_id": 14,
         "version": 5,
         "enemy_forces_required": 225,
@@ -3856,6 +4113,7 @@
     },
     {
         "id": 297,
+        "game_version_id": 1,
         "dungeon_id": 23,
         "version": 7,
         "enemy_forces_required": 305,
@@ -3871,6 +4129,7 @@
     },
     {
         "id": 298,
+        "game_version_id": 1,
         "dungeon_id": 105,
         "version": 8,
         "enemy_forces_required": 300,
@@ -3886,6 +4145,7 @@
     },
     {
         "id": 299,
+        "game_version_id": 1,
         "dungeon_id": 106,
         "version": 6,
         "enemy_forces_required": 335,
@@ -3901,6 +4161,7 @@
     },
     {
         "id": 300,
+        "game_version_id": 1,
         "dungeon_id": 103,
         "version": 7,
         "enemy_forces_required": 430,
@@ -3916,6 +4177,7 @@
     },
     {
         "id": 301,
+        "game_version_id": 1,
         "dungeon_id": 5,
         "version": 5,
         "enemy_forces_required": 273,
@@ -3931,6 +4193,7 @@
     },
     {
         "id": 302,
+        "game_version_id": 1,
         "dungeon_id": 105,
         "version": 9,
         "enemy_forces_required": 300,
@@ -3946,6 +4209,7 @@
     },
     {
         "id": 303,
+        "game_version_id": 1,
         "dungeon_id": 106,
         "version": 7,
         "enemy_forces_required": 335,
@@ -3961,6 +4225,7 @@
     },
     {
         "id": 304,
+        "game_version_id": 2,
         "dungeon_id": 107,
         "version": 1,
         "enemy_forces_required": 0,
@@ -3976,6 +4241,7 @@
     },
     {
         "id": 305,
+        "game_version_id": 1,
         "dungeon_id": 67,
         "version": 5,
         "enemy_forces_required": 450,
@@ -3991,6 +4257,7 @@
     },
     {
         "id": 306,
+        "game_version_id": 1,
         "dungeon_id": 67,
         "version": 6,
         "enemy_forces_required": 450,
@@ -4006,6 +4273,7 @@
     },
     {
         "id": 307,
+        "game_version_id": 1,
         "dungeon_id": 68,
         "version": 11,
         "enemy_forces_required": 723,
@@ -4021,6 +4289,7 @@
     },
     {
         "id": 308,
+        "game_version_id": 1,
         "dungeon_id": 69,
         "version": 10,
         "enemy_forces_required": 435,
@@ -4036,6 +4305,7 @@
     },
     {
         "id": 309,
+        "game_version_id": 1,
         "dungeon_id": 69,
         "version": 11,
         "enemy_forces_required": 435,
@@ -4051,6 +4321,7 @@
     },
     {
         "id": 310,
+        "game_version_id": 1,
         "dungeon_id": 74,
         "version": 8,
         "enemy_forces_required": 575,
@@ -4066,6 +4337,7 @@
     },
     {
         "id": 311,
+        "game_version_id": 1,
         "dungeon_id": 74,
         "version": 9,
         "enemy_forces_required": 575,
@@ -4081,6 +4353,7 @@
     },
     {
         "id": 312,
+        "game_version_id": 1,
         "dungeon_id": 72,
         "version": 5,
         "enemy_forces_required": 660,
@@ -4096,6 +4369,7 @@
     },
     {
         "id": 313,
+        "game_version_id": 1,
         "dungeon_id": 72,
         "version": 6,
         "enemy_forces_required": 660,
@@ -4111,6 +4385,7 @@
     },
     {
         "id": 314,
+        "game_version_id": 1,
         "dungeon_id": 71,
         "version": 6,
         "enemy_forces_required": 520,
@@ -4126,6 +4401,7 @@
     },
     {
         "id": 315,
+        "game_version_id": 1,
         "dungeon_id": 71,
         "version": 7,
         "enemy_forces_required": 520,
@@ -4141,6 +4417,7 @@
     },
     {
         "id": 316,
+        "game_version_id": 1,
         "dungeon_id": 73,
         "version": 4,
         "enemy_forces_required": 410,
@@ -4156,6 +4433,7 @@
     },
     {
         "id": 317,
+        "game_version_id": 1,
         "dungeon_id": 73,
         "version": 5,
         "enemy_forces_required": 410,
@@ -4171,6 +4449,7 @@
     },
     {
         "id": 318,
+        "game_version_id": 1,
         "dungeon_id": 68,
         "version": 12,
         "enemy_forces_required": 723,
@@ -4186,6 +4465,7 @@
     },
     {
         "id": 319,
+        "game_version_id": 1,
         "dungeon_id": 70,
         "version": 7,
         "enemy_forces_required": 525,
@@ -4201,6 +4481,7 @@
     },
     {
         "id": 320,
+        "game_version_id": 1,
         "dungeon_id": 70,
         "version": 8,
         "enemy_forces_required": 525,
@@ -4216,6 +4497,7 @@
     },
     {
         "id": 321,
+        "game_version_id": 1,
         "dungeon_id": 73,
         "version": 6,
         "enemy_forces_required": 410,
@@ -4231,6 +4513,7 @@
     },
     {
         "id": 322,
+        "game_version_id": 1,
         "dungeon_id": 68,
         "version": 13,
         "enemy_forces_required": 723,
@@ -4246,6 +4529,7 @@
     },
     {
         "id": 323,
+        "game_version_id": 1,
         "dungeon_id": 67,
         "version": 7,
         "enemy_forces_required": 450,
@@ -4261,6 +4545,7 @@
     },
     {
         "id": 324,
+        "game_version_id": 1,
         "dungeon_id": 69,
         "version": 12,
         "enemy_forces_required": 435,
@@ -4276,6 +4561,7 @@
     },
     {
         "id": 325,
+        "game_version_id": 1,
         "dungeon_id": 70,
         "version": 9,
         "enemy_forces_required": 525,
@@ -4291,6 +4577,7 @@
     },
     {
         "id": 326,
+        "game_version_id": 1,
         "dungeon_id": 71,
         "version": 8,
         "enemy_forces_required": 520,
@@ -4306,6 +4593,7 @@
     },
     {
         "id": 327,
+        "game_version_id": 1,
         "dungeon_id": 72,
         "version": 7,
         "enemy_forces_required": 660,
@@ -4321,6 +4609,7 @@
     },
     {
         "id": 328,
+        "game_version_id": 1,
         "dungeon_id": 74,
         "version": 10,
         "enemy_forces_required": 575,
@@ -4336,6 +4625,7 @@
     },
     {
         "id": 329,
+        "game_version_id": 1,
         "dungeon_id": 68,
         "version": 14,
         "enemy_forces_required": 723,
@@ -4351,6 +4641,7 @@
     },
     {
         "id": 330,
+        "game_version_id": 1,
         "dungeon_id": 108,
         "version": 1,
         "enemy_forces_required": 0,
@@ -4366,6 +4657,7 @@
     },
     {
         "id": 331,
+        "game_version_id": 1,
         "dungeon_id": 109,
         "version": 1,
         "enemy_forces_required": 0,
@@ -4381,6 +4673,7 @@
     },
     {
         "id": 332,
+        "game_version_id": 1,
         "dungeon_id": 110,
         "version": 1,
         "enemy_forces_required": 0,
@@ -4396,6 +4689,7 @@
     },
     {
         "id": 333,
+        "game_version_id": 1,
         "dungeon_id": 111,
         "version": 1,
         "enemy_forces_required": 0,
@@ -4411,6 +4705,7 @@
     },
     {
         "id": 334,
+        "game_version_id": 1,
         "dungeon_id": 112,
         "version": 1,
         "enemy_forces_required": 0,
@@ -4426,6 +4721,7 @@
     },
     {
         "id": 335,
+        "game_version_id": 1,
         "dungeon_id": 113,
         "version": 1,
         "enemy_forces_required": 0,
@@ -4441,6 +4737,7 @@
     },
     {
         "id": 336,
+        "game_version_id": 1,
         "dungeon_id": 114,
         "version": 1,
         "enemy_forces_required": 0,
@@ -4456,6 +4753,7 @@
     },
     {
         "id": 337,
+        "game_version_id": 1,
         "dungeon_id": 115,
         "version": 1,
         "enemy_forces_required": 0,
@@ -4471,6 +4769,7 @@
     },
     {
         "id": 338,
+        "game_version_id": 1,
         "dungeon_id": 116,
         "version": 1,
         "enemy_forces_required": 0,
@@ -4486,6 +4785,7 @@
     },
     {
         "id": 353,
+        "game_version_id": 1,
         "dungeon_id": 67,
         "version": 8,
         "enemy_forces_required": 450,
@@ -4501,6 +4801,7 @@
     },
     {
         "id": 354,
+        "game_version_id": 1,
         "dungeon_id": 67,
         "version": 9,
         "enemy_forces_required": 450,
@@ -4516,6 +4817,7 @@
     },
     {
         "id": 355,
+        "game_version_id": 1,
         "dungeon_id": 18,
         "version": 2,
         "enemy_forces_required": 319,
@@ -4531,6 +4833,7 @@
     },
     {
         "id": 357,
+        "game_version_id": 1,
         "dungeon_id": 108,
         "version": 2,
         "enemy_forces_required": 485,
@@ -4546,6 +4849,7 @@
     },
     {
         "id": 358,
+        "game_version_id": 1,
         "dungeon_id": 18,
         "version": 3,
         "enemy_forces_required": 319,
@@ -4561,6 +4865,7 @@
     },
     {
         "id": 359,
+        "game_version_id": 1,
         "dungeon_id": 110,
         "version": 2,
         "enemy_forces_required": 742,
@@ -4576,6 +4881,7 @@
     },
     {
         "id": 360,
+        "game_version_id": 1,
         "dungeon_id": 34,
         "version": 2,
         "enemy_forces_required": 283,
@@ -4591,6 +4897,7 @@
     },
     {
         "id": 361,
+        "game_version_id": 1,
         "dungeon_id": 34,
         "version": 3,
         "enemy_forces_required": 283,
@@ -4606,6 +4913,7 @@
     },
     {
         "id": 362,
+        "game_version_id": 1,
         "dungeon_id": 113,
         "version": 2,
         "enemy_forces_required": 430,
@@ -4621,6 +4929,7 @@
     },
     {
         "id": 363,
+        "game_version_id": 1,
         "dungeon_id": 116,
         "version": 2,
         "enemy_forces_required": 683,
@@ -4636,6 +4945,7 @@
     },
     {
         "id": 364,
+        "game_version_id": 1,
         "dungeon_id": 30,
         "version": 2,
         "enemy_forces_required": 260,
@@ -4651,6 +4961,7 @@
     },
     {
         "id": 365,
+        "game_version_id": 1,
         "dungeon_id": 30,
         "version": 3,
         "enemy_forces_required": 260,
@@ -4666,6 +4977,7 @@
     },
     {
         "id": 366,
+        "game_version_id": 1,
         "dungeon_id": 115,
         "version": 2,
         "enemy_forces_required": 489,
@@ -4681,6 +4993,7 @@
     },
     {
         "id": 375,
+        "game_version_id": 2,
         "dungeon_id": 117,
         "version": 3,
         "enemy_forces_required": 0,
@@ -4696,6 +5009,7 @@
     },
     {
         "id": 376,
+        "game_version_id": 1,
         "dungeon_id": 30,
         "version": 4,
         "enemy_forces_required": 290,
@@ -4711,6 +5025,7 @@
     },
     {
         "id": 377,
+        "game_version_id": 1,
         "dungeon_id": 108,
         "version": 3,
         "enemy_forces_required": 485,
@@ -4726,6 +5041,7 @@
     },
     {
         "id": 378,
+        "game_version_id": 1,
         "dungeon_id": 115,
         "version": 3,
         "enemy_forces_required": 489,
@@ -4741,6 +5057,7 @@
     },
     {
         "id": 379,
+        "game_version_id": 1,
         "dungeon_id": 113,
         "version": 3,
         "enemy_forces_required": 460,
@@ -4756,6 +5073,7 @@
     },
     {
         "id": 380,
+        "game_version_id": 1,
         "dungeon_id": 108,
         "version": 4,
         "enemy_forces_required": 485,
@@ -4771,6 +5089,7 @@
     },
     {
         "id": 381,
+        "game_version_id": 1,
         "dungeon_id": 110,
         "version": 3,
         "enemy_forces_required": 742,
@@ -4786,6 +5105,7 @@
     },
     {
         "id": 382,
+        "game_version_id": 1,
         "dungeon_id": 30,
         "version": 5,
         "enemy_forces_required": 290,
@@ -4801,6 +5121,7 @@
     },
     {
         "id": 383,
+        "game_version_id": 1,
         "dungeon_id": 30,
         "version": 6,
         "enemy_forces_required": 290,
@@ -4816,6 +5137,7 @@
     },
     {
         "id": 384,
+        "game_version_id": 1,
         "dungeon_id": 34,
         "version": 4,
         "enemy_forces_required": 332,
@@ -4831,6 +5153,7 @@
     },
     {
         "id": 385,
+        "game_version_id": 1,
         "dungeon_id": 18,
         "version": 4,
         "enemy_forces_required": 494,
@@ -4846,6 +5169,7 @@
     },
     {
         "id": 386,
+        "game_version_id": 1,
         "dungeon_id": 116,
         "version": 3,
         "enemy_forces_required": 683,
@@ -4861,6 +5185,7 @@
     },
     {
         "id": 387,
+        "game_version_id": 1,
         "dungeon_id": 30,
         "version": 7,
         "enemy_forces_required": 290,
@@ -4876,6 +5201,7 @@
     },
     {
         "id": 388,
+        "game_version_id": 1,
         "dungeon_id": 110,
         "version": 4,
         "enemy_forces_required": 742,
@@ -4891,6 +5217,7 @@
     },
     {
         "id": 389,
+        "game_version_id": 1,
         "dungeon_id": 115,
         "version": 4,
         "enemy_forces_required": 489,
@@ -4906,6 +5233,7 @@
     },
     {
         "id": 390,
+        "game_version_id": 1,
         "dungeon_id": 113,
         "version": 4,
         "enemy_forces_required": 460,
@@ -4921,6 +5249,7 @@
     },
     {
         "id": 391,
+        "game_version_id": 1,
         "dungeon_id": 108,
         "version": 5,
         "enemy_forces_required": 485,
@@ -4936,6 +5265,7 @@
     },
     {
         "id": 392,
+        "game_version_id": 1,
         "dungeon_id": 110,
         "version": 5,
         "enemy_forces_required": 742,
@@ -4951,6 +5281,7 @@
     },
     {
         "id": 393,
+        "game_version_id": 1,
         "dungeon_id": 34,
         "version": 5,
         "enemy_forces_required": 332,
@@ -4966,6 +5297,7 @@
     },
     {
         "id": 394,
+        "game_version_id": 1,
         "dungeon_id": 18,
         "version": 5,
         "enemy_forces_required": 494,
@@ -4981,6 +5313,7 @@
     },
     {
         "id": 395,
+        "game_version_id": 1,
         "dungeon_id": 110,
         "version": 6,
         "enemy_forces_required": 742,
@@ -4996,6 +5329,7 @@
     },
     {
         "id": 396,
+        "game_version_id": 1,
         "dungeon_id": 113,
         "version": 5,
         "enemy_forces_required": 460,
@@ -5011,6 +5345,7 @@
     },
     {
         "id": 397,
+        "game_version_id": 1,
         "dungeon_id": 115,
         "version": 5,
         "enemy_forces_required": 489,
@@ -5026,6 +5361,7 @@
     },
     {
         "id": 398,
+        "game_version_id": 1,
         "dungeon_id": 108,
         "version": 6,
         "enemy_forces_required": 485,
@@ -5041,6 +5377,7 @@
     },
     {
         "id": 399,
+        "game_version_id": 1,
         "dungeon_id": 108,
         "version": 7,
         "enemy_forces_required": 485,
@@ -5056,6 +5393,7 @@
     },
     {
         "id": 400,
+        "game_version_id": 1,
         "dungeon_id": 115,
         "version": 6,
         "enemy_forces_required": 489,
@@ -5071,6 +5409,7 @@
     },
     {
         "id": 401,
+        "game_version_id": 1,
         "dungeon_id": 113,
         "version": 6,
         "enemy_forces_required": 460,
@@ -5086,6 +5425,7 @@
     },
     {
         "id": 402,
+        "game_version_id": 1,
         "dungeon_id": 108,
         "version": 8,
         "enemy_forces_required": 485,
@@ -5101,6 +5441,7 @@
     },
     {
         "id": 403,
+        "game_version_id": 1,
         "dungeon_id": 110,
         "version": 7,
         "enemy_forces_required": 742,
@@ -5116,6 +5457,7 @@
     },
     {
         "id": 404,
+        "game_version_id": 1,
         "dungeon_id": 34,
         "version": 6,
         "enemy_forces_required": 332,
@@ -5131,6 +5473,7 @@
     },
     {
         "id": 405,
+        "game_version_id": 1,
         "dungeon_id": 18,
         "version": 6,
         "enemy_forces_required": 494,
@@ -5146,6 +5489,7 @@
     },
     {
         "id": 406,
+        "game_version_id": 1,
         "dungeon_id": 113,
         "version": 7,
         "enemy_forces_required": 460,
@@ -5161,6 +5505,7 @@
     },
     {
         "id": 407,
+        "game_version_id": 1,
         "dungeon_id": 108,
         "version": 9,
         "enemy_forces_required": 485,
@@ -5176,6 +5521,7 @@
     },
     {
         "id": 408,
+        "game_version_id": 1,
         "dungeon_id": 110,
         "version": 8,
         "enemy_forces_required": 742,
@@ -5191,6 +5537,7 @@
     },
     {
         "id": 409,
+        "game_version_id": 1,
         "dungeon_id": 34,
         "version": 7,
         "enemy_forces_required": 332,
@@ -5206,6 +5553,7 @@
     },
     {
         "id": 410,
+        "game_version_id": 1,
         "dungeon_id": 116,
         "version": 4,
         "enemy_forces_required": 683,
@@ -5221,6 +5569,7 @@
     },
     {
         "id": 411,
+        "game_version_id": 5,
         "dungeon_id": 120,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5236,6 +5585,7 @@
     },
     {
         "id": 412,
+        "game_version_id": 5,
         "dungeon_id": 121,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5251,6 +5601,7 @@
     },
     {
         "id": 413,
+        "game_version_id": 2,
         "dungeon_id": 119,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5266,6 +5617,7 @@
     },
     {
         "id": 414,
+        "game_version_id": 2,
         "dungeon_id": 118,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5281,6 +5633,7 @@
     },
     {
         "id": 416,
+        "game_version_id": 1,
         "dungeon_id": 115,
         "version": 7,
         "enemy_forces_required": 489,
@@ -5296,6 +5649,7 @@
     },
     {
         "id": 417,
+        "game_version_id": 1,
         "dungeon_id": 113,
         "version": 8,
         "enemy_forces_required": 460,
@@ -5311,6 +5665,7 @@
     },
     {
         "id": 418,
+        "game_version_id": 1,
         "dungeon_id": 108,
         "version": 10,
         "enemy_forces_required": 485,
@@ -5326,6 +5681,7 @@
     },
     {
         "id": 419,
+        "game_version_id": 1,
         "dungeon_id": 34,
         "version": 8,
         "enemy_forces_required": 332,
@@ -5341,6 +5697,7 @@
     },
     {
         "id": 420,
+        "game_version_id": 1,
         "dungeon_id": 18,
         "version": 7,
         "enemy_forces_required": 494,
@@ -5356,6 +5713,7 @@
     },
     {
         "id": 422,
+        "game_version_id": 2,
         "dungeon_id": 118,
         "version": 2,
         "enemy_forces_required": 0,
@@ -5371,6 +5729,7 @@
     },
     {
         "id": 423,
+        "game_version_id": 5,
         "dungeon_id": 120,
         "version": 2,
         "enemy_forces_required": 0,
@@ -5386,6 +5745,7 @@
     },
     {
         "id": 424,
+        "game_version_id": 2,
         "dungeon_id": 123,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5401,6 +5761,7 @@
     },
     {
         "id": 425,
+        "game_version_id": 2,
         "dungeon_id": 124,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5416,6 +5777,7 @@
     },
     {
         "id": 426,
+        "game_version_id": 2,
         "dungeon_id": 125,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5431,6 +5793,7 @@
     },
     {
         "id": 427,
+        "game_version_id": 2,
         "dungeon_id": 126,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5446,6 +5809,7 @@
     },
     {
         "id": 428,
+        "game_version_id": 2,
         "dungeon_id": 127,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5461,6 +5825,7 @@
     },
     {
         "id": 429,
+        "game_version_id": 2,
         "dungeon_id": 122,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5476,6 +5841,7 @@
     },
     {
         "id": 431,
+        "game_version_id": 2,
         "dungeon_id": 126,
         "version": 2,
         "enemy_forces_required": 0,
@@ -5491,6 +5857,7 @@
     },
     {
         "id": 432,
+        "game_version_id": 6,
         "dungeon_id": 128,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5506,6 +5873,7 @@
     },
     {
         "id": 433,
+        "game_version_id": 6,
         "dungeon_id": 129,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5521,6 +5889,7 @@
     },
     {
         "id": 434,
+        "game_version_id": 6,
         "dungeon_id": 130,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5536,6 +5905,7 @@
     },
     {
         "id": 435,
+        "game_version_id": 6,
         "dungeon_id": 131,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5551,6 +5921,7 @@
     },
     {
         "id": 436,
+        "game_version_id": 6,
         "dungeon_id": 132,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5566,6 +5937,7 @@
     },
     {
         "id": 437,
+        "game_version_id": 6,
         "dungeon_id": 133,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5581,6 +5953,7 @@
     },
     {
         "id": 438,
+        "game_version_id": 6,
         "dungeon_id": 134,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5596,6 +5969,7 @@
     },
     {
         "id": 439,
+        "game_version_id": 6,
         "dungeon_id": 135,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5611,6 +5985,7 @@
     },
     {
         "id": 440,
+        "game_version_id": 2,
         "dungeon_id": 126,
         "version": 3,
         "enemy_forces_required": 0,
@@ -5626,6 +6001,7 @@
     },
     {
         "id": 442,
+        "game_version_id": 2,
         "dungeon_id": 126,
         "version": 4,
         "enemy_forces_required": 0,
@@ -5641,6 +6017,7 @@
     },
     {
         "id": 443,
+        "game_version_id": 2,
         "dungeon_id": 124,
         "version": 2,
         "enemy_forces_required": 0,
@@ -5656,6 +6033,7 @@
     },
     {
         "id": 444,
+        "game_version_id": 2,
         "dungeon_id": 136,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5671,6 +6049,7 @@
     },
     {
         "id": 445,
+        "game_version_id": 1,
         "dungeon_id": 26,
         "version": 2,
         "enemy_forces_required": 0,
@@ -5685,22 +6064,8 @@
         "merged": false
     },
     {
-        "id": 446,
-        "dungeon_id": 126,
-        "version": 5,
-        "enemy_forces_required": 0,
-        "enemy_forces_required_teeming": null,
-        "enemy_forces_shrouded": null,
-        "enemy_forces_shrouded_zul_gamux": null,
-        "timer_max_seconds": 0,
-        "mdt_mapping_hash": null,
-        "facade_enabled": 0,
-        "created_at": "2025-02-07T21:05:29.000000Z",
-        "updated_at": "2025-02-07T21:05:29.000000Z",
-        "merged": false
-    },
-    {
         "id": 464,
+        "game_version_id": 2,
         "dungeon_id": 136,
         "version": 16,
         "enemy_forces_required": 0,
@@ -5716,6 +6081,7 @@
     },
     {
         "id": 465,
+        "game_version_id": 2,
         "dungeon_id": 136,
         "version": 17,
         "enemy_forces_required": 0,
@@ -5731,6 +6097,7 @@
     },
     {
         "id": 467,
+        "game_version_id": 2,
         "dungeon_id": 136,
         "version": 19,
         "enemy_forces_required": 0,
@@ -5746,6 +6113,7 @@
     },
     {
         "id": 482,
+        "game_version_id": 2,
         "dungeon_id": 136,
         "version": 20,
         "enemy_forces_required": 0,
@@ -5761,6 +6129,7 @@
     },
     {
         "id": 483,
+        "game_version_id": 1,
         "dungeon_id": 35,
         "version": 2,
         "enemy_forces_required": 271,
@@ -5776,6 +6145,7 @@
     },
     {
         "id": 495,
+        "game_version_id": 1,
         "dungeon_id": 35,
         "version": 10,
         "enemy_forces_required": 271,
@@ -5791,6 +6161,7 @@
     },
     {
         "id": 498,
+        "game_version_id": 1,
         "dungeon_id": 109,
         "version": 2,
         "enemy_forces_required": 587,
@@ -5806,6 +6177,7 @@
     },
     {
         "id": 503,
+        "game_version_id": 1,
         "dungeon_id": 111,
         "version": 6,
         "enemy_forces_required": 438,
@@ -5821,6 +6193,7 @@
     },
     {
         "id": 504,
+        "game_version_id": 1,
         "dungeon_id": 25,
         "version": 2,
         "enemy_forces_required": 160,
@@ -5836,6 +6209,7 @@
     },
     {
         "id": 505,
+        "game_version_id": 1,
         "dungeon_id": 25,
         "version": 3,
         "enemy_forces_required": 374,
@@ -5851,6 +6225,7 @@
     },
     {
         "id": 507,
+        "game_version_id": 1,
         "dungeon_id": 114,
         "version": 2,
         "enemy_forces_required": 992,
@@ -5866,6 +6241,7 @@
     },
     {
         "id": 508,
+        "game_version_id": 1,
         "dungeon_id": 112,
         "version": 2,
         "enemy_forces_required": 960,
@@ -5881,6 +6257,7 @@
     },
     {
         "id": 509,
+        "game_version_id": 1,
         "dungeon_id": 137,
         "version": 1,
         "enemy_forces_required": 0,
@@ -5896,6 +6273,7 @@
     },
     {
         "id": 510,
+        "game_version_id": 1,
         "dungeon_id": 137,
         "version": 2,
         "enemy_forces_required": 470,
@@ -5911,6 +6289,7 @@
     },
     {
         "id": 511,
+        "game_version_id": 1,
         "dungeon_id": 20,
         "version": 2,
         "enemy_forces_required": 384,
@@ -5926,6 +6305,7 @@
     },
     {
         "id": 512,
+        "game_version_id": 1,
         "dungeon_id": 20,
         "version": 3,
         "enemy_forces_required": 457,
@@ -5941,6 +6321,7 @@
     },
     {
         "id": 515,
+        "game_version_id": 1,
         "dungeon_id": 109,
         "version": 3,
         "enemy_forces_required": 587,
@@ -5956,6 +6337,7 @@
     },
     {
         "id": 516,
+        "game_version_id": 1,
         "dungeon_id": 111,
         "version": 7,
         "enemy_forces_required": 386,
@@ -5971,6 +6353,7 @@
     },
     {
         "id": 517,
+        "game_version_id": 1,
         "dungeon_id": 112,
         "version": 3,
         "enemy_forces_required": 960,
@@ -5986,6 +6369,7 @@
     },
     {
         "id": 518,
+        "game_version_id": 1,
         "dungeon_id": 114,
         "version": 3,
         "enemy_forces_required": 992,
@@ -6001,6 +6385,7 @@
     },
     {
         "id": 519,
+        "game_version_id": 1,
         "dungeon_id": 25,
         "version": 4,
         "enemy_forces_required": 374,
@@ -6016,6 +6401,7 @@
     },
     {
         "id": 520,
+        "game_version_id": 1,
         "dungeon_id": 35,
         "version": 11,
         "enemy_forces_required": 271,
@@ -6031,6 +6417,7 @@
     },
     {
         "id": 521,
+        "game_version_id": 1,
         "dungeon_id": 137,
         "version": 3,
         "enemy_forces_required": 470,
@@ -6046,6 +6433,7 @@
     },
     {
         "id": 522,
+        "game_version_id": 1,
         "dungeon_id": 20,
         "version": 4,
         "enemy_forces_required": 457,
@@ -6061,6 +6449,7 @@
     },
     {
         "id": 523,
+        "game_version_id": 1,
         "dungeon_id": 112,
         "version": 4,
         "enemy_forces_required": 960,
@@ -6076,6 +6465,7 @@
     },
     {
         "id": 524,
+        "game_version_id": 2,
         "dungeon_id": 127,
         "version": 2,
         "enemy_forces_required": 0,
@@ -6091,6 +6481,7 @@
     },
     {
         "id": 525,
+        "game_version_id": 1,
         "dungeon_id": 114,
         "version": 4,
         "enemy_forces_required": 992,
@@ -6106,6 +6497,7 @@
     },
     {
         "id": 526,
+        "game_version_id": 2,
         "dungeon_id": 138,
         "version": 2,
         "enemy_forces_required": 0,
@@ -6121,6 +6513,7 @@
     },
     {
         "id": 538,
+        "game_version_id": 2,
         "dungeon_id": 138,
         "version": 1,
         "enemy_forces_required": 0,
@@ -6136,6 +6529,7 @@
     },
     {
         "id": 539,
+        "game_version_id": 2,
         "dungeon_id": 138,
         "version": 3,
         "enemy_forces_required": 0,
@@ -6147,6 +6541,166 @@
         "facade_enabled": 0,
         "created_at": "2025-04-12T13:00:33.000000Z",
         "updated_at": "2025-04-12T13:00:33.000000Z",
+        "merged": false
+    },
+    {
+        "id": 540,
+        "game_version_id": 6,
+        "dungeon_id": 135,
+        "version": 2,
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": null,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": null,
+        "facade_enabled": 0,
+        "created_at": "2025-06-26T15:31:24.000000Z",
+        "updated_at": "2025-06-26T15:31:24.000000Z",
+        "merged": false
+    },
+    {
+        "id": 541,
+        "game_version_id": 6,
+        "dungeon_id": 135,
+        "version": 3,
+        "enemy_forces_required": 25,
+        "enemy_forces_required_teeming": null,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": null,
+        "facade_enabled": 0,
+        "created_at": "2025-06-26T15:33:34.000000Z",
+        "updated_at": "2025-07-14T13:21:11.000000Z",
+        "merged": false
+    },
+    {
+        "id": 542,
+        "game_version_id": 6,
+        "dungeon_id": 128,
+        "version": 2,
+        "enemy_forces_required": 25,
+        "enemy_forces_required_teeming": null,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": null,
+        "facade_enabled": 0,
+        "created_at": "2025-06-27T08:52:23.000000Z",
+        "updated_at": "2025-07-11T18:42:24.000000Z",
+        "merged": false
+    },
+    {
+        "id": 543,
+        "game_version_id": 6,
+        "dungeon_id": 129,
+        "version": 2,
+        "enemy_forces_required": 20,
+        "enemy_forces_required_teeming": null,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": null,
+        "facade_enabled": 0,
+        "created_at": "2025-06-27T13:32:04.000000Z",
+        "updated_at": "2025-07-11T20:05:17.000000Z",
+        "merged": false
+    },
+    {
+        "id": 544,
+        "game_version_id": 6,
+        "dungeon_id": 133,
+        "version": 2,
+        "enemy_forces_required": 32,
+        "enemy_forces_required_teeming": null,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": null,
+        "facade_enabled": 0,
+        "created_at": "2025-06-27T14:29:59.000000Z",
+        "updated_at": "2025-07-10T21:06:56.000000Z",
+        "merged": false
+    },
+    {
+        "id": 545,
+        "game_version_id": 6,
+        "dungeon_id": 134,
+        "version": 2,
+        "enemy_forces_required": 0,
+        "enemy_forces_required_teeming": null,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": null,
+        "facade_enabled": 0,
+        "created_at": "2025-06-27T20:12:42.000000Z",
+        "updated_at": "2025-06-27T20:12:42.000000Z",
+        "merged": false
+    },
+    {
+        "id": 549,
+        "game_version_id": 6,
+        "dungeon_id": 131,
+        "version": 2,
+        "enemy_forces_required": 40,
+        "enemy_forces_required_teeming": null,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": null,
+        "facade_enabled": 0,
+        "created_at": "2025-06-28T20:12:14.000000Z",
+        "updated_at": "2025-07-13T14:16:17.000000Z",
+        "merged": false
+    },
+    {
+        "id": 550,
+        "game_version_id": 6,
+        "dungeon_id": 130,
+        "version": 2,
+        "enemy_forces_required": 50,
+        "enemy_forces_required_teeming": null,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": null,
+        "facade_enabled": 0,
+        "created_at": "2025-06-28T20:37:41.000000Z",
+        "updated_at": "2025-07-13T13:17:26.000000Z",
+        "merged": false
+    },
+    {
+        "id": 558,
+        "game_version_id": 6,
+        "dungeon_id": 132,
+        "version": 2,
+        "enemy_forces_required": 35,
+        "enemy_forces_required_teeming": null,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 0,
+        "mdt_mapping_hash": null,
+        "facade_enabled": 0,
+        "created_at": "2025-06-29T12:31:57.000000Z",
+        "updated_at": "2025-07-13T14:54:13.000000Z",
+        "merged": false
+    },
+    {
+        "id": 561,
+        "game_version_id": 6,
+        "dungeon_id": 76,
+        "version": 1,
+        "enemy_forces_required": 410,
+        "enemy_forces_required_teeming": 1000,
+        "enemy_forces_shrouded": null,
+        "enemy_forces_shrouded_zul_gamux": null,
+        "timer_max_seconds": 1800,
+        "mdt_mapping_hash": null,
+        "facade_enabled": 0,
+        "created_at": "2025-07-10T12:22:43.000000Z",
+        "updated_at": "2025-07-10T12:22:43.000000Z",
         "merged": false
     }
 ]

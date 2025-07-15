@@ -197,7 +197,9 @@ MDT.mapPOIs[dungeonIndex] = {};
     {
         $dungeonEnemies = [];
 
-        $npcs = Npc::whereIn('dungeon_id', [-1, $mappingVersion->dungeon_id])
+        $npcs = Npc::join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+            ->select('npcs.*')
+            ->where('npc_dungeons.dungeon_id', $mappingVersion->dungeon_id)
             ->get()
             ->keyBy('id');
 
@@ -259,11 +261,12 @@ MDT.mapPOIs[dungeonIndex] = {};
             $isBoss = $npc->classification_id >= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS] ?
                 true : null;
 
+            $npcHealth    = $npc->getHealthByGameVersion($mappingVersion->gameVersion);
             $dungeonEnemy = array_filter([
                 'name'             => addslashes($npc->name),
                 'id'               => $npc->id,
                 'count'            => $enemyForces,
-                'health'           => $npc->base_health,
+                'health'           => $npcHealth?->health ?? 123456,
                 'scale'            => $npc->mdt_scale ?? $scaleMapping[$npc->classification_id],
                 'stealthDetect'    => $npc->truesight ? true : null,
                 'displayId'        => $npc->display_id,
@@ -280,7 +283,7 @@ MDT.mapPOIs[dungeonIndex] = {};
                     return [$spell->id => []];
                 })->toArray(),
                 'clones'           => [],
-                'healthPercentage' => $npc->health_percentage ?? null,
+                'healthPercentage' => $npcHealth?->percentage ?? null,
             ], fn($value) => $value !== null);
 
             $translations->push($npc->name);

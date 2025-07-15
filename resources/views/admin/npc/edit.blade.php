@@ -7,11 +7,11 @@ use App\Models\Npc\NpcType;
 use App\Models\Spell\Spell;
 
 /**
- * @var Npc     $npc
- * @var Floor   $floor
- * @var array   $classifications
+ * @var Npc $npc
+ * @var Floor $floor
+ * @var array $classifications
  * @var Spell[] $spells
- * @var array   $bolsteringNpcs
+ * @var array $bolsteringNpcs
  */
 ?>
 
@@ -20,16 +20,6 @@ use App\Models\Spell\Spell;
     'showAds' => false,
     'title' => isset($npc) ? __('view_admin.npc.edit.title_edit', ['name' => $npc->name]) : __('view_admin.npc.edit.title_new'),
 ])
-
-@include('common.general.inline', ['path' => 'admin/npc/edit', 'options' => [
-    'baseHealthSelector' => '#base_health',
-    'scaledHealthSelector' => '#scaled_health',
-    'scaledHealthToBaseHealthApplyBtnSelector' => '#scaled_health_to_base_health_apply_btn',
-    'scaledHealthPercentageSelector' => '#scaled_health_percentage',
-    'scaledHealthLevelSelector' => '#scaled_health_level',
-    'scaledHealthTypeSelector' => '#scaled_health_type',
-    'healthPercentageSelector' => '#health_percentage',
-]])
 
 @section('header-title')
     {{ isset($npc) ? __('view_admin.npc.edit.header_edit', ['name' => $npc->name]) : __('view_admin.npc.edit.header_new') }}
@@ -55,7 +45,14 @@ use App\Models\Spell\Spell;
         @include('common.forms.form-error', ['key' => 'id'])
     </div>
 
-    @include('common.dungeon.select', ['activeOnly' => false, 'ignoreGameVersion' => true])
+    @include('common.dungeon.select', [
+        'name' => 'dungeon_ids[]',
+        'selected' => isset($npc) ? $npc->dungeons->pluck('id')->toArray() : [],
+        'multiple' => true,
+        'showAll' => false,
+        'activeOnly' => false,
+        'ignoreGameVersion' => true
+    ])
 
     <div class="form-group{{ $errors->has('classification_id') ? ' has-error' : '' }}">
         {!! Form::label('classification_id', __('view_admin.npc.edit.classification'), [], false) !!}
@@ -90,61 +87,6 @@ use App\Models\Spell\Spell;
         {!! Form::select('npc_class_id', NpcClass::pluck('name', 'id')->mapWithKeys(static fn($name, $id) => [$id => __($name)]), null,
                         ['class' => 'form-control selectpicker']) !!}
         @include('common.forms.form-error', ['key' => 'npc_class_id'])
-    </div>
-
-    <div class="form-group{{ $errors->has('base_health') ? ' has-error' : '' }}">
-        {!! Form::label('base_health', __('view_admin.npc.edit.base_health'), [], false) !!}
-        <span class="form-required">*</span>
-        <div class="row">
-            <div class="col-3">
-                {!! Form::text('base_health', null, ['id' => 'base_health', 'class' => 'form-control']) !!}
-            </div>
-            <div class="col-9">
-                <div class="row">
-                    <div class="col-auto">
-                        <div id="scaled_health_to_base_health_apply_btn" class="btn btn-info">
-                            {{ __('view_admin.npc.edit.scaled_health_to_base_health_apply') }}
-                        </div>
-                    </div>
-                    <div class="col">
-                        {!! Form::text('scaled_health', null, [
-                            'id' => 'scaled_health',
-                            'class' => 'form-control',
-                            'placeholder' => __('view_admin.npc.edit.scaled_health_placeholder'),
-                        ]) !!}
-                    </div>
-                    <div class="col">
-                        {!! Form::text('scaled_health_percentage', null, [
-                            'id' => 'scaled_health_percentage',
-                            'class' => 'form-control',
-                            'placeholder' => __('view_admin.npc.edit.scaled_health_percentage_placeholder'),
-                            ]) !!}
-                    </div>
-                    <div class="col">
-                        {!! Form::text('scaled_health_level', null, ['id' => 'scaled_health_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}
-                    </div>
-                    <div class="col">
-                        {!!
-                            Form::select('scaled_health_type',
-                            [
-                                'none' => __('view_admin.npc.edit.scaled_type_none'),
-                                'fortified' => __('view_admin.npc.edit.scaled_type_fortified', ['affix' => __('affixes.fortified.name')]),
-                                'tyrannical' => __('view_admin.npc.edit.scaled_type_tyrannical', ['affix' => __('affixes.tyrannical.name')]),
-                            ],
-                            null,
-                            ['id' => 'scaled_health_type', 'class' => 'form-control selectpicker'])
-                        !!}
-                    </div>
-                </div>
-            </div>
-        </div>
-        @include('common.forms.form-error', ['key' => 'base_health'])
-    </div>
-
-    <div class="form-group{{ $errors->has('health_percentage') ? ' has-error' : '' }}">
-        {!! Form::label('health_percentage', __('view_admin.npc.edit.health_percentage')) !!}
-        {!! Form::number('health_percentage', (isset($npc) ? $npc->health_percentage: null) ?? 100, ['class' => 'form-control']) !!}
-        @include('common.forms.form-error', ['key' => 'health_percentage'])
     </div>
 
     <div class="form-group{{ $errors->has('level') ? ' has-error' : '' }}">
@@ -215,6 +157,7 @@ use App\Models\Spell\Spell;
         {!! Form::label('spells[]', __('view_admin.npc.edit.spells'), [], false) !!}
         @php($selectedSpells = isset($npc) ? $npc->spells(false)->get()->pluck(['id'])->toArray() : [])
         <!--suppress HtmlFormInputWithoutLabel -->
+        <!--selectpicker-->
         <select class="form-control" name="spells[]" multiple="multiple"
                 data-live-search="true" data-selected-text-format="count > 1"
                 data-count-selected-text="{{ __('view_admin.npc.edit.spells_count') }}">
@@ -242,7 +185,11 @@ use App\Models\Spell\Spell;
 
     @isset($npc)
         <div class="form-group">
-            @include('admin.npc.enemyforces', ['npc' => $npc])
+            @include('admin.npc.npchealth', ['npc' => $npc])
+        </div>
+
+        <div class="form-group">
+            @include('admin.npc.npcenemyforces', ['npc' => $npc])
         </div>
     @endisset
 @endsection

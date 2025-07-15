@@ -1,12 +1,27 @@
 <?php
+
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
+use Illuminate\Support\Collection;
 
 /**
- * @var MappingVersion|null $mappingVersion
+ * @var MappingVersion|null     $mappingVersion
+ * @var Collection<GameVersion> $allGameVersions
  **/
+
+$gameVersionsSelect = $allGameVersions
+    ->mapWithKeys(static fn(GameVersion $gameVersion) => [$gameVersion->id => __($gameVersion->name)]);
 ?>
 
 @include('common.general.inline', ['path' => 'common/dungeon/mappingversion'])
+
+<div class="form-group{{ $errors->has('game_version_id') ? ' has-error' : '' }}">
+    {!! Form::label('game_version_id', __('view_admin.dungeon.edit.game_version_id'), [], false) !!}
+    <span class="form-required">*</span>
+    {!! Form::select('game_version_id', $gameVersionsSelect, $mappingVersion->game_version_id,
+        ['id' => 'map_mapping_version_game_version_id', 'class' => 'form-control selectpicker']) !!}
+    @include('common.forms.form-error', ['key' => 'game_version_id'])
+</div>
 
 <div class="form-group">
     {!! Form::label('map_mapping_version_facade_enabled', __('view_common.modal.mappingversion.facade_enabled')) !!}

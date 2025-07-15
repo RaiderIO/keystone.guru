@@ -47,12 +47,9 @@
                         'name': 'name',
                     },
                     {
-                        'title': lang.get('messages.dungeon_label'),
-                        'data': 'dungeon.name',
+                        'title': lang.get('messages.dungeons_label'),
+                        'data': 'dungeon_names',
                         'name': 'dungeon_id',
-                        'render': function (data, type, row) {
-                            return row.dungeon_id === -1 ? '{{ __('view_admin.npc.list.all_dungeons') }}' : lang.get(row.dungeon.name);
-                        },
                     },
                     {
                         'title': lang.get('messages.enemy_forces_label'),

@@ -59,7 +59,7 @@ use Illuminate\Support\Collection;
     <div class="wrapper embed_wrapper {{ $embedOptions['style'] }}">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
-            'mappingVersion' => $dungeon->currentMappingVersion,
+            'mappingVersion' => $dungeon->getCurrentMappingVersion($gameVersion),
             'mapBackgroundColor' => $embedOptions['mapBackgroundColor'],
             'embed' => true,
 //            'embedStyle' => $embedOptions['style'],

@@ -44,17 +44,15 @@ class DungeonExploreController extends Controller
 
     public function viewDungeon(Request $request, GameVersion $gameVersion, Dungeon $dungeon): RedirectResponse
     {
-        $dungeon->load(['currentMappingVersion']);
+        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        if (!$dungeon->active || $dungeon->currentMappingVersion === null) {
+        if (!$dungeon->active || $currentMappingVersion === null) {
             return redirect()->route('dungeon.explore.list');
         }
 
-        $dungeon->load(['currentMappingVersion']);
-
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-            ->defaultOrFacade($dungeon->currentMappingVersion)
+            ->defaultOrFacade($currentMappingVersion)
             ->first();
 
         return redirect()->route('dungeon.explore.gameversion.view.floor', [
@@ -84,9 +82,9 @@ class DungeonExploreController extends Controller
         Dungeon                        $dungeon,
         string                         $floorIndex = '1'
     ): View|RedirectResponse {
-        $dungeon->load(['currentMappingVersion']);
+        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        if (!$dungeon->active || $dungeon->currentMappingVersion === null) {
+        if (!$dungeon->active || $currentMappingVersion === null) {
             return redirect()->route('dungeon.explore.list');
         }
 
@@ -96,13 +94,13 @@ class DungeonExploreController extends Controller
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($dungeon->currentMappingVersion, $floorIndex)
+            ->indexOrFacade($currentMappingVersion, $floorIndex)
             ->first();
 
         if ($floor === null) {
             /** @var Floor $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-                ->defaultOrFacade($dungeon->currentMappingVersion)
+                ->defaultOrFacade($currentMappingVersion)
                 ->first();
 
             return redirect()->route('dungeon.explore.gameversion.view.floor', [
@@ -131,9 +129,9 @@ class DungeonExploreController extends Controller
                 'dungeon'                 => $dungeon,
                 'floor'                   => $floor,
                 'title'                   => __($dungeon->name),
-                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
+                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $currentMappingVersion),
                 'showHeatmapSearch'       => $heatmapActive,
-                'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons && $mostRecentSeason !== null ?
+                'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                     $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
             ]));
@@ -159,9 +157,9 @@ class DungeonExploreController extends Controller
         Dungeon                    $dungeon,
         string                     $floorIndex = '1'
     ): View|RedirectResponse {
-        $dungeon->load(['currentMappingVersion']);
+        $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        if (!$dungeon->active || $dungeon->currentMappingVersion === null) {
+        if (!$dungeon->active || $currentMappingVersion === null) {
             return redirect()->route('dungeon.explore.list');
         }
 
@@ -171,7 +169,7 @@ class DungeonExploreController extends Controller
 
         /** @var Floor $floor */
         $floor = Floor::where('dungeon_id', $dungeon->id)
-            ->indexOrFacade($dungeon->currentMappingVersion, $floorIndex)
+            ->indexOrFacade($currentMappingVersion, $floorIndex)
             ->first();
 
         $validated = $request->validated();
@@ -179,7 +177,7 @@ class DungeonExploreController extends Controller
         if ($floor === null) {
             /** @var Floor $defaultFloor */
             $defaultFloor = Floor::where('dungeon_id', $dungeon->id)
-                ->defaultOrFacade($dungeon->currentMappingVersion)
+                ->defaultOrFacade($currentMappingVersion)
                 ->first();
 
             return redirect()->route('dungeon.explore.gameversion.embed.floor', [
@@ -224,9 +222,9 @@ class DungeonExploreController extends Controller
             'dungeon'                 => $dungeon,
             'floor'                   => $floor,
             'title'                   => __($dungeon->name),
-            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $dungeon->currentMappingVersion),
+            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $currentMappingVersion),
             'showHeatmapSearch'       => $heatmapActive,
-            'seasonWeeklyAffixGroups' => $dungeon->gameVersion->has_seasons ?
+            'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
                 $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),
             'parameters'              => $validated,

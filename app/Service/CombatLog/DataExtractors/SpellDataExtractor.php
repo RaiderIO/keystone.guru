@@ -16,6 +16,7 @@ use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Player;
 use App\Models\CombatLog\CombatLogNpcSpellAssignment;
 use App\Models\CombatLog\CombatLogSpellUpdate;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell as SpellModel;
@@ -325,7 +326,11 @@ class SpellDataExtractor implements DataExtractorInterface
         try {
             $this->log->createSpellAndFetchInfoStart($spell->getSpellId());
 
-            $spellDataResult = $this->wowheadService->getSpellData($currentDungeon->dungeon->gameVersion, $spell->getSpellId());
+            // @TODO We need to know the game version assigned to the combat log to do this properly
+            $spellDataResult = $this->wowheadService->getSpellData(
+                GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL),
+                $spell->getSpellId()
+            );
 
             $spellAttributes = [
                 'id'              => $spell->getSpellId(),

@@ -33,7 +33,15 @@ class AssignMDTIDs extends Command
         $mappingVersions = MappingVersion::with(['enemies', 'dungeon'])->get();
 
         $dungeonWhitelist = [
-            Dungeon::RAID_SCARLET_ENCLAVE,
+            Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN,
+            Dungeon::DUNGEON_MOGU_SHAN_PALACE,
+            Dungeon::DUNGEON_SCARLET_HALLS_MOP,
+            Dungeon::DUNGEON_SCARLET_MONASTERY_MOP,
+            Dungeon::DUNGEON_SCHOLOMANCE_MOP,
+            Dungeon::DUNGEON_SHADO_PAN_MONASTERY,
+            Dungeon::DUNGEON_SIEGE_OF_NIUZAO_TEMPLE,
+            Dungeon::DUNGEON_STORMSTOUT_BREWERY,
+            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
         ];
 
         foreach ($mappingVersions as $mappingVersion) {
@@ -49,6 +57,7 @@ class AssignMDTIDs extends Command
                 }
 
                 foreach ($enemies->groupBy('npc_id') as $npcId => $enemiesByNpcId) {
+                    /** @var Collection<Enemy> $enemiesByNpcId */
                     $enemiesByNpcId = $enemiesByNpcId->sortBy('id');
                     $maxId = 0;
                     // Determine the max ID first, then assign the max ID to any NPCs that don't have an ID yet

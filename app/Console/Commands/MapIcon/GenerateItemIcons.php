@@ -44,6 +44,7 @@ class GenerateItemIcons extends Command
             'spell_holy_rebuke.jpg'                 => 'priory_blessing_of_the_sacred_flame.png',
             'spell_animabastion_orb.jpg'            => 'nw_item_anima.png',
             'inv_eng_crate.jpg'                     => 'floodgate_weapons_stockpile_explosion.png',
+            'spell_fire_sealoffire.jpg'             => 'gate_of_the_setting_sun_brazier.png',
         ];
 
         foreach ($imagePaths as $sourceImage => $targetImage) {

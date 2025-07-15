@@ -92,10 +92,15 @@ return [
             'npcs'                       => [
                 'npcs'     => 'NPCs',
                 'new_npc'  => 'New NPC',
-                'edit_npc' => 'Edit NPC',
+                'edit_npc' => 'Edit :npc',
             ],
             'npcenemyforces'             => [
+                'new_npc_enemy_forces'  => 'New NPC enemy forces',
                 'edit_npc_enemy_forces' => 'Edit NPC enemy forces',
+            ],
+            'npchealth'                  => [
+                'new_npc_health'  => 'New NPC health',
+                'edit_npc_health' => 'Edit NPC health',
             ],
             'spells'                     => [
                 'spells'     => 'Spells',

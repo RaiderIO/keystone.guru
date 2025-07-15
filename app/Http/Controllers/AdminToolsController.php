@@ -12,10 +12,12 @@ use App\Logic\MDT\Exception\InvalidMDTStringException;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\MDTImport;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
+use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcType;
 use App\Models\Spell\Spell;
@@ -193,9 +195,9 @@ class AdminToolsController extends Controller
                 $beforeModel = clone $npcCandidate;
 
                 /** @var Dungeon $dungeon */
-                $dungeon = Dungeon::where('zone_id', $npcData['location'][0])->first();
-                if ($dungeon === null) {
-                    $log[] = sprintf('*** Unable to find dungeon with zone_id %s; npc %s (%s) NOT added; needs manual work', $npcData['location'][0], $npcData['id'], $npcData['name']);
+                $dungeons = Dungeon::whereIn('zone_id', $npcData['location'])->get();
+                if ($dungeons->isEmpty()) {
+                    $log[] = sprintf('*** Unable to find dungeon(s) with zone_id(s) %s; npc %s (%s) NOT added; needs manual work', implode(', ', $npcData['location']), $npcData['id'], $npcData['name']);
 
                     continue;
                 }
@@ -214,28 +216,29 @@ class AdminToolsController extends Controller
                 }
 
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
-                // 8 since we start the expansion with 8 dungeons usually
-                $npcCandidate->dungeon_id = count($npcData['location']) > 1 ? -1 : $dungeon->id;
-                $npcCandidate->name       = $npcData['name'];
-                // Do not overwrite health if it was set already
-                if ($npcCandidate->base_health <= 0) {
-                    $npcCandidate->base_health = 12345;
-                }
+                $npcCandidate->name = $npcData['name'];
 
                 $npcCandidate->aggressiveness = isset($npcData['react']) && is_array($npcData['react']) ? $aggressivenessMapping[$npcData['react'][0] ?? -1] : 'aggressive';
 
                 $existed = $npcCandidate->exists;
                 if ($npcCandidate->save()) {
-                    if ($existed) {
-                        $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
-                    } else {
-                        // Now create new enemy forces. Default to 0
-                        $npcCandidate->createNpcEnemyForcesForExistingMappingVersions();
+                    foreach ($dungeons as $dungeon) {
+                        NpcDungeon::create([
+                            'npc_id' => $npcCandidate->id,
+                            'dungeon_id' => $dungeon->id,
+                        ]);
 
-                        $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                        if ($existed) {
+                            $log[] = sprintf('Updated NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                        } else {
+                            // Now create new enemy forces. Default to 0
+                            $npcCandidate->createNpcEnemyForcesForExistingMappingVersions();
+
+                            $log[] = sprintf('Inserted NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                        }
                     }
                 } else {
-                    $log[] = sprintf('*** Error saving NPC %s (%s) in %s', $npcData['id'], $npcData['name'], __($dungeon->name));
+                    $log[] = sprintf('*** Error saving NPC %s (%s)', $npcData['id'], $npcData['name']);
                 }
 
                 // Changed the mapping; so make sure we synchronize it
@@ -256,7 +259,9 @@ class AdminToolsController extends Controller
     {
         return view('admin.tools.npc.managespellvisibility', [
             'npcs'    => Npc::when($dungeon !== null, function (Builder $builder) use ($dungeon) {
-                return $builder->where('dungeon_id', $dungeon->id);
+                return $builder->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+                    ->select('npcs.*')
+                    ->where('npc_dungeons.dungeon_id', $dungeon->id);
             })->with('npcSpells')
                 ->has('npcSpells')
                 ->paginate(50),
@@ -625,7 +630,7 @@ class AdminToolsController extends Controller
     /**
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
-    public function importingamecoordinates(): View
+    public function wowToolsImportIngameCoordinates(): View
     {
         return view('admin.tools.wowtools.importingamecoordinates');
     }
@@ -635,7 +640,7 @@ class AdminToolsController extends Controller
      *
      * @throws Exception
      */
-    public function importingamecoordinatessubmit(Request $request): void
+    public function wowToolsImportIngameCoordinatesSubmit(Request $request): void
     {
         // Parse all Map TABLE data and convert them to a workable format
         $mapTable                   = $request->get('map_table_xhr_response');
@@ -802,6 +807,74 @@ class AdminToolsController extends Controller
         dd($changedDungeons, $unchangedDungeons->pluck('name')->toArray());
     }
 
+
+    /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     */
+    public function wagoggImportIngameCoordinates(): View
+    {
+        return view('admin.tools.wagogg.importingamecoordinates');
+    }
+
+    /**
+     * @return Application|Factory|\Illuminate\Contracts\View\View
+     *
+     * @throws Exception
+     */
+    public function wagoggImportIngameCoordinatesSubmit(Request $request): void
+    {
+        // Parse all UI Map Assignment TABLE data and convert them to a workable format
+        $uiMapAssignmentTable                   = $request->get('ui_map_assignment_table_csv');
+        $uiMapAssignmentTableParsed             = str_getcsv_assoc($uiMapAssignmentTable);
+        $uiMapAssignmentTableHeaders            = array_shift($uiMapAssignmentTableParsed);
+        $uiMapAssignmentTableHeaderIndexUiMapId = array_search('UiMapID', $uiMapAssignmentTableHeaders, true);
+        $uiMapAssignmentTableHeaderIndexMinX    = array_search('Region_0', $uiMapAssignmentTableHeaders, true);
+        $uiMapAssignmentTableHeaderIndexMinY    = array_search('Region_1', $uiMapAssignmentTableHeaders, true);
+        $uiMapAssignmentTableHeaderIndexMaxX    = array_search('Region_3', $uiMapAssignmentTableHeaders, true);
+        $uiMapAssignmentTableHeaderIndexMaxY    = array_search('Region_4', $uiMapAssignmentTableHeaders, true);
+
+        /** @var Collection<Floor> $allFloors */
+        //        $allDungeons = Dungeon::where('key', Dungeon::DUNGEON_AZJOL_NERUB)->get()->keyBy('id');
+        $allFloors = Floor::where('facade', 0)
+            ->where('ui_map_id', '>', 0)
+            ->where('ingame_min_x', 0)
+            ->where('ingame_min_y', 0)
+//            ->where('ingame_max_x', 0)
+//            ->where('ingame_max_y', 0)
+            ->get();
+
+        dump('Changed floors:');
+
+        $allUiMapIds                = $allFloors->pluck('ui_map_id')->toArray();
+        $uiMapAssignmentTableParsed = array_filter($uiMapAssignmentTableParsed, function (array $item) use ($allUiMapIds, $uiMapAssignmentTableHeaderIndexUiMapId) {
+            return in_array($item[$uiMapAssignmentTableHeaderIndexUiMapId], $allUiMapIds);
+        });
+
+        // Go over the UI Map Assignments and find the ones we're interested in
+        foreach ($allFloors as $floor) {
+            foreach ($uiMapAssignmentTableParsed as $index => $uiMapAssignmentRow) {
+                if (((int)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexUiMapId]) === $floor->ui_map_id) {
+                    $beforeModel = clone $floor;
+
+                    $floor->update([
+                        'ingame_min_x' => round((float)$uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinX], 2),
+                        'ingame_min_y' => round($uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMinY], 2),
+                        'ingame_max_x' => round($uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxX], 2),
+                        'ingame_max_y' => round($uiMapAssignmentRow[$uiMapAssignmentTableHeaderIndexMaxY], 2),
+                    ]);
+
+                    dump(sprintf('Updated floor %s (id: %d, ui_map_id: %d) ', __($floor->name), $floor->id, $floor->ui_map_id));
+
+//                    $this->mappingChanged($beforeModel, $floor);
+
+                    break;
+                }
+            }
+        }
+
+        dd('done!');
+    }
+
     /**
      * @return Factory|
      *
@@ -842,11 +915,12 @@ class AdminToolsController extends Controller
                 else {
 
                     // Match health
-                    if ($npc->base_health !== $mdtNpc->getHealth()) {
+                    $npcHealth = $npc->getHealthByGameVersion(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL));
+                    if ($npcHealth?->health !== $mdtNpc->getHealth()) {
                         $warnings->push(
                             new ImportWarning('mismatched_health',
-                                sprintf(__('controller.admintools.error.mdt_mismatched_health'), $mdtNpc->getId(), $mdtNpc->getHealth(), $npc->base_health),
-                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npc->base_health, 'new' => $mdtNpc->getHealth()]
+                                sprintf(__('controller.admintools.error.mdt_mismatched_health'), $mdtNpc->getId(), $mdtNpc->getHealth(), $npcHealth->health),
+                                ['mdt_npc' => (object)$mdtNpc->getRawMdtNpc(), 'npc' => $npc, 'old' => $npcHealth->health, 'new' => $mdtNpc->getHealth()]
                             )
                         );
                     }
@@ -927,24 +1001,27 @@ class AdminToolsController extends Controller
     /**
      * @return array
      */
-    public function applychange(Request $request)
+    public function applyChange(Request $request)
     {
-        $category = $request->get('category');
-        $npcId    = $request->get('npc_id');
-        $value    = $request->get('value');
+        $category  = $request->get('category');
+        $npcId     = $request->get('npc_id');
+        $dungeonId = $request->get('dungeon_id');
+        $value     = $request->get('value');
 
         /** @var \App\Models\Npc\Npc $npc */
-        $npc = Npc::with(['enemyForces'])->find($npcId);
+        $npc     = Npc::with(['enemyForces'])->find($npcId);
+        $dungeon = Dungeon::findOrFail($dungeonId);
 
         switch ($category) {
             case 'mismatched_health':
-                $npc->base_health = $value;
-                $npc->save();
+                $npc->getHealthByGameVersion(
+                    GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL)
+                )?->update([
+                    'health' => $value,
+                ]);
                 break;
             case 'mismatched_enemy_forces':
-                if ($npc->dungeon_id !== -1) {
-                    $npc->setEnemyForces($value);
-                }
+                $npc->setEnemyForces($value, $dungeon->getCurrentMappingVersion());
 
                 break;
             // Teeming is deprecated pretty much

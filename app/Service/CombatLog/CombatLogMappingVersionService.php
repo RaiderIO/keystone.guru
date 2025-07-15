@@ -193,7 +193,7 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
             if ($parsedEvent instanceof MapChange) {
                 $currentFloor = $this->floorRepository->findByUiMapId($parsedEvent->getUiMapID(), $dungeon->id);
                 if ($currentFloor === null) {
-                    $this->log->createMappingVersionFromCombatLogSkipEntryMapChangeFloorNotFound();
+                    $this->log->createMappingVersionFromCombatLogSkipEntryMapChangeFloorNotFound($parsedEvent->getUiMapID(), $dungeon->id);
 
                     return $parsedEvent;
                 }

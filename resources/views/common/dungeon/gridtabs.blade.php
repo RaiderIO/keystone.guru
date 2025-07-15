@@ -134,7 +134,7 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
                      class="tab-pane fade show {{ $selectedSeasonId === null && $index === 0 ? 'active' : '' }}"
                      role="tabpanel"
                      aria-labelledby="{{ $expansion->shortname }}-grid-content">
-                    @php($dungeons = $expansion->dungeons()->active()->get())
+                    @php($dungeons = $expansion->dungeons()->active()->forGameVersion($currentUserGameVersion)->get())
                     @include('common.dungeon.grid', [
                         'expansion' => $expansion,
                         'dungeons' => $dungeons,
@@ -153,7 +153,7 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
                      class="tab-pane fade show {{ $selectedSeasonId === null && $index === 0 ? 'active' : '' }}"
                      role="tabpanel"
                      aria-labelledby="{{ $expansion->shortname }}-raid-grid-content">
-                    @php($raids = $expansion->raids()->active()->get())
+                    @php($raids = $expansion->raids()->active()->forGameVersion($currentUserGameVersion)->get())
                     @include('common.dungeon.grid', [
                         'expansion' => $expansion,
                         'dungeons' => $raids,

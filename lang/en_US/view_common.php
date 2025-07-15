@@ -454,6 +454,12 @@ return [
             'route' => 'Route',
         ],
     ],
+    'mappingversion' => [
+        'select' => [
+            'mapping_version_readonly' => ':gameVersion version :version (readonly)',
+            'mapping_version'          => ':gameVersion version :version',
+        ]
+    ],
     'modal'        => [
         'dungeonroute'       => [
             'removed' => [

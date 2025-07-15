@@ -467,13 +467,13 @@ class Enemy extends VersionableMapObject {
         let result = null;
 
         if (this.npc !== null) {
-            let scaledHealth = this.npc.base_health * ((this.npc.health_percentage ?? 100) / 100);
-
             let mapContext = getState().getMapContext();
+            let scaledHealth = mapContext.getNpcHealth(this.npc);
+
             let keyLevelLabel = '';
             let affixes = [];
 
-            if (mapContext instanceof MapContextDungeonRoute && mapContext.getGameVersion().key === GAME_VERSION_RETAIL) {
+            if (mapContext instanceof MapContextDungeonRoute && mapContext.getMappingVersion().game_version.key === GAME_VERSION_RETAIL) {
                 // noinspection JSAssignmentUsedAsCondition
                 if ((mapContext.hasAffix(AFFIX_FORTIFIED) && [NPC_CLASSIFICATION_ID_NORMAL, NPC_CLASSIFICATION_ID_ELITE].includes(this.npc.classification_id))) {
                     affixes.push(AFFIX_FORTIFIED);
@@ -492,7 +492,8 @@ class Enemy extends VersionableMapObject {
                 scaledHealth = Math.round(scaledHealth);
             }
 
-            let percentageString = this.npc.health_percentage !== null && this.npc.health_percentage !== 100 ? ` (${this.npc.health_percentage}%)` : ``;
+            let healthPercentage = mapContext.getNpcHealthPercentage(this.npc);
+            let percentageString = healthPercentage !== 100 ? ` (${healthPercentage}%)` : ``;
 
             result = {info: [], custom: []};
             // @formatter:off
@@ -501,7 +502,7 @@ class Enemy extends VersionableMapObject {
                 value: scaledHealth.toLocaleString() + percentageString,
                 info: affixes.length === 0 ? false : lang.get('messages.sidebar_enemy_health_affixes_label', {
                     affixes: affixes.join(', '),
-                    baseHealth: this.npc.base_health.toLocaleString(),
+                    baseHealth: mapContext.getNpcHealth(this.npc).toLocaleString(),
                     factor: Math.round(c.map.enemy.getKeyScalingFactor(mapContext.getLevelMin(), affixes) * 100)
                 })
             });
@@ -519,7 +520,7 @@ class Enemy extends VersionableMapObject {
                 });
             }
 
-            if (mapContext.getGameVersion().key === GAME_VERSION_RETAIL) {
+            if (mapContext.getMappingVersion().game_version.key === GAME_VERSION_RETAIL) {
                 // These affixes have been removed
                 // result.info.push({key: lang.get('messages.sidebar_enemy_bursting_label'), value: this.npc.bursting});
                 // result.info.push({key: lang.get('messages.sidebar_enemy_bolstering_label'), value: this.npc.bolstering});
@@ -571,7 +572,7 @@ class Enemy extends VersionableMapObject {
                 let spellHtml = '';
                 let count = 0;
                 let spellTemplate = Handlebars.templates['spell_template'];
-                let gameVersion = mapContext.getDungeon().game_version;
+                let gameVersion = mapContext.getMappingVersion().game_version;
 
                 for (let index in this.npc.spells) {
                     if (this.npc.spells.hasOwnProperty(index)) {
@@ -607,7 +608,7 @@ class Enemy extends VersionableMapObject {
             case GAME_VERSION_WOTLK:
                 wowheadBaseUrl += '/wrath';
                 break;
-            case GAME_VERSION_CLASSIC:
+            case GAME_VERSION_CLASSIC_ERA:
                 wowheadBaseUrl += '/classic';
                 break;
         }

@@ -23,7 +23,7 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
      */
     public function create(NpcServiceInterface $npcService, Request $request, Dungeon $dungeon, Floor $floor, int $difficulty): \Illuminate\View\View
     {
-        $npcs = $npcService->getNpcsForDropdown($dungeon, true)->toArray();
+        $npcs = $npcService->getNpcsForDropdown(collect([$dungeon]))->toArray();
 
         return view('admin.dungeonspeedrunrequirednpc.new', [
             'dungeon'            => $dungeon,

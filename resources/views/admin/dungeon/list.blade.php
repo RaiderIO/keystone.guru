@@ -45,7 +45,6 @@ use Illuminate\Support\Collection;
         <tr>
             <th width="50px">{{ __('view_admin.dungeon.list.table_header_active') }}</th>
             <th width="50px">{{ __('view_admin.dungeon.list.table_header_expansion') }}</th>
-            <th width="50px">{{ __('view_admin.dungeon.list.table_header_game_version') }}</th>
             <th width="45%">{{ __('view_admin.dungeon.list.table_header_name') }}</th>
             <th width="10%">{{ __('view_admin.dungeon.list.table_header_enemy_forces') }}</th>
             <th width="10%">{{ __('view_admin.dungeon.list.table_header_enemy_forces_teeming') }}</th>
@@ -58,7 +57,7 @@ use Illuminate\Support\Collection;
         @foreach ($models as $dungeon)
                 <?php
                 /** @var MappingVersion|null $mappingVersion */
-                $mappingVersion = $dungeon->mappingVersions->first();
+                $mappingVersion = $dungeon->loadMappingVersions()->mappingVersions->first();
                 ?>
             <tr>
                 @if($dungeon->active)
@@ -74,13 +73,6 @@ use Illuminate\Support\Collection;
                     <img src="{{ ksgAssetImage(sprintf('expansions/%s.png', $dungeon->expansion->shortname)) }}"
                          alt="{{ __($dungeon->expansion->name) }}"
                          title="{{ __($dungeon->expansion->name) }}"
-                         data-toggle="tooltip"
-                         style="width: 50px;"/>
-                </td>
-                <td data-order="{{ $dungeon->game_version_id }}">
-                    <img src="{{ ksgAssetImage(sprintf('gameversions/%s.png', $dungeon->gameVersion->key)) }}"
-                         alt="{{ __($dungeon->gameVersion->name) }}"
-                         title="{{ __($dungeon->gameVersion->name) }}"
                          data-toggle="tooltip"
                          style="width: 50px;"/>
                 </td>

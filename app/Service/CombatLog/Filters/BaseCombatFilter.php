@@ -59,6 +59,21 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
         // Darkflame Cleft: The Darkness is defeated at 45%
         208747 => 0.46,
+
+        // Mogu'shan Palace: Trial of the King
+        61442  => 0.01,
+        61444  => 0.01,
+        61445  => 0.01,
+
+        // Shado-Pan Monastery:
+        58198  => 0.01, // Shado-pan Desciples become friendly at 1hp
+        56473  => 0.01, // Flying Snow becomes friendly at 1hp
+        56472  => 0.01, // Fragrant Lotus becomes friendly at 1hp
+        56541  => 0.01, // Master Snowdrift becomes friendly at 1hp
+        56884  => 0.01, // Corrupted Taran Zhu despawns and becomes friendly Taran Zhu at 1hp
+
+        // Scholomance
+        58722 => 0.01, // Lilian Voss
     ];
 
     /** @var array Some enemies are summoned that we DO want to track in the route */

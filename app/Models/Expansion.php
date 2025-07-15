@@ -208,10 +208,16 @@ class Expansion extends CacheModel
     {
         $result = false;
 
-        foreach ($this->raids as $dungeon) {
-            if ($dungeon->game_version_id === $gameVersion->id) {
-                $result = true;
-                break;
+        $this->raids->load([
+            'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
+        ]);
+
+        foreach ($this->raids as $raid) {
+            foreach ($raid->mappingVersions as $mappingVersion) {
+                if ($mappingVersion->game_version_id === $gameVersion->id) {
+                    $result = true;
+                    break 2;
+                }
             }
         }
 
@@ -222,10 +228,16 @@ class Expansion extends CacheModel
     {
         $result = false;
 
+        $this->dungeons->load([
+            'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
+        ]);
+
         foreach ($this->dungeons as $dungeon) {
-            if ($dungeon->game_version_id === $gameVersion->id) {
-                $result = true;
-                break;
+            foreach ($dungeon->mappingVersions as $mappingVersion) {
+                if ($mappingVersion->game_version_id === $gameVersion->id) {
+                    $result = true;
+                    break 2;
+                }
             }
         }
 

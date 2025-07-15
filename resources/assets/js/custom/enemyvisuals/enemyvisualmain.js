@@ -133,7 +133,9 @@ class EnemyVisualMain extends EnemyVisualIcon {
         }
 
         let mapContext = state.getMapContext();
-        let health = this.enemyvisual.enemy.npc === null ? 0 : this.enemyvisual.enemy.npc.base_health * ((this.enemyvisual.enemy.npc.health_percentage ?? 100) / 100);
+        let health = this.enemyvisual.enemy.npc === null ?
+            0 :
+            mapContext.getNpcHealth(this.enemyvisual.enemy.npc);
         if (this.enemyvisual.enemy.npc === null) {
             if (!state.isMapAdmin()) {
                 console.warn('Enemy has no NPC!', this.enemyvisual.enemy);

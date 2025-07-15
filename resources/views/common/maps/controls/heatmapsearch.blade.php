@@ -9,6 +9,7 @@ use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\GameServerRegion;
 use App\Models\Laratrust\Role;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
@@ -16,6 +17,7 @@ use Illuminate\Support\Collection;
 /**
  * @var bool                                     $showAds
  * @var Dungeon                                  $dungeon
+ * @var MappingVersion                           $mappingVersion
  * @var Season                                   $season
  * @var bool                                     $embed
  * @var string                                   $embedStyle
@@ -332,7 +334,7 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                     </div>
                 @endcomponent
 
-                @if($dungeon->gameVersion->has_seasons)
+                @if($mappingVersion->gameVersion->has_seasons)
                     {{--                    @component('common.forms.labelinput', ['key' => 'season', 'text' => __('view_common.maps.controls.heatmapsearch.season'), 'expanded' => $expandedAffixWeek])--}}
                     {{--                        <div class="filter_affix">--}}
                     {{--                            <div class="row">--}}
@@ -419,47 +421,47 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
                     @endcomponent
 
 
-                        @component('common.forms.labelinput', [
-                            'id' => 'filter_classes_player_deaths_container',
-                            'name' => 'filter_classes_player_deaths',
-                            'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths'),
-                            'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths_title'),
-                        ])
-                            {!!
-                                Form::select(
-                                    'filter_classes_player_deaths[]',
-                                    $characterClassSelectOptions,
-                                    [],
-                                    [
-                                        'id' => 'filter_classes_player_deaths',
-                                        'name' => 'classes_player_deaths',
-                                        'class' => 'form-control selectpicker',
-                                        'multiple' => 'multiple'
-                                    ]
-                                )
-                             !!}
-                        @endcomponent
+                    @component('common.forms.labelinput', [
+                        'id' => 'filter_classes_player_deaths_container',
+                        'name' => 'filter_classes_player_deaths',
+                        'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths'),
+                        'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths_title'),
+                    ])
+                        {!!
+                            Form::select(
+                                'filter_classes_player_deaths[]',
+                                $characterClassSelectOptions,
+                                [],
+                                [
+                                    'id' => 'filter_classes_player_deaths',
+                                    'name' => 'classes_player_deaths',
+                                    'class' => 'form-control selectpicker',
+                                    'multiple' => 'multiple'
+                                ]
+                            )
+                         !!}
+                    @endcomponent
 
-                        @component('common.forms.labelinput', [
-                            'id' => 'filter_specializations_player_deaths_container',
-                            'name' => 'filter_specializations_player_deaths',
-                            'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths'),
-                            'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths_title'),
-                        ])
-                            {!!
-                                Form::select(
-                                    'filter_specializations_player_deaths[]',
-                                    $characterClassSpecializationsSelectOptions,
-                                    [],
-                                    [
-                                        'id' => 'filter_specializations_player_deaths',
-                                        'name' => 'specializations_player_deaths',
-                                        'class' => 'form-control selectpicker',
-                                        'multiple' => 'multiple'
-                                    ]
-                                )
-                             !!}
-                        @endcomponent
+                    @component('common.forms.labelinput', [
+                        'id' => 'filter_specializations_player_deaths_container',
+                        'name' => 'filter_specializations_player_deaths',
+                        'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths'),
+                        'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths_title'),
+                    ])
+                        {!!
+                            Form::select(
+                                'filter_specializations_player_deaths[]',
+                                $characterClassSpecializationsSelectOptions,
+                                [],
+                                [
+                                    'id' => 'filter_specializations_player_deaths',
+                                    'name' => 'specializations_player_deaths',
+                                    'class' => 'form-control selectpicker',
+                                    'multiple' => 'multiple'
+                                ]
+                            )
+                         !!}
+                    @endcomponent
 
                 @endcomponent
 

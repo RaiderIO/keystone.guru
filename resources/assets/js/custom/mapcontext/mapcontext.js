@@ -354,7 +354,7 @@ class MapContext extends Signalable {
      * @returns {{}}
      */
     getGameVersion() {
-        return this._options.dungeon.game_version;
+        return this._options.mappingVersion.game_version;
     }
 
     /**
@@ -441,6 +441,69 @@ class MapContext extends Signalable {
                 result = this._options.dungeon.npcs[i];
                 break;
             }
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param npc {Object}
+     * @param gameVersionId {Number}
+     * @returns {Object}
+     */
+    _getNpcHealthObj(npc, gameVersionId = null) {
+        let mapContext = getState().getMapContext();
+        // @TODO #2879 Use mapping version's game version ID instead of the dungeon's game version ID
+        gameVersionId = gameVersionId ?? mapContext.getMappingVersion().game_version.id;
+
+        let result = null;
+        for (let index in npc.npc_healths) {
+            let health = npc.npc_healths[index];
+            if (health.game_version_id === gameVersionId) {
+                result = health;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param npc {Object}
+     * @param usePercentage {Boolean}
+     * @param gameVersionId {Number}
+     * @returns {Number}
+     */
+    getNpcHealth(npc, usePercentage = true, gameVersionId = null) {
+
+        let npcHealthObj = this._getNpcHealthObj(npc, gameVersionId);
+
+        let result = -1;
+        if (npcHealthObj !== null) {
+            let healthValue = npcHealthObj.health;
+            if (usePercentage && typeof npc.percentage !== 'undefined') {
+                healthValue = (healthValue * npc.percentage) / 100;
+            }
+
+            result = healthValue;
+        }
+
+        return result;
+    }
+
+    /**
+     * Get the health percentage of an NPC. Some NPCs start with low health, this allows you to account for that.
+     * @param npc {Object}
+     * @returns {Number}
+     */
+    getNpcHealthPercentage(npc) {
+        let npcHealthObj = this._getNpcHealthObj(npc);
+
+        let result = 100;
+        if (npcHealthObj !== null) {
+            result = npcHealthObj.percentage ?? 100;
         }
 
         return result;
@@ -605,5 +668,20 @@ class MapContext extends Signalable {
      */
     getNpcsMaxHealth() {
         return this._options.npcsMaxHealth;
+    }
+
+    /**
+     *
+     * @param gameVersionId {Number}
+     * @returns {Object|null}
+     */
+    getGameVersionById(gameVersionId) {
+        let gameVersions = this._options.static.gameVersions;
+        for (let i = 0; i < gameVersions.length; i++) {
+            if (gameVersions[i].id === gameVersionId) {
+                return gameVersions[i];
+            }
+        }
+        return null;
     }
 }

@@ -189,9 +189,12 @@ const TEEMING_VISIBLE = 'visible';
 const TEEMING_HIDDEN = 'hidden';
 
 // Game versions
-const GAME_VERSION_CLASSIC = 'classic';
-const GAME_VERSION_WOTLK = 'wotlk';
 const GAME_VERSION_RETAIL = 'retail';
+const GAME_VERSION_CLASSIC_ERA = 'classic';
+const GAME_VERSION_WOTLK = 'wotlk';
+const GAME_VERSION_BETA = 'beta';
+const GAME_VERSION_CATA = 'cata';
+const GAME_VERSION_MOP = 'mop';
 
 // Mountable Areas
 const MOVEMENT_SPEED_DEFAULT = 7;

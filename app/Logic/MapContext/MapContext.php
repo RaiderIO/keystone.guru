@@ -8,6 +8,7 @@ use App\Models\CharacterClassSpecialization;
 use App\Models\Dungeon;
 use App\Models\Faction;
 use App\Models\Floor\Floor;
+use App\Models\GameVersion\GameVersion;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
@@ -98,11 +99,10 @@ abstract class MapContext
                 $enemies = $this->mappingVersion->mapContextEnemies($this->coordinatesService, $useFacade);
 
                 return array_merge($dungeon->toArray(), $this->getEnemies(), [
-                    'latestMappingVersion'      => $this->floor->dungeon->currentMappingVersion,
+                    'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion),
                     'npcs'                      => $this->floor->dungeon->npcs()
-                        // @TODO #2772 Prevent loading NPCs that are not used (ie. those with dungeon_id = -1
                         ->when($this->onlyLoadInUseNpcs(), function (Builder $query) use ($enemies) {
-                            $query->whereIn('id', $enemies->pluck('id'));
+                            $query->whereIn('npcs.id', $enemies->pluck('npc_id')->unique());
                         })->with([
                             'spells',
                             // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
@@ -112,7 +112,10 @@ abstract class MapContext
                         ->disableCache()
                         ->get()
                         // Only show what we need in the FE
-                        ->each(fn(Npc $npc) => $npc->enemyForces?->setVisible(['enemy_forces', 'enemy_forces_teeming'])),
+                        ->each(function (Npc $npc) {
+                            $npc->enemyForces?->setVisible(['enemy_forces', 'enemy_forces_teeming']);
+                            $npc->setHidden(['pivot']);
+                        }),
                     'auras'                     => $auras,
                     'enemies'                   => $enemies,
                     'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
@@ -140,6 +143,7 @@ abstract class MapContext
             'raidMarkers'                       => RaidMarker::all(),
             'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
             'publishStates'                     => PublishedState::all(),
+            'gameVersions'                      => GameVersion::all(),
         ], config('keystoneguru.cache.static_data.ttl'));
 
         [$npcMinHealth, $npcMaxHealth] = $this->floor->dungeon->getNpcsMinMaxHealth($this->mappingVersion);
@@ -152,7 +156,7 @@ abstract class MapContext
         return [
             'environment'         => config('app.env'),
             'type'                => $this->getType(),
-            'mappingVersion'      => $this->mappingVersion,
+            'mappingVersion'      => $this->mappingVersion->makeVisible(['gameVersion']),
             'floorId'             => $this->floor->id,
             'teeming'             => $this->isTeeming(),
             'seasonalIndex'       => $this->getSeasonalIndex(),

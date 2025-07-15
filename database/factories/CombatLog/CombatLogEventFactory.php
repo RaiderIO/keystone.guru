@@ -70,7 +70,7 @@ class CombatLogEventFactory extends Factory
                 config('keystoneguru.keystone.levels.default_max'),
             ),
             'affix_id'          => $affixGroup->affixes->pluck('affix_id')->toArray(),
-            'success'           => $dungeon->currentMappingVersion->timer_max_seconds > $runDurationMin * 60,
+            'success'           => $dungeon->getCurrentMappingVersion()->timer_max_seconds > $runDurationMin * 60,
             'start'             => $now->subMinutes($runDurationMin + $runAgeMin)->unix(),
             'end'               => $now->subMinutes($runAgeMin)->unix(),
             'duration_ms'       => $runDurationMin * 60 * 1000,

@@ -443,9 +443,8 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             /** @var Dungeon $dungeon */
             $dungeon = $dungeon ?? $season->dungeons->random();
             // Cannot load directly on the relation - need to fix
-            $dungeon = $dungeon->load('currentMappingVersion');
-
-            $dungeon->currentMappingVersion->load('enemies');
+            $currentMappingVersion = $dungeon->getCurrentMappingVersion()
+                ->load('enemies');
 
             $runId         = rand(1000, 100000000);
             $keystoneRunId = rand(1000, 100000000);
@@ -462,10 +461,10 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 GameServerRegion::TAIWAN => 5,
                 default => 2, // US
             };
-            $runDurationMs = rand(600, $dungeon->currentMappingVersion->timer_max_seconds) * 1000;
-            $timerFraction = $runDurationMs / ($dungeon->currentMappingVersion->timer_max_seconds * 1000);
+            $runDurationMs = rand(600, $currentMappingVersion->timer_max_seconds) * 1000;
+            $timerFraction = $runDurationMs / ($currentMappingVersion->timer_max_seconds * 1000);
 
-            $success = $dungeon->currentMappingVersion->timer_max_seconds > ($runDurationMs / 1000);
+            $success = $currentMappingVersion->timer_max_seconds > ($runDurationMs / 1000);
             $start = $runStart->toDateTimeString();
             $end   = $runStart->addMilliseconds($runDurationMs)->toDateTimeString();
 
@@ -479,7 +478,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             $dateTime   = $now->toDateTimeString();
             for ($j = 0; $j < $eventsPerRun; $j++) {
                 /** @var Enemy $enemy */
-                $enemy = $dungeon->currentMappingVersion->enemies->random();
+                $enemy = $currentMappingVersion->enemies->random();
                 // Not ideal but I can't get the relation to load properly whenever the run is generated
                 $enemy->load(['floor']);
 

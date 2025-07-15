@@ -17,6 +17,7 @@ class RaidEventPullEnemy implements RaidEventOutputInterface, RaidEventPullEnemy
     public function calculateHealth(SimulationCraftRaidEventsOptions $options, Npc $npc): int
     {
         return (int)($npc->calculateHealthForKey(
+                $options->dungeonRoute->mappingVersion->gameVersion,
                 $options->key_level,
                 $options->getAffixes()
             ) * ($this->options->hp_percent / 100));

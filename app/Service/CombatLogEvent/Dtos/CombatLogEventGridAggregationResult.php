@@ -144,7 +144,7 @@ class CombatLogEventGridAggregationResult implements Arrayable
         $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation($ingameXY);
 
         $latLngArray = ($this->useFacade ?
-            $this->coordinatesService->convertMapLocationToFacadeMapLocation($dungeon->currentMappingVersion, $latLng) :
+            $this->coordinatesService->convertMapLocationToFacadeMapLocation($dungeon->getCurrentMappingVersion(), $latLng) :
             $latLng)->toArray();
 
         // Just limit the amount of data going out

@@ -56,6 +56,7 @@ use App\Http\Controllers\LiveSessionLegacyController;
 use App\Http\Controllers\MDTImportController;
 use App\Http\Controllers\NpcController;
 use App\Http\Controllers\NpcEnemyForcesController;
+use App\Http\Controllers\NpcHealthController;
 use App\Http\Controllers\PatreonController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReleaseController;
@@ -247,7 +248,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 // Mapping versions
                 Route::prefix('{dungeon}/mappingversion')->group(static function () {
                     Route::get('new', (new MappingVersionController())->saveNew(...))->name('admin.mappingversion.new');
-                    Route::get('new/bare', (new MappingVersionController())->saveNewBare(...))->name('admin.mappingversion.newbare');
                     Route::get('{mappingVersion}/delete', (new MappingVersionController())->delete(...))->name('admin.mappingversion.delete');
                 });
                 // Floors
@@ -291,9 +291,26 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::prefix('{npc}')->group(static function () {
                     Route::get('/', (new NpcController())->edit(...))->name('admin.npc.edit');
                     Route::patch('/', (new NpcController())->update(...))->name('admin.npc.update');
-                    Route::prefix('npcEnemyForces/{npcEnemyForces}')->group(static function () {
-                        Route::get('/', (new NpcEnemyForcesController())->edit(...))->name('admin.npcenemyforces.edit');
-                        Route::patch('/', (new NpcEnemyForcesController())->update(...))->name('admin.npcenemyforces.update');
+
+                    Route::prefix('npcEnemyForces/')->group(static function () {
+                        Route::get('new', (new NpcEnemyForcesController())->create(...))->name('admin.npc.npcenemyforces.new');
+                        Route::post('new', (new NpcEnemyForcesController())->savenew(...))->name('admin.npc.npcenemyforces.savenew');
+
+                        Route::prefix('{npcEnemyForces}')->group(static function () {
+                            Route::delete('/', (new NpcEnemyForcesController())->delete(...))->name('admin.npc.npcenemyforces.delete');
+                            Route::get('/', (new NpcEnemyForcesController())->edit(...))->name('admin.npc.npcenemyforces.edit');
+                            Route::patch('/', (new NpcEnemyForcesController())->update(...))->name('admin.npc.npcenemyforces.update');
+                        });
+                    });
+                    Route::prefix('health/')->group(static function () {
+                        Route::get('new', (new NpcHealthController())->create(...))->name('admin.npc.npchealth.new');
+                        Route::post('new', (new NpcHealthController())->savenew(...))->name('admin.npc.npchealth.savenew');
+
+                        Route::prefix('{npcHealth}')->group(static function () {
+                            Route::delete('/', (new NpcHealthController())->delete(...))->name('admin.npc.npchealth.delete');
+                            Route::get('/', (new NpcHealthController())->edit(...))->name('admin.npc.npchealth.edit');
+                            Route::patch('/', (new NpcHealthController())->update(...))->name('admin.npc.npchealth.update');
+                        });
                     });
                 });
             });
@@ -365,8 +382,12 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 });
 
                 // Wow.tools
-                Route::get('wowtools/importingamecoordinates', (new AdminToolsController())->importingamecoordinates(...))->name('admin.tools.wowtools.import_ingame_coordinates');
-                Route::post('wowtools/importingamecoordinates', (new AdminToolsController())->importingamecoordinatessubmit(...))->name('admin.tools.wowtools.import_ingame_coordinates.submit');
+                Route::get('wowtools/importingamecoordinates', (new AdminToolsController())->wowToolsImportIngameCoordinates(...))->name('admin.tools.wowtools.import_ingame_coordinates');
+                Route::post('wowtools/importingamecoordinates', (new AdminToolsController())->wowToolsImportIngameCoordinatesSubmit(...))->name('admin.tools.wowtools.import_ingame_coordinates.submit');
+
+                // Wago.gg
+                Route::get('wagogg/importingamecoordinates', (new AdminToolsController())->wagoggImportIngameCoordinates(...))->name('admin.tools.wagogg.import_ingame_coordinates');
+                Route::post('wagogg/importingamecoordinates', (new AdminToolsController())->wagoggImportIngameCoordinatesSubmit(...))->name('admin.tools.wagogg.import_ingame_coordinates.submit');
 
                 // Feature management
                 Route::get('features', (new AdminToolsController())->listFeatures(...))->name('admin.tools.features.list');
@@ -476,7 +497,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 });
             });
             Route::put('/userreport/{userreport}/status', (new AjaxUserReportController())->status(...));
-            Route::post('/tools/mdt/diff/apply', (new AdminToolsController())->applychange(...));
+            Route::post('/tools/mdt/diff/apply', (new AdminToolsController())->applyChange(...));
             Route::put('/user/{user}/patreon/benefits', (new UserController())->storePatreonBenefits(...));
         });
         Route::prefix('dungeonRoute')->group(static function () {

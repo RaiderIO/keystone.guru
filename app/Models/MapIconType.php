@@ -140,6 +140,7 @@ class MapIconType extends CacheModel
     public const MAP_ICON_TYPE_KARAZHAN_CRYPTS_SPIDER_NEST           = 'karazhan_crypts_spider_nest';
     public const MAP_ICON_TYPE_PRIORY_BLESSING_OF_THE_SACRED_FLAME   = 'priory_blessing_of_the_sacred_flame';
     public const MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION = 'floodgate_weapons_stockpile_explosion';
+    public const MAP_ICON_TYPE_GATE_OF_THE_SETTING_SUN_BRAZIER       = 'gate_of_the_setting_sun_brazier';
 
     public const ALL = [
         self::MAP_ICON_TYPE_UNKNOWN                   => 1,
@@ -268,9 +269,12 @@ class MapIconType extends CacheModel
 
         self::MAP_ICON_TYPE_PRIORY_BLESSING_OF_THE_SACRED_FLAME   => 102,
         self::MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION => 103,
+
+        self::MAP_ICON_TYPE_GATE_OF_THE_SETTING_SUN_BRAZIER => 104,
     ];
 
-    public function getIconUrlAttribute(): string {
+    public function getIconUrlAttribute(): string
+    {
         return ksgAssetImage(sprintf('mapicon/%s.png', $this->key));
     }
 

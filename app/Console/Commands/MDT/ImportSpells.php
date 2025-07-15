@@ -44,7 +44,6 @@ class ImportSpells extends Command
 
         if ($dungeonKey !== null) {
             $dungeon = Dungeon::where('key', $dungeonKey)->firstOrFail();
-            $dungeon->setRelation('currentMappingVersion', $dungeon->currentMappingVersion()->first());
             $dungeon->setRelation('npcs', $dungeon->npcs()->get());
 
             $dungeons->push($dungeon);
@@ -59,7 +58,6 @@ class ImportSpells extends Command
             }
 
             // Cannot do ->with('npcs') here - it won't load the relationship properly due to orWhere(dungeon_id = -1)
-            $dungeon->setRelation('currentMappingVersion', $dungeon->currentMappingVersion()->first());
             $dungeon->setRelation('npcs', $dungeon->npcs()->get());
 
             $mdtDungeon = new MDTDungeon($cacheService, $coordinatesService, $dungeon);

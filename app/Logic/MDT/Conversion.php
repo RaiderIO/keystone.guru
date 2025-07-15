@@ -337,7 +337,7 @@ class Conversion
      */
     public static function convertWeekToAffixGroup(SeasonService $seasonService, Dungeon $dungeon, int $mdtWeek): ?AffixGroup
     {
-        if (!$dungeon->gameVersion->has_seasons) {
+        if (!$dungeon->hasMappingVersionWithSeasons()) {
             return null;
         }
 

@@ -27,15 +27,12 @@ class NpcFormRequest extends FormRequest
         return [
             'id'                        => 'required',
             'name'                      => 'required',
-            'dungeon_id'                => [Rule::in(array_merge([-1], Dungeon::all('id')->pluck('id')->toArray()))],
+            'dungeon_ids'               => 'array',
+            'dungeon_ids.*'             => Rule::exists('dungeons', 'id'),
             'npc_type_id'               => Rule::exists('npc_types', 'id'),
             'npc_class_id'              => Rule::exists('npc_classes', 'id'),
             'classification_id'         => [Rule::exists('npc_classifications', 'id'), 'required'],
             'aggressiveness'            => Rule::in(Npc::ALL_AGGRESSIVENESS),
-            'base_health'               => [
-                'required',
-                'regex:/^[\d\s,]*$/',
-            ],
             'health_percentage'         => 'int|nullable',
             'level'                     => 'int|nullable',
             'dangerous'                 => 'bool',

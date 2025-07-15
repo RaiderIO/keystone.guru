@@ -11,24 +11,19 @@ class NpcService implements NpcServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function getNpcsForDropdown(Dungeon $dungeon, bool $includeAllDungeonsNpcs = false): Collection
+    public function getNpcsForDropdown(Collection $dungeons): Collection
     {
-        $npcIds = collect([
-            __($dungeon->name) => Npc::whereIn('dungeon_id', [$dungeon->id])
-                ->get(['name', 'id'])
-                ->pluck('name', 'id')
-                ->mapWithKeys(static fn($name, $id) => [$id => sprintf('%s (%d)', $name, $id)]),
-        ]);
+        $npcIds = collect();
 
-        if ($includeAllDungeonsNpcs) {
-            $allDungeonNpcs = collect([
-                __('services.npcservice.all_dungeons') => Npc::whereIn('dungeon_id', [-1])
+        foreach ($dungeons as $dungeon) {
+            $npcIds->push([
+                __($dungeon->name) => Npc::select('npcs.*')
+                    ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+                    ->where('npc_dungeons.dungeon_id', $dungeon->id)
                     ->get(['name', 'id'])
                     ->pluck('name', 'id')
                     ->mapWithKeys(static fn($name, $id) => [$id => sprintf('%s (%d)', $name, $id)]),
             ]);
-
-            $npcIds = $npcIds->merge($allDungeonNpcs);
         }
 
         return $npcIds;

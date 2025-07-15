@@ -1,0 +1,91 @@
+{
+    "id": 307,
+    "release_changelog_id": 314,
+    "version": "v13.6",
+    "title": "Added Mists of Pandaria dungeon mapping",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-07-15T07:22:22+00:00",
+    "updated_at": "2025-07-15T07:22:22+00:00",
+    "changelog": {
+        "id": 314,
+        "release_id": 307,
+        "description": "This release also changes a lot of the internals to make sure that different game versions can be supported next to Retail at the same time.",
+        "changes": [
+            {
+                "release_changelog_id": 314,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2878,
+                "change": "NPC health is now adjustable per game version per npc (required when Retail uses dungeons from older expansions in M+)."
+            },
+            {
+                "release_changelog_id": 314,
+                "release_changelog_category_id": 2,
+                "ticket_id": 2869,
+                "change": "Popular routes for dungeons not part of the current expansion (but part of the current season) can now be viewed again."
+            },
+            {
+                "release_changelog_id": 314,
+                "release_changelog_category_id": 3,
+                "ticket_id": 2879,
+                "change": "There can now be different versions of a dungeon per game version (retail used Temple of the Jade Serpent in M+ in the past, for example, so 2 mapping versions are required)."
+            },
+            {
+                "release_changelog_id": 314,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2649,
+                "change": "Added Stormstout Brewery mapping."
+            },
+            {
+                "release_changelog_id": 314,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2642,
+                "change": "Added Gate of the Setting Sun mapping."
+            },
+            {
+                "release_changelog_id": 314,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2643,
+                "change": "Added Mogu'Shan Palace mapping."
+            },
+            {
+                "release_changelog_id": 314,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2647,
+                "change": "Added Shado-pan Monastery mapping."
+            },
+            {
+                "release_changelog_id": 314,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2648,
+                "change": "Added Siege of Niuzao Temple mapping."
+            },
+            {
+                "release_changelog_id": 314,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2645,
+                "change": "Added Scarlet Monastery (MoP) mapping."
+            },
+            {
+                "release_changelog_id": 314,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2644,
+                "change": "Added Scarlet Halls mapping."
+            },
+            {
+                "release_changelog_id": 314,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2646,
+                "change": "Added Scholomance (MoP) mapping."
+            },
+            {
+                "release_changelog_id": 314,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2876,
+                "change": "Gnomeregan and AQ40 now load their NPCs properly again."
+            }
+        ]
+    }
+}

@@ -3,7 +3,15 @@
 return [
 
     'map_icons' => [
-        'legion'      => [
+        'mop'    => [
+            'gate_of_the_setting_sun' => [
+                'krik_thik_spawn_note' => 'Keystone.guru: Krik\'thik Conscripts only spawn after defeating Commander Ri\'mok',
+            ],
+            'mogu_shan_palace' => [
+                'door_unlocks_after_trial_of_the_king' => 'Door unlocks after defeating the Trial of the King',
+            ]
+        ],
+        'legion' => [
             'court_of_stars'   => [
                 'unlocks_after_patrol_captain_gerdo' => 'Unlocks after killing Patrol Captain Gerdo',
                 'arcane_beacon'                      => 'Arcane Beacon',
@@ -13,7 +21,7 @@ return [
                 'hidden_pack_in_cave' => 'Pack is in a cave below the water behind the waterfall.',
             ],
         ],
-        'sl' => [
+        'sl'     => [
             'de_other_side'         => [
                 'start'                => 'Start',
                 'graveyard_ardenweald' => 'Activates after entering Ardenweald',
@@ -85,14 +93,14 @@ return [
                 'exit'                 => 'Exit',
             ],
         ],
-        'tww' => [
-            'the_stonevault' => [
+        'tww'    => [
+            'the_stonevault'             => [
                 'imbued_iron_energy' => 'Warriors, Dwarves, Blacksmiths (25): Energy trapped inside the Imbued Iron Bar releases, increasing the Versatility of all players within 20 yards by 10% for 10 mins.',
             ],
             'priory_of_the_sacred_flame' => [
-                'miniboss_explanation' => 'Keystone.guru: When the mini bosses are killed together with the boss, they do not give any count. When summoned by another mini boss, they DO give count.'
-            ]
-        ]
+                'miniboss_explanation' => 'Keystone.guru: When the mini bosses are killed together with the boss, they do not give any count. When summoned by another mini boss, they DO give count.',
+            ],
+        ],
     ],
 
 ];

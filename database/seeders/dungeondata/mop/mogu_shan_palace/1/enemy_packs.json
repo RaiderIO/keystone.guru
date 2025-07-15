@@ -1,1 +1,98 @@
-[]
+[
+    {
+        "id": 14994,
+        "mapping_version_id": 543,
+        "floor_id": 342,
+        "group": 1,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-46.7186,\"lng\":152.6083},{\"lat\":-55.4017,\"lng\":154.0187},{\"lat\":-55.3475,\"lng\":162.6439},{\"lat\":-46.6101,\"lng\":161.3962}]"
+    },
+    {
+        "id": 14995,
+        "mapping_version_id": 543,
+        "floor_id": 342,
+        "group": 2,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-62.9997,\"lng\":149.57},{\"lat\":-69.3492,\"lng\":150.1125},{\"lat\":-68.2638,\"lng\":159.9854},{\"lat\":-62.2942,\"lng\":160.1481}]"
+    },
+    {
+        "id": 14996,
+        "mapping_version_id": 543,
+        "floor_id": 342,
+        "group": 3,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-26.2619,\"lng\":150.0579},{\"lat\":-37.1158,\"lng\":150.3291},{\"lat\":-37.0615,\"lng\":159.1713},{\"lat\":-25.9906,\"lng\":158.7916}]"
+    },
+    {
+        "id": 14997,
+        "mapping_version_id": 543,
+        "floor_id": 342,
+        "group": 4,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-35.3259,\"lng\":160.528},{\"lat\":-44.6603,\"lng\":160.311},{\"lat\":-49.1646,\"lng\":169.8584},{\"lat\":-39.7217,\"lng\":176.368}]"
+    },
+    {
+        "id": 14998,
+        "mapping_version_id": 543,
+        "floor_id": 342,
+        "group": 5,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-44.931,\"lng\":184.669},{\"lat\":-59.041,\"lng\":185.6454},{\"lat\":-58.6069,\"lng\":195.6268},{\"lat\":-44.3883,\"lng\":194.2164}]"
+    },
+    {
+        "id": 14999,
+        "mapping_version_id": 543,
+        "floor_id": 342,
+        "group": 6,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-101.4317,\"lng\":146.312},{\"lat\":-109.7755,\"lng\":146.312},{\"lat\":-110.1232,\"lng\":163.6181},{\"lat\":-101.0841,\"lng\":163.4096}]"
+    },
+    {
+        "id": 15000,
+        "mapping_version_id": 543,
+        "floor_id": 342,
+        "group": 7,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-135.6419,\"lng\":148.2795},{\"lat\":-146.4435,\"lng\":148.334},{\"lat\":-146.6617,\"lng\":161.5304},{\"lat\":-136.3511,\"lng\":161.0396}]"
+    },
+    {
+        "id": 15001,
+        "mapping_version_id": 543,
+        "floor_id": 342,
+        "group": 8,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-173.4902,\"lng\":140.4796},{\"lat\":-198.9126,\"lng\":140.6438},{\"lat\":-198.2106,\"lng\":169.7754},{\"lat\":-174.1044,\"lng\":168.8043}]"
+    }
+]

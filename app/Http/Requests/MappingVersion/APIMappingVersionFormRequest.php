@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\MappingVersion;
 
+use App\Models\GameVersion\GameVersion;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class APIMappingVersionFormRequest extends FormRequest
 {
@@ -20,6 +22,7 @@ class APIMappingVersionFormRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'game_version_id'                 => Rule::exists(GameVersion::class, 'id'),
             'enemy_forces_required'           => 'int',
             'enemy_forces_required_teeming'   => 'int|nullable',
             'enemy_forces_shrouded'           => 'int|nullable',

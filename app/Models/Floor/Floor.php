@@ -176,37 +176,37 @@ class Floor extends CacheModel implements MappingModelInterface
     public function enemies(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(Enemy::class)
-            ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
+            ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     public function enemypacks(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPack::class)
-            ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
+            ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     public function enemypatrols(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPatrol::class)
-            ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
+            ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     public function mapIcons(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MapIcon::class)->whereNull('dungeon_route_id')
-            ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
+            ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     public function mountableAreas(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MountableArea::class)
-            ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
+            ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     public function dungeonFloorSwitchMarkers(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class)
-            ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->currentMappingVersion)->id);
+            ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
     }
 
     public function enemiesForExport(): HasMany
@@ -326,13 +326,18 @@ class Floor extends CacheModel implements MappingModelInterface
                 static fn(Builder $builder) => $builder->where('facade', 1)->orWhere('default', 1)
             )->when(
                 !$useFacade,
-                static fn(Builder $builder) => $builder->where('facade', 0)->where(static function (Builder $builder) use ($floorIndex) {
-                    // Either try to resolve the actual floor, or revert to the default if not found
-                    $builder->where('index', $floorIndex)
-                        ->orWhere('default', 1);
-                })
+                static fn(Builder $builder) => $builder->where('facade', 0)
+                    ->where(static function (Builder $builder) use ($floorIndex) {
+                        // Either try to resolve the actual floor, or revert to the default if not found
+                        $builder->where('index', $floorIndex)
+                            ->orWhere('default', 1);
+                    })
             )
-        )->orderByDesc($useFacade ? 'facade' : 'index')
+        )->when($useFacade, static fn(Builder $builder) => $builder->orderByDesc('facade'))
+            ->when(!$useFacade, static fn(Builder $builder) => $builder
+                ->orderByRaw('(`index` = ?) DESC', [$floorIndex]) // preferred match first
+                ->orderByDesc('default') // fallback if index not found
+            )
             ->limit(1);
     }
 

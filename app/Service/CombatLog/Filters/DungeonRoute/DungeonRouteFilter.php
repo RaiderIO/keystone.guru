@@ -49,7 +49,7 @@ class DungeonRouteFilter implements CombatLogParserInterface
                 );
             }
 
-            $currentMappingVersion = $dungeon->currentMappingVersion;
+            $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
             $this->dungeonRoute = DungeonRoute::create([
                 'public_key'         => DungeonRoute::generateRandomPublicKey(),

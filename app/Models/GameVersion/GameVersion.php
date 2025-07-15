@@ -48,6 +48,7 @@ class GameVersion extends CacheModel
     public const GAME_VERSION_CLASSIC_ERA = 'classic';
     public const GAME_VERSION_BETA        = 'beta';
     public const GAME_VERSION_CATA        = 'cata';
+    public const GAME_VERSION_MOP         = 'mop';
 
     public const ALL = [
         self::GAME_VERSION_RETAIL      => 1,
@@ -55,6 +56,7 @@ class GameVersion extends CacheModel
         self::GAME_VERSION_WRATH       => 3,
         self::GAME_VERSION_BETA        => 4,
         self::GAME_VERSION_CATA        => 5,
+        self::GAME_VERSION_MOP         => 6,
     ];
 
     /**
@@ -86,6 +88,11 @@ class GameVersion extends CacheModel
             }
         }
 
+        return self::getDefaultGameVersion();
+    }
+
+    public static function getDefaultGameVersion(): GameVersion
+    {
         /** @var CacheServiceInterface $cacheService */
         $cacheService = App::make(CacheServiceInterface::class);
 

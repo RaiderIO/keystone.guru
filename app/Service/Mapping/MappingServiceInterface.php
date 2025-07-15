@@ -3,6 +3,7 @@
 namespace App\Service\Mapping;
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Support\Collection;
 
@@ -23,7 +24,9 @@ interface MappingServiceInterface
      */
     public function getDungeonsWithUnmergedMappingChanges(): Collection;
 
-    public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon): MappingVersion;
+    public function createNewBareMappingVersion(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion;
+
+    public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion;
 
     /**
      * Creates a new mapping version for a dungeon.
@@ -48,5 +51,5 @@ interface MappingServiceInterface
      *
      * @return void
      */
-    public function getMappingVersionOrNew(Dungeon $dungeon): MappingVersion;
+    public function getMappingVersionOrNew(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion;
 }

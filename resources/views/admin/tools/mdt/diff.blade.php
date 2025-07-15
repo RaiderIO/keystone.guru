@@ -1,6 +1,8 @@
 <?php
 
 use App\Logic\MDT\Exception\ImportWarning;
+use App\Models\Dungeon;
+use App\Models\Npc\Npc;
 use Illuminate\Support\Collection;
 
 /**
@@ -28,6 +30,7 @@ use Illuminate\Support\Collection;
                     dataType: 'json',
                     data: {
                         category: $this.data('category'),
+                        dungeon_id: $this.data('dungeon_id'),
                         npc_id: $this.data('id'),
                         value: $this.data('new')
                     },
@@ -76,13 +79,14 @@ use Illuminate\Support\Collection;
                 </tr>
                 @foreach($category as $importWarning)
                         <?php /** @var ImportWarning $importWarning */
+                        /** @var $data array{old: ?string, new: ?string, npc: ?Npc} */
                         $data   = ($importWarning->getData());
                         $mdtNpc = $data['mdt_npc'];
 
                         $old         = $data['old'] ?? '';
                         $new         = $data['new'] ?? '';
                         $count       = isset($data['npc']) ? $data['npc']->enemies->count() : 0;
-                        $dungeonName = isset($data['npc']) && isset($data['npc']->dungeon) ? $data['npc']->dungeon->name : __('view_admin.tools.mdt.diff.no_dungeon_name_found');
+                        $dungeonName = isset($data['npc']) && $data['npc']->dungeons->isNotEmpty() ? $data['npc']->dungeons->first()->name : __('view_admin.tools.mdt.diff.no_dungeon_name_found');
                         ?>
                     <tr id="{{ $key . '_' . $mdtNpc->id }}">
                         <td>
@@ -102,8 +106,14 @@ use Illuminate\Support\Collection;
                         </td>
                         <td>
                             @if( $key === 'mismatched_health' || $key === 'mismatched_enemy_forces' || $key === 'mismatched_enemy_forces_teeming' || $key === 'mismatched_enemy_type')
+                                    <?php
+                                    /** @var Dungeon $dungeon */
+                                    $dungeon = $data['npc']->dungeons->first();
+                                    ?>
                                 <button class="btn btn-primary apply_btn"
-                                        data-id="{{ $mdtNpc->id }}" data-category="{{ $key }}"
+                                        data-id="{{ $mdtNpc->id }}"
+                                        data-dungeon_id="{{ $dungeon->id }}"
+                                        data-category="{{ $key }}"
                                         data-new="{{ $new }}">
                                     {{ __('view_admin.tools.mdt.diff.apply_mdt_kg') }}
                                 </button>

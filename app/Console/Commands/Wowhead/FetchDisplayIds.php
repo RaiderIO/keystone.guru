@@ -39,9 +39,7 @@ class FetchDisplayIds extends Command
         }
 
         foreach ($dungeon->npcs as $npc) {
-            if ($npc->dungeon_id === -1) {
-                continue;
-            } else if ($npc->display_id !== null) {
+            if ($npc->display_id !== null) {
                 $this->info(sprintf('Skipping already set display ID for %s (%d)', $npc->name, $npc->id));
 
                 continue;
@@ -49,18 +47,21 @@ class FetchDisplayIds extends Command
 
             $this->info(sprintf('Fetching display ID for %s (%d)', $npc->name, $npc->id));
 
-            $displayId = $wowheadService->getNpcDisplayId($dungeon->gameVersion, $npc);
+            foreach ($dungeon->getMappingVersionGameVersions() as $gameVersion) {
+                // Don't DDOS
+                sleep(1);
 
-            if ($displayId === null) {
-                $this->warn('- Unable to find display ID for npc! Is the game version correct?');
-            } else {
-                $npc->update(['display_id' => $displayId]);
+                $displayId = $wowheadService->getNpcDisplayId($gameVersion, $npc);
 
-                $this->info(sprintf('- %d', $displayId));
+                if ($displayId === null) {
+                    $this->warn('- Unable to find display ID for npc! Is the game version correct?');
+                } else {
+                    $npc->update(['display_id' => $displayId]);
+
+                    $this->info(sprintf('- %d', $displayId));
+                    break;
+                }
             }
-
-            // Don't DDOS
-            sleep(1);
         }
     }
 }

@@ -1,18 +1,14 @@
 <?php
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
+use Illuminate\Support\Collection;
 
-/** @var Dungeon $dungeon */
-
-$mappingVersionsSelect = $dungeon->mappingVersions
-    ->mapWithKeys(static function (MappingVersion $mappingVersion) {
-        if ($mappingVersion->merged) {
-            return [$mappingVersion->id => sprintf(__('Version %d (readonly)'), $mappingVersion->version)];
-        } else {
-            return [$mappingVersion->id => sprintf(__('Version %d'), $mappingVersion->version)];
-        }
-    });
+/**
+ * @var Dungeon                 $dungeon
+ * @var Collection<GameVersion> $allGameVersions
+ */
 ?>
 
 @section('scripts')
@@ -24,24 +20,27 @@ $mappingVersionsSelect = $dungeon->mappingVersions
         });
     </script>
 @endsection
-
-<h4>{{ __('view_admin.dungeon.edit.floor_management.title') }}</h4>
-<div class="float-right">
-    <a href="{{ route('admin.floor.new', ['dungeon' => $dungeon->slug]) }}"
-       class="btn btn-success text-white pull-right" role="button">
-        <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.floor_management.add_floor') }}
-    </a>
+<div class="row">
+    <div class="col">
+        <h4>{{ __('view_admin.dungeon.edit.floor_management.title') }}</h4>
+    </div>
+    <div class="col-auto">
+        <a href="{{ route('admin.floor.new', ['dungeon' => $dungeon->slug]) }}"
+           class="btn btn-success text-white pull-right" role="button">
+            <i class="fas fa-plus"></i> {{ __('view_admin.dungeon.edit.floor_management.add_floor') }}
+        </a>
+    </div>
 </div>
 
 <table id="admin_dungeon_floor_table" class="tablesorter default_table table-striped">
     <thead>
     <tr>
-        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_active') }}</th>
-        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_facade') }}</th>
-        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_id') }}</th>
-        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header_index') }}</th>
-        <th width="20%">{{ __('view_admin.dungeon.edit.floor_management.table_header_name') }}</th>
-        <th width="40%">{{ __('view_admin.dungeon.edit.floor_management.table_header_actions') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header.active') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header.facade') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header.id') }}</th>
+        <th width="10%">{{ __('view_admin.dungeon.edit.floor_management.table_header.index') }}</th>
+        <th width="20%">{{ __('view_admin.dungeon.edit.floor_management.table_header.name') }}</th>
+        <th width="40%">{{ __('view_admin.dungeon.edit.floor_management.table_header.actions') }}</th>
     </tr>
     </thead>
 
@@ -68,7 +67,7 @@ $mappingVersionsSelect = $dungeon->mappingVersions
                             </a>
                         </div>
                         <div class="col pr-0">
-                            {!! Form::select('mapping_version', $mappingVersionsSelect, null, ['class' => 'form-control selectpicker']) !!}
+                            @include('common.mappingversion.select', ['dungeon' => $dungeon])
                         </div>
                         <div class="col-auto pl-1">
                             {!! Form::submit(__('view_admin.dungeon.edit.floor_management.floor_edit_edit_mapping'), ['class' => 'form-control']) !!}
