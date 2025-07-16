@@ -629,7 +629,7 @@ return [
     ],
     'user'         => [
         'name' => [
-            'avatar_title' => 'Аватар',
+            'avatar_alt' => 'Аватар',
         ],
     ],
 

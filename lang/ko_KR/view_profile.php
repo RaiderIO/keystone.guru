@@ -11,7 +11,7 @@ return [
         'reports'                 => '',
         'menu_title'              => '',
         'avatar'                  => '',
-        'avatar_title'            => '',
+        'avatar_alt'            => '',
         'username'                => '',
         'username_title'          => '',
         'email'                   => '',

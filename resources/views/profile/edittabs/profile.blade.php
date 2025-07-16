@@ -28,7 +28,7 @@ use Illuminate\Support\Collection;
     @if(isset($user->iconfile))
         <div class="form-group">
             {{__('view_profile.edit.avatar')}}: <img src="{{ $user->iconfile->getURL() }}"
-                                                     alt="{{ __('view_profile.edit.avatar_title') }}"
+                                                     alt="{{ __('view_profile.edit.avatar_alt') }}"
                                                      style="max-width: 48px"/>
         </div>
     @endif

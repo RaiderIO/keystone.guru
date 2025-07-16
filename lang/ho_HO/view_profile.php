@@ -11,7 +11,7 @@ return [
         'reports'                 => 'Hodor',
         'menu_title'              => 'Hodor',
         'avatar'                  => 'Hodor',
-        'avatar_title'            => 'Hodor',
+        'avatar_alt'            => 'Hodor',
         'username'                => 'Hodor',
         'username_title'          => 'Hodor',
         'email'                   => 'Hodor',
