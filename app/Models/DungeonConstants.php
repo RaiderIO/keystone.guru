@@ -138,7 +138,7 @@ trait DungeonConstants
     public const DUNGEON_SHADO_PAN_MONASTERY        = 'shado_pan_monastery'; // shadowpanhideout
     public const DUNGEON_SIEGE_OF_NIUZAO_TEMPLE     = 'siege_of_niu_zao_temple';
     public const DUNGEON_STORMSTOUT_BREWERY         = 'stormstout_brewery';
-    public const DUNGEON_TEMPLE_OF_THE_JADE_SERPENT = 'templeofthejadeserpent';
+    public const DUNGEON_TEMPLE_OF_THE_JADE_SERPENT = 'templeofthejadeserpent'; // easttemple
 
     // Warlords of Draenor
     public const DUNGEON_AUCHINDOUN                = 'auchindoun';
