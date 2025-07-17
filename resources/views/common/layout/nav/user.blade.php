@@ -19,7 +19,7 @@ $user = Auth::user();
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            @include('common.user.name', ['user' => $user])
+            @include('common.user.name', ['user' => $user, 'showRaiderIOStaffImage' => false])
         </a>
         <div class="dropdown-menu text-center text-xl-left" aria-labelledby="navbarDropdown">
             @if($user->hasRole(Role::ROLE_ADMIN))

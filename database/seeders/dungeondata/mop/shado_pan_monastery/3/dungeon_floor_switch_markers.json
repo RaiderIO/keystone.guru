@@ -5,9 +5,20 @@
         "floor_id": 355,
         "source_floor_id": null,
         "target_floor_id": 353,
-        "linked_dungeon_floor_switch_marker_id": 2050,
+        "linked_dungeon_floor_switch_marker_id": 2066,
         "direction": null,
         "lat": -210.08,
         "lng": 296.46
+    },
+    {
+        "id": 2064,
+        "mapping_version_id": 544,
+        "floor_id": 355,
+        "source_floor_id": null,
+        "target_floor_id": 353,
+        "linked_dungeon_floor_switch_marker_id": 2066,
+        "direction": "left",
+        "lat": -36.34,
+        "lng": 51.21
     }
 ]

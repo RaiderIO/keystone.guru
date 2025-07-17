@@ -7,11 +7,13 @@ use App\Models\User;
  * @var User    $user
  * @var boolean $link
  * @var boolean $showAnonIcon
+ * @var boolean $showRaiderIOStaffImage
  */
 
-$link            ??= false;
-$showAnonIcon    ??= true;
-$isRaiderIOStaff = isset($user) && $user->hasRole(Role::ROLE_ADMIN);
+$link                   ??= false;
+$showAnonIcon           ??= true;
+$showRaiderIOStaffImage ??= true;
+$isRaiderIOStaff        = $showRaiderIOStaffImage && isset($user) && $user->hasRole(Role::ROLE_ADMIN);
 ?>
 
 @isset($user)
