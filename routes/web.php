@@ -144,6 +144,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         });
     });
     // Explore dungeons (just show me the mapping but don't allow me to create routes)
+    Route::prefix('heatmaps')->group(static function () {
+        Route::get('/', (new DungeonExploreController())->getHeatmaps(...))->name('dungeon.explore.heatmaps.list');
+    });
+
     Route::prefix('explore')->group(static function () {
         Route::get('/', (new DungeonExploreController())->get(...))->name('dungeon.explore.list');
         Route::get('/retail/mechagon-workshop', (new DungeonExploreController())->viewDungeonFloorMechagonWorkshopCorrection(...))->name('dungeon.explore.gameversion.view.mechagonworkshopcorrection');

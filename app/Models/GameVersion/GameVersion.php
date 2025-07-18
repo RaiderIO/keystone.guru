@@ -3,20 +3,29 @@
 namespace App\Models\GameVersion;
 
 use App\Models\CacheModel;
+use App\Models\Expansion;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\SeederModel;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * @property int    $id
- * @property string $key
- * @property string $name
- * @property string $description
- * @property bool   $has_seasons
- * @property bool   $active
+ * @property int                        $id
+ * @property int                        $expansion_id The expansion that this game version focussed on.
+ * @property string                     $key
+ * @property string                     $name
+ * @property string                     $description
+ * @property bool                       $has_seasons
+ * @property bool                       $active
+ *
+ * @property Expansion                  $expansion
+ * @property Collection<MappingVersion> $mappingVersions
  *
  * @method static Builder active()
  */
@@ -37,6 +46,10 @@ class GameVersion extends CacheModel
         'description',
         'has_seasons',
         'active',
+    ];
+
+    protected $with = [
+        'expansion',
     ];
 
     public $timestamps = false;
@@ -73,6 +86,21 @@ class GameVersion extends CacheModel
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('game_versions.active', 1);
+    }
+
+    public function expansion(): BelongsTo
+    {
+        return $this->belongsTo(Expansion::class);
+    }
+
+    public function mappingVersions(): HasMany
+    {
+        return $this->hasMany(MappingVersion::class);
+    }
+
+    public function getDungeonsWithHeatmapsEnabled(): Collection
+    {
+        return $this->mappingVersions->filter(fn(MappingVersion $mappingVersion) => $mappingVersion->dungeon !== null && $mappingVersion->dungeon->heatmap_enabled);
     }
 
     /**

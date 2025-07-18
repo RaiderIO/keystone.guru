@@ -71,7 +71,7 @@ class DungeonController extends Controller
             }
 
             if ($availableKeysForExpansion->isNotEmpty()) {
-                $availableKeysSelect->put(Expansion::ALL[$expansion], $availableKeysForExpansion);
+                $availableKeysSelect->put(__(sprintf('expansions.%s.name', $expansion)), $availableKeysForExpansion);
             }
         }
 

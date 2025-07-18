@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use Illuminate\Database\Seeder;
 
@@ -12,21 +13,60 @@ class GameVersionsSeeder extends Seeder implements TableSeederInterface
      */
     public function run(): void
     {
-        $gameVersionAttributes = [];
-
-        foreach (GameVersion::ALL as $key => $id) {
-            $gameVersionAttributes[] = [
-                'id'          => $id,
-                'key'         => $key,
-                'name'        => sprintf('gameversions.%s.name', $key),
-                'description' => sprintf('gameversions.%s.description', $key),
-                'has_seasons' => $key === GameVersion::GAME_VERSION_RETAIL,
-                'active'      => $key !== GameVersion::GAME_VERSION_BETA,
-            ];
-        }
+        $gameVersionAttributes = [
+            [
+                'expansion_id' => Expansion::ALL[Expansion::EXPANSION_TWW],
+                'key'          => GameVersion::GAME_VERSION_RETAIL,
+                'name'         => 'gameversions.retail.name',
+                'description'  => 'gameversions.retail.description',
+                'has_seasons'  => true,
+                'active'       => true,
+            ],
+            [
+                'expansion_id' => Expansion::ALL[Expansion::EXPANSION_CLASSIC],
+                'key'          => GameVersion::GAME_VERSION_CLASSIC_ERA,
+                'name'         => 'gameversions.classic.name',
+                'description'  => 'gameversions.classic.description',
+                'has_seasons'  => false,
+                'active'       => true,
+            ],
+            [
+                'expansion_id' => Expansion::ALL[Expansion::EXPANSION_WOTLK],
+                'key'          => GameVersion::GAME_VERSION_WRATH,
+                'name'         => 'gameversions.wotlk.name',
+                'description'  => 'gameversions.wotlk.description',
+                'has_seasons'  => false,
+                'active'       => true,
+            ],
+            [
+                'expansion_id' => Expansion::ALL[Expansion::EXPANSION_TWW],
+                'key'          => GameVersion::GAME_VERSION_BETA,
+                'name'         => 'gameversions.beta.name',
+                'description'  => 'gameversions.beta.description',
+                'has_seasons'  => false,
+                'active'       => false,
+            ],
+            [
+                'expansion_id' => Expansion::ALL[Expansion::EXPANSION_CATACLYSM],
+                'key'          => GameVersion::GAME_VERSION_CATA,
+                'name'         => 'gameversions.cata.name',
+                'description'  => 'gameversions.cata.description',
+                'has_seasons'  => false,
+                'active'       => true,
+            ],
+            [
+                'expansion_id' => Expansion::ALL[Expansion::EXPANSION_MOP],
+                'key'          => GameVersion::GAME_VERSION_MOP,
+                'name'         => 'gameversions.mop.name',
+                'description'  => 'gameversions.mop.description',
+                'has_seasons'  => false,
+                'active'       => true,
+            ],
+        ];
 
         GameVersion::from(DatabaseSeeder::getTempTableName(GameVersion::class))->insert($gameVersionAttributes);
     }
+
 
     public static function getAffectedModelClasses(): array
     {

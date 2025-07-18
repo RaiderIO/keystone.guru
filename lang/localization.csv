@@ -2027,7 +2027,7 @@ view_common,layout.footer.all_rights_reserved,©:date :nameAndVersion - All Righ
 view_common,layout.header.toggle_navigation_title,Toggle navigation,,,,,,,Включить навигацию,,
 view_common,layout.header.create_route,Create route,,,,,,,Создать маршрут,,
 view_common,layout.header.search,Search,,,,,,,Поиск,,
-view_common,layout.header.expansion_routes,Expansion routes,,,,,,,,,
+view_common,layout.header.browse_by_expansion,Expansion routes,,,,,,,,,
 view_common,layout.header.routes,:expansion,,,,,,,:expansion,,
 view_common,layout.header.explore,Explore,,,,,,,,,
 view_common,layout.header.affixes,Affixes,,,,,,,Аффиксы,,

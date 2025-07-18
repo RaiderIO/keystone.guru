@@ -137,7 +137,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
             $npcSpellsAttributes          = [];
             $npcDungeonsAttributes        = [];
             $affectedNpcIds               = [];
-            $gameVersionRetail = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+            $gameVersionRetail            = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
 
             /** @var Npc|null $npc */
             foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {

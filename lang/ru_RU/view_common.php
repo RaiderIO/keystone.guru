@@ -235,7 +235,7 @@ return [
             'toggle_navigation_title' => 'Включить навигацию',
             'create_route'            => 'Создать маршрут',
             'search'                  => 'Поиск',
-            'expansion_routes'        => '',
+            'browse_by_expansion'        => '',
             'routes'                  => ':expansion',
             'explore'                 => '',
             'affixes'                 => 'Аффиксы',

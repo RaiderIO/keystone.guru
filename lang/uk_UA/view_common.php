@@ -228,7 +228,7 @@ return [
             'toggle_navigation_title' => '',
             'create_route'            => '',
             'search'                  => '',
-            'expansion_routes'        => '',
+            'browse_by_expansion'        => '',
             'routes'                  => '',
             'explore'                 => '',
             'affixes'                 => '',

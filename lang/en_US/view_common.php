@@ -244,8 +244,10 @@ return [
             'toggle_navigation_title' => 'Toggle navigation',
             'create_route'            => 'Create route',
             'search'                  => 'Search',
-            'expansion_routes'        => 'Expansion routes',
+            'browse_by_expansion'     => 'Routes by expansion',
             'routes'                  => ':expansion',
+            'browse_routes'           => 'Browse routes',
+            'heatmaps'                => 'Heatmaps',
             'explore'                 => 'Explore',
             'affixes'                 => 'Affixes',
             'new'                     => 'NEW',
@@ -664,7 +666,7 @@ return [
     'user'           => [
         'name' => [
             'avatar_alt' => 'Avatar',
-            'raider_io'    => 'Raider.IO',
+            'raider_io'  => 'Raider.IO',
         ],
     ],
 
