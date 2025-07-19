@@ -24,11 +24,6 @@ use Laravel\Pennant\Feature;
 class DungeonExploreController extends Controller
 {
 
-    public function getHeatmaps(Request $request): RedirectResponse
-    {
-        return redirect()->route('dungeon.explore.list');
-    }
-
     public function get(
         Request                     $request,
         GameVersionServiceInterface $gameVersionService

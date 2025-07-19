@@ -20,7 +20,8 @@ class GameVersionService implements GameVersionServiceInterface
         $user?->update(['game_version_id' => $gameVersion->id]);
 
         // Unit tests and artisan commands don't like this
-        if (!app()->runningInConsole()) {
+        // Nor do we want to keep setting the cookie if it hasn't changed
+        if (!app()->runningInConsole() && ($_COOKIE[self::GAME_VERSION_COOKIE] ?? null) !== $gameVersion->key) {
             // Set the new cookie
             $this->cookieService->setCookie(self::GAME_VERSION_COOKIE, $gameVersion->key);
         }

@@ -689,7 +689,7 @@ class AjaxDungeonRouteController extends Controller
     public function data(Request $request, string $publickey)
     {
         // Init the fields we should get for this request
-        $fields = $request->get('fields', ['enemy,enemypack,enemypatrol,mapicon,dungeonfloorswitchmarker']);
+        $fields = $request->get('fields', 'enemy,enemypack,enemypatrol,mapicon,dungeonfloorswitchmarker');
         $fields = explode(',', (string)$fields);
 
         // Show enemies or raw data when fetching enemy packs

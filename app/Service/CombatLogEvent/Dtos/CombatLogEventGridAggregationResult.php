@@ -3,8 +3,8 @@
 namespace App\Service\CombatLogEvent\Dtos;
 
 use App\Logic\Structs\IngameXY;
-use App\Logic\Utils\Stopwatch;
 use App\Models\Floor\Floor;
+use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Contracts\Support\Arrayable;
@@ -16,6 +16,8 @@ use Illuminate\Support\Collection;
 class CombatLogEventGridAggregationResult implements Arrayable
 {
     private bool $useFacade;
+
+    private ?MappingVersion $currentMappingVersion = null;
 
     public function __construct(
         private readonly CoordinatesServiceInterface $coordinatesService,
@@ -141,10 +143,13 @@ class CombatLogEventGridAggregationResult implements Arrayable
     {
         $dungeon = $this->combatLogEventFilter->getDungeon();
 
+        // Just a little cache to avoid recalculating the mapping version every time
+        $this->currentMappingVersion ??= $dungeon->getCurrentMappingVersion();
+
         $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation($ingameXY);
 
         $latLngArray = ($this->useFacade ?
-            $this->coordinatesService->convertMapLocationToFacadeMapLocation($dungeon->getCurrentMappingVersion(), $latLng) :
+            $this->coordinatesService->convertMapLocationToFacadeMapLocation($this->currentMappingVersion, $latLng) :
             $latLng)->toArray();
 
         // Just limit the amount of data going out
