@@ -235,7 +235,7 @@ return [
             'toggle_navigation_title' => 'Hodor',
             'create_route'            => 'Hodor',
             'search'                  => 'Hodor',
-            'expansion_routes'        => 'Hodor',
+            'browse_by_expansion'        => 'Hodor',
             'routes'                  => 'Hodor',
             'explore'                 => 'Hodor',
             'affixes'                 => 'Hodor',
@@ -629,7 +629,7 @@ return [
     ],
     'user'         => [
         'name' => [
-            'avatar_title' => 'Hodor',
+            'avatar_alt' => 'Hodor',
         ],
     ],
 

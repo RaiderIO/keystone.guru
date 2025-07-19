@@ -11,7 +11,7 @@ return [
         'reports'                 => 'Reports',
         'menu_title'              => '%s\'s profile',
         'avatar'                  => 'Avatar',
-        'avatar_title'            => 'User avatar',
+        'avatar_alt'            => 'User avatar',
         'username'                => 'Username',
         'username_title'          => 'Since you logged in using an external Authentication service, you may change your username once.',
         'email'                   => 'Email',

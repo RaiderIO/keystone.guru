@@ -4,7 +4,6 @@ use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
 
 /**
- * @var boolean     $showRunCountPerDungeon
  * @var GameVersion $gameVersion
  */
 ?>
@@ -17,15 +16,24 @@ use App\Models\GameVersion\GameVersion;
 @section('header-title', __('view_dungeon.explore.gameversion.list.header'))
 
 @section('content')
+
+    <div class="row form-group">
+        <div class="col">
+            <p>
+                {{ __('view_dungeon.explore.gameversion.list.description') }}
+            </p>
+        </div>
+    </div>
+
     @include('common.dungeon.gridtabs', [
         'id' => 'explore_dungeon',
         'tabsId' => 'explore_dungeon_select_tabs',
         'route' => 'dungeon.explore.gameversion.view',
         'routeParams' => ['gameVersion' => $gameVersion],
-        'subtextFn' => function(Dungeon $dungeon) use ($showRunCountPerDungeon) {
+        'subtextFn' => function(Dungeon $dungeon) {
             $result = '';
 
-            if( $showRunCountPerDungeon && $dungeon->heatmap_enabled ) {
+            if( $dungeon->heatmap_enabled ) {
                 echo '<div class="row no-gutters">
                     <div class="col">
                     </div>

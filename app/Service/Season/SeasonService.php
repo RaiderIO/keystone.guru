@@ -159,7 +159,7 @@ class SeasonService implements SeasonServiceInterface
     {
         $season = $this->getSeasonAt($date, $expansion, $region);
         // There's no season active at the given time!
-        if ($season === null) {
+        if ($season === null || $season->affix_group_count <= 0) {
             return null;
         }
 

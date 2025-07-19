@@ -17,6 +17,7 @@ $dungeons ??= $expansion->dungeonsAndRaids()->active()->get();
 $colCount = 4;
 $rowCount = (int)ceil($dungeons->count() / $colCount);
 
+$test       ??= false;
 $names      ??= true;
 $links      ??= collect();
 $route      ??= null;
@@ -32,7 +33,7 @@ for( $i = 0; $i < $rowCount; ++$i ) { ?>
         if( $dungeons->has($index) ){
             /** @var Dungeon $dungeon */
             $dungeon = $dungeons->get($index);
-            $link = $links->where('dungeon', $dungeon->key)->first();
+            $link = $links->firstWhere('dungeon', $dungeon->key);
             ?>
             <div
                 class="grid_dungeon col-lg-{{ 12 / $colCount }} col-{{ 12 / ($colCount / 2) }} p-2 {{$selectable ? 'selectable' : ''}}"

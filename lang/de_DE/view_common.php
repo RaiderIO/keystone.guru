@@ -235,7 +235,7 @@ return [
             'toggle_navigation_title' => '',
             'create_route'            => '',
             'search'                  => '',
-            'expansion_routes'        => '',
+            'browse_by_expansion'        => '',
             'routes'                  => '',
             'explore'                 => '',
             'affixes'                 => '',
@@ -629,7 +629,7 @@ return [
     ],
     'user'         => [
         'name' => [
-            'avatar_title' => '',
+            'avatar_alt' => '',
         ],
     ],
 

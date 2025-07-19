@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\GameVersion\GameVersion;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Timewalking\TimewalkingEvent;
 use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
@@ -78,19 +79,19 @@ class Expansion extends CacheModel
     public const EXPANSION_TLT          = 'tlt';
 
     public const ALL = [
-        self::EXPANSION_CLASSIC      => 'Classic',
-        self::EXPANSION_TBC          => 'The Burning Crusade',
-        self::EXPANSION_WOTLK        => 'Wrath of the Lich King',
-        self::EXPANSION_CATACLYSM    => 'Cataclysm',
-        self::EXPANSION_MOP          => 'Mists of Pandaria',
-        self::EXPANSION_WOD          => 'Warlords of Draenor',
-        self::EXPANSION_LEGION       => 'Legion',
-        self::EXPANSION_BFA          => 'Battle for Azeroth',
-        self::EXPANSION_SHADOWLANDS  => 'Shadowlands',
-        self::EXPANSION_DRAGONFLIGHT => 'Dragonflight',
-        self::EXPANSION_TWW          => 'The War Within',
-        self::EXPANSION_MIDNIGHT     => 'Midnight',
-        self::EXPANSION_TLT          => 'The Last Titan',
+        self::EXPANSION_CLASSIC      => 4,
+        self::EXPANSION_TBC          => 5,
+        self::EXPANSION_WOTLK        => 6,
+        self::EXPANSION_CATACLYSM    => 7,
+        self::EXPANSION_MOP          => 8,
+        self::EXPANSION_WOD          => 9,
+        self::EXPANSION_LEGION       => 1,
+        self::EXPANSION_BFA          => 2,
+        self::EXPANSION_SHADOWLANDS  => 3,
+        self::EXPANSION_DRAGONFLIGHT => 10,
+        self::EXPANSION_TWW          => 11,
+        self::EXPANSION_MIDNIGHT     => 12,
+        self::EXPANSION_TLT          => 13,
     ];
 
     private ?Collection $currentSeasonCache = null;
@@ -204,7 +205,7 @@ class Expansion extends CacheModel
         return $this->timewalkingEvent instanceof TimewalkingEvent;
     }
 
-    public function hasRaidForGameVersion(GameVersion $gameVersion): bool
+    public function hasRaidForGameVersion(GameVersion $gameVersion, callable $filterFn): bool
     {
         $result = false;
 
@@ -212,7 +213,7 @@ class Expansion extends CacheModel
             'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
         ]);
 
-        foreach ($this->raids as $raid) {
+        foreach ($this->raids->filter($filterFn) as $raid) {
             foreach ($raid->mappingVersions as $mappingVersion) {
                 if ($mappingVersion->game_version_id === $gameVersion->id) {
                     $result = true;
@@ -224,7 +225,7 @@ class Expansion extends CacheModel
         return $result;
     }
 
-    public function hasDungeonForGameVersion(GameVersion $gameVersion): bool
+    public function hasDungeonForGameVersion(GameVersion $gameVersion, callable $filterFn): bool
     {
         $result = false;
 
@@ -232,8 +233,9 @@ class Expansion extends CacheModel
             'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
         ]);
 
-        foreach ($this->dungeons as $dungeon) {
+        foreach ($this->dungeons->filter($filterFn) as $dungeon) {
             foreach ($dungeon->mappingVersions as $mappingVersion) {
+                /** @var MappingVersion $mappingVersion */
                 if ($mappingVersion->game_version_id === $gameVersion->id) {
                     $result = true;
                     break 2;

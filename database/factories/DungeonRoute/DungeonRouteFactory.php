@@ -32,8 +32,6 @@ class DungeonRouteFactory extends Factory
             }
 
             $dungeon = Dungeon::whereNotNull('challenge_mode_id')->inRandomOrder()->first();
-            // Cannot use ->with(), that doesn't work with this relation due to the limit
-            $dungeon->load('currentMappingVersion');
             $count++;
         } while ($dungeon->getCurrentMappingVersion() === null);
 

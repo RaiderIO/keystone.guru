@@ -1,12 +1,12 @@
 <?php
 
 return [
-    'affixgroup'   => [
+    'affixgroup'     => [
         'affixgroup' => [
 
         ],
     ],
-    'dungeon'      => [
+    'dungeon'        => [
         'griddiscover' => [
             'popular'   => 'Popular',
             'this_week' => 'This week',
@@ -26,7 +26,7 @@ return [
             'siege_of_boralus_warning' => 'Due to differences between the Horde and the Alliance version of Siege of Boralus, you are required to select a faction in the group composition.',
         ],
     ],
-    'dungeonroute' => [
+    'dungeonroute'   => [
         'search'     => [
             'loadmore' => [
                 'loading' => 'Loading...',
@@ -71,7 +71,7 @@ return [
             'data_by_archon_gg' => '%s - data by https://www.archon.gg/wow',
         ],
     ],
-    'forms'        => [
+    'forms'          => [
         'createroute'          => [
             'title'                                          => 'Title',
             'title_title'                                    => 'Choose a title that will uniquely identify the route for you over other similar routes you may create. The title will be visible to others once you choose to publish your route.',
@@ -196,7 +196,7 @@ return [
             'timezone'   => 'Timezone',
         ],
     ],
-    'general'      => [
+    'general'        => [
         'linkpreview' => [
             'title'               => ':title | Keystone.guru',
             'description'         => ':description Plan routes online cooperatively with your team or discover routes that suit your play style and skill level. Keystone.guru is the one place to manage and share your M+ routes.',
@@ -204,7 +204,7 @@ return [
             'twitter_description' => ':description Keystone.guru is the one place to find, manage and share your M+ routes.',
         ],
     ],
-    'group'        => [
+    'group'          => [
         'affixes'     => [
             'seasonal_index_preset'    => 'Preset :count',
             'awakened_enemy_set'       => 'Awakened enemy set',
@@ -218,7 +218,7 @@ return [
             'party_member_nr' => 'Party member #%d',
         ],
     ],
-    'layout'       => [
+    'layout'         => [
         'footer' => [
             'developer'                       => 'Developer',
             'api_documentation'               => 'API documentation',
@@ -228,6 +228,8 @@ return [
             'changelog_new'                   => 'NEW',
             'credits'                         => 'Credits',
             'about'                           => 'About',
+            'legacy'                          => 'Legacy',
+            'affixes'                         => 'Affixes calendar',
             'external'                        => 'External',
             'patreon'                         => 'Patreon',
             'discord'                         => 'Discord',
@@ -244,10 +246,11 @@ return [
             'toggle_navigation_title' => 'Toggle navigation',
             'create_route'            => 'Create route',
             'search'                  => 'Search',
-            'expansion_routes'        => 'Expansion routes',
+            'browse_by_expansion'     => 'Routes by expansion',
             'routes'                  => ':expansion',
-            'explore'                 => 'Explore',
-            'affixes'                 => 'Affixes',
+            'browse_routes'           => 'Browse routes',
+            'heatmaps'                => 'Heatmaps',
+            'explore'                 => 'Explore dungeons',
             'new'                     => 'NEW',
         ],
         'nav'    => [
@@ -276,7 +279,7 @@ return [
             ],
         ],
     ],
-    'maps'         => [
+    'maps'           => [
         'controls' => [
             'draw'           => [
                 'admin'           => 'Admin',
@@ -458,9 +461,9 @@ return [
         'select' => [
             'mapping_version_readonly' => ':gameVersion version :version (readonly)',
             'mapping_version'          => ':gameVersion version :version',
-        ]
+        ],
     ],
-    'modal'        => [
+    'modal'          => [
         'dungeonroute'       => [
             'removed' => [
                 'title'        => 'Route removed',
@@ -610,12 +613,12 @@ return [
             'title' => 'Upload logs',
         ],
     ],
-    'release'      => [
+    'release'        => [
         'release' => [
             'new' => 'NEW',
         ],
     ],
-    'tag'          => [
+    'tag'            => [
         'manager' => [
             'route_personal' => 'Route',
             'route_team'     => 'Route',
@@ -629,7 +632,7 @@ return [
             'create_new_tag' => 'Create new tag',
         ],
     ],
-    'team'         => [
+    'team'           => [
         'details' => [
             'name'            => 'Name',
             'description'     => 'Description',
@@ -646,7 +649,7 @@ return [
             'create_team' => 'Create team',
         ],
     ],
-    'thirdparty'   => [
+    'thirdparty'     => [
         'nitropay'      => [
             'adcontrols' => [
                 'remove_ads' => 'Remove ads',
@@ -661,9 +664,10 @@ return [
             'learn_more' => 'Learn more',
         ],
     ],
-    'user'         => [
+    'user'           => [
         'name' => [
-            'avatar_title' => 'Avatar',
+            'avatar_alt' => 'Avatar',
+            'raider_io'  => 'Raider.IO',
         ],
     ],
 

@@ -1,5 +1,3 @@
-
-
 /** GENERAL ICONS */
 .username_menu {
     width: 105px;
@@ -362,4 +360,14 @@ ul.light-slider {
 
 #dungeonroute_coverage_affixgroup_table .covered_warning {
     background-color: #fcc57e11;
+}
+
+.user_icon {
+    max-width: 26px;
+    max-height: 26px;
+    border-radius: 30px;
+}
+
+.raider_io_staff_text {
+    color: #ffbd0a !important;
 }
