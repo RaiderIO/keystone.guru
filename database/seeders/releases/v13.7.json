@@ -1,0 +1,49 @@
+{
+    "id": 309,
+    "release_changelog_id": 316,
+    "version": "v13.7",
+    "title": "Reworked the main header and made heatmaps more prominent",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-07-19T20:44:19+00:00",
+    "updated_at": "2025-07-19T20:44:19+00:00",
+    "changelog": {
+        "id": 316,
+        "release_id": 309,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 316,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2894,
+                "change": "The main site's header has been reworked to highlight those things that are important, added Heatmaps as a separate feature from the Explore feature and moved Affixes away to a new Legacy section in the site's footer."
+            },
+            {
+                "release_changelog_id": 316,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2892,
+                "change": "Raider.io staff creating routes are now displayed as Raider.io, rather than the personal account that made the route. As a reminder, Raider.io is the owner of Keystone.guru."
+            },
+            {
+                "release_changelog_id": 316,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2893,
+                "change": "Many Mists of Pandaria dungeons have received corrections to enemy forces, grouping, enemy placement etc. Thank you Seagullible for the suggestions!"
+            },
+            {
+                "release_changelog_id": 316,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2891,
+                "change": "Siege of Niuzao Temple and Shado-Pan Monastery now support combined floors view (activate from the map settings in the route's pull sidebar)."
+            },
+            {
+                "release_changelog_id": 316,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2895,
+                "change": "The Auto-Route Creator is now functioning properly again."
+            }
+        ]
+    }
+}
