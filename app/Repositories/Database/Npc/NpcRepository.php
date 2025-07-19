@@ -20,9 +20,9 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
     {
         return Npc::select('npcs.*')
             ->leftJoin('npc_enemy_forces', 'npcs.id', 'npc_enemy_forces.npc_id')
+            ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
             ->where(function (Builder $builder) use ($dungeon) {
                 $builder
-                    ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
                     ->where('npc_dungeons.dungeon_id', $dungeon->id)
                     ->where(function (Builder $builder) use ($dungeon) {
                     // Enemy forces may be not set, that means that we assume 0. They MAY be missing entirely for bosses
