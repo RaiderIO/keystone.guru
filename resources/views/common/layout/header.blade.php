@@ -1,5 +1,6 @@
 <?php
 
+use App\Features\Heatmap;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
@@ -52,8 +53,8 @@ $navs[__('view_common.layout.header.browse_by_expansion')] = [
     'items' => $expansionRoutes,
 ];
 
-if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
-    $navs[route('dungeon.explore.heatmaps.list')] = [
+if (Feature::active(Heatmap::class) && $currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
+    $navs[route('dungeon.heatmaps.list')] = [
         'fa'   => 'fas fa-fire text-danger',
         'text' => __('view_common.layout.header.heatmaps'),
         'new'  => true
@@ -63,10 +64,6 @@ if ($currentUserGameVersion->key === GameVersion::GAME_VERSION_RETAIL) {
 $navs[route('dungeon.explore.list')] = [
     'fa'   => 'fas fa-compass',
     'text' => __('view_common.layout.header.explore'),
-];
-
-$navs[route('misc.affixes')] = [
-    'text' => __('view_common.layout.header.affixes'),
 ];
 
 ?>

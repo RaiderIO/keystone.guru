@@ -43,6 +43,7 @@ use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Dungeon\DungeonExploreController;
+use App\Http\Controllers\Dungeon\DungeonHeatmapController;
 use App\Http\Controllers\Dungeon\MappingVersionController;
 use App\Http\Controllers\DungeonController;
 use App\Http\Controllers\DungeonRouteController;
@@ -145,7 +146,18 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     });
     // Explore dungeons (just show me the mapping but don't allow me to create routes)
     Route::prefix('heatmaps')->group(static function () {
-        Route::get('/', (new DungeonExploreController())->getHeatmaps(...))->name('dungeon.explore.heatmaps.list');
+        Route::get('/', (new DungeonHeatmapController())->get(...))->name('dungeon.heatmaps.list');
+
+        Route::prefix('{gameVersion}')->group(static function () {
+            Route::get('/', (new DungeonHeatmapController())->getByGameVersion(...))->name('dungeon.heatmaps.gameversion.list');
+        });
+    });
+
+    Route::prefix('heatmap/{gameVersion}/{dungeon}')->group(static function () {
+        Route::get('/', (new DungeonHeatmapController())->viewDungeon(...))->name('dungeon.heatmap.gameversion.view');
+        Route::get('/embed', (new DungeonHeatmapController())->embed(...))->name('dungeon.heatmap.gameversion.embed');
+        Route::get('/embed/{floorIndex}', (new DungeonHeatmapController())->embed(...))->name('dungeon.heatmap.gameversion.embed.floor');
+        Route::get('/{floorIndex}', (new DungeonHeatmapController())->viewDungeonFloor(...))->name('dungeon.heatmap.gameversion.view.floor');
     });
 
     Route::prefix('explore')->group(static function () {

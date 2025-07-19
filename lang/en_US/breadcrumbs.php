@@ -23,7 +23,8 @@ return [
         'gameversion'      => [
             'update'  => ':gameVersion',
             'dungeon' => [
-                'explore' => 'Explore',
+                'heatmaps' => 'Heatmaps',
+                'explore'  => 'Explore',
             ],
         ],
         'dungeonroute'     => [

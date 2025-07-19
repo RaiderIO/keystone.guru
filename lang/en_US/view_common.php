@@ -228,6 +228,8 @@ return [
             'changelog_new'                   => 'NEW',
             'credits'                         => 'Credits',
             'about'                           => 'About',
+            'legacy'                          => 'Legacy',
+            'affixes'                         => 'Affixes calendar',
             'external'                        => 'External',
             'patreon'                         => 'Patreon',
             'discord'                         => 'Discord',
@@ -248,8 +250,7 @@ return [
             'routes'                  => ':expansion',
             'browse_routes'           => 'Browse routes',
             'heatmaps'                => 'Heatmaps',
-            'explore'                 => 'Explore',
-            'affixes'                 => 'Affixes',
+            'explore'                 => 'Explore dungeons',
             'new'                     => 'NEW',
         ],
         'nav'    => [

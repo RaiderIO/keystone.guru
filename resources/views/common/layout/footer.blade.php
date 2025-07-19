@@ -50,6 +50,18 @@
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
                     <h5 class="mbr-section-subtitle mbr-fonts-style mb-2 display-7">
+                        <strong>{{ __('view_common.layout.footer.legacy') }}</strong>
+                    </h5>
+                    <ul class="list mbr-fonts-style display-4">
+
+                        <li class="mbr-text item-wrap">
+                            <a href="{{ route('misc.affixes') }}" target="_blank" rel="noopener noreferrer">
+                                {{ __('view_common.layout.footer.affixes') }}
+                            </a>
+                        </li>
+                    </ul>
+                    <br>
+                    <h5 class="mbr-section-subtitle mbr-fonts-style mb-2 display-7">
                         <strong>{{ __('view_common.layout.footer.external') }}</strong>
                     </h5>
                     <ul class="list mbr-fonts-style display-4">

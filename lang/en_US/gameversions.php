@@ -3,7 +3,7 @@
 return [
     'retail'  => [
         'name'        => 'Retail',
-        'description' => 'The War Within',
+        'description' => 'Retail',
     ],
     'wotlk'   => [
         'name'        => 'Wrath',

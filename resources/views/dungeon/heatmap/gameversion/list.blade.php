@@ -9,26 +9,31 @@ use App\Models\GameVersion\GameVersion;
 ?>
 @extends('layouts.sitepage', [
     'rootClass' => 'discover',
-    'title' => __('view_dungeon.explore.gameversion.list.title'),
+    'title' => __('view_dungeon.heatmap.gameversion.list.title'),
     'breadcrumbsParams' => [$gameVersion],
 ])
 
-@section('header-title', __('view_dungeon.explore.gameversion.list.header'))
+@section('header-title', __('view_dungeon.heatmap.gameversion.list.header'))
 
 @section('content')
 
     <div class="row form-group">
         <div class="col">
             <p>
-                {{ __('view_dungeon.explore.gameversion.list.description') }}
+                {!! __('view_dungeon.heatmap.gameversion.list.description', [
+                    'raiderIO' => '<a href="https://raider.io/" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-external-link-alt"></i> ' .
+                         __('view_dungeon.heatmap.gameversion.list.raider_io') .
+                     '</a>',
+                ]) !!}
             </p>
         </div>
     </div>
 
     @include('common.dungeon.gridtabs', [
-        'id' => 'explore_dungeon',
-        'tabsId' => 'explore_dungeon_select_tabs',
-        'route' => 'dungeon.explore.gameversion.view',
+        'id' => 'heatmap_dungeon',
+        'tabsId' => 'heatmap_dungeon_select_tabs',
+        'route' => 'dungeon.heatmap.gameversion.view',
         'routeParams' => ['gameVersion' => $gameVersion],
         'subtextFn' => function(Dungeon $dungeon) {
             $result = '';
@@ -39,13 +44,16 @@ use App\Models\GameVersion\GameVersion;
                     </div>
                     <div class="col-auto px-2">
                         <i class="fas fa-fire text-danger" data-toggle="tooltip" title="'
-                        . __('view_dungeon.explore.gameversion.list.heatmap_available') .
+                        . __('view_dungeon.heatmap.gameversion.list.heatmap_available') .
                         '"></i>
                     </div>
                 </div>';
             }
 
             return $result;
+        },
+        'filterFn' => function(Dungeon $dungeon) {
+            return $dungeon->heatmap_enabled && $dungeon->active;
         },
     ])
 @endsection

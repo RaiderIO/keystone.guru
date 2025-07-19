@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Dungeon;
 
 use App\Features\Heatmap;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Heatmap\ExploreEmbedUrlFormRequest;
-use App\Http\Requests\Heatmap\ExploreUrlFormRequest;
+use App\Http\Requests\Heatmap\HeatmapEmbedUrlFormRequest;
+use App\Http\Requests\Heatmap\HeatmapUrlFormRequest;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
-use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -21,37 +21,30 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Laravel\Pennant\Feature;
 
-class DungeonExploreController extends Controller
+class DungeonHeatmapController extends Controller
 {
-
-    public function getHeatmaps(Request $request): RedirectResponse
-    {
-        return redirect()->route('dungeon.explore.list');
-    }
-
     public function get(
         Request                     $request,
         GameVersionServiceInterface $gameVersionService
     ): RedirectResponse {
-        return redirect()->route('dungeon.explore.gameversion.list', [
+        return redirect()->route('dungeon.heatmaps.gameversion.list', [
             'gameVersion' => $gameVersionService->getGameVersion(Auth::user()),
         ]);
     }
 
     public function getByGameVersion(
-        Request                        $request,
-        GameVersion                    $gameVersion,
-        CombatLogEventServiceInterface $combatLogEventService,
-        GameVersionServiceInterface    $gameVersionService
+        Request                     $request,
+        GameVersion                 $gameVersion,
+        GameVersionServiceInterface $gameVersionService
     ): View|RedirectResponse {
         $userOrDefaultGameVersion = $gameVersionService->getGameVersion(Auth::user());
         if ($gameVersion->id !== $userOrDefaultGameVersion->id) {
-            return redirect()->route('dungeon.explore.gameversion.list', [
+            return redirect()->route('dungeon.heatmaps.gameversion.list', [
                 'gameVersion' => $userOrDefaultGameVersion,
             ]);
         }
 
-        return view('dungeon.explore.gameversion.list', [
+        return view('dungeon.heatmap.gameversion.list', [
             'gameVersion'            => $gameVersion,
         ]);
     }
@@ -60,8 +53,9 @@ class DungeonExploreController extends Controller
     {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        if (!$dungeon->active || $currentMappingVersion === null) {
-            return redirect()->route('dungeon.explore.list');
+        $redirect = $this->guardAgainstInvalidAccess($dungeon, $currentMappingVersion);
+        if($redirect instanceof RedirectResponse) {
+            return $redirect;
         }
 
         /** @var Floor $defaultFloor */
@@ -69,7 +63,7 @@ class DungeonExploreController extends Controller
             ->defaultOrFacade($currentMappingVersion)
             ->first();
 
-        return redirect()->route('dungeon.explore.gameversion.view.floor', [
+        return redirect()->route('dungeon.heatmap.gameversion.view.floor', [
             'gameVersion' => $gameVersion,
             'dungeon'     => $dungeon,
             'floorIndex'  => $defaultFloor?->index ?? '1',
@@ -77,10 +71,10 @@ class DungeonExploreController extends Controller
     }
 
     public function viewDungeonFloorMechagonWorkshopCorrection(
-        ExploreUrlFormRequest $request,
+        HeatmapUrlFormRequest $request,
         string                $floorIndex = '1'
     ): RedirectResponse {
-        return redirect()->route('dungeon.explore.gameversion.view.floor', [
+        return redirect()->route('dungeon.heatmap.gameversion.view.floor', [
                 'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
                 'dungeon'     => Dungeon::where('key', Dungeon::DUNGEON_MECHAGON_WORKSHOP)->firstOrFail(),
                 'floorIndex'  => $floorIndex,
@@ -88,18 +82,18 @@ class DungeonExploreController extends Controller
     }
 
     public function viewDungeonFloor(
-        ExploreUrlFormRequest          $request,
-        MapContextServiceInterface     $mapContextService,
-        CombatLogEventServiceInterface $combatLogEventService,
-        SeasonServiceInterface         $seasonService,
-        GameVersion                    $gameVersion,
-        Dungeon                        $dungeon,
-        string                         $floorIndex = '1'
+        HeatmapUrlFormRequest      $request,
+        MapContextServiceInterface $mapContextService,
+        SeasonServiceInterface     $seasonService,
+        GameVersion                $gameVersion,
+        Dungeon                    $dungeon,
+        string                     $floorIndex = '1'
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        if (!$dungeon->active || $currentMappingVersion === null) {
-            return redirect()->route('dungeon.explore.list');
+        $redirect = $this->guardAgainstInvalidAccess($dungeon, $currentMappingVersion);
+        if($redirect instanceof RedirectResponse) {
+            return $redirect;
         }
 
         if (!is_numeric($floorIndex)) {
@@ -117,14 +111,14 @@ class DungeonExploreController extends Controller
                 ->defaultOrFacade($currentMappingVersion)
                 ->first();
 
-            return redirect()->route('dungeon.explore.gameversion.view.floor', [
+            return redirect()->route('dungeon.heatmap.gameversion.view.floor', [
                     'gameVersion' => $gameVersion,
                     'dungeon'     => $dungeon,
                     'floorIndex'  => $defaultFloor?->index ?? '1',
                 ] + $request->validated());
         } else {
             if ($floor->index !== (int)$floorIndex) {
-                return redirect()->route('dungeon.explore.gameversion.view.floor', [
+                return redirect()->route('dungeon.heatmap.gameversion.view.floor', [
                         'gameVersion' => $gameVersion,
                         'dungeon'     => $dungeon,
                         'floorIndex'  => $floor->index,
@@ -133,18 +127,15 @@ class DungeonExploreController extends Controller
 
             $mostRecentSeason = $dungeon->getActiveSeason($seasonService);
 
-            $heatmapActive = Feature::active(Heatmap::class) && $dungeon->heatmap_enabled;
-
             $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON);
 
-            return view('dungeon.explore.gameversion.view', array_merge($this->getFilterSettings($mostRecentSeason), [
+            return view('dungeon.heatmap.gameversion.view', array_merge($this->getFilterSettings($mostRecentSeason), [
                 'gameVersion'             => $gameVersion,
                 'season'                  => $mostRecentSeason,
                 'dungeon'                 => $dungeon,
                 'floor'                   => $floor,
                 'title'                   => __($dungeon->name),
                 'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $floor, $currentMappingVersion),
-                'showHeatmapSearch'       => $heatmapActive,
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                     $seasonService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
@@ -153,10 +144,10 @@ class DungeonExploreController extends Controller
     }
 
     public function embedMechagonWorkshopCorrection(
-        ExploreUrlFormRequest $request,
+        HeatmapUrlFormRequest $request,
         string                $floorIndex = '1'
     ): RedirectResponse {
-        return redirect()->route('dungeon.explore.gameversion.embed.floor', [
+        return redirect()->route('dungeon.heatmap.gameversion.embed.floor', [
                 'gameVersion' => GameVersion::GAME_VERSION_RETAIL,
                 'dungeon'     => Dungeon::where('key', Dungeon::DUNGEON_MECHAGON_WORKSHOP)->firstOrFail(),
                 'floorIndex'  => $floorIndex,
@@ -164,7 +155,7 @@ class DungeonExploreController extends Controller
     }
 
     public function embed(
-        ExploreEmbedUrlFormRequest $request,
+        HeatmapEmbedUrlFormRequest $request,
         MapContextServiceInterface $mapContextService,
         SeasonServiceInterface     $seasonService,
         GameVersion                $gameVersion,
@@ -173,8 +164,9 @@ class DungeonExploreController extends Controller
     ): View|RedirectResponse {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
-        if (!$dungeon->active || $currentMappingVersion === null) {
-            return redirect()->route('dungeon.explore.list');
+        $redirect = $this->guardAgainstInvalidAccess($dungeon, $currentMappingVersion);
+        if($redirect instanceof RedirectResponse) {
+            return $redirect;
         }
 
         if (!is_numeric($floorIndex)) {
@@ -194,13 +186,13 @@ class DungeonExploreController extends Controller
                 ->defaultOrFacade($currentMappingVersion)
                 ->first();
 
-            return redirect()->route('dungeon.explore.gameversion.embed.floor', [
+            return redirect()->route('dungeon.heatmap.gameversion.embed.floor', [
                     'gameVersion' => $gameVersion,
                     'dungeon'     => $dungeon,
                     'floorIndex'  => $defaultFloor?->index ?? '1',
                 ] + $validated);
         } else if ($floor->index !== (int)$floorIndex) {
-            return redirect()->route('dungeon.explore.gameversion.embed.floor', [
+            return redirect()->route('dungeon.heatmap.gameversion.embed.floor', [
                     'gameVersion' => $gameVersion,
                     'dungeon'     => $dungeon,
                     'floorIndex'  => $floor->index,
@@ -230,7 +222,7 @@ class DungeonExploreController extends Controller
 
         $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON_EMBED);
 
-        return view('dungeon.explore.gameversion.embed', array_merge($this->getFilterSettings($mostRecentSeason), [
+        return view('dungeon.heatmap.gameversion.embed', array_merge($this->getFilterSettings($mostRecentSeason), [
             'gameVersion'             => $gameVersion,
             'season'                  => $mostRecentSeason,
             'dungeon'                 => $dungeon,
@@ -268,5 +260,26 @@ class DungeonExploreController extends Controller
             'minSamplesRequiredMin' => 1,
             'minSamplesRequiredMax' => 100,
         ];
+    }
+
+    /**
+     * Maybe this should go in a policy?
+     *
+     * @param Dungeon             $dungeon
+     * @param MappingVersion|null $currentMappingVersion
+     * @return RedirectResponse|null
+     */
+    private function guardAgainstInvalidAccess(Dungeon $dungeon, ?MappingVersion $currentMappingVersion): ?RedirectResponse
+    {
+        if (
+            !$dungeon->active ||
+            !$dungeon->heatmap_enabled ||
+            $currentMappingVersion === null ||
+            !Feature::active(Heatmap::class)
+        ) {
+            return redirect()->route('dungeon.heatmaps.list');
+        }
+
+        return null;
     }
 }

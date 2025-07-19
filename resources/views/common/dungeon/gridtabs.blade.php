@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @var string                $tabsId
  * @var bool                  $selectable
  * @var callable|null         $subtextFn
+ * @var callable|null         $filterFn
  */
 
 $selectedSeasonId      = $currentUserGameVersion->has_seasons ? ($nextSeason ?? $currentSeason)->id : null;
@@ -26,6 +27,7 @@ $linkMapFn             = static fn(Dungeon $dungeon) => [
     'link'    => route($route, array_merge($routeParams, ['dungeon' => $dungeon])),
 ];
 $subtextFn             ??= null;
+$filterFn              ??= fn(Dungeon $dungeon) => true;
 $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $currentSeason->expansion_id;
 ?>
 <div id="{{ $id }}">
@@ -60,7 +62,7 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
         $index = 0; ?>
         @foreach($activeExpansions as $expansion)
                 <?php /** @var Expansion $expansion */ ?>
-            @if($expansion->hasDungeonForGameVersion($currentUserGameVersion))
+            @if($expansion->hasDungeonForGameVersion($currentUserGameVersion, $filterFn))
                 @php($active = $selectedSeasonId === null && $index === 0)
                 <li class="nav-item">
                     <a id="{{ $expansion->shortname }}-grid-tab"
@@ -75,7 +77,7 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
                 </li>
                 @php($index++)
             @endif
-            @if($expansion->hasRaidForGameVersion($currentUserGameVersion))
+            @if($expansion->hasRaidForGameVersion($currentUserGameVersion, $filterFn))
                 @php($active = $selectedSeasonId === null && $index === 0)
                 <li class="nav-item">
                     <a id="{{ $expansion->shortname }}-raid-grid-tab"
@@ -100,12 +102,13 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
                      class="tab-pane fade show {{ $selectedSeasonId === $nextSeason->id ? 'active' : '' }}"
                      role="tabpanel"
                      aria-labelledby="season-{{ $nextSeason->id }}-grid-content">
+                    @php($dungeons = $nextSeason->dungeons->filter($filterFn)->values())
                     @include('common.dungeon.grid', [
-                        'dungeons' => $nextSeason->dungeons,
+                        'dungeons' => $dungeons,
                         'names' => true,
                         'selectable' => true,
                         'route' => $route,
-                        'links' => $route === null ? collect() : $nextSeason->dungeons->map($linkMapFn),
+                        'links' => $route === null ? collect() : $dungeons->map($linkMapFn),
                         'subtextFn' => $subtextFn,
                     ])
                 </div>
@@ -114,12 +117,13 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
                  class="tab-pane fade show {{ $selectedSeasonId === $currentSeason->id ? 'active' : '' }}"
                  role="tabpanel"
                  aria-labelledby="season-{{ $currentSeason->id }}-grid-content">
+                @php($dungeons = $currentSeason->dungeons->filter($filterFn)->values())
                 @include('common.dungeon.grid', [
-                    'dungeons' => $currentSeason->dungeons,
+                    'dungeons' => $dungeons,
                     'names' => true,
                     'selectable' => true,
                     'route' => $route,
-                    'links' => $route === null ? collect() : $currentSeason->dungeons->map($linkMapFn),
+                    'links' => $route === null ? collect() : $dungeons->map($linkMapFn),
                     'subtextFn' => $subtextFn,
                 ])
             </div>
@@ -129,13 +133,15 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
         @foreach($activeExpansions as $expansion)
                 <?php /** @var Expansion $expansion */ ?>
 
-            @if($expansion->hasDungeonForGameVersion($currentUserGameVersion))
+            @if($expansion->hasDungeonForGameVersion($currentUserGameVersion, $filterFn))
                 <div id="{{ $expansion->shortname }}-grid-content"
                      class="tab-pane fade show {{ $selectedSeasonId === null && $index === 0 ? 'active' : '' }}"
                      role="tabpanel"
                      aria-labelledby="{{ $expansion->shortname }}-grid-content">
-                    @php($dungeons = $expansion->dungeons()->active()->forGameVersion($currentUserGameVersion)->get())
+                    @php($dungeons = $expansion->dungeons()->active()->forGameVersion($currentUserGameVersion)->get()->filter($filterFn)->values())
+
                     @include('common.dungeon.grid', [
+                        'test' => $expansion->shortname === 'bfa',
                         'expansion' => $expansion,
                         'dungeons' => $dungeons,
                         'names' => true,
@@ -148,12 +154,12 @@ $showFullExpansionName = $nextSeason !== null && $nextSeason->expansion_id !== $
                 @php($index++)
             @endif
 
-            @if($expansion->hasRaidForGameVersion($currentUserGameVersion))
+            @if($expansion->hasRaidForGameVersion($currentUserGameVersion, $filterFn))
                 <div id="{{ $expansion->shortname }}-raid-grid-content"
                      class="tab-pane fade show {{ $selectedSeasonId === null && $index === 0 ? 'active' : '' }}"
                      role="tabpanel"
                      aria-labelledby="{{ $expansion->shortname }}-raid-grid-content">
-                    @php($raids = $expansion->raids()->active()->forGameVersion($currentUserGameVersion)->get())
+                    @php($raids = $expansion->raids()->active()->forGameVersion($currentUserGameVersion)->get()->filter($filterFn)->values())
                     @include('common.dungeon.grid', [
                         'expansion' => $expansion,
                         'dungeons' => $raids,

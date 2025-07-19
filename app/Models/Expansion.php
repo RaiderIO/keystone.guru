@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\GameVersion\GameVersion;
+use App\Models\Mapping\MappingVersion;
 use App\Models\Timewalking\TimewalkingEvent;
 use App\Models\Traits\HasIconFile;
 use App\Models\Traits\SeederModel;
@@ -204,7 +205,7 @@ class Expansion extends CacheModel
         return $this->timewalkingEvent instanceof TimewalkingEvent;
     }
 
-    public function hasRaidForGameVersion(GameVersion $gameVersion): bool
+    public function hasRaidForGameVersion(GameVersion $gameVersion, callable $filterFn): bool
     {
         $result = false;
 
@@ -212,7 +213,7 @@ class Expansion extends CacheModel
             'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
         ]);
 
-        foreach ($this->raids as $raid) {
+        foreach ($this->raids->filter($filterFn) as $raid) {
             foreach ($raid->mappingVersions as $mappingVersion) {
                 if ($mappingVersion->game_version_id === $gameVersion->id) {
                     $result = true;
@@ -224,7 +225,7 @@ class Expansion extends CacheModel
         return $result;
     }
 
-    public function hasDungeonForGameVersion(GameVersion $gameVersion): bool
+    public function hasDungeonForGameVersion(GameVersion $gameVersion, callable $filterFn): bool
     {
         $result = false;
 
@@ -232,8 +233,9 @@ class Expansion extends CacheModel
             'mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
         ]);
 
-        foreach ($this->dungeons as $dungeon) {
+        foreach ($this->dungeons->filter($filterFn) as $dungeon) {
             foreach ($dungeon->mappingVersions as $mappingVersion) {
+                /** @var MappingVersion $mappingVersion */
                 if ($mappingVersion->game_version_id === $gameVersion->id) {
                     $result = true;
                     break 2;
