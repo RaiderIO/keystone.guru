@@ -225,8 +225,9 @@ class Expansion extends CacheModel
         return $result;
     }
 
-    public function hasDungeonForGameVersion(GameVersion $gameVersion, callable $filterFn): bool
+    public function hasDungeonForGameVersion(GameVersion $gameVersion, ?callable $filterFn = null): bool
     {
+        $filterFn ??= fn(Dungeon $dungeon) => true;
         $result = false;
 
         $this->dungeons->load([
