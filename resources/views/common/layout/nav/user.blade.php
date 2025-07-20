@@ -5,13 +5,13 @@ use App\Models\Laratrust\Role;
 $user = Auth::user();
 ?>
 @guest
-    <li class="nav-item px-3">
+    <li class="nav-item px-2">
         <a class="btn btn-info" href="#" data-toggle="modal" data-target="#login_modal">
             <i class="fas fa-sign-in-alt"></i> {{__('view_common.layout.nav.user.login')}}
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link px-3" href="#" data-toggle="modal" data-target="#register_modal">
+        <a class="nav-link px-2" href="#" data-toggle="modal" data-target="#register_modal">
             {{__('view_common.layout.nav.user.register')}}
         </a>
     </li>

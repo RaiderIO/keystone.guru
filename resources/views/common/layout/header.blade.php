@@ -93,7 +93,7 @@ $navs[route('dungeon.explore.list')] = [
 <nav
     class="navbar navbar-second fixed-top navbar-expand-lg {{ $theme === User::THEME_LUX ? 'navbar-light' : 'navbar-dark' }} bg-header"
     data-toggle="navbar-shrink">
-    <div class="container">
+    <div class="container p-0">
         <a class="navbar-brand" href="/">
             <img src="{{ ksgAssetImage('logo/logo_and_text.png') }}" alt="{{ config('app.name') }}"
                  height="44px;" width="200px;">
