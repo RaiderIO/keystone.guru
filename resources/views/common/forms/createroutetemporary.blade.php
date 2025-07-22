@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 
 /**
@@ -7,6 +8,7 @@ use App\Models\Season;
  * @var Season|null $nextSeason
  * @var int         $routeKeyLevelFrom
  * @var int         $routeKeyLevelTo
+ * @var GameVersion $currentUserGameVersion
  */
 
 $dungeonSelectId = 'dungeon_id_select_temporary';
@@ -29,15 +31,17 @@ $dungeonSelectId = 'dungeon_id_select_temporary';
         @include('common.dungeon.select', ['id' => $dungeonSelectId, 'showAll' => false, 'showSeasons' => true])
     @endif
 
-    <div class="form-group">
-        <label for="dungeon_route_level">
-            {{ __('view_common.forms.createroutetemporary.key_levels') }}
-            <i class="fas fa-info-circle" data-toggle="tooltip"
-               title="{{ __('view_common.forms.createroutetemporary.key_levels_title') }}"></i>
-        </label>
-        {!! Form::text('dungeon_route_level', sprintf('%d;%d', $routeKeyLevelFrom, $routeKeyLevelTo),
-            ['id' => 'temporary_dungeon_route_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}
-    </div>
+    @if($currentUserGameVersion->has_seasons)
+        <div class="form-group">
+            <label for="dungeon_route_level">
+                {{ __('view_common.forms.createroutetemporary.key_levels') }}
+                <i class="fas fa-info-circle" data-toggle="tooltip"
+                   title="{{ __('view_common.forms.createroutetemporary.key_levels_title') }}"></i>
+            </label>
+            {!! Form::text('dungeon_route_level', sprintf('%d;%d', $routeKeyLevelFrom, $routeKeyLevelTo),
+                ['id' => 'temporary_dungeon_route_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}
+        </div>
+    @endif
 
     <div class="form-group">
         <div class="text-info">
