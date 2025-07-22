@@ -3,7 +3,15 @@
 return [
 
     'map_icons' => [
-        'legion'      => [
+        'mop'    => [
+            'gate_of_the_setting_sun' => [
+                'krik_thik_spawn_note' => 'Hodor',
+            ],
+            'mogu_shan_palace' => [
+                'door_unlocks_after_trial_of_the_king' => 'Hodor',
+            ]
+        ],
+        'legion' => [
             'court_of_stars'   => [
                 'unlocks_after_patrol_captain_gerdo' => 'Hodor',
                 'arcane_beacon'                      => 'Hodor',
@@ -13,7 +21,7 @@ return [
                 'hidden_pack_in_cave' => 'Hodor',
             ],
         ],
-        'sl' => [
+        'sl'     => [
             'de_other_side'         => [
                 'start'                => 'Hodor',
                 'graveyard_ardenweald' => 'Hodor',
@@ -85,11 +93,14 @@ return [
                 'exit'                 => 'Hodor',
             ],
         ],
-        'tww' => [
-            'the_stonevault' => [
+        'tww'    => [
+            'the_stonevault'             => [
                 'imbued_iron_energy' => 'Hodor',
             ],
-        ]
+            'priory_of_the_sacred_flame' => [
+                'miniboss_explanation' => 'Hodor',
+            ],
+        ],
     ],
 
 ];

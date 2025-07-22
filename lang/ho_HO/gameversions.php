@@ -21,4 +21,8 @@ return [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
+    'mop'   => [
+        'name'        => 'Hodor',
+        'description' => 'Hodor',
+    ],
 ];

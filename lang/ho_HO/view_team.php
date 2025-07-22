@@ -42,6 +42,8 @@ return [
         'to_team_list'   => 'Hodor',
         'team_header'    => 'Hodor',
         'icon_image_alt' => 'Hodor',
+        'routes'         => 'Hodor',
+        'members'        => 'Hodor',
     ],
     'invite'   => [
         'linkpreview_title'       => 'Hodor',

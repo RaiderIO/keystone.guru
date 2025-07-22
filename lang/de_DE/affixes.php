@@ -154,6 +154,10 @@ return [
         'name'        => '',
         'description' => '',
     ],
+    'xalataths_bargain_pulsar'  => [
+        'name'        => '',
+        'description' => '',
+    ],
     'seasonal_index_preset'        => '',
 
 ];

@@ -1,7 +1,7 @@
 <?php
 
 return [
+    'npc_death'    => '',
     'player_death' => '',
-    'enemy_killed' => '',
-    'spell_cast'   => '',
+    'player_spell' => '',
 ];

@@ -70,6 +70,15 @@ return [
                 'tinkers_court'     => 'Hodor',
             ],
         ],
+        'karazhan_crypts'             => [
+            'name'   => 'Hodor',
+            'floors' => [
+                'karazhan_crypts'         => 'Hodor',
+                'the_slough_of_dispair'   => 'Hodor',
+                'tome_of_the_unrepentant' => 'Hodor',
+                'the_pit_of_criminals'    => 'Hodor',
+            ],
+        ],
         'lower_blackrock_spire'       => [
             'name'   => 'Hodor',
             'floors' => [
@@ -116,6 +125,16 @@ return [
             'name'   => 'Hodor',
             'floors' => [
                 'ruins_of_ahnqiraj' => 'Hodor',
+            ],
+        ],
+        'scarlet_enclave'             => [
+            'name'   => 'Hodor',
+            'floors' => [
+                'tyrs_hand'              => 'Hodor',
+                'the_forbidding_expanse' => 'Hodor',
+                'scarlet_cathedral'      => 'Hodor',
+                'avalon_monastery'       => 'Hodor',
+                'ashbringer_chapel'      => 'Hodor',
             ],
         ],
         'scarlet_monastery_armory'    => [
@@ -800,10 +819,11 @@ return [
         'mechagon_workshop'         => [
             'name'   => 'Hodor',
             'floors' => [
-                'the_robodrome'  => 'Hodor',
-                'waste_pipes'    => 'Hodor',
-                'the_under_junk' => 'Hodor',
-                'mechagon_city'  => 'Hodor',
+                'the_robodrome'               => 'Hodor',
+                'waste_pipes'                 => 'Hodor',
+                'the_under_junk'              => 'Hodor',
+                'mechagon_city'               => 'Hodor',
+                'operation_mechagon_workshop' => 'Hodor',
             ],
         ],
         'orgrimmar_horrific_vision' => [
@@ -1020,6 +1040,7 @@ return [
             'name'   => 'Hodor',
             'floors' => [
                 'darkflame_cleft' => 'Hodor',
+                'shadow_realm'    => 'Hodor',
             ],
         ],
         'priory_of_the_sacred_flame' => [
@@ -1051,6 +1072,14 @@ return [
             'name'   => 'Hodor',
             'floors' => [
                 'the_stonevault' => 'Hodor',
+            ],
+        ],
+        'operation_floodgate'        => [
+            'name'   => 'Hodor',
+            'floors' => [
+                'the_waterworks'      => 'Hodor',
+                'the_grid'            => 'Hodor',
+                'operation_floodgate' => 'Hodor',
             ],
         ],
     ],

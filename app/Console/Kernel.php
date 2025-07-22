@@ -29,6 +29,8 @@ use App\Console\Commands\Github\CreateGithubRelease;
 use App\Console\Commands\Github\CreateGithubReleasePullRequest;
 use App\Console\Commands\Github\CreateGithubReleaseTicket;
 use App\Console\Commands\Handlebars\Refresh as HandlebarsRefresh;
+use App\Console\Commands\Localization\ExportNpcNames;
+use App\Console\Commands\Localization\ImportNpcNames;
 use App\Console\Commands\Localization\LocalizationSync;
 use App\Console\Commands\MapIcon\GenerateItemIcons;
 use App\Console\Commands\Mapping\AssignMDTIDs;
@@ -150,6 +152,8 @@ class Kernel extends ConsoleKernel
         HandlebarsRefresh::class,
 
         // Localization
+        ExportNpcNames::class,
+        ImportNpcNames::class,
         LocalizationSync::class,
 
         // MapIcon
@@ -291,7 +295,7 @@ class Kernel extends ConsoleKernel
             // Cleanup the generated custom thumbnails
             $commands[] = $schedule->command('thumbnail:deleteexpiredjobs')->everyFifteenMinutes();
 
-            foreach($commands as $command) {
+            foreach ($commands as $command) {
                 // php://stdout is used to ensure that the output is always logged, even when running in a Docker container
                 $command->appendOutputTo('/proc/1/fd/1');
             }

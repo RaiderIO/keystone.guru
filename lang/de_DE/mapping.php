@@ -3,7 +3,15 @@
 return [
 
     'map_icons' => [
-        'legion'      => [
+        'mop'    => [
+            'gate_of_the_setting_sun' => [
+                'krik_thik_spawn_note' => '',
+            ],
+            'mogu_shan_palace' => [
+                'door_unlocks_after_trial_of_the_king' => '',
+            ]
+        ],
+        'legion' => [
             'court_of_stars'   => [
                 'unlocks_after_patrol_captain_gerdo' => '',
                 'arcane_beacon'                      => '',
@@ -13,7 +21,7 @@ return [
                 'hidden_pack_in_cave' => '',
             ],
         ],
-        'sl' => [
+        'sl'     => [
             'de_other_side'         => [
                 'start'                => '',
                 'graveyard_ardenweald' => '',
@@ -85,11 +93,14 @@ return [
                 'exit'                 => '',
             ],
         ],
-        'tww' => [
-            'the_stonevault' => [
+        'tww'    => [
+            'the_stonevault'             => [
                 'imbued_iron_energy' => '',
             ],
-        ]
+            'priory_of_the_sacred_flame' => [
+                'miniboss_explanation' => '',
+            ],
+        ],
     ],
 
 ];

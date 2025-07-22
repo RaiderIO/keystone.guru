@@ -13,6 +13,7 @@ return [
             'speedrun_enabled'                   => '',
             'speedrun_difficulty_10_man_enabled' => '',
             'speedrun_difficulty_25_man_enabled' => '',
+            'has_wallpaper'                      => '',
             'facade_enabled'                     => '',
             'id'                                 => '',
             'game_version_id'                    => '',
@@ -29,12 +30,14 @@ return [
             'floor_management' => [
                 'title'                   => '',
                 'add_floor'               => '',
-                'table_header_active'     => '',
-                'table_header_facade'     => '',
-                'table_header_id'         => '',
-                'table_header_index'      => '',
-                'table_header_name'       => '',
-                'table_header_actions'    => '',
+                'table_header'            => [
+                    'id'      => '',
+                    'index'   => '',
+                    'name'    => '',
+                    'active'  => '',
+                    'facade'  => '',
+                    'actions' => '',
+                ],
                 'floor_edit_edit'         => '',
                 'floor_edit_edit_mapping' => '',
             ],
@@ -44,12 +47,15 @@ return [
                 'add_bare_mapping_version' => '',
                 'add_mapping_version'      => '',
                 'delete'                   => '',
-                'table_header_merged'      => '',
-                'table_header_facade'      => '',
-                'table_header_id'          => '',
-                'table_header_version'     => '',
-                'table_header_created_at'  => '',
-                'table_header_actions'     => '',
+                'table_header'             => [
+                    'merged'       => '',
+                    'facade'       => '',
+                    'id'           => '',
+                    'game_version' => '',
+                    'version'      => '',
+                    'created_at'   => '',
+                    'actions'      => '',
+                ],
             ],
         ],
         'list' => [
@@ -57,7 +63,6 @@ return [
             'header'                            => 'Показать подземелья',
             'table_header_active'               => 'Действующий',
             'table_header_expansion'            => 'Опыт',
-            'table_header_game_version'         => '',
             'table_header_name'                 => 'Имя',
             'table_header_enemy_forces'         => 'Силы врага',
             'table_header_enemy_forces_teeming' => 'Кишащий СВ',
@@ -165,48 +170,40 @@ return [
         ],
     ],
     'npc'                        => [
-        'flash' => [
+        'flash'          => [
             'npc_updated' => 'NPC обновлены',
             'npc_created' => 'NPC %s создан',
         ],
-        'edit'  => [
-            'title_new'                            => 'Новый NPC',
-            'header_new'                           => 'Новый NPC',
-            'title_edit'                           => 'Редактировать NPC',
-            'header_edit'                          => 'Редактировать NPC',
-            'name'                                 => 'Имя',
-            'game_id'                              => 'Игровое ID',
-            'classification'                       => 'Классификация',
-            'aggressiveness'                       => 'Агрессивность',
-            'type'                                 => '',
-            'class'                                => 'Класс',
-            'base_health'                          => 'Базовое здоровье',
-            'scaled_health_to_base_health_apply'   => '',
-            'scaled_health_placeholder'            => '',
-            'scaled_health_percentage_placeholder' => '',
-            'scaled_type_none'                     => '',
-            'scaled_type_fortified'                => '',
-            'scaled_type_tyrannical'               => '',
-            'health_percentage'                    => '',
-            'level'                                => '',
-            'enemy_forces'                         => 'Отряд врага (-1 если неизвестно)',
-            'enemy_forces_teeming'                 => 'Кишащий отряд врага (-1 если без изменений)',
-            'dangerous'                            => 'Подземелье',
-            'truesight'                            => 'Истинное зрение',
-            'bursting'                             => 'Взрывной',
-            'bolstering'                           => 'Усиливающий',
-            'sanguine'                             => 'Кровавый',
-            'runs_away_in_fear'                    => '',
-            'bolstering_npc_whitelist'             => 'Белый список Усиливающий NPC',
-            'bolstering_npc_whitelist_count'       => '{0} NPCs',
-            'spells'                               => 'Способность',
-            'spells_count'                         => '{0} Способность',
-            'submit'                               => 'Подтвердить',
-            'save_as_new_npc'                      => 'Сохранить нового NPC',
-            'all_npcs'                             => 'Все NPC',
-            'all_dungeons'                         => 'Все подземелья',
+        'edit'           => [
+            'title_new'                      => 'Новый NPC',
+            'header_new'                     => 'Новый NPC',
+            'title_edit'                     => 'Редактировать NPC',
+            'header_edit'                    => 'Редактировать NPC',
+            'name'                           => 'Имя',
+            'game_id'                        => 'Игровое ID',
+            'classification'                 => 'Классификация',
+            'aggressiveness'                 => 'Агрессивность',
+            'type'                           => '',
+            'class'                          => 'Класс',
+            'level'                          => '',
+            'enemy_forces'                   => 'Отряд врага (-1 если неизвестно)',
+            'enemy_forces_teeming'           => 'Кишащий отряд врага (-1 если без изменений)',
+            'dangerous'                      => 'Подземелье',
+            'truesight'                      => 'Истинное зрение',
+            'bursting'                       => 'Взрывной',
+            'bolstering'                     => 'Усиливающий',
+            'sanguine'                       => 'Кровавый',
+            'runs_away_in_fear'              => '',
+            'bolstering_npc_whitelist'       => 'Белый список Усиливающий NPC',
+            'bolstering_npc_whitelist_count' => '{0} NPCs',
+            'spells'                         => 'Способность',
+            'spells_count'                   => '{0} Способность',
+            'submit'                         => 'Подтвердить',
+            'save_as_new_npc'                => 'Сохранить нового NPC',
+            'all_npcs'                       => 'Все NPC',
+            'all_dungeons'                   => 'Все подземелья',
         ],
-        'list'  => [
+        'list'           => [
             'all_dungeons'                => 'Все',
             'title'                       => 'Список NPC',
             'header'                      => 'Показать NPC',
@@ -219,21 +216,77 @@ return [
             'table_header_classification' => 'Классификация',
             'table_header_actions'        => 'Действия',
         ],
+        'npcenemyforces' => [
+            'add_npc_enemy_forces'         => '',
+            'mapping_version_read_only'    => '',
+            'edit_npc_enemy_forces'        => '',
+            'delete_npc_enemy_forces'      => '',
+            'table_header_id'              => '',
+            'table_header_mapping_version' => '',
+            'table_header_enemy_forces'    => '',
+            'table_header_actions'         => '',
+        ],
+        'npchealth'      => [
+            'add_npc_health'    => '',
+            'edit_npc_health'   => '',
+            'delete_npc_health' => '',
+            'table_header'      => [
+                'id'           => '',
+                'game_version' => '',
+                'health'       => '',
+                'percentage'   => '',
+                'actions'      => '',
+            ],
+        ],
     ],
     'npcenemyforces'             => [
-        'title'                        => '',
-        'mapping_version_read_only'    => '',
-        'edit_enemy_forces'            => '',
-        'table_header_id'              => '',
-        'table_header_mapping_version' => '',
-        'table_header_enemy_forces'    => '',
-        'table_header_actions'         => '',
-        'edit'                         => [
+        'flash' => [
+            'enemy_forces_updated' => '',
+            'enemy_forces_created' => '',
+            'enemy_forces_deleted' => '',
+        ],
+        'title' => '',
+        'edit'  => [
             'title'                => '',
             'header'               => '',
+            'mapping_version'      => '',
             'enemy_forces'         => '',
             'enemy_forces_teeming' => '',
             'submit'               => '',
+        ],
+    ],
+    'npchealth'                  => [
+        'flash' => [
+            'npc_health_updated' => '',
+            'npc_health_created' => '',
+            'npc_health_deleted' => '',
+        ],
+        'title' => '',
+        'edit'  => [
+            'title'                                => '',
+            'header'                               => '',
+            'current'                              => '',
+            'health'                               => '',
+            'scaled_health_to_health_apply'        => '',
+            'scaled_health_placeholder'            => '',
+            'scaled_health_percentage_placeholder' => '',
+            'scaled_type_none'                     => '',
+            'scaled_type_fortified'                => '',
+            'scaled_type_tyrannical'               => '',
+            'auto_complete_npc_healths'            => '',
+            'table_header'                         => [
+                'npc_id'         => '',
+                'npc_name'       => '',
+                'classification' => '',
+                'health'         => '',
+                'percentage'     => '',
+                'actions'        => '',
+            ],
+            'apply_to_npc_health'                  => '',
+            'edit_npc_health'                      => '',
+            'percentage'                           => '',
+            'game_version'                         => '',
+            'submit'                               => '',
         ],
     ],
     'release'                    => [
@@ -275,6 +328,7 @@ return [
             'title_edit'        => 'Редактировать способность',
             'header_edit'       => 'Редактировать способность',
             'game_id'           => 'Игровое ID',
+            'game_version_id'   => '',
             'name'              => 'Название',
             'icon_name'         => 'Название иконки',
             'category'          => '',
@@ -298,7 +352,7 @@ return [
         ],
     ],
     'tools'                      => [
-        'datadump'     => [
+        'datadump'      => [
             'viewexporteddungeondata' => [
                 'title'   => 'Экспортировано!',
                 'header'  => 'Данные подземелья сброшены',
@@ -310,7 +364,7 @@ return [
                 'content' => 'Экспортировано!',
             ],
         ],
-        'dungeonroute' => [
+        'dungeonroute'  => [
             'view'            => [
                 'title'      => 'Показать подземелье',
                 'header'     => 'Показать подземелье',
@@ -329,7 +383,7 @@ return [
                 'table_header_actions'              => '',
             ],
         ],
-        'enemyforces'  => [
+        'enemyforces'   => [
             'title'                    => 'Импорт силы врага',
             'header'                   => 'Импорт силы врага',
             'paste_mennos_export_json' => 'Вставить Menno\'s экспортированный Json',
@@ -340,7 +394,7 @@ return [
                 'submit' => '',
             ],
         ],
-        'exception'    => [
+        'exception'     => [
             'select' => [
                 'title'                     => 'Сброс исключений',
                 'header'                    => 'Сброс исключений',
@@ -348,7 +402,7 @@ return [
                 'submit'                    => 'Подтвердить',
             ],
         ],
-        'features'     => [
+        'features'      => [
             'list' => [
                 'title'        => '',
                 'header'       => '',
@@ -363,7 +417,15 @@ return [
                 ],
             ],
         ],
-        'mdt'          => [
+        'messagebanner' => [
+            'set' => [
+                'title'   => '',
+                'header'  => '',
+                'message' => '',
+                'submit'  => '',
+            ],
+        ],
+        'mdt'           => [
             'diff'                              => [
                 'title'                 => 'MDT Различия',
                 'header'                => 'MDT Различия',
@@ -419,7 +481,7 @@ return [
                 'submit' => '',
             ],
         ],
-        'npc'          => [
+        'npc'           => [
             'import'                => [
                 'title'                   => '',
                 'header'                  => '',
@@ -427,15 +489,20 @@ return [
                 'submit'                  => '',
             ],
             'managespellvisibility' => [
-                'title'  => '',
-                'header' => '',
-                'submit' => '',
+                'title'           => '',
+                'header'          => '',
+                'submit'          => '',
+                'spell_not_found' => '',
             ],
         ],
-        'list'         => [
-            'title'                   => 'Инструменты администратора',
-            'header'                  => 'Инструменты администратора',
-            'header_tools'            => 'Инструменты',
+        'list'          => [
+            'title'        => 'Инструменты администратора',
+            'header'       => 'Инструменты администратора',
+            'header_tools' => 'Инструменты',
+
+            'subheader_message_banner' => '',
+            'set_message_banner'       => '',
+
             'subheader_npcs'          => '',
             'mass_import_npcs'        => 'Массовый импорт NPC',
             'manage_spell_visibility' => '',
@@ -459,6 +526,9 @@ return [
             'subheader_wowtools'                 => '',
             'wowtools_import_ingame_coordinates' => '',
 
+            'subheader_wagogg'                 => '',
+            'wagogg_import_ingame_coordinates' => '',
+
             'subheader_misc'     => 'Разное',
             'drop_caches'        => 'Сбросить кеш',
             'throw_an_exception' => 'Сбросить исключения',
@@ -469,16 +539,17 @@ return [
             'subheader_features' => '',
             'manage_features'    => '',
 
-            'subheader_actions'   => 'Действия',
-            'export_dungeon_data' => 'Экспорт данных о подземельях',
-            'export_releases'     => 'Экспорт релизов',
+            'subheader_actions'    => 'Действия',
+            'export_dungeon_data'  => 'Экспорт данных о подземельях',
+            'export_releases'      => 'Экспорт релизов',
+            'toggle_readonly_mode' => '',
 
             'enemy_forces_recalculate' => '',
 
             'subheader_thumbnails'  => '',
             'thumbnails_regenerate' => '',
         ],
-        'thumbnails'   => [
+        'thumbnails'    => [
             'regenerate' => [
                 'title'        => '',
                 'header'       => '',
@@ -486,7 +557,15 @@ return [
                 'submit'       => '',
             ],
         ],
-        'wowtools'     => [
+        'wagogg'        => [
+            'importingamecoordinates' => [
+                'title'                       => '',
+                'header'                      => '',
+                'ui_map_assignment_table_csv' => '',
+                'submit'                      => '',
+            ],
+        ],
+        'wowtools'      => [
             'importingamecoordinates' => [
                 'title'                                  => '',
                 'header'                                 => '',

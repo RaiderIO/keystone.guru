@@ -155,7 +155,7 @@ class RowElementKillZone extends RowElement {
                 let enemy = enemyMapObjectGroup.objects[enemyKey];
                 if (enemy.id === enemyId) {
                     if (enemy.isBossNpc()) {
-                        bossNames.push(enemy.npc.name);
+                        bossNames.push(lang.get(enemy.npc.name));
                     } else if (!hasAwakened && enemy.isAwakenedNpc()) {
                         hasAwakened = true;
                     } else if (!hasPrideful && enemy.isPridefulNpc()) {
@@ -222,7 +222,7 @@ class RowElementKillZone extends RowElement {
                 // If not in our array, add it
                 if (!npcArr.hasOwnProperty(enemy.npc.id)) {
                     npcArr[enemy.npc.id] = {
-                        name: enemy.npc.name,
+                        name: lang.get(enemy.npc.name),
                         awakened: enemy.isAwakenedNpc(),
                         prideful: enemy.isPridefulNpc(),
                         inspiring: false, // Will be set below
@@ -261,7 +261,7 @@ class RowElementKillZone extends RowElement {
                 'enemy_forces': npc.enemy_forces,
                 'enemy_forces_percent': getFormattedPercentage(npc.enemy_forces, this.map.enemyForcesManager.getEnemyForcesRequired()),
                 'count': npc.count,
-                'name': npc.name,
+                'name': lang.get(npc.name),
                 'awakened': npc.awakened,
                 'prideful': npc.prideful,
                 'inspiring': npc.inspiring,

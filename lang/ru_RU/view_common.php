@@ -1,12 +1,12 @@
 <?php
 
 return [
-    'affixgroup'   => [
+    'affixgroup'     => [
         'affixgroup' => [
 
         ],
     ],
-    'dungeon'      => [
+    'dungeon'        => [
         'griddiscover' => [
             'popular'   => 'Популярные',
             'this_week' => 'Текущая неделя',
@@ -26,7 +26,7 @@ return [
             'siege_of_boralus_warning' => 'Так как подземелье Осада Боралуса отличаются для Орды и Альянса вам необходимо выбрать фракцию.',
         ],
     ],
-    'dungeonroute' => [
+    'dungeonroute'   => [
         'search'     => [
             'loadmore' => [
                 'loading' => 'Загрузка...',
@@ -71,7 +71,7 @@ return [
             'data_by_archon_gg' => '%s -  данные https://mplus.subcreation.net',
         ],
     ],
-    'forms'        => [
+    'forms'          => [
         'createroute'          => [
             'title'                                          => 'Название',
             'title_title'                                    => 'Выберите заголовок, который будет отличать ваши маршрут от других аналогичных маршрутов, которые вы можете создать. Заголовок будет виден другим пользователям, как только вы опубликуете свой маршрут.',
@@ -106,11 +106,19 @@ return [
             'login_through_oauth2' => 'Авторизация с помощью OAuth2',
         ],
         'mapsettings'          => [
+            'general'                                       => '',
             'map_facade_style'                              => '',
             'map_facade_style_title'                        => '',
             'map_facade_style_facade_option'                => '',
             'map_facade_style_split_floors_option'          => '',
             'map_facade_style_change_requires_page_refresh' => '',
+
+            'zoom_speed'       => '',
+            'zoom_speed_title' => '',
+
+            'heatmap'                     => '',
+            'show_heatmap_tooltips'       => '',
+            'show_heatmap_tooltips_title' => '',
 
             'enemies'                                => 'Враги',
             'enemy_number_style'                     => 'Стиль числа врагов',
@@ -138,6 +146,7 @@ return [
             'temporary_route'                        => 'Временный маршрут',
             'temporary_route_title'                  => 'Временный маршрут не будет отображаться в вашем профиле и будет автоматически удален через %d часов.',
             'parsing_your_string'                    => 'Разбор вашей строки MDT...',
+            'assign_notes_to_pulls'                  => '',
             'import_as_this_week'                    => '',
             'import_route'                           => 'Импорт маршрута',
         ],
@@ -187,7 +196,7 @@ return [
             'timezone'   => 'Временная зона',
         ],
     ],
-    'general'      => [
+    'general'        => [
         'linkpreview' => [
             'title'               => '',
             'description'         => '',
@@ -195,7 +204,7 @@ return [
             'twitter_description' => '',
         ],
     ],
-    'group'        => [
+    'group'          => [
         'affixes'     => [
             'seasonal_index_preset'    => 'Задано :count',
             'awakened_enemy_set'       => 'Набор Пробудившихся врагов',
@@ -209,7 +218,7 @@ return [
             'party_member_nr' => 'Член группы  #%d',
         ],
     ],
-    'layout'       => [
+    'layout'         => [
         'footer' => [
             'developer'                       => '',
             'api_documentation'               => '',
@@ -219,6 +228,8 @@ return [
             'changelog_new'                   => 'НОВОЕ',
             'credits'                         => 'Благодарности',
             'about'                           => 'О нас',
+            'legacy'                          => '',
+            'affixes'                         => '',
             'external'                        => 'Внешние ссылки',
             'patreon'                         => 'Patreon',
             'discord'                         => 'Discord',
@@ -235,10 +246,11 @@ return [
             'toggle_navigation_title' => 'Включить навигацию',
             'create_route'            => 'Создать маршрут',
             'search'                  => 'Поиск',
-            'browse_by_expansion'        => '',
+            'browse_by_expansion'     => '',
             'routes'                  => ':expansion',
+            'browse_routes'           => '',
+            'heatmaps'                => '',
             'explore'                 => '',
-            'affixes'                 => 'Аффиксы',
             'new'                     => 'Новые',
         ],
         'nav'    => [
@@ -267,7 +279,7 @@ return [
             ],
         ],
     ],
-    'maps'         => [
+    'maps'           => [
         'controls' => [
             'draw'           => [
                 'admin'           => '',
@@ -315,35 +327,45 @@ return [
                 'report_an_issue' => 'Сообщить о проблеме',
             ],
             'heatmapsearch'  => [
-                'settings_title'      => '',
-                'enabled'             => '',
-                'disabled'            => '',
-                'event_type'          => '',
-                'data_type'           => '',
-                'npc_death_alt'       => '',
-                'player_death_alt'    => '',
-                'bloodlust_alt'       => '',
-                'data_type_title'     => '',
-                'filter'              => '',
-                'key_level'           => '',
-                'item_level'          => '',
-                'player_deaths'       => '',
-                'affixes'             => '',
-                'affixes_title'       => '',
-                'affixes_selected'    => '',
-                'weekly_affix_groups' => '',
-                'specializations'     => '',
-                'date_range'          => '',
-                'date_range_from'     => '',
-                'date_range_to'       => '',
-                'duration'            => '',
-                'advanced_options'    => '',
-                'advanced_option'     => [
+                'settings_title'         => '',
+                'enabled'                => '',
+                'disabled'               => '',
+                'event_type'             => '',
+                'data_type'              => '',
+                'npc_death_alt'          => '',
+                'player_death_alt'       => '',
+                'bloodlust_alt'          => '',
+                'data_type_title'        => '',
+                'filter'                 => '',
+                'key_level'              => '',
+                'item_level'             => '',
+                'player_deaths'          => '',
+                'affixes'                => '',
+                'affixes_title'          => '',
+                'affixes_selected'       => '',
+                'weekly_affix_groups'    => '',
+                'date_range'             => '',
+                'date_range_from'        => '',
+                'date_range_to'          => '',
+                'duration'               => '',
+                'class_and_spec_options' => '',
+                'class_and_spec_option'  => [
+                    'specializations'                     => '',
+                    'specializations_title'               => '',
+                    'classes'                             => '',
+                    'classes_title'                       => '',
+                    'specializations_player_deaths'       => '',
+                    'specializations_player_deaths_title' => '',
+                    'classes_player_deaths'               => '',
+                    'classes_player_deaths_title'         => '',
+                ],
+                'advanced_options'       => '',
+                'advanced_option'        => [
                     'min_samples_required'       => '',
                     'min_samples_required_title' => '',
                 ],
-                'heat_options'        => '',
-                'heat_option'         => [
+                'heat_options'           => '',
+                'heat_option'            => [
                     'min_opacity' => '',
                     'max_zoom'    => '',
                     'max'         => '',
@@ -393,12 +415,13 @@ return [
             ],
             'pullsworkbench' => [
                 'modal'            => [
-                    'description' => [
+                    'description'       => [
                         'label'               => '',
                         'supported_html_tags' => '',
                         'save'                => '',
                     ],
-                    'spells'      => [
+                    'supported_domains' => '',
+                    'spells'            => [
                         'label' => '',
                         'save'  => '',
                     ],
@@ -431,7 +454,13 @@ return [
             'route' => 'Маршрут',
         ],
     ],
-    'modal'        => [
+    'mappingversion' => [
+        'select' => [
+            'mapping_version_readonly' => '',
+            'mapping_version'          => '',
+        ],
+    ],
+    'modal'          => [
         'dungeonroute'       => [
             'removed' => [
                 'title'        => '',
@@ -576,12 +605,12 @@ return [
             'title' => '',
         ],
     ],
-    'release'      => [
+    'release'        => [
         'release' => [
             'new' => 'Новые',
         ],
     ],
-    'tag'          => [
+    'tag'            => [
         'manager' => [
             'route_personal' => 'Маршрут',
             'route_team'     => 'Маршрут',
@@ -595,7 +624,7 @@ return [
             'create_new_tag' => 'Создать новый тег',
         ],
     ],
-    'team'         => [
+    'team'           => [
         'details' => [
             'name'            => 'Название',
             'description'     => 'Описание',
@@ -612,7 +641,7 @@ return [
             'create_team' => 'Создать команду',
         ],
     ],
-    'thirdparty'   => [
+    'thirdparty'     => [
         'nitropay'      => [
             'adcontrols' => [
                 'remove_ads' => 'Убрать рекламу',
@@ -627,9 +656,10 @@ return [
             'learn_more' => 'Дополнительная информация',
         ],
     ],
-    'user'         => [
+    'user'           => [
         'name' => [
             'avatar_alt' => 'Аватар',
+            'raider_io'  => '',
         ],
     ],
 

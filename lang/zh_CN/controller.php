@@ -6,6 +6,7 @@ return [
         'error' => [
             'mdt_string_parsing_failed'           => '',
             'mdt_string_format_not_recognized'    => '',
+            'cli_weakauras_parser_not_found'      => '',
             'invalid_mdt_string'                  => '',
             'invalid_mdt_string_exception'        => '',
             'mdt_importer_not_configured'         => '',
@@ -18,15 +19,18 @@ return [
             'mdt_invalid_category'                => '',
         ],
         'flash' => [
-            'thumbnail_regenerate_result' => '',
-            'caches_dropped_successfully' => '',
-            'releases_exported'           => '',
-            'exception'                   => [
+            'message_banner_set_successfully' => '',
+            'thumbnail_regenerate_result'     => '',
+            'caches_dropped_successfully'     => '',
+            'releases_exported'               => '',
+            'exception'                       => [
                 'internal_server_error' => '',
             ],
-            'feature_toggle_activated'    => '',
-            'feature_toggle_deactivated'  => '',
-            'feature_forgotten'           => '',
+            'feature_toggle_activated'        => '',
+            'feature_toggle_deactivated'      => '',
+            'feature_forgotten'               => '',
+            'read_only_mode_disabled'         => '',
+            'read_only_mode_enabled'          => '',
         ],
     ],
     'apidungeonroute'             => [
@@ -103,6 +107,7 @@ return [
             'user_exists'             => '',
             'email_exists'            => '',
             'permission_denied'       => '',
+            'read_only_mode_enabled'  => '',
         ],
     ],
     'register'                    => [
@@ -132,6 +137,7 @@ return [
         'error'           => [
             'mdt_string_parsing_failed'             => '',
             'mdt_string_format_not_recognized'      => '',
+            'cli_weakauras_parser_not_found'        => '',
             'invalid_mdt_string_exception'          => '',
             'invalid_mdt_string'                    => '',
             'mdt_importer_not_configured_properly'  => '',

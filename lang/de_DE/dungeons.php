@@ -70,6 +70,15 @@ return [
                 'tinkers_court'     => '',
             ],
         ],
+        'karazhan_crypts'             => [
+            'name'   => '',
+            'floors' => [
+                'karazhan_crypts'         => '',
+                'the_slough_of_dispair'   => '',
+                'tome_of_the_unrepentant' => '',
+                'the_pit_of_criminals'    => '',
+            ],
+        ],
         'lower_blackrock_spire'       => [
             'name'   => '',
             'floors' => [
@@ -116,6 +125,16 @@ return [
             'name'   => '',
             'floors' => [
                 'ruins_of_ahnqiraj' => '',
+            ],
+        ],
+        'scarlet_enclave'             => [
+            'name'   => '',
+            'floors' => [
+                'tyrs_hand'              => '',
+                'the_forbidding_expanse' => '',
+                'scarlet_cathedral'      => '',
+                'avalon_monastery'       => '',
+                'ashbringer_chapel'      => '',
             ],
         ],
         'scarlet_monastery_armory'    => [
@@ -800,10 +819,11 @@ return [
         'mechagon_workshop'         => [
             'name'   => '',
             'floors' => [
-                'the_robodrome'  => '',
-                'waste_pipes'    => '',
-                'the_under_junk' => '',
-                'mechagon_city'  => '',
+                'the_robodrome'               => '',
+                'waste_pipes'                 => '',
+                'the_under_junk'              => '',
+                'mechagon_city'               => '',
+                'operation_mechagon_workshop' => '',
             ],
         ],
         'orgrimmar_horrific_vision' => [
@@ -1020,6 +1040,7 @@ return [
             'name'   => '',
             'floors' => [
                 'darkflame_cleft' => '',
+                'shadow_realm'    => '',
             ],
         ],
         'priory_of_the_sacred_flame' => [
@@ -1051,6 +1072,14 @@ return [
             'name'   => '',
             'floors' => [
                 'the_stonevault' => '',
+            ],
+        ],
+        'operation_floodgate'        => [
+            'name'   => '',
+            'floors' => [
+                'the_waterworks'      => '',
+                'the_grid'            => '',
+                'operation_floodgate' => '',
             ],
         ],
     ],

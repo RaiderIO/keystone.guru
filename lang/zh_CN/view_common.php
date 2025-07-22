@@ -1,17 +1,20 @@
 <?php
 
 return [
-    'affixgroup'   => [
+    'affixgroup'     => [
         'affixgroup' => [
 
         ],
     ],
-    'dungeon'      => [
+    'dungeon'        => [
         'griddiscover' => [
             'popular'   => '',
             'this_week' => '',
             'next_week' => '',
             'new'       => '',
+        ],
+        'gridtabs'     => [
+            'raid' => '',
         ],
         'select'       => [
             'dungeon'                  => '',
@@ -19,10 +22,11 @@ return [
             'all_dungeons'             => '',
             'all_expansion_dungeons'   => '',
             'seasons'                  => '',
+            'raid'                     => '',
             'siege_of_boralus_warning' => '',
         ],
     ],
-    'dungeonroute' => [
+    'dungeonroute'   => [
         'search'     => [
             'loadmore' => [
                 'loading' => '',
@@ -41,6 +45,8 @@ return [
             'updated_at'               => '',
             'report'                   => '',
             'refresh_thumbnail'        => '',
+            'dominant_affix'           => '',
+            'seasonal_affix'           => '',
         ],
         'cardlist'   => [
             'no_dungeonroutes' => '',
@@ -65,7 +71,7 @@ return [
             'data_by_archon_gg' => '',
         ],
     ],
-    'forms'        => [
+    'forms'          => [
         'createroute'          => [
             'title'                                          => '',
             'title_title'                                    => '',
@@ -100,11 +106,19 @@ return [
             'login_through_oauth2' => '',
         ],
         'mapsettings'          => [
+            'general'                                       => '',
             'map_facade_style'                              => '',
             'map_facade_style_title'                        => '',
             'map_facade_style_facade_option'                => '',
             'map_facade_style_split_floors_option'          => '',
             'map_facade_style_change_requires_page_refresh' => '',
+
+            'zoom_speed'       => '',
+            'zoom_speed_title' => '',
+
+            'heatmap'                     => '',
+            'show_heatmap_tooltips'       => '',
+            'show_heatmap_tooltips_title' => '',
 
             'enemies'                                => '',
             'enemy_number_style'                     => '',
@@ -132,6 +146,7 @@ return [
             'temporary_route'                        => '',
             'temporary_route_title'                  => '',
             'parsing_your_string'                    => '',
+            'assign_notes_to_pulls'                  => '',
             'import_as_this_week'                    => '',
             'import_route'                           => '',
         ],
@@ -181,7 +196,7 @@ return [
             'timezone'   => '',
         ],
     ],
-    'general'      => [
+    'general'        => [
         'linkpreview' => [
             'title'               => '',
             'description'         => '',
@@ -189,7 +204,7 @@ return [
             'twitter_description' => '',
         ],
     ],
-    'group'        => [
+    'group'          => [
         'affixes'     => [
             'seasonal_index_preset'    => '',
             'awakened_enemy_set'       => '',
@@ -203,59 +218,68 @@ return [
             'party_member_nr' => '',
         ],
     ],
-    'layout'       => [
-        'footer'  => [
-            'developer'         => '',
-            'api_documentation' => '',
-            'keystone_guru'     => '',
-            'changelog'         => '',
-            'changelog_new'     => '',
-            'credits'           => '',
-            'about'             => '',
-            'external'          => '',
-            'patreon'           => '',
-            'discord'           => '',
-            'github'            => '',
-            'legal'             => '',
-            'terms_of_service'  => '',
-            'privacy_policy'    => '',
-            'cookie_policy'     => '',
-            'trademark'         => '',
-            'trademark_footer'  => '',
-            'social'            => '',
+    'layout'         => [
+        'footer' => [
+            'developer'                       => '',
+            'api_documentation'               => '',
+            'api_documentation_internal_team' => '',
+            'keystone_guru'                   => '',
+            'changelog'                       => '',
+            'changelog_new'                   => '',
+            'credits'                         => '',
+            'about'                           => '',
+            'legacy'                          => '',
+            'affixes'                         => '',
+            'external'                        => '',
+            'patreon'                         => '',
+            'discord'                         => '',
+            'github'                          => '',
+            'legal'                           => '',
+            'terms_of_service'                => '',
+            'privacy_policy'                  => '',
+            'cookie_policy'                   => '',
+            'trademark'                       => '',
+            'trademark_footer'                => '',
+            'social'                          => '',
         ],
-        'header'  => [
+        'header' => [
             'toggle_navigation_title' => '',
             'create_route'            => '',
             'search'                  => '',
-            'browse_by_expansion'        => '',
+            'browse_by_expansion'     => '',
             'routes'                  => '',
+            'browse_routes'           => '',
+            'heatmaps'                => '',
             'explore'                 => '',
-            'affixes'                 => '',
             'new'                     => '',
         ],
-        'navuser' => [
-            'login'             => '',
-            'register'          => '',
-            'telescope'         => '',
-            'tools'             => '',
-            'view_releases'     => '',
-            'view_expansions'   => '',
-            'view_dungeons'     => '',
-            'view_npcs'         => '',
-            'view_spells'       => '',
-            'view_users'        => '',
-            'view_user_reports' => '',
-            'my_routes'         => '',
-            'my_favorites'      => '',
-            'my_tags'           => '',
-            'my_teams'          => '',
-            'my_profile'        => '',
-            'account_settings'  => '',
-            'logout'            => '',
+        'nav'    => [
+            'user'       => [
+                'login'             => '',
+                'register'          => '',
+                'telescope'         => '',
+                'tools'             => '',
+                'view_releases'     => '',
+                'view_expansions'   => '',
+                'view_dungeons'     => '',
+                'view_npcs'         => '',
+                'view_spells'       => '',
+                'view_users'        => '',
+                'view_user_reports' => '',
+                'my_routes'         => '',
+                'my_favorites'      => '',
+                'my_tags'           => '',
+                'my_teams'          => '',
+                'my_profile'        => '',
+                'account_settings'  => '',
+                'logout'            => '',
+            ],
+            'uploadlogs' => [
+                'upload_logs' => '',
+            ],
         ],
     ],
-    'maps'         => [
+    'maps'           => [
         'controls' => [
             'draw'           => [
                 'admin'           => '',
@@ -303,32 +327,60 @@ return [
                 'report_an_issue' => '',
             ],
             'heatmapsearch'  => [
-                'settings_title'            => '',
-                'enabled'                   => '',
-                'disabled'                  => '',
-                'event_type'                => '',
-                'data_type'                 => '',
-                'data_type_title'           => '',
-                'filter'                    => '',
-                'loading'                   => '',
-                'key_level'                 => '',
-                'affixes'                   => '',
-                'affixes_title'             => '',
-                'affixes_selected'          => '',
-                'weekly_affix_groups'       => '',
-                'weekly_affix_groups_title' => '',
-                'date_range'                => '',
-                'date_range_from'           => '',
-                'date_range_to'             => '',
-                'duration'                  => '',
-                'data'                      => [
-                    'dungeon_routes' => '',
+                'settings_title'         => '',
+                'enabled'                => '',
+                'disabled'               => '',
+                'event_type'             => '',
+                'data_type'              => '',
+                'npc_death_alt'          => '',
+                'player_death_alt'       => '',
+                'bloodlust_alt'          => '',
+                'data_type_title'        => '',
+                'filter'                 => '',
+                'key_level'              => '',
+                'item_level'             => '',
+                'player_deaths'          => '',
+                'affixes'                => '',
+                'affixes_title'          => '',
+                'affixes_selected'       => '',
+                'weekly_affix_groups'    => '',
+                'date_range'             => '',
+                'date_range_from'        => '',
+                'date_range_to'          => '',
+                'duration'               => '',
+                'class_and_spec_options' => '',
+                'class_and_spec_option'  => [
+                    'specializations'                     => '',
+                    'specializations_title'               => '',
+                    'classes'                             => '',
+                    'classes_title'                       => '',
+                    'specializations_player_deaths'       => '',
+                    'specializations_player_deaths_title' => '',
+                    'classes_player_deaths'               => '',
+                    'classes_player_deaths_title'         => '',
+                ],
+                'advanced_options'       => '',
+                'advanced_option'        => [
+                    'min_samples_required'       => '',
+                    'min_samples_required_title' => '',
+                ],
+                'heat_options'           => '',
+                'heat_option'            => [
+                    'min_opacity' => '',
+                    'max_zoom'    => '',
+                    'max'         => '',
+                    'radius'      => '',
+                    'blur'        => '',
+                    'gradient'    => '',
+                    'pane'        => '',
                 ],
             ],
             'header'         => [
                 'toggle_navigation'              => '',
                 'stop'                           => '',
                 'start'                          => '',
+                'dominant_affix'                 => '',
+                'seasonal_affix'                 => '',
                 'live_session_expires_in'        => '',
                 'edit_route'                     => '',
                 'view_route'                     => '',
@@ -337,6 +389,8 @@ return [
                 'simulate_route'                 => '',
                 'edit_route_settings'            => '',
                 'edit_mapping_version'           => '',
+                'admin_header_title'             => '',
+                'explore_header_title'           => '',
                 'share'                          => '',
                 'start_live_session'             => '',
                 'start_live_session_paragraph_1' => '',
@@ -361,12 +415,13 @@ return [
             ],
             'pullsworkbench' => [
                 'modal'            => [
-                    'description' => [
+                    'description'       => [
                         'label'               => '',
                         'supported_html_tags' => '',
                         'save'                => '',
                     ],
-                    'spells'      => [
+                    'supported_domains' => '',
+                    'spells'            => [
                         'label' => '',
                         'save'  => '',
                     ],
@@ -395,13 +450,24 @@ return [
 
             'new_mapping_version_header_title'       => '',
             'new_mapping_version_header_description' => '',
-            'explore_header_title'                   => '',
-            'admin_header_title'                     => '',
 
             'route' => '',
         ],
     ],
-    'modal'        => [
+    'mappingversion' => [
+        'select' => [
+            'mapping_version_readonly' => '',
+            'mapping_version'          => '',
+        ],
+    ],
+    'modal'          => [
+        'dungeonroute'       => [
+            'removed' => [
+                'title'        => '',
+                'description'  => '',
+                'back_to_home' => '',
+            ],
+        ],
         'userreport'         => [
             'dungeonroute' => [
                 'report_route'           => '',
@@ -475,62 +541,76 @@ return [
             'copy_to_clipboard'                => '',
         ],
         'simulate'           => [
-            'intro'                                   => '',
-            'title'                                   => '',
-            'key_level'                               => '',
-            'key_level_title'                         => '',
-            'shrouded_bounty_type'                    => '',
-            'shrouded_bounty_type_title'              => '',
-            'shrouded_bounty_types'                   => [
-                'none'    => '',
-                'crit'    => '',
-                'haste'   => '',
-                'mastery' => '',
-                'vers'    => '',
-            ],
-            'affixes'                                 => '',
-            'affixes_title'                           => '',
-            'affixes_map'                             => [
-                'fortified'  => '',
-                'tyrannical' => '',
-            ],
-            'simulate_thundering_clear_seconds'       => '',
-            'simulate_thundering_clear_seconds_title' => '',
-            'bloodlust'                               => '',
-            'bloodlust_title'                         => '',
-            'arcane_intellect'                        => '',
-            'power_word_fortitude'                    => '',
-            'battle_shout'                            => '',
-            'mystic_touch'                            => '',
-            'chaos_brand'                             => '',
-            'hp_percent'                              => '',
-            'hp_percent_title'                        => '',
-            'bloodlust_per_pull'                      => '',
-            'bloodlust_per_pull_title'                => '',
-            'ranged_pull_compensation_yards'          => '',
-            'ranged_pull_compensation_yards_title'    => '',
-            'use_mounts'                              => '',
-            'use_mounts_title'                        => '',
-            'get_simulationcraft_string'              => '',
-            'simulationcraft_string'                  => '',
-            'loading'                                 => '',
-            'copy_to_clipboard'                       => '',
+            'intro'                      => '',
+            'title'                      => '',
+            'get_simulationcraft_string' => '',
+            'simulationcraft_string'     => '',
+            'loading'                    => '',
+            'copy_to_clipboard'          => '',
         ],
         'simulateoptions'    => [
+            'default'  => [
+
+                'key_level'                               => '',
+                'key_level_title'                         => '',
+                'shrouded_bounty_type'                    => '',
+                'shrouded_bounty_type_title'              => '',
+                'shrouded_bounty_types'                   => [
+                    'none'    => '',
+                    'crit'    => '',
+                    'haste'   => '',
+                    'mastery' => '',
+                    'vers'    => '',
+                ],
+                'affixes'                                 => '',
+                'affixes_title'                           => '',
+                'affixes_map'                             => [
+                    'fortified'  => '',
+                    'tyrannical' => '',
+                ],
+                'simulate_thundering_clear_seconds'       => '',
+                'simulate_thundering_clear_seconds_title' => '',
+                'raid_buffs_title'                        => '',
+                'raid_buffs'                              => '',
+                'raid_buffs_map'                          => [
+                    'bloodlust'            => '',
+                    'arcane_intellect'     => '',
+                    'power_word_fortitude' => '',
+                    'mark_of_the_wild'     => '',
+                    'battle_shout'         => '',
+                    'mystic_touch'         => '',
+                    'chaos_brand'          => '',
+                    'skyfury'              => '',
+                    'hunters_mark'         => '',
+                    'power_infusion'       => '',
+                    'bleeding'             => '',
+                ],
+                'hp_percent'                              => '',
+                'hp_percent_title'                        => '',
+                'bloodlust_per_pull'                      => '',
+                'bloodlust_per_pull_title'                => '',
+            ],
             'advanced' => [
-                'patreon_link_text' => '',
-                'patreon_only'      => '',
-                'advanced_options'  => '',
-                'description'       => '',
+                'ranged_pull_compensation_yards'       => '',
+                'ranged_pull_compensation_yards_title' => '',
+                'use_mounts'                           => '',
+                'use_mounts_title'                     => '',
+                'patreon_link_text'                    => '',
+                'patreon_only'                         => '',
+                'advanced_options'                     => '',
+                'description'                          => '',
             ],
         ],
+        'uploadlogs'         => [
+            'title' => '',
+        ],
     ],
-    'release'      => [
+    'release'        => [
         'release' => [
             'new' => '',
         ],
     ],
-    'tag'          => [
+    'tag'            => [
         'manager' => [
             'route_personal' => '',
             'route_team'     => '',
@@ -544,7 +624,7 @@ return [
             'create_new_tag' => '',
         ],
     ],
-    'team'         => [
+    'team'           => [
         'details' => [
             'name'            => '',
             'description'     => '',
@@ -561,7 +641,7 @@ return [
             'create_team' => '',
         ],
     ],
-    'thirdparty'   => [
+    'thirdparty'     => [
         'nitropay'      => [
             'adcontrols' => [
                 'remove_ads' => '',
@@ -576,9 +656,10 @@ return [
             'learn_more' => '',
         ],
     ],
-    'user'         => [
+    'user'           => [
         'name' => [
             'avatar_alt' => '',
+            'raider_io'  => '',
         ],
     ],
 

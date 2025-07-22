@@ -42,6 +42,8 @@ return [
         'to_team_list'   => '',
         'team_header'    => '',
         'icon_image_alt' => '',
+        'routes'         => '',
+        'members'        => '',
     ],
     'invite'   => [
         'linkpreview_title'       => '',

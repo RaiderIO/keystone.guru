@@ -21,8 +21,10 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Psr\SimpleCache\InvalidArgumentException;
 
 abstract class MapContext
@@ -128,6 +130,40 @@ abstract class MapContext
                 ]);
             }, config('keystoneguru.cache.dungeonData.ttl')
         );
+
+        // Npc data (for localizations)
+        $locale = Auth::user()?->locale ?? 'en_US';
+        $dungeonNpcData = $this->cacheService->remember(
+            sprintf('dungeon_npcs_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $locale),
+            function () use($dungeonData, $locale) {
+                return [
+                    'npcs' => $this->floor->dungeon->npcs()
+                        ->selectRaw('npcs.*, translations.translation as name')
+                        ->leftJoin('translations', static function (JoinClause $clause) use($locale) {
+                            $clause->on('translations.key', 'npcs.name')
+                                ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
+                        })
+                        ->when($this->onlyLoadInUseNpcs(), function (Builder $query) use ($dungeonData) {
+                            $query->whereIn('npcs.id', $dungeonData['enemies']->pluck('npc_id')->unique());
+                        })->with([
+                            'spells',
+                            // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
+                            'enemyForces' => fn(HasOne $query) => $query->where('mapping_version_id', $this->mappingVersion->id),
+                        ])
+                        // Disable cache for this query though! Since NpcEnemyForces is a cache model, it can otherwise return values from another mapping version
+                        ->disableCache()
+                        ->get()
+                        // Only show what we need in the FE
+                        ->each(function (Npc $npc) {
+                            $npc->enemyForces?->setVisible(['enemy_forces', 'enemy_forces_teeming']);
+                            $npc->setHidden(['pivot']);
+                        }),
+                ];
+            }, config('keystoneguru.cache.dungeonData.ttl')
+        );
+
+        $dungeonData['npcs'] = $dungeonNpcData['npcs'];
+
 
         $selectableSpells = Spell::where('selectable', true)->get();
         $characterClasses = CharacterClass::all();

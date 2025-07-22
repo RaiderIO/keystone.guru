@@ -398,7 +398,7 @@ class Enemy extends VersionableMapObject {
                 let npc = npcs[index];
                 this.selectNpcs.push({
                     id: npc.id,
-                    name: `${npc.name} (${npc.id})`
+                    name: `${lang.get(npc.name)} (${npc.id})`
                 });
             }
         }
@@ -550,7 +550,7 @@ class Enemy extends VersionableMapObject {
                 for (let index in this.npc.npcbolsteringwhitelists) {
                     if (this.npc.npcbolsteringwhitelists.hasOwnProperty(index)) {
                         let whitelistedNpc = this.npc.npcbolsteringwhitelists[index];
-                        npcBolsteringWhitelistHtml += whitelistedNpc.whitelistnpc.name;
+                        npcBolsteringWhitelistHtml += lang.get(whitelistedNpc.whitelistnpc.name);
                         // Stop before the end
                         if (count < this.npc.npcbolsteringwhitelists.length - 1) {
                             npcBolsteringWhitelistHtml += '<br>';
@@ -734,7 +734,7 @@ class Enemy extends VersionableMapObject {
         if (this.layer !== null) {
             let text;
             if (this.npc !== null) {
-                text = this.npc.name;
+                text = lang.get(this.npc.name);
             } else {
                 text = lang.get('messages.no_npc_found_label');
             }
