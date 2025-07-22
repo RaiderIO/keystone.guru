@@ -13,7 +13,7 @@ use App\Models\User;
 $link                   ??= false;
 $showAnonIcon           ??= true;
 $showRaiderIOStaffImage ??= true;
-$isRaiderIOStaff        = $showRaiderIOStaffImage && isset($user) && $user->hasRole(Role::ROLE_ADMIN);
+$isRaiderIOStaff        = $showRaiderIOStaffImage && isset($user) && $user->hasRole(Role::ROLE_INTERNAL_TEAM);
 ?>
 
 @isset($user)

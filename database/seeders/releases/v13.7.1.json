@@ -1,0 +1,31 @@
+{
+    "id": 310,
+    "release_changelog_id": 317,
+    "version": "v13.7.1",
+    "title": "Added Mists of Pandaria dungeons backgrounds",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-07-22T10:30:32+00:00",
+    "updated_at": "2025-07-22T10:30:32+00:00",
+    "changelog": {
+        "id": 317,
+        "release_id": 310,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 317,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2896,
+                "change": "Added wallpapers for all of the Mists of Pandaria dungeons."
+            },
+            {
+                "release_changelog_id": 317,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2896,
+                "change": "Fixed an issue where switching game type when not logged in would not work."
+            }
+        ]
+    }
+}
