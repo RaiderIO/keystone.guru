@@ -28,8 +28,6 @@ interface ThumbnailServiceLoggingInterface
 
     public function doCreateThumbnailRemovedOldPngFile(): void;
 
-    public function doCreateThumbnailSuccess(string $target, bool $fileExists): void;
-
     public function doCreateThumbnailException(Throwable|Exception $e): void;
 
     public function doCreateThumbnailRemovedTmpFileSuccess(): void;
@@ -45,4 +43,8 @@ interface ThumbnailServiceLoggingInterface
     public function doCreateThumbnailEnd(): void;
 
     public function copyThumbnailsError(string $sourcePublicKey, string $targetPublicKey, int $id, Exception $exception): void;
+
+    public function attachThumbnailToDungeonRouteDeleteExistingThumbnail(int $id, bool $deleteResult): void;
+
+    public function attachThumbnailToDungeonRouteSuccess(string $target, bool $fileExists): void;
 }

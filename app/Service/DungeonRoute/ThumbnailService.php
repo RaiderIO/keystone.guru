@@ -11,6 +11,7 @@ use App\Models\File;
 use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\Logging\ThumbnailServiceLoggingInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -402,15 +403,20 @@ class ThumbnailService implements ThumbnailServiceInterface
         bool         $isCustom = false,
     ): ?DungeonRouteThumbnail {
         return DB::transaction(function () use ($dungeonRoute, $floorIndex, $isCustom, $target, $thumbnailData, &$result) {
-            // Remove existing thumbnail if it exists
-            /** @var DungeonRouteThumbnail $existingThumbnail */
-            $existingThumbnail = DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)
-                ->where('floor_id', $floorIndex)
-                ->first();
-
-            $disk ??= config('filesystems.default', 'public');
             /** @var Floor $floor */
-            $floor                 = $dungeonRoute->dungeon->floors->where('index', $floorIndex)->firstOrFail();
+            $floor = $dungeonRoute->dungeon->floors->where('index', $floorIndex)->firstOrFail();
+
+            /** @var Collection<DungeonRouteThumbnail> $existingThumbnailsToDelete */
+            $existingThumbnailsToDelete = DungeonRouteThumbnail::where('dungeon_route_id', $dungeonRoute->id)
+                // When the target floor is NOT a facade, we want to keep just this floor's thumbnail
+                // Routes with a facade will have a thumbnail for the facade, and nothing else, so this query will
+                // in that case delete all thumbnails for the route before attaching the new one
+                ->when(!$floor->facade, function (Builder $query) use ($floor) {
+                    $query->where('floor_id', $floor->index);
+                })
+                ->get();
+
+            $disk                  ??= config('filesystems.default', 'public');
             $dungeonRouteThumbnail = DungeonRouteThumbnail::create([
                 'dungeon_route_id' => $dungeonRoute->id,
                 'floor_id'         => $floor->id,
@@ -428,12 +434,13 @@ class ThumbnailService implements ThumbnailServiceInterface
             Storage::disk($disk)->put($target, $thumbnailData);
 
             // Only after the new file was created, we can delete the old one
-            if ($existingThumbnail !== null) {
+            foreach ($existingThumbnailsToDelete as $existingThumbnail) {
                 // Delete like this so that the file is removed, and then in turn removed from the disk
-                $existingThumbnail->delete();
+                $deleteResult = $existingThumbnail->delete();
+                $this->log->attachThumbnailToDungeonRouteDeleteExistingThumbnail($existingThumbnail->id, $deleteResult);
             }
 
-            $this->log->doCreateThumbnailSuccess($target, file_exists($target));
+            $this->log->attachThumbnailToDungeonRouteSuccess($target, file_exists($target));
 
             return $dungeonRouteThumbnail;
         });
