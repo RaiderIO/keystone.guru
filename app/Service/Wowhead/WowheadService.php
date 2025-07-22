@@ -6,9 +6,11 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use App\Service\Traits\Curl;
+use App\Service\Wowhead\Dtos\LocalizedNpcName;
 use App\Service\Wowhead\Dtos\SpellDataResult;
 use App\Service\Wowhead\Logging\WowheadServiceLoggingInterface;
 use Carbon\CarbonInterval;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
@@ -206,7 +208,7 @@ class WowheadService implements WowheadServiceInterface
                 preg_match(self::IDENTIFYING_REGEX_SPELL_ICON_NAME_CLASSIC, $line, $matches)) {
                 $iconName = $matches[1];
             } else if (!$categoryFound && preg_match(self::IDENTIFYING_REGEX_SPELL_CATEGORY, $line, $matches)) {
-                $category = Str::slug($matches[1], '_');
+                $category      = Str::slug($matches[1], '_');
                 $categoryFound = true;
             } // Mechanic
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_MECHANIC)) {
@@ -307,6 +309,61 @@ class WowheadService implements WowheadServiceInterface
             $castTime,
             $duration
         );
+    }
+
+    public function getNpcNames(GameVersion $gameVersion): Collection
+    {
+        $env = match ($gameVersion->key) {
+            GameVersion::GAME_VERSION_RETAIL => '1',
+            GameVersion::GAME_VERSION_BETA => '3',
+            GameVersion::GAME_VERSION_CLASSIC_ERA => '4',
+            GameVersion::GAME_VERSION_WRATH => '8',
+            default => null,
+        };
+
+        $result = collect();
+        if ($env !== null) {
+            $data = $this->curlGet(sprintf('https://nether.wowhead.com/data/npc-names?dataEnv=%s', $env));
+
+            $dataArr = json_decode($data, true);
+
+            $result = collect();
+
+            foreach ($dataArr as $npcNames) {
+                /** @var array{
+                 *     id: int,
+                 *     name_enus: string,
+                 *     name_frfr: string,
+                 *     name_dede: string,
+                 *     name_eses: string,
+                 *     name_ptbr: string,
+                 *     name_ruru: string,
+                 *     name_itit: string,
+                 *     name_zhcn: string,
+                 *     name_kokr: string,
+                 *     name_zhtw: string,
+                 *     name_esmx: string
+                 * } $npcNames
+                 */
+
+                $npcId = $npcNames['id'];
+
+                foreach ($npcNames as $nameLocale => $npcName) {
+                    if ($nameLocale === 'id') {
+                        continue;
+                    }
+
+                    $locale = str_replace('name_', '', $nameLocale);
+                    $parts = str_split($locale, 2); // e.g., enus -> ['en', 'us']
+                    $locale = sprintf('%s_%s', $parts[0], strtoupper($parts[1])); // en_US, fr_FR, etc.
+
+                    $result->put($locale, $result->get($locale, collect())->put($npcId, $npcName));
+                }
+            }
+
+        }
+
+        return $result;
     }
 
 

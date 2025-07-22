@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Localization;
 
+use App\Console\Commands\Localization\Traits\ExportsNpcNames;
 use App\Models\Npc\Npc;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -9,6 +10,8 @@ use Illuminate\Support\Str;
 
 class ExportNpcNames extends Command
 {
+    use ExportsNpcNames;
+
     /**
      * The name and signature of the console command.
      *
@@ -40,26 +43,6 @@ class ExportNpcNames extends Command
 
         ksort($export);
 
-        $exportToString = var_export($export, true);
-        $exportToString = preg_replace_callback(
-            '/\b(\d+)\s*=>/',
-            function ($matches) {
-                return "'" . $matches[1] . "' =>";
-            },
-            $exportToString
-        );
-
-        if (file_put_contents(
-            lang_path('en_US/npcs.php'),
-            '<?php ' . PHP_EOL . PHP_EOL . 'return ' . $exportToString . ';'
-        )) {
-            $this->info('NPC names exported successfully to en_US/npcs.php');
-
-            return 0;
-        } else {
-            $this->error('Failed to write NPC names to en_US/npcs.php');
-
-            return 1;
-        }
+        return $this->exportNpcNames('en_US', $export) ? 0 : 1;
     }
 }

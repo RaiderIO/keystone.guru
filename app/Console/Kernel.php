@@ -32,6 +32,7 @@ use App\Console\Commands\Handlebars\Refresh as HandlebarsRefresh;
 use App\Console\Commands\Localization\ExportNpcNames;
 use App\Console\Commands\Localization\ImportNpcNames;
 use App\Console\Commands\Localization\LocalizationSync;
+use App\Console\Commands\Localization\SyncNpcNames;
 use App\Console\Commands\MapIcon\GenerateItemIcons;
 use App\Console\Commands\Mapping\AssignMDTIDs;
 use App\Console\Commands\Mapping\AssignPackGroups;
@@ -155,6 +156,7 @@ class Kernel extends ConsoleKernel
         ExportNpcNames::class,
         ImportNpcNames::class,
         LocalizationSync::class,
+        SyncNpcNames::class,
 
         // MapIcon
         GenerateItemIcons::class,
