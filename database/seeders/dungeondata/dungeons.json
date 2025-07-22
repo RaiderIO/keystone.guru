@@ -2,7 +2,6 @@
     {
         "id": 1,
         "expansion_id": 1,
-        "game_version_id": 1,
         "zone_id": 7855,
         "map_id": 1516,
         "instance_id": 726,
@@ -48,7 +47,6 @@
     {
         "id": 2,
         "expansion_id": 1,
-        "game_version_id": 1,
         "zone_id": 7805,
         "map_id": 1501,
         "instance_id": 740,
@@ -304,7 +302,6 @@
     {
         "id": 3,
         "expansion_id": 1,
-        "game_version_id": 1,
         "zone_id": 8527,
         "map_id": 1677,
         "instance_id": 900,
@@ -446,7 +443,6 @@
     {
         "id": 4,
         "expansion_id": 1,
-        "game_version_id": 1,
         "zone_id": 8079,
         "map_id": 1571,
         "instance_id": 800,
@@ -492,7 +488,6 @@
     {
         "id": 5,
         "expansion_id": 1,
-        "game_version_id": 1,
         "zone_id": 7673,
         "map_id": 1466,
         "instance_id": 762,
@@ -538,7 +533,6 @@
     {
         "id": 6,
         "expansion_id": 1,
-        "game_version_id": 1,
         "zone_id": 8040,
         "map_id": 1456,
         "instance_id": 716,
@@ -584,7 +578,6 @@
     {
         "id": 7,
         "expansion_id": 1,
-        "game_version_id": 1,
         "zone_id": 7672,
         "map_id": 1477,
         "instance_id": 721,
@@ -705,7 +698,6 @@
     {
         "id": 8,
         "expansion_id": 1,
-        "game_version_id": 1,
         "zone_id": 8443,
         "map_id": 1651,
         "instance_id": 860,
@@ -985,7 +977,6 @@
     {
         "id": 9,
         "expansion_id": 1,
-        "game_version_id": 1,
         "zone_id": 7812,
         "map_id": 1492,
         "instance_id": 727,
@@ -1106,7 +1097,6 @@
     {
         "id": 10,
         "expansion_id": 1,
-        "game_version_id": 1,
         "zone_id": 7546,
         "map_id": 1458,
         "instance_id": 767,
@@ -1152,7 +1142,6 @@
     {
         "id": 11,
         "expansion_id": 1,
-        "game_version_id": 1,
         "zone_id": 8443,
         "map_id": 1651,
         "instance_id": 860,
@@ -1458,7 +1447,6 @@
     {
         "id": 12,
         "expansion_id": 1,
-        "game_version_id": 1,
         "zone_id": 8910,
         "map_id": 1753,
         "instance_id": 945,
@@ -1504,7 +1492,6 @@
     {
         "id": 13,
         "expansion_id": 1,
-        "game_version_id": 1,
         "zone_id": 7787,
         "map_id": 1493,
         "instance_id": 707,
@@ -1625,7 +1612,6 @@
     {
         "id": 14,
         "expansion_id": 2,
-        "game_version_id": 1,
         "zone_id": 9028,
         "map_id": 1763,
         "instance_id": 968,
@@ -1709,7 +1695,6 @@
     {
         "id": 15,
         "expansion_id": 2,
-        "game_version_id": 1,
         "zone_id": 9164,
         "map_id": 1754,
         "instance_id": 1001,
@@ -1755,7 +1740,6 @@
     {
         "id": 16,
         "expansion_id": 2,
-        "game_version_id": 1,
         "zone_id": 9526,
         "map_id": 1762,
         "instance_id": 1041,
@@ -1801,7 +1785,6 @@
     {
         "id": 17,
         "expansion_id": 2,
-        "game_version_id": 1,
         "zone_id": 9525,
         "map_id": 1864,
         "instance_id": 1036,
@@ -1885,7 +1868,6 @@
     {
         "id": 18,
         "expansion_id": 2,
-        "game_version_id": 1,
         "zone_id": 9354,
         "map_id": 1822,
         "instance_id": 1023,
@@ -1955,7 +1937,6 @@
     {
         "id": 19,
         "expansion_id": 2,
-        "game_version_id": 1,
         "zone_id": 9527,
         "map_id": 1877,
         "instance_id": 1030,
@@ -2039,7 +2020,6 @@
     {
         "id": 20,
         "expansion_id": 2,
-        "game_version_id": 1,
         "zone_id": 8064,
         "map_id": 1594,
         "instance_id": 1012,
@@ -2085,7 +2065,6 @@
     {
         "id": 21,
         "expansion_id": 2,
-        "game_version_id": 1,
         "zone_id": 9391,
         "map_id": 1841,
         "instance_id": 1022,
@@ -2169,7 +2148,6 @@
     {
         "id": 22,
         "expansion_id": 2,
-        "game_version_id": 1,
         "zone_id": 9327,
         "map_id": 1771,
         "instance_id": 1002,
@@ -2438,7 +2416,6 @@
     {
         "id": 23,
         "expansion_id": 2,
-        "game_version_id": 1,
         "zone_id": 9424,
         "map_id": 1862,
         "instance_id": 1021,
@@ -2657,7 +2634,6 @@
     {
         "id": 24,
         "expansion_id": 2,
-        "game_version_id": 1,
         "zone_id": 10225,
         "map_id": 2097,
         "instance_id": null,
@@ -2741,7 +2717,6 @@
     {
         "id": 25,
         "expansion_id": 2,
-        "game_version_id": 1,
         "zone_id": 10225,
         "map_id": 2097,
         "instance_id": 1178,
@@ -2886,7 +2861,6 @@
     {
         "id": 26,
         "expansion_id": 2,
-        "game_version_id": 1,
         "zone_id": 0,
         "map_id": -1,
         "instance_id": null,
@@ -2970,7 +2944,6 @@
     {
         "id": 27,
         "expansion_id": 2,
-        "game_version_id": 1,
         "zone_id": 0,
         "map_id": -1,
         "instance_id": 1206,
@@ -3016,7 +2989,6 @@
     {
         "id": 28,
         "expansion_id": 3,
-        "game_version_id": 1,
         "zone_id": 13309,
         "map_id": 2291,
         "instance_id": 1188,
@@ -3174,7 +3146,6 @@
     {
         "id": 29,
         "expansion_id": 3,
-        "game_version_id": 1,
         "zone_id": 12831,
         "map_id": 2287,
         "instance_id": 1185,
@@ -3295,7 +3266,6 @@
     {
         "id": 30,
         "expansion_id": 3,
-        "game_version_id": 1,
         "zone_id": 13334,
         "map_id": 2290,
         "instance_id": 1184,
@@ -3365,7 +3335,6 @@
     {
         "id": 31,
         "expansion_id": 3,
-        "game_version_id": 1,
         "zone_id": 13228,
         "map_id": 2289,
         "instance_id": 1183,
@@ -3449,7 +3418,6 @@
     {
         "id": 32,
         "expansion_id": 3,
-        "game_version_id": 1,
         "zone_id": 12842,
         "map_id": 2284,
         "instance_id": 1189,
@@ -3533,7 +3501,6 @@
     {
         "id": 33,
         "expansion_id": 3,
-        "game_version_id": 1,
         "zone_id": 12837,
         "map_id": 2285,
         "instance_id": 1186,
@@ -3691,7 +3658,6 @@
     {
         "id": 34,
         "expansion_id": 3,
-        "game_version_id": 1,
         "zone_id": 12916,
         "map_id": 2286,
         "instance_id": 1182,
@@ -3836,7 +3802,6 @@
     {
         "id": 35,
         "expansion_id": 3,
-        "game_version_id": 1,
         "zone_id": 12841,
         "map_id": 2293,
         "instance_id": 1187,
@@ -4061,7 +4026,6 @@
     {
         "id": 36,
         "expansion_id": 3,
-        "game_version_id": 1,
         "zone_id": 13577,
         "map_id": 2441,
         "instance_id": 1194,
@@ -4219,7 +4183,6 @@
     {
         "id": 37,
         "expansion_id": 3,
-        "game_version_id": 1,
         "zone_id": 13577,
         "map_id": 2441,
         "instance_id": 1194,
@@ -4377,7 +4340,6 @@
     {
         "id": 38,
         "expansion_id": 9,
-        "game_version_id": 1,
         "zone_id": 6912,
         "map_id": 1182,
         "instance_id": 547,
@@ -4423,7 +4385,6 @@
     {
         "id": 39,
         "expansion_id": 9,
-        "game_version_id": 1,
         "zone_id": 6874,
         "map_id": 1175,
         "instance_id": 385,
@@ -4469,7 +4430,6 @@
     {
         "id": 40,
         "expansion_id": 9,
-        "game_version_id": 1,
         "zone_id": 6951,
         "map_id": 1195,
         "instance_id": 558,
@@ -4515,7 +4475,6 @@
     {
         "id": 41,
         "expansion_id": 9,
-        "game_version_id": 1,
         "zone_id": 6984,
         "map_id": 1208,
         "instance_id": 536,
@@ -4673,7 +4632,6 @@
     {
         "id": 42,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4494,
         "map_id": 619,
         "instance_id": 271,
@@ -4719,7 +4677,6 @@
     {
         "id": 43,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4277,
         "map_id": 601,
         "instance_id": 272,
@@ -4840,7 +4797,6 @@
     {
         "id": 44,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4196,
         "map_id": 600,
         "instance_id": 273,
@@ -4924,7 +4880,6 @@
     {
         "id": 45,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4416,
         "map_id": 604,
         "instance_id": 274,
@@ -4970,7 +4925,6 @@
     {
         "id": 46,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4272,
         "map_id": 602,
         "instance_id": 275,
@@ -5054,7 +5008,6 @@
     {
         "id": 47,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4820,
         "map_id": 668,
         "instance_id": 276,
@@ -5100,7 +5053,6 @@
     {
         "id": 48,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4264,
         "map_id": 599,
         "instance_id": 277,
@@ -5146,7 +5098,6 @@
     {
         "id": 49,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4813,
         "map_id": 658,
         "instance_id": 278,
@@ -5192,7 +5143,6 @@
     {
         "id": 50,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4100,
         "map_id": 595,
         "instance_id": 279,
@@ -5276,7 +5226,6 @@
     {
         "id": 51,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4809,
         "map_id": 632,
         "instance_id": 280,
@@ -5322,7 +5271,6 @@
     {
         "id": 52,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4265,
         "map_id": 576,
         "instance_id": 281,
@@ -5368,7 +5316,6 @@
     {
         "id": 53,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4228,
         "map_id": 578,
         "instance_id": 282,
@@ -5563,7 +5510,6 @@
     {
         "id": 54,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4415,
         "map_id": 608,
         "instance_id": 283,
@@ -5609,7 +5555,6 @@
     {
         "id": 55,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4723,
         "map_id": 650,
         "instance_id": 284,
@@ -5655,7 +5600,6 @@
     {
         "id": 56,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 206,
         "map_id": 574,
         "instance_id": 285,
@@ -5776,7 +5720,6 @@
     {
         "id": 57,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 1196,
         "map_id": 575,
         "instance_id": 286,
@@ -5860,7 +5803,6 @@
     {
         "id": 58,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4812,
         "map_id": 631,
         "instance_id": 758,
@@ -6196,7 +6138,6 @@
     {
         "id": 59,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 2159,
         "map_id": 249,
         "instance_id": 760,
@@ -6242,7 +6183,6 @@
     {
         "id": 60,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 3456,
         "map_id": 533,
         "instance_id": 754,
@@ -6867,7 +6807,6 @@
     {
         "id": 61,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4722,
         "map_id": 649,
         "instance_id": 757,
@@ -6937,7 +6876,6 @@
     {
         "id": 62,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4500,
         "map_id": 616,
         "instance_id": 756,
@@ -6983,7 +6921,6 @@
     {
         "id": 63,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4493,
         "map_id": 615,
         "instance_id": 755,
@@ -7029,7 +6966,6 @@
     {
         "id": 64,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4987,
         "map_id": 724,
         "instance_id": 761,
@@ -7075,7 +7011,6 @@
     {
         "id": 65,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4273,
         "map_id": 603,
         "instance_id": 759,
@@ -7875,7 +7810,6 @@
     {
         "id": 66,
         "expansion_id": 6,
-        "game_version_id": 3,
         "zone_id": 4603,
         "map_id": 624,
         "instance_id": 753,
@@ -7921,7 +7855,6 @@
     {
         "id": 67,
         "expansion_id": 10,
-        "game_version_id": 1,
         "zone_id": 0,
         "map_id": 2526,
         "instance_id": 1201,
@@ -8085,7 +8018,6 @@
     {
         "id": 68,
         "expansion_id": 10,
-        "game_version_id": 1,
         "zone_id": 13991,
         "map_id": 2520,
         "instance_id": 1196,
@@ -8206,7 +8138,6 @@
     {
         "id": 69,
         "expansion_id": 10,
-        "game_version_id": 1,
         "zone_id": 0,
         "map_id": 2527,
         "instance_id": 1204,
@@ -8327,7 +8258,6 @@
     {
         "id": 70,
         "expansion_id": 10,
-        "game_version_id": 1,
         "zone_id": 14011,
         "map_id": 2519,
         "instance_id": 1199,
@@ -8448,7 +8378,6 @@
     {
         "id": 71,
         "expansion_id": 10,
-        "game_version_id": 1,
         "zone_id": 0,
         "map_id": 2516,
         "instance_id": 1198,
@@ -8525,7 +8454,6 @@
     {
         "id": 72,
         "expansion_id": 10,
-        "game_version_id": 1,
         "zone_id": 0,
         "map_id": 2521,
         "instance_id": 1202,
@@ -8646,7 +8574,6 @@
     {
         "id": 73,
         "expansion_id": 10,
-        "game_version_id": 1,
         "zone_id": 13954,
         "map_id": 2515,
         "instance_id": 1203,
@@ -8896,7 +8823,6 @@
     {
         "id": 74,
         "expansion_id": 10,
-        "game_version_id": 1,
         "zone_id": 13968,
         "map_id": 2451,
         "instance_id": 1197,
@@ -9017,7 +8943,6 @@
     {
         "id": 75,
         "expansion_id": 9,
-        "game_version_id": 1,
         "zone_id": 0,
         "map_id": 1176,
         "instance_id": 537,
@@ -9138,7 +9063,6 @@
     {
         "id": 76,
         "expansion_id": 8,
-        "game_version_id": 6,
         "zone_id": 0,
         "map_id": 960,
         "instance_id": 313,
@@ -9152,7 +9076,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -9184,7 +9108,6 @@
     {
         "id": 77,
         "expansion_id": 7,
-        "game_version_id": 1,
         "zone_id": 5035,
         "map_id": 657,
         "instance_id": 68,
@@ -9230,7 +9153,6 @@
     {
         "id": 78,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 719,
         "map_id": 48,
         "instance_id": 227,
@@ -9351,7 +9273,6 @@
     {
         "id": 79,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 1584,
         "map_id": 230,
         "instance_id": 228,
@@ -9435,7 +9356,6 @@
     {
         "id": 80,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 1581,
         "map_id": 36,
         "instance_id": 63,
@@ -9519,7 +9439,6 @@
     {
         "id": 81,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 2557,
         "map_id": 429,
         "instance_id": 230,
@@ -9640,7 +9559,6 @@
     {
         "id": 82,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 721,
         "map_id": 90,
         "instance_id": 231,
@@ -9798,7 +9716,6 @@
     {
         "id": 83,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 1583,
         "map_id": 229,
         "instance_id": 229,
@@ -10060,7 +9977,6 @@
     {
         "id": 84,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 2100,
         "map_id": 349,
         "instance_id": 232,
@@ -10144,7 +10060,6 @@
     {
         "id": 85,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 2437,
         "map_id": 389,
         "instance_id": 226,
@@ -10190,7 +10105,6 @@
     {
         "id": 86,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 722,
         "map_id": 129,
         "instance_id": 233,
@@ -10236,7 +10150,6 @@
     {
         "id": 87,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 491,
         "map_id": 47,
         "instance_id": 234,
@@ -10282,7 +10195,6 @@
     {
         "id": 88,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 796,
         "map_id": 189,
         "instance_id": 316,
@@ -10328,7 +10240,6 @@
     {
         "id": 89,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 796,
         "map_id": 189,
         "instance_id": 316,
@@ -10374,7 +10285,6 @@
     {
         "id": 90,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 796,
         "map_id": 189,
         "instance_id": 316,
@@ -10420,7 +10330,6 @@
     {
         "id": 91,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 796,
         "map_id": 189,
         "instance_id": 316,
@@ -10466,7 +10375,6 @@
     {
         "id": 92,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 2057,
         "map_id": 289,
         "instance_id": 246,
@@ -10636,7 +10544,6 @@
     {
         "id": 93,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 209,
         "map_id": 33,
         "instance_id": 64,
@@ -10911,7 +10818,6 @@
     {
         "id": 94,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 2017,
         "map_id": 329,
         "instance_id": 236,
@@ -10995,7 +10901,6 @@
     {
         "id": 95,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 717,
         "map_id": 34,
         "instance_id": 238,
@@ -11041,7 +10946,6 @@
     {
         "id": 96,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 1477,
         "map_id": 109,
         "instance_id": 237,
@@ -11248,7 +11152,6 @@
     {
         "id": 97,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 1337,
         "map_id": 70,
         "instance_id": 239,
@@ -11332,7 +11235,6 @@
     {
         "id": 98,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 718,
         "map_id": 43,
         "instance_id": 240,
@@ -11378,7 +11280,6 @@
     {
         "id": 99,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 1176,
         "map_id": 209,
         "instance_id": 241,
@@ -11424,7 +11325,6 @@
     {
         "id": 100,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 2557,
         "map_id": 429,
         "instance_id": 230,
@@ -11470,7 +11370,6 @@
     {
         "id": 101,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 2557,
         "map_id": 429,
         "instance_id": 230,
@@ -11554,7 +11453,6 @@
     {
         "id": 102,
         "expansion_id": 9,
-        "game_version_id": 1,
         "zone_id": 7109,
         "map_id": 1279,
         "instance_id": 556,
@@ -11638,7 +11536,6 @@
     {
         "id": 103,
         "expansion_id": 7,
-        "game_version_id": 1,
         "zone_id": 5004,
         "map_id": 643,
         "instance_id": 65,
@@ -11746,7 +11643,6 @@
     {
         "id": 104,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 1583,
         "map_id": 229,
         "instance_id": 229,
@@ -11867,7 +11763,6 @@
     {
         "id": 105,
         "expansion_id": 10,
-        "game_version_id": 1,
         "zone_id": 14514,
         "map_id": 2579,
         "instance_id": 1209,
@@ -12129,7 +12024,6 @@
     {
         "id": 106,
         "expansion_id": 10,
-        "game_version_id": 1,
         "zone_id": 14514,
         "map_id": 2579,
         "instance_id": 1209,
@@ -12501,7 +12395,6 @@
     {
         "id": 107,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 721,
         "map_id": 90,
         "instance_id": 231,
@@ -12750,7 +12643,6 @@
     {
         "id": 108,
         "expansion_id": 11,
-        "game_version_id": 1,
         "zone_id": 15093,
         "map_id": 2660,
         "instance_id": 1271,
@@ -12858,7 +12750,6 @@
     {
         "id": 109,
         "expansion_id": 11,
-        "game_version_id": 1,
         "zone_id": 15103,
         "map_id": 2661,
         "instance_id": 1272,
@@ -12904,7 +12795,6 @@
     {
         "id": 110,
         "expansion_id": 11,
-        "game_version_id": 1,
         "zone_id": 14979,
         "map_id": 2669,
         "instance_id": 1274,
@@ -13012,7 +12902,6 @@
     {
         "id": 111,
         "expansion_id": 11,
-        "game_version_id": 1,
         "zone_id": 14882,
         "map_id": 2651,
         "instance_id": 1210,
@@ -13120,7 +13009,6 @@
     {
         "id": 112,
         "expansion_id": 11,
-        "game_version_id": 1,
         "zone_id": 14954,
         "map_id": 2649,
         "instance_id": 1267,
@@ -13228,7 +13116,6 @@
     {
         "id": 113,
         "expansion_id": 11,
-        "game_version_id": 1,
         "zone_id": 14971,
         "map_id": 2662,
         "instance_id": 1270,
@@ -13298,7 +13185,6 @@
     {
         "id": 114,
         "expansion_id": 11,
-        "game_version_id": 1,
         "zone_id": 14938,
         "map_id": 2648,
         "instance_id": 1268,
@@ -13584,7 +13470,6 @@
     {
         "id": 115,
         "expansion_id": 11,
-        "game_version_id": 1,
         "zone_id": 14938,
         "map_id": 2652,
         "instance_id": 1269,
@@ -13654,7 +13539,6 @@
     {
         "id": 116,
         "expansion_id": 7,
-        "game_version_id": 1,
         "zone_id": 4950,
         "map_id": 670,
         "instance_id": 71,
@@ -13724,7 +13608,6 @@
     {
         "id": 117,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 2717,
         "map_id": 409,
         "instance_id": 741,
@@ -13859,7 +13742,6 @@
     {
         "id": 118,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 2677,
         "map_id": 469,
         "instance_id": 742,
@@ -14074,7 +13956,6 @@
     {
         "id": 119,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 1977,
         "map_id": 309,
         "instance_id": 76,
@@ -14120,7 +14001,6 @@
     {
         "id": 120,
         "expansion_id": 7,
-        "game_version_id": 5,
         "zone_id": 5723,
         "map_id": 720,
         "instance_id": 78,
@@ -14241,7 +14121,6 @@
     {
         "id": 121,
         "expansion_id": 7,
-        "game_version_id": 5,
         "zone_id": 5892,
         "map_id": 967,
         "instance_id": 187,
@@ -14431,7 +14310,6 @@
     {
         "id": 122,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 2159,
         "map_id": 249,
         "instance_id": 760,
@@ -14477,7 +14355,6 @@
     {
         "id": 123,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 0,
         "map_id": -1,
         "instance_id": null,
@@ -14523,7 +14400,6 @@
     {
         "id": 124,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 0,
         "map_id": -1,
         "instance_id": null,
@@ -14650,7 +14526,6 @@
     {
         "id": 125,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 3429,
         "map_id": 509,
         "instance_id": 743,
@@ -14696,7 +14571,6 @@
     {
         "id": 126,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 3428,
         "map_id": 531,
         "instance_id": 744,
@@ -14967,7 +14841,6 @@
     {
         "id": 127,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 3456,
         "map_id": 533,
         "instance_id": 754,
@@ -15549,7 +15422,6 @@
     {
         "id": 128,
         "expansion_id": 8,
-        "game_version_id": 6,
         "zone_id": 5976,
         "map_id": 962,
         "instance_id": 303,
@@ -15563,7 +15435,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -15619,7 +15491,6 @@
     {
         "id": 129,
         "expansion_id": 8,
-        "game_version_id": 6,
         "zone_id": 6182,
         "map_id": 994,
         "instance_id": 321,
@@ -15633,7 +15504,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -15752,7 +15623,6 @@
     {
         "id": 130,
         "expansion_id": 8,
-        "game_version_id": 6,
         "zone_id": 6052,
         "map_id": 1001,
         "instance_id": 311,
@@ -15766,7 +15636,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -15836,7 +15706,6 @@
     {
         "id": 131,
         "expansion_id": 8,
-        "game_version_id": 6,
         "zone_id": 6109,
         "map_id": 1004,
         "instance_id": 316,
@@ -15850,7 +15719,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -15920,7 +15789,6 @@
     {
         "id": 132,
         "expansion_id": 8,
-        "game_version_id": 6,
         "zone_id": 6066,
         "map_id": 1007,
         "instance_id": 246,
@@ -15934,7 +15802,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -16065,7 +15933,6 @@
     {
         "id": 133,
         "expansion_id": 8,
-        "game_version_id": 6,
         "zone_id": 5918,
         "map_id": 959,
         "instance_id": 312,
@@ -16079,7 +15946,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -16247,7 +16114,6 @@
     {
         "id": 134,
         "expansion_id": 8,
-        "game_version_id": 6,
         "zone_id": 6214,
         "map_id": 1011,
         "instance_id": 324,
@@ -16261,7 +16127,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -16392,7 +16258,6 @@
     {
         "id": 135,
         "expansion_id": 8,
-        "game_version_id": 6,
         "zone_id": 5963,
         "map_id": 961,
         "instance_id": 302,
@@ -16406,7 +16271,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": false,
         "floors": [
             {
@@ -16550,7 +16415,6 @@
     {
         "id": 136,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 16074,
         "map_id": 2875,
         "instance_id": 2875,
@@ -16708,7 +16572,6 @@
     {
         "id": 137,
         "expansion_id": 11,
-        "game_version_id": 1,
         "zone_id": 15452,
         "map_id": 2773,
         "instance_id": 1298,
@@ -16816,7 +16679,6 @@
     {
         "id": 138,
         "expansion_id": 4,
-        "game_version_id": 2,
         "zone_id": 16236,
         "map_id": 2856,
         "instance_id": 2856,
