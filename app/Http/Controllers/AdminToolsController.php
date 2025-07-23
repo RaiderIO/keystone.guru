@@ -216,7 +216,8 @@ class AdminToolsController extends Controller
                 }
 
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
-                $npcCandidate->name = $npcData['name'];
+                // This will be converted to a translation with localization:exportnpcnames!
+                $npcCandidate->name        = $npcData['name'];
 
                 $npcCandidate->aggressiveness = isset($npcData['react']) && is_array($npcData['react']) ? $aggressivenessMapping[$npcData['react'][0] ?? -1] : 'aggressive';
 
@@ -224,7 +225,7 @@ class AdminToolsController extends Controller
                 if ($npcCandidate->save()) {
                     foreach ($dungeons as $dungeon) {
                         NpcDungeon::create([
-                            'npc_id' => $npcCandidate->id,
+                            'npc_id'     => $npcCandidate->id,
                             'dungeon_id' => $dungeon->id,
                         ]);
 
@@ -244,6 +245,11 @@ class AdminToolsController extends Controller
                 // Changed the mapping; so make sure we synchronize it
                 $this->mappingChanged($beforeModel, $npcCandidate);
             }
+
+            // Cannot do this automatically due to permission issues
+            $log[] = '';
+            $log[] = 'You can now run php artisan localization:exportnpcnames to export the NPC names to the localization files.';
+            $log[] = 'You can now run php artisan localization:importnpcnames to convert the NPC names to translation keys in the database.';
         } catch (Exception $exception) {
             dump($exception);
         } finally {

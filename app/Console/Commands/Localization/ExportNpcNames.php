@@ -28,12 +28,13 @@ class ExportNpcNames extends Command
 
     public function handle(): int
     {
+        // Start off with the existing array
+        $export = __('npcs', [], 'en_US');
 
-        $export = [];
         Npc::chunk(1000, function (Collection $npcs) use (&$export) {
             /** @var Collection<Npc> $npcs */
             foreach ($npcs as $npc) {
-                if (empty($npc->name) || Str::startsWith($npc->name, 'Unknown')) {
+                if (empty($npc->name) || Str::startsWith($npc->name, ['npcs.'])) {
                     continue;
                 }
 
