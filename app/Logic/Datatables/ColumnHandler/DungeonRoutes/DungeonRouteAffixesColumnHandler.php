@@ -22,11 +22,8 @@ class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
 
     protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
     {
-
-        $affixes = $columnData['search']['value'];
-        if (!empty($affixes)) {
-            $affixIds = explode(',', (string)$affixes);
-
+        $affixIds = $columnData['search']['value'] ?? [];
+        if (!empty($affixIds)) {
             $subBuilder->whereHas('affixes', static function ($query) use (&$affixIds) {
                 /** @var $query Builder */
                 $query->whereIn('affix_groups.id', $affixIds);

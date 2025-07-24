@@ -131,6 +131,7 @@ class DungeonrouteTable extends InlineCode {
             'processing': true,
             'serverSide': true,
             'responsive': true,
+            'searching': false,
             'ajax': {
                 'url': '/ajax/routes',
                 'data': function (d) {

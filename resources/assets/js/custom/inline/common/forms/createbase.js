@@ -5,7 +5,8 @@ class CommonFormsCreatebase extends InlineCode {
     activate() {
         super.activate();
 
-        this.levelSliderInitializer = (new LevelSliderInitializer(this.options));
+        this.levelSliderInitializer = $(this.options.levelSelector).length > 0 ?
+            (new LevelSliderInitializer(this.options)) : null;
 
         $(`${this.options.dungeonSelector}`).on('change', this._dungeonChanged.bind(this));
 
@@ -18,11 +19,13 @@ class CommonFormsCreatebase extends InlineCode {
 
         let season = this._getSeasonForDungeon(dungeonId);
 
-        if (season !== null) {
-            this.levelSliderInitializer.update(season.key_level_min, season.key_level_max);
-        } else {
-            this.levelSliderInitializer.update(this.options.keyLevelMinDefault, this.options.keyLevelMaxDefault);
-
+        // Can be null if no key levels exist for the currently selected game version
+        if (this.levelSliderInitializer !== null) {
+            if (season === null) {
+                this.levelSliderInitializer.update(this.options.keyLevelMinDefault, this.options.keyLevelMaxDefault);
+            } else {
+                this.levelSliderInitializer.update(season.key_level_min, season.key_level_max);
+            }
         }
     }
 
