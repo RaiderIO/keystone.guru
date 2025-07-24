@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Localization;
 
-use App\Console\Commands\Localization\Traits\ExportsNpcNames;
+use App\Console\Commands\Localization\Traits\ExportsTranslations;
 use App\Models\Npc\Npc;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class ExportNpcNames extends Command
 {
-    use ExportsNpcNames;
+    use ExportsTranslations;
 
     /**
      * The name and signature of the console command.
@@ -44,6 +44,6 @@ class ExportNpcNames extends Command
 
         ksort($export);
 
-        return $this->exportNpcNames('en_US', $export) ? 0 : 1;
+        return $this->exportTranslations('en_US', 'npcs.php', $export) ? 0 : 1;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Localization;
 
-use App\Console\Commands\Localization\Traits\ExportsNpcNames;
+use App\Console\Commands\Localization\Traits\ExportsTranslations;
 use App\Models\GameVersion\GameVersion;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Exception;
@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 
 class SyncNpcNames extends Command
 {
-    use ExportsNpcNames;
+    use ExportsTranslations;
 
     /**
      * The name and signature of the console command.
@@ -53,7 +53,7 @@ class SyncNpcNames extends Command
             );
 
             ksort($newNpcNames);
-            $this->exportNpcNames($locale, $newNpcNames);
+            $this->exportTranslations($locale, 'npcs.php', $newNpcNames);
         }
     }
 }

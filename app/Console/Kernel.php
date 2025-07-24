@@ -29,6 +29,8 @@ use App\Console\Commands\Github\CreateGithubRelease;
 use App\Console\Commands\Github\CreateGithubReleasePullRequest;
 use App\Console\Commands\Github\CreateGithubReleaseTicket;
 use App\Console\Commands\Handlebars\Refresh as HandlebarsRefresh;
+use App\Console\Commands\Localization\Datatables\ConvertLocalizations;
+use App\Console\Commands\Localization\Datatables\DownloadLocalizations;
 use App\Console\Commands\Localization\ExportNpcNames;
 use App\Console\Commands\Localization\ImportNpcNames;
 use App\Console\Commands\Localization\LocalizationSync;
@@ -157,6 +159,9 @@ class Kernel extends ConsoleKernel
         ImportNpcNames::class,
         LocalizationSync::class,
         SyncNpcNames::class,
+        // Localization Datatables
+        ConvertLocalizations::class,
+        DownloadLocalizations::class,
 
         // MapIcon
         GenerateItemIcons::class,

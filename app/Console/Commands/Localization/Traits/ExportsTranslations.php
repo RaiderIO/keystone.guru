@@ -7,12 +7,13 @@ use Illuminate\Console\Command;
 /**
  * @mixin Command
  */
-trait ExportsNpcNames
+trait ExportsTranslations
 {
-    public function exportNpcNames(string $locale, array $data): bool
+    public function exportTranslations(string $locale, string $fileName, array $data): bool
     {
         $exportToString = var_export($data, true);
         $exportToString = preg_replace_callback(
+            // @TODO '-1' keys get converted to -'1'
             '/\b(\d+)\s*=>/',
             function ($matches) {
                 return "'" . $matches[1] . "' =>";
@@ -21,14 +22,14 @@ trait ExportsNpcNames
         );
 
         if (file_put_contents(
-            lang_path(sprintf('%s/npcs.php', $locale)),
+            lang_path(sprintf('%s/%s', $locale, $fileName)),
             '<?php ' . PHP_EOL . PHP_EOL . 'return ' . $exportToString . ';'
         )) {
-            $this->info(sprintf('NPC names exported successfully to %s/npcs.php', $locale));
+            $this->info(sprintf('Translations exported successfully to %s/%s', $locale, $fileName));
 
             return true;
         } else {
-            $this->error(sprintf('Failed to write NPC names to %s/npcs.php', $locale));
+            $this->error(sprintf('Failed to write translations to %s/%s', $locale, $fileName));
 
             return false;
         }
