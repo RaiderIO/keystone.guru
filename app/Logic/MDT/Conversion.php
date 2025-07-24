@@ -85,7 +85,15 @@ class Conversion
         ],
 
         Expansion::EXPANSION_MOP => [
-            //            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
+//            Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN    => 'GateoftheSettingSun',
+//            Dungeon::DUNGEON_MOGU_SHAN_PALACE           => 'MoguShanPalace',
+//            Dungeon::DUNGEON_SCARLET_HALLS_MOP          => 'ScarletHalls',
+//            Dungeon::DUNGEON_SCARLET_MONASTERY_MOP      => 'ScarletMonastery',
+//            Dungeon::DUNGEON_SCHOLOMANCE_MOP            => 'Scholomance',
+//            Dungeon::DUNGEON_SHADO_PAN_MONASTERY        => 'ShadoPanMonastery',
+//            Dungeon::DUNGEON_SIEGE_OF_NIUZAO_TEMPLE     => 'SiegeOfNiuzaoTemple',
+//            Dungeon::DUNGEON_STORMSTOUT_BREWERY         => 'StormstoutBrewery',
+//            Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT => 'TempleOfTheJadeSerpent',
         ],
 
         Expansion::EXPANSION_WOD => [

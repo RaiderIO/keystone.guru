@@ -1,4 +1,4 @@
-![alt text](https://keystone.guru/images/external/github/readme_logo.png "Keystone.guru logo")
+![alt text](https://assets.keystone.guru/images/external/github/readme_logo.png "Keystone.guru logo")
 
 # About Keystone.guru
 Keystone.guru is a website where users can build and find their favorite routes for completing in Mythic Plus in World of Warcraft®: Shadowlands™.
@@ -8,7 +8,7 @@ It uses a ton of other libraries such as Leaflet for map displaying, Puppeteer f
 The website is free to use, now and forever. You may support the development of this website by becoming a Patron on [Patreon](https://www.patreon.com/keystoneguru).
 
 # Features
-* Full interactive Leaflet map of all Classic™, Wrath of the Lich King Classic™, Battle for Azeroth™, Shadowlands™ and Dragonflight™ dungeons
+* Full interactive Leaflet map of all Classic™, Wrath of the Lich King Classic™, Mists of Pandaria™, Battle for Azeroth™, Shadowlands™, Dragonflight™ and The War Within™ dungeons
 * Enhanced dungeon map images to allow for 5 zoom levels
   * Dungeon mapping shared with Mythic Dungeon Tools for a seamless integration (thanks to Nnoggie for collaborating)
 * Full import/export support for Mythic Dungeon Tools strings
