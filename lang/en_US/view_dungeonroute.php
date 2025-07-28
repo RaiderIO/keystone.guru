@@ -28,6 +28,7 @@ return [
             'key_level'               => 'Key level',
             'affixes'                 => 'Affixes',
             'affixes_title'           => 'Select affixes',
+            'select_affixes'          => 'Select affixes',
             'affixes_selected'        => '{0} affixes selected',
             'enemy_forces'            => 'Enemy forces',
             'enemy_forces_complete'   => 'Complete',

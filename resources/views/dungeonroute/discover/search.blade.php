@@ -91,6 +91,7 @@ use Illuminate\Support\Collection;
                                     'multiple' => 'multiple',
                                     'title' => __('view_dungeonroute.discover.search.affixes_title'),
                                     'data-selected-text-format' => 'count > 1',
+                                    'data-none-selected-text' => __('view_dungeonroute.discover.search.select_affixes'),
                                     'data-count-selected-text' => __('view_dungeonroute.discover.search.affixes_selected')]) !!}
                             </div>
                         </div>

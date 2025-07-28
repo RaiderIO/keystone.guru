@@ -112,6 +112,7 @@ if (Auth::check()) {
             'class' => 'form-control affixselect selectpicker',
             'multiple' => 'multiple',
             'data-selected-text-format' => 'count > 1',
+            'data-none-selected-text' => __('view_common.dungeonroute.table.select_affixes'),
             'data-count-selected-text' => __('view_common.dungeonroute.table.affixes_selected')]) !!}
     </div>
     <div class="col-lg pl-1 pr-1">
@@ -132,6 +133,7 @@ if (Auth::check()) {
             'class' => 'form-control selectpicker',
             'multiple' => 'multiple',
             'data-selected-text-format' => 'count > 1',
+            'data-none-selected-text' => __('view_common.dungeonroute.table.select_requirements'),
             'data-count-selected-text' => __('view_common.dungeonroute.table.requirements_selected'),
         ]) !!}
     </div>
@@ -145,6 +147,7 @@ if (Auth::check()) {
                 // Change the original text
                 'title' => $searchTags->isEmpty() ? __('view_common.dungeonroute.table.tags_title') : false,
                 'data-selected-text-format' => 'count > 1',
+                'data-none-selected-text' => __('view_common.dungeonroute.table.select_tags'),
                 'data-count-selected-text' => __('view_common.dungeonroute.table.tags_selected')]) !!}
         </div>
     @endif

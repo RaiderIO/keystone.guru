@@ -113,7 +113,8 @@ class ViewService implements ViewServiceInterface
                 ->orderBy('name')
                 ->get()
                 ->groupBy('category')
-                ->mapWithKeys(static fn(Collection $spells, string $key) => [__($key) => $spells]);
+                // Do NOT localize the keys, they are used in the frontend which can have a different locale
+                ->mapWithKeys(static fn(Collection $spells, string $key) => [$key => $spells]);
 
             $appRevision = trim(file_get_contents(base_path('version')));
 

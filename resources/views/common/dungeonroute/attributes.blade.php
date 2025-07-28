@@ -45,9 +45,10 @@ $showNoAttributes ??= false;
     <select multiple name="attributes[]" id="attributes" class="form-control selectpicker"
             size="{{ $allRouteAttributeCount + $routeAttributes->count() }}"
             data-selected-text-format="count > 1"
+            data-none-selected-text="{{__('view_common.dungeonroute.attributes.select_attributes')}}"
             data-count-selected-text="{{__('view_common.dungeonroute.attributes.attributes_selected')}}">
         @foreach ($routeAttributes as $category => $categoryAttributes)
-            <optgroup label="{{ ucfirst($category) }}">
+            <optgroup label="{{ __(sprintf('routeattributes.category.%s', $category)) }}">
                 @foreach ($categoryAttributes as $attribute)
                     <option value="{{ $attribute->id }}"
                         {{ in_array($attribute->id, $selectedIds) ? 'selected' : '' }}>
