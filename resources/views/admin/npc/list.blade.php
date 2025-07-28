@@ -94,9 +94,9 @@
                         }
                     }
                 ],
-                'language': {
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
                     'emptyTable': lang.get('messages.datatable_no_npcs_in_table')
-                }
+                })
             });
         });
     </script>

@@ -14,7 +14,10 @@ use App\Models\Npc\npchealth;
     <script type="text/javascript">
         $(function () {
             $('#admin_npc_npc_health_table').DataTable({
-                'order': [[1, 'asc']]
+                'order': [[1, 'asc']],
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+
+                })
             });
         });
     </script>

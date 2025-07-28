@@ -20,6 +20,14 @@
 }
 
 /** DATATABLES */
+div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-paging .dt-paging-button.disabled:hover, div.dt-container .dt-paging .dt-paging-button.disabled:active {
+    cursor: default;
+    color: rgba(255, 255, 255, 0.4) !important;
+    border: 1px solid transparent;
+    background: transparent;
+    box-shadow: none;
+}
+
 .row_selected {
     background-color: rgba(255, 255, 255, 0.15) !important;
     cursor: pointer;

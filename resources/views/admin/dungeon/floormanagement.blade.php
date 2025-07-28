@@ -16,7 +16,11 @@ use Illuminate\Support\Collection;
 
     <script type="text/javascript">
         $(function () {
-            $('#admin_dungeon_floor_table').DataTable({});
+            $('#admin_dungeon_floor_table').DataTable({
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+
+                })
+            });
         });
     </script>
 @endsection

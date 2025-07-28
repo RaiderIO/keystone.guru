@@ -51,7 +51,11 @@ $menuTitle = sprintf(__('view_profile.edit.menu_title'), $user->name);
             appCode._newPassword('#new_password');
 
             // Disabled since it's not shown by default and causes a JS error otherwise
-            // $('#user_reports_table').DataTable({});
+            // $('#user_reports_table').DataTable({
+            //     'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+            //
+            //     })
+            // });
         });
     </script>
 @endsection

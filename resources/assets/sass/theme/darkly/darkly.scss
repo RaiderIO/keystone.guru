@@ -50,6 +50,10 @@
     }
   }
 
+  div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-paging .dt-paging-button.disabled:hover, div.dt-container .dt-paging .dt-paging-button.disabled:active {
+    color: var(--theme-light) !important;
+  }
+
   //.btn-info {
   //  color: black;
   //  background-color: #ffbd0a;

@@ -9,6 +9,10 @@ class ProfileEdit extends InlineCode {
             $('#echo_color').val($(this).data('color'));
         });
 
-        $('#profile_user_reports_table').DataTable({});
+        $('#profile_user_reports_table').DataTable({
+            'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+
+            })
+        });
     }
 }

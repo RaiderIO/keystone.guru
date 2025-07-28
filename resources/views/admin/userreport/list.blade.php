@@ -42,6 +42,9 @@ use Illuminate\Support\Collection;
                         });
                     });
                 },
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+
+                })
             });
         });
     </script>

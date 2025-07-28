@@ -15,8 +15,16 @@ use Illuminate\Support\Collection;
 
     <script type="text/javascript">
         $(function () {
-            $('#admin_dungeon_route_mapping_versions_unused_table').DataTable({});
-            $('#admin_dungeon_route_mapping_versions_used_table').DataTable({});
+            $('#admin_dungeon_route_mapping_versions_unused_table').DataTable({
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+
+                })
+            });
+            $('#admin_dungeon_route_mapping_versions_used_table').DataTable({
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+
+                })
+            });
         });
     </script>
 @endsection

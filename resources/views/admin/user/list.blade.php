@@ -154,9 +154,9 @@ use Illuminate\Support\Collection;
                         }
                     },
                 ],
-                'language': {
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
                     'emptyTable': lang.get('messages.datatable_no_users_in_table')
-                }
+                })
             });
         });
     </script>

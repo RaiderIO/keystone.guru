@@ -13,8 +13,7 @@ trait ExportsTranslations
     {
         $exportToString = var_export($data, true);
         $exportToString = preg_replace_callback(
-            // @TODO '-1' keys get converted to -'1'
-            '/\b(\d+)\s*=>/',
+            '/(-?\d+)\s*=>/',
             function ($matches) {
                 return "'" . $matches[1] . "' =>";
             },
