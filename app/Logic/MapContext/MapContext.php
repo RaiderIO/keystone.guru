@@ -162,14 +162,25 @@ abstract class MapContext
             }, config('keystoneguru.cache.dungeonData.ttl')
         );
 
+        $selectableSpells = $this->cacheService->remember(
+            sprintf('selectable_spells_%s', $locale),
+            function () use ($locale) {
+                return Spell::where('selectable', true)
+                    ->selectRaw('spells.*, translations.translation as name')
+                    ->leftJoin('translations', static function (JoinClause $clause) use($locale) {
+                        $clause->on('translations.key', 'spells.name')
+                            ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
+                    })
+                    ->get();
+            }, config('keystoneguru.cache.dungeonData.ttl')
+        );
+
         $dungeonData['npcs'] = $dungeonNpcData['npcs'];
 
 
-        $selectableSpells = Spell::where('selectable', true)->get();
         $characterClasses = CharacterClass::all();
         $mapIconTypes     = MapIconType::all()->keyBy('id');
         $static           = $this->cacheService->remember('static_data', static fn() => [
-            'selectableSpells'                  => $selectableSpells,
             'mapIconTypes'                      => $mapIconTypes->values(),
             'unknownMapIconType'                => $mapIconTypes->get(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
             'awakenedObeliskGatewayMapIconType' => $mapIconTypes->get(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),
@@ -181,6 +192,8 @@ abstract class MapContext
             'publishStates'                     => PublishedState::all(),
             'gameVersions'                      => GameVersion::all(),
         ], config('keystoneguru.cache.static_data.ttl'));
+
+        $static['selectableSpells'] = $selectableSpells;
 
         [$npcMinHealth, $npcMaxHealth] = $this->floor->dungeon->getNpcsMinMaxHealth($this->mappingVersion);
 

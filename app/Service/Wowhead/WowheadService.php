@@ -162,7 +162,7 @@ class WowheadService implements WowheadServiceInterface
         // More hacky shit to scrape data we need
         $mechanic      = null;
         $category      = Spell::CATEGORY_UNKNOWN;
-        $cooldownGroup = sprintf('spells.cooldown_group.%s', Spell::COOLDOWN_GROUP_UNKNOWN); // I can't find info on this on Wowhead?
+        $cooldownGroup = sprintf('spellcooldowngroup.%s', Spell::COOLDOWN_GROUP_UNKNOWN); // I can't find info on this on Wowhead?
         $dispelType    = '';
         $iconName      = '';
         $name          = '';
@@ -219,7 +219,7 @@ class WowheadService implements WowheadServiceInterface
                 if (str_contains($mechanic, 'n/a')) {
                     $mechanic = null;
                 } else {
-                    $mechanic = sprintf('spells.mechanic.%s', Str::slug($mechanic));
+                    $mechanic = sprintf('spellmechanic.%s', Str::slug($mechanic));
                 }
                 $mechanicFound = false;
                 $mechanicSet   = true;
@@ -300,7 +300,7 @@ class WowheadService implements WowheadServiceInterface
         return new SpellDataResult(
             $spellId,
             $mechanic,
-            sprintf('spells.category.%s', $category),
+            sprintf('spellcategory.%s', $category),
             $cooldownGroup,
             $dispelType,
             $iconName,

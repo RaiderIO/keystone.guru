@@ -125,7 +125,7 @@ class SpellService implements SpellServiceInterface
             }
         }
 
-        return sprintf('spells.category.%s', $categorySlug);
+        return sprintf('spellcategory.%s', $categorySlug);
     }
 
     public function getCharacterClassFromClassName(string $csvClass): ?CharacterClass
@@ -155,7 +155,7 @@ class SpellService implements SpellServiceInterface
             return null;
         }
 
-        return sprintf('spells.cooldown_group.%s', $cooldownGroupSlug);
+        return sprintf('spellcooldowngroup.%s', $cooldownGroupSlug);
     }
 
     /**

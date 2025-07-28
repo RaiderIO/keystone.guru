@@ -31,10 +31,13 @@ use App\Console\Commands\Github\CreateGithubReleaseTicket;
 use App\Console\Commands\Handlebars\Refresh as HandlebarsRefresh;
 use App\Console\Commands\Localization\Datatables\ConvertLocalizations;
 use App\Console\Commands\Localization\Datatables\DownloadLocalizations;
-use App\Console\Commands\Localization\ExportNpcNames;
-use App\Console\Commands\Localization\ImportNpcNames;
 use App\Console\Commands\Localization\LocalizationSync;
-use App\Console\Commands\Localization\SyncNpcNames;
+use App\Console\Commands\Localization\Npc\ExportNpcNames;
+use App\Console\Commands\Localization\Npc\ImportNpcNames;
+use App\Console\Commands\Localization\Npc\SyncNpcNames;
+use App\Console\Commands\Localization\Spell\ExportSpellNames;
+use App\Console\Commands\Localization\Spell\ImportSpellNames;
+use App\Console\Commands\Localization\Spell\SyncSpellNames;
 use App\Console\Commands\MapIcon\GenerateItemIcons;
 use App\Console\Commands\Mapping\AssignMDTIDs;
 use App\Console\Commands\Mapping\AssignPackGroups;
@@ -65,9 +68,9 @@ use App\Console\Commands\Scheduler\Cache\RedisClearIdleKeys;
 use App\Console\Commands\Scheduler\Discover\Cache as DiscoverCache;
 use App\Console\Commands\Scheduler\DungeonRoute\DeleteExpired;
 use App\Console\Commands\Scheduler\DungeonRoute\RefreshOutdatedThumbnails;
+use App\Console\Commands\Scheduler\DungeonRoute\Touch;
 use App\Console\Commands\Scheduler\DungeonRoute\UpdatePopularity;
 use App\Console\Commands\Scheduler\DungeonRoute\UpdateRating;
-use App\Console\Commands\Scheduler\DungeonRoute\Touch;
 use App\Console\Commands\Scheduler\Metric\Aggregate;
 use App\Console\Commands\Scheduler\Metric\SavePending;
 use App\Console\Commands\Scheduler\Patreon\RefreshMembershipStatus;
@@ -86,7 +89,6 @@ use App\Console\Commands\Wowhead\FetchMissingSpells;
 use App\Console\Commands\Wowhead\FetchSpellData;
 use App\Console\Commands\Wowhead\RefreshDisplayIds as RefreshDisplayIdsWowhead;
 use App\Console\Commands\WowTools\RefreshDisplayIds;
-use App\Logging\StructuredLogging;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -155,13 +157,18 @@ class Kernel extends ConsoleKernel
         HandlebarsRefresh::class,
 
         // Localization
-        ExportNpcNames::class,
-        ImportNpcNames::class,
         LocalizationSync::class,
-        SyncNpcNames::class,
         // Localization Datatables
         ConvertLocalizations::class,
         DownloadLocalizations::class,
+        // Localization Npc
+        ExportNpcNames::class,
+        ImportNpcNames::class,
+        SyncNpcNames::class,
+        // Localization Spell
+        ExportSpellNames::class,
+        ImportSpellNames::class,
+        SyncSpellNames::class,
 
         // MapIcon
         GenerateItemIcons::class,

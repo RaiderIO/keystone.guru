@@ -1,32 +1,42 @@
 <?php
 
 return [
-    'processing'        => 'Procesando...',
-    'lengthMenu'        => 'Mostrar _MENU_ registros',
-    'zeroRecords'       => 'No se encontraron resultados',
-    'emptyTable'        => 'Ningún dato disponible en esta tabla',
-    'infoEmpty'         => 'Mostrando registros del 0 al 0 de un total de 0 registros',
-    'infoFiltered'      => '(filtrado de un total de _MAX_ registros)',
-    'search'            => 'Buscar:',
-    'loadingRecords'    => 'Cargando...',
-    'paginate'          =>
+    'emptyTable'     => 'Ningún dato disponible en esta tabla',
+    'info'           => 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+    'infoEmpty'      => 'Mostrando registros del 0 al 0 de un total de 0 registros',
+    'infoFiltered'   => '(filtrado de un total de _MAX_ registros)',
+    'infoThousands'  => '.',
+    'lengthMenu'     => 'Mostrar _MENU_ registros',
+    'loadingRecords' => 'Cargando...',
+    'processing'     => 'Procesando...',
+    'search'         => 'Buscar:',
+    'zeroRecords'    => 'No se encontraron resultados',
+    'thousands'      => '.',
+    'paginate'       =>
         [
             'first'    => 'Primero',
             'last'     => 'Último',
             'next'     => 'Siguiente',
             'previous' => 'Anterior',
         ],
-    'aria'              =>
+    'aria'           =>
         [
             'sortAscending'  => ': Activar para ordenar la columna de manera ascendente',
             'sortDescending' => ': Activar para ordenar la columna de manera descendente',
         ],
-    'buttons'           =>
+    'autoFill'       =>
         [
-            'copy'            => 'Copiar',
-            'colvis'          => 'Visibilidad',
+            'cancel'         => 'Cancelar',
+            'fill'           => 'Rellene todas las celdas con <i>%d</i>',
+            'fillHorizontal' => 'Rellenar celdas horizontalmente',
+            'fillVertical'   => 'Rellenar celdas verticalmente',
+        ],
+    'buttons'        =>
+        [
             'collection'      => 'Colección',
+            'colvis'          => 'Visibilidad',
             'colvisRestore'   => 'Restaurar visibilidad',
+            'copy'            => 'Copiar',
             'copyKeys'        => 'Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br /> <br /> Para cancelar, haga clic en este mensaje o presione escape.',
             'copySuccess'     =>
                 [
@@ -40,27 +50,18 @@ return [
                 [
                     '-1' => 'Mostrar todas las filas',
                     '_'  => 'Mostrar %d filas',
-                    '1'  => 'Mostrar 1 Fila',
                 ],
             'pdf'             => 'PDF',
             'print'           => 'Imprimir',
-            'renameState'     => 'Cambiar nombre',
             'updateState'     => 'Actualizar',
-            'createState'     => 'Crear Estado',
-            'removeAllStates' => 'Remover Estados',
-            'removeState'     => 'Remover',
-            'savedStates'     => 'Estados Guardados',
             'stateRestore'    => 'Estado %d',
+            'savedStates'     => 'Estados Guardados',
+            'renameState'     => 'Cambiar nombre',
+            'removeState'     => 'Remover',
+            'removeAllStates' => 'Remover Estados',
+            'createState'     => 'Crear Estado',
         ],
-    'autoFill'          =>
-        [
-            'cancel'         => 'Cancelar',
-            'fill'           => 'Rellene todas las celdas con <i>%d</i>',
-            'fillHorizontal' => 'Rellenar celdas horizontalmente',
-            'fillVertical'   => 'Rellenar celdas verticalmente',
-        ],
-    'decimal'           => ',',
-    'searchBuilder'     =>
+    'searchBuilder'  =>
         [
             'add'         => 'Añadir condición',
             'button'      =>
@@ -74,27 +75,27 @@ return [
                 [
                     'date'   =>
                         [
+                            'after'      => 'Después',
                             'before'     => 'Antes',
                             'between'    => 'Entre',
                             'empty'      => 'Vacío',
                             'equals'     => 'Igual a',
-                            'notBetween' => 'No entre',
                             'not'        => 'Diferente de',
-                            'after'      => 'Después',
+                            'notBetween' => 'No entre',
                             'notEmpty'   => 'No Vacío',
                         ],
                     'number' =>
                         [
                             'between'    => 'Entre',
+                            'empty'      => 'Vacío',
                             'equals'     => 'Igual a',
                             'gt'         => 'Mayor a',
                             'gte'        => 'Mayor o igual a',
                             'lt'         => 'Menor que',
                             'lte'        => 'Menor o igual que',
+                            'not'        => 'Diferente de',
                             'notBetween' => 'No entre',
                             'notEmpty'   => 'No vacío',
-                            'not'        => 'Diferente de',
-                            'empty'      => 'Vacío',
                         ],
                     'string' =>
                         [
@@ -102,21 +103,21 @@ return [
                             'empty'         => 'Vacío',
                             'endsWith'      => 'Termina en',
                             'equals'        => 'Igual a',
-                            'startsWith'    => 'Empieza con',
                             'not'           => 'Diferente de',
+                            'notEmpty'      => 'No Vacío',
+                            'startsWith'    => 'Empieza con',
                             'notContains'   => 'No Contiene',
                             'notStartsWith' => 'No empieza con',
                             'notEndsWith'   => 'No termina con',
-                            'notEmpty'      => 'No Vacío',
                         ],
                     'array'  =>
                         [
-                            'not'      => 'Diferente de',
-                            'equals'   => 'Igual',
-                            'empty'    => 'Vacío',
-                            'contains' => 'Contiene',
-                            'notEmpty' => 'No Vacío',
                             'without'  => 'Sin',
+                            'notEmpty' => 'No Vacío',
+                            'not'      => 'Diferente de',
+                            'contains' => 'Contiene',
+                            'empty'    => 'Vacío',
+                            'equals'   => 'Igual',
                         ],
                 ],
             'data'        => 'Data',
@@ -132,7 +133,7 @@ return [
                 ],
             'value'       => 'Valor',
         ],
-    'searchPanes'       =>
+    'searchPanes'    =>
         [
             'clearMessage'    => 'Borrar todo',
             'collapse'        =>
@@ -148,7 +149,7 @@ return [
             'showMessage'     => 'Mostrar Todo',
             'collapseMessage' => 'Colapsar Todo',
         ],
-    'select'            =>
+    'select'         =>
         [
             'cells'   =>
                 [
@@ -166,10 +167,10 @@ return [
                     '_' => '%d filas seleccionadas',
                 ],
         ],
-    'thousands'         => '.',
-    'datetime'          =>
+    'datetime'       =>
         [
             'previous' => 'Anterior',
+            'next'     => 'Próximo',
             'hours'    => 'Horas',
             'minutes'  => 'Minutos',
             'seconds'  => 'Segundos',
@@ -179,12 +180,20 @@ return [
                     '0' => 'AM',
                     '1' => 'PM',
                 ],
+            'weekdays' =>
+                [
+                    '0' => 'Dom',
+                    '1' => 'Lun',
+                    '2' => 'Mar',
+                    '3' => 'Mié',
+                    '4' => 'Jue',
+                    '5' => 'Vie',
+                    '6' => 'Sáb',
+                ],
             'months'   =>
                 [
                     '0'  => 'Enero',
                     '1'  => 'Febrero',
-                    '10' => 'Noviembre',
-                    '11' => 'Diciembre',
                     '2'  => 'Marzo',
                     '3'  => 'Abril',
                     '4'  => 'Mayo',
@@ -193,20 +202,11 @@ return [
                     '7'  => 'Agosto',
                     '8'  => 'Septiembre',
                     '9'  => 'Octubre',
+                    '10' => 'Noviembre',
+                    '11' => 'Diciembre',
                 ],
-            'weekdays' =>
-                [
-                    '0' => 'Dom',
-                    '1' => 'Lun',
-                    '2' => 'Mar',
-                    '4' => 'Jue',
-                    '5' => 'Vie',
-                    '3' => 'Mié',
-                    '6' => 'Sáb',
-                ],
-            'next'     => 'Próximo',
         ],
-    'editor'            =>
+    'editor'         =>
         [
             'close'  => 'Cerrar',
             'create' =>
@@ -239,67 +239,41 @@ return [
             'multi'  =>
                 [
                     'title'   => 'Múltiples Valores',
+                    'info'    => 'Los elementos seleccionados contienen diferentes valores para este registro. Para editar y establecer todos los elementos de este registro con el mismo valor, haga clic o pulse aquí, de lo contrario conservarán sus valores individuales.',
                     'restore' => 'Deshacer Cambios',
                     'noMulti' => 'Este registro puede ser editado individualmente, pero no como parte de un grupo.',
-                    'info'    => 'Los elementos seleccionados contienen diferentes valores para este registro. Para editar y establecer todos los elementos de este registro con el mismo valor, haga clic o pulse aquí, de lo contrario conservarán sus valores individuales.',
                 ],
         ],
-    'info'              => 'Mostrando _START_ a _END_ de _TOTAL_ registros',
-    'stateRestore'      =>
+    'stateRestore'   =>
         [
+            'renameTitle'    => 'Cambiar Nombre Estado',
+            'renameLabel'    => 'Nuevo nombre para %s:',
+            'renameButton'   => 'Cambiar Nombre',
+            'removeTitle'    => 'Remover Estado',
+            'removeSubmit'   => 'Eliminar',
+            'removeJoiner'   => 'y',
+            'removeError'    => 'Error al eliminar el Estado',
+            'removeConfirm'  => '¿Seguro que quiere eliminar %s?',
+            'emptyStates'    => 'No hay Estados guardados',
+            'emptyError'     => 'El nombre no puede estar vacío.',
+            'duplicateError' => 'Ya existe un Estado con este nombre.',
             'creationModal'  =>
                 [
-                    'button'        => 'Crear',
-                    'name'          => 'Nombre:',
-                    'order'         => 'Clasificación',
-                    'paging'        => 'Paginación',
+                    'toggleLabel'   => 'Incluir:',
+                    'title'         => 'Crear Nuevo Estado',
                     'select'        => 'Seleccionar',
+                    'searchBuilder' => 'Búsqueda avanzada',
+                    'search'        => 'Búsqueda',
+                    'scroller'      => 'Posición de desplazamiento',
+                    'paging'        => 'Paginación',
+                    'order'         => 'Clasificación',
+                    'name'          => 'Nombre:',
                     'columns'       =>
                         [
-                            'search'  => 'Búsqueda de Columna',
                             'visible' => 'Visibilidad de Columna',
+                            'search'  => 'Búsqueda de Columna',
                         ],
-                    'title'         => 'Crear Nuevo Estado',
-                    'toggleLabel'   => 'Incluir:',
-                    'scroller'      => 'Posición de desplazamiento',
-                    'search'        => 'Búsqueda',
-                    'searchBuilder' => 'Búsqueda avanzada',
-                ],
-            'removeJoiner'   => 'y',
-            'removeSubmit'   => 'Eliminar',
-            'renameButton'   => 'Cambiar Nombre',
-            'duplicateError' => 'Ya existe un Estado con este nombre.',
-            'emptyStates'    => 'No hay Estados guardados',
-            'removeTitle'    => 'Remover Estado',
-            'renameTitle'    => 'Cambiar Nombre Estado',
-            'emptyError'     => 'El nombre no puede estar vacío.',
-            'removeConfirm'  => '¿Seguro que quiere eliminar %s?',
-            'removeError'    => 'Error al eliminar el Estado',
-            'renameLabel'    => 'Nuevo nombre para %s:',
-        ],
-    'infoThousands'     => '.',
-    'searchPlaceholder' => 'Ejemplo búsqueda...',
-    'columnControl'     =>
-        [
-            'colVis'         => 'Visibilidad',
-            'colVisDropdown' => 'Desplegable visibilidad',
-            'dropdown'       => 'Desplegable',
-            'orderAddAsc'    => 'Añadir a ordenación ascendente',
-            'orderAddDesc'   => 'Añadir a ordenación descencente',
-            'orderAsc'       => 'Ordenar ascendentemente',
-            'orderDesc'      => 'Ordenar descendentemente',
-            'orderRemove'    => 'Borrar de ordenación',
-            'reorder'        => 'Reordenar',
-            'reorderLeft'    => 'Mover a la izquierda',
-            'reorderRight'   => 'Mover a la derecha',
-            'searchClear'    => 'Borrar búsqueda',
-            'searchDropdown' => 'Buscar',
-            'list'           =>
-                [
-                    'add'    => 'Añadir',
-                    'none'   => 'Ninguno',
-                    'search' => 'Buscar..',
+                    'button'        => 'Crear',
                 ],
         ],
-    'orderClear'        => 'Limpiar ordenación de toda la tabla',
 ];

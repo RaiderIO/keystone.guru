@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Localization;
+namespace App\Console\Commands\Localization\Npc;
 
 use App\Models\Npc\Npc;
 use Illuminate\Console\Command;
@@ -40,7 +40,7 @@ class ImportNpcNames extends Command
         Npc::chunk(1000, function (Collection $npcs) use (&$npcNames, &$updatedCount, $progressBar) {
             /** @var Collection<Npc> $npcs */
             foreach ($npcs as $npc) {
-                if (empty($npc->name) || Str::startsWith($npc->name, 'Unknown')) {
+                if (empty($npc->name) || Str::startsWith($npc->name, 'npcs.')) {
                     continue;
                 }
 

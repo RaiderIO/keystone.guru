@@ -1,58 +1,67 @@
 <?php
 
 return [
-    'lengthMenu'        => 'Показати _MENU_ записів',
-    'infoFiltered'      => '(відфільтровано з _MAX_ записів)',
-    'search'            => 'Пошук:',
-    'paginate'          =>
+    'emptyTable'     => 'Ця таблиця не містить даних',
+    'info'           => 'Показано від _START_ по _END_ з _TOTAL_ записів',
+    'infoEmpty'      => 'Показано від 0 по 0 з 0 записів',
+    'infoFiltered'   => '(відфільтровано з _MAX_ записів)',
+    'infoThousands'  => ',',
+    'lengthMenu'     => 'Показати _MENU_ записів',
+    'loadingRecords' => 'Завантаження',
+    'processing'     => 'Опрацювання...',
+    'search'         => 'Пошук:',
+    'zeroRecords'    => 'Не знайдено жодних записів',
+    'thousands'      => ',',
+    'paginate'       =>
         [
             'first'    => 'Перша',
-            'previous' => 'Попередня',
-            'next'     => 'Наступна',
             'last'     => 'Остання',
+            'next'     => 'Наступна',
+            'previous' => 'Попередня',
         ],
-    'aria'              =>
+    'aria'           =>
         [
             'sortAscending'  => ': активуйте, щоб сортувати колонку за зростанням',
             'sortDescending' => ': активуйте, щоб сортувати колонку за спаданням',
         ],
-    'autoFill'          =>
+    'autoFill'       =>
         [
             'cancel'         => 'Відміна',
             'fill'           => 'Заповнити всі клітинки з <i>%d</i>',
             'fillHorizontal' => 'Заповнити клітинки горизонтально',
             'fillVertical'   => 'Заповнити клітинки вертикально',
         ],
-    'buttons'           =>
+    'buttons'        =>
         [
-            'collection'    => 'Список <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
-            'colvis'        => 'Видимість колонки',
-            'colvisRestore' => 'Відновити видимість',
-            'copy'          => 'Копіювати',
-            'copyKeys'      => 'Нажміть ctrl або u2318 + C щоб копіювати інформацію з таблиці до вашого буферу обміну.<br /><br />Щоб відмінити нажміть на це повідомлення або Esc',
-            'copySuccess'   =>
+            'collection'      => 'Список <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
+            'colvis'          => 'Видимість колонки',
+            'colvisRestore'   => 'Відновити видимість',
+            'copy'            => 'Копіювати',
+            'copyKeys'        => 'Нажміть ctrl або u2318 + C щоб копіювати інформацію з таблиці до вашого буферу обміну.<br /><br />Щоб відмінити нажміть на це повідомлення або Esc',
+            'copySuccess'     =>
                 [
                     '1' => 'Скопійовано 1 рядок в буфер обміну',
                     '_' => 'Скопійовано %d рядків в буфер обміну',
                 ],
-            'copyTitle'     => 'Копіювати в буфер обміну',
-            'csv'           => 'CSV',
-            'excel'         => 'Excel',
-            'pageLength'    =>
+            'copyTitle'       => 'Копіювати в буфер обміну',
+            'csv'             => 'CSV',
+            'excel'           => 'Excel',
+            'pageLength'      =>
                 [
                     '-1' => 'Показати усі рядки',
                     '_'  => 'Показати %d рядки',
                 ],
-            'pdf'           => 'PDF',
-            'print'         => 'Друкувати',
+            'pdf'             => 'PDF',
+            'print'           => 'Друкувати',
+            'updateState'     => '',
+            'stateRestore'    => '',
+            'savedStates'     => '',
+            'renameState'     => '',
+            'removeState'     => '',
+            'removeAllStates' => '',
+            'createState'     => '',
         ],
-    'emptyTable'        => 'Ця таблиця не містить даних',
-    'info'              => 'Показано від _START_ по _END_ з _TOTAL_ записів',
-    'infoEmpty'         => 'Показано від 0 по 0 з 0 записів',
-    'infoThousands'     => ',',
-    'loadingRecords'    => 'Завантаження',
-    'processing'        => 'Опрацювання...',
-    'searchBuilder'     =>
+    'searchBuilder'  =>
         [
             'add'         => 'Додати умову',
             'button'      =>
@@ -103,12 +112,12 @@ return [
                         ],
                     'array'  =>
                         [
-                            'equals'   => 'Дорівнює',
-                            'empty'    => 'Пустий',
-                            'contains' => 'Містить',
-                            'not'      => 'Не',
-                            'notEmpty' => 'Не пустий',
                             'without'  => 'Без',
+                            'notEmpty' => 'Не пустий',
+                            'not'      => 'Не',
+                            'contains' => 'Містить',
+                            'empty'    => 'Пустий',
+                            'equals'   => 'Дорівнює',
                         ],
                 ],
             'data'        => 'Дата',
@@ -124,7 +133,7 @@ return [
                 ],
             'value'       => 'Значення',
         ],
-    'searchPanes'       =>
+    'searchPanes'    =>
         [
             'clearMessage'    => 'Очистити все',
             'collapse'        =>
@@ -140,7 +149,7 @@ return [
             'showMessage'     => 'Показати всі',
             'collapseMessage' => 'Приховати всі',
         ],
-    'select'            =>
+    'select'         =>
         [
             'cells'   =>
                 [
@@ -152,10 +161,52 @@ return [
                     '1' => '1 колонку вибрано',
                     '_' => '%d колонок вибрано',
                 ],
+            'rows'    =>
+                [
+                    '1' => '',
+                    '_' => '',
+                ],
         ],
-    'thousands'         => ',',
-    'zeroRecords'       => 'Не знайдено жодних записів',
-    'editor'            =>
+    'datetime'       =>
+        [
+            'previous' => 'Попередні',
+            'next'     => 'Наступні',
+            'hours'    => '',
+            'minutes'  => 'Хвилина',
+            'seconds'  => 'Секунда',
+            'unknown'  => '-',
+            'amPm'     =>
+                [
+                    '0' => '',
+                    '1' => '',
+                ],
+            'weekdays' =>
+                [
+                    '0' => 'Неділя',
+                    '1' => 'Понеділок',
+                    '2' => 'Вівторок',
+                    '3' => 'Середа',
+                    '4' => 'Четверг',
+                    '5' => 'П\'ятниця',
+                    '6' => 'Субота',
+                ],
+            'months'   =>
+                [
+                    '0'  => 'Січень',
+                    '1'  => 'Лютий',
+                    '2'  => 'Березень',
+                    '3'  => 'Квітень',
+                    '4'  => 'Травень',
+                    '5'  => 'Червень',
+                    '6'  => 'Липень',
+                    '7'  => 'Серпень',
+                    '8'  => 'Вересень',
+                    '9'  => 'Жовтень',
+                    '10' => 'Листопад',
+                    '11' => 'Грудень',
+                ],
+        ],
+    'editor'         =>
         [
             'close'  => 'Закрити',
             'create' =>
@@ -172,43 +223,57 @@ return [
                 ],
             'remove' =>
                 [
-                    'button' => 'Видалити',
-                    'title'  => 'Видалити',
-                    'submit' => 'Видалити',
+                    'button'  => 'Видалити',
+                    'title'   => 'Видалити',
+                    'submit'  => 'Видалити',
+                    'confirm' =>
+                        [
+                            '_' => '',
+                            '1' => '',
+                        ],
+                ],
+            'error'  =>
+                [
+                    'system' => '',
+                ],
+            'multi'  =>
+                [
+                    'title'   => '',
+                    'info'    => '',
+                    'restore' => '',
+                    'noMulti' => '',
                 ],
         ],
-    'datetime'          =>
+    'stateRestore'   =>
         [
-            'minutes'  => 'Хвилина',
-            'months'   =>
+            'renameTitle'    => '',
+            'renameLabel'    => '',
+            'renameButton'   => '',
+            'removeTitle'    => '',
+            'removeSubmit'   => '',
+            'removeJoiner'   => '',
+            'removeError'    => '',
+            'removeConfirm'  => '',
+            'emptyStates'    => '',
+            'emptyError'     => '',
+            'duplicateError' => '',
+            'creationModal'  =>
                 [
-                    '0'  => 'Січень',
-                    '1'  => 'Лютий',
-                    '10' => 'Листопад',
-                    '11' => 'Грудень',
-                    '2'  => 'Березень',
-                    '3'  => 'Квітень',
-                    '4'  => 'Травень',
-                    '5'  => 'Червень',
-                    '6'  => 'Липень',
-                    '7'  => 'Серпень',
-                    '8'  => 'Вересень',
-                    '9'  => 'Жовтень',
-                ],
-            'next'     => 'Наступні',
-            'previous' => 'Попередні',
-            'seconds'  => 'Секунда',
-            'unknown'  => '-',
-            'weekdays' =>
-                [
-                    '0' => 'Неділя',
-                    '1' => 'Понеділок',
-                    '2' => 'Вівторок',
-                    '3' => 'Середа',
-                    '4' => 'Четверг',
-                    '5' => 'П\'ятниця',
-                    '6' => 'Субота',
+                    'toggleLabel'   => '',
+                    'title'         => '',
+                    'select'        => '',
+                    'searchBuilder' => '',
+                    'search'        => '',
+                    'scroller'      => '',
+                    'paging'        => '',
+                    'order'         => '',
+                    'name'          => '',
+                    'columns'       =>
+                        [
+                            'visible' => '',
+                            'search'  => '',
+                        ],
+                    'button'        => '',
                 ],
         ],
-    'searchPlaceholder' => 'Пошук',
 ];

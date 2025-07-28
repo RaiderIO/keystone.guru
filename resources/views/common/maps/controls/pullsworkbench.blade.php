@@ -127,11 +127,11 @@ use Illuminate\Support\Collection;
 
                             @include('common.forms.select.imageoption', [
                                 'url' => $spell['icon_url'],
-                                'name' => $spell['name'],
+                                'name' => __($spell['name']),
                             ])
 
                                 <?php $html = ob_get_clean(); ?>
-                            <option value="{{ $spell['id'] }}" data-content="{{{$html}}}">{{ $spell['name'] }}</option>
+                            <option value="{{ $spell['id'] }}" data-content="{{{$html}}}">{{ __($spell['name']) }}</option>
                         @endforeach
                     </optgroup>
                 @endforeach

@@ -47,9 +47,9 @@ use Illuminate\Support\Collection;
         <tbody>
         @foreach ($models as $spell)
             <tr>
-                <td><img src="{{ $spell->icon_url }}" width="48px" alt="{{ $spell->name }}"/></td>
+                <td><img src="{{ $spell->icon_url }}" width="48px" alt="{{ __($spell->name) }}"/></td>
                 <td>{{ $spell->id }}</td>
-                <td>{{ $spell->name }}</td>
+                <td>{{ __($spell->name) }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ route('admin.spell.edit', ['spell' => $spell->id]) }}">
                         <i class="fas fa-edit"></i>&nbsp;{{ __('view_admin.spell.list.edit') }}

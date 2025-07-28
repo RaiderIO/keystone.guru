@@ -28,6 +28,7 @@ return [
             'key_level'               => '',
             'affixes'                 => '',
             'affixes_title'           => '',
+            'select_affixes'          => '',
             'affixes_selected'        => '',
             'enemy_forces'            => '',
             'enemy_forces_complete'   => '',

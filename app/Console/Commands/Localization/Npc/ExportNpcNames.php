@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Localization;
+namespace App\Console\Commands\Localization\Npc;
 
 use App\Console\Commands\Localization\Traits\ExportsTranslations;
 use App\Models\Npc\Npc;
@@ -30,6 +30,9 @@ class ExportNpcNames extends Command
     {
         // Start off with the existing array
         $export = __('npcs', [], 'en_US');
+        if (!is_array($export)) {
+            $export = [];
+        }
 
         Npc::chunk(1000, function (Collection $npcs) use (&$export) {
             /** @var Collection<Npc> $npcs */

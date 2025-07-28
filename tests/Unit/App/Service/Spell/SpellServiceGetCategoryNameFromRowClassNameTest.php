@@ -74,67 +74,67 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
             [
                 'Warrior Protection',
                 CharacterClass::CHARACTER_CLASS_WARRIOR,
-                'spells.category.warrior',
+                'spellcategory.warrior',
             ],
             [
                 'Hunter Survival',
                 CharacterClass::CHARACTER_CLASS_HUNTER,
-                'spells.category.hunter',
+                'spellcategory.hunter',
             ],
             [
                 'Death Knight Blood',
                 CharacterClass::CHARACTER_CLASS_DEATH_KNIGHT,
-                'spells.category.death_knight',
+                'spellcategory.death_knight',
             ],
             [
                 'Mage Fire',
                 CharacterClass::CHARACTER_CLASS_MAGE,
-                'spells.category.mage',
+                'spellcategory.mage',
             ],
             [
                 'Priest Discipline',
                 CharacterClass::CHARACTER_CLASS_PRIEST,
-                'spells.category.priest',
+                'spellcategory.priest',
             ],
             [
                 'Monk Mistweaver',
                 CharacterClass::CHARACTER_CLASS_MONK,
-                'spells.category.monk',
+                'spellcategory.monk',
             ],
             [
                 'Rogue Assassination',
                 CharacterClass::CHARACTER_CLASS_ROGUE,
-                'spells.category.rogue',
+                'spellcategory.rogue',
             ],
             [
                 'Warlock Destruction',
                 CharacterClass::CHARACTER_CLASS_WARLOCK,
-                'spells.category.warlock',
+                'spellcategory.warlock',
             ],
             [
                 'Shaman Enhancement',
                 CharacterClass::CHARACTER_CLASS_SHAMAN,
-                'spells.category.shaman',
+                'spellcategory.shaman',
             ],
             [
                 'Paladin Retribution',
                 CharacterClass::CHARACTER_CLASS_PALADIN,
-                'spells.category.paladin',
+                'spellcategory.paladin',
             ],
             [
                 'Druid Restoration',
                 CharacterClass::CHARACTER_CLASS_DRUID,
-                'spells.category.druid',
+                'spellcategory.druid',
             ],
             [
                 'Demon Hunter Havoc',
                 CharacterClass::CHARACTER_CLASS_DEMON_HUNTER,
-                'spells.category.demon_hunter',
+                'spellcategory.demon_hunter',
             ],
             [
                 'Evoker Preservation',
                 CharacterClass::CHARACTER_CLASS_EVOKER,
-                'spells.category.evoker',
+                'spellcategory.evoker',
             ],
         ];
     }
@@ -185,7 +185,7 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
         return [
             [
                 'General',
-                'spells.category.general',
+                'spellcategory.general',
             ],
         ];
     }

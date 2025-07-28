@@ -1,17 +1,23 @@
 <?php
 
 return [
+    'emptyTable'     => 'Nessun dato disponibile nella tabella',
+    'info'           => 'Risultati da _START_ a _END_ di _TOTAL_ elementi',
+    'infoEmpty'      => 'Risultati da 0 a 0 di 0 elementi',
     'infoFiltered'   => '(filtrati da _MAX_ elementi totali)',
     'infoThousands'  => '.',
+    'lengthMenu'     => 'Mostra _MENU_ elementi',
     'loadingRecords' => 'Caricamento...',
     'processing'     => 'Elaborazione...',
     'search'         => 'Cerca:',
+    'zeroRecords'    => 'Nessun elemento corrispondente trovato',
+    'thousands'      => '.',
     'paginate'       =>
         [
             'first'    => 'Inizio',
-            'previous' => 'Precedente',
-            'next'     => 'Successivo',
             'last'     => 'Fine',
+            'next'     => 'Successivo',
+            'previous' => 'Precedente',
         ],
     'aria'           =>
         [
@@ -47,18 +53,14 @@ return [
                 ],
             'pdf'             => 'PDF',
             'print'           => 'Stampa',
-            'createState'     => 'Crea stato',
-            'removeAllStates' => 'Rimuovi tutti gli stati',
-            'removeState'     => 'Rimuovi',
-            'renameState'     => 'Rinomina',
-            'savedStates'     => 'Salva stato',
-            'stateRestore'    => 'Ripristina stato',
             'updateState'     => 'Aggiorna',
+            'stateRestore'    => 'Ripristina stato',
+            'savedStates'     => 'Salva stato',
+            'renameState'     => 'Rinomina',
+            'removeState'     => 'Rimuovi',
+            'removeAllStates' => 'Rimuovi tutti gli stati',
+            'createState'     => 'Crea stato',
         ],
-    'emptyTable'     => 'Nessun dato disponibile nella tabella',
-    'info'           => 'Risultati da _START_ a _END_ di _TOTAL_ elementi',
-    'infoEmpty'      => 'Risultati da 0 a 0 di 0 elementi',
-    'lengthMenu'     => 'Mostra _MENU_ elementi',
     'searchBuilder'  =>
         [
             'add'         => 'Aggiungi Condizione',
@@ -110,12 +112,12 @@ return [
                         ],
                     'array'  =>
                         [
-                            'equals'   => 'Uguale A',
-                            'empty'    => 'Vuoto',
-                            'contains' => 'Contiene',
-                            'not'      => 'Non',
-                            'notEmpty' => 'Non Vuoto',
                             'without'  => 'Senza',
+                            'notEmpty' => 'Non Vuoto',
+                            'not'      => 'Non',
+                            'contains' => 'Contiene',
+                            'empty'    => 'Vuoto',
+                            'equals'   => 'Uguale A',
                         ],
                 ],
             'data'        => 'Dati',
@@ -165,20 +167,19 @@ return [
                     '_' => '%d righe selezionate',
                 ],
         ],
-    'zeroRecords'    => 'Nessun elemento corrispondente trovato',
     'datetime'       =>
         [
+            'previous' => 'precedente',
+            'next'     => 'successivo',
+            'hours'    => 'ore',
+            'minutes'  => 'minuti',
+            'seconds'  => 'secondi',
+            'unknown'  => 'sconosciuto',
             'amPm'     =>
                 [
                     '0' => 'am',
                     '1' => 'pm',
                 ],
-            'hours'    => 'ore',
-            'minutes'  => 'minuti',
-            'next'     => 'successivo',
-            'previous' => 'precedente',
-            'seconds'  => 'secondi',
-            'unknown'  => 'sconosciuto',
             'weekdays' =>
                 [
                     '0' => 'Dom',
@@ -211,14 +212,25 @@ return [
             'create' =>
                 [
                     'button' => 'Nuovo',
-                    'submit' => 'Aggiungi',
                     'title'  => 'Aggiungi nuovo elemento',
+                    'submit' => 'Aggiungi',
                 ],
             'edit'   =>
                 [
                     'button' => 'Modifica',
-                    'submit' => 'Modifica',
                     'title'  => 'Modifica elemento',
+                    'submit' => 'Modifica',
+                ],
+            'remove' =>
+                [
+                    'button'  => 'Rimuovi',
+                    'title'   => 'Rimuovi',
+                    'submit'  => 'Rimuovi',
+                    'confirm' =>
+                        [
+                            '_' => 'Sei sicuro di voler cancellare %d righe?',
+                            '1' => 'Sei sicuro di voler cancellare 1 riga?',
+                        ],
                 ],
             'error'  =>
                 [
@@ -226,55 +238,42 @@ return [
                 ],
             'multi'  =>
                 [
-                    'info'    => 'Gli elementi selezionati contengono valori diversi. Per modificare e impostare tutti gli elementi per questa selezione allo stesso valore, premi o clicca qui, altrimenti ogni cella manterrà il suo valore attuale.',
-                    'noMulti' => 'Questa selezione può essere modificata individualmente, ma non se fa parte di un gruppo.',
-                    'restore' => 'Annulla le modifiche',
                     'title'   => 'Valori multipli',
-                ],
-            'remove' =>
-                [
-                    'button'  => 'Rimuovi',
-                    'confirm' =>
-                        [
-                            '_' => 'Sei sicuro di voler cancellare %d righe?',
-                            '1' => 'Sei sicuro di voler cancellare 1 riga?',
-                        ],
-                    'submit'  => 'Rimuovi',
-                    'title'   => 'Rimuovi',
+                    'info'    => 'Gli elementi selezionati contengono valori diversi. Per modificare e impostare tutti gli elementi per questa selezione allo stesso valore, premi o clicca qui, altrimenti ogni cella manterrà il suo valore attuale.',
+                    'restore' => 'Annulla le modifiche',
+                    'noMulti' => 'Questa selezione può essere modificata individualmente, ma non se fa parte di un gruppo.',
                 ],
         ],
-    'thousands'      => '.',
-    'decimal'        => ',',
     'stateRestore'   =>
         [
+            'renameTitle'    => 'Rinomina Stato',
+            'renameLabel'    => 'Nuovo nome per %s:',
+            'renameButton'   => 'Rinomina',
+            'removeTitle'    => 'Elimina Stato',
+            'removeSubmit'   => 'Elimina',
+            'removeJoiner'   => 'e',
+            'removeError'    => 'Errore durante l\'eliminazione dello Stato',
+            'removeConfirm'  => 'Sei sicuro di eliminare lo Stato %s?',
+            'emptyStates'    => 'Non ci sono stati salvati',
+            'emptyError'     => 'Il nome è obbligatorio',
+            'duplicateError' => 'Nome stato già presente',
             'creationModal'  =>
                 [
-                    'button'        => 'Crea',
+                    'toggleLabel'   => 'Includi:',
+                    'title'         => 'Crea nuovo Stato',
+                    'select'        => 'Seleziona',
+                    'searchBuilder' => 'Form di Ricerca',
+                    'search'        => 'Ricerca',
+                    'scroller'      => 'Scorri posizione',
+                    'paging'        => 'Paginazione',
+                    'order'         => 'Ordinamento',
+                    'name'          => 'Nome:',
                     'columns'       =>
                         [
-                            'search'  => 'Colonna Cerca',
                             'visible' => 'Colonna Visibilità',
+                            'search'  => 'Colonna Cerca',
                         ],
-                    'name'          => 'Nome:',
-                    'order'         => 'Ordinamento',
-                    'paging'        => 'Paginazione',
-                    'scroller'      => 'Scorri posizione',
-                    'search'        => 'Ricerca',
-                    'searchBuilder' => 'Form di Ricerca',
-                    'select'        => 'Seleziona',
-                    'title'         => 'Crea nuovo Stato',
-                    'toggleLabel'   => 'Includi:',
+                    'button'        => 'Crea',
                 ],
-            'duplicateError' => 'Nome stato già presente',
-            'emptyError'     => 'Il nome è obbligatorio',
-            'emptyStates'    => 'Non ci sono stati salvati',
-            'removeConfirm'  => 'Sei sicuro di eliminare lo Stato %s?',
-            'removeError'    => 'Errore durante l\'eliminazione dello Stato',
-            'removeJoiner'   => 'e',
-            'removeSubmit'   => 'Elimina',
-            'removeTitle'    => 'Elimina Stato',
-            'renameButton'   => 'Rinomina',
-            'renameLabel'    => 'Nuovo nome per %s:',
-            'renameTitle'    => 'Rinomina Stato',
         ],
 ];

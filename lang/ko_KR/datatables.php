@@ -11,6 +11,7 @@ return [
     'processing'     => '처리중...',
     'search'         => '검색:',
     'zeroRecords'    => '검색 결과가 없습니다',
+    'thousands'      => '',
     'paginate'       =>
         [
             'first'    => '처음',
@@ -23,28 +24,42 @@ return [
             'sortAscending'  => ': 오름차순 정렬',
             'sortDescending' => ': 내림차순 정렬',
         ],
+    'autoFill'       =>
+        [
+            'cancel'         => '취소',
+            'fill'           => '모든 셀에서 <i>%d<i>을(를) 삽입</i></i>',
+            'fillHorizontal' => '수평 셀에서 값을 삽입',
+            'fillVertical'   => '수직 설에서 값을 삽입',
+        ],
     'buttons'        =>
         [
-            'copyKeys'      => 'ctrl키 나 u2318 + C키로 테이블 데이터를 시스텝 복사판에서 복사하고 취소하려면 이 메시지를 클릭하거나 ESC키를 누르면됩니다. to copy the table data to your system clipboard. To cancel, click this message or press escape.',
-            'copySuccess'   =>
+            'collection'      => '집합 <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
+            'colvis'          => '컬럼 보기',
+            'colvisRestore'   => '보기 복원',
+            'copy'            => '복사',
+            'copyKeys'        => 'ctrl키 나 u2318 + C키로 테이블 데이터를 시스텝 복사판에서 복사하고 취소하려면 이 메시지를 클릭하거나 ESC키를 누르면됩니다. to copy the table data to your system clipboard. To cancel, click this message or press escape.',
+            'copySuccess'     =>
                 [
-                    '_' => '%d행을 복사판에서 복사됨',
                     '1' => '1행을 복사판에서 복사됨',
+                    '_' => '%d행을 복사판에서 복사됨',
                 ],
-            'copyTitle'     => '복사판에서 복사',
-            'csv'           => 'CSV',
-            'pageLength'    =>
+            'copyTitle'       => '복사판에서 복사',
+            'csv'             => 'CSV',
+            'excel'           => '엑셀',
+            'pageLength'      =>
                 [
                     '-1' => '모든 행 보기',
                     '_'  => '%d행 보기',
                 ],
-            'pdf'           => 'PDF',
-            'print'         => '인쇄',
-            'collection'    => '집합 <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
-            'colvis'        => '컬럼 보기',
-            'colvisRestore' => '보기 복원',
-            'copy'          => '복사',
-            'excel'         => '엑셀',
+            'pdf'             => 'PDF',
+            'print'           => '인쇄',
+            'updateState'     => '',
+            'stateRestore'    => '',
+            'savedStates'     => '',
+            'renameState'     => '',
+            'removeState'     => '',
+            'removeAllStates' => '',
+            'createState'     => '',
         ],
     'searchBuilder'  =>
         [
@@ -56,10 +71,61 @@ return [
                 ],
             'clearAll'    => '모두 지우기',
             'condition'   => '조건',
+            'conditions'  =>
+                [
+                    'date'   =>
+                        [
+                            'after'      => '',
+                            'before'     => '',
+                            'between'    => '',
+                            'empty'      => '',
+                            'equals'     => '',
+                            'not'        => '',
+                            'notBetween' => '',
+                            'notEmpty'   => '',
+                        ],
+                    'number' =>
+                        [
+                            'between'    => '',
+                            'empty'      => '',
+                            'equals'     => '',
+                            'gt'         => '',
+                            'gte'        => '',
+                            'lt'         => '',
+                            'lte'        => '',
+                            'not'        => '',
+                            'notBetween' => '',
+                            'notEmpty'   => '',
+                        ],
+                    'string' =>
+                        [
+                            'contains'      => '',
+                            'empty'         => '',
+                            'endsWith'      => '',
+                            'equals'        => '',
+                            'not'           => '',
+                            'notEmpty'      => '',
+                            'startsWith'    => '',
+                            'notContains'   => '',
+                            'notStartsWith' => '',
+                            'notEndsWith'   => '',
+                        ],
+                    'array'  =>
+                        [
+                            'without'  => '',
+                            'notEmpty' => '',
+                            'not'      => '',
+                            'contains' => '',
+                            'empty'    => '',
+                            'equals'   => '',
+                        ],
+                ],
             'data'        => '데이터',
             'deleteTitle' => '필터 규칙을 삭제',
+            'leftTitle'   => '',
             'logicAnd'    => 'And',
             'logicOr'     => 'Or',
+            'rightTitle'  => '',
             'title'       =>
                 [
                     '0' => '빌더 조회',
@@ -67,12 +133,39 @@ return [
                 ],
             'value'       => '값',
         ],
-    'autoFill'       =>
+    'searchPanes'    =>
         [
-            'cancel'         => '취소',
-            'fill'           => '모든 셀에서 <i>%d<i>을(를) 삽입</i></i>',
-            'fillHorizontal' => '수평 셀에서 값을 삽입',
-            'fillVertical'   => '수직 설에서 값을 삽입',
+            'clearMessage'    => '',
+            'collapse'        =>
+                [
+                    '0' => '',
+                    '_' => '',
+                ],
+            'count'           => '',
+            'countFiltered'   => '',
+            'emptyPanes'      => '',
+            'loadMessage'     => '',
+            'title'           => '',
+            'showMessage'     => '',
+            'collapseMessage' => '',
+        ],
+    'select'         =>
+        [
+            'cells'   =>
+                [
+                    '1' => '',
+                    '_' => '',
+                ],
+            'columns' =>
+                [
+                    '1' => '',
+                    '_' => '',
+                ],
+            'rows'    =>
+                [
+                    '1' => '',
+                    '_' => '',
+                ],
         ],
     'datetime'       =>
         [
@@ -130,13 +223,57 @@ return [
                 ],
             'remove' =>
                 [
-                    'button' => '삭제',
-                    'title'  => '항목 삭제',
-                    'submit' => '완료',
+                    'button'  => '삭제',
+                    'title'   => '항목 삭제',
+                    'submit'  => '완료',
+                    'confirm' =>
+                        [
+                            '_' => '',
+                            '1' => '',
+                        ],
                 ],
             'error'  =>
                 [
                     'system' => '에러가 발생하였습니다 (&lt;a target="\\" rel="nofollow" href="\\"&gt;자세한 정보&lt;/a&gt;).',
+                ],
+            'multi'  =>
+                [
+                    'title'   => '',
+                    'info'    => '',
+                    'restore' => '',
+                    'noMulti' => '',
+                ],
+        ],
+    'stateRestore'   =>
+        [
+            'renameTitle'    => '',
+            'renameLabel'    => '',
+            'renameButton'   => '',
+            'removeTitle'    => '',
+            'removeSubmit'   => '',
+            'removeJoiner'   => '',
+            'removeError'    => '',
+            'removeConfirm'  => '',
+            'emptyStates'    => '',
+            'emptyError'     => '',
+            'duplicateError' => '',
+            'creationModal'  =>
+                [
+                    'toggleLabel'   => '',
+                    'title'         => '',
+                    'select'        => '',
+                    'searchBuilder' => '',
+                    'search'        => '',
+                    'scroller'      => '',
+                    'paging'        => '',
+                    'order'         => '',
+                    'name'          => '',
+                    'columns'       =>
+                        [
+                            'visible' => '',
+                            'search'  => '',
+                        ],
+                    'button'        => '',
                 ],
         ],
 ];

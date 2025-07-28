@@ -28,6 +28,7 @@ return [
             'key_level'               => 'Уровень ключа',
             'affixes'                 => 'Аффикс',
             'affixes_title'           => 'Выбрать аффикс',
+            'select_affixes'          => '',
             'affixes_selected'        => '{0} аффиксов выбрано',
             'enemy_forces'            => 'Силы врага',
             'enemy_forces_complete'   => 'Завершенные',

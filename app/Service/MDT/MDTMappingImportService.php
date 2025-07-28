@@ -322,8 +322,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                     $spellsAttributes[$spellId] = [
                         'id'             => $spellId,
-                        'category'       => sprintf('spells.category.%s', Spell::CATEGORY_UNKNOWN),
-                        'cooldown_group' => sprintf('spells.cooldown_group.%s', Spell::COOLDOWN_GROUP_UNKNOWN),
+                        'category'       => sprintf('spellcategory.%s', Spell::CATEGORY_UNKNOWN),
+                        'cooldown_group' => sprintf('spellcooldowngroup.%s', Spell::COOLDOWN_GROUP_UNKNOWN),
                         'dispel_type'    => Spell::DISPEL_TYPE_UNKNOWN,
                         'icon_name'      => '',
                         'name'           => '',

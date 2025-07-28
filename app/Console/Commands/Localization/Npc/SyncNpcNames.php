@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Localization;
+namespace App\Console\Commands\Localization\Npc;
 
 use App\Console\Commands\Localization\Traits\ExportsTranslations;
 use App\Models\GameVersion\GameVersion;
