@@ -18,14 +18,14 @@ class SyncSpellNames extends Command
      *
      * @var string
      */
-    protected $signature = 'localization:syncnpcnames {gameVersion}';
+    protected $signature = 'localization:syncspellnames {gameVersion}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Fetches the names of all NPCs from Wowhead and updates the localizations.';
+    protected $description = 'Fetches the names of all spells from Wowhead and updates the localizations.';
 
     /**
      * Execute the console command.
@@ -38,22 +38,25 @@ class SyncSpellNames extends Command
         $gameVersionKey = $this->argument('gameVersion');
         $gameVersion    = GameVersion::firstWhere('key', $gameVersionKey);
 
-        $npcNamesByLocale = $wowheadService->getNpcNames($gameVersion);
+        $spellNamesByLocale = $wowheadService->getSpellNames($gameVersion);
 
-        foreach ($npcNamesByLocale as $locale => $npcNames) {
-            /** @var Collection $npcNames */
-            // Get the existing NPC names from the localization file and merge with the fetched names
-            $existingNpcNames = __('npcs', [], $locale);
+        foreach ($spellNamesByLocale as $locale => $spellNames) {
+            /** @var Collection $spellNames */
+            // Get the existing spell names from the localization file and merge with the fetched names
+            $existingSpellNames = __('spells', [], $locale);
+            if (!is_array($existingSpellNames) || empty($existingSpellNames)) {
+                $existingSpellNames = [];
+            }
 
             // Get the keys that are present in the existing array
             // And then merge the new names with the existing ones, updating them
-            $newNpcNames = array_replace(
-                $existingNpcNames,
-                array_intersect_key($npcNames->toArray(), $existingNpcNames)
+            $newSpellNames = array_replace(
+                $existingSpellNames,
+                array_intersect_key($spellNames->toArray(), $existingSpellNames)
             );
 
-            ksort($newNpcNames);
-            $this->exportTranslations($locale, 'npcs.php', $newNpcNames);
+            ksort($newSpellNames);
+            $this->exportTranslations($locale, 'spells.php', $newSpellNames);
         }
     }
 }

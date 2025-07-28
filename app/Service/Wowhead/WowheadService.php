@@ -6,7 +6,6 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
 use App\Service\Traits\Curl;
-use App\Service\Wowhead\Dtos\LocalizedNpcName;
 use App\Service\Wowhead\Dtos\SpellDataResult;
 use App\Service\Wowhead\Logging\WowheadServiceLoggingInterface;
 use Carbon\CarbonInterval;
@@ -354,7 +353,7 @@ class WowheadService implements WowheadServiceInterface
                     }
 
                     $locale = str_replace('name_', '', $nameLocale);
-                    $parts = str_split($locale, 2); // e.g., enus -> ['en', 'us']
+                    $parts  = str_split($locale, 2);                              // e.g., enus -> ['en', 'us']
                     $locale = sprintf('%s_%s', $parts[0], strtoupper($parts[1])); // en_US, fr_FR, etc.
 
                     $result->put($locale, $result->get($locale, collect())->put($npcId, $npcName));
@@ -366,6 +365,66 @@ class WowheadService implements WowheadServiceInterface
         return $result;
     }
 
+
+    public function getSpellNames(GameVersion $gameVersion): Collection
+    {
+        $env = match ($gameVersion->key) {
+            GameVersion::GAME_VERSION_RETAIL => '1',
+            GameVersion::GAME_VERSION_BETA => '3',
+            GameVersion::GAME_VERSION_CLASSIC_ERA => '4',
+            GameVersion::GAME_VERSION_WRATH => '8',
+            default => null,
+        };
+
+        if ($env === null) {
+            return collect();
+        }
+
+        $result = collect();
+        foreach (config('language.all') as $language) {
+            $locale = $language['long'];
+
+            if ($locale === 'ho_HO') {
+                continue; // Skip Hodor language
+            }
+
+            $parts = explode('_', $locale);
+            if (count($parts) !== 2) {
+                continue; // Skip invalid locales
+            }
+
+            $wowheadLocale =
+                match ($locale) {
+                    'ko_KR' => '1',
+                    'fr_FR' => '2',
+                    'de_DE' => '3',
+                    'zh_CN', 'zh_TW' => '4',
+                    'es_ES', 'es_MX' => '6',
+                    'ru_RU' => '7',
+                    'pt_BR' => '8',
+                    'it_IT' => '9',
+                    default => '0', // en_US, uk_UA
+                };
+
+            $data = $this->curlGet(sprintf('https://nether.wowhead.com/data/spell-names?dataEnv=%d&locale=%d', $env, $wowheadLocale));
+
+            $dataArr = json_decode($data, true);
+
+            foreach ($dataArr as $spellData) {
+                /** @var array{
+                 *     id: int,
+                 *     school: int,
+                 *     icon: string,
+                 *     name: string,
+                 *     rank: string|null
+                 * } $spellData
+                 */
+                $result->put($locale, $result->get($locale, collect())->put($spellData['id'], $spellData['name']));
+            }
+        }
+
+        return $result;
+    }
 
     public function sleep(int $seconds = 1): void
     {
