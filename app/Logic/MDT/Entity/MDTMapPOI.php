@@ -45,6 +45,7 @@ class MDTMapPOI implements Arrayable
     public const TYPE_ECO_DOME_AL_DANI_ITEM_1 = 'EDAItem1';
     public const TYPE_ECO_DOME_AL_DANI_ITEM_2 = 'EDAItem2';
     public const TYPE_ECO_DOME_AL_DANI_ITEM_3 = 'EDAItem3';
+    public const TYPE_TEXT_FRAME              = 'textFrame';
 
     public const ALL_TYPES = [
         self::TYPE_MAP_LINK,
@@ -74,6 +75,7 @@ class MDTMapPOI implements Arrayable
         self::TYPE_ECO_DOME_AL_DANI_ITEM_1,
         self::TYPE_ECO_DOME_AL_DANI_ITEM_2,
         self::TYPE_ECO_DOME_AL_DANI_ITEM_3,
+        self::TYPE_TEXT_FRAME,
     ];
 
     private readonly string $template;

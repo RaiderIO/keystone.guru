@@ -20,6 +20,8 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
@@ -102,22 +104,6 @@ abstract class MapContext
 
                 return array_merge($dungeon->toArray(), $this->getEnemies(), [
                     'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion),
-                    'npcs'                      => $this->floor->dungeon->npcs()
-                        ->when($this->onlyLoadInUseNpcs(), function (Builder $query) use ($enemies) {
-                            $query->whereIn('npcs.id', $enemies->pluck('npc_id')->unique());
-                        })->with([
-                            'spells',
-                            // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
-                            'enemyForces' => fn(HasOne $query) => $query->where('mapping_version_id', $this->mappingVersion->id),
-                        ])
-                        // Disable cache for this query though! Since NpcEnemyForces is a cache model, it can otherwise return values from another mapping version
-                        ->disableCache()
-                        ->get()
-                        // Only show what we need in the FE
-                        ->each(function (Npc $npc) {
-                            $npc->enemyForces?->setVisible(['enemy_forces', 'enemy_forces_teeming']);
-                            $npc->setHidden(['pivot']);
-                        }),
                     'auras'                     => $auras,
                     'enemies'                   => $enemies,
                     'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
@@ -146,7 +132,12 @@ abstract class MapContext
                         ->when($this->onlyLoadInUseNpcs(), function (Builder $query) use ($dungeonData) {
                             $query->whereIn('npcs.id', $dungeonData['enemies']->pluck('npc_id')->unique());
                         })->with([
-                            'spells',
+                            'spells' => fn(BelongsToMany $belongsToMany) => $belongsToMany
+                                ->selectRaw('spells.*, translations.translation as name')
+                                ->leftJoin('translations', static function (JoinClause $clause) use($locale) {
+                                    $clause->on('translations.key', 'spells.name')
+                                        ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
+                                }),
                             // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
                             'enemyForces' => fn(HasOne $query) => $query->where('mapping_version_id', $this->mappingVersion->id),
                         ])

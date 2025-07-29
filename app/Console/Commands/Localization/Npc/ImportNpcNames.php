@@ -41,6 +41,8 @@ class ImportNpcNames extends Command
             /** @var Collection<Npc> $npcs */
             foreach ($npcs as $npc) {
                 if (empty($npc->name) || Str::startsWith($npc->name, 'npcs.')) {
+                    $progressBar->advance();
+
                     continue;
                 }
 

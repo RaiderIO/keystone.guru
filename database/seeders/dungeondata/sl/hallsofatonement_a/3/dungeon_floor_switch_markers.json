@@ -9,5 +9,27 @@
         "direction": null,
         "lat": -123.75,
         "lng": 269.75
+    },
+    {
+        "id": 2074,
+        "mapping_version_id": 569,
+        "floor_id": 79,
+        "source_floor_id": null,
+        "target_floor_id": 78,
+        "linked_dungeon_floor_switch_marker_id": null,
+        "direction": null,
+        "lat": -123.75,
+        "lng": 269.75
+    },
+    {
+        "id": 2086,
+        "mapping_version_id": 572,
+        "floor_id": 79,
+        "source_floor_id": null,
+        "target_floor_id": 78,
+        "linked_dungeon_floor_switch_marker_id": null,
+        "direction": null,
+        "lat": -123.75,
+        "lng": 269.75
     }
 ]

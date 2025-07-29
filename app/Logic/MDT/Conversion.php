@@ -138,7 +138,7 @@ class Conversion
             Dungeon::DUNGEON_IRON_DOCKS                 => 'IronDocks',
             // SL
             Dungeon::DUNGEON_DE_OTHER_SIDE              => 'DeOtherSide',
-            Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
+//            Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
             Dungeon::DUNGEON_PLAGUEFALL                 => 'Plaguefall',
             Dungeon::DUNGEON_SANGUINE_DEPTHS            => 'SanguineDepths',
             Dungeon::DUNGEON_SPIRES_OF_ASCENSION        => 'SpiresOfAscension',
@@ -182,6 +182,7 @@ class Conversion
             Dungeon::DUNGEON_THE_MOTHERLODE             => 'TheMotherlode',
 
             // Shadowlands
+            Dungeon::DUNGEON_HALLS_OF_ATONEMENT         => 'HallsOfAtonement',
             Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE      => 'MistsOfTirnaScithe',
             Dungeon::DUNGEON_THE_NECROTIC_WAKE          => 'TheNecroticWake',
             Dungeon::DUNGEON_THEATER_OF_PAIN            => 'TheaterOfPain',
@@ -215,6 +216,7 @@ class Conversion
         Dungeon::DUNGEON_MECHAGON_WORKSHOP,
 
         // Shadowlands
+        Dungeon::DUNGEON_HALLS_OF_ATONEMENT,
         Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE,
         Dungeon::DUNGEON_THE_NECROTIC_WAKE,
         Dungeon::DUNGEON_THEATER_OF_PAIN,
