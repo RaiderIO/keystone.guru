@@ -153,6 +153,7 @@ class MDTDungeon
             }
 
             $floors->load(['dungeon']);
+            /** @var Collection<Floor> $floors */
             $floors = $floors->keyBy('id');
 
             // NPC_ID => list of clones
@@ -199,7 +200,6 @@ class MDTDungeon
             }
 
             // We now know a list of clones that we want to display, convert those clones to TEMP enemies
-
             foreach ($npcClones as $npcId => $floorIndexes) {
                 foreach ($floorIndexes as $floorId => $clones) {
                     foreach ($clones as $mdtCloneIndex => $clone) {

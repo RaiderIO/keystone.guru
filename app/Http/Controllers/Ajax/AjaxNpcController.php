@@ -53,12 +53,16 @@ class AjaxNpcController extends Controller
     public function get(Request $request): array
     {
         $npcs = Npc::with(['type', 'classification', 'enemyForces'])
-            ->selectRaw('npcs.*, GROUP_CONCAT(DISTINCT translations.translation SEPARATOR ", ") AS dungeon_names, COUNT(enemies.id) as enemy_count')
+            ->selectRaw('npcs.*, npc_name_translations.translation as name, GROUP_CONCAT(DISTINCT translations.translation SEPARATOR ", ") AS dungeon_names, COUNT(enemies.id) as enemy_count')
             ->join('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')
             ->leftJoin('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
             ->leftJoin('translations', static function (JoinClause $clause) {
                 $clause->on('translations.key', 'dungeons.name')
                     ->on('translations.locale', DB::raw('"en_US"'));
+            })
+            ->leftJoin('translations as npc_name_translations', function (JoinClause $clause) {
+                $clause->on('npc_name_translations.key', '=', 'npcs.name')
+                    ->where('npc_name_translations.locale', '=', 'en_US');
             })
             ->leftJoin('enemies', 'npcs.id', '=', 'enemies.npc_id')
             ->groupBy('npcs.id');

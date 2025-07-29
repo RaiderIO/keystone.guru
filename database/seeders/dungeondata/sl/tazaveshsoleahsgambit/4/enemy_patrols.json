@@ -10,6 +10,7 @@
             "color_animated": null,
             "weight": 3,
             "vertices_json": "[{\"lat\":-181.7274,\"lng\":164.9693},{\"lat\":-166.7104,\"lng\":166.384},{\"lat\":-103.75,\"lng\":182.25}]"
-        }
+        },
+        "mdt_polyline": null
     }
 ]

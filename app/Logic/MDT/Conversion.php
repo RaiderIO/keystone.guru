@@ -143,8 +143,8 @@ class Conversion
             Dungeon::DUNGEON_SANGUINE_DEPTHS            => 'SanguineDepths',
             Dungeon::DUNGEON_SPIRES_OF_ASCENSION        => 'SpiresOfAscension',
 //            Dungeon::DUNGEON_THEATER_OF_PAIN            => 'TheaterOfPain',
-            Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER => 'TazaveshLower',
-            Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   => 'TazaveshUpper',
+//            Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER => 'TazaveshLower',
+//            Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   => 'TazaveshUpper',
         ],
 
         Expansion::EXPANSION_DRAGONFLIGHT => [
@@ -186,6 +186,8 @@ class Conversion
             Dungeon::DUNGEON_THE_NECROTIC_WAKE          => 'TheNecroticWake',
             Dungeon::DUNGEON_THEATER_OF_PAIN            => 'TheaterOfPain',
             Dungeon::DUNGEON_MECHAGON_WORKSHOP          => 'MechagonWorkshop',
+            Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER => 'TazaveshLower',
+            Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT   => 'TazaveshUpper',
 
             // TWW
             Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES    => 'AraKara',
@@ -197,6 +199,7 @@ class Conversion
             Dungeon::DUNGEON_PRIORY_OF_THE_SACRED_FLAME => 'PrioryOfTheSacredFlame',
             Dungeon::DUNGEON_THE_ROOKERY                => 'TheRookery',
             Dungeon::DUNGEON_OPERATION_FLOODGATE        => 'OperationFloodgate',
+            Dungeon::DUNGEON_ECO_DOME_AL_DANI           => 'EcoDomeAldani',
 
         ],
     ];
@@ -215,6 +218,8 @@ class Conversion
         Dungeon::DUNGEON_MISTS_OF_TIRNA_SCITHE,
         Dungeon::DUNGEON_THE_NECROTIC_WAKE,
         Dungeon::DUNGEON_THEATER_OF_PAIN,
+        Dungeon::DUNGEON_TAZAVESH_STREETS_OF_WONDER,
+        Dungeon::DUNGEON_TAZAVESH_SO_LEAHS_GAMBIT,
 
         // TWW
         Dungeon::DUNGEON_ARA_KARA_CITY_OF_ECHOES,
@@ -226,6 +231,7 @@ class Conversion
         Dungeon::DUNGEON_PRIORY_OF_THE_SACRED_FLAME,
         Dungeon::DUNGEON_THE_ROOKERY,
         Dungeon::DUNGEON_OPERATION_FLOODGATE,
+        Dungeon::DUNGEON_ECO_DOME_AL_DANI,
     ];
 
     /**

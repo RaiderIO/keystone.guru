@@ -1,0 +1,22 @@
+[
+    {
+        "id": 534,
+        "mapping_version_id": 562,
+        "floor_id": 383,
+        "target_floor_id": 382,
+        "lat": -127.85,
+        "lng": 210.39,
+        "size": 330,
+        "rotation": 0
+    },
+    {
+        "id": 540,
+        "mapping_version_id": 568,
+        "floor_id": 383,
+        "target_floor_id": 382,
+        "lat": -127.85,
+        "lng": 210.39,
+        "size": 330,
+        "rotation": 0
+    }
+]

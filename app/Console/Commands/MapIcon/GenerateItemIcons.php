@@ -45,12 +45,24 @@ class GenerateItemIcons extends Command
             'spell_animabastion_orb.jpg'            => 'nw_item_anima.png',
             'inv_eng_crate.jpg'                     => 'floodgate_weapons_stockpile_explosion.png',
             'spell_fire_sealoffire.jpg'             => 'gate_of_the_setting_sun_brazier.png',
+            'inv_112_arcane_beam.jpg'               => 'eco_dome_al_dani_shatter_conduit.png',
+            'spell_broker_nova.jpg'                 => 'eco_dome_al_dani_disruption_grenade.png',
+            'inv_112_arcane_buff.jpg'               => 'eco_dome_al_dani_kareshi_surge.png',
         ];
 
         foreach ($imagePaths as $sourceImage => $targetImage) {
+            $targetImagePath = base_path(sprintf('../keystone.guru.assets/images/mapicon/%s', $targetImage));
+            if (is_writable($targetImagePath) && !file_exists($targetImagePath)) {
+                // Just write something
+                file_put_contents($targetImagePath, file_get_contents($sourceImage));
+
+                // Make sure the path is absolute
+                $targetImagePath = realpath($targetImagePath);
+            }
+
             $imageService->convertToItemImage(
                 realpath(base_path(sprintf('../keystone.guru.assets/images/mapicon_gen/%s', $sourceImage))),
-                realpath(base_path(sprintf('../keystone.guru.assets/images/mapicon/%s', $targetImage))),
+                $targetImagePath,
             );
         }
 

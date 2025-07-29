@@ -141,6 +141,9 @@ class MapIconType extends CacheModel
     public const MAP_ICON_TYPE_PRIORY_BLESSING_OF_THE_SACRED_FLAME   = 'priory_blessing_of_the_sacred_flame';
     public const MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION = 'floodgate_weapons_stockpile_explosion';
     public const MAP_ICON_TYPE_GATE_OF_THE_SETTING_SUN_BRAZIER       = 'gate_of_the_setting_sun_brazier';
+    public const MAP_ICON_TYPE_ECO_DOME_AL_DANI_SHATTER_CONDUIT      = 'eco_dome_al_dani_shatter_conduit';
+    public const MAP_ICON_TYPE_ECO_DOME_AL_DANI_DISRUPTION_GRENADE   = 'eco_dome_al_dani_disruption_grenade';
+    public const MAP_ICON_TYPE_ECO_DOME_AL_DANI_KARESHI_SURGE        = 'eco_dome_al_dani_kareshi_surge';
 
     public const ALL = [
         self::MAP_ICON_TYPE_UNKNOWN                   => 1,
@@ -271,6 +274,10 @@ class MapIconType extends CacheModel
         self::MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION => 103,
 
         self::MAP_ICON_TYPE_GATE_OF_THE_SETTING_SUN_BRAZIER => 104,
+
+        self::MAP_ICON_TYPE_ECO_DOME_AL_DANI_SHATTER_CONDUIT    => 105,
+        self::MAP_ICON_TYPE_ECO_DOME_AL_DANI_DISRUPTION_GRENADE => 106,
+        self::MAP_ICON_TYPE_ECO_DOME_AL_DANI_KARESHI_SURGE      => 107,
     ];
 
     public function getIconUrlAttribute(): string

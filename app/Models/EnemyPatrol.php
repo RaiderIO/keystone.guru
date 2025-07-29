@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Logic\MDT\Entity\MDTPatrol;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
@@ -80,8 +81,8 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
 
     public function mdtPolyline(): HasOne
     {
-        return $this->hasOne(Polyline::class, 'model_id', 'mdt_polyline_id')
-            ->where('model_class', static::class);
+        return $this->hasOne(Polyline::class, 'model_id')
+            ->where('model_class', MDTPatrol::class);
     }
 
     public function getDungeonId(): ?int
@@ -115,6 +116,8 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         // Delete patrol properly if it gets deleted
         static::deleting(static function (EnemyPatrol $enemyPatrol) {
             $enemyPatrol->polyline?->delete();
+
+            $enemyPatrol->load('mdtPolyline');
             $enemyPatrol->mdtPolyline?->delete();
         });
     }
