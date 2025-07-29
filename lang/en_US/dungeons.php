@@ -1082,6 +1082,12 @@ return [
                 'operation_floodgate' => 'Operation: Floodgate',
             ],
         ],
+        'eco_dome_al_dani'           => [
+            'name'   => 'Eco-Dome Al\'Dani',
+            'floors' => [
+                'eco_dome_al_dani' => 'Eco-Dome Al\'Dani',
+            ],
+        ],
     ],
 
 ];

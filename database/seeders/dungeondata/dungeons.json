@@ -12656,7 +12656,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -13022,7 +13022,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -13129,7 +13129,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -16232,7 +16232,7 @@
             {
                 "id": 380,
                 "index": 4,
-                "mdt_sub_level": 1,
+                "mdt_sub_level": 0,
                 "ui_map_id": 0,
                 "map_name": null,
                 "name": "dungeons.mop.siege_of_niu_zao_temple.floors.siege_of_niu_zao_temple",
@@ -16585,7 +16585,7 @@
         "speedrun_enabled": 0,
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
-        "has_wallpaper": 0,
+        "has_wallpaper": 1,
         "mdt_supported": true,
         "floors": [
             {
@@ -16865,6 +16865,75 @@
                         "direction": "down"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            }
+        ]
+    },
+    {
+        "id": 139,
+        "expansion_id": 11,
+        "zone_id": 16104,
+        "map_id": 2830,
+        "instance_id": 1303,
+        "challenge_mode_id": 542,
+        "mdt_id": 123,
+        "raid": 0,
+        "key": "ecodomealdani",
+        "name": "dungeons.tww.eco_dome_al_dani.name",
+        "slug": "eco-dome-al-dani",
+        "heatmap_enabled": 0,
+        "speedrun_enabled": 0,
+        "speedrun_difficulty_10_man_enabled": 0,
+        "speedrun_difficulty_25_man_enabled": 0,
+        "has_wallpaper": 1,
+        "mdt_supported": false,
+        "floors": [
+            {
+                "id": 382,
+                "index": 1,
+                "mdt_sub_level": 1,
+                "ui_map_id": 2449,
+                "map_name": null,
+                "name": "dungeons.tww.eco_dome_al_dani.floors.eco_dome_al_dani",
+                "default": 1,
+                "facade": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 262.5,
+                "ingame_min_y": -1375,
+                "ingame_max_x": 1343.75,
+                "ingame_max_y": 245.83,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 383,
+                "index": 2,
+                "mdt_sub_level": 0,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.tww.eco_dome_al_dani.floors.eco_dome_al_dani",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
