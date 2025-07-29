@@ -256,12 +256,22 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function importEnemyPatrolsSaveNewMdtPolyline(int $polylineId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
     public function importEnemyPatrolsSaveNewEnemyPatrol(int $enemyPatrolId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
     public function importEnemyPatrolsCoupleEnemyPatrolToPolyline(int $enemyPatrolId, int $polylineId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
+    public function importEnemyPatrolsCoupleEnemyPatrolToMdtPolyline(int $enemyPatrolId, int $polylineId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
     }

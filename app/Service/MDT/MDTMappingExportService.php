@@ -347,22 +347,38 @@ MDT.mapPOIs[dungeonIndex] = {};
                     // !$savedEnemyPatrols->has($enemy->enemy_patrol_id))
                     $enemy->enemyPatrol->mdt_npc_id === $enemy->npc_id &&
                     $enemy->enemyPatrol->mdt_id === $enemy->mdt_id) {
+
                     $patrolVertices = [];
-
-                    $polylineLatLngs = $enemy->enemyPatrol->polyline->getDecodedLatLngs($enemy->floor);
                     $vertexIndex     = 0;
-                    foreach ($polylineLatLngs as $vertexLatLng) {
-                        $convertedVertexLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $vertexLatLng);
-                        $vertexMDTXY           = Conversion::convertLatLngToMDTCoordinate($convertedVertexLatLng);
-                        // Reverse order
-                        $patrolVertices[++$vertexIndex] = [
-                            'x' => $vertexMDTXY['x'],
-                            'y' => $vertexMDTXY['y'],
-                        ];
-                    }
+                    // Prefer the mdt polyline if it exists (it was introduced later), otherwise use the regular polyline
+                    if($enemy->enemyPatrol->mdtPolyline !== null) {
+                        $polylineMdtXYs = $enemy->enemyPatrol->mdtPolyline
+                            ->getDecodedLatLngs($enemy->floor);
+                        foreach ($polylineMdtXYs as $vertexMdtLatLng) {
+                            // $vertexMdtLatLng actually contains the x and y in the lng and lat keys
+                            $patrolVertices[++$vertexIndex] = [
+                                'x' => $vertexMdtLatLng['lng'],
+                                'y' => $vertexMdtLatLng['lat'],
+                            ];
+                        }
+                    } else {
+                        // Fall back to the regular polyline that may be adjusted by us
+                        $polylineLatLngs = $enemy->enemyPatrol->polyline
+                            ->getDecodedLatLngs($enemy->floor);
 
-                    // MDT does not save the close off of its patrols, so remove the last vertex for export
-                    array_pop($patrolVertices);
+                        foreach ($polylineLatLngs as $vertexLatLng) {
+                            $convertedVertexLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $vertexLatLng);
+                            $vertexMDTXY           = Conversion::convertLatLngToMDTCoordinate($convertedVertexLatLng);
+                            // Reverse order
+                            $patrolVertices[++$vertexIndex] = [
+                                'x' => $vertexMDTXY['x'],
+                                'y' => $vertexMDTXY['y'],
+                            ];
+                        }
+
+                        // MDT does not save the close off of its patrols, so remove the last vertex for export
+                        array_pop($patrolVertices);
+                    }
 
                     $dungeonEnemy['clones'][$cloneIndex]['patrol'] = $patrolVertices;
 

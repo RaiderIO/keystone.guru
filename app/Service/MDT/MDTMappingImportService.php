@@ -680,7 +680,27 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     if ($polyLine !== null) {
                         $this->log->importEnemyPatrolsSaveNewPolyline($polyLine->id);
                     } else {
-                        throw new Exception(sprintf('Unable to save polyline!'));
+                        throw new Exception('Unable to save polyline!');
+                    }
+
+                    // MDT Polyline
+                    $mdtPolyLine = Polyline::create([
+                        'model_id'       => -1,
+                        'model_class'    => EnemyPatrol::class,
+                        'color'          => '#003280',
+                        'color_animated' => null,
+                        'weight'         => 2,
+                        // Save the direct X and Y coordinates as lat/lng so we can echo it back later exactly
+                        // This polyline is not meant to be used for display, but rather to be used for MDT
+                        'vertices_json'  => json_encode(array_map(fn(array $v) => [
+                            'lat' => $v['y'],
+                            'lng' => $v['x'],
+                        ], $mdtNpcClone['patrol'])),
+                    ]);
+                    if ($mdtPolyLine !== null) {
+                        $this->log->importEnemyPatrolsSaveNewMdtPolyline($mdtPolyLine->id);
+                    } else {
+                        throw new Exception('Unable to save MDT polyline!');
                     }
 
                     // Enemy patrols
@@ -688,6 +708,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         'mapping_version_id' => $newMappingVersion->id,
                         'floor_id'           => $savedEnemy->floor_id,
                         'polyline_id'        => $polyLine->id,
+                        'mdt_polyline_id'    => $mdtPolyLine->id,
                         'mdt_npc_id'         => $mdtNPC->getId(),
                         'mdt_id'             => $mdtCloneIndex,
                         'teeming'            => null,
@@ -696,7 +717,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     if ($enemyPatrol !== null) {
                         $this->log->importEnemyPatrolsSaveNewEnemyPatrol($enemyPatrol->id);
                     } else {
-                        throw new Exception(sprintf('Unable to save enemy patrol!'));
+                        throw new Exception('Unable to save enemy patrol!');
                     }
 
                     // Couple polyline to enemy patrol
@@ -704,12 +725,20 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     if ($polyLineSaveResult) {
                         $this->log->importEnemyPatrolsCoupleEnemyPatrolToPolyline($enemyPatrol->id, $polyLine->id);
                     } else {
-                        throw new Exception(sprintf('Unable to save polyline!'));
+                        throw new Exception('Unable to save polyline!');
+                    }
+                    // Couple mdt polyline to enemy patrol
+                    $mdtPolyLineSaveResult = $mdtPolyLine->update(['model_id' => $enemyPatrol->id]);
+                    if ($mdtPolyLineSaveResult) {
+                        $this->log->importEnemyPatrolsCoupleEnemyPatrolToPolyline($enemyPatrol->id, $polyLine->id);
+                    } else {
+                        throw new Exception('Unable to save polyline!');
                     }
 
                     // Couple enemy/enemies to enemy patrol
                     if ($savedEnemy->enemy_pack_id !== null) {
-                        $enemyUpdateResult = Enemy::where('enemy_pack_id', $savedEnemy->enemy_pack_id)->update(['enemy_patrol_id' => $enemyPatrol->id]);
+                        $enemyUpdateResult = Enemy::where('enemy_pack_id', $savedEnemy->enemy_pack_id)
+                            ->update(['enemy_patrol_id' => $enemyPatrol->id]);
                     } else {
                         $enemyUpdateResult = $savedEnemy->update(['enemy_patrol_id' => $enemyPatrol->id]);
                     }
@@ -717,7 +746,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     if ($enemyUpdateResult) {
                         $this->log->importEnemyPatrolsCoupleEnemiesToEnemyPatrol($enemyPatrol->id);
                     } else {
-                        throw new Exception(sprintf('Unable to update enemy to have attached patrol!'));
+                        throw new Exception('Unable to update enemy to have attached patrol!');
                     }
                 }
             }

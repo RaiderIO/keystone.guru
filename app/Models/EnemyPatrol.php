@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int            $mapping_version_id
  * @property int            $floor_id
  * @property int            $polyline_id
+ * @property int|null       $mdt_polyline_id The polyline that represents this patrol in MDT
  * @property int|null       $mdt_npc_id Keeps track of which enemy this patrol was assigned to in MDT
  * @property int|null       $mdt_id
  * @property string         $teeming
@@ -25,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property MappingVersion $mappingVersion
  * @property Floor          $floor
  * @property Polyline       $polyline
+ * @property Polyline|null  $mdtPolyline
  *
  * @mixin Eloquent
  */
@@ -39,6 +41,7 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         'mapping_version_id',
         'floor_id',
         'polyline_id',
+        'mdt_polyline_id',
         'mdt_npc_id',
         'mdt_id',
         'teeming',
@@ -50,6 +53,7 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         'mapping_version_id' => 'integer',
         'floor_id'           => 'integer',
         'polyline_id'        => 'integer',
+        'mdt_polyline_id'    => 'integer',
         'mdt_npc_id'         => 'integer',
         'mdt_id'             => 'integer',
     ];
@@ -74,6 +78,12 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
             ->where('model_class', static::class);
     }
 
+    public function mdtPolyline(): HasOne
+    {
+        return $this->hasOne(Polyline::class, 'model_id', 'mdt_polyline_id')
+            ->where('model_class', static::class);
+    }
+
     public function getDungeonId(): ?int
     {
         return $this->floor?->dungeon_id ?? null;
@@ -88,8 +98,12 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         $clonedEnemyPatrol->mapping_version_id = $mappingVersion->id;
         $clonedEnemyPatrol->save();
 
-        $clonedPolyLine = $this->polyline->cloneForNewMappingVersion($mappingVersion, $clonedEnemyPatrol);
-        $clonedEnemyPatrol->update(['polyline_id' => $clonedPolyLine->id]);
+        $clonedPolyLine    = $this->polyline?->cloneForNewMappingVersion($mappingVersion, $clonedEnemyPatrol);
+        $clonedMdtPolyLine = $this->mdtPolyline?->cloneForNewMappingVersion($mappingVersion, $clonedEnemyPatrol);
+        $clonedEnemyPatrol->update([
+            'polyline_id'     => $clonedPolyLine->id,
+            'mdt_polyline_id' => $clonedMdtPolyLine?->id,
+        ]);
 
         return $clonedEnemyPatrol;
     }
@@ -100,9 +114,8 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
 
         // Delete patrol properly if it gets deleted
         static::deleting(static function (EnemyPatrol $enemyPatrol) {
-            if ($enemyPatrol->polyline !== null) {
-                $enemyPatrol->polyline->delete();
-            }
+            $enemyPatrol->polyline?->delete();
+            $enemyPatrol->mdtPolyline?->delete();
         });
     }
 }
