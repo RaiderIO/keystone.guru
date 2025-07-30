@@ -778,7 +778,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     MDTMapPOI::TYPE_ECO_DOME_AL_DANI_ITEM_1 => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_SHATTER_CONDUIT],
                     MDTMapPOI::TYPE_ECO_DOME_AL_DANI_ITEM_2 => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_DISRUPTION_GRENADE],
                     MDTMapPOI::TYPE_ECO_DOME_AL_DANI_ITEM_3 => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_KARESHI_SURGE],
-                    MDTMapPOI::TYPE_GENERAL_NOTE            => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_COMMENT],
+                    MDTMapPOI::TYPE_GENERAL_NOTE            => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_EXCLAMATION_YELLOW],
                 ];
 
                 foreach ($mdtMapPOIs as $mdtMapPOI) {

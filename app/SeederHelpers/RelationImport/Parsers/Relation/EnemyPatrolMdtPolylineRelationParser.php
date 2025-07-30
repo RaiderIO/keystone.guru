@@ -24,7 +24,7 @@ class EnemyPatrolMdtPolylineRelationParser implements RelationParserInterface
         $value['model_class'] = MDTPatrol::class;
         $value['model_id']    = $modelData['id'];
 
-        $modelData['polyline_id'] = Polyline::insertGetId($value);
+        $modelData['mdt_polyline_id'] = Polyline::insertGetId($value);
 
         // Didn't really change anything so just return the value.
         return $modelData;

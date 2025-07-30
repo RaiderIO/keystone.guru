@@ -18,11 +18,11 @@ use App\Models\Spell\Spell;
 @extends('layouts.sitepage', [
     'breadcrumbsParams' => [$npc ?? null],
     'showAds' => false,
-    'title' => isset($npc) ? __('view_admin.npc.edit.title_edit', ['name' => $npc->name]) : __('view_admin.npc.edit.title_new'),
+    'title' => isset($npc) ? __('view_admin.npc.edit.title_edit', ['name' => __($npc->name)]) : __('view_admin.npc.edit.title_new'),
 ])
 
 @section('header-title')
-    {{ isset($npc) ? __('view_admin.npc.edit.header_edit', ['name' => $npc->name]) : __('view_admin.npc.edit.header_new') }}
+    {{ isset($npc) ? __('view_admin.npc.edit.header_edit', ['name' => __($npc->name)]) : __('view_admin.npc.edit.header_new') }}
 @endsection
 @section('content')
     @isset($npc)
