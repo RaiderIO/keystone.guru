@@ -917,10 +917,11 @@ return [
         'tazavesh_so_leahs_gambit'   => [
             'name'   => 'Tazavesh: So\'leah\'s Gambit',
             'floors' => [
-                'stormheim'         => 'Stormheim',
-                'aggramars_vault'   => 'Aggramar\'s Vault',
-                'boralus_harbor'    => 'Boralus Harbor',
-                'the_opulent_nexus' => 'The Opulent Nexus',
+                'stormheim'                => 'Stormheim',
+                'aggramars_vault'          => 'Aggramar\'s Vault',
+                'boralus_harbor'           => 'Boralus Harbor',
+                'the_opulent_nexus'        => 'The Opulent Nexus',
+                'tazavesh_so_leahs_gambit' => 'Tazavesh: So\'leah\'s Gambit',
             ],
         ],
     ],
