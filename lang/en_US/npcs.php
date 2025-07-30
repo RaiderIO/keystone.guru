@@ -5463,6 +5463,7 @@ return [
     '245070'    => 'Lightgorged Whelp',
     '245092'    => 'Burrowing Creeper',
     '245234'    => 'Mr. Bigglesworth',
+    '246285'    => 'Bazaar Overseer',
     '555555'    => 'Priory of the Sacred Flame',
     '129547000' => 'Blacktooth Knuckleduster',
 ];

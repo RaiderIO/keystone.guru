@@ -908,10 +908,11 @@ return [
         'tazavesh_streets_of_wonder' => [
             'name'   => 'Tazavesh: Streets of Wonder',
             'floors' => [
-                'the_veiled_market'   => 'The Veiled Market',
-                'the_grand_menagerie' => 'The Grand Menagerie',
-                'the_post'            => 'The P.O.S.T.',
-                'myzas_oasis'         => 'Myza\'s Oasis',
+                'the_veiled_market'          => 'The Veiled Market',
+                'the_grand_menagerie'        => 'The Grand Menagerie',
+                'the_post'                   => 'The P.O.S.T.',
+                'myzas_oasis'                => 'Myza\'s Oasis',
+                'tazavesh_streets_of_wonder' => 'Tazavesh: Streets of Wonder',
             ],
         ],
         'tazavesh_so_leahs_gambit'   => [

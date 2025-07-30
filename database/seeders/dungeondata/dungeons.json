@@ -4112,7 +4112,7 @@
             {
                 "id": 102,
                 "index": 2,
-                "mdt_sub_level": 1,
+                "mdt_sub_level": null,
                 "ui_map_id": 1995,
                 "map_name": null,
                 "name": "dungeons.sl.tazavesh_streets_of_wonder.floors.the_grand_menagerie",
@@ -4131,7 +4131,7 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 390,
+                        "id": 1157,
                         "floor1_id": 102,
                         "floor2_id": 101,
                         "direction": "left"
@@ -4143,7 +4143,7 @@
             {
                 "id": 103,
                 "index": 3,
-                "mdt_sub_level": 1,
+                "mdt_sub_level": null,
                 "ui_map_id": 1996,
                 "map_name": null,
                 "name": "dungeons.sl.tazavesh_streets_of_wonder.floors.the_post",
@@ -4162,7 +4162,7 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 391,
+                        "id": 1158,
                         "floor1_id": 103,
                         "floor2_id": 101,
                         "direction": "right"
@@ -4174,7 +4174,7 @@
             {
                 "id": 104,
                 "index": 4,
-                "mdt_sub_level": 1,
+                "mdt_sub_level": null,
                 "ui_map_id": 1997,
                 "map_name": null,
                 "name": "dungeons.sl.tazavesh_streets_of_wonder.floors.myzas_oasis",
@@ -4193,12 +4193,36 @@
                 "active": 1,
                 "floorcouplings": [
                     {
-                        "id": 392,
+                        "id": 1159,
                         "floor1_id": 104,
                         "floor2_id": 101,
                         "direction": "right"
                     }
                 ],
+                "dungeon_speedrun_required_npcs10_man": [],
+                "dungeon_speedrun_required_npcs25_man": []
+            },
+            {
+                "id": 386,
+                "index": 5,
+                "mdt_sub_level": 1,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.sl.tazavesh_streets_of_wonder.floors.tazavesh_streets_of_wonder",
+                "default": 0,
+                "facade": 1,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "floorcouplings": [],
                 "dungeon_speedrun_required_npcs10_man": [],
                 "dungeon_speedrun_required_npcs25_man": []
             }
