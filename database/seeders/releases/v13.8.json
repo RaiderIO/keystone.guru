@@ -1,0 +1,67 @@
+{
+    "id": 311,
+    "release_changelog_id": 318,
+    "version": "v13.8",
+    "title": "Added Season 3 and their dungeons",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-07-31T21:41:34+00:00",
+    "updated_at": "2025-07-31T21:41:34+00:00",
+    "changelog": {
+        "id": 318,
+        "release_id": 311,
+        "description": "This update focuses on adding season 3 and prepares for having Keystone.guru be available in all of the game's locales.",
+        "changes": [
+            {
+                "release_changelog_id": 318,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2905,
+                "change": "NPC names are now translatable."
+            },
+            {
+                "release_changelog_id": 318,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2906,
+                "change": "Found many untranslated strings and made them translatable."
+            },
+            {
+                "release_changelog_id": 318,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2907,
+                "change": "Mists of Pandaria dungeons are now exported to MDT - an update for MDT is now available to allow you to use those routes."
+            },
+            {
+                "release_changelog_id": 318,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2908,
+                "change": "Spell names are now translatable."
+            },
+            {
+                "release_changelog_id": 318,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2910,
+                "change": "Added Eco-Dome Al'Dani."
+            },
+            {
+                "release_changelog_id": 318,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2909,
+                "change": "Added all remaining S3 dungeon mappings (or updated them as necessary)."
+            },
+            {
+                "release_changelog_id": 318,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2902,
+                "change": "Mists of Pandaria dungeons no longer get assigned retail affixes. Routes can now also simply have no affixes assigned to them, if the game version the route is for does not support affixes."
+            },
+            {
+                "release_changelog_id": 318,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2903,
+                "change": "Refreshing thumbnails for routes of dungeons that have a combined floor introduced (MDT-style) now regenerates the thumbnails of just the combined view and discards the individual floor thumbnails."
+            }
+        ]
+    }
+}
