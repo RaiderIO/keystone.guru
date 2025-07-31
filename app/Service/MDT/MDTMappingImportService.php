@@ -5,7 +5,6 @@ namespace App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Entity\MDTMapPOI;
-use App\Logic\MDT\Entity\MDTNpc;
 use App\Logic\MDT\Entity\MDTPatrol;
 use App\Models\Characteristic;
 use App\Models\Dungeon;
@@ -661,6 +660,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         continue;
                     }
 
+                    // @TODO Check based on existing enemy patrols if this patrol already exists
+                    // We check the MDTPolyline to see if it equals the one we are about to save
+                    // If it does, we re-import the existing enemy patrol instead (since it may have been altered manually)
+                    // Not doing this would overwrite any manual changes made to the enemy patrols
+                    // @TODO Also, import any enemy patrols created that do not have a MDT polyline
+                    // These patrols may be linked to connecting portals or skip icons together.
+                    // They just use a patrol to make it look nice.
                     $vertices = [];
                     foreach ($mdtNpcClone['patrol'] as $xy) {
                         $latLng     = Conversion::convertMDTCoordinateToLatLng($xy, $facadeFloor ?? $savedEnemy->floor);
