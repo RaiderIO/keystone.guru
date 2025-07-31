@@ -106,4 +106,7 @@ return [
     'priory_blessing_of_the_sacred_flame'   => 'Blessing of the Sacred Flame',
     'floodgate_weapons_stockpile_explosion' => 'Weapons Stockpile Explosion',
     'gate_of_the_setting_sun_brazier'       => 'Signal Brazier',
+    'eco_dome_al_dani_shatter_conduit'      => 'Shatter Conduit',
+    'eco_dome_al_dani_disruption_grenade'   => 'Disruption Grenade',
+    'eco_dome_al_dani_kareshi_surge'        => 'K\'areshi Surge',
 ];

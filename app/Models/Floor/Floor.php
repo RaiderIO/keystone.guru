@@ -221,7 +221,7 @@ class Floor extends CacheModel implements MappingModelInterface
 
     public function enemyPatrolsForExport(): HasMany
     {
-        return $this->hasMany(EnemyPatrol::class)->orderBy('id');
+        return $this->hasMany(EnemyPatrol::class)->with('mdtPolyline')->orderBy('id');
     }
 
     public function mapIconsForExport(): HasMany

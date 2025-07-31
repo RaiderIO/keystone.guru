@@ -21,7 +21,7 @@ class LocalizationSync extends Command
      *
      * @var string
      */
-    protected $signature = 'localization:sync {base : Base language} {target : Target language}';
+    protected $signature = 'localization:sync {base : Base language} {target? : Target language}';
 
     /**
      * The console command description.
@@ -40,9 +40,25 @@ class LocalizationSync extends Command
 
         $langDir   = lang_path();
         $baseDir   = $langDir . DIRECTORY_SEPARATOR . $baseLang;
-        $targetDir = $langDir . DIRECTORY_SEPARATOR . $targetLang;
 
-        $this->scanDir($baseLang, $targetLang, $baseDir, $targetDir);
+        $targetLangs = [];
+        if ($targetLang === null) {
+            foreach (config('language.all') as $locale) {
+                // Exclude base language
+                if (in_array($locale['long'], [$baseLang])) {
+                    continue;
+                }
+                $targetLangs[] = $locale['long'];
+            }
+        } else {
+            $targetLangs = [$targetLang];
+        }
+
+        foreach($targetLangs as $targetLang) {
+            $targetDir = $langDir . DIRECTORY_SEPARATOR . $targetLang;
+
+            $this->scanDir($baseLang, $targetLang, $baseDir, $targetDir);
+        }
 
         return 0;
     }

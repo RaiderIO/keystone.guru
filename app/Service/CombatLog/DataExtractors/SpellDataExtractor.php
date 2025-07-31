@@ -198,7 +198,7 @@ class SpellDataExtractor implements DataExtractorInterface
             // Only assign spells that are NOT player spells!
             if (
                 $spell !== null &&
-                $spell->category === sprintf('spells.category.%s', SpellModel::CATEGORY_UNKNOWN)
+                $spell->category === sprintf('spellcategory.%s', SpellModel::CATEGORY_UNKNOWN)
             ) {
                 // If this dungeon wasn't assigned to the spell yet..
                 if ($spell->spellDungeons
@@ -230,7 +230,7 @@ class SpellDataExtractor implements DataExtractorInterface
     ): void {
         // Check if the spell can be assigned
         $spell = $this->allSpells->get($prefix->getSpellId());
-        if ($spell === null || $spell->category !== sprintf('spells.category.%s', SpellModel::CATEGORY_UNKNOWN)) {
+        if ($spell === null || $spell->category !== sprintf('spellcategory.%s', SpellModel::CATEGORY_UNKNOWN)) {
             return;
         }
 

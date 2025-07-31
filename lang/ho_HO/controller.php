@@ -6,6 +6,7 @@ return [
         'error' => [
             'mdt_string_parsing_failed'           => 'Hodor',
             'mdt_string_format_not_recognized'    => 'Hodor',
+            'cli_weakauras_parser_not_found'      => 'Hodor',
             'invalid_mdt_string'                  => 'Hodor',
             'invalid_mdt_string_exception'        => 'Hodor',
             'mdt_importer_not_configured'         => 'Hodor',
@@ -18,15 +19,18 @@ return [
             'mdt_invalid_category'                => 'Hodor',
         ],
         'flash' => [
-            'thumbnail_regenerate_result' => 'Hodor',
-            'caches_dropped_successfully' => 'Hodor',
-            'releases_exported'           => 'Hodor',
-            'exception'                   => [
+            'message_banner_set_successfully' => 'Hodor',
+            'thumbnail_regenerate_result'     => 'Hodor',
+            'caches_dropped_successfully'     => 'Hodor',
+            'releases_exported'               => 'Hodor',
+            'exception'                       => [
                 'internal_server_error' => 'Hodor',
             ],
-            'feature_toggle_activated'    => 'Hodor',
-            'feature_toggle_deactivated'  => 'Hodor',
-            'feature_forgotten'           => 'Hodor',
+            'feature_toggle_activated'        => 'Hodor',
+            'feature_toggle_deactivated'      => 'Hodor',
+            'feature_forgotten'               => 'Hodor',
+            'read_only_mode_disabled'         => 'Hodor',
+            'read_only_mode_enabled'          => 'Hodor',
         ],
     ],
     'apidungeonroute'             => [
@@ -103,6 +107,7 @@ return [
             'user_exists'             => 'Hodor',
             'email_exists'            => 'Hodor',
             'permission_denied'       => 'Hodor',
+            'read_only_mode_enabled'  => 'Hodor',
         ],
     ],
     'register'                    => [
@@ -132,6 +137,7 @@ return [
         'error'           => [
             'mdt_string_parsing_failed'             => 'Hodor',
             'mdt_string_format_not_recognized'      => 'Hodor',
+            'cli_weakauras_parser_not_found'        => 'Hodor',
             'invalid_mdt_string_exception'          => 'Hodor',
             'invalid_mdt_string'                    => 'Hodor',
             'mdt_importer_not_configured_properly'  => 'Hodor',

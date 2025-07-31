@@ -335,9 +335,9 @@ class TeamEdit extends InlineCode {
             'searching': false,
             'bLengthChange': false,
             'columns': columns,
-            'language': {
+            'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
                 'emptyTable': lang.get('messages.datatable_no_members_in_table')
-            }
+            })
         });
 
         $('.ad_free_giveaway_add').unbind('click').bind('click', function (e) {

@@ -7,6 +7,7 @@ history -s 'php artisan combatlog:ingestcombatlogroutejson tmp/'
 history -s 'php artisan challengemoderundata:convert'
 history -s 'php artisan environment:update'
 history -s 'php artisan handlebars:refresh'
+history -s 'php artisan localization:syncnpcnames'
 history -s 'php artisan localization:sync en_US '
 history -s 'php artisan mapicon:generateitemicons'
 history -s 'php artisan mapping:save'
@@ -65,3 +66,14 @@ git config --global --add safe.directory /var/www/vendor/wotuu/keystone.guru.dep
 # # or to populate Opensearch while converting
 # php artisan challengemoderundata:convert --saveToOpensearch
 
+# cd de_DE && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd es_ES && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd es_MX && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd fr_FR && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd ho_HO && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd it_IT && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd ko_KR && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd pt_BR && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd ru_RU && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd uk_UA && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. && \
+# cd zh_CN && sudo chown wouterkoppenol:wouterkoppenol *.php && cd .. &&

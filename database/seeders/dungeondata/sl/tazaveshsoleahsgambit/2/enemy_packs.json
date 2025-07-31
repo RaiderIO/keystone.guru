@@ -34,5 +34,41 @@
         "color_animated": null,
         "label": "Enemy pack",
         "vertices_json": "[{\"lat\":-95.6517,\"lng\":218.617},{\"lat\":-117.5243,\"lng\":237.8779},{\"lat\":-103.5955,\"lng\":251.1538},{\"lat\":-86.6198,\"lng\":230.6959}]"
+    },
+    {
+        "id": 15715,
+        "mapping_version_id": 574,
+        "floor_id": 98,
+        "group": 22,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 22",
+        "vertices_json": "[{\"lat\":-87.4935,\"lng\":66.9694},{\"lat\":-60.3825,\"lng\":66.9694},{\"lat\":-60.3825,\"lng\":101.9043},{\"lat\":-87.4935,\"lng\":101.9043}]"
+    },
+    {
+        "id": 15716,
+        "mapping_version_id": 574,
+        "floor_id": 98,
+        "group": 23,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 23",
+        "vertices_json": "[{\"lat\":-172.0598,\"lng\":131.516},{\"lat\":-152.2971,\"lng\":131.516},{\"lat\":-152.2971,\"lng\":161.2598},{\"lat\":-172.0598,\"lng\":161.2598}]"
+    },
+    {
+        "id": 15717,
+        "mapping_version_id": 574,
+        "floor_id": 98,
+        "group": 32,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 32",
+        "vertices_json": "[{\"lat\":-145.942,\"lng\":194.6818},{\"lat\":-84.5155,\"lng\":194.6818},{\"lat\":-84.5155,\"lng\":255.0728},{\"lat\":-145.942,\"lng\":255.0728}]"
     }
 ]

@@ -7,6 +7,7 @@ use App\Models\Characteristic;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
+use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
@@ -58,11 +59,17 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
             ->pluck('ui_map_id')
             ->toArray();
 
+        $dungeonNameTranslationKey = $this->convertStringToTranslationKey(__($mappingVersion->dungeon->name, [], 'en_US'));
+
         return sprintf('local MDT = MDT
 local L = MDT.L
 %slocal dungeonIndex = %d
 MDT.dungeonList[dungeonIndex] = L["%s"]
-MDT.mapInfo[dungeonIndex] = {};
+MDT.mapInfo[dungeonIndex] = {
+    shortname = L["%s"],
+    englishName = L["%s"],
+    mapID = %d,
+};
 
 local zones = { %s }
 for _, zone in ipairs(zones) do
@@ -71,7 +78,10 @@ end
 ',
             $translationsLua,
             $mappingVersion->dungeon->mdt_id,
-            $this->convertStringToTranslationKey(__($mappingVersion->dungeon->name)),
+            $dungeonNameTranslationKey,
+            sprintf('%sShortName', Str::camel($dungeonNameTranslationKey)),
+            addslashes(__($mappingVersion->dungeon->name, [], 'en_US')),
+            $mappingVersion->dungeon->map_id,
             implode(', ', $zoneIds)
         );
     }
@@ -83,7 +93,13 @@ end
             /** @var Floor $facadeFloor */
             $facadeFloor   = $mappingVersion->dungeon->floors()->firstWhere('facade', true);
             $dungeonMaps[] = '  [0] = "",';
-            $dungeonMaps[] = sprintf('  [1] = { customTextures = \'%s\' },', $facadeFloor->map_name);
+            $dungeonMaps[] = sprintf(
+                '  [1] = { customTextures = \'%s\' },',
+                sprintf('Interface\\\\AddOns\\\\\'..addonName..\'\\\\%s\\\\Textures\\\\%s',
+                    $this->convertStringToTranslationKey(__($mappingVersion->dungeon->expansion->name, [], 'en_US')),
+                    $this->convertStringToTranslationKey(__($mappingVersion->dungeon->name, [], 'en_US'))
+                )
+            );
         } else {
             $index         = 0;
             $dungeonMaps[] = sprintf('  [%d] = "%s",', $index, $mappingVersion->dungeon->key);
@@ -138,46 +154,58 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
         $mapPOIs = [];
 
         /** @var Collection<Floor> $floors */
-        $floors = $mappingVersion->dungeon->floors();
+        $floors = $mappingVersion->dungeon->floorsForMapFacade($mappingVersion, false);
         //        $floors->each(function (Floor $floor) use ($mappingVersion) {
         //            $floor->setRelation('dungeon', $mappingVersion->dungeon);
         //            $floor->load('mapIcons');
         //        });
 
+
+        $subLevelOverride = $mappingVersion->facade_enabled ? 1 : null;
         foreach ($floors as $floor) {
             $mapPOIsOnFloor = [];
             $mapPOIIndex    = 0;
 
-            /** @var DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers */
-            $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkers($mappingVersion)
-                ->with(['floor', 'targetFloor'])
-                ->get();
+            // MDT does not care for switch markers when the facade is enabled, so we skip them
+            if (!$mappingVersion->facade_enabled) {
+                /** @var DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers */
+                $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkers($mappingVersion)
+                    ->with(['floor', 'targetFloor'])
+                    ->get();
 
-            foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
-                $mapPOIsOnFloor[++$mapPOIIndex] = array_merge([
-                    'template'        => 'MapLinkPinTemplate',
-                    'type'            => 'mapLink',
-                    'target'          => $dungeonFloorSwitchMarker->targetFloor->mdt_sub_level ?? $dungeonFloorSwitchMarker->targetFloor->index,
-                    'direction'       => $dungeonFloorSwitchMarker->getMdtDirection(),
-                    'connectionIndex' => $mapPOIIndex, // @TODO this is wrong?
-                ], Conversion::convertLatLngToMDTCoordinate($dungeonFloorSwitchMarker->getLatLng()));
+                foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
+                    $mapPOIsOnFloor[++$mapPOIIndex] = array_merge([
+                        'template'        => 'MapLinkPinTemplate',
+                        'type'            => 'mapLink',
+                        'target'          => $dungeonFloorSwitchMarker->targetFloor->mdt_sub_level ?? $dungeonFloorSwitchMarker->targetFloor->index,
+                        'direction'       => $dungeonFloorSwitchMarker->getMdtDirection(),
+                        'connectionIndex' => $mapPOIIndex, // @TODO this is wrong?
+                    ], Conversion::convertLatLngToMDTCoordinate($dungeonFloorSwitchMarker->getLatLng()));
+                }
             }
 
-            foreach ($floor->mapIcons($mappingVersion)->get() as $mapIcon) {
-                // Skip all map icon types that are not graveyards
-                if ($mapIcon->map_icon_type_id !== MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD]) {
-                    continue;
-                }
-
-                $mapPOIsOnFloor[++$mapPOIIndex] = array_merge([
-                    'template'             => 'DeathReleasePinTemplate',
-                    'type'                 => 'graveyard',
-                    'graveyardDescription' => $mapIcon->comment ?? '',
-                ], Conversion::convertLatLngToMDTCoordinate($mapIcon->getLatLng()));
+            // Export graveyards and dungeon entrances
+            foreach ($floor->mapIcons($mappingVersion)->whereIn('map_icon_type_id', [
+                MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD],
+                MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
+            ])->get() as $mapIcon) {
+                /** @var MapIcon $mapIcon */
+                $mapPOIsOnFloor[++$mapPOIIndex] = array_merge(
+                    match ($mapIcon->map_icon_type_id) {
+                        MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD] => [
+                            'template'             => 'DeathReleasePinTemplate',
+                            'type'                 => 'graveyard',
+                            'graveyardDescription' => $mapIcon->comment ?? '',
+                        ],
+                        MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START] => [
+                            'template' => 'MapLinkPinTemplate',
+                            'type'     => 'dungeonEntrance',
+                        ],
+                    }, Conversion::convertLatLngToMDTCoordinate($mapIcon->getLatLng()));
             }
 
             if (!empty($mapPOIsOnFloor)) {
-                $mapPOIs[$floor->mdt_sub_level ?? $floor->index] = $mapPOIsOnFloor;
+                $mapPOIs[$subLevelOverride ?? $floor->mdt_sub_level ?? $floor->index] = $mapPOIsOnFloor;
             }
         }
 
@@ -263,7 +291,7 @@ MDT.mapPOIs[dungeonIndex] = {};
 
             $npcHealth    = $npc->getHealthByGameVersion($mappingVersion->gameVersion);
             $dungeonEnemy = array_filter([
-                'name'             => addslashes($npc->name),
+                'name'             => addslashes(__($npc->name, [], 'en_US')),
                 'id'               => $npc->id,
                 'count'            => $enemyForces,
                 'health'           => $npcHealth?->health ?? 123456,
@@ -286,7 +314,7 @@ MDT.mapPOIs[dungeonIndex] = {};
                 'healthPercentage' => $npcHealth?->percentage ?? null,
             ], fn($value) => $value !== null);
 
-            $translations->push($npc->name);
+            $translations->push(__($npc->name, [], 'en_US'));
 
             $cloneIndex = 0;
             foreach ($enemies as $enemy) {
@@ -319,22 +347,38 @@ MDT.mapPOIs[dungeonIndex] = {};
                     // !$savedEnemyPatrols->has($enemy->enemy_patrol_id))
                     $enemy->enemyPatrol->mdt_npc_id === $enemy->npc_id &&
                     $enemy->enemyPatrol->mdt_id === $enemy->mdt_id) {
+
                     $patrolVertices = [];
-
-                    $polylineLatLngs = $enemy->enemyPatrol->polyline->getDecodedLatLngs($enemy->floor);
                     $vertexIndex     = 0;
-                    foreach ($polylineLatLngs as $vertexLatLng) {
-                        $convertedVertexLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $vertexLatLng);
-                        $vertexMDTXY           = Conversion::convertLatLngToMDTCoordinate($convertedVertexLatLng);
-                        // Reverse order
-                        $patrolVertices[++$vertexIndex] = [
-                            'x' => $vertexMDTXY['x'],
-                            'y' => $vertexMDTXY['y'],
-                        ];
-                    }
+                    // Prefer the mdt polyline if it exists (it was introduced later), otherwise use the regular polyline
+                    if($enemy->enemyPatrol->mdtPolyline !== null) {
+                        $polylineMdtXYs = $enemy->enemyPatrol->mdtPolyline
+                            ->getDecodedLatLngs($enemy->floor);
+                        foreach ($polylineMdtXYs as $vertexMdtLatLng) {
+                            // $vertexMdtLatLng actually contains the x and y in the lng and lat keys
+                            $patrolVertices[++$vertexIndex] = [
+                                'x' => $vertexMdtLatLng['lng'],
+                                'y' => $vertexMdtLatLng['lat'],
+                            ];
+                        }
+                    } else {
+                        // Fall back to the regular polyline that may be adjusted by us
+                        $polylineLatLngs = $enemy->enemyPatrol->polyline
+                            ->getDecodedLatLngs($enemy->floor);
 
-                    // MDT does not save the close off of its patrols, so remove the last vertex for export
-                    array_pop($patrolVertices);
+                        foreach ($polylineLatLngs as $vertexLatLng) {
+                            $convertedVertexLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation($mappingVersion, $vertexLatLng);
+                            $vertexMDTXY           = Conversion::convertLatLngToMDTCoordinate($convertedVertexLatLng);
+                            // Reverse order
+                            $patrolVertices[++$vertexIndex] = [
+                                'x' => $vertexMDTXY['x'],
+                                'y' => $vertexMDTXY['y'],
+                            ];
+                        }
+
+                        // MDT does not save the close off of its patrols, so remove the last vertex for export
+                        array_pop($patrolVertices);
+                    }
 
                     $dungeonEnemy['clones'][$cloneIndex]['patrol'] = $patrolVertices;
 

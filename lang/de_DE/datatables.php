@@ -1,0 +1,279 @@
+<?php
+
+return [
+    'emptyTable'     => 'Keine Daten in der Tabelle vorhanden',
+    'info'           => '_START_ bis _END_ von _TOTAL_ Einträgen',
+    'infoEmpty'      => 'Keine Daten vorhanden',
+    'infoFiltered'   => '(gefiltert von _MAX_ Einträgen)',
+    'infoThousands'  => '.',
+    'lengthMenu'     => '_MENU_ Zeilen anzeigen',
+    'loadingRecords' => 'Wird geladen ..',
+    'processing'     => 'Bitte warten ..',
+    'search'         => 'Suche:',
+    'zeroRecords'    => 'Keine passenden Einträge gefunden',
+    'thousands'      => '.',
+    'paginate'       =>
+        [
+            'first'    => 'Erste',
+            'last'     => 'Letzte',
+            'next'     => 'Nächste',
+            'previous' => 'Vorherige',
+        ],
+    'aria'           =>
+        [
+            'sortAscending'  => ': aktivieren, um Spalte aufsteigend zu sortieren',
+            'sortDescending' => ': aktivieren, um Spalte absteigend zu sortieren',
+        ],
+    'autoFill'       =>
+        [
+            'cancel'         => 'Abbrechen',
+            'fill'           => 'Alle Zellen mit <i>%d<i> füllen</i></i>',
+            'fillHorizontal' => 'Alle horizontalen Zellen füllen',
+            'fillVertical'   => 'Alle vertikalen Zellen füllen',
+        ],
+    'buttons'        =>
+        [
+            'collection'      => 'Aktionen <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
+            'colvis'          => 'Spaltensichtbarkeit',
+            'colvisRestore'   => 'Sichtbarkeit wiederherstellen',
+            'copy'            => 'Kopieren',
+            'copyKeys'        => 'Taste <i>STRG&lt;\\/i&gt; oder <i>⌘&lt;\\/i&gt; + <i>C&lt;\\/i&gt; drücken um die Tabelle<br />in den Zwischenspeicher zu kopieren.<br /><br />Um den Vorgang abzubrechen, Nachricht anklicken oder Escape-Taste drücken.</i></i></i>',
+            'copySuccess'     =>
+                [
+                    '1' => '1 Zeile kopiert',
+                    '_' => '%d Zeilen kopiert',
+                ],
+            'copyTitle'       => 'In Zwischenablage kopieren',
+            'csv'             => 'CSV',
+            'excel'           => 'Excel',
+            'pageLength'      =>
+                [
+                    '-1' => 'Alle Zeilen anzeigen',
+                    '_'  => 'Zeige %d Zeilen',
+                ],
+            'pdf'             => 'PDF',
+            'print'           => 'Drucken',
+            'updateState'     => 'Aktualisieren',
+            'stateRestore'    => 'Ansicht %d',
+            'savedStates'     => 'Gespeicherte Ansicht',
+            'renameState'     => 'Umbenennen',
+            'removeState'     => 'Entfernen',
+            'removeAllStates' => 'Alle Ansichten entfernen',
+            'createState'     => 'Ansicht erstellen',
+        ],
+    'searchBuilder'  =>
+        [
+            'add'         => 'Bedingung hinzufügen',
+            'button'      =>
+                [
+                    '0' => 'Such-Baukasten',
+                    '_' => 'Such-Baukasten (%d)',
+                ],
+            'clearAll'    => 'Alle entfernen',
+            'condition'   => 'Bedingung',
+            'conditions'  =>
+                [
+                    'date'   =>
+                        [
+                            'after'      => 'Nach',
+                            'before'     => 'Vor',
+                            'between'    => 'Zwischen',
+                            'empty'      => 'Leer',
+                            'equals'     => 'Gleich',
+                            'not'        => 'Nicht',
+                            'notBetween' => 'Nicht zwischen',
+                            'notEmpty'   => 'Nicht leer',
+                        ],
+                    'number' =>
+                        [
+                            'between'    => 'Zwischen',
+                            'empty'      => 'Leer',
+                            'equals'     => 'Entspricht',
+                            'gt'         => 'Größer als',
+                            'gte'        => 'Größer als oder gleich',
+                            'lt'         => 'Kleiner als',
+                            'lte'        => 'Kleiner als oder gleich',
+                            'not'        => 'Nicht',
+                            'notBetween' => 'Nicht zwischen',
+                            'notEmpty'   => 'Nicht leer',
+                        ],
+                    'string' =>
+                        [
+                            'contains'      => 'Beinhaltet',
+                            'empty'         => 'Leer',
+                            'endsWith'      => 'Endet mit',
+                            'equals'        => 'Entspricht',
+                            'not'           => 'Nicht',
+                            'notEmpty'      => 'Nicht leer',
+                            'startsWith'    => 'Startet mit',
+                            'notContains'   => 'enthält nicht',
+                            'notStartsWith' => 'startet nicht mit',
+                            'notEndsWith'   => 'endet nicht mit',
+                        ],
+                    'array'  =>
+                        [
+                            'without'  => 'aber nicht',
+                            'notEmpty' => 'ist nicht leer',
+                            'not'      => 'ist ungleich',
+                            'contains' => 'enthält',
+                            'empty'    => 'ist leer',
+                            'equals'   => 'ist gleich',
+                        ],
+                ],
+            'data'        => 'Daten',
+            'deleteTitle' => 'Filterregel entfernen',
+            'leftTitle'   => 'Äußere Kriterien',
+            'logicAnd'    => 'Und',
+            'logicOr'     => 'Oder',
+            'rightTitle'  => 'Innere Kriterien',
+            'title'       =>
+                [
+                    '0' => 'Such-Baukasten',
+                    '_' => 'Such-Baukasten (%d)',
+                ],
+            'value'       => 'Wert',
+        ],
+    'searchPanes'    =>
+        [
+            'clearMessage'    => 'Leeren',
+            'collapse'        =>
+                [
+                    '0' => 'Suchmasken',
+                    '_' => 'Suchmasken (%d)',
+                ],
+            'count'           => '{total}',
+            'countFiltered'   => '{shown} ({total})',
+            'emptyPanes'      => 'Keine Suchmasken',
+            'loadMessage'     => 'Lade Suchmasken ..',
+            'title'           => 'Aktive Filter: %d',
+            'showMessage'     => 'zeige Alle',
+            'collapseMessage' => 'Alle einklappen',
+        ],
+    'select'         =>
+        [
+            'cells'   =>
+                [
+                    '1' => '1 Zelle ausgewählt',
+                    '_' => '%d Zellen ausgewählt',
+                ],
+            'columns' =>
+                [
+                    '1' => '1 Spalte ausgewählt',
+                    '_' => '%d Spalten ausgewählt',
+                ],
+            'rows'    =>
+                [
+                    '1' => '1 Zeile ausgewählt',
+                    '_' => '%d Zeilen ausgewählt',
+                ],
+        ],
+    'datetime'       =>
+        [
+            'previous' => 'Vorher',
+            'next'     => 'Nachher',
+            'hours'    => 'Stunden',
+            'minutes'  => 'Minuten',
+            'seconds'  => 'Sekunden',
+            'unknown'  => 'Unbekannt',
+            'amPm'     =>
+                [
+                    '0' => '',
+                    '1' => '',
+                ],
+            'weekdays' =>
+                [
+                    '0' => 'Sonntag',
+                    '1' => 'Montag',
+                    '2' => 'Dienstag',
+                    '3' => 'Mittwoch',
+                    '4' => 'Donnerstag',
+                    '5' => 'Freitag',
+                    '6' => 'Samstag',
+                ],
+            'months'   =>
+                [
+                    '0'  => 'Januar',
+                    '1'  => 'Februar',
+                    '2'  => 'März',
+                    '3'  => 'April',
+                    '4'  => 'Mai',
+                    '5'  => 'Juni',
+                    '6'  => 'Juli',
+                    '7'  => 'August',
+                    '8'  => 'September',
+                    '9'  => 'Oktober',
+                    '10' => 'November',
+                    '11' => 'Dezember',
+                ],
+        ],
+    'editor'         =>
+        [
+            'close'  => 'Schließen',
+            'create' =>
+                [
+                    'button' => 'Neu',
+                    'title'  => 'Neuen Eintrag erstellen',
+                    'submit' => 'Erstellen',
+                ],
+            'edit'   =>
+                [
+                    'button' => 'Bearbeiten',
+                    'title'  => 'Eintrag bearbeiten',
+                    'submit' => 'Bearbeiten',
+                ],
+            'remove' =>
+                [
+                    'button'  => 'Entfernen',
+                    'title'   => 'Entfernen',
+                    'submit'  => 'Entfernen',
+                    'confirm' =>
+                        [
+                            '_' => 'Sollen %d Zeilen gelöscht werden?',
+                            '1' => 'Soll diese Zeile gelöscht werden?',
+                        ],
+                ],
+            'error'  =>
+                [
+                    'system' => 'Ein Systemfehler ist aufgetreten',
+                ],
+            'multi'  =>
+                [
+                    'title'   => 'Mehrere Werte',
+                    'info'    => 'Die ausgewählten Elemente enthalten mehrere Werte für dieses Feld. Um alle Elemente für dieses Feld zu bearbeiten und auf denselben Wert zu setzen, hier klicken oder tippen, andernfalls behalten diese ihre individuellen Werte bei.',
+                    'restore' => 'Änderungen zurücksetzen',
+                    'noMulti' => 'Dieses Feld kann nur einzeln bearbeitet werden, nicht als Teil einer Mengen-Änderung.',
+                ],
+        ],
+    'stateRestore'   =>
+        [
+            'renameTitle'    => 'Ansicht umbenennen',
+            'renameLabel'    => 'Neuer Name für %s:',
+            'renameButton'   => 'Umbenennen',
+            'removeTitle'    => 'Ansicht entfernen',
+            'removeSubmit'   => 'Entfernen',
+            'removeJoiner'   => ' und ',
+            'removeError'    => 'Entfernen der Ansicht fehlgeschlagen.',
+            'removeConfirm'  => 'Sicher dass %s entfernt werden soll?',
+            'emptyStates'    => 'Keine gespeicherten Ansichten',
+            'emptyError'     => 'Name darf nicht leer sein.',
+            'duplicateError' => 'Eine Ansicht mit diesem Namen existiert bereits.',
+            'creationModal'  =>
+                [
+                    'toggleLabel'   => 'Inkludiert:',
+                    'title'         => 'Neue Ansicht erstellen',
+                    'select'        => 'Auswahl',
+                    'searchBuilder' => 'Such-Baukasten',
+                    'search'        => 'Suche',
+                    'scroller'      => 'Scroll Position',
+                    'paging'        => 'Seiten',
+                    'order'         => 'Sortieren',
+                    'name'          => 'Name:',
+                    'columns'       =>
+                        [
+                            'visible' => 'Spalten Sichtbarkeit',
+                            'search'  => 'Spalten Suche',
+                        ],
+                    'button'        => 'Erstellen',
+                ],
+        ],
+];

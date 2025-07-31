@@ -9,6 +9,7 @@ use App\Service\Traits\Curl;
 use App\Service\Wowhead\Dtos\SpellDataResult;
 use App\Service\Wowhead\Logging\WowheadServiceLoggingInterface;
 use Carbon\CarbonInterval;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
@@ -160,7 +161,7 @@ class WowheadService implements WowheadServiceInterface
         // More hacky shit to scrape data we need
         $mechanic      = null;
         $category      = Spell::CATEGORY_UNKNOWN;
-        $cooldownGroup = sprintf('spells.cooldown_group.%s', Spell::COOLDOWN_GROUP_UNKNOWN); // I can't find info on this on Wowhead?
+        $cooldownGroup = sprintf('spellcooldowngroup.%s', Spell::COOLDOWN_GROUP_UNKNOWN); // I can't find info on this on Wowhead?
         $dispelType    = '';
         $iconName      = '';
         $name          = '';
@@ -206,7 +207,7 @@ class WowheadService implements WowheadServiceInterface
                 preg_match(self::IDENTIFYING_REGEX_SPELL_ICON_NAME_CLASSIC, $line, $matches)) {
                 $iconName = $matches[1];
             } else if (!$categoryFound && preg_match(self::IDENTIFYING_REGEX_SPELL_CATEGORY, $line, $matches)) {
-                $category = Str::slug($matches[1], '_');
+                $category      = Str::slug($matches[1], '_');
                 $categoryFound = true;
             } // Mechanic
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_MECHANIC)) {
@@ -217,7 +218,7 @@ class WowheadService implements WowheadServiceInterface
                 if (str_contains($mechanic, 'n/a')) {
                     $mechanic = null;
                 } else {
-                    $mechanic = sprintf('spells.mechanic.%s', Str::slug($mechanic));
+                    $mechanic = sprintf('spellmechanic.%s', Str::slug($mechanic));
                 }
                 $mechanicFound = false;
                 $mechanicSet   = true;
@@ -298,7 +299,7 @@ class WowheadService implements WowheadServiceInterface
         return new SpellDataResult(
             $spellId,
             $mechanic,
-            sprintf('spells.category.%s', $category),
+            sprintf('spellcategory.%s', $category),
             $cooldownGroup,
             $dispelType,
             $iconName,
@@ -309,6 +310,121 @@ class WowheadService implements WowheadServiceInterface
         );
     }
 
+    public function getNpcNames(GameVersion $gameVersion): Collection
+    {
+        $env = match ($gameVersion->key) {
+            GameVersion::GAME_VERSION_RETAIL => '1',
+            GameVersion::GAME_VERSION_BETA => '3',
+            GameVersion::GAME_VERSION_CLASSIC_ERA => '4',
+            GameVersion::GAME_VERSION_WRATH => '8',
+            default => null,
+        };
+
+        $result = collect();
+        if ($env !== null) {
+            $data = $this->curlGet(sprintf('https://nether.wowhead.com/data/npc-names?dataEnv=%s', $env));
+
+            $dataArr = json_decode($data, true);
+
+            $result = collect();
+
+            foreach ($dataArr as $npcNames) {
+                /** @var array{
+                 *     id: int,
+                 *     name_enus: string,
+                 *     name_frfr: string,
+                 *     name_dede: string,
+                 *     name_eses: string,
+                 *     name_ptbr: string,
+                 *     name_ruru: string,
+                 *     name_itit: string,
+                 *     name_zhcn: string,
+                 *     name_kokr: string,
+                 *     name_zhtw: string,
+                 *     name_esmx: string
+                 * } $npcNames
+                 */
+
+                $npcId = $npcNames['id'];
+
+                foreach ($npcNames as $nameLocale => $npcName) {
+                    if ($nameLocale === 'id') {
+                        continue;
+                    }
+
+                    $locale = str_replace('name_', '', $nameLocale);
+                    $parts  = str_split($locale, 2);                              // e.g., enus -> ['en', 'us']
+                    $locale = sprintf('%s_%s', $parts[0], strtoupper($parts[1])); // en_US, fr_FR, etc.
+
+                    $result->put($locale, $result->get($locale, collect())->put($npcId, $npcName));
+                }
+            }
+
+        }
+
+        return $result;
+    }
+
+
+    public function getSpellNames(GameVersion $gameVersion): Collection
+    {
+        $env = match ($gameVersion->key) {
+            GameVersion::GAME_VERSION_RETAIL => '1',
+            GameVersion::GAME_VERSION_BETA => '3',
+            GameVersion::GAME_VERSION_CLASSIC_ERA => '4',
+            GameVersion::GAME_VERSION_WRATH => '8',
+            default => null,
+        };
+
+        if ($env === null) {
+            return collect();
+        }
+
+        $result = collect();
+        foreach (config('language.all') as $language) {
+            $locale = $language['long'];
+
+            if ($locale === 'ho_HO') {
+                continue; // Skip Hodor language
+            }
+
+            $parts = explode('_', $locale);
+            if (count($parts) !== 2) {
+                continue; // Skip invalid locales
+            }
+
+            $wowheadLocale =
+                match ($locale) {
+                    'ko_KR' => '1',
+                    'fr_FR' => '2',
+                    'de_DE' => '3',
+                    'zh_CN', 'zh_TW' => '4',
+                    'es_ES', 'es_MX' => '6',
+                    'ru_RU' => '7',
+                    'pt_BR' => '8',
+                    'it_IT' => '9',
+                    default => '0', // en_US, uk_UA
+                };
+
+            $data = $this->curlGet(sprintf('https://nether.wowhead.com/data/spell-names?dataEnv=%d&locale=%d', $env, $wowheadLocale));
+
+            $dataArr = json_decode($data, true);
+
+            foreach ($dataArr as $spellData) {
+                /** @var array{
+                 *     id: int,
+                 *     school: int,
+                 *     icon: string,
+                 *     name: string,
+                 *     rank: string|null
+                 * } $spellData
+                 */
+                $result->put($locale, $result->get($locale, collect())->put($spellData['id'], $spellData['name']));
+            }
+        }
+
+        return $result;
+    }
 
     public function sleep(int $seconds = 1): void
     {

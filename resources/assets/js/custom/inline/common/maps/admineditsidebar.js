@@ -30,7 +30,7 @@ class CommonMapsAdmineditsidebar extends InlineCode {
             let visualData = focusedEnemy.getVisualData();
             if (visualData !== null) {
                 $('#enemy_info_container').show().find('.card-title').empty().append(
-                    $('<a />').attr('href', `/admin/npc/${focusedEnemy.npc.id}`).text(focusedEnemy.npc.name)
+                    $('<a />').attr('href', `/admin/npc/${focusedEnemy.npc.id}`).text(lang.get(focusedEnemy.npc.name))
                 );
 
                 // Update the focused enemy in the sidebar

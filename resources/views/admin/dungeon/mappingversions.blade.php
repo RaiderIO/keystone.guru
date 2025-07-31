@@ -22,7 +22,11 @@ $gameVersionsSelect = $allGameVersions
     <script type="text/javascript">
         $(function () {
             $('#admin_dungeon_mapping_versions_table').DataTable({
-                'order': [[2, 'desc']]
+                'order': [[2, 'desc']],
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+
+                })
+
             });
         });
     </script>

@@ -212,6 +212,7 @@ trait DungeonConstants
     public const DUNGEON_THE_ROOKERY                = 'therookery'; // rookerydungeon
     public const DUNGEON_THE_STONEVAULT             = 'thestonevault'; // stonevault_foundry
     public const DUNGEON_OPERATION_FLOODGATE        = 'operationfloodgate';
+    public const DUNGEON_ECO_DOME_AL_DANI           = 'ecodomealdani'; // ??
     // @formatter:on
 
     public const ALL = [
@@ -378,6 +379,7 @@ trait DungeonConstants
             self::DUNGEON_THE_ROOKERY,
             self::DUNGEON_THE_STONEVAULT,
             self::DUNGEON_OPERATION_FLOODGATE,
+            self::DUNGEON_ECO_DOME_AL_DANI,
         ],
     ];
 

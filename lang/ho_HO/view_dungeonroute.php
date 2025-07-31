@@ -28,6 +28,7 @@ return [
             'key_level'               => 'Hodor',
             'affixes'                 => 'Hodor',
             'affixes_title'           => 'Hodor',
+            'select_affixes'          => 'Hodor',
             'affixes_selected'        => 'Hodor',
             'enemy_forces'            => 'Hodor',
             'enemy_forces_complete'   => 'Hodor',

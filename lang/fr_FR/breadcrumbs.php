@@ -5,11 +5,27 @@ return [
     'home' => [
         'keystone_guru'    => '',
         'affixes'          => '',
-        'changelog'        => '',
+        'about'            => '',
+        'credits'          => '',
+        'changelog'        => [
+            'list'    => '',
+            'release' => [
+                'view' => '',
+            ],
+        ],
+        'legal'            => [
+            'cookies' => '',
+            'privacy' => '',
+            'terms'   => '',
+        ],
         'routes'           => '',
         'routes_expansion' => '',
-        'dungeon'          => [
-            'explore' => '',
+        'gameversion'      => [
+            'update'  => '',
+            'dungeon' => [
+                'heatmaps' => '',
+                'explore'  => '',
+            ],
         ],
         'dungeonroute'     => [
             'new' => '',
@@ -80,7 +96,12 @@ return [
                 'edit_npc' => '',
             ],
             'npcenemyforces'             => [
+                'new_npc_enemy_forces'  => '',
                 'edit_npc_enemy_forces' => '',
+            ],
+            'npchealth'                  => [
+                'new_npc_health'  => '',
+                'edit_npc_health' => '',
             ],
             'spells'                     => [
                 'spells'     => '',

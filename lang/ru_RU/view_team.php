@@ -42,6 +42,8 @@ return [
         'to_team_list'   => 'Список команд',
         'team_header'    => 'Команда %s',
         'icon_image_alt' => 'Нет изображения',
+        'routes'         => '',
+        'members'        => '',
     ],
     'invite'   => [
         'linkpreview_title'       => '',

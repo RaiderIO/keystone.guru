@@ -2,6 +2,7 @@
 
 use App\Models\Affix;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\Season;
 
@@ -11,6 +12,7 @@ use App\Models\Season;
  * @var Season|null       $nextSeason
  * @var int               $routeKeyLevelFrom
  * @var int               $routeKeyLevelTo
+ * @var GameVersion       $currentUserGameVersion
  */
 
 $teeming                = old('teeming') ?? false;
@@ -69,31 +71,33 @@ $dungeonSelectId = 'dungeon_id_select';
             {!! Form::textarea('dungeon_route_description', $dungeonroute->description ?? '', ['id' => 'dungeon_route_description', 'class' => 'form-control']) !!}
         </div>
     @endisset
-    <div class="form-group">
-        <label for="dungeon_route_level">
-            {{ __('view_common.forms.createroute.key_levels') }}
-            <i class="fas fa-info-circle" data-toggle="tooltip"
-               title="{{ __('view_common.forms.createroute.key_levels_title') }}"></i>
-        </label>
-        {!! Form::text('dungeon_route_level', isset($dungeonroute) ?
-                sprintf('%d;%d', $dungeonroute->level_min, $dungeonroute->level_max) ?? '' :
-                sprintf('%d;%d', $routeKeyLevelFrom, $routeKeyLevelTo),
-            ['id' => 'dungeon_route_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}
-    </div>
 
-    <p>{{ __('view_common.forms.createroute.affixes') }} <span class="form-required">*</span></p>
+    @if($currentUserGameVersion->has_seasons)
+        <div class="form-group">
+            <label for="dungeon_route_level">
+                {{ __('view_common.forms.createroute.key_levels') }}
+                <i class="fas fa-info-circle" data-toggle="tooltip"
+                   title="{{ __('view_common.forms.createroute.key_levels_title') }}"></i>
+            </label>
+            {!! Form::text('dungeon_route_level', isset($dungeonroute) ?
+                    sprintf('%d;%d', $dungeonroute->level_min, $dungeonroute->level_max) ?? '' :
+                    sprintf('%d;%d', $routeKeyLevelFrom, $routeKeyLevelTo),
+                ['id' => 'dungeon_route_level', 'class' => 'form-control', 'style' => 'display: none;']) !!}
+        </div>
 
-    @include('common.group.affixes', [
-        'dungeonroute'     => $dungeonroute ?? null,
-        'dungeonSelector' => sprintf('#%s', $dungeonSelectId),
-        'teemingSelector'  => '#teeming',
-        'collapseSelector' => '#createRouteAdvancedCollapse',
-        'defaultSelected'  => $defaultSelectedAffixes,
-        ])
+        <p>{{ __('view_common.forms.createroute.affixes') }} <span class="form-required">*</span></p>
+        @include('common.group.affixes', [
+            'dungeonroute'     => $dungeonroute ?? null,
+            'dungeonSelector' => sprintf('#%s', $dungeonSelectId),
+            'teemingSelector'  => '#teeming',
+            'collapseSelector' => '#createRouteAdvancedCollapse',
+            'defaultSelected'  => $defaultSelectedAffixes,
+            ])
+    @endif
 
     @if(isset($dungeonroute))
             <?php
-            $seasonalAffix = $dungeonroute->getSeasonalAffix()?->key;
+            $seasonalAffix         = $dungeonroute->getSeasonalAffix()?->key;
             $canMigrateToEncrypted = $seasonalAffix === Affix::AFFIX_TORMENTED;
             $canMigrateToShrouded  = $seasonalAffix === Affix::AFFIX_ENCRYPTED;
             ?>

@@ -154,6 +154,10 @@ return [
         'name'        => 'Hodor',
         'description' => 'Hodor',
     ],
+    'xalataths_bargain_pulsar'  => [
+        'name'        => 'Hodor',
+        'description' => 'Hodor',
+    ],
     'seasonal_index_preset'        => 'Hodor',
 
 ];

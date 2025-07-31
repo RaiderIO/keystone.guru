@@ -18,30 +18,34 @@ class MDTMapPOI implements Arrayable
         self::TEMPLATE_VIGNETTE_PIN,
     ];
 
-    public const TYPE_MAP_LINK             = 'mapLink';
-    public const TYPE_DUNGEON_ENTRANCE     = 'dungeonEntrance';
-    public const TYPE_GRAVEYARD            = 'graveyard';
-    public const TYPE_GENERAL_NOTE         = 'generalNote';
-    public const TYPE_ZOOM                 = 'zoom';
-    public const TYPE_IRON_DOCKS_IRON_STAR = 'ironDocksIronStar';
-    public const TYPE_NYALOTHA_SPIRE       = 'nyalothaSpire';
-    public const TYPE_THE_UNDERROT_SKIP    = 'tuSkip';
-    public const TYPE_BRACKENHIDE_CAGE     = 'brackenhideCage';
-    public const TYPE_BRACKENHIDE_CAULDRON = 'brackenhideCauldron';
-    public const TYPE_NELTHARUS_CHAIN      = 'neltharusChain';
-    public const TYPE_NELTHARUS_FOOD       = 'neltharusFood';
-    public const TYPE_NELTHARUS_SHIELD     = 'neltharusShield';
-    public const TYPE_NW_ITEM              = 'nwItem';
-    public const TYPE_ARA_KARA_ITEM        = 'araKaraItem';
-    public const TYPE_MISTS_ITEM           = 'mistsItem';
-    public const TYPE_STONEVAULT_ITEM      = 'stonevaultItem';
-    public const TYPE_COT_ITEM             = 'cityOfThreadsItem';
-    public const TYPE_CINDERBREW_ITEM_A    = 'brewItemA';
-    public const TYPE_CINDERBREW_ITEM_B    = 'brewItemB';
-    public const TYPE_WORKSHOP_ITEM        = 'workshopItem';
-    public const TYPE_PRIORY_ITEM          = 'prioryItem';
-    public const TYPE_MOTHERLODE_ITEM      = 'motherlodeItem';
-    public const TYPE_FLOODGATE_ITEM       = 'floodgateItem';
+    public const TYPE_MAP_LINK                = 'mapLink';
+    public const TYPE_DUNGEON_ENTRANCE        = 'dungeonEntrance';
+    public const TYPE_GRAVEYARD               = 'graveyard';
+    public const TYPE_GENERAL_NOTE            = 'generalNote';
+    public const TYPE_ZOOM                    = 'zoom';
+    public const TYPE_IRON_DOCKS_IRON_STAR    = 'ironDocksIronStar';
+    public const TYPE_NYALOTHA_SPIRE          = 'nyalothaSpire';
+    public const TYPE_THE_UNDERROT_SKIP       = 'tuSkip';
+    public const TYPE_BRACKENHIDE_CAGE        = 'brackenhideCage';
+    public const TYPE_BRACKENHIDE_CAULDRON    = 'brackenhideCauldron';
+    public const TYPE_NELTHARUS_CHAIN         = 'neltharusChain';
+    public const TYPE_NELTHARUS_FOOD          = 'neltharusFood';
+    public const TYPE_NELTHARUS_SHIELD        = 'neltharusShield';
+    public const TYPE_NW_ITEM                 = 'nwItem';
+    public const TYPE_ARA_KARA_ITEM           = 'araKaraItem';
+    public const TYPE_MISTS_ITEM              = 'mistsItem';
+    public const TYPE_STONEVAULT_ITEM         = 'stonevaultItem';
+    public const TYPE_COT_ITEM                = 'cityOfThreadsItem';
+    public const TYPE_CINDERBREW_ITEM_A       = 'brewItemA';
+    public const TYPE_CINDERBREW_ITEM_B       = 'brewItemB';
+    public const TYPE_WORKSHOP_ITEM           = 'workshopItem';
+    public const TYPE_PRIORY_ITEM             = 'prioryItem';
+    public const TYPE_MOTHERLODE_ITEM         = 'motherlodeItem';
+    public const TYPE_FLOODGATE_ITEM          = 'floodgateItem';
+    public const TYPE_ECO_DOME_AL_DANI_ITEM_1 = 'EDAItem1';
+    public const TYPE_ECO_DOME_AL_DANI_ITEM_2 = 'EDAItem2';
+    public const TYPE_ECO_DOME_AL_DANI_ITEM_3 = 'EDAItem3';
+    public const TYPE_TEXT_FRAME              = 'textFrame';
 
     public const ALL_TYPES = [
         self::TYPE_MAP_LINK,
@@ -68,6 +72,10 @@ class MDTMapPOI implements Arrayable
         self::TYPE_PRIORY_ITEM,
         self::TYPE_MOTHERLODE_ITEM,
         self::TYPE_FLOODGATE_ITEM,
+        self::TYPE_ECO_DOME_AL_DANI_ITEM_1,
+        self::TYPE_ECO_DOME_AL_DANI_ITEM_2,
+        self::TYPE_ECO_DOME_AL_DANI_ITEM_3,
+        self::TYPE_TEXT_FRAME,
     ];
 
     private readonly string $template;

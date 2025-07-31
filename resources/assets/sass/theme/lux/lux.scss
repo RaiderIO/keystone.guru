@@ -110,4 +110,8 @@
       color: var(--theme-text-contrast)
     }
   }
+
+  div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-paging .dt-paging-button.disabled:hover, div.dt-container .dt-paging .dt-paging-button.disabled:active {
+    color: var(--theme-text-contrast) !important;
+  }
 }

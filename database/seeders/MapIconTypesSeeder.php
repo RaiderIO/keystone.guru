@@ -145,6 +145,10 @@ class MapIconTypesSeeder extends Seeder implements TableSeederInterface
             MapIconType::MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION => ['name' => 'mapicontypes.floodgate_weapons_stockpile_explosion', 'width' => 32, 'height' => 32, 'admin_only' => true],
 
             MapIconType::MAP_ICON_TYPE_GATE_OF_THE_SETTING_SUN_BRAZIER => ['name' => 'mapicontypes.gate_of_the_setting_sun_brazier', 'width' => 32, 'height' => 32, 'admin_only' => true],
+
+            MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_SHATTER_CONDUIT => ['name' => 'mapicontypes.eco_dome_al_dani_shatter_conduit', 'width' => 32, 'height' => 32, 'admin_only' => true],
+            MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_DISRUPTION_GRENADE => ['name' => 'mapicontypes.eco_dome_al_dani_disruption_grenade', 'width' => 32, 'height' => 32, 'admin_only' => true],
+            MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_KARESHI_SURGE => ['name' => 'mapicontypes.eco_dome_al_dani_kareshi_surge', 'width' => 32, 'height' => 32, 'admin_only' => true],
         ];
 
         $mapIconTypeAttributes = [];

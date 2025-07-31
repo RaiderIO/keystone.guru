@@ -24,6 +24,11 @@ class EnemyPatrolPolylineRelationParser implements RelationParserInterface
         $value['model_id']    = $modelData['id'];
 
         $modelData['polyline_id'] = Polyline::insertGetId($value);
+        // Temp solution - the mdt_polyline is an OPTIONAL relation, and we can't handle that properly.
+        // EnemyPatrolMdtPolylineRelationParser will not get called, so this will never be set (to null)
+        // So set it here so we don't get an invalid column count error.
+        // Real solution would be to somehow support optional relations.
+        $modelData['mdt_polyline_id'] = null;
 
         // Didn't really change anything so just return the value.
         return $modelData;

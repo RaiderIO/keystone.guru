@@ -111,9 +111,13 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemyPatrolsSaveNewPolyline(int $polylineId): void;
 
+    public function importEnemyPatrolsSaveNewMdtPolyline(int $polylineId): void;
+
     public function importEnemyPatrolsSaveNewEnemyPatrol(int $enemyPatrolId): void;
 
     public function importEnemyPatrolsCoupleEnemyPatrolToPolyline(int $enemyPatrolId, int $polylineId): void;
+
+    public function importEnemyPatrolsCoupleEnemyPatrolToMdtPolyline(int $enemyPatrolId, int $polylineId): void;
 
     public function importEnemyPatrolsCoupleEnemiesToEnemyPatrol(int $enemyPatrolId): void;
 

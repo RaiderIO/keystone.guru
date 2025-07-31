@@ -42,7 +42,10 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
         return $this->storeModel(
             $coordinatesService,
             $mappingVersion,
-            $validated,
+            array_merge($validated, [
+                // Ensure we keep the mdt polyline ID if it was set
+                'mdt_polyline_id' => $beforeModel?->mdt_polyline_id,
+            ]),
             EnemyPatrol::class,
             $enemyPatrol,
             function (EnemyPatrol $enemyPatrol) use ($coordinatesService, $validated, $beforeModel) {

@@ -499,7 +499,7 @@ class CommonMapsMap extends InlineCode {
         if (!isNull) {
             let visualData = focusedEnemy.getVisualData();
             if (visualData !== null) {
-                $('#enemy_info_container').show().find('.card-title').html(focusedEnemy.npc.name);
+                $('#enemy_info_container').show().find('.card-title').html(lang.get(focusedEnemy.npc.name));
 
                 // Update the focused enemy in the sidebar
                 let template = Handlebars.templates['map_sidebar_enemy_info_template'];
@@ -776,11 +776,11 @@ class CommonMapsMap extends InlineCode {
 
             let closestValidMdtEnemy = this._getClosestMDTEnemyForEnemy(enemyToSolve);
             if (closestValidMdtEnemy !== null) {
-                console.log(`Auto solving enemy ${enemyToSolve.id} - mapping to MDT enemy ${closestValidMdtEnemy.id}/${closestValidMdtEnemy.npc.name}`);
+                console.log(`Auto solving enemy ${enemyToSolve.id} - mapping to MDT enemy ${closestValidMdtEnemy.id}/${lang.get(closestValidMdtEnemy.npc.name)}`);
                 closestValidMdtEnemy.connectToEnemy(enemyToSolve);
                 enemyToSolve.save();
             } else {
-                console.log(`Cannot find MDT enemy for ${enemyToSolve.id}/${enemyToSolve.npc.name}`);
+                console.log(`Cannot find MDT enemy for ${enemyToSolve.id}/${lang.get(enemyToSolve.npc.name)}`);
             }
         }
     }

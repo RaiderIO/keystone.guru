@@ -8,9 +8,12 @@ return [
             'header_new'                         => '',
             'header_edit'                        => '',
             'active'                             => '',
+            'raid'                               => '',
+            'heatmap_enabled'                    => '',
             'speedrun_enabled'                   => '',
             'speedrun_difficulty_10_man_enabled' => '',
             'speedrun_difficulty_25_man_enabled' => '',
+            'has_wallpaper'                      => '',
             'facade_enabled'                     => '',
             'id'                                 => '',
             'game_version_id'                    => '',
@@ -27,12 +30,14 @@ return [
             'floor_management' => [
                 'title'                   => '',
                 'add_floor'               => '',
-                'table_header_active'     => '',
-                'table_header_facade'     => '',
-                'table_header_id'         => '',
-                'table_header_index'      => '',
-                'table_header_name'       => '',
-                'table_header_actions'    => '',
+                'table_header'            => [
+                    'id'      => '',
+                    'index'   => '',
+                    'name'    => '',
+                    'active'  => '',
+                    'facade'  => '',
+                    'actions' => '',
+                ],
                 'floor_edit_edit'         => '',
                 'floor_edit_edit_mapping' => '',
             ],
@@ -42,12 +47,15 @@ return [
                 'add_bare_mapping_version' => '',
                 'add_mapping_version'      => '',
                 'delete'                   => '',
-                'table_header_merged'      => '',
-                'table_header_facade'      => '',
-                'table_header_id'          => '',
-                'table_header_version'     => '',
-                'table_header_created_at'  => '',
-                'table_header_actions'     => '',
+                'table_header'             => [
+                    'merged'       => '',
+                    'facade'       => '',
+                    'id'           => '',
+                    'game_version' => '',
+                    'version'      => '',
+                    'created_at'   => '',
+                    'actions'      => '',
+                ],
             ],
         ],
         'list' => [
@@ -55,7 +63,6 @@ return [
             'header'                            => '',
             'table_header_active'               => '',
             'table_header_expansion'            => '',
-            'table_header_game_version'         => '',
             'table_header_name'                 => '',
             'table_header_enemy_forces'         => '',
             'table_header_enemy_forces_teeming' => '',
@@ -163,48 +170,40 @@ return [
         ],
     ],
     'npc'                        => [
-        'flash' => [
+        'flash'          => [
             'npc_updated' => '',
             'npc_created' => '',
         ],
-        'edit'  => [
-            'title_new'                            => '',
-            'header_new'                           => '',
-            'title_edit'                           => '',
-            'header_edit'                          => '',
-            'name'                                 => '',
-            'game_id'                              => '',
-            'classification'                       => '',
-            'aggressiveness'                       => '',
-            'type'                                 => '',
-            'class'                                => '',
-            'base_health'                          => '',
-            'scaled_health_to_base_health_apply'   => '',
-            'scaled_health_placeholder'            => '',
-            'scaled_health_percentage_placeholder' => '',
-            'scaled_type_none'                     => '',
-            'scaled_type_fortified'                => '',
-            'scaled_type_tyrannical'               => '',
-            'health_percentage'                    => '',
-            'level'                                => '',
-            'enemy_forces'                         => '',
-            'enemy_forces_teeming'                 => '',
-            'dangerous'                            => '',
-            'truesight'                            => '',
-            'bursting'                             => '',
-            'bolstering'                           => '',
-            'sanguine'                             => '',
-            'runs_away_in_fear'                    => '',
-            'bolstering_npc_whitelist'             => '',
-            'bolstering_npc_whitelist_count'       => '',
-            'spells'                               => '',
-            'spells_count'                         => '',
-            'submit'                               => '',
-            'save_as_new_npc'                      => '',
-            'all_npcs'                             => '',
-            'all_dungeons'                         => '',
+        'edit'           => [
+            'title_new'                      => '',
+            'header_new'                     => '',
+            'title_edit'                     => '',
+            'header_edit'                    => '',
+            'name'                           => '',
+            'game_id'                        => '',
+            'classification'                 => '',
+            'aggressiveness'                 => '',
+            'type'                           => '',
+            'class'                          => '',
+            'level'                          => '',
+            'enemy_forces'                   => '',
+            'enemy_forces_teeming'           => '',
+            'dangerous'                      => '',
+            'truesight'                      => '',
+            'bursting'                       => '',
+            'bolstering'                     => '',
+            'sanguine'                       => '',
+            'runs_away_in_fear'              => '',
+            'bolstering_npc_whitelist'       => '',
+            'bolstering_npc_whitelist_count' => '',
+            'spells'                         => '',
+            'spells_count'                   => '',
+            'submit'                         => '',
+            'save_as_new_npc'                => '',
+            'all_npcs'                       => '',
+            'all_dungeons'                   => '',
         ],
-        'list'  => [
+        'list'           => [
             'all_dungeons'                => '',
             'title'                       => '',
             'header'                      => '',
@@ -217,21 +216,77 @@ return [
             'table_header_classification' => '',
             'table_header_actions'        => '',
         ],
+        'npcenemyforces' => [
+            'add_npc_enemy_forces'         => '',
+            'mapping_version_read_only'    => '',
+            'edit_npc_enemy_forces'        => '',
+            'delete_npc_enemy_forces'      => '',
+            'table_header_id'              => '',
+            'table_header_mapping_version' => '',
+            'table_header_enemy_forces'    => '',
+            'table_header_actions'         => '',
+        ],
+        'npchealth'      => [
+            'add_npc_health'    => '',
+            'edit_npc_health'   => '',
+            'delete_npc_health' => '',
+            'table_header'      => [
+                'id'           => '',
+                'game_version' => '',
+                'health'       => '',
+                'percentage'   => '',
+                'actions'      => '',
+            ],
+        ],
     ],
     'npcenemyforces'             => [
-        'title'                        => '',
-        'mapping_version_read_only'    => '',
-        'edit_enemy_forces'            => '',
-        'table_header_id'              => '',
-        'table_header_mapping_version' => '',
-        'table_header_enemy_forces'    => '',
-        'table_header_actions'         => '',
-        'edit'                         => [
+        'flash' => [
+            'enemy_forces_updated' => '',
+            'enemy_forces_created' => '',
+            'enemy_forces_deleted' => '',
+        ],
+        'title' => '',
+        'edit'  => [
             'title'                => '',
             'header'               => '',
+            'mapping_version'      => '',
             'enemy_forces'         => '',
             'enemy_forces_teeming' => '',
             'submit'               => '',
+        ],
+    ],
+    'npchealth'                  => [
+        'flash' => [
+            'npc_health_updated' => '',
+            'npc_health_created' => '',
+            'npc_health_deleted' => '',
+        ],
+        'title' => '',
+        'edit'  => [
+            'title'                                => '',
+            'header'                               => '',
+            'current'                              => '',
+            'health'                               => '',
+            'scaled_health_to_health_apply'        => '',
+            'scaled_health_placeholder'            => '',
+            'scaled_health_percentage_placeholder' => '',
+            'scaled_type_none'                     => '',
+            'scaled_type_fortified'                => '',
+            'scaled_type_tyrannical'               => '',
+            'auto_complete_npc_healths'            => '',
+            'table_header'                         => [
+                'npc_id'         => '',
+                'npc_name'       => '',
+                'classification' => '',
+                'health'         => '',
+                'percentage'     => '',
+                'actions'        => '',
+            ],
+            'apply_to_npc_health'                  => '',
+            'edit_npc_health'                      => '',
+            'percentage'                           => '',
+            'game_version'                         => '',
+            'submit'                               => '',
         ],
     ],
     'release'                    => [
@@ -242,8 +297,10 @@ return [
             'header_edit'  => '',
             'version'      => '',
             'title'        => '',
+            'backup_db'    => '',
             'silent'       => '',
             'spotlight'    => '',
+            'released'     => '',
             'changelog'    => '',
             'description'  => '',
             'ticket_nr'    => '',
@@ -271,6 +328,7 @@ return [
             'title_edit'        => '',
             'header_edit'       => '',
             'game_id'           => '',
+            'game_version_id'   => '',
             'name'              => '',
             'icon_name'         => '',
             'category'          => '',
@@ -294,7 +352,7 @@ return [
         ],
     ],
     'tools'                      => [
-        'datadump'     => [
+        'datadump'      => [
             'viewexporteddungeondata' => [
                 'title'   => '',
                 'header'  => '',
@@ -306,7 +364,7 @@ return [
                 'content' => '',
             ],
         ],
-        'dungeonroute' => [
+        'dungeonroute'  => [
             'view'            => [
                 'title'      => '',
                 'header'     => '',
@@ -325,7 +383,7 @@ return [
                 'table_header_actions'              => '',
             ],
         ],
-        'enemyforces'  => [
+        'enemyforces'   => [
             'title'                    => '',
             'header'                   => '',
             'paste_mennos_export_json' => '',
@@ -336,7 +394,7 @@ return [
                 'submit' => '',
             ],
         ],
-        'exception'    => [
+        'exception'     => [
             'select' => [
                 'title'                     => '',
                 'header'                    => '',
@@ -344,7 +402,7 @@ return [
                 'submit'                    => '',
             ],
         ],
-        'features'     => [
+        'features'      => [
             'list' => [
                 'title'        => '',
                 'header'       => '',
@@ -359,7 +417,15 @@ return [
                 ],
             ],
         ],
-        'mdt'          => [
+        'messagebanner' => [
+            'set' => [
+                'title'   => '',
+                'header'  => '',
+                'message' => '',
+                'submit'  => '',
+            ],
+        ],
+        'mdt'           => [
             'diff'                              => [
                 'title'                 => '',
                 'header'                => '',
@@ -392,6 +458,18 @@ return [
                 'paste_your_mdt_export_string' => '',
                 'submit'                       => '',
             ],
+            'list'                              => [
+                'title'           => '',
+                'header'          => '',
+                'copy_mdt_string' => '',
+                'table_header'    => [
+                    'id'            => '',
+                    'error'         => '',
+                    'import_string' => '',
+                    'date'          => '',
+                    'actions'       => '',
+                ],
+            ],
             'dungeonmappinghash'                => [
                 'title'  => '',
                 'header' => '',
@@ -403,7 +481,7 @@ return [
                 'submit' => '',
             ],
         ],
-        'npc'          => [
+        'npc'           => [
             'import'                => [
                 'title'                   => '',
                 'header'                  => '',
@@ -411,15 +489,20 @@ return [
                 'submit'                  => '',
             ],
             'managespellvisibility' => [
-                'title'  => '',
-                'header' => '',
-                'submit' => '',
+                'title'           => '',
+                'header'          => '',
+                'submit'          => '',
+                'spell_not_found' => '',
             ],
         ],
-        'list'         => [
-            'title'                   => '',
-            'header'                  => '',
-            'header_tools'            => '',
+        'list'          => [
+            'title'        => '',
+            'header'       => '',
+            'header_tools' => '',
+
+            'subheader_message_banner' => '',
+            'set_message_banner'       => '',
+
             'subheader_npcs'          => '',
             'mass_import_npcs'        => '',
             'manage_spell_visibility' => '',
@@ -431,6 +514,7 @@ return [
             'subheader_mdt'                               => '',
             'view_mdt_string'                             => '',
             'view_mdt_string_as_dungeonroute'             => '',
+            'list_mdt_strings'                            => '',
             'view_dungeonroute_as_mdt_string'             => '',
             'view_mdt_diff'                               => '',
             'view_dungeon_mapping_hash'                   => '',
@@ -442,6 +526,9 @@ return [
             'subheader_wowtools'                 => '',
             'wowtools_import_ingame_coordinates' => '',
 
+            'subheader_wagogg'                 => '',
+            'wagogg_import_ingame_coordinates' => '',
+
             'subheader_misc'     => '',
             'drop_caches'        => '',
             'throw_an_exception' => '',
@@ -452,16 +539,17 @@ return [
             'subheader_features' => '',
             'manage_features'    => '',
 
-            'subheader_actions'   => '',
-            'export_dungeon_data' => '',
-            'export_releases'     => '',
+            'subheader_actions'    => '',
+            'export_dungeon_data'  => '',
+            'export_releases'      => '',
+            'toggle_readonly_mode' => '',
 
             'enemy_forces_recalculate' => '',
 
             'subheader_thumbnails'  => '',
             'thumbnails_regenerate' => '',
         ],
-        'thumbnails'   => [
+        'thumbnails'    => [
             'regenerate' => [
                 'title'        => '',
                 'header'       => '',
@@ -469,7 +557,15 @@ return [
                 'submit'       => '',
             ],
         ],
-        'wowtools'     => [
+        'wagogg'        => [
+            'importingamecoordinates' => [
+                'title'                       => '',
+                'header'                      => '',
+                'ui_map_assignment_table_csv' => '',
+                'submit'                      => '',
+            ],
+        ],
+        'wowtools'      => [
             'importingamecoordinates' => [
                 'title'                                  => '',
                 'header'                                 => '',
@@ -482,16 +578,18 @@ return [
     ],
     'user'                       => [
         'list' => [
-            'title'                   => '',
-            'header'                  => '',
-            'table_header_id'         => '',
-            'table_header_name'       => '',
-            'table_header_email'      => '',
-            'table_header_routes'     => '',
-            'table_header_roles'      => '',
-            'table_header_registered' => '',
-            'table_header_actions'    => '',
-            'table_header_patreons'   => '',
+            'title'                        => '',
+            'header'                       => '',
+            'table_header_id'              => '',
+            'table_header_name'            => '',
+            'table_header_email'           => '',
+            'table_header_routes'          => '',
+            'table_header_roles'           => '',
+            'table_header_registered'      => '',
+            'table_header_actions'         => '',
+            'table_header_patreons'        => '',
+            'ip_addresses_header'          => '',
+            'ip_addresses_cloudflare_link' => '',
         ],
     ],
     'userreport'                 => [

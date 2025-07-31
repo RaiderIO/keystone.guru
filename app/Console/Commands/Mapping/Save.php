@@ -417,7 +417,7 @@ class Save extends Command
             ->each($roundLatLngFn);
 
         $enemyPacks   = $floor->enemyPacksForExport->values()->each($roundLatLngVerticesFn);
-        $enemyPatrols = $floor->enemyPatrolsForExport->values()->each($roundLatLngPolyLinesFn);
+        $enemyPatrols = $floor->enemyPatrolsForExport->values()->makeVisible(['mdtPolyline'])->each($roundLatLngPolyLinesFn);
         /** @var \Illuminate\Database\Eloquent\Collection $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkersForExport->values()->each($roundLatLngFn);
         // floorCouplingDirection is an attributed column which does not exist in the database; it exists in the DungeonData seeder

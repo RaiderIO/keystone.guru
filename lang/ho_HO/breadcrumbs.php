@@ -5,13 +5,26 @@ return [
     'home' => [
         'keystone_guru'    => 'Hodor',
         'affixes'          => 'Hodor',
-        'changelog'        => 'Hodor',
+        'about'            => 'Hodor',
+        'credits'          => 'Hodor',
+        'changelog'        => [
+            'list'    => 'Hodor',
+            'release' => [
+                'view' => 'Hodor',
+            ],
+        ],
+        'legal'            => [
+            'cookies' => 'Hodor',
+            'privacy' => 'Hodor',
+            'terms'   => 'Hodor',
+        ],
         'routes'           => 'Hodor',
         'routes_expansion' => 'Hodor',
-        'gameversion' => [
-            'update' => 'Hodor',
-            'dungeon'          => [
-                'explore' => 'Hodor',
+        'gameversion'      => [
+            'update'  => 'Hodor',
+            'dungeon' => [
+                'heatmaps' => 'Hodor',
+                'explore'  => 'Hodor',
             ],
         ],
         'dungeonroute'     => [
@@ -83,7 +96,12 @@ return [
                 'edit_npc' => 'Hodor',
             ],
             'npcenemyforces'             => [
+                'new_npc_enemy_forces'  => 'Hodor',
                 'edit_npc_enemy_forces' => 'Hodor',
+            ],
+            'npchealth'                  => [
+                'new_npc_health'  => 'Hodor',
+                'edit_npc_health' => 'Hodor',
             ],
             'spells'                     => [
                 'spells'     => 'Hodor',

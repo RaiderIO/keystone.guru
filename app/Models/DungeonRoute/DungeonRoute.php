@@ -21,6 +21,7 @@ use App\Models\Faction;
 use App\Models\File;
 use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\Interfaces\TracksPageViewInterface;
 use App\Models\KillZone\KillZone;
@@ -139,8 +140,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * @property Collection<RouteAttribute>              $routeattributes
  * @property Collection<DungeonRouteAttribute>       $routeattributesraw
  * @property Collection<DungeonRouteThumbnailJob>    $dungeonRouteThumbnailJobs
- * @property Collection<DungeonRouteThumbnail> $dungeonRouteThumbnails
- * @property Collection<File>                  $thumbnails
+ * @property Collection<DungeonRouteThumbnail>       $dungeonRouteThumbnails
+ * @property Collection<File>                        $thumbnails
  *
  * @method static Builder visible()
  * @method static Builder visibleWithUnlisted()
@@ -785,11 +786,15 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         $dungeon                  = Dungeon::findOrFail($this->dungeon_id);
         $this->mapping_version_id = $dungeon->getCurrentMappingVersion()->id;
 
-        $activeSeason = $seasonService->getCurrentSeason(
-            $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion())
-        ) ?? $seasonService->getMostRecentSeasonForDungeon($dungeon);
-        // Can still be null if there are no seasons for this dungeon, like in Classic
-        $this->season_id = $activeSeason->id ?? null;
+        $userGameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $activeSeason    = null;
+        if ($userGameVersion->has_seasons) {
+            $activeSeason = $seasonService->getCurrentSeason(
+                $userGameVersion->expansion
+            ) ?? $seasonService->getMostRecentSeasonForDungeon($dungeon);
+            // Can still be null if there are no seasons for this dungeon, like in Classic
+            $this->season_id = $activeSeason->id ?? null;
+        }
 
         $this->faction_id = 1;
 //        $this->difficulty     = 1;
@@ -803,27 +808,29 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         $this->title = __('models.dungeonroute.title_temporary_route', ['dungeonName' => __($this->dungeon->name)]);
 
-        $dungeonRouteLevel      = $request->get('dungeon_route_level');
-        $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
-        $this->level_min        = $dungeonRouteLevelParts[0] ?? null;
-        $this->level_max        = $dungeonRouteLevelParts[1] ?? null;
+        $dungeonRouteLevel = $request->get('dungeon_route_level');
+        if ($dungeonRouteLevel !== null) {
+            $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
+            $this->level_min        = $dungeonRouteLevelParts[0] ?? null;
+            $this->level_max        = $dungeonRouteLevelParts[1] ?? null;
 
-        if ($this->level_min === null || $this->level_max === null) {
-            $this->level_min = $this->level_min ?? $activeSeason->key_level_min;
-            $this->level_max = $this->level_max ?? $activeSeason->key_level_max;
-        }
-        if ($this->level_min !== null) {
-            $this->level_min = (int)$this->level_min;
-        }
-        if ($this->level_max !== null) {
-            $this->level_max = (int)$this->level_max;
+            if ($this->level_min === null || $this->level_max === null) {
+                $this->level_min = $this->level_min ?? $activeSeason?->key_level_min;
+                $this->level_max = $this->level_max ?? $activeSeason?->key_level_max;
+            }
+            if ($this->level_min !== null) {
+                $this->level_min = (int)$this->level_min;
+            }
+            if ($this->level_max !== null) {
+                $this->level_max = (int)$this->level_max;
+            }
         }
 
         $this->expires_at = Carbon::now()->addHours(config('keystoneguru.sandbox_dungeon_route_expires_hours'))->toDateTimeString();
 
         $saveResult = $this->save();
-        if ($saveResult) {
-            $this->ensureAffixGroup($seasonService, $expansionService);
+        if ($saveResult && $activeSeason !== null) {
+            $this->ensureAffixGroup($activeSeason);
         }
 
         return $saveResult;
@@ -863,10 +870,15 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         // If it was empty just set Unspecified instead
         $this->faction_id = empty($this->faction_id) ? 1 : $this->faction_id;
 
-        $activeSeason = $seasonService->getUpcomingSeasonForDungeon($this->dungeon) ??
-            $seasonService->getMostRecentSeasonForDungeon($this->dungeon);
-        // Can still be null if there are no seasons for this dungeon, like in Classic
-        $this->season_id = $activeSeason->id ?? null;
+        $userGameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $activeSeason    = null;
+        if ($userGameVersion->has_seasons) {
+            $activeSeason = $seasonService->getUpcomingSeasonForDungeon($this->dungeon) ??
+                $seasonService->getMostRecentSeasonForDungeon($this->dungeon);
+            // Can still be null if there are no seasons for this dungeon, like in Classic
+            $this->season_id = $activeSeason->id ?? null;
+            $this->setRelation('season', $activeSeason);
+        }
 
         //$this->difficulty = $request->get('difficulty', $this->difficulty);
 //        $this->difficulty     = 1;
@@ -885,20 +897,18 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             $this->title = __($this->dungeon->name);
         }
 
-        $dungeonRouteLevel      = $request->get('dungeon_route_level');
-        $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
-        $this->level_min        = $dungeonRouteLevelParts[0] ?? null;
-        $this->level_max        = $dungeonRouteLevelParts[1] ?? null;
+        $dungeonRouteLevel = $request->get('dungeon_route_level');
+        if ($dungeonRouteLevel !== null) {
+            $dungeonRouteLevelParts = explode(';', (string)$dungeonRouteLevel);
+            $this->level_min        = $dungeonRouteLevelParts[0] ?? $activeSeason?->key_level_min;
+            $this->level_max        = $dungeonRouteLevelParts[1] ?? $activeSeason?->key_level_max;
 
-        if ($this->level_min === null || $this->level_max === null) {
-            $this->level_min = $this->level_min ?? $activeSeason->key_level_min;
-            $this->level_max = $this->level_max ?? $activeSeason->key_level_max;
-        }
-        if ($this->level_min !== null) {
-            $this->level_min = (int)$this->level_min;
-        }
-        if ($this->level_max !== null) {
-            $this->level_max = (int)$this->level_max;
+            if ($this->level_min !== null) {
+                $this->level_min = (int)$this->level_min;
+            }
+            if ($this->level_max !== null) {
+                $this->level_max = (int)$this->level_max;
+            }
         }
 
         if ($user?->hasRole(Role::ROLE_ADMIN)) {
@@ -975,15 +985,11 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 // Remove old affixgroups
                 $this->affixgroups()->delete();
 
-                $dungeonActiveSeason = $this->dungeon->getActiveSeason($seasonService);
-
-                if ($dungeonActiveSeason === null) {
-                    $this->ensureAffixGroup($seasonService, $expansionService);
-                } else {
+                if ($activeSeason !== null) {
                     foreach ($newAffixes as $value) {
                         $value = (int)$value;
 
-                        if ($dungeonActiveSeason->affixGroups->filter(static fn(AffixGroup $affixGroup) => $affixGroup->id === $value)->isEmpty()) {
+                        if ($activeSeason->affixGroups->filter(static fn(AffixGroup $affixGroup) => $affixGroup->id === $value)->isEmpty()) {
                             // Attempted to assign an affix that the dungeon cannot have - abort it
                             continue;
                         }
@@ -1008,12 +1014,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                             'affix_group_id'   => $affixGroup->id,
                         ]);
                     }
-                }
 
-                // Reload the affixes relation
-                $this->load('affixes');
-            } else if ($new) {
-                $this->ensureAffixGroup($seasonService, $expansionService);
+                    // Reload the affixes relation
+                    $this->load('affixes');
+                }
+            } else if ($new && $activeSeason !== null) {
+                $this->ensureAffixGroup($activeSeason);
             }
 
             // Instantly generate a placeholder thumbnail for new routes.
@@ -1525,23 +1531,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
      *
      * @throws Exception
      */
-    private function ensureAffixGroup(SeasonServiceInterface $seasonService, ExpansionServiceInterface $expansionService): void
-    {
+    private function ensureAffixGroup(
+        Season $activeSeason
+    ): void {
         if ($this->affixgroups()->count() === 0) {
-            // Fallback to the current expansion's
-            $activeSeason = $this->dungeon->getActiveSeason($seasonService);
-
-            if ($activeSeason === null) {
-                //                logger()->warning('No active season found for dungeon; fallback on current season', [
-                //                    'dungeonroute' => $this->public_key,
-                //                    'dungeon'      => $this->dungeon->name,
-                //                ]);
-
-                $activeSeason = $seasonService->getCurrentSeason(
-                    $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion())
-                );
-            }
-
             // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
             DungeonRouteAffixGroup::create([
                 'affix_group_id'   => $activeSeason->getCurrentAffixGroup()?->id ?? $activeSeason->affixGroups->first()->id,
@@ -1606,7 +1599,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 'brushlines',
                 'paths',
                 'killZones',
-                'livesessions'
+                'livesessions',
             ]);
 
             $dungeonRoute->setConnection('combatlog')->challengeModeRun()->delete();

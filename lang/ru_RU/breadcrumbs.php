@@ -5,13 +5,26 @@ return [
     'home' => [
         'keystone_guru'    => 'Keystone.guru',
         'affixes'          => 'Аффиксы',
-        'changelog'        => 'История изменений',
+        'about'            => '',
+        'credits'          => '',
+        'changelog'        => [
+            'list'    => '',
+            'release' => [
+                'view' => '',
+            ],
+        ],
+        'legal'            => [
+            'cookies' => '',
+            'privacy' => '',
+            'terms'   => '',
+        ],
         'routes'           => 'Маршруты',
         'routes_expansion' => ':expansion маршруты',
-        'gameversion' => [
-            'update' => '',
-            'dungeon'          => [
-                'explore' => '',
+        'gameversion'      => [
+            'update'  => '',
+            'dungeon' => [
+                'heatmaps' => '',
+                'explore'  => '',
             ],
         ],
         'dungeonroute'     => [
@@ -83,7 +96,12 @@ return [
                 'edit_npc' => 'Редактировать НПЦ',
             ],
             'npcenemyforces'             => [
+                'new_npc_enemy_forces'  => '',
                 'edit_npc_enemy_forces' => '',
+            ],
+            'npchealth'                  => [
+                'new_npc_health'  => '',
+                'edit_npc_health' => '',
             ],
             'spells'                     => [
                 'spells'     => 'Способность',

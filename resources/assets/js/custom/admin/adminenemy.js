@@ -475,7 +475,7 @@ class AdminEnemy extends Enemy {
         }
 
         let data = $.extend({}, getHandlebarsDefaultVariables(), {
-            npc_name: this.npc === null ? lang.get('messages.no_npc_found_label') : this.npc.name,
+            npc_name: this.npc === null ? lang.get('messages.no_npc_found_label') : lang.get(this.npc.name),
             enemy_forces: enemyForces,
             healths: healths,
             teeming: (this.teeming === TEEMING_VISIBLE ? 'yes' : (this.teeming === TEEMING_HIDDEN ? TEEMING_HIDDEN : 'no')),

@@ -15,7 +15,11 @@ use App\Models\Floor\Floor;
 
     <script type="text/javascript">
         $(function () {
-            $('#admin_dungeon_speedrun_required_npcs_{{ $difficulty }}_table').DataTable({});
+            $('#admin_dungeon_speedrun_required_npcs_{{ $difficulty }}_table').DataTable({
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+
+                })
+            });
         });
     </script>
 @endsection

@@ -2,6 +2,11 @@
 
 return [
 
+    'category'            => [
+        'class' => '',
+        'item'  => '',
+        'misc'  => '',
+    ],
     'no_attributes'       => '',
     'rogue_shroud_skip'   => '',
     'warlock_gate_skip'   => '',

@@ -6,6 +6,7 @@ return [
         'error' => [
             'mdt_string_parsing_failed'           => '',
             'mdt_string_format_not_recognized'    => 'Формат строки MDT не распознан.',
+            'cli_weakauras_parser_not_found'      => '',
             'invalid_mdt_string'                  => 'Неверная строка MDT',
             'invalid_mdt_string_exception'        => 'Неверная строка MDT: %s',
             'mdt_importer_not_configured'         => 'Импорт MDT настроен неправильно. Пожалуйста, свяжитесь с администратором по поводу этой проблемы.',
@@ -18,15 +19,18 @@ return [
             'mdt_invalid_category'                => 'Неверная категория',
         ],
         'flash' => [
-            'thumbnail_regenerate_result' => '',
-            'caches_dropped_successfully' => 'Кеш сброшен успешно',
-            'releases_exported'           => 'Релизы экспортированы',
-            'exception'                   => [
+            'message_banner_set_successfully' => '',
+            'thumbnail_regenerate_result'     => '',
+            'caches_dropped_successfully'     => 'Кеш сброшен успешно',
+            'releases_exported'               => 'Релизы экспортированы',
+            'exception'                       => [
                 'internal_server_error' => 'Дополнение добавлено в админ панель',
             ],
-            'feature_toggle_activated'    => '',
-            'feature_toggle_deactivated'  => '',
-            'feature_forgotten'           => '',
+            'feature_toggle_activated'        => '',
+            'feature_toggle_deactivated'      => '',
+            'feature_forgotten'               => '',
+            'read_only_mode_disabled'         => '',
+            'read_only_mode_enabled'          => '',
         ],
     ],
     'apidungeonroute'             => [
@@ -103,6 +107,7 @@ return [
             'user_exists'             => 'Пользователь с таким именем уже существует %s. Может быть вы уже зарегистрированы?',
             'email_exists'            => 'Пользователь с таким электронным адресом уже существует %s. Может быть вы уже зарегистрированы?',
             'permission_denied'       => '',
+            'read_only_mode_enabled'  => '',
         ],
     ],
     'register'                    => [
@@ -132,6 +137,7 @@ return [
         'error'           => [
             'mdt_string_parsing_failed'             => '',
             'mdt_string_format_not_recognized'      => 'Формат строки MDT не распознан.',
+            'cli_weakauras_parser_not_found'        => '',
             'invalid_mdt_string_exception'          => 'Недействительная строка MDT: %s',
             'invalid_mdt_string'                    => 'Недействительная строка MDT',
             'mdt_importer_not_configured_properly'  => 'Импорт MDT настроен неправильно. Пожалуйста, свяжитесь с администратором по поводу этой проблемы.',

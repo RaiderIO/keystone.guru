@@ -131,6 +131,7 @@ class DungeonrouteTable extends InlineCode {
             'processing': true,
             'serverSide': true,
             'responsive': true,
+            'searching': false,
             'ajax': {
                 'url': '/ajax/routes',
                 'data': function (d) {
@@ -161,9 +162,9 @@ class DungeonrouteTable extends InlineCode {
             'order': [[1 + (self._viewMode === 'biglist' ? 1 : 0), 'asc']],
             'columns': self._getColumns(),
             'searchCols': self._getDefaultSearchColumns(),
-            'language': {
+            'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
                 'emptyTable': lang.get('messages.datatable_no_routes_in_table')
-            }
+            })
         });
 
         self._dt.on('draw.dt', function (e, settings, json, xhr) {

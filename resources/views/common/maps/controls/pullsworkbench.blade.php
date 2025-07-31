@@ -118,19 +118,20 @@ use Illuminate\Support\Collection;
             <select id="map_killzonessidebar_killzone_spells_modal_select"
                     class="form-control selectpicker"
                     data-live-search="true"
+                    data-none-selected-text="{{ __('view_common.maps.controls.pullsworkbench.modal.spells.select_spells') }}"
                     multiple>
                 @foreach($spellsSelect as $group => $spells)
-                    <optgroup label="{{$group}}">
+                    <optgroup label="{{__($group)}}">
                         @foreach($spells as $spell)
                                 <?php ob_start() ?>
 
                             @include('common.forms.select.imageoption', [
                                 'url' => $spell['icon_url'],
-                                'name' => $spell['name'],
+                                'name' => __($spell['name']),
                             ])
 
                                 <?php $html = ob_get_clean(); ?>
-                            <option value="{{ $spell['id'] }}" data-content="{{{$html}}}">{{ $spell['name'] }}</option>
+                            <option value="{{ $spell['id'] }}" data-content="{{{$html}}}">{{ __($spell['name']) }}</option>
                         @endforeach
                     </optgroup>
                 @endforeach

@@ -30,6 +30,9 @@ use Illuminate\Support\Collection;
             var dt = $('#admin_dungeon_table').DataTable({
                 'aaSorting': [],
                 'lengthMenu': [50],
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+
+                })
             });
 
             dt.on('draw.dt', function (e, settings, json, xhr) {

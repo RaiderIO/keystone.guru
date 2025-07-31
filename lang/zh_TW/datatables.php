@@ -1,0 +1,279 @@
+<?php
+
+return [
+    'emptyTable'     => '表中没有数据',
+    'info'           => '正在显示第 _START_ 至 _END_ 条记录，共 _TOTAL_ 条',
+    'infoEmpty'      => '正在显示第 0 至 0 条记录，共 0 条',
+    'infoFiltered'   => '(筛选自全部 _MAX_ 条记录)',
+    'infoThousands'  => ',',
+    'lengthMenu'     => '显示 _MENU_ 条记录',
+    'loadingRecords' => '正在加载...',
+    'processing'     => '正在处理...',
+    'search'         => '搜索:',
+    'zeroRecords'    => '没有找到匹配的记录',
+    'thousands'      => ',',
+    'paginate'       =>
+        [
+            'first'    => '首页',
+            'last'     => '末页',
+            'next'     => '下页',
+            'previous' => '上页',
+        ],
+    'aria'           =>
+        [
+            'sortAscending'  => ': 激活以按升序排序此列',
+            'sortDescending' => ': 激活以按降序排序此列',
+        ],
+    'autoFill'       =>
+        [
+            'cancel'         => '取消',
+            'fill'           => '用 <i>%d</i> 填充所有单元格',
+            'fillHorizontal' => '水平填充单元格',
+            'fillVertical'   => '垂直填充单元格',
+        ],
+    'buttons'        =>
+        [
+            'collection'      => '集合<span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
+            'colvis'          => '列可见性',
+            'colvisRestore'   => '重置可见性',
+            'copy'            => '复制',
+            'copyKeys'        => '按 Ctrl 或 u2318 + C 键将表中数据复制到系统剪贴板。<br /><br />要取消，请单击此消息或按 Escape 键。',
+            'copySuccess'     =>
+                [
+                    '1' => '已复制 1 行到剪贴板',
+                    '_' => '已复制 %d 行到剪贴板',
+                ],
+            'copyTitle'       => '复制到剪贴板',
+            'csv'             => 'CSV',
+            'excel'           => 'Excel',
+            'pageLength'      =>
+                [
+                    '-1' => '显示所有行',
+                    '_'  => '显示 %d 行',
+                ],
+            'pdf'             => 'PDF',
+            'print'           => '打印',
+            'updateState'     => '更新',
+            'stateRestore'    => '状态 %d',
+            'savedStates'     => '保存的状态',
+            'renameState'     => '重命名',
+            'removeState'     => '删除',
+            'removeAllStates' => '删除所有状态',
+            'createState'     => '创建状态',
+        ],
+    'searchBuilder'  =>
+        [
+            'add'         => '添加条件',
+            'button'      =>
+                [
+                    '0' => '搜索生成器',
+                    '_' => '搜索生成器 (%d)',
+                ],
+            'clearAll'    => '全部清除',
+            'condition'   => '条件',
+            'conditions'  =>
+                [
+                    'date'   =>
+                        [
+                            'after'      => '早于',
+                            'before'     => '晚于',
+                            'between'    => '介于',
+                            'empty'      => '为空',
+                            'equals'     => '等于',
+                            'not'        => '非',
+                            'notBetween' => '不介于',
+                            'notEmpty'   => '非空',
+                        ],
+                    'number' =>
+                        [
+                            'between'    => '介于',
+                            'empty'      => '为空',
+                            'equals'     => '等于',
+                            'gt'         => '大于',
+                            'gte'        => '大于等于',
+                            'lt'         => '小于',
+                            'lte'        => '小于等于',
+                            'not'        => '非',
+                            'notBetween' => '不介于',
+                            'notEmpty'   => '非空',
+                        ],
+                    'string' =>
+                        [
+                            'contains'      => '含有',
+                            'empty'         => '为空',
+                            'endsWith'      => '结尾为',
+                            'equals'        => '等于',
+                            'not'           => '非',
+                            'notEmpty'      => '非空',
+                            'startsWith'    => '开头为',
+                            'notContains'   => '不含有',
+                            'notStartsWith' => '开头不为',
+                            'notEndsWith'   => '结尾不为',
+                        ],
+                    'array'  =>
+                        [
+                            'without'  => '无',
+                            'notEmpty' => '非空',
+                            'not'      => '非',
+                            'contains' => '含有',
+                            'empty'    => '为空',
+                            'equals'   => '等于',
+                        ],
+                ],
+            'data'        => '数据',
+            'deleteTitle' => '删除筛选规则',
+            'leftTitle'   => '组合规则',
+            'logicAnd'    => '与',
+            'logicOr'     => '或',
+            'rightTitle'  => '取消组合规则',
+            'title'       =>
+                [
+                    '0' => '搜索生成器',
+                    '_' => '搜索生成器 (%d)',
+                ],
+            'value'       => '值',
+        ],
+    'searchPanes'    =>
+        [
+            'clearMessage'    => '全部清除',
+            'collapse'        =>
+                [
+                    '0' => '搜索面板',
+                    '_' => '搜索面板 (%d)',
+                ],
+            'count'           => '{total}',
+            'countFiltered'   => '{shown} ({total})',
+            'emptyPanes'      => '没有搜索面板',
+            'loadMessage'     => '正在加载搜索面板...',
+            'title'           => '激活的筛选 - %d',
+            'showMessage'     => '全部显示',
+            'collapseMessage' => '全部折叠',
+        ],
+    'select'         =>
+        [
+            'cells'   =>
+                [
+                    '1' => '已选择 1 个单元格',
+                    '_' => '已选择 %d 个单元格',
+                ],
+            'columns' =>
+                [
+                    '1' => '已选择 1 列',
+                    '_' => '已选择 %d 列',
+                ],
+            'rows'    =>
+                [
+                    '1' => '已选择 1 行',
+                    '_' => '已选择 %d 行',
+                ],
+        ],
+    'datetime'       =>
+        [
+            'previous' => '上月',
+            'next'     => '下月',
+            'hours'    => '时',
+            'minutes'  => '分',
+            'seconds'  => '秒',
+            'unknown'  => '-',
+            'amPm'     =>
+                [
+                    '0' => '上午',
+                    '1' => '下午',
+                ],
+            'weekdays' =>
+                [
+                    '0' => '日',
+                    '1' => '一',
+                    '2' => '二',
+                    '3' => '三',
+                    '4' => '四',
+                    '5' => '五',
+                    '6' => '六',
+                ],
+            'months'   =>
+                [
+                    '0'  => '1月',
+                    '1'  => '2月',
+                    '2'  => '3月',
+                    '3'  => '4月',
+                    '4'  => '5月',
+                    '5'  => '6月',
+                    '6'  => '7月',
+                    '7'  => '8月',
+                    '8'  => '9月',
+                    '9'  => '10月',
+                    '10' => '11月',
+                    '11' => '12月',
+                ],
+        ],
+    'editor'         =>
+        [
+            'close'  => '关闭',
+            'create' =>
+                [
+                    'button' => '新建',
+                    'title'  => '创建新记录',
+                    'submit' => '创建',
+                ],
+            'edit'   =>
+                [
+                    'button' => '编辑',
+                    'title'  => '编辑记录',
+                    'submit' => '更新',
+                ],
+            'remove' =>
+                [
+                    'button'  => '删除',
+                    'title'   => '删除',
+                    'submit'  => '删除',
+                    'confirm' =>
+                        [
+                            '_' => '确定要删除 %d 行？',
+                            '1' => '确定要删除 1 行？',
+                        ],
+                ],
+            'error'  =>
+                [
+                    'system' => '出现了系统错误 (<a target="\\" rel="\\ nofollow" href="\\">更多信息&lt;\\/a&gt;)。</a>',
+                ],
+            'multi'  =>
+                [
+                    'title'   => '多个值',
+                    'info'    => '选择的多条记录的此字段含有不同的值。要编辑并将所有记录的此字段都设为相同的值，请单击或点按这里，否则它们会保持各自的值不变。',
+                    'restore' => '撤销更改',
+                    'noMulti' => '此字段可以单独编辑，不可以组合编辑。',
+                ],
+        ],
+    'stateRestore'   =>
+        [
+            'renameTitle'    => '重命名状态',
+            'renameLabel'    => '%s 的新名称:',
+            'renameButton'   => '重命名',
+            'removeTitle'    => '删除状态',
+            'removeSubmit'   => '删除',
+            'removeJoiner'   => '和',
+            'removeError'    => '删除状态失败。',
+            'removeConfirm'  => '确定要删除 %s？',
+            'emptyStates'    => '没有保存的状态',
+            'emptyError'     => '名称不能为空。',
+            'duplicateError' => '已存在使用此名称的状态。',
+            'creationModal'  =>
+                [
+                    'toggleLabel'   => '包括:',
+                    'title'         => '创建新状态',
+                    'select'        => '选择',
+                    'searchBuilder' => '搜索生成器',
+                    'search'        => '搜索',
+                    'scroller'      => '滚动定位',
+                    'paging'        => '分页',
+                    'order'         => '排序',
+                    'name'          => '名称:',
+                    'columns'       =>
+                        [
+                            'visible' => '列可见性',
+                            'search'  => '列搜索',
+                        ],
+                    'button'        => '创建',
+                ],
+        ],
+];

@@ -908,19 +908,21 @@ return [
         'tazavesh_streets_of_wonder' => [
             'name'   => 'Tazavesh: Streets of Wonder',
             'floors' => [
-                'the_veiled_market'   => 'The Veiled Market',
-                'the_grand_menagerie' => 'The Grand Menagerie',
-                'the_post'            => 'The P.O.S.T.',
-                'myzas_oasis'         => 'Myza\'s Oasis',
+                'the_veiled_market'          => 'The Veiled Market',
+                'the_grand_menagerie'        => 'The Grand Menagerie',
+                'the_post'                   => 'The P.O.S.T.',
+                'myzas_oasis'                => 'Myza\'s Oasis',
+                'tazavesh_streets_of_wonder' => 'Tazavesh: Streets of Wonder',
             ],
         ],
         'tazavesh_so_leahs_gambit'   => [
             'name'   => 'Tazavesh: So\'leah\'s Gambit',
             'floors' => [
-                'stormheim'         => 'Stormheim',
-                'aggramars_vault'   => 'Aggramar\'s Vault',
-                'boralus_harbor'    => 'Boralus Harbor',
-                'the_opulent_nexus' => 'The Opulent Nexus',
+                'stormheim'                => 'Stormheim',
+                'aggramars_vault'          => 'Aggramar\'s Vault',
+                'boralus_harbor'           => 'Boralus Harbor',
+                'the_opulent_nexus'        => 'The Opulent Nexus',
+                'tazavesh_so_leahs_gambit' => 'Tazavesh: So\'leah\'s Gambit',
             ],
         ],
     ],
@@ -1080,6 +1082,12 @@ return [
                 'the_waterworks'      => 'The Waterworks',
                 'the_grid'            => 'The G.R.I.D.',
                 'operation_floodgate' => 'Operation: Floodgate',
+            ],
+        ],
+        'eco_dome_al_dani'           => [
+            'name'   => 'Eco-Dome Al\'Dani',
+            'floors' => [
+                'eco_dome_al_dani' => 'Eco-Dome Al\'Dani',
             ],
         ],
     ],

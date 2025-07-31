@@ -94,9 +94,9 @@
                         }
                     }
                 ],
-                'language': {
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
                     'emptyTable': lang.get('messages.datatable_no_npcs_in_table')
-                }
+                })
             });
         });
     </script>
@@ -106,9 +106,9 @@
     <table id="admin_npc_table" class="tablesorter default_table table-striped">
         <thead>
         <tr>
-            <th width="15%">{{ __('view_admin.npc.list.table_header_id') }}</th>
-            <th width="30%">{{ __('view_admin.npc.list.table_header_name') }}</th>
-            <th width="15%">{{ __('view_admin.npc.list.table_header_dungeon') }}</th>
+            <th width="10%">{{ __('view_admin.npc.list.table_header_id') }}</th>
+            <th width="25%">{{ __('view_admin.npc.list.table_header_name') }}</th>
+            <th width="25%">{{ __('view_admin.npc.list.table_header_dungeon') }}</th>
             <th width="10%">{{ __('view_admin.npc.list.table_header_enemy_forces') }}</th>
             <th width="10%">{{ __('view_admin.npc.list.table_header_enemy_count') }}</th>
             <th width="10%">{{ __('view_admin.npc.list.table_header_classification') }}</th>

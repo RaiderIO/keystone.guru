@@ -15,9 +15,9 @@ class TeamList extends InlineCode {
         this._dt = $('#team_table').DataTable({
             'searching': false,
             'bLengthChange': false,
-            'language': {
+            'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
                 'emptyTable': lang.get('messages.datatable_no_teams_in_table')
-            },
+            })
         });
 
         this._dt.on('click', 'tbody td.clickable', function (clickEvent) {

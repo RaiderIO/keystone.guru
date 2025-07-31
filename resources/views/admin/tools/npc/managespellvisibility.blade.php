@@ -95,7 +95,7 @@ use Illuminate\Support\Collection;
                         <div class="col">
                             <div class="form-element" style="line-height: 2.5">
                                 <a class="spell_wowhead_url-{{ $spell->id }}"
-                                    href="{{ Spell::getWowheadLink($spell->game_version_id, $spell->id, $spell->name) }}"
+                                    href="{{ Spell::getWowheadLink($spell->game_version_id, $spell->id, __($spell->name, [], 'en_US')) }}"
                                    data-wh-icon-size="medium"
                                 >
                                     <img src="{{$spell->icon_url}}" width="32px" alt="{{ __($spell->name) }}"/>

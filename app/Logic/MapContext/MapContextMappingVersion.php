@@ -10,6 +10,8 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class MapContextMappingVersion
@@ -56,8 +58,12 @@ abstract class MapContextMappingVersion extends MapContext
         // Get or set the NPCs
         $npcs = $this->cacheService->remember(sprintf('npcs_%s', $this->context->id), function () {
             return Npc::with('dungeons')
-                ->select('npcs.*')
+                ->selectRaw('npcs.*, translations.translation as name')
                 ->join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
+                ->leftJoin('translations', static function (JoinClause $clause) {
+                    $clause->on('translations.key', 'npcs.name')
+                        ->on('translations.locale', DB::raw('"en_US"'));
+                })
                 ->where('npc_dungeons.dungeon_id', $this->context->id)
                 ->get()
                 ->map(static fn(Npc $npc) => ['id' => $npc->id, 'name' => $npc->name, 'dungeon_ids' => $npc->dungeons->pluck('id')])

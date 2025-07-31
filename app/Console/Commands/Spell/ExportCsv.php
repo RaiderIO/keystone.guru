@@ -42,7 +42,7 @@ class ExportCsv extends Command
                 'id'           => $spell->id,
                 'npc_id'       => optional($npc)->id ?? 'UNKNOWN',
                 'mechanic'     => __($spell->mechanic, [], 'en_US'),
-                'name'         => $spell->name,
+                'name'         => __($spell->name, [], 'en_US'),
                 'dispel_type'  => $spell->dispel_type,
                 'schools'      => Spell::maskToReadableString(Spell::ALL_SCHOOLS, $spell->schools_mask),
                 'miss_types'   => Spell::maskToReadableString(Spell::ALL_MISS_TYPES, $spell->miss_types_mask),

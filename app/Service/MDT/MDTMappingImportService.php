@@ -5,6 +5,7 @@ namespace App\Service\MDT;
 use App\Logic\MDT\Conversion;
 use App\Logic\MDT\Data\MDTDungeon;
 use App\Logic\MDT\Entity\MDTMapPOI;
+use App\Logic\MDT\Entity\MDTPatrol;
 use App\Models\Characteristic;
 use App\Models\Dungeon;
 use App\Models\DungeonFloorSwitchMarker;
@@ -160,24 +161,24 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $npc->encounter_id      = $mdtNpc->getEncounterId();
                 $npc->classification_id ??= NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE];
                 $npc->name              = $mdtNpc->getName();
-                // MDT doesn't always get this right - don't trust it (Watcher Irideus for example)
-                $npc->health_percentage = $npc->health_percentage ?? $mdtNpc->getHealthPercentage();
                 $npc->level             = $mdtNpc->getLevel();
                 $npc->mdt_scale         = $mdtNpc->getScale();
                 $npc->npc_type_id       = NpcType::ALL[$mdtNpc->getCreatureType()] ?? NpcType::UNCATEGORIZED;
                 $npc->truesight         = $mdtNpc->getStealthDetect();
 
-                foreach ($npc->npcDungeons as $npcDungeon) {
-                    // Check if it's already associated
-                    if ($npcDungeon->dungeon_id === $dungeon->id) {
-                        // It is, don't save the attributes
-                        continue;
-                    }
+                // If no dungeons are assigned, OR if the current dungeon is not part of the list
+                if (!$npc->exists) {
+                    $npc->load('npcDungeons');
 
-                    $npcDungeonsAttributes[] = [
-                        'npc_id'     => $npc->id,
-                        'dungeon_id' => $dungeon->id,
-                    ];
+                    if ($npc->npcDungeons->filter(function (NpcDungeon $npcDungeon) use ($dungeon) {
+                        // Check if this NPC is already associated with this dungeon
+                        return $npcDungeon->dungeon_id === $dungeon->id;
+                    })->isEmpty()) {
+                        $npcDungeonsAttributes[] = [
+                            'npc_id'     => $npc->id,
+                            'dungeon_id' => $dungeon->id,
+                        ];
+                    }
                 }
 
                 // Save/update health
@@ -189,8 +190,9 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         'health'          => $mdtNpc->getHealth(),
                     ]);
                 }
-                $npcHealth->health     = $mdtNpc->getHealth();
-                $npcHealth->percentage = $mdtNpc->getHealthPercentage();
+                $npcHealth->health = $mdtNpc->getHealth();
+                // MDT doesn't always get this right - don't trust it (Watcher Irideus for example)
+                $npcHealth->percentage = $npc->health_percentage ?? $mdtNpc->getHealthPercentage();
                 $npcHealth->save();
 
                 // Save characteristics
@@ -322,8 +324,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
                     $spellsAttributes[$spellId] = [
                         'id'             => $spellId,
-                        'category'       => sprintf('spells.category.%s', Spell::CATEGORY_UNKNOWN),
-                        'cooldown_group' => sprintf('spells.cooldown_group.%s', Spell::COOLDOWN_GROUP_UNKNOWN),
+                        'category'       => sprintf('spellcategory.%s', Spell::CATEGORY_UNKNOWN),
+                        'cooldown_group' => sprintf('spellcooldowngroup.%s', Spell::COOLDOWN_GROUP_UNKNOWN),
                         'dispel_type'    => Spell::DISPEL_TYPE_UNKNOWN,
                         'icon_name'      => '',
                         'name'           => '',
@@ -386,8 +388,8 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
             $this->importNpcsDataFromMDT($mdtDungeon, $dungeon);
 
-            // Get a list of NPCs and update/save them
-            $npcs = $dungeon->npcs->keyBy('id');
+            // Get a list of NPCs and update/save them (re-fetch the list to include any new NPCs)
+            $npcs = $dungeon->npcs()->get()->keyBy('id');
 
             foreach ($mdtDungeon->getMDTNPCs() as $mdtNpc) {
                 /** @var Npc|null $npc */
@@ -658,6 +660,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         continue;
                     }
 
+                    // @TODO Check based on existing enemy patrols if this patrol already exists
+                    // We check the MDTPolyline to see if it equals the one we are about to save
+                    // If it does, we re-import the existing enemy patrol instead (since it may have been altered manually)
+                    // Not doing this would overwrite any manual changes made to the enemy patrols
+                    // @TODO Also, import any enemy patrols created that do not have a MDT polyline
+                    // These patrols may be linked to connecting portals or skip icons together.
+                    // They just use a patrol to make it look nice.
                     $vertices = [];
                     foreach ($mdtNpcClone['patrol'] as $xy) {
                         $latLng     = Conversion::convertMDTCoordinateToLatLng($xy, $facadeFloor ?? $savedEnemy->floor);
@@ -680,7 +689,27 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     if ($polyLine !== null) {
                         $this->log->importEnemyPatrolsSaveNewPolyline($polyLine->id);
                     } else {
-                        throw new Exception(sprintf('Unable to save polyline!'));
+                        throw new Exception('Unable to save polyline!');
+                    }
+
+                    // MDT Polyline
+                    $mdtPolyLine = Polyline::create([
+                        'model_id'       => -1,
+                        'model_class'    => MDTPatrol::class,
+                        'color'          => '#003280',
+                        'color_animated' => null,
+                        'weight'         => 2,
+                        // Save the direct X and Y coordinates as lat/lng so we can echo it back later exactly
+                        // This polyline is not meant to be used for display, but rather to be used for MDT
+                        'vertices_json'  => json_encode(array_values(array_map(fn(array $v) => [
+                            'lat' => $v['y'],
+                            'lng' => $v['x'],
+                        ], $mdtNpcClone['patrol']))),
+                    ]);
+                    if ($mdtPolyLine !== null) {
+                        $this->log->importEnemyPatrolsSaveNewMdtPolyline($mdtPolyLine->id);
+                    } else {
+                        throw new Exception('Unable to save MDT polyline!');
                     }
 
                     // Enemy patrols
@@ -688,6 +717,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         'mapping_version_id' => $newMappingVersion->id,
                         'floor_id'           => $savedEnemy->floor_id,
                         'polyline_id'        => $polyLine->id,
+                        'mdt_polyline_id'    => $mdtPolyLine->id,
                         'mdt_npc_id'         => $mdtNPC->getId(),
                         'mdt_id'             => $mdtCloneIndex,
                         'teeming'            => null,
@@ -696,7 +726,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     if ($enemyPatrol !== null) {
                         $this->log->importEnemyPatrolsSaveNewEnemyPatrol($enemyPatrol->id);
                     } else {
-                        throw new Exception(sprintf('Unable to save enemy patrol!'));
+                        throw new Exception('Unable to save enemy patrol!');
                     }
 
                     // Couple polyline to enemy patrol
@@ -704,12 +734,20 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     if ($polyLineSaveResult) {
                         $this->log->importEnemyPatrolsCoupleEnemyPatrolToPolyline($enemyPatrol->id, $polyLine->id);
                     } else {
-                        throw new Exception(sprintf('Unable to save polyline!'));
+                        throw new Exception('Unable to save polyline!');
+                    }
+                    // Couple mdt polyline to enemy patrol
+                    $mdtPolyLineSaveResult = $mdtPolyLine->update(['model_id' => $enemyPatrol->id]);
+                    if ($mdtPolyLineSaveResult) {
+                        $this->log->importEnemyPatrolsCoupleEnemyPatrolToPolyline($enemyPatrol->id, $polyLine->id);
+                    } else {
+                        throw new Exception('Unable to save polyline!');
                     }
 
                     // Couple enemy/enemies to enemy patrol
                     if ($savedEnemy->enemy_pack_id !== null) {
-                        $enemyUpdateResult = Enemy::where('enemy_pack_id', $savedEnemy->enemy_pack_id)->update(['enemy_patrol_id' => $enemyPatrol->id]);
+                        $enemyUpdateResult = Enemy::where('enemy_pack_id', $savedEnemy->enemy_pack_id)
+                            ->update(['enemy_patrol_id' => $enemyPatrol->id]);
                     } else {
                         $enemyUpdateResult = $savedEnemy->update(['enemy_patrol_id' => $enemyPatrol->id]);
                     }
@@ -717,7 +755,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     if ($enemyUpdateResult) {
                         $this->log->importEnemyPatrolsCoupleEnemiesToEnemyPatrol($enemyPatrol->id);
                     } else {
-                        throw new Exception(sprintf('Unable to update enemy to have attached patrol!'));
+                        throw new Exception('Unable to update enemy to have attached patrol!');
                     }
                 }
             }
@@ -739,10 +777,14 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $this->log->importMapPOIsMDTHasMapPOIs();
 
                 $mapIconTypeMapping = [
-                    MDTMapPOI::TYPE_GRAVEYARD        => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD],
-                    MDTMapPOI::TYPE_DUNGEON_ENTRANCE => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
-                    MDTMapPOI::TYPE_PRIORY_ITEM      => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_PRIORY_BLESSING_OF_THE_SACRED_FLAME],
-                    MDTMapPOI::TYPE_FLOODGATE_ITEM   => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION],
+                    MDTMapPOI::TYPE_GRAVEYARD               => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GRAVEYARD],
+                    MDTMapPOI::TYPE_DUNGEON_ENTRANCE        => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_DUNGEON_START],
+                    MDTMapPOI::TYPE_PRIORY_ITEM             => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_PRIORY_BLESSING_OF_THE_SACRED_FLAME],
+                    MDTMapPOI::TYPE_FLOODGATE_ITEM          => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_FLOODGATE_WEAPONS_STOCKPILE_EXPLOSION],
+                    MDTMapPOI::TYPE_ECO_DOME_AL_DANI_ITEM_1 => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_SHATTER_CONDUIT],
+                    MDTMapPOI::TYPE_ECO_DOME_AL_DANI_ITEM_2 => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_DISRUPTION_GRENADE],
+                    MDTMapPOI::TYPE_ECO_DOME_AL_DANI_ITEM_3 => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_ECO_DOME_AL_DANI_KARESHI_SURGE],
+                    MDTMapPOI::TYPE_GENERAL_NOTE            => MapIconType::ALL[MapIconType::MAP_ICON_TYPE_EXCLAMATION_YELLOW],
                 ];
 
                 foreach ($mdtMapPOIs as $mdtMapPOI) {

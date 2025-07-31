@@ -57,6 +57,9 @@ $gameVersionsSelect   = $allGameVersions
                 'order': [[3, 'desc']],
                 // Amount per page
                 'pageLength': 25,
+                'language': $.extend({}, lang.messages[`${lang.locale}.datatables`], {
+
+                })
             });
 
             $('.apply-health').on('click', function (e) {
