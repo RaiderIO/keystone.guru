@@ -71,6 +71,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                     }
                 }
             }
+
             $enemy->load(['npc', 'npc.enemyForces', 'floor'])->makeHidden(['floor']);
             // Perform floor change and move enemy to the correct location on the new floor
             if ($previousFloor !== null && $enemy->floor->id !== $previousFloor->id) {
@@ -78,6 +79,13 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                 $newLatLng = $coordinatesService->calculateMapLocationForIngameLocation($ingameXY->setFloor($enemy->floor));
 
                 $enemy->update($newLatLng->toArray());
+            }
+
+            $enemy->npc->name = __($enemy->npc->name);
+            foreach ($enemy->npc->spells as $spell) {
+                $spell->name           = __($spell->name);
+                $spell->category       = __($spell->category);
+                $spell->cooldown_group = __($spell->cooldown_group);
             }
         });
     }
