@@ -3340,14 +3340,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -130.139,
         "lng": 297.5801,
-        "kill_priority": null
+        "kill_priority": -1
     },
     {
         "id": 98981,
@@ -3615,7 +3615,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -4240,14 +4240,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -153.0108,
         "lng": 151.3276,
-        "kill_priority": null
+        "kill_priority": -1
     },
     {
         "id": 99017,
@@ -4265,7 +4265,7 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
@@ -4340,14 +4340,14 @@
         "teeming": null,
         "faction": "any",
         "required": 0,
-        "skippable": 0,
+        "skippable": 1,
         "hyper_respawn": 0,
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
         "lat": -121.0368,
         "lng": 152.9116,
-        "kill_priority": null
+        "kill_priority": -1
     },
     {
         "id": 99021,
@@ -4595,8 +4595,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -130.8046,
-        "lng": 160.0569,
+        "lat": -128.7188,
+        "lng": 159.3125,
         "kill_priority": null
     },
     {
