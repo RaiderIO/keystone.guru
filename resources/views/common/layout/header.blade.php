@@ -61,7 +61,7 @@ if (Feature::active(Heatmap::class) && $currentUserGameVersion->key === GameVers
     ];
 }
 
-$navs[route('dungeon.explore.list')] = [
+$navs[route('dungeon.explore.gameversion.list', ['gameVersion' => $currentUserGameVersion])] = [
     'fa'   => 'fas fa-compass',
     'text' => __('view_common.layout.header.explore'),
 ];
