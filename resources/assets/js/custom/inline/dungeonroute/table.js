@@ -32,22 +32,6 @@ class DungeonrouteTable extends InlineCode {
         let self = this;
 
         $('#dungeonroute_filter').unbind('click').bind('click', function () {
-            // Build the search parameters
-            let dungeonId = $('#dungeonroute_search_dungeon_id').val();
-            let affixes = $('#affixes').val();
-            let attributes = $('#attributes').val();
-
-            // Find wherever the columns are we're looking for, then filter using them
-            // https://stackoverflow.com/questions/32598279/how-to-get-name-of-datatable-column
-            $.each(self._dt.settings().init().columns, function (index, value) {
-                if (value.name === 'dungeon_id') {
-                    self._dt.column(index).search(dungeonId);
-                } else if (value.name === 'affixes.id') {
-                    self._dt.column(index).search(affixes);
-                } else if (value.name === 'routeattributes.name') {
-                    self._dt.column(index).search(attributes);
-                }
-            });
             self._dt.draw();
         });
 
@@ -111,6 +95,8 @@ class DungeonrouteTable extends InlineCode {
     refreshTable() {
         let self = this;
 
+        console.log('Refreshing table with view mode', self._viewMode);
+
         // Send cookie
         Cookies.set('routes_viewmode', self._viewMode, cookieDefaultAttributes);
 
@@ -135,6 +121,23 @@ class DungeonrouteTable extends InlineCode {
             'ajax': {
                 'url': '/ajax/routes',
                 'data': function (d) {
+                    let dt = $element.DataTable();
+
+                    // Map columns to the html select elements that control them
+                    const searchMap = {
+                        'dungeon_id': $('#dungeonroute_search_dungeon_id').val(),
+                        'affixes.id': $('#affixes').val(),
+                        'routeattributes.name': $('#attributes').val()
+                    };
+
+                    dt.columns().every(function () {
+                        const column = this;
+                        const name = column.settings()[0].aoColumns[column.index()].name;
+
+                        if (searchMap[name] !== undefined) {
+                            d.columns[column.index()].search.value = searchMap[name];
+                        }
+                    });
                     d.requirements = $('#dungeonroute_requirements_select').val();
                     d.tags = $('#dungeonroute_tags_select').val();
                     d = $.extend(d, self._tableView.getAjaxParameters());
@@ -208,7 +211,7 @@ class DungeonrouteTable extends InlineCode {
                 // Only link to edit page when YOU are the author of the route.
                 // Maybe you have access to edit the route through a team but we're not checking that here
                 (self._tableView.getName() === 'profile' && authorId === self.options.currentUserId ?
-                `/${key}/edit` : `/${key}`)
+                    `/${key}/edit` : `/${key}`)
             );
         });
 
@@ -395,7 +398,7 @@ class DungeonrouteTable extends InlineCode {
             actions: {
                 'title': lang.get('messages.actions_label'),
                 'render': function (data, type, row, meta) {
-                    if(row.author.id !== self.options.currentUserId  && !isUserAdmin) {
+                    if (row.author.id !== self.options.currentUserId && !isUserAdmin) {
                         return '';
                     }
 
