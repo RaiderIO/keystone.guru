@@ -1,0 +1,37 @@
+{
+    "id": 312,
+    "release_changelog_id": 319,
+    "version": "v13.8.1",
+    "title": "Dungeon selector in route table filters now works again",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-08-02T19:39:09+00:00",
+    "updated_at": "2025-08-02T19:39:09+00:00",
+    "changelog": {
+        "id": 319,
+        "release_id": 312,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 319,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2912,
+                "change": "All season 3 dungeons now have skippable enemies properly marked (this is required for the live sessions to work properly)."
+            },
+            {
+                "release_changelog_id": 319,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2918,
+                "change": "The navigation header now properly highlights again if you're visiting a page of said header."
+            },
+            {
+                "release_changelog_id": 319,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2919,
+                "change": "Dungeon selector in route list no longer always filters on season 2 (the default) (thanks Rubyurek!)"
+            }
+        ]
+    }
+}
