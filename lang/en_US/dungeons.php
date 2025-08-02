@@ -1085,9 +1085,9 @@ return [
             ],
         ],
         'eco_dome_al_dani'           => [
-            'name'   => 'Eco-Dome Al\'Dani',
+            'name'   => 'Eco-Dome Al\'dani',
             'floors' => [
-                'eco_dome_al_dani' => 'Eco-Dome Al\'Dani',
+                'eco_dome_al_dani' => 'Eco-Dome Al\'dani',
             ],
         ],
     ],

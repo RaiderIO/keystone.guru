@@ -138,7 +138,19 @@ $navs[route('dungeon.explore.gameversion.list', ['gameVersion' => $currentUserGa
                         </li>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link pr-3 {{ str_starts_with(Request::url(), $route) ? 'active' : '' }}"
+                                <?php
+                                // Check if the route that we're currently on is the same as the route in the nav
+                                // If so, show it as active
+                                $active    = '';
+                                $parsedUrl = (parse_url($route));
+                                if (is_array($parsedUrl)) {
+                                    $routePath = trim($parsedUrl['path'], '/');
+                                    if (Str::startsWith($routePath, Request::path())) {
+                                        $active = 'active';
+                                    }
+                                }
+                                ?>
+                            <a class="nav-link pr-3 {{ $active }}"
                                href="{{ $route }}">
                                 @isset($opts['fa'])
                                     <i class="{{ $opts['fa'] }}"></i>
