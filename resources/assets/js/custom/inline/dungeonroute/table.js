@@ -95,8 +95,6 @@ class DungeonrouteTable extends InlineCode {
     refreshTable() {
         let self = this;
 
-        console.log('Refreshing table with view mode', self._viewMode);
-
         // Send cookie
         Cookies.set('routes_viewmode', self._viewMode, cookieDefaultAttributes);
 
