@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'all'            => 'All',
     'cd_external'    => 'CD External',
     'cd_group'       => 'CD Group',

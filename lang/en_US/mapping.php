@@ -83,11 +83,6 @@ return [
                 'grisly_curio'           => 'Grisly Curio',
                 'exit'                   => 'Exit',
             ],
-            'tazavesh_streets_of_wonder' => [
-                'bazaar_event_wave_one'   => 'Bazaar Event: Wave 1',
-                'bazaar_event_wave_two'   => 'Bazaar Event: Wave 2',
-                'bazaar_event_wave_three' => 'Bazaar Event: Wave 3',
-            ],
             'theater_of_pain'            => [
                 'start'                => 'Start',
                 'necrolord_banner'     => 'Necrolord: Click Necrolord Banners to grant a 5-minute 10% speed and versatility buff to all party members',
@@ -96,6 +91,11 @@ return [
                 'miniboss_pick_one'    => 'Only one is available - pick one and not both',
                 'teleporter'           => 'Teleporter',
                 'exit'                 => 'Exit',
+            ],
+            'tazavesh_streets_of_wonder' => [
+                'bazaar_event_wave_one'   => 'Bazaar Event: Wave 1',
+                'bazaar_event_wave_two'   => 'Bazaar Event: Wave 2',
+                'bazaar_event_wave_three' => 'Bazaar Event: Wave 3',
             ],
         ],
         'tww'    => [

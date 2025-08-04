@@ -150,5 +150,5 @@ return [
      | Wotuu: HERE IT WANTS DASHES BUT IT EXPORTS IT AS UNDERSCORES, YOU TELL ME MAN
      */
 
-    'source_language' => 'en-US',
+    'source_language' => 'en_US',
 ];

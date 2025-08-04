@@ -109,4 +109,5 @@ return [
     'eco_dome_al_dani_shatter_conduit'      => 'Shatter Conduit',
     'eco_dome_al_dani_disruption_grenade'   => 'Disruption Grenade',
     'eco_dome_al_dani_kareshi_surge'        => 'K\'areshi Surge',
+
 ];

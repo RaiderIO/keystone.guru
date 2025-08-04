@@ -12157,32 +12157,31 @@
         },
         {
             "name": "lukasss93/laravel-larex",
-            "version": "v4.5.0",
+            "version": "v4.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Lukasss93/laravel-larex.git",
-                "reference": "d749ee4b543cdcc2ef5f7c60e18a39bf7c2e50a1"
+                "reference": "c5b4ff804d9e24f9566732fff5a2110a50255a92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Lukasss93/laravel-larex/zipball/d749ee4b543cdcc2ef5f7c60e18a39bf7c2e50a1",
-                "reference": "d749ee4b543cdcc2ef5f7c60e18a39bf7c2e50a1",
+                "url": "https://api.github.com/repos/Lukasss93/laravel-larex/zipball/c5b4ff804d9e24f9566732fff5a2110a50255a92",
+                "reference": "c5b4ff804d9e24f9566732fff5a2110a50255a92",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-json": "*",
-                "illuminate/support": "^8.0|^9.0|^10.0|^11.0",
-                "loilo/fuse": "^6.4.6",
+                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0",
+                "loilo/fuse": "^6.4.6|^7.1",
                 "php": "^8.0",
-                "spatie/laravel-collection-macros": "^7.12",
+                "spatie/laravel-collection-macros": "^7.12|^8.0",
                 "spatie/simple-excel": "^3.0.1"
             },
             "require-dev": {
-                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0",
-                "pestphp/pest": "^v1.0|^v2.0",
-                "psalm/plugin-laravel": "^2.0",
-                "vimeo/psalm": "^5.0"
+                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0|^10.0",
+                "pestphp/pest": "^v1.0|^v2.0|^3.7",
+                "vimeo/psalm": "^5.0|^6.7"
             },
             "type": "library",
             "extra": {
@@ -12222,7 +12221,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Lukasss93/laravel-larex/issues",
-                "source": "https://github.com/Lukasss93/laravel-larex/tree/v4.5.0"
+                "source": "https://github.com/Lukasss93/laravel-larex/tree/v4.6.0"
             },
             "funding": [
                 {
@@ -12230,7 +12229,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-03-15T00:02:07+00:00"
+            "time": "2025-02-20T01:29:39+00:00"
         },
         {
             "name": "lukasss93/laravel-larex-crowdin",

@@ -1,279 +1,247 @@
 <?php
 
 return [
-    'emptyTable'     => 'Nenhum registro encontrado',
-    'info'           => 'Mostrando de _START_ até _END_ de _TOTAL_ registros',
-    'infoEmpty'      => 'Mostrando 0 até 0 de 0 registro(s)',
-    'infoFiltered'   => '(Filtrados de _MAX_ registros)',
-    'infoThousands'  => '.',
-    'lengthMenu'     => 'Exibir _MENU_ resultados por página',
+
+    'emptyTable' => 'Nenhum registro encontrado',
+    'info' => 'Mostrando de _START_ até _END_ de _TOTAL_ registros',
+    'infoEmpty' => 'Mostrando 0 até 0 de 0 registro(s)',
+    'infoFiltered' => '(Filtrados de _MAX_ registros)',
+    'infoThousands' => '.',
+    'lengthMenu' => 'Exibir _MENU_ resultados por página',
     'loadingRecords' => 'Carregando...',
-    'processing'     => 'Carregando...',
-    'search'         => 'Pesquisar',
-    'zeroRecords'    => 'Nenhum registro encontrado',
-    'thousands'      => '.',
-    'paginate'       =>
-        [
-            'first'    => 'Primeiro',
-            'last'     => 'Último',
-            'next'     => 'Próximo',
-            'previous' => 'Anterior',
+    'processing' => 'Carregando...',
+    'search' => 'Pesquisar',
+    'zeroRecords' => 'Nenhum registro encontrado',
+    'thousands' => '.',
+    'paginate' => [
+        'first' => 'Primeiro',
+        'last' => 'Último',
+        'next' => 'Próximo',
+        'previous' => 'Anterior',
+    ],
+    'aria' => [
+        'sortAscending' => ': Ordenar colunas de forma ascendente',
+        'sortDescending' => ': Ordenar colunas de forma descendente',
+    ],
+    'autoFill' => [
+        'cancel' => 'Cancelar',
+        'fill' => 'Preencher todas as células com',
+        'fillHorizontal' => 'Preencher células horizontalmente',
+        'fillVertical' => 'Preencher células verticalmente',
+    ],
+    'buttons' => [
+        'collection' => 'Coleção  <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
+        'colvis' => 'Visibilidade da Coluna',
+        'colvisRestore' => 'Restaurar Visibilidade',
+        'copy' => 'Copiar',
+        'copyKeys' => 'Pressione ctrl ou u2318 + C para copiar os dados da tabela para a área de transferência do sistema. Para cancelar, clique nesta mensagem ou pressione Esc..',
+        'copySuccess' => [
+            1 => 'Uma linha copiada com sucesso',
+            '_' => '%d linhas copiadas com sucesso',
         ],
-    'aria'           =>
-        [
-            'sortAscending'  => ': Ordenar colunas de forma ascendente',
-            'sortDescending' => ': Ordenar colunas de forma descendente',
+        'copyTitle' => 'Copiar para a Área de Transferência',
+        'csv' => 'CSV',
+        'excel' => 'Excel',
+        'pageLength' => [
+            -1 => 'Mostrar todos os registros',
+            '_' => 'Mostrar %d registros',
         ],
-    'autoFill'       =>
-        [
-            'cancel'         => 'Cancelar',
-            'fill'           => 'Preencher todas as células com',
-            'fillHorizontal' => 'Preencher células horizontalmente',
-            'fillVertical'   => 'Preencher células verticalmente',
+        'pdf' => 'PDF',
+        'print' => 'Imprimir',
+        'updateState' => 'Atualizar',
+        'stateRestore' => 'Estado %d',
+        'savedStates' => 'Estados salvos',
+        'renameState' => 'Renomear',
+        'removeState' => 'Remover',
+        'removeAllStates' => 'Remover todos os estados',
+        'createState' => 'Criar estado',
+    ],
+    'searchBuilder' => [
+        'add' => 'Adicionar Condição',
+        'button' => [
+            0 => 'Construtor de Pesquisa',
+            '_' => 'Construtor de Pesquisa (%d)',
         ],
-    'buttons'        =>
-        [
-            'collection'      => 'Coleção  <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
-            'colvis'          => 'Visibilidade da Coluna',
-            'colvisRestore'   => 'Restaurar Visibilidade',
-            'copy'            => 'Copiar',
-            'copyKeys'        => 'Pressione ctrl ou u2318 + C para copiar os dados da tabela para a área de transferência do sistema. Para cancelar, clique nesta mensagem ou pressione Esc..',
-            'copySuccess'     =>
-                [
-                    '1' => 'Uma linha copiada com sucesso',
-                    '_' => '%d linhas copiadas com sucesso',
-                ],
-            'copyTitle'       => 'Copiar para a Área de Transferência',
-            'csv'             => 'CSV',
-            'excel'           => 'Excel',
-            'pageLength'      =>
-                [
-                    '-1' => 'Mostrar todos os registros',
-                    '_'  => 'Mostrar %d registros',
-                ],
-            'pdf'             => 'PDF',
-            'print'           => 'Imprimir',
-            'updateState'     => 'Atualizar',
-            'stateRestore'    => 'Estado %d',
-            'savedStates'     => 'Estados salvos',
-            'renameState'     => 'Renomear',
-            'removeState'     => 'Remover',
-            'removeAllStates' => 'Remover todos os estados',
-            'createState'     => 'Criar estado',
+        'clearAll' => 'Limpar Tudo',
+        'condition' => 'Condição',
+        'conditions' => [
+            'date' => [
+                'after' => 'Depois',
+                'before' => 'Antes',
+                'between' => 'Entre',
+                'empty' => 'Vazio',
+                'equals' => 'Igual',
+                'not' => 'Não',
+                'notBetween' => 'Não Entre',
+                'notEmpty' => 'Não Vazio',
+            ],
+            'number' => [
+                'between' => 'Entre',
+                'empty' => 'Vazio',
+                'equals' => 'Igual',
+                'gt' => 'Maior Que',
+                'gte' => 'Maior ou Igual a',
+                'lt' => 'Menor Que',
+                'lte' => 'Menor ou Igual a',
+                'not' => 'Não',
+                'notBetween' => 'Não Entre',
+                'notEmpty' => 'Não Vazio',
+            ],
+            'string' => [
+                'contains' => 'Contém',
+                'empty' => 'Vazio',
+                'endsWith' => 'Termina Com',
+                'equals' => 'Igual',
+                'not' => 'Não',
+                'notEmpty' => 'Não Vazio',
+                'startsWith' => 'Começa Com',
+                'notContains' => 'Não contém',
+                'notStartsWith' => 'Não começa com',
+                'notEndsWith' => 'Não termina com',
+            ],
+            'array' => [
+                'without' => 'Não possui',
+                'notEmpty' => 'Não vazio',
+                'not' => 'Não',
+                'contains' => 'Contém',
+                'empty' => 'Vazio',
+                'equals' => 'Igual à',
+            ],
         ],
-    'searchBuilder'  =>
-        [
-            'add'         => 'Adicionar Condição',
-            'button'      =>
-                [
-                    '0' => 'Construtor de Pesquisa',
-                    '_' => 'Construtor de Pesquisa (%d)',
-                ],
-            'clearAll'    => 'Limpar Tudo',
-            'condition'   => 'Condição',
-            'conditions'  =>
-                [
-                    'date'   =>
-                        [
-                            'after'      => 'Depois',
-                            'before'     => 'Antes',
-                            'between'    => 'Entre',
-                            'empty'      => 'Vazio',
-                            'equals'     => 'Igual',
-                            'not'        => 'Não',
-                            'notBetween' => 'Não Entre',
-                            'notEmpty'   => 'Não Vazio',
-                        ],
-                    'number' =>
-                        [
-                            'between'    => 'Entre',
-                            'empty'      => 'Vazio',
-                            'equals'     => 'Igual',
-                            'gt'         => 'Maior Que',
-                            'gte'        => 'Maior ou Igual a',
-                            'lt'         => 'Menor Que',
-                            'lte'        => 'Menor ou Igual a',
-                            'not'        => 'Não',
-                            'notBetween' => 'Não Entre',
-                            'notEmpty'   => 'Não Vazio',
-                        ],
-                    'string' =>
-                        [
-                            'contains'      => 'Contém',
-                            'empty'         => 'Vazio',
-                            'endsWith'      => 'Termina Com',
-                            'equals'        => 'Igual',
-                            'not'           => 'Não',
-                            'notEmpty'      => 'Não Vazio',
-                            'startsWith'    => 'Começa Com',
-                            'notContains'   => 'Não contém',
-                            'notStartsWith' => 'Não começa com',
-                            'notEndsWith'   => 'Não termina com',
-                        ],
-                    'array'  =>
-                        [
-                            'without'  => 'Não possui',
-                            'notEmpty' => 'Não vazio',
-                            'not'      => 'Não',
-                            'contains' => 'Contém',
-                            'empty'    => 'Vazio',
-                            'equals'   => 'Igual à',
-                        ],
-                ],
-            'data'        => 'Data',
-            'deleteTitle' => 'Excluir regra de filtragem',
-            'leftTitle'   => 'Critérios Externos',
-            'logicAnd'    => 'E',
-            'logicOr'     => 'Ou',
-            'rightTitle'  => 'Critérios Internos',
-            'title'       =>
-                [
-                    '0' => 'Construtor de Pesquisa',
-                    '_' => 'Construtor de Pesquisa (%d)',
-                ],
-            'value'       => 'Valor',
+        'data' => 'Data',
+        'deleteTitle' => 'Excluir regra de filtragem',
+        'leftTitle' => 'Critérios Externos',
+        'logicAnd' => 'E',
+        'logicOr' => 'Ou',
+        'rightTitle' => 'Critérios Internos',
+        'title' => [
+            0 => 'Construtor de Pesquisa',
+            '_' => 'Construtor de Pesquisa (%d)',
         ],
-    'searchPanes'    =>
-        [
-            'clearMessage'    => 'Limpar Tudo',
-            'collapse'        =>
-                [
-                    '0' => 'Painéis de Pesquisa',
-                    '_' => 'Painéis de Pesquisa (%d)',
-                ],
-            'count'           => '{total}',
-            'countFiltered'   => '{shown} ({total})',
-            'emptyPanes'      => 'Nenhum Painel de Pesquisa',
-            'loadMessage'     => 'Carregando Painéis de Pesquisa...',
-            'title'           => 'Filtros Ativos',
-            'showMessage'     => 'Mostrar todos',
-            'collapseMessage' => 'Fechar todos',
+        'value' => 'Valor',
+    ],
+    'searchPanes' => [
+        'clearMessage' => 'Limpar Tudo',
+        'collapse' => [
+            0 => 'Painéis de Pesquisa',
+            '_' => 'Painéis de Pesquisa (%d)',
         ],
-    'select'         =>
-        [
-            'cells'   =>
-                [
-                    '1' => '1 célula selecionada',
-                    '_' => '%d células selecionadas',
-                ],
-            'columns' =>
-                [
-                    '1' => '1 coluna selecionada',
-                    '_' => '%d colunas selecionadas',
-                ],
-            'rows'    =>
-                [
-                    '1' => 'Selecionado 1 linha',
-                    '_' => 'Selecionado %d linhas',
-                ],
+        'count' => '{total}',
+        'countFiltered' => '{shown} ({total})',
+        'emptyPanes' => 'Nenhum Painel de Pesquisa',
+        'loadMessage' => 'Carregando Painéis de Pesquisa...',
+        'title' => 'Filtros Ativos',
+        'showMessage' => 'Mostrar todos',
+        'collapseMessage' => 'Fechar todos',
+    ],
+    'select' => [
+        'cells' => [
+            1 => '1 célula selecionada',
+            '_' => '%d células selecionadas',
         ],
-    'datetime'       =>
-        [
-            'previous' => 'Anterior',
-            'next'     => 'Próximo',
-            'hours'    => 'Hora',
-            'minutes'  => 'Minuto',
-            'seconds'  => 'Segundo',
-            'unknown'  => '-',
-            'amPm'     =>
-                [
-                    '0' => 'am',
-                    '1' => 'pm',
-                ],
-            'weekdays' =>
-                [
-                    '0' => 'Dom',
-                    '1' => 'Seg',
-                    '2' => 'Ter',
-                    '3' => 'Qua',
-                    '4' => 'Qui',
-                    '5' => 'Sex',
-                    '6' => 'Sáb',
-                ],
-            'months'   =>
-                [
-                    '0'  => 'Janeiro',
-                    '1'  => 'Fevereiro',
-                    '2'  => 'Março',
-                    '3'  => 'Abril',
-                    '4'  => 'Maio',
-                    '5'  => 'Junho',
-                    '6'  => 'Julho',
-                    '7'  => 'Agosto',
-                    '8'  => 'Setembro',
-                    '9'  => 'Outubro',
-                    '10' => 'Novembro',
-                    '11' => 'Dezembro',
-                ],
+        'columns' => [
+            1 => '1 coluna selecionada',
+            '_' => '%d colunas selecionadas',
         ],
-    'editor'         =>
-        [
-            'close'  => 'Fechar',
-            'create' =>
-                [
-                    'button' => 'Novo',
-                    'title'  => 'Criar novo registro',
-                    'submit' => 'Criar',
-                ],
-            'edit'   =>
-                [
-                    'button' => 'Editar',
-                    'title'  => 'Editar registro',
-                    'submit' => 'Atualizar',
-                ],
-            'remove' =>
-                [
-                    'button'  => 'Remover',
-                    'title'   => 'Remover registro',
-                    'submit'  => 'Remover',
-                    'confirm' =>
-                        [
-                            '_' => 'Tem certeza que quer deletar %d linhas?',
-                            '1' => 'Tem certeza que quer deletar 1 linha?',
-                        ],
-                ],
-            'error'  =>
-                [
-                    'system' => 'Ocorreu um erro no sistema (<a target="\\" rel="nofollow" href="\\">Mais informações</a>).',
-                ],
-            'multi'  =>
-                [
-                    'title'   => 'Multiplos valores',
-                    'info'    => 'Os itens selecionados contêm valores diferentes para esta entrada. Para editar e definir todos os itens para esta entrada com o mesmo valor, clique ou toque aqui, caso contrário, eles manterão seus valores individuais.',
-                    'restore' => 'Desfazer alterações',
-                    'noMulti' => 'Essa entrada pode ser editada individualmente, mas não como parte do grupo',
-                ],
+        'rows' => [
+            1 => 'Selecionado 1 linha',
+            '_' => 'Selecionado %d linhas',
         ],
-    'stateRestore'   =>
-        [
-            'renameTitle'    => 'Renomear estado',
-            'renameLabel'    => 'Novo nome para %s:',
-            'renameButton'   => 'Renomear',
-            'removeTitle'    => 'Remover estado',
-            'removeSubmit'   => 'Remover',
-            'removeJoiner'   => 'e',
-            'removeError'    => 'Falha ao remover estado!',
-            'removeConfirm'  => 'Confirma remover %s?',
-            'emptyStates'    => 'Nenhum estado salvo',
-            'emptyError'     => 'Não pode ser vazio!',
-            'duplicateError' => 'Já existe um estado com esse nome!',
-            'creationModal'  =>
-                [
-                    'toggleLabel'   => 'Inclui:',
-                    'title'         => 'Criar novo estado',
-                    'select'        => 'Selecionar',
-                    'searchBuilder' => 'Mecanismo de busca',
-                    'search'        => 'Busca',
-                    'scroller'      => 'Posição da barra de rolagem',
-                    'paging'        => 'Paginação',
-                    'order'         => 'Ordernar',
-                    'name'          => 'Nome:',
-                    'columns'       =>
-                        [
-                            'visible' => 'Visibilidade da coluna',
-                            'search'  => 'Busca de colunas',
-                        ],
-                    'button'        => 'Criar',
-                ],
+    ],
+    'datetime' => [
+        'previous' => 'Anterior',
+        'next' => 'Próximo',
+        'hours' => 'Hora',
+        'minutes' => 'Minuto',
+        'seconds' => 'Segundo',
+        'unknown' => '-',
+        'amPm' => [
+            0 => 'am',
+            1 => 'pm',
         ],
+        'weekdays' => [
+            0 => 'Dom',
+            1 => 'Seg',
+            2 => 'Ter',
+            3 => 'Qua',
+            4 => 'Qui',
+            5 => 'Sex',
+            6 => 'Sáb',
+        ],
+        'months' => [
+            0 => 'Janeiro',
+            1 => 'Fevereiro',
+            2 => 'Março',
+            3 => 'Abril',
+            4 => 'Maio',
+            5 => 'Junho',
+            6 => 'Julho',
+            7 => 'Agosto',
+            8 => 'Setembro',
+            9 => 'Outubro',
+            10 => 'Novembro',
+            11 => 'Dezembro',
+        ],
+    ],
+    'editor' => [
+        'close' => 'Fechar',
+        'create' => [
+            'button' => 'Novo',
+            'title' => 'Criar novo registro',
+            'submit' => 'Criar',
+        ],
+        'edit' => [
+            'button' => 'Editar',
+            'title' => 'Editar registro',
+            'submit' => 'Atualizar',
+        ],
+        'remove' => [
+            'button' => 'Remover',
+            'title' => 'Remover registro',
+            'submit' => 'Remover',
+            'confirm' => [
+                '_' => 'Tem certeza que quer deletar %d linhas?',
+                1 => 'Tem certeza que quer deletar 1 linha?',
+            ],
+        ],
+        'error' => [
+            'system' => 'Ocorreu um erro no sistema (<a target="" rel="nofollow" href="">Mais informações</a>).',
+        ],
+        'multi' => [
+            'title' => 'Multiplos valores',
+            'info' => 'Os itens selecionados contêm valores diferentes para esta entrada. Para editar e definir todos os itens para esta entrada com o mesmo valor, clique ou toque aqui, caso contrário, eles manterão seus valores individuais.',
+            'restore' => 'Desfazer alterações',
+            'noMulti' => 'Essa entrada pode ser editada individualmente, mas não como parte do grupo',
+        ],
+    ],
+    'stateRestore' => [
+        'renameTitle' => 'Renomear estado',
+        'renameLabel' => 'Novo nome para %s:',
+        'renameButton' => 'Renomear',
+        'removeTitle' => 'Remover estado',
+        'removeSubmit' => 'Remover',
+        'removeJoiner' => 'e',
+        'removeError' => 'Falha ao remover estado!',
+        'removeConfirm' => 'Confirma remover %s?',
+        'emptyStates' => 'Nenhum estado salvo',
+        'emptyError' => 'Não pode ser vazio!',
+        'duplicateError' => 'Já existe um estado com esse nome!',
+        'creationModal' => [
+            'toggleLabel' => 'Inclui:',
+            'title' => 'Criar novo estado',
+            'select' => 'Selecionar',
+            'searchBuilder' => 'Mecanismo de busca',
+            'search' => 'Busca',
+            'scroller' => 'Posição da barra de rolagem',
+            'paging' => 'Paginação',
+            'order' => 'Ordernar',
+            'name' => 'Nome:',
+            'columns' => [
+                'visible' => 'Visibilidade da coluna',
+                'search' => 'Busca de colunas',
+            ],
+            'button' => 'Criar',
+        ],
+    ],
+
 ];

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'general'      => 'General',
     'death_knight' => 'Death Knight',
     'demon_hunter' => 'Demon Hunter',

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'dungeon'                    => [
         'edit' => [
             'title_new'                          => 'New dungeon',
@@ -26,8 +27,7 @@ return [
             'key'                                => 'Key',
             'slug'                               => 'Slug',
             'submit'                             => 'Submit',
-
-            'floor_management' => [
+            'floor_management'                   => [
                 'title'                   => 'Floor management',
                 'add_floor'               => 'Add floor',
                 'table_header'            => [
@@ -41,8 +41,7 @@ return [
                 'floor_edit_edit'         => 'Edit',
                 'floor_edit_edit_mapping' => 'Edit mapping',
             ],
-
-            'mapping_versions' => [
+            'mapping_versions'                   => [
                 'title'                    => 'Mapping versions',
                 'add_bare_mapping_version' => 'Add bare mapping version',
                 'add_mapping_version'      => 'Add mapping version',
@@ -152,8 +151,7 @@ return [
                 'right' => 'Right',
             ],
             'submit'                             => 'Submit',
-
-            'speedrun_required_npcs' => [
+            'speedrun_required_npcs'             => [
                 'title_10_man'         => '10-man Speedrun Required Npcs',
                 'title_25_man'         => '25-man Speedrun Required Npcs',
                 'add_npc'              => 'Add NPC',
@@ -496,21 +494,17 @@ return [
             ],
         ],
         'list'          => [
-            'title'        => 'Admin tools',
-            'header'       => 'Admin tools',
-            'header_tools' => 'Tools',
-
-            'subheader_message_banner' => 'Message banner',
-            'set_message_banner'       => 'Set message banner',
-
-            'subheader_npcs'          => 'NPCs',
-            'mass_import_npcs'        => 'Mass import NPCs',
-            'manage_spell_visibility' => 'Manage NPC spell visibility',
-
-            'subheader_dungeonroute'                  => 'Dungeonroute',
-            'view_dungeonroute_details'               => 'View Dungeonroute details',
-            'view_dungeonroute_mapping_version_usage' => 'View Dungeonroute Mapping Version usage',
-
+            'title'                                       => 'Admin tools',
+            'header'                                      => 'Admin tools',
+            'header_tools'                                => 'Tools',
+            'subheader_message_banner'                    => 'Message banner',
+            'set_message_banner'                          => 'Set message banner',
+            'subheader_npcs'                              => 'NPCs',
+            'mass_import_npcs'                            => 'Mass import NPCs',
+            'manage_spell_visibility'                     => 'Manage NPC spell visibility',
+            'subheader_dungeonroute'                      => 'Dungeonroute',
+            'view_dungeonroute_details'                   => 'View Dungeonroute details',
+            'view_dungeonroute_mapping_version_usage'     => 'View Dungeonroute Mapping Version usage',
             'subheader_mdt'                               => 'MDT',
             'view_mdt_string'                             => 'View MDT String contents',
             'view_mdt_string_as_dungeonroute'             => 'View MDT String as Dungeonroute',
@@ -519,35 +513,26 @@ return [
             'view_mdt_diff'                               => 'View MDT Diff',
             'view_dungeon_mapping_hash'                   => 'View dungeon mapping hash',
             'view_dungeon_mapping_version_to_mdt_mapping' => 'Convert mapping version to MDT mapping',
-
-            'subheader_enemy_forces' => 'Enemy Forces',
-            'enemy_forces_import'    => 'Import enemy forces',
-
-            'subheader_wowtools'                 => 'WoW.tools',
-            'wowtools_import_ingame_coordinates' => 'Import in-game coordinates',
-
-            'subheader_wagogg'                 => 'Wago.gg',
-            'wagogg_import_ingame_coordinates' => 'Import in-game coordinates',
-
-            'subheader_misc'     => 'Misc',
-            'drop_caches'        => 'Drop caches',
-            'throw_an_exception' => 'Throw an exception',
-
-            'subheader_mapping'  => 'Mapping',
-            'force_sync_mapping' => 'Force sync mapping',
-
-            'subheader_features' => 'Features',
-            'manage_features'    => 'Manage features',
-
-            'subheader_actions'    => 'Actions',
-            'export_dungeon_data'  => 'Export dungeon data',
-            'export_releases'      => 'Export releases',
-            'toggle_readonly_mode' => 'Toggle read-only mode',
-
-            'enemy_forces_recalculate' => 'Mass recalculate enemy forces for routes',
-
-            'subheader_thumbnails'  => 'Thumbnails',
-            'thumbnails_regenerate' => 'Mass regenerate thumbnails',
+            'subheader_enemy_forces'                      => 'Enemy Forces',
+            'enemy_forces_import'                         => 'Import enemy forces',
+            'subheader_wowtools'                          => 'WoW.tools',
+            'wowtools_import_ingame_coordinates'          => 'Import in-game coordinates',
+            'subheader_wagogg'                            => 'Wago.gg',
+            'wagogg_import_ingame_coordinates'            => 'Import in-game coordinates',
+            'subheader_misc'                              => 'Misc',
+            'drop_caches'                                 => 'Drop caches',
+            'throw_an_exception'                          => 'Throw an exception',
+            'subheader_mapping'                           => 'Mapping',
+            'force_sync_mapping'                          => 'Force sync mapping',
+            'subheader_features'                          => 'Features',
+            'manage_features'                             => 'Manage features',
+            'subheader_actions'                           => 'Actions',
+            'export_dungeon_data'                         => 'Export dungeon data',
+            'export_releases'                             => 'Export releases',
+            'toggle_readonly_mode'                        => 'Toggle read-only mode',
+            'enemy_forces_recalculate'                    => 'Mass recalculate enemy forces for routes',
+            'subheader_thumbnails'                        => 'Thumbnails',
+            'thumbnails_regenerate'                       => 'Mass regenerate thumbnails',
         ],
         'thumbnails'    => [
             'regenerate' => [
@@ -606,4 +591,5 @@ return [
             'handled'                  => 'Handled',
         ],
     ],
+
 ];

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'discover'       => [
         'dungeon'  => [
             'overview' => [
@@ -88,4 +89,5 @@ return [
         'linkpreview_default_description_sandbox' => 'Temporary M+ route for dungeon %s.',
         'linkpreview_default_description_explore' => 'Explore %s.',
     ],
+
 ];

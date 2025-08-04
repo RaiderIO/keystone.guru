@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'cookies' => [
         'title'  => 'Cookies Policy',
         'header' => 'Cookies Policy',
@@ -13,4 +14,5 @@ return [
         'title'  => 'Terms of Service',
         'header' => 'Terms of Service',
     ],
+
 ];

@@ -1,279 +1,247 @@
 <?php
 
 return [
-    'emptyTable'     => 'Aucune donnée disponible dans le tableau',
-    'info'           => 'Affichage de _START_ à _END_ sur _TOTAL_ entrées',
-    'infoEmpty'      => 'Affichage de 0 à 0 sur 0 entrées',
-    'infoFiltered'   => '(filtrées depuis un total de _MAX_ entrées)',
-    'infoThousands'  => ' ',
-    'lengthMenu'     => 'Afficher _MENU_ entrées',
+
+    'emptyTable' => 'Aucune donnée disponible dans le tableau',
+    'info' => 'Affichage de _START_ à _END_ sur _TOTAL_ entrées',
+    'infoEmpty' => 'Affichage de 0 à 0 sur 0 entrées',
+    'infoFiltered' => '(filtrées depuis un total de _MAX_ entrées)',
+    'infoThousands' => ' ',
+    'lengthMenu' => 'Afficher _MENU_ entrées',
     'loadingRecords' => 'Chargement...',
-    'processing'     => 'Traitement...',
-    'search'         => 'Rechercher :',
-    'zeroRecords'    => 'Aucune entrée correspondante trouvée',
-    'thousands'      => ' ',
-    'paginate'       =>
-        [
-            'first'    => 'Première',
-            'last'     => 'Dernière',
-            'next'     => 'Suivante',
-            'previous' => 'Précédente',
+    'processing' => 'Traitement...',
+    'search' => 'Rechercher :',
+    'zeroRecords' => 'Aucune entrée correspondante trouvée',
+    'thousands' => ' ',
+    'paginate' => [
+        'first' => 'Première',
+        'last' => 'Dernière',
+        'next' => 'Suivante',
+        'previous' => 'Précédente',
+    ],
+    'aria' => [
+        'sortAscending' => ' : activer pour trier la colonne par ordre croissant',
+        'sortDescending' => ' : activer pour trier la colonne par ordre décroissant',
+    ],
+    'autoFill' => [
+        'cancel' => 'Annuler',
+        'fill' => 'Remplir toutes les cellules avec <i>%d</i>',
+        'fillHorizontal' => 'Remplir les cellules horizontalement',
+        'fillVertical' => 'Remplir les cellules verticalement',
+    ],
+    'buttons' => [
+        'collection' => 'Collection',
+        'colvis' => 'Visibilité colonnes',
+        'colvisRestore' => 'Rétablir visibilité',
+        'copy' => 'Copier',
+        'copyKeys' => 'Appuyez sur ctrl ou u2318 + C pour copier les données du tableau dans votre presse-papier.',
+        'copySuccess' => [
+            1 => '1 ligne copiée dans le presse-papier',
+            '_' => '%d lignes copiées dans le presse-papier',
         ],
-    'aria'           =>
-        [
-            'sortAscending'  => ' : activer pour trier la colonne par ordre croissant',
-            'sortDescending' => ' : activer pour trier la colonne par ordre décroissant',
+        'copyTitle' => 'Copier dans le presse-papier',
+        'csv' => 'CSV',
+        'excel' => 'Excel',
+        'pageLength' => [
+            -1 => 'Afficher toutes les lignes',
+            '_' => 'Afficher %d lignes',
         ],
-    'autoFill'       =>
-        [
-            'cancel'         => 'Annuler',
-            'fill'           => 'Remplir toutes les cellules avec <i>%d</i>',
-            'fillHorizontal' => 'Remplir les cellules horizontalement',
-            'fillVertical'   => 'Remplir les cellules verticalement',
+        'pdf' => 'PDF',
+        'print' => 'Imprimer',
+        'updateState' => 'Mettre à jour',
+        'stateRestore' => 'État %d',
+        'savedStates' => 'États sauvegardés',
+        'renameState' => 'Renommer',
+        'removeState' => 'Supprimer',
+        'removeAllStates' => 'Supprimer tous les états',
+        'createState' => 'Créer un état',
+    ],
+    'searchBuilder' => [
+        'add' => 'Ajouter une condition',
+        'button' => [
+            0 => 'Recherche avancée',
+            '_' => 'Recherche avancée (%d)',
         ],
-    'buttons'        =>
-        [
-            'collection'      => 'Collection',
-            'colvis'          => 'Visibilité colonnes',
-            'colvisRestore'   => 'Rétablir visibilité',
-            'copy'            => 'Copier',
-            'copyKeys'        => 'Appuyez sur ctrl ou u2318 + C pour copier les données du tableau dans votre presse-papier.',
-            'copySuccess'     =>
-                [
-                    '1' => '1 ligne copiée dans le presse-papier',
-                    '_' => '%d lignes copiées dans le presse-papier',
-                ],
-            'copyTitle'       => 'Copier dans le presse-papier',
-            'csv'             => 'CSV',
-            'excel'           => 'Excel',
-            'pageLength'      =>
-                [
-                    '-1' => 'Afficher toutes les lignes',
-                    '_'  => 'Afficher %d lignes',
-                ],
-            'pdf'             => 'PDF',
-            'print'           => 'Imprimer',
-            'updateState'     => 'Mettre à jour',
-            'stateRestore'    => 'État %d',
-            'savedStates'     => 'États sauvegardés',
-            'renameState'     => 'Renommer',
-            'removeState'     => 'Supprimer',
-            'removeAllStates' => 'Supprimer tous les états',
-            'createState'     => 'Créer un état',
+        'clearAll' => 'Effacer tout',
+        'condition' => 'Condition',
+        'conditions' => [
+            'date' => [
+                'after' => 'Après le',
+                'before' => 'Avant le',
+                'between' => 'Entre',
+                'empty' => 'Vide',
+                'equals' => 'Égal à',
+                'not' => 'Différent de',
+                'notBetween' => 'Pas entre',
+                'notEmpty' => 'Non vide',
+            ],
+            'number' => [
+                'between' => 'Entre',
+                'empty' => 'Vide',
+                'equals' => 'Égal à',
+                'gt' => 'Supérieur à',
+                'gte' => 'Supérieur ou égal à',
+                'lt' => 'Inférieur à',
+                'lte' => 'Inférieur ou égal à',
+                'not' => 'Différent de',
+                'notBetween' => 'Pas entre',
+                'notEmpty' => 'Non vide',
+            ],
+            'string' => [
+                'contains' => 'Contient',
+                'empty' => 'Vide',
+                'endsWith' => 'Se termine par',
+                'equals' => 'Égal à',
+                'not' => 'Différent de',
+                'notEmpty' => 'Non vide',
+                'startsWith' => 'Commence par',
+                'notContains' => 'Ne contient pas',
+                'notStartsWith' => 'Ne commence pas par',
+                'notEndsWith' => 'Ne termine pas par',
+            ],
+            'array' => [
+                'without' => 'Sans',
+                'notEmpty' => 'Non vide',
+                'not' => 'Différent de',
+                'contains' => 'Contient',
+                'empty' => 'Vide',
+                'equals' => 'Égal à',
+            ],
         ],
-    'searchBuilder'  =>
-        [
-            'add'         => 'Ajouter une condition',
-            'button'      =>
-                [
-                    '0' => 'Recherche avancée',
-                    '_' => 'Recherche avancée (%d)',
-                ],
-            'clearAll'    => 'Effacer tout',
-            'condition'   => 'Condition',
-            'conditions'  =>
-                [
-                    'date'   =>
-                        [
-                            'after'      => 'Après le',
-                            'before'     => 'Avant le',
-                            'between'    => 'Entre',
-                            'empty'      => 'Vide',
-                            'equals'     => 'Égal à',
-                            'not'        => 'Différent de',
-                            'notBetween' => 'Pas entre',
-                            'notEmpty'   => 'Non vide',
-                        ],
-                    'number' =>
-                        [
-                            'between'    => 'Entre',
-                            'empty'      => 'Vide',
-                            'equals'     => 'Égal à',
-                            'gt'         => 'Supérieur à',
-                            'gte'        => 'Supérieur ou égal à',
-                            'lt'         => 'Inférieur à',
-                            'lte'        => 'Inférieur ou égal à',
-                            'not'        => 'Différent de',
-                            'notBetween' => 'Pas entre',
-                            'notEmpty'   => 'Non vide',
-                        ],
-                    'string' =>
-                        [
-                            'contains'      => 'Contient',
-                            'empty'         => 'Vide',
-                            'endsWith'      => 'Se termine par',
-                            'equals'        => 'Égal à',
-                            'not'           => 'Différent de',
-                            'notEmpty'      => 'Non vide',
-                            'startsWith'    => 'Commence par',
-                            'notContains'   => 'Ne contient pas',
-                            'notStartsWith' => 'Ne commence pas par',
-                            'notEndsWith'   => 'Ne termine pas par',
-                        ],
-                    'array'  =>
-                        [
-                            'without'  => 'Sans',
-                            'notEmpty' => 'Non vide',
-                            'not'      => 'Différent de',
-                            'contains' => 'Contient',
-                            'empty'    => 'Vide',
-                            'equals'   => 'Égal à',
-                        ],
-                ],
-            'data'        => 'Donnée',
-            'deleteTitle' => 'Supprimer la règle de filtrage',
-            'leftTitle'   => 'Désindenter le critère',
-            'logicAnd'    => 'Et',
-            'logicOr'     => 'Ou',
-            'rightTitle'  => 'Indenter le critère',
-            'title'       =>
-                [
-                    '0' => 'Recherche avancée',
-                    '_' => 'Recherche avancée (%d)',
-                ],
-            'value'       => 'Valeur',
+        'data' => 'Donnée',
+        'deleteTitle' => 'Supprimer la règle de filtrage',
+        'leftTitle' => 'Désindenter le critère',
+        'logicAnd' => 'Et',
+        'logicOr' => 'Ou',
+        'rightTitle' => 'Indenter le critère',
+        'title' => [
+            0 => 'Recherche avancée',
+            '_' => 'Recherche avancée (%d)',
         ],
-    'searchPanes'    =>
-        [
-            'clearMessage'    => 'Effacer tout',
-            'collapse'        =>
-                [
-                    '0' => 'Volet de recherche',
-                    '_' => 'Volet de recherche (%d)',
-                ],
-            'count'           => '{total}',
-            'countFiltered'   => '{shown} ({total})',
-            'emptyPanes'      => 'Pas de volet de recherche',
-            'loadMessage'     => 'Chargement du volet de recherche...',
-            'title'           => 'Filtres actifs - %d',
-            'showMessage'     => 'Montrer tout',
-            'collapseMessage' => 'Réduire tout',
+        'value' => 'Valeur',
+    ],
+    'searchPanes' => [
+        'clearMessage' => 'Effacer tout',
+        'collapse' => [
+            0 => 'Volet de recherche',
+            '_' => 'Volet de recherche (%d)',
         ],
-    'select'         =>
-        [
-            'cells'   =>
-                [
-                    '1' => '1 cellule sélectionnée',
-                    '_' => '%d cellules sélectionnées',
-                ],
-            'columns' =>
-                [
-                    '1' => '1 colonne sélectionnée',
-                    '_' => '%d colonnes sélectionnées',
-                ],
-            'rows'    =>
-                [
-                    '1' => '1 ligne sélectionnée',
-                    '_' => '%d lignes sélectionnées',
-                ],
+        'count' => '{total}',
+        'countFiltered' => '{shown} ({total})',
+        'emptyPanes' => 'Pas de volet de recherche',
+        'loadMessage' => 'Chargement du volet de recherche...',
+        'title' => 'Filtres actifs - %d',
+        'showMessage' => 'Montrer tout',
+        'collapseMessage' => 'Réduire tout',
+    ],
+    'select' => [
+        'cells' => [
+            1 => '1 cellule sélectionnée',
+            '_' => '%d cellules sélectionnées',
         ],
-    'datetime'       =>
-        [
-            'previous' => 'Précédent',
-            'next'     => 'Suivant',
-            'hours'    => 'Heures',
-            'minutes'  => 'Minutes',
-            'seconds'  => 'Secondes',
-            'unknown'  => '-',
-            'amPm'     =>
-                [
-                    '0' => 'am',
-                    '1' => 'pm',
-                ],
-            'weekdays' =>
-                [
-                    '0' => 'Dim',
-                    '1' => 'Lun',
-                    '2' => 'Mar',
-                    '3' => 'Mer',
-                    '4' => 'Jeu',
-                    '5' => 'Ven',
-                    '6' => 'Sam',
-                ],
-            'months'   =>
-                [
-                    '0'  => 'Janvier',
-                    '1'  => 'Février',
-                    '2'  => 'Mars',
-                    '3'  => 'Avril',
-                    '4'  => 'Mai',
-                    '5'  => 'Juin',
-                    '6'  => 'Juillet',
-                    '7'  => 'Août',
-                    '8'  => 'Septembre',
-                    '9'  => 'Octobre',
-                    '10' => 'Novembre',
-                    '11' => 'Décembre',
-                ],
+        'columns' => [
+            1 => '1 colonne sélectionnée',
+            '_' => '%d colonnes sélectionnées',
         ],
-    'editor'         =>
-        [
-            'close'  => 'Fermer',
-            'create' =>
-                [
-                    'button' => 'Nouveau',
-                    'title'  => 'Créer une nouvelle entrée',
-                    'submit' => 'Créer',
-                ],
-            'edit'   =>
-                [
-                    'button' => 'Editer',
-                    'title'  => 'Editer Entrée',
-                    'submit' => 'Mettre à jour',
-                ],
-            'remove' =>
-                [
-                    'button'  => 'Supprimer',
-                    'title'   => 'Supprimer',
-                    'submit'  => 'Supprimer',
-                    'confirm' =>
-                        [
-                            '_' => 'Êtes-vous sûr de vouloir supprimer %d lignes ?',
-                            '1' => 'Êtes-vous sûr de vouloir supprimer 1 ligne ?',
-                        ],
-                ],
-            'error'  =>
-                [
-                    'system' => 'Une erreur système s\'est produite (<a target="\\" rel="nofollow" href="\\">Plus d\'information</a>).',
-                ],
-            'multi'  =>
-                [
-                    'title'   => 'Valeurs multiples',
-                    'info'    => 'Les éléments sélectionnés contiennent différentes valeurs pour cette entrée. Pour modifier et définir tous les éléments de cette entrée à la même valeur, cliquez ou tapez ici, sinon ils conserveront leurs valeurs individuelles.',
-                    'restore' => 'Annuler les modifications',
-                    'noMulti' => 'Ce champ peut être modifié individuellement, mais ne fait pas partie d\'un groupe. ',
-                ],
+        'rows' => [
+            1 => '1 ligne sélectionnée',
+            '_' => '%d lignes sélectionnées',
         ],
-    'stateRestore'   =>
-        [
-            'renameTitle'    => 'Renommer l\'état',
-            'renameLabel'    => 'Nouveau nom pour %s :',
-            'renameButton'   => 'Renommer',
-            'removeTitle'    => 'Supprimer l\'état',
-            'removeSubmit'   => 'Supprimer',
-            'removeJoiner'   => 'et',
-            'removeError'    => 'Échec de la suppression de l\'état.',
-            'removeConfirm'  => 'Voulez vous vraiment supprimer %s ?',
-            'emptyStates'    => 'Aucun état sauvegardé',
-            'emptyError'     => 'Le nom ne peut pas être vide.',
-            'duplicateError' => 'Il existe déjà un état avec ce nom.',
-            'creationModal'  =>
-                [
-                    'toggleLabel'   => 'Inclus :',
-                    'title'         => 'Créer un nouvel état',
-                    'select'        => 'Sélection',
-                    'searchBuilder' => 'Recherche avancée',
-                    'search'        => 'Recherche',
-                    'scroller'      => 'Position du défilement',
-                    'paging'        => 'Pagination',
-                    'order'         => 'Tri',
-                    'name'          => 'Nom :',
-                    'columns'       =>
-                        [
-                            'visible' => 'Visibilité des colonnes',
-                            'search'  => 'Recherche par colonne',
-                        ],
-                    'button'        => 'Créer',
-                ],
+    ],
+    'datetime' => [
+        'previous' => 'Précédent',
+        'next' => 'Suivant',
+        'hours' => 'Heures',
+        'minutes' => 'Minutes',
+        'seconds' => 'Secondes',
+        'unknown' => '-',
+        'amPm' => [
+            0 => 'am',
+            1 => 'pm',
         ],
+        'weekdays' => [
+            0 => 'Dim',
+            1 => 'Lun',
+            2 => 'Mar',
+            3 => 'Mer',
+            4 => 'Jeu',
+            5 => 'Ven',
+            6 => 'Sam',
+        ],
+        'months' => [
+            0 => 'Janvier',
+            1 => 'Février',
+            2 => 'Mars',
+            3 => 'Avril',
+            4 => 'Mai',
+            5 => 'Juin',
+            6 => 'Juillet',
+            7 => 'Août',
+            8 => 'Septembre',
+            9 => 'Octobre',
+            10 => 'Novembre',
+            11 => 'Décembre',
+        ],
+    ],
+    'editor' => [
+        'close' => 'Fermer',
+        'create' => [
+            'button' => 'Nouveau',
+            'title' => 'Créer une nouvelle entrée',
+            'submit' => 'Créer',
+        ],
+        'edit' => [
+            'button' => 'Editer',
+            'title' => 'Editer Entrée',
+            'submit' => 'Mettre à jour',
+        ],
+        'remove' => [
+            'button' => 'Supprimer',
+            'title' => 'Supprimer',
+            'submit' => 'Supprimer',
+            'confirm' => [
+                '_' => 'Êtes-vous sûr de vouloir supprimer %d lignes ?',
+                1 => 'Êtes-vous sûr de vouloir supprimer 1 ligne ?',
+            ],
+        ],
+        'error' => [
+            'system' => 'Une erreur système s\'est produite (<a target="" rel="nofollow" href="">Plus d\'information</a>).',
+        ],
+        'multi' => [
+            'title' => 'Valeurs multiples',
+            'info' => 'Les éléments sélectionnés contiennent différentes valeurs pour cette entrée. Pour modifier et définir tous les éléments de cette entrée à la même valeur, cliquez ou tapez ici, sinon ils conserveront leurs valeurs individuelles.',
+            'restore' => 'Annuler les modifications',
+            'noMulti' => 'Ce champ peut être modifié individuellement, mais ne fait pas partie d\'un groupe. ',
+        ],
+    ],
+    'stateRestore' => [
+        'renameTitle' => 'Renommer l\'état',
+        'renameLabel' => 'Nouveau nom pour %s :',
+        'renameButton' => 'Renommer',
+        'removeTitle' => 'Supprimer l\'état',
+        'removeSubmit' => 'Supprimer',
+        'removeJoiner' => 'et',
+        'removeError' => 'Échec de la suppression de l\'état.',
+        'removeConfirm' => 'Voulez vous vraiment supprimer %s ?',
+        'emptyStates' => 'Aucun état sauvegardé',
+        'emptyError' => 'Le nom ne peut pas être vide.',
+        'duplicateError' => 'Il existe déjà un état avec ce nom.',
+        'creationModal' => [
+            'toggleLabel' => 'Inclus :',
+            'title' => 'Créer un nouvel état',
+            'select' => 'Sélection',
+            'searchBuilder' => 'Recherche avancée',
+            'search' => 'Recherche',
+            'scroller' => 'Position du défilement',
+            'paging' => 'Pagination',
+            'order' => 'Tri',
+            'name' => 'Nom :',
+            'columns' => [
+                'visible' => 'Visibilité des colonnes',
+                'search' => 'Recherche par colonne',
+            ],
+            'button' => 'Créer',
+        ],
+    ],
+
 ];
