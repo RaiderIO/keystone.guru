@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     '400' => [
         'title'   => 'Hodor',
         'message' => 'Hodor',
@@ -37,4 +38,5 @@ return [
         'title'   => 'Hodor',
         'message' => 'Hodor',
     ],
+
 ];

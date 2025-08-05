@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'passwords' => [
         'email' => [
             'title'                    => '',
@@ -24,4 +25,5 @@ return [
         'title'  => '',
         'header' => '',
     ],
+
 ];

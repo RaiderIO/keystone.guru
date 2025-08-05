@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'taunt'           => 'Hodor',
     'incapacitate'    => 'Hodor',
     'subjugate_demon' => 'Hodor',
@@ -25,4 +26,5 @@ return [
     'hibernate'       => 'Hodor',
     'turn_evil'       => 'Hodor',
     'mind_soothe'     => 'Hodor',
+
 ];

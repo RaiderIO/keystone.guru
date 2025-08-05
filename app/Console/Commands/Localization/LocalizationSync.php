@@ -171,6 +171,16 @@ class LocalizationSync extends Command
                 $segment = $match[0];
 
                 array_pop($tree);
+            }
+            // unquoted numeric key
+            else if (preg_match('#^(-?\d+)\s*=>#', $content, $match)) {
+                if (!$expects_key) {
+                    return false;
+                }
+
+                $segment = $match[0];
+                $tree[] = $match[1];
+                $expects_key = false;
             } // single or double quoted string
             else if (preg_match('#^(")((?:[^"\\\\]|\\\\.)*)"#', $content, $match)
                 || preg_match("#^(')((?:[^'\\\\]|\\\\.)*)'#", $content, $match)

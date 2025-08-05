@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'sitepage' => [
         'staging_banner_description'        => '',
         'staging_banner_take_me_away'       => '',
@@ -10,4 +11,5 @@ return [
         'linkpreview_title'       => '',
         'linkpreview_description' => '',
     ],
+
 ];

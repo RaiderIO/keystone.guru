@@ -29,6 +29,8 @@ use App\Console\Commands\Github\CreateGithubRelease;
 use App\Console\Commands\Github\CreateGithubReleasePullRequest;
 use App\Console\Commands\Github\CreateGithubReleaseTicket;
 use App\Console\Commands\Handlebars\Refresh as HandlebarsRefresh;
+use App\Console\Commands\Larex\WriteKsg;
+use App\Console\Commands\Larex\WriteKsgFromCrowdin;
 use App\Console\Commands\Localization\Datatables\ConvertLocalizations;
 use App\Console\Commands\Localization\Datatables\DownloadLocalizations;
 use App\Console\Commands\Localization\LocalizationSync;
@@ -155,6 +157,10 @@ class Kernel extends ConsoleKernel
 
         // Handlebars
         HandlebarsRefresh::class,
+
+        // Larex
+        WriteKsg::class,
+        WriteKsgFromCrowdin::class,
 
         // Localization
         LocalizationSync::class,

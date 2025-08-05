@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'dungeon'                    => [
         'edit' => [
             'title_new'                          => '',
@@ -26,8 +27,7 @@ return [
             'key'                                => '',
             'slug'                               => '',
             'submit'                             => '',
-
-            'floor_management' => [
+            'floor_management'                   => [
                 'title'                   => '',
                 'add_floor'               => '',
                 'table_header'            => [
@@ -41,8 +41,7 @@ return [
                 'floor_edit_edit'         => '',
                 'floor_edit_edit_mapping' => '',
             ],
-
-            'mapping_versions' => [
+            'mapping_versions'                   => [
                 'title'                    => '',
                 'add_bare_mapping_version' => '',
                 'add_mapping_version'      => '',
@@ -152,8 +151,7 @@ return [
                 'right' => '',
             ],
             'submit'                             => '',
-
-            'speedrun_required_npcs' => [
+            'speedrun_required_npcs'             => [
                 'title_10_man'         => '',
                 'title_25_man'         => '',
                 'add_npc'              => '',
@@ -496,21 +494,17 @@ return [
             ],
         ],
         'list'          => [
-            'title'        => '',
-            'header'       => '',
-            'header_tools' => '',
-
-            'subheader_message_banner' => '',
-            'set_message_banner'       => '',
-
-            'subheader_npcs'          => '',
-            'mass_import_npcs'        => '',
-            'manage_spell_visibility' => '',
-
-            'subheader_dungeonroute'                  => '',
-            'view_dungeonroute_details'               => '',
-            'view_dungeonroute_mapping_version_usage' => '',
-
+            'title'                                       => '',
+            'header'                                      => '',
+            'header_tools'                                => '',
+            'subheader_message_banner'                    => '',
+            'set_message_banner'                          => '',
+            'subheader_npcs'                              => '',
+            'mass_import_npcs'                            => '',
+            'manage_spell_visibility'                     => '',
+            'subheader_dungeonroute'                      => '',
+            'view_dungeonroute_details'                   => '',
+            'view_dungeonroute_mapping_version_usage'     => '',
             'subheader_mdt'                               => '',
             'view_mdt_string'                             => '',
             'view_mdt_string_as_dungeonroute'             => '',
@@ -519,35 +513,26 @@ return [
             'view_mdt_diff'                               => '',
             'view_dungeon_mapping_hash'                   => '',
             'view_dungeon_mapping_version_to_mdt_mapping' => '',
-
-            'subheader_enemy_forces' => '',
-            'enemy_forces_import'    => '',
-
-            'subheader_wowtools'                 => '',
-            'wowtools_import_ingame_coordinates' => '',
-
-            'subheader_wagogg'                 => '',
-            'wagogg_import_ingame_coordinates' => '',
-
-            'subheader_misc'     => '',
-            'drop_caches'        => '',
-            'throw_an_exception' => '',
-
-            'subheader_mapping'  => '',
-            'force_sync_mapping' => '',
-
-            'subheader_features' => '',
-            'manage_features'    => '',
-
-            'subheader_actions'    => '',
-            'export_dungeon_data'  => '',
-            'export_releases'      => '',
-            'toggle_readonly_mode' => '',
-
-            'enemy_forces_recalculate' => '',
-
-            'subheader_thumbnails'  => '',
-            'thumbnails_regenerate' => '',
+            'subheader_enemy_forces'                      => '',
+            'enemy_forces_import'                         => '',
+            'subheader_wowtools'                          => '',
+            'wowtools_import_ingame_coordinates'          => '',
+            'subheader_wagogg'                            => '',
+            'wagogg_import_ingame_coordinates'            => '',
+            'subheader_misc'                              => '',
+            'drop_caches'                                 => '',
+            'throw_an_exception'                          => '',
+            'subheader_mapping'                           => '',
+            'force_sync_mapping'                          => '',
+            'subheader_features'                          => '',
+            'manage_features'                             => '',
+            'subheader_actions'                           => '',
+            'export_dungeon_data'                         => '',
+            'export_releases'                             => '',
+            'toggle_readonly_mode'                        => '',
+            'enemy_forces_recalculate'                    => '',
+            'subheader_thumbnails'                        => '',
+            'thumbnails_regenerate'                       => '',
         ],
         'thumbnails'    => [
             'regenerate' => [
@@ -606,4 +591,5 @@ return [
             'handled'                  => '',
         ],
     ],
+
 ];

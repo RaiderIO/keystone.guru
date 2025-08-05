@@ -3,7 +3,7 @@
 return [
 
     'unspecified' => 'Не выбрана',
-    'horde' => 'Орда',
-    'alliance' => 'Альянс',
+    'horde'       => 'Орда',
+    'alliance'    => 'Альянс',
 
 ];

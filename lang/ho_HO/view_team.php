@@ -1,20 +1,18 @@
 <?php
 
 return [
+
     'edittabs' => [
         'details'         => [
             'title' => 'Hodor',
         ],
         'members'         => [
-            'title' => 'Hodor',
-
-            'invite_new_members'        => 'Hodor',
-            'invite_code_share_warning' => 'Hodor',
-            'copy_to_clipboard_title'   => 'Hodor',
-            'refresh_invite_link_title' => 'Hodor',
-
-            'default_role' => 'Hodor',
-
+            'title'                                      => 'Hodor',
+            'invite_new_members'                         => 'Hodor',
+            'invite_code_share_warning'                  => 'Hodor',
+            'copy_to_clipboard_title'                    => 'Hodor',
+            'refresh_invite_link_title'                  => 'Hodor',
+            'default_role'                               => 'Hodor',
             'ad_free_giveaway_description_not_available' => 'Hodor',
             'ad_free_giveaway_description_available'     => 'Hodor',
         ],
@@ -34,7 +32,6 @@ return [
             'title'       => 'Hodor',
             'description' => 'Hodor',
         ],
-
     ],
     'edit'     => [
         'title'          => 'Hodor',
@@ -46,26 +43,22 @@ return [
         'members'        => 'Hodor',
     ],
     'invite'   => [
-        'linkpreview_title'       => 'Hodor',
-        'linkpreview_description' => 'Hodor',
-
-        'title'        => 'Hodor',
-        'header'       => 'Hodor',
-        'invalid_team' => 'Hodor',
-
+        'linkpreview_title'           => 'Hodor',
+        'linkpreview_description'     => 'Hodor',
+        'title'                       => 'Hodor',
+        'header'                      => 'Hodor',
+        'invalid_team'                => 'Hodor',
         'logo_image_alt'              => 'Hodor',
         'already_a_member'            => 'Hodor',
         'invited_to_join'             => 'Hodor',
         'accept_the_invitation'       => 'Hodor',
         'login_or_register_to_accept' => 'Hodor',
-
-        'return_to_team'    => 'Hodor',
-        'accept_invitation' => 'Hodor',
-        'login'             => 'Hodor',
-        'register'          => 'Hodor',
-
-        'invite_not_found' => 'Hodor',
-        'back_to_homepage' => 'Hodor',
+        'return_to_team'              => 'Hodor',
+        'accept_invitation'           => 'Hodor',
+        'login'                       => 'Hodor',
+        'register'                    => 'Hodor',
+        'invite_not_found'            => 'Hodor',
+        'back_to_homepage'            => 'Hodor',
     ],
     'list'     => [
         'title'                => 'Hodor',
@@ -79,4 +72,5 @@ return [
         'title'  => 'Hodor',
         'header' => 'Hodor',
     ],
+
 ];

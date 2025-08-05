@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'cookies' => [
         'title'  => '',
         'header' => '',
@@ -13,4 +14,5 @@ return [
         'title'  => '',
         'header' => '',
     ],
+
 ];

@@ -3,62 +3,68 @@
 return [
 
     'death_knight' => [
-        'blood' => 'Кровь',
-        'frost' => 'Лед',
+        'blood'  => 'Кровь',
+        'frost'  => 'Лед',
         'unholy' => 'Нечестивость',
     ],
     'demon_hunter' => [
-        'havoc' => 'Истребление',
+        'havoc'     => 'Истребление',
         'vengeance' => 'Месть',
     ],
-    'druid' => [
-        'balance' => 'Баланс',
-        'feral' => 'Сила зверя',
-        'guardian' => 'Страж',
+    'druid'        => [
+        'balance'     => 'Баланс',
+        'feral'       => 'Сила зверя',
+        'guardian'    => 'Страж',
         'restoration' => 'Исцеление',
     ],
-    'hunter' => [
+    'evoker'       => [
+        'devastation'  => '',
+        'preservation' => '',
+        'augmentation' => '',
+    ],
+    'hunter'       => [
         'beast_mastery' => 'Повелитель зверей',
-        'survival' => 'Выживание',
+        'marksmanship'  => '',
+        'survival'      => 'Выживание',
     ],
-    'mage' => [
+    'mage'         => [
         'arcane' => 'Тайная магия',
-        'fire' => 'Огонь',
-        'frost' => 'Лед',
+        'fire'   => 'Огонь',
+        'frost'  => 'Лед',
     ],
-    'monk' => [
+    'monk'         => [
         'brewmaster' => 'Хмелевар',
         'mistweaver' => 'Ткач туманов',
         'windwalker' => 'Танцующий с ветром',
     ],
-    'paladin' => [
-        'holy' => 'Свет',
-        'protection' => 'Защита',
+    'paladin'      => [
+        'holy'        => 'Свет',
+        'protection'  => 'Защита',
         'retribution' => 'Воздаяние',
     ],
-    'priest' => [
+    'priest'       => [
         'discipline' => 'Послушание',
-        'holy' => 'Свет',
-        'shadow' => 'Тьма',
+        'holy'       => 'Свет',
+        'shadow'     => 'Тьма',
     ],
-    'rogue' => [
+    'rogue'        => [
         'assassination' => 'Ликвидация',
-        'outlaw' => 'Головорез',
-        'subtlety' => 'Скрытность',
+        'outlaw'        => 'Головорез',
+        'subtlety'      => 'Скрытность',
     ],
-    'shaman' => [
-        'elemental' => 'Стихии',
+    'shaman'       => [
+        'elemental'   => 'Стихии',
         'enhancement' => 'Совершествование',
         'restoration' => 'Исцеление',
     ],
-    'warlock' => [
-        'affliction' => 'Колдовство',
-        'demonology' => 'Демонология',
+    'warlock'      => [
+        'affliction'  => 'Колдовство',
+        'demonology'  => 'Демонология',
         'destruction' => 'Разрушение',
     ],
-    'warrior' => [
-        'arms' => 'Оружие',
-        'fury' => 'Неистовство',
+    'warrior'      => [
+        'arms'       => 'Оружие',
+        'fury'       => 'Неистовство',
         'protection' => 'Защита',
     ],
 
