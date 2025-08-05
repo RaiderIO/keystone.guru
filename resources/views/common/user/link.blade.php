@@ -5,8 +5,9 @@ use App\Models\User;
 
 /**
  * @var User $user
+ * @var boolean $isRaiderIOStaff
  */
-$isRaiderIOStaff = isset($user) && $user->hasRole(Role::ROLE_ADMIN);
+$isRaiderIOStaff ??= false;
 ?>
 <a
     @if($isRaiderIOStaff)

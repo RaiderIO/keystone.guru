@@ -18,7 +18,7 @@ $isRaiderIOStaff        = $showRaiderIOStaffImage && isset($user) && $user->hasR
 
 @isset($user)
     @if ($link)
-        @component('common.user.link', ['user' => $user])
+        @component('common.user.link', ['user' => $user, 'isRaiderIOStaff' => $isRaiderIOStaff])
             @includeWhen($isRaiderIOStaff, 'common.user.raideriostaffimage', ['user' => $user])
             @includeWhen(!$isRaiderIOStaff, 'common.user.userimage', ['user' => $user, 'showAnonIcon' => $showAnonIcon])
         @endcomponent
