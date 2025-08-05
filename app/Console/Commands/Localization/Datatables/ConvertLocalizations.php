@@ -22,7 +22,7 @@ class ConvertLocalizations extends Command
      *
      * @var string
      */
-    protected $description = 'Converts all fetched localizations to translations Laravel understands.';
+    protected $description = 'Converts all fetched Datatables localizations to translations Laravel understands.';
 
     /**
      * Execute the console command.

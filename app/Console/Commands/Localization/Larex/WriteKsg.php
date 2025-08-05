@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Console\Commands\Larex;
+namespace App\Console\Commands\Localization\Larex;
 
-use App\Console\Commands\Larex\Traits\CorrectsLocalizationsHeader;
+use App\Console\Commands\Localization\Larex\Traits\CorrectsLocalizationsHeader;
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use Illuminate\Console\Command;
 
@@ -33,7 +33,7 @@ class WriteKsg extends Command
         // php artisan larex:import laravel-group --exclude=npcs,spells,view_admin
         $this->shell([
             'rm -f lang/localization.csv',
-            'php artisan larex:import laravel-group --exclude=datatables,npcs,spells,view_admin',
+            'php artisan larex:import laravel-group --exclude=datatables,npcs,spells,view_admin,validation',
         ]);
 
         if (!$this->correctLocalizationHeader()) {

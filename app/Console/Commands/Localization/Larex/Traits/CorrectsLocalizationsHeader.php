@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\Larex\Traits;
+namespace App\Console\Commands\Localization\Larex\Traits;
 
 use Illuminate\Console\Command;
 

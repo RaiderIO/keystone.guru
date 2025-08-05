@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Console\Commands\Larex;
+namespace App\Console\Commands\Localization\Larex;
 
-use App\Console\Commands\Larex\Traits\CorrectsLocalizationsHeader;
+use App\Console\Commands\Localization\Larex\Traits\CorrectsLocalizationsHeader;
 use App\Console\Commands\Traits\ExecutesShellCommands;
 use Illuminate\Console\Command;
 
