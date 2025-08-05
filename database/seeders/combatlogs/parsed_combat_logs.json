@@ -8167,5 +8167,68 @@
         "extracted_data": 1,
         "created_at": "2025-04-18T21:19:51+00:00",
         "updated_at": "2025-04-18T21:19:51+00:00"
+    },
+    {
+        "id": 1172,
+        "combat_log_path": "tmp\/WoWCombatLog-072125_085140_12_eco-dome-aldani.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-05T15:22:19+00:00",
+        "updated_at": "2025-08-05T15:22:19+00:00"
+    },
+    {
+        "id": 1173,
+        "combat_log_path": "tmp\/WoWCombatLog-072125_085140_7_eco-dome-aldani.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-05T15:24:18+00:00",
+        "updated_at": "2025-08-05T15:24:18+00:00"
+    },
+    {
+        "id": 1174,
+        "combat_log_path": "tmp\/WoWCombatLog-072325_113437_7_tazavesh-the-veiled-market-1.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-05T15:24:48+00:00",
+        "updated_at": "2025-08-05T15:24:48+00:00"
+    },
+    {
+        "id": 1175,
+        "combat_log_path": "tmp\/WoWCombatLog-072325_113437_7_tazavesh-the-veiled-market.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-05T15:25:22+00:00",
+        "updated_at": "2025-08-05T15:25:22+00:00"
+    },
+    {
+        "id": 1176,
+        "combat_log_path": "tmp\/WoWCombatLog-072925_162013_7_halls-of-atonement.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-05T15:25:55+00:00",
+        "updated_at": "2025-08-05T15:25:55+00:00"
+    },
+    {
+        "id": 1177,
+        "combat_log_path": "tmp\/WoWCombatLog-073125_132246_7_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-05T15:26:16+00:00",
+        "updated_at": "2025-08-05T15:26:16+00:00"
+    },
+    {
+        "id": 1178,
+        "combat_log_path": "tmp\/WoWCombatLog-073125_132246_7_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-05T15:26:28+00:00",
+        "updated_at": "2025-08-05T15:26:28+00:00"
+    },
+    {
+        "id": 1179,
+        "combat_log_path": "tmp\/WoWCombatLog-080225_100926_7_operation-floodgate.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-05T15:26:39+00:00",
+        "updated_at": "2025-08-05T15:26:39+00:00"
+    },
+    {
+        "id": 1180,
+        "combat_log_path": "tmp\/WoWCombatLog-080225_100926_7_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-05T15:26:52+00:00",
+        "updated_at": "2025-08-05T15:26:52+00:00"
     }
 ]

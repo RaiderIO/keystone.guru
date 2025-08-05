@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     465     => 'Aura della Devozione',
     498     => 'Protezione Divina',
     568     => 'Scarica Arcana',
@@ -2668,7 +2667,7 @@ return [
     323489  => 'Lancio Mannaia',
     323496  => 'Lancio Mannaia',
     323515  => 'Assalto Perfido',
-    323538  => 'Dardo di Potere',
+    323538  => 'Dardo d\'Animum',
     323542  => 'Melmoso',
     323552  => 'Raffica di Potere',
     323608  => 'Devastazione Oscura',
@@ -2754,7 +2753,7 @@ return [
     325725  => 'Artificio Cosmico',
     325797  => 'Rapidità di Tiro',
     325807  => 'Cosmi Svincolati',
-    325876  => 'Maledizione dell\'Annientamento',
+    325876  => 'Marchio dell\'Annientamento',
     326018  => 'Pieno d\'Acido',
     326021  => 'Globulo Acido',
     326022  => 'Globulo Acido',
@@ -2808,7 +2807,7 @@ return [
     327393  => 'Fato Tetro',
     327396  => 'Fato Tetro',
     327397  => 'Fato Tetro',
-    327411  => 'Maledizione della Pietra',
+    327411  => 'Da Carne in Pietra',
     327413  => 'Pugno Ribelle',
     327416  => 'Ricarica Animum',
     327481  => 'Lancia Nera',
@@ -3787,7 +3786,7 @@ return [
     383067  => 'Parente Furente',
     383087  => 'Contagio Avvizzente',
     383231  => 'Dardo di Lava',
-    383269  => 'Arto di Abominio',
+    383269  => 'Legione di Anime',
     383298  => 'Marchio Fuso',
     383312  => 'Arto di Abominio',
     383385  => 'Impeto Marcescente',
@@ -5943,5 +5942,4 @@ return [
     1236290 => '',
     1236291 => '',
     1237702 => '',
-
 ];

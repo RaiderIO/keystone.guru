@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     465     => 'Aura de dévotion',
     498     => 'Protection divine',
     568     => 'Jaillissement des Arcanes',
@@ -2668,7 +2667,7 @@ return [
     323489  => 'Lancer de fendoir',
     323496  => 'Lancer de fendoir',
     323515  => 'Frappe haineuse',
-    323538  => 'Trait de pouvoir',
+    323538  => 'Trait d’anima',
     323542  => 'Suintement visqueux',
     323552  => 'Salve de puissance',
     323608  => 'Sombre dévastation',
@@ -2754,7 +2753,7 @@ return [
     325725  => 'Artifice cosmique',
     325797  => 'Tir rapide',
     325807  => 'Cosmos infini',
-    325876  => 'Malédiction d’oblitération',
+    325876  => 'Marque d’oblitération',
     326018  => 'Rempli d’acide',
     326021  => 'Globule d’acide',
     326022  => 'Globule d’acide',
@@ -2808,7 +2807,7 @@ return [
     327393  => 'Destin sinistre',
     327396  => 'Destin sinistre',
     327397  => 'Destin sinistre',
-    327411  => 'Malédiction de pierre',
+    327411  => 'Statufication',
     327413  => 'Poing rebelle',
     327416  => 'Recharger l’anima',
     327481  => 'Lance noire',
@@ -3787,7 +3786,7 @@ return [
     383067  => 'Rage du clan',
     383087  => 'Contagion flétrissante',
     383231  => 'Trait de lave',
-    383269  => 'Membre abominable',
+    383269  => 'Légion des âmes',
     383298  => 'Marque en fusion',
     383312  => 'Membre abominable',
     383385  => 'Recrudescence pourrissante',
@@ -5943,5 +5942,4 @@ return [
     1236290 => '',
     1236291 => '',
     1237702 => '',
-
 ];

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     465     => 'Aura de Devoção',
     498     => 'Proteção Divina',
     568     => 'Estouro Arcano',
@@ -2668,7 +2667,7 @@ return [
     323489  => 'Arremessar Cutelo',
     323496  => 'Arremessar Cutelo',
     323515  => 'Golpe Odioso',
-    323538  => 'Seta de Poder',
+    323538  => 'Seta de Ânima',
     323542  => 'Gosmento',
     323552  => 'Salva de Poder',
     323608  => 'Devastação Sombria',
@@ -2754,7 +2753,7 @@ return [
     325725  => 'Artífice Cósmico',
     325797  => 'Tiro Rápido',
     325807  => 'Cosmos Incontido',
-    325876  => 'Maldição da Obliteração',
+    325876  => 'Marca da Obliteração',
     326018  => 'Repleto de Ácido',
     326021  => 'Glóbulo Ácido',
     326022  => 'Glóbulo Ácido',
@@ -2808,7 +2807,7 @@ return [
     327393  => 'Destino Sinistro',
     327396  => 'Destino Sinistro',
     327397  => 'Destino Sinistro',
-    327411  => 'Maldição da Pedra',
+    327411  => 'Pele em Pedra',
     327413  => 'Punho Rebelde',
     327416  => 'Recarregar Ânima',
     327481  => 'Lança Sombria',
@@ -3787,7 +3786,7 @@ return [
     383067  => 'Irmão Furioso',
     383087  => 'Contágio Definhante',
     383231  => 'Seta de Lava',
-    383269  => 'Membro da Abominação',
+    383269  => 'Legião das Almas',
     383298  => 'Marca Derretida',
     383312  => 'Membro da Abominação',
     383385  => 'Surto Putrescente',
@@ -5943,5 +5942,4 @@ return [
     1236290 => '',
     1236291 => '',
     1237702 => '',
-
 ];

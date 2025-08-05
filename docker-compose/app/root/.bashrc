@@ -28,6 +28,23 @@ git config --global --add safe.directory /var/www/vendor/wotuu/keystone.guru.dep
 
 # # Take combat logs, extract their data, ingest them in the database and then in Opensearch:
 # php artisan combatlog:extractdata tmp
+# # Fetch any spells that may have been fetched from the combat log
+# php artisan wowhead:fetchmissingspells && php artisan wowhead:fetchmissingspellicons
+# # Save the spell names to the localization files
+# php artisan localization:exportspellnames
+# # Write translation keys back into the Spells table in the database
+# php artisan localization:importspellnames
+# # Fetch other translations from Wowhead
+# php artisan localization:syncspellnames retail
+# # Save the npc names to the localization files
+# php artisan localization:exportnpcnames
+# # Write translation keys back into the Npcs table in the database
+# php artisan localization:importnpcnames
+# # Fetch other translations from Wowhead
+# php artisan localization:syncnpcnames retail
+# # Now save and re-import the mapping so that translations are available in the database (optional)
+# php artisan mapping:save && ./refresh_db_seed.sh
+
 # # One combat log can contain multiple runs, split them up
 # php artisan combatlog:splitchallengemode tmp
 # # Convert to ARC-able .json bodies

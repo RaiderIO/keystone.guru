@@ -60,12 +60,13 @@ class FetchSpellData extends Command
             $this->info(sprintf('Fetching spell data for %d spells', $spells->count()));
         }
 
-        $gameVersions = $dungeon->getMappingVersionGameVersions();
+        $gameVersions = $dungeon?->getMappingVersionGameVersions() ?? collect();
         if ($gameVersions->isEmpty()) {
             $gameVersions = GameVersion::whereIn('id', [
                 GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
                 GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA],
                 GameVersion::ALL[GameVersion::GAME_VERSION_WRATH],
+                GameVersion::ALL[GameVersion::GAME_VERSION_MOP],
             ])->get();
         }
 

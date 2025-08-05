@@ -183,6 +183,9 @@ class Spell extends CacheModel implements MappingModelInterface
                 case GameVersion::ALL[GameVersion::GAME_VERSION_CLASSIC_ERA]:
                     $wowheadBaseUrl .= '/classic';
                     break;
+                case GameVersion::ALL[GameVersion::GAME_VERSION_MOP]:
+                    $wowheadBaseUrl .= '/mop-classic';
+                    break;
             }
         }
 

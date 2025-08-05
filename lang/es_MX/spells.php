@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     465     => 'Aura de devoción',
     498     => 'Protección divina',
     568     => 'Ráfaga Arcana',
@@ -2668,7 +2667,7 @@ return [
     323489  => 'Lanzar cuchilla',
     323496  => 'Lanzar cuchilla',
     323515  => 'Golpe de odio',
-    323538  => 'Saeta de poder',
+    323538  => 'Descarga de ánima',
     323542  => 'Rezumando',
     323552  => 'Salva de poder',
     323608  => 'Devastación oscura',
@@ -2754,7 +2753,7 @@ return [
     325725  => 'Artificio cósmico',
     325797  => 'Fuego rápido',
     325807  => 'Cosmos desatado',
-    325876  => 'Maldición de desintegración',
+    325876  => 'Marca de desintegración',
     326018  => 'Lleno de ácido',
     326021  => 'Glóbulo ácido',
     326022  => 'Glóbulo ácido',
@@ -2808,7 +2807,7 @@ return [
     327393  => 'Destino lúgubre',
     327396  => 'Destino lúgubre',
     327397  => 'Destino lúgubre',
-    327411  => 'Maldición de piedra',
+    327411  => 'Carne en piedra',
     327413  => 'Puño rebelde',
     327416  => 'Recargar ánima',
     327481  => 'Lanza oscura',
@@ -3787,7 +3786,7 @@ return [
     383067  => 'Pariente embravecido',
     383087  => 'Contagio marchito',
     383231  => 'Descarga de lava',
-    383269  => 'Extremidad abominable',
+    383269  => 'Legión de almas',
     383298  => 'Marca de magma',
     383312  => 'Extremidad abominable',
     383385  => 'Oleada putrefacta',
@@ -5943,5 +5942,4 @@ return [
     1236290 => '',
     1236291 => '',
     1237702 => '',
-
 ];

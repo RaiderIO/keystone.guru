@@ -12,13 +12,6 @@ trait ExportsTranslations
     public function exportTranslations(string $locale, string $fileName, array $data): bool
     {
         $exportToString = var_export($data, true);
-        $exportToString = preg_replace_callback(
-            '/(-?\d+)\s*=>/',
-            function ($matches) {
-                return "'" . $matches[1] . "' =>";
-            },
-            $exportToString
-        );
 
         if (file_put_contents(
             lang_path(sprintf('%s/%s', $locale, $fileName)),

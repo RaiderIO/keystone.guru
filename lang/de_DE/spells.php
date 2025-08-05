@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     465     => 'Aura der Hingabe',
     498     => 'Göttlicher Schutz',
     568     => 'Arkane Wucht',
@@ -2668,7 +2667,7 @@ return [
     323489  => 'Spaltbeil werfen',
     323496  => 'Spaltbeil werfen',
     323515  => 'Hasserfüllter Stoß',
-    323538  => 'Machtblitz',
+    323538  => 'Animablitz',
     323542  => 'Triefen',
     323552  => 'Machtsalve',
     323608  => 'Dunkle Verwüstung',
@@ -2754,7 +2753,7 @@ return [
     325725  => 'Kosmischer Kunstgriff',
     325797  => 'Schnellfeuer',
     325807  => 'Entfesselter Kosmos',
-    325876  => 'Fluch der Auslöschung',
+    325876  => 'Mal der Auslöschung',
     326018  => 'Mit Säure gefüllt',
     326021  => 'Säurekugel',
     326022  => 'Säurekugel',
@@ -2808,7 +2807,7 @@ return [
     327393  => 'Finsteres Schicksal',
     327396  => 'Finsteres Schicksal',
     327397  => 'Finsteres Schicksal',
-    327411  => 'Fluch des Steins',
+    327411  => 'Fleisch zu Stein',
     327413  => 'Rebellische Faust',
     327416  => 'Anima wiederaufladen',
     327481  => 'Dunkle Lanze',
@@ -3787,7 +3786,7 @@ return [
     383067  => 'Tobendes Geschwister',
     383087  => 'Welkende Ansteckung',
     383231  => 'Lavablitz',
-    383269  => 'Monströse Gliedmaße',
+    383269  => 'Legion der Seelen',
     383298  => 'Geschmolzenes Brandmal',
     383312  => 'Monströse Gliedmaße',
     383385  => 'Verrottende Woge',
@@ -5943,5 +5942,4 @@ return [
     1236290 => '',
     1236291 => '',
     1237702 => '',
-
 ];
