@@ -303,7 +303,8 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                     $spells->push(
                         new CombatLogRouteSpellRequestModel(
                             $resultEvent->getSpellId(),
-                            $advancedData->getInfoGuid()->getGuid(),
+                            // We use the owner guid if available (in case a pet cast this), otherwise we use the info guid (which is the owner/caster)
+                            $advancedData->getOwnerGuid()?->getGuid() ?? $advancedData->getInfoGuid()->getGuid(),
                             $resultEvent->getBaseEvent()->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
                             new CombatLogRouteCoordRequestModel(
                                 $advancedData->getPositionX(),

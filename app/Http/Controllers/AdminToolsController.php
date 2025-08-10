@@ -4,6 +4,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\Logging\HandlerLoggingInterface;
 use App\Http\Controllers\Traits\ChangesMapping;
 use App\Jobs\RefreshEnemyForces;
 use App\Logic\MDT\Data\MDTDungeon;
@@ -44,6 +45,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Laravel\Pennant\Feature;
 use Session;
@@ -217,7 +220,7 @@ class AdminToolsController extends Controller
 
                 $npcCandidate->npc_type_id = $npcTypeMapping[$npcData['type']];
                 // This will be converted to a translation with localization:exportnpcnames!
-                $npcCandidate->name        = $npcData['name'];
+                $npcCandidate->name = $npcData['name'];
 
                 $npcCandidate->aggressiveness = isset($npcData['react']) && is_array($npcData['react']) ? $aggressivenessMapping[$npcData['react'][0] ?? -1] : 'aggressive';
 
@@ -1088,21 +1091,55 @@ class AdminToolsController extends Controller
      */
     public function exceptionselect(Request $request): View
     {
-        return view('admin.tools.exception.select');
+        return view('admin.tools.exception.select', [
+            'exceptions' => [
+                'TokenMismatchException' => 'TokenMismatchException',
+                'InternalServerError'    => 'InternalServerError',
+                'DiscordException'       => 'DiscordException',
+            ],
+        ]);
     }
 
     /**
      * @throws TokenMismatchException
      * @throws Exception
      */
-    public function exceptionselectsubmit(Request $request): void
+    public function exceptionselectsubmit(Request $request): array
     {
         switch ($request->get('exception')) {
             case 'TokenMismatchException':
-                throw new TokenMismatchException(__('controller.admintools.flash.exception.token_mismatch'));
+                throw new TokenMismatchException(__('controller.admintools.flash.exception'));
             case 'InternalServerError':
-                throw new Exception(__('controller.admintools.flash.exception.internal_server_error'));
+                throw new Exception(__('controller.admintools.flash.exception'));
+            case 'DiscordException':
+                Log::error('Manual Generic test log from web');
+
+                Log::channel('discord')->error('Manual Discord test log from web');
+
+                Log::stack(['daily', 'discord'])->error('Manual stack log test from web');
+
+
+                $handlerLogging = app()->make(HandlerLoggingInterface::class);
+                $handlerLogging->uncaughtException(
+                    $request->ip(),
+                    $request->url(),
+                    null,
+                    null,
+                    null,
+                    'DiscordException',
+                    'Structured logging test from web'
+                );
+
+                return [
+                    'LOG_CHANNEL'     => env('LOG_CHANNEL'),
+                    'LOG_LEVEL'       => env('LOG_LEVEL'),
+                    'logging.default' => Config::get('logging.default'),
+                    'stack_channels'  => Config::get('logging.channels.stack.channels'),
+                    'discord_config'  => Config::get('logging.channels.discord'),
+                ];
         }
+
+        return [];
     }
 
     public function listFeatures(Request $request): View

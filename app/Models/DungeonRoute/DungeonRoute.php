@@ -1537,7 +1537,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         if ($this->affixgroups()->count() === 0) {
             // Make sure this route is at least assigned to an affix so that in the case of claiming we already have an affix which is required
             DungeonRouteAffixGroup::create([
-                'affix_group_id'   => $activeSeason->getCurrentAffixGroup()?->id ?? $activeSeason->affixGroups->first()->id,
+                'affix_group_id'   => $activeSeason->getCurrentAffixGroup()?->id ??
+                    $activeSeason->affixGroups->first()->id,
                 'dungeon_route_id' => $this->id,
             ]);
 
