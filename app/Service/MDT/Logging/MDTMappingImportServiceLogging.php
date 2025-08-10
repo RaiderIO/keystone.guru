@@ -251,6 +251,11 @@ class MDTMappingImportServiceLogging extends RollbarStructuredLogging implements
         $this->warning(__METHOD__, get_defined_vars());
     }
 
+    public function importEnemyPatrolsFoundExistingEnemyPatrol(int $enemyPatrolId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
     public function importEnemyPatrolsSaveNewPolyline(int $polylineId): void
     {
         $this->debug(__METHOD__, get_defined_vars());

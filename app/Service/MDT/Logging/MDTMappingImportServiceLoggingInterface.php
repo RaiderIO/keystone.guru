@@ -109,6 +109,8 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemyPatrolsFoundPatrolIsEmpty(string $uniqueKey): void;
 
+    public function importEnemyPatrolsFoundExistingEnemyPatrol(int $enemyPatrolId): void;
+
     public function importEnemyPatrolsSaveNewPolyline(int $polylineId): void;
 
     public function importEnemyPatrolsSaveNewMdtPolyline(int $polylineId): void;

@@ -688,12 +688,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         // attached to the patrol, but that would be a lot of work)
                         if ($existingEnemyPatrolCandidate->mdtPolyline?->vertices_json === $mdtPolylineVerticesJson) {
                             $existingEnemyPatrol = $existingEnemyPatrolCandidate;
+                            $this->log->importEnemyPatrolsFoundExistingEnemyPatrol($existingEnemyPatrol->id);
                             break;
                         }
                     }
 
-                    $verticesJson = $existingEnemyPatrol?->polyline->vertices_json ?? null;
-                    if (empty($verticesJson)) {
+                    $verticesAttributes = $existingEnemyPatrol?->polyline->getAttributes() ?? null;
+                    if (empty($verticesAttributes)) {
                         $vertices = [];
                         foreach ($mdtNpcClone['patrol'] as $xy) {
                             $latLng     = Conversion::convertMDTCoordinateToLatLng($xy, $facadeFloor ?? $savedEnemy->floor);
@@ -702,19 +703,23 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         }
 
                         // MDT automatically closes up the patrol which I don't, so correct for this (confirmed by Nnoggie)
-                        $vertices[]   = $vertices[0];
-                        $verticesJson = json_encode($vertices);
+                        $vertices[]         = $vertices[0];
+                        $verticesAttributes = [
+                            'model_class'    => EnemyPatrol::class,
+                            'color'          => '#003280',
+                            'color_animated' => null,
+                            'weight'         => 2,
+                            'vertices_json'  => json_encode($vertices),
+                        ];
                     }
 
-                    // Polyline
-                    $polyLine = Polyline::create([
-                        'model_id'       => -1,
-                        'model_class'    => EnemyPatrol::class,
-                        'color'          => '#003280',
-                        'color_animated' => null,
-                        'weight'         => 2,
-                        'vertices_json'  => $verticesJson,
-                    ]);
+                    // Save polyline
+                    $polyLine = Polyline::create(array_merge($verticesAttributes, [
+                        // Reset the ID (in case it was imported from an existing enemy patrol)
+                        'id'       => null,
+                        // But make sure that the polyline is not attached to any model yet
+                        'model_id' => -1,
+                    ]));
                     if ($polyLine !== null) {
                         $this->log->importEnemyPatrolsSaveNewPolyline($polyLine->id);
                     } else {
