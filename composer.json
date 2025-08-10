@@ -34,11 +34,11 @@
             "type": "package",
             "package": {
                 "name": "nnoggie/mythicdungeontools",
-                "version": "5.5.0",
+                "version": "5.5.1",
                 "source": {
                     "url": "https://github.com/Wotuu/MythicDungeonTools.git",
                     "type": "git",
-                    "reference": "14973b0276dbe9457852ea8c92cb90ef8a43edc9"
+                    "reference": "5c289914210997a07010f6d8fe6a6a41f0249d42"
                 }
             }
         },
@@ -102,7 +102,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "marvinlabs/laravel-discord-logger": "^1.3",
         "nnoggie/mdt-legacy": "^1.0",
-        "nnoggie/mythicdungeontools": "5.5.0",
+        "nnoggie/mythicdungeontools": "^5.5",
         "paquettg/php-html-parser": "^3.1",
         "patreon/patreon": "^1.0.0",
         "phlak/semver": "^4.1",
