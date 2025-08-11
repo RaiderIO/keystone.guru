@@ -151,6 +151,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                     2 => $mdtCoordinates['y'],
                     3 => $floor->mdt_sub_level ?? $floor->index,
                     4 => true,
+                    // @TODO #2932
                     5 => strip_tags($killZone->description), // MDT does not support HTML tags - get rid of them.
                 ],
             ];

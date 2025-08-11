@@ -74,6 +74,9 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
 
         // Scholomance
         58722 => 0.01, // Lilian Voss
+
+        // Tazavesh: Streets of Wonder
+        176555 => 0.01, // Achillite is never defeated, but starts pumping out lightning balls at 1hp instead
     ];
 
     /** @var array Some enemies are summoned that we DO want to track in the route */
