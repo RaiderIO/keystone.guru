@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'seasonal_type' => [
         'beguiling'           => 'Beguiling',
         'awakened'            => 'Awakened',
@@ -11,8 +12,8 @@ return [
         'mdt_placeholder'     => 'MDT Placeholder',
         'requires_activation' => 'Requires Activation',
         'shrouded'            => 'Shrouded',
-        'shrouded_zul_gamux'  => "Shrouded (Zul'gamux)",
+        'shrouded_zul_gamux'  => 'Shrouded (Zul\'gamux)',
         'no_shrouded'         => 'No Shrouded',
     ],
-];
 
+];

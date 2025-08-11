@@ -3,10 +3,10 @@
 return [
 
     'difficulty' => [
-        '1' => 'Hodor',
-        '2' => 'Hodor',
-        '3' => 'Hodor',
-        '4' => 'Hodor',
+        1 => 'Hodor',
+        2 => 'Hodor',
+        3 => 'Hodor',
+        4 => 'Hodor',
     ],
     'classic'    => [
         'blackfathom_deeps'           => [
@@ -908,19 +908,21 @@ return [
         'tazavesh_streets_of_wonder' => [
             'name'   => 'Hodor',
             'floors' => [
-                'the_veiled_market'   => 'Hodor',
-                'the_grand_menagerie' => 'Hodor',
-                'the_post'            => 'Hodor',
-                'myzas_oasis'         => 'Hodor',
+                'the_veiled_market'          => 'Hodor',
+                'the_grand_menagerie'        => 'Hodor',
+                'the_post'                   => 'Hodor',
+                'myzas_oasis'                => 'Hodor',
+                'tazavesh_streets_of_wonder' => 'Hodor',
             ],
         ],
         'tazavesh_so_leahs_gambit'   => [
             'name'   => 'Hodor',
             'floors' => [
-                'stormheim'         => 'Hodor',
-                'aggramars_vault'   => 'Hodor',
-                'boralus_harbor'    => 'Hodor',
-                'the_opulent_nexus' => 'Hodor',
+                'stormheim'                => 'Hodor',
+                'aggramars_vault'          => 'Hodor',
+                'boralus_harbor'           => 'Hodor',
+                'the_opulent_nexus'        => 'Hodor',
+                'tazavesh_so_leahs_gambit' => 'Hodor',
             ],
         ],
     ],
@@ -1080,6 +1082,12 @@ return [
                 'the_waterworks'      => 'Hodor',
                 'the_grid'            => 'Hodor',
                 'operation_floodgate' => 'Hodor',
+            ],
+        ],
+        'eco_dome_al_dani'           => [
+            'name'   => 'Hodor',
+            'floors' => [
+                'eco_dome_al_dani' => 'Hodor',
             ],
         ],
     ],

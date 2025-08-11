@@ -31,14 +31,14 @@ class RefreshDisplayIds extends Command
     public function handle(WowheadServiceInterface $wowheadService): void
     {
         /** @var Collection<Npc> $npcsToRefresh */
-        $npcsToRefresh = Npc::with('dungeon')->whereNull('display_id')->get();
+        $npcsToRefresh = Npc::with('dungeons')->whereNull('display_id')->get();
 
         $this->info(sprintf('Refreshing display_ids for %d npcs..', $npcsToRefresh->count()));
 
         foreach ($npcsToRefresh as $npc) {
             /** @var Dungeon $dungeon */
             foreach ($npc->dungeons as $dungeon) {
-                foreach($dungeon->getMappingVersionGameVersions() as $gameVersion) {
+                foreach ($dungeon->getMappingVersionGameVersions() as $gameVersion) {
                     $displayId = $wowheadService->getNpcDisplayId($gameVersion, $npc);
 
                     // Sleep half a second, don't DDOS wowhead

@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var array $exceptions
+ */
+?>
 @extends('layouts.sitepage', ['showAds' => false, 'title' => __('view_admin.tools.exception.select.title')])
 
 @section('header-title', __('view_admin.tools.exception.select.header'))
@@ -6,10 +11,7 @@
     {{ Form::open(['route' => 'admin.tools.exception.select.submit']) }}
     <div class="form-group">
         {!! Form::label('exception', __('view_admin.tools.exception.select.select_exception_to_throw')) !!}
-        {{ Form::select('exception', [
-        'TokenMismatchException' => 'TokenMismatchException',
-        'InternalServerError' => 'InternalServerError'
-        ], null, ['class' => 'form-control selectpicker']) }}
+        {{ Form::select('exception', $exceptions, null, ['class' => 'form-control selectpicker']) }}
     </div>
     <div class="form-group">
         {!! Form::submit(__('view_admin.tools.exception.select.submit'), ['class' => 'btn btn-primary col-md-auto']) !!}

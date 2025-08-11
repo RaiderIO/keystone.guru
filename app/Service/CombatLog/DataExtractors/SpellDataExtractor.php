@@ -113,7 +113,7 @@ class SpellDataExtractor implements DataExtractorInterface
 
                 $this->assignDungeonToSpell($result, $currentDungeon, $parsedEvent, $prefix);
 
-                $this->assignSpellToNpc($result, $parsedEvent, $sourceGuid, $prefix);
+                $this->assignSpellToNpc($result, $currentDungeon, $parsedEvent, $sourceGuid, $prefix);
             }
         }
     }
@@ -223,10 +223,11 @@ class SpellDataExtractor implements DataExtractorInterface
     }
 
     private function assignSpellToNpc(
-        ExtractedDataResult $result,
-        CombatLogEvent      $parsedEvent,
-        Creature            $sourceGuid,
-        Spell               $prefix
+        ExtractedDataResult          $result,
+        DataExtractionCurrentDungeon $currentDungeon,
+        CombatLogEvent               $parsedEvent,
+        Creature                     $sourceGuid,
+        Spell                        $prefix
     ): void {
         // Check if the spell can be assigned
         $spell = $this->allSpells->get($prefix->getSpellId());
@@ -258,6 +259,17 @@ class SpellDataExtractor implements DataExtractorInterface
                     'npc_id'   => $npc->id,
                     'spell_id' => $prefix->getSpellId(),
                 ]);
+
+                // Assign the spell to the dungeon as well
+                if (
+                    !SpellDungeon::where('spell_id', $prefix->getSpellId())
+                        ->where('dungeon_id', $currentDungeon->dungeon->id)->exists()
+                ) {
+                    SpellDungeon::create([
+                        'spell_id'   => $prefix->getSpellId(),
+                        'dungeon_id' => $currentDungeon->dungeon->id,
+                    ]);
+                }
 
                 CombatLogNpcSpellAssignment::create([
                     'npc_id'          => $npc->id,

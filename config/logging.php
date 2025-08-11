@@ -55,7 +55,8 @@ return [
     'channels' => [
         'stack' => [
             'driver'            => 'stack',
-            'channels'          => ['daily', 'discord', /*'rollbar'*/],
+            // stderr so that logs show up in EC2
+            'channels'          => ['stderr', 'daily', 'discord', /*'rollbar'*/],
             'ignore_exceptions' => false,
         ],
 
@@ -67,7 +68,7 @@ return [
 
         'stack_docker_local' => [
             'driver'            => 'stack',
-            'channels'          => ['stderr', 'daily', /*'rollbar'*/],
+            'channels'          => ['stderr', 'daily','discord', /*'rollbar'*/],
             'ignore_exceptions' => false,
         ],
 

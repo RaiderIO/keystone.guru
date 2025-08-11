@@ -6,7 +6,7 @@ use Exception;
 
 interface AffixGroupEaseTierServiceLoggingInterface
 {
-    public function parseTierListUnknownAffixGroup(string $affixGroupString): void;
+    public function parseTierListUnknownAffixGroup(?string $affixGroupString): void;
 
     public function parseTierListInvalidLastUpdated(Exception $exception, string $lastUpdated): void;
 

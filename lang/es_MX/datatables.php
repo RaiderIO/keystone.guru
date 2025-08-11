@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'emptyTable'     => 'No hay datos disponibles en la tabla',
     'info'           => 'Mostrando _START_ a _END_ de _TOTAL_ entradas',
     'infoEmpty'      => 'No hay datos para mostrar',
@@ -12,268 +13,235 @@ return [
     'search'         => 'Buscar:',
     'zeroRecords'    => 'No se encontraron coincidencias',
     'thousands'      => ',',
-    'paginate'       =>
-        [
-            'first'    => 'Primero',
-            'last'     => 'Último',
-            'next'     => 'Siguiente',
-            'previous' => 'Anterior',
+    'paginate'       => [
+        'first'    => 'Primero',
+        'last'     => 'Último',
+        'next'     => 'Siguiente',
+        'previous' => 'Anterior',
+    ],
+    'aria'           => [
+        'sortAscending'  => 'Activar para ordenar la columna de manera ascendente',
+        'sortDescending' => 'Activar para ordenar la columna de manera descendente',
+    ],
+    'autoFill'       => [
+        'cancel'         => 'Cancelar',
+        'fill'           => 'Rellene todas las celdas con <i>%d</i>',
+        'fillHorizontal' => 'Rellenar celdas horizontalmente',
+        'fillVertical'   => 'Rellenar celdas verticalmente',
+    ],
+    'buttons'        => [
+        'collection'      => 'Colección',
+        'colvis'          => 'Visibilidad',
+        'colvisRestore'   => 'Restaurar visibilidad',
+        'copy'            => 'Copiar',
+        'copyKeys'        => 'Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br /> <br /> Para cancelar, haga clic en este mensaje o presione escape.',
+        'copySuccess'     => [
+            1   => 'Copiada 1 fila al portapapeles',
+            '_' => 'Copiadas %d fila al portapapeles',
         ],
-    'aria'           =>
-        [
-            'sortAscending'  => 'Activar para ordenar la columna de manera ascendente',
-            'sortDescending' => 'Activar para ordenar la columna de manera descendente',
+        'copyTitle'       => 'Copiar al portapapeles',
+        'csv'             => 'CSV',
+        'excel'           => 'Excel',
+        'pageLength'      => [
+            -1  => 'Mostrar todas las filas',
+            '_' => 'Mostrar %d filas',
         ],
-    'autoFill'       =>
-        [
-            'cancel'         => 'Cancelar',
-            'fill'           => 'Rellene todas las celdas con <i>%d</i>',
-            'fillHorizontal' => 'Rellenar celdas horizontalmente',
-            'fillVertical'   => 'Rellenar celdas verticalmente',
+        'pdf'             => 'PDF',
+        'print'           => 'Imprimir',
+        'updateState'     => 'Actualizar Estado',
+        'stateRestore'    => 'Restaurar Estado',
+        'savedStates'     => 'Guardar Estado',
+        'renameState'     => 'Renombrar Estado',
+        'removeState'     => 'Borrar Estado',
+        'removeAllStates' => 'Borrar Todos los Estados',
+        'createState'     => 'Crear Estado',
+    ],
+    'searchBuilder'  => [
+        'add'         => 'Añadir condición',
+        'button'      => [
+            0   => 'Constructor de búsqueda',
+            '_' => 'Constructor de búsqueda (%d)',
         ],
-    'buttons'        =>
-        [
-            'collection'      => 'Colección',
-            'colvis'          => 'Visibilidad',
-            'colvisRestore'   => 'Restaurar visibilidad',
-            'copy'            => 'Copiar',
-            'copyKeys'        => 'Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br /> <br /> Para cancelar, haga clic en este mensaje o presione escape.',
-            'copySuccess'     =>
-                [
-                    '1' => 'Copiada 1 fila al portapapeles',
-                    '_' => 'Copiadas %d fila al portapapeles',
-                ],
-            'copyTitle'       => 'Copiar al portapapeles',
-            'csv'             => 'CSV',
-            'excel'           => 'Excel',
-            'pageLength'      =>
-                [
-                    '-1' => 'Mostrar todas las filas',
-                    '_'  => 'Mostrar %d filas',
-                ],
-            'pdf'             => 'PDF',
-            'print'           => 'Imprimir',
-            'updateState'     => 'Actualizar Estado',
-            'stateRestore'    => 'Restaurar Estado',
-            'savedStates'     => 'Guardar Estado',
-            'renameState'     => 'Renombrar Estado',
-            'removeState'     => 'Borrar Estado',
-            'removeAllStates' => 'Borrar Todos los Estados',
-            'createState'     => 'Crear Estado',
+        'clearAll'    => 'Borrar todo',
+        'condition'   => 'Condición',
+        'conditions'  => [
+            'date'   => [
+                'after'      => 'Después',
+                'before'     => 'Antes',
+                'between'    => 'Entre',
+                'empty'      => 'Vacío',
+                'equals'     => 'Igual a',
+                'not'        => 'Diferente de',
+                'notBetween' => 'No entre',
+                'notEmpty'   => 'No vacío',
+            ],
+            'number' => [
+                'between'    => 'Entre',
+                'empty'      => 'Vacío',
+                'equals'     => 'Igual a',
+                'gt'         => 'Mayor a',
+                'gte'        => 'Mayor o igual a',
+                'lt'         => 'Menor que',
+                'lte'        => 'Menor o igual a',
+                'not'        => 'Diferente de',
+                'notBetween' => 'No entre',
+                'notEmpty'   => 'No vacío',
+            ],
+            'string' => [
+                'contains'      => 'Contiene',
+                'empty'         => 'Vacío',
+                'endsWith'      => 'Termina con',
+                'equals'        => 'Igual a',
+                'not'           => 'Diferente de',
+                'notEmpty'      => 'No vacío',
+                'startsWith'    => 'Inicia con',
+                'notContains'   => 'No Contiene',
+                'notStartsWith' => 'No Comienza',
+                'notEndsWith'   => 'No Termina',
+            ],
+            'array'  => [
+                'without'  => 'Sin',
+                'notEmpty' => 'No vacío',
+                'not'      => 'Diferente',
+                'contains' => 'Contiene',
+                'empty'    => 'Vacío',
+                'equals'   => 'Igual a',
+            ],
         ],
-    'searchBuilder'  =>
-        [
-            'add'         => 'Añadir condición',
-            'button'      =>
-                [
-                    '0' => 'Constructor de búsqueda',
-                    '_' => 'Constructor de búsqueda (%d)',
-                ],
-            'clearAll'    => 'Borrar todo',
-            'condition'   => 'Condición',
-            'conditions'  =>
-                [
-                    'date'   =>
-                        [
-                            'after'      => 'Después',
-                            'before'     => 'Antes',
-                            'between'    => 'Entre',
-                            'empty'      => 'Vacío',
-                            'equals'     => 'Igual a',
-                            'not'        => 'Diferente de',
-                            'notBetween' => 'No entre',
-                            'notEmpty'   => 'No vacío',
-                        ],
-                    'number' =>
-                        [
-                            'between'    => 'Entre',
-                            'empty'      => 'Vacío',
-                            'equals'     => 'Igual a',
-                            'gt'         => 'Mayor a',
-                            'gte'        => 'Mayor o igual a',
-                            'lt'         => 'Menor que',
-                            'lte'        => 'Menor o igual a',
-                            'not'        => 'Diferente de',
-                            'notBetween' => 'No entre',
-                            'notEmpty'   => 'No vacío',
-                        ],
-                    'string' =>
-                        [
-                            'contains'      => 'Contiene',
-                            'empty'         => 'Vacío',
-                            'endsWith'      => 'Termina con',
-                            'equals'        => 'Igual a',
-                            'not'           => 'Diferente de',
-                            'notEmpty'      => 'No vacío',
-                            'startsWith'    => 'Inicia con',
-                            'notContains'   => 'No Contiene',
-                            'notStartsWith' => 'No Comienza',
-                            'notEndsWith'   => 'No Termina',
-                        ],
-                    'array'  =>
-                        [
-                            'without'  => 'Sin',
-                            'notEmpty' => 'No vacío',
-                            'not'      => 'Diferente',
-                            'contains' => 'Contiene',
-                            'empty'    => 'Vacío',
-                            'equals'   => 'Igual a',
-                        ],
-                ],
-            'data'        => 'Datos',
-            'deleteTitle' => 'Eliminar regla de filtrado',
-            'leftTitle'   => 'Criterios anulados',
-            'logicAnd'    => 'Y',
-            'logicOr'     => 'O',
-            'rightTitle'  => 'Criterios de sangría',
-            'title'       =>
-                [
-                    '0' => 'Constructor de búsqueda',
-                    '_' => 'Constructor de búsqueda (%d)',
-                ],
-            'value'       => 'Valor',
+        'data'        => 'Datos',
+        'deleteTitle' => 'Eliminar regla de filtrado',
+        'leftTitle'   => 'Criterios anulados',
+        'logicAnd'    => 'Y',
+        'logicOr'     => 'O',
+        'rightTitle'  => 'Criterios de sangría',
+        'title'       => [
+            0   => 'Constructor de búsqueda',
+            '_' => 'Constructor de búsqueda (%d)',
         ],
-    'searchPanes'    =>
-        [
-            'clearMessage'    => 'Borrar todo',
-            'collapse'        =>
-                [
-                    '0' => 'Paneles de búsqueda',
-                    '_' => 'Paneles de búsqueda (%d)',
-                ],
-            'count'           => '{total}',
-            'countFiltered'   => '{shown} ({total})',
-            'emptyPanes'      => 'Sin paneles de búsqueda',
-            'loadMessage'     => 'Cargando paneles de búsqueda',
-            'title'           => 'Filtros Activos - %d',
-            'showMessage'     => 'Mostrar Todo',
-            'collapseMessage' => 'Colapsar',
+        'value'       => 'Valor',
+    ],
+    'searchPanes'    => [
+        'clearMessage'    => 'Borrar todo',
+        'collapse'        => [
+            0   => 'Paneles de búsqueda',
+            '_' => 'Paneles de búsqueda (%d)',
         ],
-    'select'         =>
-        [
-            'cells'   =>
-                [
-                    '1' => '1 celda seleccionada',
-                    '_' => '%d celdas seleccionadas',
-                ],
-            'columns' =>
-                [
-                    '1' => '1 columna seleccionada',
-                    '_' => '%d columnas seleccionadas',
-                ],
-            'rows'    =>
-                [
-                    '1' => '1 fila seleccionada',
-                    '_' => '%d filas seleccionadas',
-                ],
+        'count'           => '{total}',
+        'countFiltered'   => '{shown} ({total})',
+        'emptyPanes'      => 'Sin paneles de búsqueda',
+        'loadMessage'     => 'Cargando paneles de búsqueda',
+        'title'           => 'Filtros Activos - %d',
+        'showMessage'     => 'Mostrar Todo',
+        'collapseMessage' => 'Colapsar',
+    ],
+    'select'         => [
+        'cells'   => [
+            1   => '1 celda seleccionada',
+            '_' => '%d celdas seleccionadas',
         ],
-    'datetime'       =>
-        [
-            'previous' => 'Anterior',
-            'next'     => 'Siguiente',
-            'hours'    => 'Horas',
-            'minutes'  => 'Minutos',
-            'seconds'  => 'Segundos',
-            'unknown'  => '-',
-            'amPm'     =>
-                [
-                    '0' => 'am',
-                    '1' => 'pm',
-                ],
-            'weekdays' =>
-                [
-                    '0' => 'Domingo',
-                    '1' => 'Lunes',
-                    '2' => 'Martes',
-                    '3' => 'Miércoles',
-                    '4' => 'Jueves',
-                    '5' => 'Viernes',
-                    '6' => 'Sábado',
-                ],
-            'months'   =>
-                [
-                    '0'  => 'Enero',
-                    '1'  => 'Febrero',
-                    '2'  => 'Marzo',
-                    '3'  => 'Abril',
-                    '4'  => 'Mayo',
-                    '5'  => 'Junio',
-                    '6'  => 'Julio',
-                    '7'  => 'Agosto',
-                    '8'  => 'Septiembre',
-                    '9'  => 'Octubre',
-                    '10' => 'Noviembre',
-                    '11' => 'Diciembre',
-                ],
+        'columns' => [
+            1   => '1 columna seleccionada',
+            '_' => '%d columnas seleccionadas',
         ],
-    'editor'         =>
-        [
-            'close'  => 'Cerrar',
-            'create' =>
-                [
-                    'button' => 'Nuevo',
-                    'title'  => 'Crear Nuevo Registro',
-                    'submit' => 'Crear',
-                ],
-            'edit'   =>
-                [
-                    'button' => 'Editar',
-                    'title'  => 'Editar Registro',
-                    'submit' => 'Actualizar',
-                ],
-            'remove' =>
-                [
-                    'button'  => 'Eliminar',
-                    'title'   => 'Eliminar Registro',
-                    'submit'  => 'Eliminar',
-                    'confirm' =>
-                        [
-                            '_' => '¿Está seguro que desea eliminar %d filas?',
-                            '1' => '¿Está seguro que desea eliminar 1 fila?',
-                        ],
-                ],
-            'error'  =>
-                [
-                    'system' => 'Ha ocurrido un error en el sistema (<a target="\\" rel="\\ nofollow" href="\\"> Más información</a>).',
-                ],
-            'multi'  =>
-                [
-                    'title'   => 'Múltiples Valores',
-                    'info'    => 'Los elementos seleccionados contienen diferentes valores para este registro. Para editar y establecer todos los elementos de este registro con el mismo valor, haga click o toque aquí, de lo contrario conservarán sus valores individuales.',
-                    'restore' => 'Deshacer Cambios',
-                    'noMulti' => 'Este registro puede ser editado individualmente, pero no como parte de un grupo.',
-                ],
+        'rows'    => [
+            1   => '1 fila seleccionada',
+            '_' => '%d filas seleccionadas',
         ],
-    'stateRestore'   =>
-        [
-            'renameTitle'    => 'Renombrar',
-            'renameLabel'    => 'Nuevo nombre para %s:',
-            'renameButton'   => 'Renombrar',
-            'removeTitle'    => 'Eliminar',
-            'removeSubmit'   => 'Eliminar',
-            'removeJoiner'   => 'y',
-            'removeError'    => 'Fallo al eliminar',
-            'removeConfirm'  => 'Esta seguro de eliminar %s?',
-            'emptyStates'    => 'No se han guardado',
-            'emptyError'     => 'No puede ser vacío',
-            'duplicateError' => 'Ya existe un valor con el mismo nombre',
-            'creationModal'  =>
-                [
-                    'toggleLabel'   => 'Incluye:',
-                    'title'         => 'Crear nuevo',
-                    'select'        => 'Selector',
-                    'searchBuilder' => 'Creador de búsquedas',
-                    'search'        => 'Buscar',
-                    'scroller'      => 'Posición de desplazamiento',
-                    'paging'        => 'Paginar',
-                    'order'         => 'Ordenar',
-                    'name'          => 'Nombre:',
-                    'columns'       =>
-                        [
-                            'visible' => 'Columna de visibilidad',
-                            'search'  => 'Columna de búsqueda',
-                        ],
-                    'button'        => 'Crear',
-                ],
+    ],
+    'datetime'       => [
+        'previous' => 'Anterior',
+        'next'     => 'Siguiente',
+        'hours'    => 'Horas',
+        'minutes'  => 'Minutos',
+        'seconds'  => 'Segundos',
+        'unknown'  => '-',
+        'amPm'     => [
+            0 => 'am',
+            1 => 'pm',
         ],
+        'weekdays' => [
+            0 => 'Domingo',
+            1 => 'Lunes',
+            2 => 'Martes',
+            3 => 'Miércoles',
+            4 => 'Jueves',
+            5 => 'Viernes',
+            6 => 'Sábado',
+        ],
+        'months'   => [
+            0  => 'Enero',
+            1  => 'Febrero',
+            2  => 'Marzo',
+            3  => 'Abril',
+            4  => 'Mayo',
+            5  => 'Junio',
+            6  => 'Julio',
+            7  => 'Agosto',
+            8  => 'Septiembre',
+            9  => 'Octubre',
+            10 => 'Noviembre',
+            11 => 'Diciembre',
+        ],
+    ],
+    'editor'         => [
+        'close'  => 'Cerrar',
+        'create' => [
+            'button' => 'Nuevo',
+            'title'  => 'Crear Nuevo Registro',
+            'submit' => 'Crear',
+        ],
+        'edit'   => [
+            'button' => 'Editar',
+            'title'  => 'Editar Registro',
+            'submit' => 'Actualizar',
+        ],
+        'remove' => [
+            'button'  => 'Eliminar',
+            'title'   => 'Eliminar Registro',
+            'submit'  => 'Eliminar',
+            'confirm' => [
+                '_' => '¿Está seguro que desea eliminar %d filas?',
+                1   => '¿Está seguro que desea eliminar 1 fila?',
+            ],
+        ],
+        'error'  => [
+            'system' => 'Ha ocurrido un error en el sistema (<a target="" rel="\ nofollow" href=""> Más información</a>).',
+        ],
+        'multi'  => [
+            'title'   => 'Múltiples Valores',
+            'info'    => 'Los elementos seleccionados contienen diferentes valores para este registro. Para editar y establecer todos los elementos de este registro con el mismo valor, haga click o toque aquí, de lo contrario conservarán sus valores individuales.',
+            'restore' => 'Deshacer Cambios',
+            'noMulti' => 'Este registro puede ser editado individualmente, pero no como parte de un grupo.',
+        ],
+    ],
+    'stateRestore'   => [
+        'renameTitle'    => 'Renombrar',
+        'renameLabel'    => 'Nuevo nombre para %s:',
+        'renameButton'   => 'Renombrar',
+        'removeTitle'    => 'Eliminar',
+        'removeSubmit'   => 'Eliminar',
+        'removeJoiner'   => 'y',
+        'removeError'    => 'Fallo al eliminar',
+        'removeConfirm'  => 'Esta seguro de eliminar %s?',
+        'emptyStates'    => 'No se han guardado',
+        'emptyError'     => 'No puede ser vacío',
+        'duplicateError' => 'Ya existe un valor con el mismo nombre',
+        'creationModal'  => [
+            'toggleLabel'   => 'Incluye:',
+            'title'         => 'Crear nuevo',
+            'select'        => 'Selector',
+            'searchBuilder' => 'Creador de búsquedas',
+            'search'        => 'Buscar',
+            'scroller'      => 'Posición de desplazamiento',
+            'paging'        => 'Paginar',
+            'order'         => 'Ordenar',
+            'name'          => 'Nombre:',
+            'columns'       => [
+                'visible' => 'Columna de visibilidad',
+                'search'  => 'Columna de búsqueda',
+            ],
+            'button'        => 'Crear',
+        ],
+    ],
+
 ];

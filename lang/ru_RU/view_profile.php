@@ -1,29 +1,29 @@
 <?php
 
 return [
-    'edit'      => [
-        'title'                   => 'Профиль',
-        'profile'                 => 'Профиль',
-        'account'                 => 'Аккаунт',
-        'patreon'                 => 'Patreon',
-        'change_password'         => 'Сменить пароль',
-        'privacy'                 => 'Конфиденциальность',
-        'reports'                 => 'Жалобы',
-        'menu_title'              => '%s\'s профиль',
-        'avatar'                  => 'Аватар',
-        'avatar_alt'            => 'Аватар пользователя',
-        'username'                => 'Имя пользователя',
-        'username_title'          => 'Поскольку вы вошли в систему с помощью внешней службы аутентификации, вы можете изменить свое имя пользователя один раз.',
-        'email'                   => 'Электронный адрес',
-        'region'                  => 'Регион',
-        'select_region'           => 'Выбрать регион',
-        'show_as_anonymous'       => 'Отображать как аноним',
-        'show_as_anonymous_title' => 'Включение этой опции будет отображать вас как анонима при просмотре маршрутов, которые не являются частью какой-либо команды, частью которой вы являетесь.
-                             Для ваших собственных маршрутов и для маршрутов, входящих в состав ваших команд, ваше имя всегда будет видно.',
-        'echo_color'              => 'Синхронизация редактирования цвета маршрута',
-        'echo_color_title'        => 'При редактировании маршрута совместно с членом команды этот цвет будет идентифицировать вас.',
-        'save'                    => 'Сохранить',
 
+    'edit'      => [
+        'title'                                            => 'Профиль',
+        'profile'                                          => 'Профиль',
+        'account'                                          => 'Аккаунт',
+        'patreon'                                          => 'Patreon',
+        'change_password'                                  => 'Сменить пароль',
+        'privacy'                                          => 'Конфиденциальность',
+        'reports'                                          => 'Жалобы',
+        'menu_title'                                       => '%s\'s профиль',
+        'avatar'                                           => 'Аватар',
+        'avatar_alt'                                       => 'Аватар пользователя',
+        'username'                                         => 'Имя пользователя',
+        'username_title'                                   => 'Поскольку вы вошли в систему с помощью внешней службы аутентификации, вы можете изменить свое имя пользователя один раз.',
+        'email'                                            => 'Электронный адрес',
+        'region'                                           => 'Регион',
+        'select_region'                                    => 'Выбрать регион',
+        'show_as_anonymous'                                => 'Отображать как аноним',
+        'show_as_anonymous_title'                          => 'Включение этой опции будет отображать вас как анонима при просмотре маршрутов, которые не являются частью какой-либо команды, частью которой вы являетесь.
+                             Для ваших собственных маршрутов и для маршрутов, входящих в состав ваших команд, ваше имя всегда будет видно.',
+        'echo_color'                                       => 'Синхронизация редактирования цвета маршрута',
+        'echo_color_title'                                 => 'При редактировании маршрута совместно с членом команды этот цвет будет идентифицировать вас.',
+        'save'                                             => 'Сохранить',
         'account_delete_consequences'                      => 'Если вы удалите свою учетную запись Keystone.guru, произойдет следующее:',
         'account_delete_consequence_routes'                => 'Маршруты',
         'account_delete_consequence_routes_delete'         => 'Ваш %s маршрут(ы) будут удален.',
@@ -36,31 +36,27 @@ return [
         'account_delete_consequence_reports_unresolved'    => 'Ваши неразрешенные жалобы (%s) будут удалены.',
         'account_delete_warning'                           => 'Ваша учетная запись будет удалена без возможности восстановления. Пути назад нет  .',
         'account_delete_confirm'                           => 'Удалить мою учетную запись на Keystone.guru',
-
-        'unlink_from_patreon'             => 'Отменить связь с Patreon',
-        'patreon_status_granted_manually' => '',
-        'link_to_patreon_success'         => 'Ваша учетная запись привязана к Patreon. Спасибо!',
-        'link_to_patreon'                 => 'Ссылка на Патреон',
-        'link_to_patreon_description'     => 'Чтобы получить бонусы подписчика Patreon, вам необходимо привязать свою учетную запись к Patreon.',
-        'patreon_benefit_table'           => [
+        'unlink_from_patreon'                              => 'Отменить связь с Patreon',
+        'patreon_status_granted_manually'                  => '',
+        'link_to_patreon_success'                          => 'Ваша учетная запись привязана к Patreon. Спасибо!',
+        'link_to_patreon'                                  => 'Ссылка на Патреон',
+        'link_to_patreon_description'                      => 'Чтобы получить бонусы подписчика Patreon, вам необходимо привязать свою учетную запись к Patreon.',
+        'patreon_benefit_table'                            => [
             'header_active'  => '',
             'header_benefit' => '',
         ],
-
-        'current_password'     => 'Текущий пароль',
-        'new_password'         => 'Новый пароль',
-        'new_password_confirm' => 'Подтвердить новый пароль',
-        'submit'               => 'Подтвердить',
-
-        'ga_cookies_opt_out'  => 'Отключение файлов cookie Google Analytics',
-        'reports_description' => 'Здесь будут перечислены все маршруты, враги и другие отчеты, которые вы сделали на сайте.',
-
-        'reports_table_header_id'         => 'ID',
-        'reports_table_header_category'   => 'Категория',
-        'reports_table_header_message'    => 'Сообщение',
-        'reports_table_header_created_at' => 'Дата создания',
-        'reports_table_header_status'     => 'Статус',
-        'reports_table_action_handled'    => 'Обработано',
+        'current_password'                                 => 'Текущий пароль',
+        'new_password'                                     => 'Новый пароль',
+        'new_password_confirm'                             => 'Подтвердить новый пароль',
+        'submit'                                           => 'Подтвердить',
+        'ga_cookies_opt_out'                               => 'Отключение файлов cookie Google Analytics',
+        'reports_description'                              => 'Здесь будут перечислены все маршруты, враги и другие отчеты, которые вы сделали на сайте.',
+        'reports_table_header_id'                          => 'ID',
+        'reports_table_header_category'                    => 'Категория',
+        'reports_table_header_message'                     => 'Сообщение',
+        'reports_table_header_created_at'                  => 'Дата создания',
+        'reports_table_header_status'                      => 'Статус',
+        'reports_table_action_handled'                     => 'Обработано',
     ],
     'favorites' => [
         'title' => 'Избранное',
@@ -80,7 +76,6 @@ return [
         'create_team'              => 'Создать команду',
         'create_team_description'  => 'Команда используется, чтобы делиться вашими маршрутами с друзьями и помогать всем оставаться в курсе последних изменений в маршрутах.
                                  Совместное редактирование значительно упрощает корректировку существующего маршрута, пока вы боретесь за лучший маршрут для своей команды.',
-
     ],
     'routes'    => [
         'title' => 'Мои маршруты',
@@ -95,4 +90,5 @@ return [
         'title'  => '%s\'s маршруты',
         'header' => '%s\'s маршруты',
     ],
+
 ];

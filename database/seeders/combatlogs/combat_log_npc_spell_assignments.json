@@ -9043,5 +9043,32 @@
         "raw_event": "4\/16\/2025 19:54:35.274-7  SPELL_DAMAGE,Creature-0-5177-2856-14454-243139-0000006D5B,\"Lightgorged Whelp\",0xa48,0x80,Player-5813-026A13DF,\"Farmvael-WildGrowth-US\",0x514,0x0,1232332,\"Unstable Detonation\",0x2,Player-5813-026A13DF,0000000000000000,77,100,0,0,0,0,0,-1,0,0,0,2000.09,-5779.90,0,2.5895,86,1000,1000,-1,2,0,0,0,nil,nil,nil,AOE\r\n",
         "created_at": "2025-04-18T21:19:31+00:00",
         "updated_at": "2025-04-18T21:19:31+00:00"
+    },
+    {
+        "id": 1058,
+        "npc_id": 228537,
+        "spell_id": 1242681,
+        "combat_log_path": "tmp\/WoWCombatLog-073125_132246_7_the-dawnbreaker.zip",
+        "raw_event": "7\/31\/2025 14:19:53.775-3  SPELL_MISSED,Creature-0-5770-2662-23415-228537-00000BA5B2,\"Nightfall Shadowalker\",0xa48,0x80000000,Player-5764-0047BE26,\"Drexadin-Fyrakk-\",0x511,0x80000020,1242681,\"Shadowblades\",0x20,ABSORB,nil,82523,172291,nil,ST\r\n",
+        "created_at": "2025-08-05T15:26:26+00:00",
+        "updated_at": "2025-08-05T15:26:26+00:00"
+    },
+    {
+        "id": 1059,
+        "npc_id": 228538,
+        "spell_id": 1242074,
+        "combat_log_path": "tmp\/WoWCombatLog-073125_132246_7_the-dawnbreaker.zip",
+        "raw_event": "7\/31\/2025 14:20:08.802-3  SPELL_AURA_APPLIED,Creature-0-5770-2662-23415-228538-00008BA5C0,\"Nightfall Curseblade\",0xa48,0x80000000,Creature-0-5770-2662-23415-228538-00008BA5C0,\"Nightfall Curseblade\",0xa48,0x80000000,1242074,\"Intensifying Aggression\",0x1,BUFF\r\n",
+        "created_at": "2025-08-05T15:26:27+00:00",
+        "updated_at": "2025-08-05T15:26:27+00:00"
+    },
+    {
+        "id": 1060,
+        "npc_id": 234528,
+        "spell_id": 473526,
+        "combat_log_path": "tmp\/WoWCombatLog-080225_100926_7_operation-floodgate.zip",
+        "raw_event": "8\/2\/2025 11:13:53.136-3  SPELL_DAMAGE,Creature-0-5773-2773-22131-234528-00000E1D20,\"Ticking Time Bomb\",0xa28,0x80000000,Player-5765-00490EF6,\"Jumzo-Vyranoth-\",0x512,0x80000000,473526,\"Big Bada BOOM!\",0x1,Player-5765-00490EF6,0000000000000000,0,12427940,110852,18352,101514,38,1515,0,0,2500000,2500000,0,1627.70,-2854.42,2387,1.8338,694,17968332,41821716,5540393,1,0,0,770885,nil,nil,nil,AOE\r\n",
+        "created_at": "2025-08-05T15:26:35+00:00",
+        "updated_at": "2025-08-05T15:26:35+00:00"
     }
 ]

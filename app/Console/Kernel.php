@@ -31,6 +31,8 @@ use App\Console\Commands\Github\CreateGithubReleaseTicket;
 use App\Console\Commands\Handlebars\Refresh as HandlebarsRefresh;
 use App\Console\Commands\Localization\Datatables\ConvertLocalizations;
 use App\Console\Commands\Localization\Datatables\DownloadLocalizations;
+use App\Console\Commands\Localization\Larex\WriteKsg;
+use App\Console\Commands\Localization\Larex\WriteKsgFromCrowdin;
 use App\Console\Commands\Localization\LocalizationSync;
 use App\Console\Commands\Localization\Npc\ExportNpcNames;
 use App\Console\Commands\Localization\Npc\ImportNpcNames;
@@ -38,6 +40,7 @@ use App\Console\Commands\Localization\Npc\SyncNpcNames;
 use App\Console\Commands\Localization\Spell\ExportSpellNames;
 use App\Console\Commands\Localization\Spell\ImportSpellNames;
 use App\Console\Commands\Localization\Spell\SyncSpellNames;
+use App\Console\Commands\Localization\Validation\ConvertLocalizations as ValidationConvertLocalizations;
 use App\Console\Commands\MapIcon\GenerateItemIcons;
 use App\Console\Commands\Mapping\AssignMDTIDs;
 use App\Console\Commands\Mapping\AssignPackGroups;
@@ -156,6 +159,10 @@ class Kernel extends ConsoleKernel
         // Handlebars
         HandlebarsRefresh::class,
 
+        // Larex
+        WriteKsg::class,
+        WriteKsgFromCrowdin::class,
+
         // Localization
         LocalizationSync::class,
         // Localization Datatables
@@ -169,6 +176,8 @@ class Kernel extends ConsoleKernel
         ExportSpellNames::class,
         ImportSpellNames::class,
         SyncSpellNames::class,
+        // Localization Validation
+        ValidationConvertLocalizations::class,
 
         // MapIcon
         GenerateItemIcons::class,

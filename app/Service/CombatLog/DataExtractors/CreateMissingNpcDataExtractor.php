@@ -118,7 +118,8 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
                     // Calculate the base health based on the current key level + current max hp
                     $baseHealth = (int)($parsedEvent->getAdvancedData()->getMaxHP() / $createdNpc->getScalingFactor(
                             $currentDungeon->keyLevel,
-                            $currentDungeon->affixGroup->affixes->pluck('key')->toArray()
+                            // Affixgroup can be null for PTR keys for example, which can have arbitrary affixes
+                            $currentDungeon->affixGroup?->affixes->pluck('key')->toArray() ?? []
                         ));
                 }
 

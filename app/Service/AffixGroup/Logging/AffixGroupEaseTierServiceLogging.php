@@ -7,7 +7,7 @@ use Exception;
 
 class AffixGroupEaseTierServiceLogging extends RollbarStructuredLogging implements AffixGroupEaseTierServiceLoggingInterface
 {
-    public function parseTierListUnknownAffixGroup(string $affixGroupString): void
+    public function parseTierListUnknownAffixGroup(?string $affixGroupString): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }

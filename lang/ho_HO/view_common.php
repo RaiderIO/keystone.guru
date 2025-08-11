@@ -1,11 +1,7 @@
 <?php
 
 return [
-    'affixgroup'     => [
-        'affixgroup' => [
 
-        ],
-    ],
     'dungeon'        => [
         'griddiscover' => [
             'popular'   => 'Hodor',
@@ -116,32 +112,29 @@ return [
             'map_facade_style_facade_option'                => 'Hodor',
             'map_facade_style_split_floors_option'          => 'Hodor',
             'map_facade_style_change_requires_page_refresh' => 'Hodor',
-
-            'zoom_speed'       => 'Hodor',
-            'zoom_speed_title' => 'Hodor',
-
-            'heatmap'                     => 'Hodor',
-            'show_heatmap_tooltips'       => 'Hodor',
-            'show_heatmap_tooltips_title' => 'Hodor',
-
-            'enemies'                                => 'Hodor',
-            'enemy_number_style'                     => 'Hodor',
-            'enemy_number_style_title'               => 'Hodor',
-            'percentage'                             => 'Hodor',
-            'enemy_forces'                           => 'Hodor',
-            'unkilled_enemy_opacity'                 => 'Hodor',
-            'unkilled_enemy_opacity_title'           => 'Hodor',
-            'unkilled_important_enemy_opacity'       => 'Hodor',
-            'unkilled_important_enemy_opacity_title' => 'Hodor',
-            'show_aggressiveness_border'             => 'Hodor',
-            'show_aggressiveness_border_title'       => 'Hodor',
-            'highlight_dangerous_enemies'            => 'Hodor',
-            'highlight_dangerous_enemies_title'      => 'Hodor',
-            'drawing'                                => 'Hodor',
-            'default_line_weight'                    => 'Hodor',
-            'default_line_weight_title'              => 'Hodor',
-            'default_line_color'                     => 'Hodor',
-            'default_line_color_title'               => 'Hodor',
+            'zoom_speed'                                    => 'Hodor',
+            'zoom_speed_title'                              => 'Hodor',
+            'heatmap'                                       => 'Hodor',
+            'show_heatmap_tooltips'                         => 'Hodor',
+            'show_heatmap_tooltips_title'                   => 'Hodor',
+            'enemies'                                       => 'Hodor',
+            'enemy_number_style'                            => 'Hodor',
+            'enemy_number_style_title'                      => 'Hodor',
+            'percentage'                                    => 'Hodor',
+            'enemy_forces'                                  => 'Hodor',
+            'unkilled_enemy_opacity'                        => 'Hodor',
+            'unkilled_enemy_opacity_title'                  => 'Hodor',
+            'unkilled_important_enemy_opacity'              => 'Hodor',
+            'unkilled_important_enemy_opacity_title'        => 'Hodor',
+            'show_aggressiveness_border'                    => 'Hodor',
+            'show_aggressiveness_border_title'              => 'Hodor',
+            'highlight_dangerous_enemies'                   => 'Hodor',
+            'highlight_dangerous_enemies_title'             => 'Hodor',
+            'drawing'                                       => 'Hodor',
+            'default_line_weight'                           => 'Hodor',
+            'default_line_weight_title'                     => 'Hodor',
+            'default_line_color'                            => 'Hodor',
+            'default_line_color_title'                      => 'Hodor',
         ],
         'mdtimport'            => [
             'paste_mdt_export_string'                => 'Hodor',
@@ -445,18 +438,15 @@ return [
             ],
         ],
         'map'      => [
-            'no_teeming'      => 'Hodor',
-            'visible_teeming' => 'Hodor',
-            'hidden_teeming'  => 'Hodor',
-
-            'any'      => 'Hodor',
-            'alliance' => 'Hodor',
-            'horde'    => 'Hodor',
-
+            'no_teeming'                             => 'Hodor',
+            'visible_teeming'                        => 'Hodor',
+            'hidden_teeming'                         => 'Hodor',
+            'any'                                    => 'Hodor',
+            'alliance'                               => 'Hodor',
+            'horde'                                  => 'Hodor',
             'new_mapping_version_header_title'       => 'Hodor',
             'new_mapping_version_header_description' => 'Hodor',
-
-            'route' => 'Hodor',
+            'route'                                  => 'Hodor',
         ],
     ],
     'mappingversion' => [
@@ -485,7 +475,6 @@ return [
             'enemy'        => [
                 'report_enemy_bug'       => 'Hodor',
                 'your_name'              => 'Hodor',
-                'what_is_wrong'          => 'Hodor',
                 'contact_by_email'       => 'Hodor',
                 'contact_by_email_guest' => 'Hodor',
                 'submit'                 => 'Hodor',
@@ -555,7 +544,6 @@ return [
         ],
         'simulateoptions'    => [
             'default'  => [
-
                 'key_level'                               => 'Hodor',
                 'key_level_title'                         => 'Hodor',
                 'shrouded_bounty_type'                    => 'Hodor',

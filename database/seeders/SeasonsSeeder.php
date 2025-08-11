@@ -307,7 +307,7 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_TWW),
                 'seasonal_affix_id'       => null,
                 'index'                   => 3,
-                'start'                   => '2025-08-04 00:00:00',
+                'start'                   => '2025-08-11 00:00:00',
                 'presets'                 => 0,
                 'affix_group_count'       => 8,
                 'start_affix_group_index' => 3,

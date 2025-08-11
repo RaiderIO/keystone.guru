@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'emptyTable'     => 'Nessun dato disponibile nella tabella',
     'info'           => 'Risultati da _START_ a _END_ di _TOTAL_ elementi',
     'infoEmpty'      => 'Risultati da 0 a 0 di 0 elementi',
@@ -12,268 +13,235 @@ return [
     'search'         => 'Cerca:',
     'zeroRecords'    => 'Nessun elemento corrispondente trovato',
     'thousands'      => '.',
-    'paginate'       =>
-        [
-            'first'    => 'Inizio',
-            'last'     => 'Fine',
-            'next'     => 'Successivo',
-            'previous' => 'Precedente',
+    'paginate'       => [
+        'first'    => 'Inizio',
+        'last'     => 'Fine',
+        'next'     => 'Successivo',
+        'previous' => 'Precedente',
+    ],
+    'aria'           => [
+        'sortAscending'  => ': attiva per ordinare la colonna in ordine crescente',
+        'sortDescending' => ': attiva per ordinare la colonna in ordine decrescente',
+    ],
+    'autoFill'       => [
+        'cancel'         => 'Annulla',
+        'fill'           => 'Riempi tutte le celle con <i>%d</i>',
+        'fillHorizontal' => 'Riempi celle orizzontalmente',
+        'fillVertical'   => 'Riempi celle verticalmente',
+    ],
+    'buttons'        => [
+        'collection'      => 'Collezione <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
+        'colvis'          => 'Visibilità Colonna',
+        'colvisRestore'   => 'Ripristina visibilità',
+        'copy'            => 'Copia',
+        'copyKeys'        => 'Premi ctrl o u2318 + C per copiare i dati della tabella nella tua clipboard di sistema.<br /><br />Per annullare, clicca questo messaggio o premi ESC.',
+        'copySuccess'     => [
+            1   => 'Copiata 1 riga nella clipboard',
+            '_' => 'Copiate %d righe nella clipboard',
         ],
-    'aria'           =>
-        [
-            'sortAscending'  => ': attiva per ordinare la colonna in ordine crescente',
-            'sortDescending' => ': attiva per ordinare la colonna in ordine decrescente',
+        'copyTitle'       => 'Copia nella Clipboard',
+        'csv'             => 'CSV',
+        'excel'           => 'Excel',
+        'pageLength'      => [
+            -1  => 'Mostra tutte le righe',
+            '_' => 'Mostra %d righe',
         ],
-    'autoFill'       =>
-        [
-            'cancel'         => 'Annulla',
-            'fill'           => 'Riempi tutte le celle con <i>%d</i>',
-            'fillHorizontal' => 'Riempi celle orizzontalmente',
-            'fillVertical'   => 'Riempi celle verticalmente',
+        'pdf'             => 'PDF',
+        'print'           => 'Stampa',
+        'updateState'     => 'Aggiorna',
+        'stateRestore'    => 'Ripristina stato',
+        'savedStates'     => 'Salva stato',
+        'renameState'     => 'Rinomina',
+        'removeState'     => 'Rimuovi',
+        'removeAllStates' => 'Rimuovi tutti gli stati',
+        'createState'     => 'Crea stato',
+    ],
+    'searchBuilder'  => [
+        'add'         => 'Aggiungi Condizione',
+        'button'      => [
+            0   => 'Generatore di Ricerca',
+            '_' => 'Generatori di Ricerca (%d)',
         ],
-    'buttons'        =>
-        [
-            'collection'      => 'Collezione <span class="ui-button-icon-primary ui-icon ui-icon-triangle-1-s"></span>',
-            'colvis'          => 'Visibilità Colonna',
-            'colvisRestore'   => 'Ripristina visibilità',
-            'copy'            => 'Copia',
-            'copyKeys'        => 'Premi ctrl o u2318 + C per copiare i dati della tabella nella tua clipboard di sistema.<br /><br />Per annullare, clicca questo messaggio o premi ESC.',
-            'copySuccess'     =>
-                [
-                    '1' => 'Copiata 1 riga nella clipboard',
-                    '_' => 'Copiate %d righe nella clipboard',
-                ],
-            'copyTitle'       => 'Copia nella Clipboard',
-            'csv'             => 'CSV',
-            'excel'           => 'Excel',
-            'pageLength'      =>
-                [
-                    '-1' => 'Mostra tutte le righe',
-                    '_'  => 'Mostra %d righe',
-                ],
-            'pdf'             => 'PDF',
-            'print'           => 'Stampa',
-            'updateState'     => 'Aggiorna',
-            'stateRestore'    => 'Ripristina stato',
-            'savedStates'     => 'Salva stato',
-            'renameState'     => 'Rinomina',
-            'removeState'     => 'Rimuovi',
-            'removeAllStates' => 'Rimuovi tutti gli stati',
-            'createState'     => 'Crea stato',
+        'clearAll'    => 'Pulisci Tutto',
+        'condition'   => 'Condizione',
+        'conditions'  => [
+            'date'   => [
+                'after'      => 'Dopo',
+                'before'     => 'Prima',
+                'between'    => 'Tra',
+                'empty'      => 'Vuoto',
+                'equals'     => 'Uguale A',
+                'not'        => 'Non',
+                'notBetween' => 'Non Tra',
+                'notEmpty'   => 'Non Vuoto',
+            ],
+            'number' => [
+                'between'    => 'Tra',
+                'empty'      => 'Vuoto',
+                'equals'     => 'Uguale A',
+                'gt'         => 'Maggiore Di',
+                'gte'        => 'Maggiore O Uguale A',
+                'lt'         => 'Minore Di',
+                'lte'        => 'Minore O Uguale A',
+                'not'        => 'Non',
+                'notBetween' => 'Non Tra',
+                'notEmpty'   => 'Non Vuoto',
+            ],
+            'string' => [
+                'contains'      => 'Contiene',
+                'empty'         => 'Vuoto',
+                'endsWith'      => 'Finisce Con',
+                'equals'        => 'Uguale A',
+                'not'           => 'Non',
+                'notEmpty'      => 'Non Vuoto',
+                'startsWith'    => 'Inizia Con',
+                'notContains'   => 'Non Contiene',
+                'notStartsWith' => 'Non Inizia Con',
+                'notEndsWith'   => 'Non Finisce Con',
+            ],
+            'array'  => [
+                'without'  => 'Senza',
+                'notEmpty' => 'Non Vuoto',
+                'not'      => 'Non',
+                'contains' => 'Contiene',
+                'empty'    => 'Vuoto',
+                'equals'   => 'Uguale A',
+            ],
         ],
-    'searchBuilder'  =>
-        [
-            'add'         => 'Aggiungi Condizione',
-            'button'      =>
-                [
-                    '0' => 'Generatore di Ricerca',
-                    '_' => 'Generatori di Ricerca (%d)',
-                ],
-            'clearAll'    => 'Pulisci Tutto',
-            'condition'   => 'Condizione',
-            'conditions'  =>
-                [
-                    'date'   =>
-                        [
-                            'after'      => 'Dopo',
-                            'before'     => 'Prima',
-                            'between'    => 'Tra',
-                            'empty'      => 'Vuoto',
-                            'equals'     => 'Uguale A',
-                            'not'        => 'Non',
-                            'notBetween' => 'Non Tra',
-                            'notEmpty'   => 'Non Vuoto',
-                        ],
-                    'number' =>
-                        [
-                            'between'    => 'Tra',
-                            'empty'      => 'Vuoto',
-                            'equals'     => 'Uguale A',
-                            'gt'         => 'Maggiore Di',
-                            'gte'        => 'Maggiore O Uguale A',
-                            'lt'         => 'Minore Di',
-                            'lte'        => 'Minore O Uguale A',
-                            'not'        => 'Non',
-                            'notBetween' => 'Non Tra',
-                            'notEmpty'   => 'Non Vuoto',
-                        ],
-                    'string' =>
-                        [
-                            'contains'      => 'Contiene',
-                            'empty'         => 'Vuoto',
-                            'endsWith'      => 'Finisce Con',
-                            'equals'        => 'Uguale A',
-                            'not'           => 'Non',
-                            'notEmpty'      => 'Non Vuoto',
-                            'startsWith'    => 'Inizia Con',
-                            'notContains'   => 'Non Contiene',
-                            'notStartsWith' => 'Non Inizia Con',
-                            'notEndsWith'   => 'Non Finisce Con',
-                        ],
-                    'array'  =>
-                        [
-                            'without'  => 'Senza',
-                            'notEmpty' => 'Non Vuoto',
-                            'not'      => 'Non',
-                            'contains' => 'Contiene',
-                            'empty'    => 'Vuoto',
-                            'equals'   => 'Uguale A',
-                        ],
-                ],
-            'data'        => 'Dati',
-            'deleteTitle' => 'Elimina regola filtro',
-            'leftTitle'   => 'Criterio di Riduzione Rientro',
-            'logicAnd'    => 'E',
-            'logicOr'     => 'O',
-            'rightTitle'  => 'Criterio di Aumento Rientro',
-            'title'       =>
-                [
-                    '0' => 'Generatore di Ricerca',
-                    '_' => 'Generatori di Ricerca (%d)',
-                ],
-            'value'       => 'Valore',
+        'data'        => 'Dati',
+        'deleteTitle' => 'Elimina regola filtro',
+        'leftTitle'   => 'Criterio di Riduzione Rientro',
+        'logicAnd'    => 'E',
+        'logicOr'     => 'O',
+        'rightTitle'  => 'Criterio di Aumento Rientro',
+        'title'       => [
+            0   => 'Generatore di Ricerca',
+            '_' => 'Generatori di Ricerca (%d)',
         ],
-    'searchPanes'    =>
-        [
-            'clearMessage'    => 'Pulisci Tutto',
-            'collapse'        =>
-                [
-                    '0' => 'Pannello di Ricerca',
-                    '_' => 'Pannelli di Ricerca (%d)',
-                ],
-            'count'           => '{total}',
-            'countFiltered'   => '{shown} ({total})',
-            'emptyPanes'      => 'Nessun Pannello di Ricerca',
-            'loadMessage'     => 'Caricamento Pannello di Ricerca',
-            'title'           => 'Filtri Attivi - %d',
-            'showMessage'     => 'Mostra tutto',
-            'collapseMessage' => 'Espandi tutto',
+        'value'       => 'Valore',
+    ],
+    'searchPanes'    => [
+        'clearMessage'    => 'Pulisci Tutto',
+        'collapse'        => [
+            0   => 'Pannello di Ricerca',
+            '_' => 'Pannelli di Ricerca (%d)',
         ],
-    'select'         =>
-        [
-            'cells'   =>
-                [
-                    '1' => '1 cella selezionata',
-                    '_' => '%d celle selezionate',
-                ],
-            'columns' =>
-                [
-                    '1' => '1 colonna selezionata',
-                    '_' => '%d colonne selezionate',
-                ],
-            'rows'    =>
-                [
-                    '1' => '1 riga selezionata',
-                    '_' => '%d righe selezionate',
-                ],
+        'count'           => '{total}',
+        'countFiltered'   => '{shown} ({total})',
+        'emptyPanes'      => 'Nessun Pannello di Ricerca',
+        'loadMessage'     => 'Caricamento Pannello di Ricerca',
+        'title'           => 'Filtri Attivi - %d',
+        'showMessage'     => 'Mostra tutto',
+        'collapseMessage' => 'Espandi tutto',
+    ],
+    'select'         => [
+        'cells'   => [
+            1   => '1 cella selezionata',
+            '_' => '%d celle selezionate',
         ],
-    'datetime'       =>
-        [
-            'previous' => 'precedente',
-            'next'     => 'successivo',
-            'hours'    => 'ore',
-            'minutes'  => 'minuti',
-            'seconds'  => 'secondi',
-            'unknown'  => 'sconosciuto',
-            'amPm'     =>
-                [
-                    '0' => 'am',
-                    '1' => 'pm',
-                ],
-            'weekdays' =>
-                [
-                    '0' => 'Dom',
-                    '1' => 'Lun',
-                    '2' => 'Mar',
-                    '3' => 'Mer',
-                    '4' => 'Gio',
-                    '5' => 'Ven',
-                    '6' => 'Sab',
-                ],
-            'months'   =>
-                [
-                    '0'  => 'Gennaio',
-                    '1'  => 'Febbraio',
-                    '2'  => 'Marzo',
-                    '3'  => 'Aprile',
-                    '4'  => 'Maggio',
-                    '5'  => 'Giugno',
-                    '6'  => 'Luglio',
-                    '7'  => 'Agosto',
-                    '8'  => 'Settembre',
-                    '9'  => 'Ottobre',
-                    '10' => 'Novembre',
-                    '11' => 'Dicembre',
-                ],
+        'columns' => [
+            1   => '1 colonna selezionata',
+            '_' => '%d colonne selezionate',
         ],
-    'editor'         =>
-        [
-            'close'  => 'Chiudi',
-            'create' =>
-                [
-                    'button' => 'Nuovo',
-                    'title'  => 'Aggiungi nuovo elemento',
-                    'submit' => 'Aggiungi',
-                ],
-            'edit'   =>
-                [
-                    'button' => 'Modifica',
-                    'title'  => 'Modifica elemento',
-                    'submit' => 'Modifica',
-                ],
-            'remove' =>
-                [
-                    'button'  => 'Rimuovi',
-                    'title'   => 'Rimuovi',
-                    'submit'  => 'Rimuovi',
-                    'confirm' =>
-                        [
-                            '_' => 'Sei sicuro di voler cancellare %d righe?',
-                            '1' => 'Sei sicuro di voler cancellare 1 riga?',
-                        ],
-                ],
-            'error'  =>
-                [
-                    'system' => 'Errore del sistema.',
-                ],
-            'multi'  =>
-                [
-                    'title'   => 'Valori multipli',
-                    'info'    => 'Gli elementi selezionati contengono valori diversi. Per modificare e impostare tutti gli elementi per questa selezione allo stesso valore, premi o clicca qui, altrimenti ogni cella manterrà il suo valore attuale.',
-                    'restore' => 'Annulla le modifiche',
-                    'noMulti' => 'Questa selezione può essere modificata individualmente, ma non se fa parte di un gruppo.',
-                ],
+        'rows'    => [
+            1   => '1 riga selezionata',
+            '_' => '%d righe selezionate',
         ],
-    'stateRestore'   =>
-        [
-            'renameTitle'    => 'Rinomina Stato',
-            'renameLabel'    => 'Nuovo nome per %s:',
-            'renameButton'   => 'Rinomina',
-            'removeTitle'    => 'Elimina Stato',
-            'removeSubmit'   => 'Elimina',
-            'removeJoiner'   => 'e',
-            'removeError'    => 'Errore durante l\'eliminazione dello Stato',
-            'removeConfirm'  => 'Sei sicuro di eliminare lo Stato %s?',
-            'emptyStates'    => 'Non ci sono stati salvati',
-            'emptyError'     => 'Il nome è obbligatorio',
-            'duplicateError' => 'Nome stato già presente',
-            'creationModal'  =>
-                [
-                    'toggleLabel'   => 'Includi:',
-                    'title'         => 'Crea nuovo Stato',
-                    'select'        => 'Seleziona',
-                    'searchBuilder' => 'Form di Ricerca',
-                    'search'        => 'Ricerca',
-                    'scroller'      => 'Scorri posizione',
-                    'paging'        => 'Paginazione',
-                    'order'         => 'Ordinamento',
-                    'name'          => 'Nome:',
-                    'columns'       =>
-                        [
-                            'visible' => 'Colonna Visibilità',
-                            'search'  => 'Colonna Cerca',
-                        ],
-                    'button'        => 'Crea',
-                ],
+    ],
+    'datetime'       => [
+        'previous' => 'precedente',
+        'next'     => 'successivo',
+        'hours'    => 'ore',
+        'minutes'  => 'minuti',
+        'seconds'  => 'secondi',
+        'unknown'  => 'sconosciuto',
+        'amPm'     => [
+            0 => 'am',
+            1 => 'pm',
         ],
+        'weekdays' => [
+            0 => 'Dom',
+            1 => 'Lun',
+            2 => 'Mar',
+            3 => 'Mer',
+            4 => 'Gio',
+            5 => 'Ven',
+            6 => 'Sab',
+        ],
+        'months'   => [
+            0  => 'Gennaio',
+            1  => 'Febbraio',
+            2  => 'Marzo',
+            3  => 'Aprile',
+            4  => 'Maggio',
+            5  => 'Giugno',
+            6  => 'Luglio',
+            7  => 'Agosto',
+            8  => 'Settembre',
+            9  => 'Ottobre',
+            10 => 'Novembre',
+            11 => 'Dicembre',
+        ],
+    ],
+    'editor'         => [
+        'close'  => 'Chiudi',
+        'create' => [
+            'button' => 'Nuovo',
+            'title'  => 'Aggiungi nuovo elemento',
+            'submit' => 'Aggiungi',
+        ],
+        'edit'   => [
+            'button' => 'Modifica',
+            'title'  => 'Modifica elemento',
+            'submit' => 'Modifica',
+        ],
+        'remove' => [
+            'button'  => 'Rimuovi',
+            'title'   => 'Rimuovi',
+            'submit'  => 'Rimuovi',
+            'confirm' => [
+                '_' => 'Sei sicuro di voler cancellare %d righe?',
+                1   => 'Sei sicuro di voler cancellare 1 riga?',
+            ],
+        ],
+        'error'  => [
+            'system' => 'Errore del sistema.',
+        ],
+        'multi'  => [
+            'title'   => 'Valori multipli',
+            'info'    => 'Gli elementi selezionati contengono valori diversi. Per modificare e impostare tutti gli elementi per questa selezione allo stesso valore, premi o clicca qui, altrimenti ogni cella manterrà il suo valore attuale.',
+            'restore' => 'Annulla le modifiche',
+            'noMulti' => 'Questa selezione può essere modificata individualmente, ma non se fa parte di un gruppo.',
+        ],
+    ],
+    'stateRestore'   => [
+        'renameTitle'    => 'Rinomina Stato',
+        'renameLabel'    => 'Nuovo nome per %s:',
+        'renameButton'   => 'Rinomina',
+        'removeTitle'    => 'Elimina Stato',
+        'removeSubmit'   => 'Elimina',
+        'removeJoiner'   => 'e',
+        'removeError'    => 'Errore durante l\'eliminazione dello Stato',
+        'removeConfirm'  => 'Sei sicuro di eliminare lo Stato %s?',
+        'emptyStates'    => 'Non ci sono stati salvati',
+        'emptyError'     => 'Il nome è obbligatorio',
+        'duplicateError' => 'Nome stato già presente',
+        'creationModal'  => [
+            'toggleLabel'   => 'Includi:',
+            'title'         => 'Crea nuovo Stato',
+            'select'        => 'Seleziona',
+            'searchBuilder' => 'Form di Ricerca',
+            'search'        => 'Ricerca',
+            'scroller'      => 'Scorri posizione',
+            'paging'        => 'Paginazione',
+            'order'         => 'Ordinamento',
+            'name'          => 'Nome:',
+            'columns'       => [
+                'visible' => 'Colonna Visibilità',
+                'search'  => 'Colonna Cerca',
+            ],
+            'button'        => 'Crea',
+        ],
+    ],
+
 ];

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'explore' => [
         'gameversion' => [
             'list'  => [
@@ -34,4 +35,5 @@ return [
             ],
         ],
     ],
+
 ];

@@ -2,7 +2,6 @@
 
 return [
 
-
     'mdt'              => [
         'io' => [
             'export_string' => [

@@ -23,9 +23,7 @@ return [
             'thumbnail_regenerate_result'     => 'Dispatched :success jobs for :total routes. :failed failed.',
             'caches_dropped_successfully'     => 'Caches dropped successfully',
             'releases_exported'               => 'Releases exported',
-            'exception'                       => [
-                'internal_server_error' => 'Exception thrown in admin panel',
-            ],
+            'exception'                       => 'Exception thrown in admin panel',
             'feature_toggle_activated'        => 'Feature :feature is now activated',
             'feature_toggle_deactivated'      => 'Feature :feature is now deactivated',
             'feature_forgotten'               => 'Feature :feature successfully forgotten',

@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'sitepage' => [
         'staging_banner_description'        => 'Предупреждение! В настоящее время вы находитесь в промежуточной стринице Keystone.guru. Это НЕ основной сайт.',
         'staging_banner_take_me_away'       => 'Переведите меня на главную страницу!',
@@ -10,4 +11,5 @@ return [
         'linkpreview_title'       => '',
         'linkpreview_description' => '',
     ],
+
 ];

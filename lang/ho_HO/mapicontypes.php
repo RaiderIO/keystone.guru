@@ -106,4 +106,8 @@ return [
     'priory_blessing_of_the_sacred_flame'   => 'Hodor',
     'floodgate_weapons_stockpile_explosion' => 'Hodor',
     'gate_of_the_setting_sun_brazier'       => 'Hodor',
+    'eco_dome_al_dani_shatter_conduit'      => 'Hodor',
+    'eco_dome_al_dani_disruption_grenade'   => 'Hodor',
+    'eco_dome_al_dani_kareshi_surge'        => 'Hodor',
+
 ];

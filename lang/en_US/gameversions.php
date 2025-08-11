@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'retail'  => [
         'name'        => 'Retail',
         'description' => 'Retail',
@@ -17,12 +18,13 @@ return [
         'name'        => 'Retail Beta',
         'description' => 'Retail Beta',
     ],
-    'cata'   => [
+    'cata'    => [
         'name'        => 'Cata',
         'description' => 'Cataclysm',
     ],
-    'mop'   => [
+    'mop'     => [
         'name'        => 'Mists',
         'description' => 'Mists of Pandaria',
     ],
+
 ];

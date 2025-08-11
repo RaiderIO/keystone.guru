@@ -1,0 +1,25 @@
+{
+    "id": 313,
+    "release_changelog_id": 320,
+    "version": "v13.8.2",
+    "title": "MDT\/mapping update",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-08-11T09:24:49+00:00",
+    "updated_at": "2025-08-11T09:24:49+00:00",
+    "changelog": {
+        "id": 320,
+        "release_id": 313,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 320,
+                "release_changelog_category_id": 4,
+                "ticket_id": 2924,
+                "change": "Updated MDT to v5.5.2"
+            }
+        ]
+    }
+}

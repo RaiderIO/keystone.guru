@@ -3,10 +3,10 @@
 return [
 
     'difficulty' => [
-        '1' => '',
-        '2' => '',
-        '3' => '',
-        '4' => '',
+        1 => '',
+        2 => '',
+        3 => '',
+        4 => '',
     ],
     'classic'    => [
         'blackfathom_deeps'           => [
@@ -908,19 +908,21 @@ return [
         'tazavesh_streets_of_wonder' => [
             'name'   => '',
             'floors' => [
-                'the_veiled_market'   => '',
-                'the_grand_menagerie' => '',
-                'the_post'            => '',
-                'myzas_oasis'         => '',
+                'the_veiled_market'          => '',
+                'the_grand_menagerie'        => '',
+                'the_post'                   => '',
+                'myzas_oasis'                => '',
+                'tazavesh_streets_of_wonder' => '',
             ],
         ],
         'tazavesh_so_leahs_gambit'   => [
             'name'   => '',
             'floors' => [
-                'stormheim'         => '',
-                'aggramars_vault'   => '',
-                'boralus_harbor'    => '',
-                'the_opulent_nexus' => '',
+                'stormheim'                => '',
+                'aggramars_vault'          => '',
+                'boralus_harbor'           => '',
+                'the_opulent_nexus'        => '',
+                'tazavesh_so_leahs_gambit' => '',
             ],
         ],
     ],
@@ -1080,6 +1082,12 @@ return [
                 'the_waterworks'      => '',
                 'the_grid'            => '',
                 'operation_floodgate' => '',
+            ],
+        ],
+        'eco_dome_al_dani'           => [
+            'name'   => '',
+            'floors' => [
+                'eco_dome_al_dani' => '',
             ],
         ],
     ],

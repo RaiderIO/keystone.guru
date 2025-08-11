@@ -129,14 +129,14 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                         continue;
                     }
 
-                    /** @var $baseEvent UnitDied */
+                    /** @var UnitDied $baseEvent */
                     // Check if we had this enemy in combat, if so, we just killed it in our current pull
                     // UnitDied only has DestGuid
                     $guid = $resultEvent->getGuid()->getGuid();
 
                     // Find the pull that this enemy is part of
                     foreach ($this->activePullCollection as $activePull) {
-                        /** @var $activePull ActivePull */
+                        /** @var ActivePull $activePull */
                         if ($activePull->isEnemyInCombat($guid)) {
                             $activePull->enemyKilled($guid);
                             $this->log->buildEnemyKilled($guid, $resultEvent->getBaseEvent()->getTimestamp()->toDateTimeString());
@@ -145,7 +145,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
 
                     // Handle the actual creation of pulls
                     foreach ($this->activePullCollection as $pullIndex => $activePull) {
-                        /** @var $activePull ActivePull */
+                        /** @var ActivePull $activePull */
                         if ($activePull->getEnemiesInCombat()->isEmpty()) {
                             $this->createPull($activePull);
 
@@ -166,6 +166,8 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                     $activePull->addSpell($resultEvent->getSpellId());
 
                     $this->log->buildSpellCast(
+                        // We use the owner guid if available (in case a pet cast this), otherwise we use the info guid (which is the owner/caster)
+                        $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData()->getOwnerGuid()?->getGuid() ??
                         $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData()->getInfoGuid()->getGuid(),
                         $resultEvent->getSpellId()
                     );

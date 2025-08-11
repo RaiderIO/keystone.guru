@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'dungeon'                    => [
         'edit' => [
             'title_new'                          => 'Новое подземелье',
@@ -26,8 +27,7 @@ return [
             'key'                                => 'Ключ',
             'slug'                               => 'Жетон',
             'submit'                             => 'Подтвердить',
-
-            'floor_management' => [
+            'floor_management'                   => [
                 'title'                   => '',
                 'add_floor'               => '',
                 'table_header'            => [
@@ -41,8 +41,7 @@ return [
                 'floor_edit_edit'         => '',
                 'floor_edit_edit_mapping' => '',
             ],
-
-            'mapping_versions' => [
+            'mapping_versions'                   => [
                 'title'                    => '',
                 'add_bare_mapping_version' => '',
                 'add_mapping_version'      => '',
@@ -152,8 +151,7 @@ return [
                 'right' => 'Правый',
             ],
             'submit'                             => 'Подтвердить',
-
-            'speedrun_required_npcs' => [
+            'speedrun_required_npcs'             => [
                 'title_10_man'         => '',
                 'title_25_man'         => '',
                 'add_npc'              => '',
@@ -496,21 +494,17 @@ return [
             ],
         ],
         'list'          => [
-            'title'        => 'Инструменты администратора',
-            'header'       => 'Инструменты администратора',
-            'header_tools' => 'Инструменты',
-
-            'subheader_message_banner' => '',
-            'set_message_banner'       => '',
-
-            'subheader_npcs'          => '',
-            'mass_import_npcs'        => 'Массовый импорт NPC',
-            'manage_spell_visibility' => '',
-
-            'subheader_dungeonroute'                  => 'Маршрут подземелья',
-            'view_dungeonroute_details'               => 'Показать детали маршрута подземелья',
-            'view_dungeonroute_mapping_version_usage' => '',
-
+            'title'                                       => 'Инструменты администратора',
+            'header'                                      => 'Инструменты администратора',
+            'header_tools'                                => 'Инструменты',
+            'subheader_message_banner'                    => '',
+            'set_message_banner'                          => '',
+            'subheader_npcs'                              => '',
+            'mass_import_npcs'                            => 'Массовый импорт NPC',
+            'manage_spell_visibility'                     => '',
+            'subheader_dungeonroute'                      => 'Маршрут подземелья',
+            'view_dungeonroute_details'                   => 'Показать детали маршрута подземелья',
+            'view_dungeonroute_mapping_version_usage'     => '',
             'subheader_mdt'                               => 'MDT',
             'view_mdt_string'                             => 'Просмотреть содержимое строки MDT',
             'view_mdt_string_as_dungeonroute'             => 'Просмотреть строку MDT как маршрут подземелья',
@@ -519,35 +513,26 @@ return [
             'view_mdt_diff'                               => 'Просмотр различия с MDT',
             'view_dungeon_mapping_hash'                   => '',
             'view_dungeon_mapping_version_to_mdt_mapping' => '',
-
-            'subheader_enemy_forces' => 'Силы врага',
-            'enemy_forces_import'    => 'Импорт силы врага',
-
-            'subheader_wowtools'                 => '',
-            'wowtools_import_ingame_coordinates' => '',
-
-            'subheader_wagogg'                 => '',
-            'wagogg_import_ingame_coordinates' => '',
-
-            'subheader_misc'     => 'Разное',
-            'drop_caches'        => 'Сбросить кеш',
-            'throw_an_exception' => 'Сбросить исключения',
-
-            'subheader_mapping'  => '',
-            'force_sync_mapping' => '',
-
-            'subheader_features' => '',
-            'manage_features'    => '',
-
-            'subheader_actions'    => 'Действия',
-            'export_dungeon_data'  => 'Экспорт данных о подземельях',
-            'export_releases'      => 'Экспорт релизов',
-            'toggle_readonly_mode' => '',
-
-            'enemy_forces_recalculate' => '',
-
-            'subheader_thumbnails'  => '',
-            'thumbnails_regenerate' => '',
+            'subheader_enemy_forces'                      => 'Силы врага',
+            'enemy_forces_import'                         => 'Импорт силы врага',
+            'subheader_wowtools'                          => '',
+            'wowtools_import_ingame_coordinates'          => '',
+            'subheader_wagogg'                            => '',
+            'wagogg_import_ingame_coordinates'            => '',
+            'subheader_misc'                              => 'Разное',
+            'drop_caches'                                 => 'Сбросить кеш',
+            'throw_an_exception'                          => 'Сбросить исключения',
+            'subheader_mapping'                           => '',
+            'force_sync_mapping'                          => '',
+            'subheader_features'                          => '',
+            'manage_features'                             => '',
+            'subheader_actions'                           => 'Действия',
+            'export_dungeon_data'                         => 'Экспорт данных о подземельях',
+            'export_releases'                             => 'Экспорт релизов',
+            'toggle_readonly_mode'                        => '',
+            'enemy_forces_recalculate'                    => '',
+            'subheader_thumbnails'                        => '',
+            'thumbnails_regenerate'                       => '',
         ],
         'thumbnails'    => [
             'regenerate' => [
@@ -606,4 +591,5 @@ return [
             'handled'                  => 'Обработано',
         ],
     ],
+
 ];

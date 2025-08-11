@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'passwords' => [
         'email' => [
             'title'                    => 'Сбросить пароль',
@@ -24,4 +25,5 @@ return [
         'title'  => 'Регистрация',
         'header' => 'Регистрация',
     ],
+
 ];

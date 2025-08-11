@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     'seasonal_type' => [
         'beguiling'           => 'Hodor',
         'awakened'            => 'Hodor',
@@ -11,8 +12,8 @@ return [
         'mdt_placeholder'     => 'Hodor',
         'requires_activation' => 'Hodor',
         'shrouded'            => 'Hodor',
-        'shrouded_zul_gamux'  => "Hodor",
+        'shrouded_zul_gamux'  => 'Hodor',
         'no_shrouded'         => 'Hodor',
     ],
-];
 
+];

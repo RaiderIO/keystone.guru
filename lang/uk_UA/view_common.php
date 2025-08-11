@@ -1,11 +1,7 @@
 <?php
 
 return [
-    'affixgroup'     => [
-        'affixgroup' => [
 
-        ],
-    ],
     'dungeon'        => [
         'griddiscover' => [
             'popular'   => '',
@@ -116,32 +112,29 @@ return [
             'map_facade_style_facade_option'                => '',
             'map_facade_style_split_floors_option'          => '',
             'map_facade_style_change_requires_page_refresh' => '',
-
-            'zoom_speed'       => '',
-            'zoom_speed_title' => '',
-
-            'heatmap'                     => '',
-            'show_heatmap_tooltips'       => '',
-            'show_heatmap_tooltips_title' => '',
-
-            'enemies'                                => '',
-            'enemy_number_style'                     => '',
-            'enemy_number_style_title'               => '',
-            'percentage'                             => '',
-            'enemy_forces'                           => '',
-            'unkilled_enemy_opacity'                 => '',
-            'unkilled_enemy_opacity_title'           => '',
-            'unkilled_important_enemy_opacity'       => '',
-            'unkilled_important_enemy_opacity_title' => '',
-            'show_aggressiveness_border'             => '',
-            'show_aggressiveness_border_title'       => '',
-            'highlight_dangerous_enemies'            => '',
-            'highlight_dangerous_enemies_title'      => '',
-            'drawing'                                => '',
-            'default_line_weight'                    => '',
-            'default_line_weight_title'              => '',
-            'default_line_color'                     => '',
-            'default_line_color_title'               => '',
+            'zoom_speed'                                    => '',
+            'zoom_speed_title'                              => '',
+            'heatmap'                                       => '',
+            'show_heatmap_tooltips'                         => '',
+            'show_heatmap_tooltips_title'                   => '',
+            'enemies'                                       => '',
+            'enemy_number_style'                            => '',
+            'enemy_number_style_title'                      => '',
+            'percentage'                                    => '',
+            'enemy_forces'                                  => '',
+            'unkilled_enemy_opacity'                        => '',
+            'unkilled_enemy_opacity_title'                  => '',
+            'unkilled_important_enemy_opacity'              => '',
+            'unkilled_important_enemy_opacity_title'        => '',
+            'show_aggressiveness_border'                    => '',
+            'show_aggressiveness_border_title'              => '',
+            'highlight_dangerous_enemies'                   => '',
+            'highlight_dangerous_enemies_title'             => '',
+            'drawing'                                       => '',
+            'default_line_weight'                           => '',
+            'default_line_weight_title'                     => '',
+            'default_line_color'                            => '',
+            'default_line_color_title'                      => '',
         ],
         'mdtimport'            => [
             'paste_mdt_export_string'                => '',
@@ -445,18 +438,15 @@ return [
             ],
         ],
         'map'      => [
-            'no_teeming'      => '',
-            'visible_teeming' => '',
-            'hidden_teeming'  => '',
-
-            'any'      => '',
-            'alliance' => '',
-            'horde'    => '',
-
+            'no_teeming'                             => '',
+            'visible_teeming'                        => '',
+            'hidden_teeming'                         => '',
+            'any'                                    => '',
+            'alliance'                               => '',
+            'horde'                                  => '',
             'new_mapping_version_header_title'       => '',
             'new_mapping_version_header_description' => '',
-
-            'route' => '',
+            'route'                                  => '',
         ],
     ],
     'mappingversion' => [
@@ -485,7 +475,6 @@ return [
             'enemy'        => [
                 'report_enemy_bug'       => '',
                 'your_name'              => '',
-                'what_is_wrong'          => '',
                 'contact_by_email'       => '',
                 'contact_by_email_guest' => '',
                 'submit'                 => '',
@@ -555,7 +544,6 @@ return [
         ],
         'simulateoptions'    => [
             'default'  => [
-
                 'key_level'                               => '',
                 'key_level_title'                         => '',
                 'shrouded_bounty_type'                    => '',

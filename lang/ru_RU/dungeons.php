@@ -3,10 +3,10 @@
 return [
 
     'difficulty' => [
-        '1' => '',
-        '2' => '',
-        '3' => '',
-        '4' => '',
+        1 => '',
+        2 => '',
+        3 => '',
+        4 => '',
     ],
     'classic'    => [
         'blackfathom_deeps'           => [
@@ -908,19 +908,21 @@ return [
         'tazavesh_streets_of_wonder' => [
             'name'   => 'Тазавеш: улицы Чудес',
             'floors' => [
-                'the_veiled_market'   => 'Тайный рынок',
-                'the_grand_menagerie' => 'Большой зверинец',
-                'the_post'            => 'Отделение ПОЧТ',
-                'myzas_oasis'         => '"Оазис Мизы""',
+                'the_veiled_market'          => 'Тайный рынок',
+                'the_grand_menagerie'        => 'Большой зверинец',
+                'the_post'                   => 'Отделение ПОЧТ',
+                'myzas_oasis'                => '"Оазис Мизы""',
+                'tazavesh_streets_of_wonder' => '',
             ],
         ],
         'tazavesh_so_leahs_gambit'   => [
             'name'   => 'Тазавеш: гамбит Со\'леи',
             'floors' => [
-                'stormheim'         => 'Штормхейм',
-                'aggramars_vault'   => 'Хранилище Агграммара',
-                'boralus_harbor'    => 'Гавань Боралуса',
-                'the_opulent_nexus' => 'Блистательный Нексус',
+                'stormheim'                => 'Штормхейм',
+                'aggramars_vault'          => 'Хранилище Агграммара',
+                'boralus_harbor'           => 'Гавань Боралуса',
+                'the_opulent_nexus'        => 'Блистательный Нексус',
+                'tazavesh_so_leahs_gambit' => '',
             ],
         ],
     ],
@@ -1080,6 +1082,12 @@ return [
                 'the_waterworks'      => '',
                 'the_grid'            => '',
                 'operation_floodgate' => '',
+            ],
+        ],
+        'eco_dome_al_dani'           => [
+            'name'   => '',
+            'floors' => [
+                'eco_dome_al_dani' => '',
             ],
         ],
     ],

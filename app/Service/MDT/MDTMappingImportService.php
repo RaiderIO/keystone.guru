@@ -89,7 +89,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                 $this->importNpcs($newMappingVersion, $mdtDungeon, $dungeon);
                 $enemies = $this->importEnemies($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon, $forceImport);
                 $this->importEnemyPacks($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
-                $this->importEnemyPatrols($newMappingVersion, $mdtDungeon, $dungeon, $enemies);
+                $this->importEnemyPatrols($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon, $enemies);
                 $this->importMapPOIs($currentMappingVersion, $newMappingVersion, $mdtDungeon, $dungeon);
             } finally {
                 $this->log->importMappingVersionFromMDTEnd();
@@ -623,8 +623,13 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
     /**
      * @throws Exception
      */
-    private function importEnemyPatrols(MappingVersion $newMappingVersion, MDTDungeon $mdtDungeon, Dungeon $dungeon, Collection $savedEnemies): void
-    {
+    private function importEnemyPatrols(
+        MappingVersion $currentMappingVersion,
+        MappingVersion $newMappingVersion,
+        MDTDungeon     $mdtDungeon,
+        Dungeon        $dungeon,
+        Collection     $savedEnemies
+    ): void {
         try {
             $this->log->importEnemyPatrolsStart();
 
@@ -633,6 +638,12 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
 
             // Pretend the patrol is on the facade floor for correct translations, IF the facade floor is available
             $facadeFloor = $dungeon->getFacadeFloor();
+
+            /** @var Collection<EnemyPatrol> $existingEnemyPatrols */
+            $existingEnemyPatrols = $currentMappingVersion
+                ->enemyPatrols()
+                ->with(['polyline', 'mdtPolyline'])
+                ->get();
 
             foreach ($mdtNPCs as $mdtNPC) {
                 foreach ($mdtNPC->getRawMdtNpc()['clones'] as $mdtCloneIndex => $mdtNpcClone) {
@@ -664,28 +675,51 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                     // We check the MDTPolyline to see if it equals the one we are about to save
                     // If it does, we re-import the existing enemy patrol instead (since it may have been altered manually)
                     // Not doing this would overwrite any manual changes made to the enemy patrols
-                    // @TODO Also, import any enemy patrols created that do not have a MDT polyline
-                    // These patrols may be linked to connecting portals or skip icons together.
-                    // They just use a patrol to make it look nice.
-                    $vertices = [];
-                    foreach ($mdtNpcClone['patrol'] as $xy) {
-                        $latLng     = Conversion::convertMDTCoordinateToLatLng($xy, $facadeFloor ?? $savedEnemy->floor);
-                        $latLng     = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
-                        $vertices[] = $latLng->toArray();
+                    $mdtPolylineVerticesJson = json_encode(array_values(array_map(fn(array $v) => [
+                        'lat' => $v['y'],
+                        'lng' => $v['x'],
+                    ], $mdtNpcClone['patrol'])));
+
+                    $existingEnemyPatrol = null;
+                    foreach ($existingEnemyPatrols as $existingEnemyPatrolCandidate) {
+                        // See if we imported this patrol already
+                        // It could be that MDT has changed the patrol slightly, we'll then have to re-do our changes
+                        // Patrols are otherwise hard or impossible to match (in theory could be done with the enemies
+                        // attached to the patrol, but that would be a lot of work)
+                        if ($existingEnemyPatrolCandidate->mdtPolyline?->vertices_json === $mdtPolylineVerticesJson) {
+                            $existingEnemyPatrol = $existingEnemyPatrolCandidate;
+                            $this->log->importEnemyPatrolsFoundExistingEnemyPatrol($existingEnemyPatrol->id);
+                            break;
+                        }
                     }
 
-                    // MDT automatically closes up the patrol which I don't, so correct for this (confirmed by Nnoggie)
-                    $vertices[] = $vertices[0];
+                    $verticesAttributes = $existingEnemyPatrol?->polyline->getAttributes() ?? null;
+                    if (empty($verticesAttributes)) {
+                        $vertices = [];
+                        foreach ($mdtNpcClone['patrol'] as $xy) {
+                            $latLng     = Conversion::convertMDTCoordinateToLatLng($xy, $facadeFloor ?? $savedEnemy->floor);
+                            $latLng     = $this->coordinatesService->convertFacadeMapLocationToMapLocation($newMappingVersion, $latLng);
+                            $vertices[] = $latLng->toArray();
+                        }
 
-                    // Polyline
-                    $polyLine = Polyline::create([
-                        'model_id'       => -1,
-                        'model_class'    => EnemyPatrol::class,
-                        'color'          => '#003280',
-                        'color_animated' => null,
-                        'weight'         => 2,
-                        'vertices_json'  => json_encode($vertices),
-                    ]);
+                        // MDT automatically closes up the patrol which I don't, so correct for this (confirmed by Nnoggie)
+                        $vertices[]         = $vertices[0];
+                        $verticesAttributes = [
+                            'model_class'    => EnemyPatrol::class,
+                            'color'          => '#003280',
+                            'color_animated' => null,
+                            'weight'         => 2,
+                            'vertices_json'  => json_encode($vertices),
+                        ];
+                    }
+
+                    // Save polyline
+                    $polyLine = Polyline::create(array_merge($verticesAttributes, [
+                        // Reset the ID (in case it was imported from an existing enemy patrol)
+                        'id'       => null,
+                        // But make sure that the polyline is not attached to any model yet
+                        'model_id' => -1,
+                    ]));
                     if ($polyLine !== null) {
                         $this->log->importEnemyPatrolsSaveNewPolyline($polyLine->id);
                     } else {
@@ -701,10 +735,7 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         'weight'         => 2,
                         // Save the direct X and Y coordinates as lat/lng so we can echo it back later exactly
                         // This polyline is not meant to be used for display, but rather to be used for MDT
-                        'vertices_json'  => json_encode(array_values(array_map(fn(array $v) => [
-                            'lat' => $v['y'],
-                            'lng' => $v['x'],
-                        ], $mdtNpcClone['patrol']))),
+                        'vertices_json'  => $mdtPolylineVerticesJson,
                     ]);
                     if ($mdtPolyLine !== null) {
                         $this->log->importEnemyPatrolsSaveNewMdtPolyline($mdtPolyLine->id);
@@ -756,6 +787,26 @@ class MDTMappingImportService implements MDTMappingImportServiceInterface
                         $this->log->importEnemyPatrolsCoupleEnemiesToEnemyPatrol($enemyPatrol->id);
                     } else {
                         throw new Exception('Unable to update enemy to have attached patrol!');
+                    }
+                }
+            }
+
+            // Import any enemy patrols created that do not have a MDT polyline
+            // These patrols may be linked to connecting portals or skip icons together.
+            // They just use a patrol to make it look nice.
+            if ($existingEnemyPatrols->filter(
+            // Only import enemy patrols like this if there was ever an mdt polyline created for them
+            // On older mapping versions, enemy patrols were created without MDT polyline
+                static fn(EnemyPatrol $enemyPatrol) => $enemyPatrol->mdtPolyline !== null
+            )->isNotEmpty()) {
+                foreach ($existingEnemyPatrols as $existingEnemyPatrolCandidate) {
+                    if ($existingEnemyPatrolCandidate->mdtPolyline === null) {
+                        // Clone the existing enemy patrol to the new mapping version
+                        $existingEnemyPatrolCandidate->cloneForNewMappingVersion(
+                            $newMappingVersion
+                        );
+
+                        $this->log->importEnemyPatrolsClonedPatrolWithoutMdtPolyline($enemyPatrol->id);
                     }
                 }
             }

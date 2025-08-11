@@ -3,10 +3,10 @@
 return [
 
     'difficulty' => [
-        '1' => '10-man',
-        '2' => '25-man',
-        '3' => '20-man',
-        '4' => '40-man',
+        1 => '10-man',
+        2 => '25-man',
+        3 => '20-man',
+        4 => '40-man',
     ],
     'classic'    => [
         'blackfathom_deeps'           => [

@@ -1,11 +1,7 @@
 <?php
 
 return [
-    'affixgroup'     => [
-        'affixgroup' => [
 
-        ],
-    ],
     'dungeon'        => [
         'griddiscover' => [
             'popular'   => 'Popular',
@@ -116,32 +112,29 @@ return [
             'map_facade_style_facade_option'                => 'Use combined floors',
             'map_facade_style_split_floors_option'          => 'Use split floors',
             'map_facade_style_change_requires_page_refresh' => 'Note: Changing this setting requires a page reload before changes take effect',
-
-            'zoom_speed'       => 'Zoom speed',
-            'zoom_speed_title' => 'This controls the speed at which the map zooms in and out when you use the mouse wheel.',
-
-            'heatmap'                     => 'Heatmap',
-            'show_heatmap_tooltips'       => 'Show mouse over tooltips',
-            'show_heatmap_tooltips_title' => 'Enabling this setting will show tooltips when you mouse over the heatmap. This can be useful to see the exact values of the heatmap at a specific location.',
-
-            'enemies'                                => 'Enemies',
-            'enemy_number_style'                     => 'Enemy number style',
-            'enemy_number_style_title'               => 'This controls what the numbers mean when you mouse over enemies or when you select the \'Enemy forces\' display type.',
-            'percentage'                             => 'Percentage',
-            'enemy_forces'                           => 'Enemy forces',
-            'unkilled_enemy_opacity'                 => 'Unkilled enemy opacity',
-            'unkilled_enemy_opacity_title'           => 'This option allows you to fade out enemies that are not part of any of your pulls. This can reduce the clutter of enemies you want to ignore.',
-            'unkilled_important_enemy_opacity'       => 'Unkilled important enemy opacity',
-            'unkilled_important_enemy_opacity_title' => 'Important enemies are bosses, those that are permanently affected by an affix (Inspiring, Prideful etc.) or are marked as required. These can be rendered at a different opacity than other enemies to highlight their importance should you reduce the opacity of all other enemies.',
-            'show_aggressiveness_border'             => 'Show aggressiveness border',
-            'show_aggressiveness_border_title'       => 'Enabling this setting will render all enemies with a border to indicate their aggressiveness. Red for aggressive enemies, yellow for neutral enemies, green for friendly enemies etc.',
-            'highlight_dangerous_enemies'            => 'Highlight dangerous enemies',
-            'highlight_dangerous_enemies_title'      => 'Dangerous enemies are marked with a dotted orange inner border. These enemies are hand-picked by Keystone.guru. These enemies are mini-bosses, those with high health compared to others, use dangerous abilities or otherwise require special care.',
-            'drawing'                                => 'Drawing',
-            'default_line_weight'                    => 'Default line weight',
-            'default_line_weight_title'              => 'This controls the default weight (width) of any lines you create on the map, such as paths and free drawn lines.',
-            'default_line_color'                     => 'Default line color',
-            'default_line_color_title'               => 'This controls the default color of any lines you create on the map, such as paths and free drawn lines.',
+            'zoom_speed'                                    => 'Zoom speed',
+            'zoom_speed_title'                              => 'This controls the speed at which the map zooms in and out when you use the mouse wheel.',
+            'heatmap'                                       => 'Heatmap',
+            'show_heatmap_tooltips'                         => 'Show mouse over tooltips',
+            'show_heatmap_tooltips_title'                   => 'Enabling this setting will show tooltips when you mouse over the heatmap. This can be useful to see the exact values of the heatmap at a specific location.',
+            'enemies'                                       => 'Enemies',
+            'enemy_number_style'                            => 'Enemy number style',
+            'enemy_number_style_title'                      => 'This controls what the numbers mean when you mouse over enemies or when you select the \'Enemy forces\' display type.',
+            'percentage'                                    => 'Percentage',
+            'enemy_forces'                                  => 'Enemy forces',
+            'unkilled_enemy_opacity'                        => 'Unkilled enemy opacity',
+            'unkilled_enemy_opacity_title'                  => 'This option allows you to fade out enemies that are not part of any of your pulls. This can reduce the clutter of enemies you want to ignore.',
+            'unkilled_important_enemy_opacity'              => 'Unkilled important enemy opacity',
+            'unkilled_important_enemy_opacity_title'        => 'Important enemies are bosses, those that are permanently affected by an affix (Inspiring, Prideful etc.) or are marked as required. These can be rendered at a different opacity than other enemies to highlight their importance should you reduce the opacity of all other enemies.',
+            'show_aggressiveness_border'                    => 'Show aggressiveness border',
+            'show_aggressiveness_border_title'              => 'Enabling this setting will render all enemies with a border to indicate their aggressiveness. Red for aggressive enemies, yellow for neutral enemies, green for friendly enemies etc.',
+            'highlight_dangerous_enemies'                   => 'Highlight dangerous enemies',
+            'highlight_dangerous_enemies_title'             => 'Dangerous enemies are marked with a dotted orange inner border. These enemies are hand-picked by Keystone.guru. These enemies are mini-bosses, those with high health compared to others, use dangerous abilities or otherwise require special care.',
+            'drawing'                                       => 'Drawing',
+            'default_line_weight'                           => 'Default line weight',
+            'default_line_weight_title'                     => 'This controls the default weight (width) of any lines you create on the map, such as paths and free drawn lines.',
+            'default_line_color'                            => 'Default line color',
+            'default_line_color_title'                      => 'This controls the default color of any lines you create on the map, such as paths and free drawn lines.',
         ],
         'mdtimport'            => [
             'paste_mdt_export_string'                => 'Paste your Mythic Dungeon Tools export string',
@@ -445,21 +438,18 @@ return [
             ],
         ],
         'map'      => [
-            'no_teeming'      => 'Always visible',
-            'visible_teeming' => 'Visible when Teeming only',
-            'hidden_teeming'  => 'Hidden when Teeming only',
-
-            'any'      => 'Any',
-            'alliance' => 'Alliance',
-            'horde'    => 'Horde',
-
+            'no_teeming'                             => 'Always visible',
+            'visible_teeming'                        => 'Visible when Teeming only',
+            'hidden_teeming'                         => 'Hidden when Teeming only',
+            'any'                                    => 'Any',
+            'alliance'                               => 'Alliance',
+            'horde'                                  => 'Horde',
             'new_mapping_version_header_title'       => 'There is a new mapping version for this dungeon',
             'new_mapping_version_header_description' => 'Keystone.guru works with mapping versions for each dungeon.
                 Every time Blizzard makes a change to the mapping or an error is corrected, a new mapping version is created.
                 Routes that are created with previous mapping versions are not automatically updated to the latest version.
                 This warning indicates the mapping version used by this route is out of date and may not represent the in-game mapping',
-
-            'route' => 'Route',
+            'route'                                  => 'Route',
         ],
     ],
     'mappingversion' => [
@@ -488,7 +478,6 @@ return [
             'enemy'        => [
                 'report_enemy_bug'       => 'Report enemy bug',
                 'your_name'              => 'Your name',
-                'what_is_wrong'          => '',
                 'contact_by_email'       => 'Contact me by e-mail if required for further investigation',
                 'contact_by_email_guest' => 'Contact me by e-mail if required for further investigation (add your e-mail address in the report body)',
                 'submit'                 => 'Submit',
@@ -559,7 +548,6 @@ return [
         ],
         'simulateoptions'    => [
             'default'  => [
-
                 'key_level'                               => 'Key level',
                 'key_level_title'                         => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
                 'shrouded_bounty_type'                    => 'Shrouded bounty',
