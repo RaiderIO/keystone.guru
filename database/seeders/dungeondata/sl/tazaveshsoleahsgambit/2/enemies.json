@@ -510,7 +510,7 @@
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": 1,
-        "seasonal_type": "shrouded",
+        "seasonal_type": null,
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
@@ -522,7 +522,7 @@
         "dungeon_difficulty": null,
         "lat": -153.2971,
         "lng": 160.2598,
-        "kill_priority": null
+        "kill_priority": -1
     },
     {
         "id": 101825,
