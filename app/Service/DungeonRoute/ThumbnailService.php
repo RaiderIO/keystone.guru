@@ -370,21 +370,31 @@ class ThumbnailService implements ThumbnailServiceInterface
             }
 
             // Fetch the file from the disk
-            $thumbnailData = Storage::disk($thumbnail->file->disk)->get($thumbnail->file->path);
+            try {
+                $thumbnailData = Storage::disk($thumbnail->file->disk)->get($thumbnail->file->path);
 
-            $copiedThumbnail = $this->attachThumbnailToDungeonRoute(
-                $targetDungeonRoute,
-                $thumbnail->floor->index,
-                self::getTargetFilePath($targetDungeonRoute, $thumbnail->floor->index, self::THUMBNAIL_FOLDER_PATH),
-                $thumbnailData
-            );
+                $copiedThumbnail = $this->attachThumbnailToDungeonRoute(
+                    $targetDungeonRoute,
+                    $thumbnail->floor->index,
+                    self::getTargetFilePath($targetDungeonRoute, $thumbnail->floor->index, self::THUMBNAIL_FOLDER_PATH),
+                    $thumbnailData
+                );
 
-            if ($copiedThumbnail === null) {
-                // If we failed to copy the thumbnail, then we don't want to continue
-                continue;
+                if ($copiedThumbnail === null) {
+                    // If we failed to copy the thumbnail, then we don't want to continue
+                    continue;
+                }
+
+                $result->push($copiedThumbnail);
+            } catch (\Exception $exception) {
+                // Could be thrown if the file does not exist, or if the disk is not available
+                $this->log->copyThumbnailsException(
+                    $sourceDungeonRoute->public_key,
+                    $targetDungeonRoute->public_key,
+                    $thumbnail->id,
+                    $exception
+                );
             }
-
-            $result->push($copiedThumbnail);
         }
 
         return $result;
@@ -431,16 +441,24 @@ class ThumbnailService implements ThumbnailServiceInterface
             ]);
             $dungeonRouteThumbnail->update(['file_id' => $file->id]);
 
-            Storage::disk($disk)->put($target, $thumbnailData);
-
-            // Only after the new file was created, we can delete the old one
+            // Before we create the new thumbnail (which will overwrite the old one), we need to delete the existing thumbnails
+            // If we do this after creating we end up deleting the thumbnail we just created
+            // There will be a split second where the thumbnail is not available, but that is okay
             foreach ($existingThumbnailsToDelete as $existingThumbnail) {
                 // Delete like this so that the file is removed, and then in turn removed from the disk
                 $deleteResult = $existingThumbnail->delete();
-                $this->log->attachThumbnailToDungeonRouteDeleteExistingThumbnail($existingThumbnail->id, $deleteResult);
+                $this->log->attachThumbnailToDungeonRouteDeleteExistingThumbnail(
+                    $existingThumbnail->id,
+                    $existingThumbnail->file?->id,
+                    $existingThumbnail->file?->disk,
+                    $existingThumbnail->file?->path,
+                    $deleteResult
+                );
             }
 
-            $this->log->attachThumbnailToDungeonRouteSuccess($target, file_exists($target));
+            Storage::disk($disk)->put($target, $thumbnailData);
+
+            $this->log->attachThumbnailToDungeonRouteSuccess($target, Storage::disk($disk)->exists($target));
 
             return $dungeonRouteThumbnail;
         });

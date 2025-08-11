@@ -459,7 +459,9 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         $polylineAttributes  = [];
         $brushlineAttributes = [];
 
+        /** @var Collection<Npc> $validNpcIds */
         $npcs          = $this->npcRepository->getInUseNpcs($dungeonRoute->mappingVersion)->keyBy('id');
+        /** @var Collection<int> $validNpcIds */
         $validNpcIds   = $this->npcRepository->getInUseNpcIds($dungeonRoute->mappingVersion);
         $previousFloor = null;
         foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
