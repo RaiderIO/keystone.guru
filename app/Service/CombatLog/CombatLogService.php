@@ -200,7 +200,7 @@ class CombatLogService implements CombatLogServiceInterface
                         // If parsing was successful, it generated a dungeonroute, so then construct our filter
                         if ($dungeonRouteFilter->parse($baseEvent, $lineNr)) {
                             $combatLogDungeonRouteFilter->setValidNpcIds(
-                                $this->npcRepository->getInUseNpcIds($dungeonRouteFilter->getDungeonRoute()->dungeon)
+                                $this->npcRepository->getInUseNpcIds($dungeonRouteFilter->getDungeonRoute()->mappingVersion)
                             );
                         }
 

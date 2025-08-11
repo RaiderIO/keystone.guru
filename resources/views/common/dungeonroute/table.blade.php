@@ -6,15 +6,14 @@ use App\Models\RouteAttribute;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
-use App\Models\TeamUser;
 use App\Service\Season\SeasonService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 /**
  * @var SeasonService              $seasonService
- * @var Collection<Tag>           $searchTags
- * @var Collection<Tag>           $autoCompleteTags
+ * @var Collection<Tag>            $searchTags
+ * @var Collection<Tag>            $autoCompleteTags
  * @var Collection<RouteAttribute> $allRouteAttributes
  */
 

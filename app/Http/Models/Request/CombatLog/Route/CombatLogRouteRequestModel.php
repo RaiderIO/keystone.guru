@@ -66,7 +66,16 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
             );
         }
 
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+        // In case there was a mapping version override, we need to find the correct mapping version
+        if ($this->settings->mappingVersion !== null) {
+            $mappingVersion = $dungeonRepository->getMappingVersionByVersion(
+                $dungeon,
+                $this->settings->mappingVersion
+            );
+        }
+
+        // Fallback if not set or not found
+        $mappingVersion ??= $dungeon->getCurrentMappingVersion();
 
         $currentSeasonForDungeon = $dungeon->getActiveSeason($seasonService);
 
@@ -74,7 +83,7 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
             'public_key'         => $dungeonRouteRepository->generateRandomPublicKey(),
             'author_id'          => $userId,
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $currentMappingVersion->id,
+            'mapping_version_id' => $mappingVersion->id,
             'season_id'          => $currentSeasonForDungeon?->id,
             'faction_id'         => Faction::ALL[Faction::FACTION_UNSPECIFIED],
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
@@ -87,7 +96,7 @@ class CombatLogRouteRequestModel extends RequestModel implements Arrayable
         ]);
 
         $dungeonRoute->setRelation('dungeon', $dungeon);
-        $dungeonRoute->setRelation('mappingVersion', $currentMappingVersion);
+        $dungeonRoute->setRelation('mappingVersion', $mappingVersion);
         // Initially set the relation so we don't go fetching it from the database initially
         $dungeonRoute->setRelation('killZones', collect());
 

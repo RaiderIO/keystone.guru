@@ -1122,7 +1122,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             foreach ($relation as $model) {
                 // We have to load the enemies before we re-assign the ID - this is no longer done lazily for us
                 if ($model instanceof KillZone) {
-                    $model->load(['killZoneEnemies']);
+                    $model->load(['killZoneEnemies', 'killZoneSpells']);
                 }
 
                 /** @var $model Model */
@@ -1138,6 +1138,13 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                         $killZoneEnemy->exists       = false;
                         $killZoneEnemy->kill_zone_id = $model->id;
                         $killZoneEnemy->save();
+                    }
+
+                    foreach ($model->killZoneSpells as $killZoneSpell) {
+                        $killZoneSpell->id           = 0;
+                        $killZoneSpell->exists       = false;
+                        $killZoneSpell->kill_zone_id = $model->id;
+                        $killZoneSpell->save();
                     }
                 } // MapIcon, save the map icons WITHOUT A TEAM, otherwise you duplicate icons in other people's teams
                 else if ($model instanceof MapIcon) {

@@ -120,5 +120,6 @@ class StructuredLoggingTest extends PublicTestCase
 
         // Assert
         // Already checked in the callback
+        $existingLogLevel = env('LOG_LEVEL', 'debug');
     }
 }

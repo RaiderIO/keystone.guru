@@ -3,6 +3,7 @@
 namespace App\Repositories\Interfaces;
 
 use App\Models\Dungeon;
+use App\Models\Mapping\MappingVersion;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
 
@@ -21,6 +22,8 @@ interface DungeonRepositoryInterface extends BaseRepositoryInterface
     public function getAllMapIds(): Collection;
 
     public function getByChallengeModeIdOrFail(int $challengeModeId): Dungeon;
+
+    public function getMappingVersionByVersion(Dungeon $dungeon, int $version): ?MappingVersion;
 
     public function getByInstanceId(int $instanceId): ?Dungeon;
 }

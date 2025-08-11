@@ -3,6 +3,7 @@
 namespace App\Repositories\Swoole;
 
 use App\Models\Dungeon;
+use App\Models\Mapping\MappingVersion;
 use App\Repositories\Database\Npc\NpcRepository;
 use App\Repositories\Swoole\Interfaces\NpcRepositorySwooleInterface;
 use App\Repositories\Swoole\Traits\ClonesCollections;
@@ -12,47 +13,47 @@ class NpcRepositorySwoole extends NpcRepository implements NpcRepositorySwooleIn
 {
     use ClonesCollections;
 
-    private Collection $inUseNpcsByDungeonId;
-    private Collection $inUseNpcIdsByDungeonId;
+    private Collection $inUseNpcsByMappingVersionId;
+    private Collection $inUseNpcIdsByMappingVersionId;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->inUseNpcsByDungeonId   = collect();
-        $this->inUseNpcIdsByDungeonId = collect();
+        $this->inUseNpcsByMappingVersionId   = collect();
+        $this->inUseNpcIdsByMappingVersionId = collect();
     }
 
     /**
      * @inheritDoc
      */
-    public function getInUseNpcs(Dungeon $dungeon): Collection
+    public function getInUseNpcs(MappingVersion $mappingVersion): Collection
     {
-        if (!$this->inUseNpcsByDungeonId->has($dungeon->id)) {
-            $inUseNpcs = parent::getInUseNpcs($dungeon);
+        if (!$this->inUseNpcsByMappingVersionId->has($mappingVersion->id)) {
+            $inUseNpcs = parent::getInUseNpcs($mappingVersion);
 
-            $this->inUseNpcsByDungeonId->put($dungeon->id, $inUseNpcs);
+            $this->inUseNpcsByMappingVersionId->put($mappingVersion->id, $inUseNpcs);
         }
 
         return $this->cloneCollection(
-            $this->inUseNpcsByDungeonId->get($dungeon->id)
+            $this->inUseNpcsByMappingVersionId->get($mappingVersion->id)
         );
     }
 
     /**
      * @inheritDoc
      */
-    public function getInUseNpcIds(Dungeon $dungeon, ?Collection $inUseNpcs = null): Collection
+    public function getInUseNpcIds(?MappingVersion $mappingVersion = null, ?Collection $inUseNpcs = null): Collection
     {
-        if (!$this->inUseNpcIdsByDungeonId->has($dungeon->id)) {
+        if (!$this->inUseNpcIdsByMappingVersionId->has($mappingVersion->id)) {
 
-            $inUseNpcIds = parent::getInUseNpcIds($dungeon, $inUseNpcs);
+            $inUseNpcIds = parent::getInUseNpcIds($mappingVersion, $inUseNpcs);
 
-            $this->inUseNpcIdsByDungeonId->put($dungeon->id, $inUseNpcIds);
+            $this->inUseNpcIdsByMappingVersionId->put($mappingVersion->id, $inUseNpcIds);
         }
 
         return $this->copyCollection(
-            $this->inUseNpcIdsByDungeonId->get($dungeon->id)
+            $this->inUseNpcIdsByMappingVersionId->get($mappingVersion->id)
         );
     }
 }
