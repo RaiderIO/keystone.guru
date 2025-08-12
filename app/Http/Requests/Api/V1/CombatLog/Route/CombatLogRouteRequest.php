@@ -47,6 +47,7 @@ class CombatLogRouteRequest extends APIFormRequest
             'metadata.wowInstanceId'        => ['nullable', 'int'],
             'settings.temporary'            => ['nullable', 'bool'],
             'settings.debugIcons'           => ['nullable', 'bool'],
+            'settings.mappingVersion'       => ['nullable', 'numeric'],
             'roster.numMembers'             => ['nullable', 'int'], // @TODO make required after raider.io supports it
             'roster.averageItemLevel'       => ['nullable', 'numeric'], // @TODO make required after raider.io supports it
             'roster.characterIds'           => ['nullable', 'array'], // @TODO make required after raider.io supports it

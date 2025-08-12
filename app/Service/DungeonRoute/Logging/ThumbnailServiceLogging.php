@@ -98,12 +98,17 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->end(__METHOD__);
     }
 
-    public function attachThumbnailToDungeonRouteDeleteExistingThumbnail(int $id, bool $deleteResult): void
-    {
+    public function attachThumbnailToDungeonRouteDeleteExistingThumbnail(
+        int     $id,
+        ?int    $fileId,
+        ?string $fileDisk,
+        ?string $filePath,
+        bool    $deleteResult
+    ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function copyThumbnailsError(string $sourcePublicKey, string $targetPublicKey, int $id, Exception $exception): void
+    public function copyThumbnailsException(string $sourcePublicKey, string $targetPublicKey, int $id, Exception $exception): void
     {
         $this->error(__METHOD__, get_defined_vars());
     }

@@ -20,7 +20,7 @@ class APICombatLogControllerCombatLogRoutePrioryOfTheSacredFlameTest extends API
     }
 
     #[Test]
-    public function create_givenTwwS2PtrPrioryOfTheSacredFlame15Json_shouldReturnValidDungeonRoute(): void
+    public function create_givenTwwS2PtrPrioryOfTheSacredFlame13Json_shouldReturnValidDungeonRoute(): void
     {
         // Arrange
         $postBody = $this->getJsonData('TWW/tww_s2_ptr_priory_of_the_sacred_flame_13', self::FIXTURES_ROOT_DIR);
@@ -36,6 +36,27 @@ class APICombatLogControllerCombatLogRoutePrioryOfTheSacredFlameTest extends API
         $this->validateResponseStaticData($responseArr);
         $this->validateDungeon($responseArr);
         $this->validatePulls($responseArr, 21, 940);
+        // This was a log which did not have full affixes set - see #2483
+//        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
+    }
+
+    #[Test]
+    public function create_givenTwwS3PtrPrioryOfTheSacredFlame7Json_shouldReturnValidDungeonRoute(): void
+    {
+        // Arrange
+        $postBody = $this->getJsonData('TWW/tww_s3_ptr_priory_of_the_sacred_flame_7', self::FIXTURES_ROOT_DIR);
+
+        // Act
+        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+
+        // Assert
+        $response->assertCreated();
+
+        $responseArr = json_decode($response->content(), true);
+
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($responseArr, 20, 989);
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }

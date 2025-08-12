@@ -91,7 +91,7 @@ abstract class DungeonRouteBuilder
         $this->availableEnemies = $enemyRepository->getAvailableEnemiesForDungeonRouteBuilder($this->dungeonRoute->mappingVersion);
 
         // #1818 Filter out any NPC ids that are invalid
-        $this->validNpcIds = $this->npcRepository->getInUseNpcIds($this->dungeonRoute->dungeon);
+        $this->validNpcIds = $this->npcRepository->getInUseNpcIds($this->dungeonRoute->mappingVersion);
 
         $this->activePullCollection = new ActivePullCollection();
 

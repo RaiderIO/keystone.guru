@@ -25,8 +25,7 @@ class CombatLogEventFactory extends Factory
         $expansion = Expansion::where('shortname', Expansion::EXPANSION_DRAGONFLIGHT)->first();
 
         /** @var Dungeon $dungeon */
-        $dungeon = Dungeon::with(['currentMappingVersion'])
-            ->where('expansion_id', $expansion->id)
+        $dungeon = Dungeon::where('expansion_id', $expansion->id)
             ->inRandomOrder()
             ->first();
 

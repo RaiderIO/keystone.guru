@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Api\V1\APICombatLogController\CombatLogRoute;
 
 use App\Models\Affix;
+use App\Models\Mapping\MappingVersion;
 use Tests\Feature\Controller\Api\V1\APICombatLogController\APICombatLogControllerTestBase;
 
 abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLogControllerTestBase
@@ -37,7 +38,11 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
     {
         $this->assertCount($pulls, $responseArr['data']['pulls']);
         $this->assertEquals($enemyForces, $responseArr['data']['enemyForces']);
-        $this->assertEquals($this->dungeon->getCurrentMappingVersion()->enemy_forces_required, $responseArr['data']['enemyForcesRequired']);
+        /** @var MappingVersion|null $mappingVersion */
+        $mappingVersion = MappingVersion::where('version', $responseArr['data']['mappingVersion'])
+            ->where('dungeon_id', $this->dungeon->id)
+            ->first();
+        $this->assertEquals($mappingVersion->enemy_forces_required, $responseArr['data']['enemyForcesRequired']);
     }
 
     protected function validateSpells(array $responseArr, int $spellCount, array $mustHaveSpells = []): void
@@ -46,7 +51,7 @@ abstract class APICombatLogControllerCombatLogRouteTestBase extends APICombatLog
         foreach ($responseArr['data']['pulls'] as $pull) {
             $responseSpellCount += count($pull['spells']);
 
-            foreach($pull['spells'] as $spellId) {
+            foreach ($pull['spells'] as $spellId) {
                 // Remove $spellId from $mustHaveSpells
                 $key = array_search($spellId, $mustHaveSpells);
                 if ($key !== false) {

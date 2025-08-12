@@ -275,7 +275,8 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                 ),
                 new CombatLogRouteSettingsRequestModel(
                     $this->combatLogRoute->settings->temporary,
-                    $this->combatLogRoute->settings->debugIcons
+                    $this->combatLogRoute->settings->debugIcons,
+                    $this->combatLogRoute->settings->mappingVersion,
                 ),
                 new CombatLogRouteChallengeModeRequestModel(
                     $this->combatLogRoute->challengeMode->start,

@@ -20,23 +20,21 @@ class DungeonRouteAttributesColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'routeattributes.name');
     }
 
-    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
+    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder, $columnData, $order, $generalSearch): void
     {
-        $routeattributes = $columnData['search']['value'];
+        $routeAttributeIds = $columnData['search']['value'];
         // If filtering or ordering
-        if (!empty($routeattributes) || $order !== null) {
+        if (!empty($routeAttributeIds) || $order !== null) {
             // $builder->leftJoin('dungeon_route_attributes', 'dungeon_route_attributes.dungeon_route_id', '=', 'dungeon_routes.id');
             $subBuilder->groupBy('dungeon_routes.id');
         }
 
         // If filtering OR ordering add the join
-        if (!empty($routeattributes) || $order !== null) {
+        if (!empty($routeAttributeIds) || $order !== null) {
 
             // If filtering
-            if (!empty($routeattributes)) {
+            if (!empty($routeAttributeIds)) {
                 $allRouteAttributeIds = RouteAttribute::all()->pluck('id')->toArray();
-                $routeAttributeIds    = explode(',', (string)$routeattributes);
-
                 // Compute the attribute IDs that the user does NOT want
                 $invalidAttributeIds = array_diff($allRouteAttributeIds, $routeAttributeIds);
 

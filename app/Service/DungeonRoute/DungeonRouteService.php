@@ -36,6 +36,9 @@ class DungeonRouteService implements DungeonRouteServiceInterface
                 SELECT MAX(id) as ids
                 FROM mapping_versions
                 GROUP BY mapping_versions.dungeon_id
+                /**
+                  @TODO #2933 Where game version is the same as the dungeon route\'s mapping version?
+                 */
             ) as latest_mapping_version_ids
             SET dungeon_routes.popularity = page_views.views
             /*
@@ -93,7 +96,8 @@ class DungeonRouteService implements DungeonRouteServiceInterface
         return $updatedRouteCount;
     }
 
-    public function refreshOutdatedThumbnails(): int {
+    public function refreshOutdatedThumbnails(): int
+    {
         $routes = collect();
 
         $sendResult = true;
@@ -103,7 +107,7 @@ class DungeonRouteService implements DungeonRouteServiceInterface
             $dungeonRoutesWithExpiredThumbnails = $this->dungeonRouteRepository->getDungeonRoutesWithExpiredThumbnails();
 
             // All routes that come from the above will need their thumbnails regenerated, loop over them and queue the jobs at once
-            foreach($dungeonRoutesWithExpiredThumbnails as $dungeonRoute) {
+            foreach ($dungeonRoutesWithExpiredThumbnails as $dungeonRoute) {
                 $sendResult = $this->thumbnailService->queueThumbnailRefresh($dungeonRoute) && $sendResult;
             }
         } finally {

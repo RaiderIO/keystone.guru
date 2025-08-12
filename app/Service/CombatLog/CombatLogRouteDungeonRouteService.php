@@ -215,7 +215,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             }
 
             // #1818 Filter out any NPC ids that are invalid
-            $validNpcIds = $this->npcRepository->getInUseNpcIds($dungeonRoute->dungeon);
+            $validNpcIds = $this->npcRepository->getInUseNpcIds($dungeonRoute->mappingVersion);
 
             /** @var ChallengeModeStartSpecialEvent $challengeModeStartEvent */
             $challengeModeStartEvent = $resultEvents->filter(static fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
@@ -459,8 +459,10 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         $polylineAttributes  = [];
         $brushlineAttributes = [];
 
-        $npcs          = $this->npcRepository->getInUseNpcs($dungeonRoute->dungeon)->keyBy('id');
-        $validNpcIds   = $this->npcRepository->getInUseNpcIds($dungeonRoute->dungeon);
+        /** @var Collection<Npc> $validNpcIds */
+        $npcs          = $this->npcRepository->getInUseNpcs($dungeonRoute->mappingVersion)->keyBy('id');
+        /** @var Collection<int> $validNpcIds */
+        $validNpcIds   = $this->npcRepository->getInUseNpcIds($dungeonRoute->mappingVersion);
         $previousFloor = null;
         foreach ($combatLogRoute->npcs as $combatLogRouteNpc) {
             $currentFloor = $combatLogRouteNpc->getResolvedEnemy()?->floor ?? $previousFloor;

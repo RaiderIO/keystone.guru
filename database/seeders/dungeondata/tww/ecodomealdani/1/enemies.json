@@ -8070,8 +8070,8 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -178.0829,
-        "lng": 218.7714,
+        "lat": -206.3544,
+        "lng": 235.5633,
         "kill_priority": null
     },
     {
@@ -8135,7 +8135,7 @@
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": null,
-        "seasonal_type": null,
+        "seasonal_type": "mdt_placeholder",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
@@ -8145,9 +8145,9 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -187.8885,
-        "lng": 217.0259,
-        "kill_priority": null
+        "lat": -211.2549,
+        "lng": 232.8462,
+        "kill_priority": -1
     },
     {
         "id": 102310,
@@ -8160,7 +8160,7 @@
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": null,
-        "seasonal_type": null,
+        "seasonal_type": "mdt_placeholder",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
@@ -8170,9 +8170,9 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -188.4315,
-        "lng": 222.3399,
-        "kill_priority": null
+        "lat": -211.2549,
+        "lng": 237.6982,
+        "kill_priority": -1
     },
     {
         "id": 102311,
@@ -8185,7 +8185,7 @@
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": null,
-        "seasonal_type": null,
+        "seasonal_type": "mdt_placeholder",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
@@ -8195,9 +8195,9 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -184.1804,
-        "lng": 226.0325,
-        "kill_priority": null
+        "lat": -207.713,
+        "lng": 241.7253,
+        "kill_priority": -1
     },
     {
         "id": 102312,
@@ -8210,7 +8210,7 @@
         "mdt_npc_id": null,
         "exclusive_enemy_id": null,
         "mdt_scale": null,
-        "seasonal_type": null,
+        "seasonal_type": "mdt_placeholder",
         "seasonal_index": null,
         "teeming": null,
         "faction": "any",
@@ -8220,9 +8220,9 @@
         "enemy_forces_override": null,
         "enemy_forces_override_teeming": null,
         "dungeon_difficulty": null,
-        "lat": -184.8087,
-        "lng": 213.1006,
-        "kill_priority": null
+        "lat": -207.7615,
+        "lng": 228.8676,
+        "kill_priority": -1
     },
     {
         "id": 102313,

@@ -8230,5 +8230,159 @@
         "extracted_data": 1,
         "created_at": "2025-08-05T15:26:52+00:00",
         "updated_at": "2025-08-05T15:26:52+00:00"
+    },
+    {
+        "id": 1181,
+        "combat_log_path": "tmp5\/WoWCombatLog-080625_213828_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:49:12+00:00",
+        "updated_at": "2025-08-12T08:49:12+00:00"
+    },
+    {
+        "id": 1182,
+        "combat_log_path": "tmp5\/WoWCombatLog-080625_213828_halls-of-atonement.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:49:17+00:00",
+        "updated_at": "2025-08-12T08:49:17+00:00"
+    },
+    {
+        "id": 1183,
+        "combat_log_path": "tmp5\/WoWCombatLog-080625_213828_operation-floodgate.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:49:23+00:00",
+        "updated_at": "2025-08-12T08:49:23+00:00"
+    },
+    {
+        "id": 1184,
+        "combat_log_path": "tmp5\/WoWCombatLog-080625_213828_the-dawnbreaker.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:49:28+00:00",
+        "updated_at": "2025-08-12T08:49:28+00:00"
+    },
+    {
+        "id": 1185,
+        "combat_log_path": "tmp5\/WoWCombatLog-080925_151946_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:49:30+00:00",
+        "updated_at": "2025-08-12T08:49:30+00:00"
+    },
+    {
+        "id": 1186,
+        "combat_log_path": "tmp5\/WoWCombatLog-080925_151946_dornogal.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:49:34+00:00",
+        "updated_at": "2025-08-12T08:49:34+00:00"
+    },
+    {
+        "id": 1187,
+        "combat_log_path": "tmp5\/WoWCombatLog-080925_151946_operation-floodgate.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:49:42+00:00",
+        "updated_at": "2025-08-12T08:49:42+00:00"
+    },
+    {
+        "id": 1188,
+        "combat_log_path": "tmp5\/WoWCombatLog-080925_151946_revendreth.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:49:50+00:00",
+        "updated_at": "2025-08-12T08:49:50+00:00"
+    },
+    {
+        "id": 1189,
+        "combat_log_path": "tmp5\/WoWCombatLog-080925_220849_city-of-threads.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:49:57+00:00",
+        "updated_at": "2025-08-12T08:49:57+00:00"
+    },
+    {
+        "id": 1190,
+        "combat_log_path": "tmp5\/WoWCombatLog-080925_220849_eco-dome-aldani.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:50:04+00:00",
+        "updated_at": "2025-08-12T08:50:04+00:00"
+    },
+    {
+        "id": 1191,
+        "combat_log_path": "tmp5\/WoWCombatLog-080925_220849_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:50:11+00:00",
+        "updated_at": "2025-08-12T08:50:11+00:00"
+    },
+    {
+        "id": 1192,
+        "combat_log_path": "tmp5\/WoWCombatLog-080925_220849_revendreth.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:50:19+00:00",
+        "updated_at": "2025-08-12T08:50:19+00:00"
+    },
+    {
+        "id": 1193,
+        "combat_log_path": "tmp5\/WoWCombatLog-081025_172957_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:50:25+00:00",
+        "updated_at": "2025-08-12T08:50:25+00:00"
+    },
+    {
+        "id": 1194,
+        "combat_log_path": "tmp5\/WoWCombatLog-081025_172957_eco-dome-aldani.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:50:25+00:00",
+        "updated_at": "2025-08-12T08:50:25+00:00"
+    },
+    {
+        "id": 1195,
+        "combat_log_path": "tmp5\/WoWCombatLog-081025_172957_tazavesh-the-veiled-market.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:50:30+00:00",
+        "updated_at": "2025-08-12T08:50:30+00:00"
+    },
+    {
+        "id": 1196,
+        "combat_log_path": "tmp5\/WoWCombatLog-081025_182704_eco-dome-aldani.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:50:35+00:00",
+        "updated_at": "2025-08-12T08:50:35+00:00"
+    },
+    {
+        "id": 1197,
+        "combat_log_path": "tmp5\/WoWCombatLog-081025_182704_hallowfall.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:50:43+00:00",
+        "updated_at": "2025-08-12T08:50:43+00:00"
+    },
+    {
+        "id": 1198,
+        "combat_log_path": "tmp5\/WoWCombatLog-081025_182704_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:50:43+00:00",
+        "updated_at": "2025-08-12T08:50:43+00:00"
+    },
+    {
+        "id": 1199,
+        "combat_log_path": "tmp5\/WoWCombatLog-081025_182704_tazavesh-the-veiled-market.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:50:43+00:00",
+        "updated_at": "2025-08-12T08:50:43+00:00"
+    },
+    {
+        "id": 1200,
+        "combat_log_path": "tmp5\/WoWCombatLog-081025_202840_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:50:51+00:00",
+        "updated_at": "2025-08-12T08:50:51+00:00"
+    },
+    {
+        "id": 1201,
+        "combat_log_path": "tmp5\/WoWCombatLog-081025_202840_eco-dome-aldani.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:50:59+00:00",
+        "updated_at": "2025-08-12T08:50:59+00:00"
+    },
+    {
+        "id": 1202,
+        "combat_log_path": "tmp5\/WoWCombatLog-081025_202840_halls-of-atonement.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-12T08:51:08+00:00",
+        "updated_at": "2025-08-12T08:51:08+00:00"
     }
 ]

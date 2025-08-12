@@ -58,4 +58,24 @@ class APICombatLogControllerCombatLogRouteAraKaraCityOfEchoesTest extends APICom
         $this->validatePulls($responseArr, 15, 498);
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
+
+    #[Test]
+    public function create_givenTwwS3PtrAraKaraCityOfEchoes7Json_shouldReturnValidDungeonRoute(): void
+    {
+        // Arrange
+        $postBody = $this->getJsonData('TWW/tww_s3_ptr_ara_kara_city_of_echoes_7', self::FIXTURES_ROOT_DIR);
+
+        // Act
+        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+
+        // Assert
+        $response->assertCreated();
+
+        $responseArr = json_decode($response->content(), true);
+
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($responseArr, 20, 811);
+//        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
+    }
 }
