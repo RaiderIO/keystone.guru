@@ -91,12 +91,9 @@ class ViewService implements ViewServiceInterface
                 ->get();
 
             /** @var Release $latestRelease */
-            $latestReleaseBuilder = Release::when(config('app.env') === 'production',
-                static fn($query) => $query->where('released', true)
-            );
-
-            $latestRelease          = $latestReleaseBuilder->latest()->first();
-            $latestReleaseSpotlight = $latestReleaseBuilder->where('spotlight', true)
+            $latestRelease          = Release::latest()->first();
+            /** @var Release $latestReleaseSpotlight */
+            $latestReleaseSpotlight = Release::where('spotlight', true)
                 ->whereDate('created_at', '>',
                     Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))->toDateTimeString()
                 )->first();

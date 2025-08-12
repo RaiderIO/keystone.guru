@@ -1,0 +1,49 @@
+{
+    "id": 314,
+    "release_changelog_id": 321,
+    "version": "v13.8.3",
+    "title": "Mapping tweaks for Auto-Route Creator and bugfixes",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-08-12T11:25:45+00:00",
+    "updated_at": "2025-08-12T11:25:45+00:00",
+    "changelog": {
+        "id": 321,
+        "release_id": 314,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 321,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2927,
+                "change": "[Hotfixed] Route thumbnails are now generated properly again."
+            },
+            {
+                "release_changelog_id": 321,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2928,
+                "change": "Cloning a route without thumbnails no longer causes a crash (but this shouldn't happen if your routes have thumbnails as intended)."
+            },
+            {
+                "release_changelog_id": 321,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2929,
+                "change": "Fixed a crash when trying to filter for route attributes in the route overview table."
+            },
+            {
+                "release_changelog_id": 321,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2931,
+                "change": "[Hotfixed] Cloning a route now also copies over assigned spells to each pull."
+            },
+            {
+                "release_changelog_id": 321,
+                "release_changelog_category_id": 11,
+                "ticket_id": 2923,
+                "change": "Auto-Route Creator now properly works for all S3 dungeons."
+            }
+        ]
+    }
+}
