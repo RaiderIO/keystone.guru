@@ -2,6 +2,7 @@
 
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
 use Illuminate\Support\Collection;
 
@@ -71,7 +72,14 @@ use Illuminate\Support\Collection;
             <h4>
                 {{ __($npc->name) }} ({{ __($npc->id) }})
             </h4>
-            @foreach($npc->npcSpells as $npcSpell)
+            <?php
+                $sortedNpcSpells = $npc->npcSpells->sortBy(function(NpcSpell $npcSpell) use($spells) {
+                    /** @var Spell $spell */
+                    $spell = $spells->get($npcSpell->spell_id);
+                    return __($spell?->name) ?? '';
+                })->values();
+                ?>
+            @foreach($sortedNpcSpells as $npcSpell)
                     <?php
                     /** @var Spell $spell */
                     $spell = $spells->get($npcSpell->spell_id);
@@ -95,7 +103,7 @@ use Illuminate\Support\Collection;
                         <div class="col">
                             <div class="form-element" style="line-height: 2.5">
                                 <a class="spell_wowhead_url-{{ $spell->id }}"
-                                    href="{{ Spell::getWowheadLink($spell->game_version_id, $spell->id, __($spell->name, [], 'en_US')) }}"
+                                   href="{{ Spell::getWowheadLink($spell->game_version_id, $spell->id, __($spell->name, [], 'en_US')) }}"
                                    data-wh-icon-size="medium"
                                 >
                                     <img src="{{$spell->icon_url}}" width="32px" alt="{{ __($spell->name) }}"/>
