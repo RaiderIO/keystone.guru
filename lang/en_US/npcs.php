@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return array (
   68 => 'Stormwind City Guard',
@@ -4888,7 +4888,7 @@ return array (
   210851 => 'Eternal Flame',
   210966 => 'Sureki Webmage',
   211087 => 'Speaker Shadowcrown',
-  211089 => 'Anubikkaj',
+  211089 => 'Anub\'ikkaj',
   211121 => 'Rank Overseer',
   211140 => 'Arathi Neophyte',
   211228 => 'Blazing Fiend',
@@ -4956,7 +4956,7 @@ return array (
   213913 => 'Kobold Flametender',
   213932 => 'Sureki Militant',
   213934 => 'Nightfall Tactician',
-  213937 => 'Rashanan',
+  213937 => 'Rasha\'nan',
   213942 => 'Sludge',
   213954 => 'Rock Smasher',
   214016 => 'Arathi Stalwart',
