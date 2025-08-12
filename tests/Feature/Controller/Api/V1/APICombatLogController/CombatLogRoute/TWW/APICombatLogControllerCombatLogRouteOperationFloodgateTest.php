@@ -39,4 +39,25 @@ class APICombatLogControllerCombatLogRouteOperationFloodgateTest extends APIComb
         // This was a log which did not have full affixes set - see #2483
 //        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
     }
+
+    #[Test]
+    public function create_givenTwwS3PtrOperationFloodgate7Json_shouldReturnValidDungeonRoute(): void
+    {
+        // Arrange
+        $postBody = $this->getJsonData('TWW/tww_s3_ptr_operation_floodgate_7', self::FIXTURES_ROOT_DIR);
+
+        // Act
+        $response = $this->post(route('api.v1.combatlog.route.create'), $postBody);
+
+        // Assert
+        $response->assertCreated();
+
+        $responseArr = json_decode($response->content(), true);
+
+        $this->validateResponseStaticData($responseArr);
+        $this->validateDungeon($responseArr);
+        $this->validatePulls($responseArr, 21, 476);
+        // This was a log which did not have full affixes set - see #2483
+//        $this->validateAffixes($responseArr, Affix::AFFIX_FORTIFIED, Affix::AFFIX_STORMING, Affix::AFFIX_BURSTING);
+    }
 }
