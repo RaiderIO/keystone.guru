@@ -174,7 +174,11 @@ class AjaxDungeonRouteController extends Controller
                 }
 
                 $routes = $routes->whereIn('published_state_id',
-                    [PublishedState::ALL[PublishedState::TEAM], PublishedState::ALL[PublishedState::WORLD]]
+                    [
+                        PublishedState::ALL[PublishedState::TEAM],
+                        PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
+                        PublishedState::ALL[PublishedState::WORLD]
+                    ]
                 );
                 //                $routes = $routes->whereHas('teams', function ($query) use (&$user, $teamId) {
                 //                    /** @var $query Builder */
