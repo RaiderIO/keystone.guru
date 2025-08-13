@@ -20,6 +20,7 @@ use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Service\AffixGroup\AffixGroupEaseTierServiceInterface;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Expansion\ExpansionData;
 use App\Service\Expansion\ExpansionServiceInterface;
 use Illuminate\Support\Carbon;
@@ -28,6 +29,8 @@ use Str;
 
 class ViewService implements ViewServiceInterface
 {
+    use RemembersToFile;
+
     private const VIEW_VARIABLES_URL_WHITELIST = [
         // search actually renders views back to the user which we need
         '/ajax/search',
@@ -56,191 +59,199 @@ class ViewService implements ViewServiceInterface
      */
     public function getGlobalViewVariables(bool $useCache = true): array
     {
-        return $this->cacheService->setCacheEnabled($useCache)->remember(sprintf('view_variables:%s:global', $this->release), function () {
-            // Build a list of some common
-            $demoRoutes = DungeonRoute::where('demo', true)
-                // @TODO Temp fix for testing environment
-                ->without(['thumbnails'])
-                ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD_WITH_LINK])
-                ->orderBy('dungeon_id')
-                ->get();
+        $viewVariablesKey = sprintf('view_variables:%s:global', $this->release);
 
-            $demoRouteDungeons = Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get();
+        return $this->rememberLocal($viewVariablesKey, 86400, function () use ($useCache, $viewVariablesKey) {
+            return $this->cacheService->setCacheEnabled($useCache)->remember($viewVariablesKey, function () {
+                // Build a list of some common
+                $demoRoutes = DungeonRoute::where('demo', true)
+                    // @TODO Temp fix for testing environment
+                    ->without(['thumbnails'])
+                    ->where('published_state_id', PublishedState::ALL[PublishedState::WORLD_WITH_LINK])
+                    ->orderBy('dungeon_id')
+                    ->get();
 
-            $dungeonsSelectQuery = Dungeon::select('dungeons.*')
-                ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
-                ->orderByRaw('expansions.released_at DESC, dungeons.name');
-            $raidsSelectQuery    = $dungeonsSelectQuery->clone()
-                ->where('dungeons.raid', true);
+                $demoRouteDungeons = Dungeon::whereIn('id', $demoRoutes->pluck(['dungeon_id']))->get();
 
-            $allDungeonsByExpansionId = $dungeonsSelectQuery
-                ->where('dungeons.raid', false)
-                ->get();
+                $dungeonsSelectQuery = Dungeon::select('dungeons.*')
+                    ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
+                    ->orderByRaw('expansions.released_at DESC, dungeons.name');
+                $raidsSelectQuery    = $dungeonsSelectQuery->clone()
+                    ->where('dungeons.raid', true);
 
-            $allRaidsByExpansionId = $raidsSelectQuery
-                ->get();
+                $allDungeonsByExpansionId = $dungeonsSelectQuery
+                    ->where('dungeons.raid', false)
+                    ->get();
 
-            $activeDungeonsByExpansionId = $dungeonsSelectQuery
-                ->where('expansions.active', true)
-                ->where('dungeons.active', true)
-                ->get();
+                $allRaidsByExpansionId = $raidsSelectQuery
+                    ->get();
 
-            $activeRaidsByExpansionId = $raidsSelectQuery
-                ->where('expansions.active', true)
-                ->where('dungeons.active', true)
-                ->get();
+                $activeDungeonsByExpansionId = $dungeonsSelectQuery
+                    ->where('expansions.active', true)
+                    ->where('dungeons.active', true)
+                    ->get();
 
-            /** @var Release $latestRelease */
-            $latestRelease          = Release::latest()->first();
-            /** @var Release $latestReleaseSpotlight */
-            $latestReleaseSpotlight = Release::where('spotlight', true)
-                ->whereDate('created_at', '>',
-                    Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))->toDateTimeString()
-                )->first();
+                $activeRaidsByExpansionId = $raidsSelectQuery
+                    ->where('expansions.active', true)
+                    ->where('dungeons.active', true)
+                    ->get();
 
-            $allRegions    = GameServerRegion::all();
-            $allExpansions = Expansion::with(['dungeons', 'raids'])->orderBy('released_at', 'desc')->get();
+                /** @var Release $latestRelease */
+                $latestRelease = Release::latest()->first();
+                /** @var Release $latestReleaseSpotlight */
+                $latestReleaseSpotlight = Release::where('spotlight', true)
+                    ->whereDate('created_at', '>',
+                        Carbon::now()->subDays(config('keystoneguru.releases.spotlight_show_days', 7))->toDateTimeString()
+                    )->first();
 
-            /** @var Collection<Expansion> $activeExpansions */
-            $activeExpansions = Expansion::active()->with(['dungeons', 'raids'])->orderBy('released_at', 'desc')->get();
+                $allRegions    = GameServerRegion::all();
+                $allExpansions = Expansion::with(['dungeons', 'raids'])->orderBy('released_at', 'desc')->get();
 
-            // Spells
-            $selectableSpellsByCategory = Spell::where('selectable', true)
-                ->orderBy('category')
-                ->orderBy('name')
-                ->get()
-                ->groupBy('category')
-                // Do NOT localize the keys, they are used in the frontend which can have a different locale
-                ->mapWithKeys(static fn(Collection $spells, string $key) => [$key => $spells]);
+                /** @var Collection<Expansion> $activeExpansions */
+                $activeExpansions = Expansion::active()->with(['dungeons', 'raids'])->orderBy('released_at', 'desc')->get();
 
-            $appRevision = trim(file_get_contents(base_path('version')));
+                // Spells
+                $selectableSpellsByCategory = Spell::where('selectable', true)
+                    ->orderBy('category')
+                    ->orderBy('name')
+                    ->get()
+                    ->groupBy('category')
+                    // Do NOT localize the keys, they are used in the frontend which can have a different locale
+                    ->mapWithKeys(static fn(Collection $spells, string $key) => [$key => $spells]);
 
-            return [
-                'isLocal'                         => config('app.env') === 'local',
-                'isMapping'                       => config('app.env') === 'mapping',
-                'isProduction'                    => config('app.env') === 'production',
-                'demoRoutes'                      => $demoRoutes,
-                'demoRouteDungeons'               => $demoRouteDungeons,
-                'demoRouteMapping'                => $demoRouteDungeons
-                    ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => $demoRoutes->where('dungeon_id', $dungeon->id)->first()->public_key]),
-                'latestRelease'                   => $latestRelease,
-                'latestReleaseSpotlight'          => $latestReleaseSpotlight,
-                'appVersion'                      => $latestRelease->version,
-                'appRevision'                     => $appRevision,
-                'appVersionAndName'               => sprintf(
-                    '%s® © 2018-%d %s - %s (%s)',
-                    config('app.name'),
-                    date('Y'),
-                    'Ludicrous Speed, LLC.',
-                    $latestRelease->version,
-                    substr($appRevision, 0, 6)
-                ),
+                $appRevision = trim(file_get_contents(base_path('version')));
 
-                // Home
-                'userCount'                       => (int)(User::count() / 1000) * 1000,
+                return [
+                    'isLocal'                         => config('app.env') === 'local',
+                    'isMapping'                       => config('app.env') === 'mapping',
+                    'isProduction'                    => config('app.env') === 'production',
+                    'demoRoutes'                      => $demoRoutes,
+                    'demoRouteDungeons'               => $demoRouteDungeons,
+                    'demoRouteMapping'                => $demoRouteDungeons
+                        ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => $demoRoutes->where('dungeon_id', $dungeon->id)->first()->public_key]),
+                    'latestRelease'                   => $latestRelease,
+                    'latestReleaseSpotlight'          => $latestReleaseSpotlight,
+                    'appVersion'                      => $latestRelease->version,
+                    'appRevision'                     => $appRevision,
+                    'appVersionAndName'               => sprintf(
+                        '%s® © 2018-%d %s - %s (%s)',
+                        config('app.name'),
+                        date('Y'),
+                        'Ludicrous Speed, LLC.',
+                        $latestRelease->version,
+                        substr($appRevision, 0, 6)
+                    ),
 
-                // OAuth/register
-                'allRegions'                      => $allRegions,
+                    // Home
+                    'userCount'                       => (int)(User::count() / 1000) * 1000,
 
-                // Composition
-                'allFactions'                     => Faction::all(),
+                    // OAuth/register
+                    'allRegions'                      => $allRegions,
 
-                // Changelog
-                'releaseChangelogCategories'      => ReleaseChangelogCategory::all(),
+                    // Composition
+                    'allFactions'                     => Faction::all(),
 
-                // Map
-                'characterClassSpecializations'   => CharacterClassSpecialization::with('class')->get(),
-                'characterClasses'                => CharacterClass::with('specializations')->orderBy('name')->get(),
-                // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
-                'characterRacesClasses'           => CharacterRace::with(['classes:character_classes.id'])->orderBy('faction_id')->get(),
-                'allAffixes'                      => Affix::all(),
-                'allRouteAttributes'              => RouteAttribute::all(),
-                'allPublishedStates'              => PublishedState::all(),
-                'selectableSpellsByCategory'      => $selectableSpellsByCategory,
+                    // Changelog
+                    'releaseChangelogCategories'      => ReleaseChangelogCategory::all(),
 
-                // Misc
-                'allGameVersions'                 => GameVersion::active()->get(),
-                'activeExpansions'                => $activeExpansions, // Show most recent expansions first
-                'allExpansions'                   => $allExpansions,
-                'dungeonsByExpansionIdDesc'       => $allDungeonsByExpansionId,
-                'raidsByExpansionIdDesc'          => $allRaidsByExpansionId,
-                // Take active expansions into account
-                'activeDungeonsByExpansionIdDesc' => $activeDungeonsByExpansionId,
-                'activeRaidsByExpansionIdDesc'    => $activeRaidsByExpansionId,
-                'siegeOfBoralus'                  => Dungeon::where('key', Dungeon::DUNGEON_SIEGE_OF_BORALUS)->first(),
+                    // Map
+                    'characterClassSpecializations'   => CharacterClassSpecialization::with('class')->get(),
+                    'characterClasses'                => CharacterClass::with('specializations')->orderBy('name')->get(),
+                    // @TODO Classes are loaded fully inside $raceClasses, this shouldn't happen. Find a way to exclude them
+                    'characterRacesClasses'           => CharacterRace::with(['classes:character_classes.id'])->orderBy('faction_id')->get(),
+                    'allAffixes'                      => Affix::all(),
+                    'allRouteAttributes'              => RouteAttribute::all(),
+                    'allPublishedStates'              => PublishedState::all(),
+                    'selectableSpellsByCategory'      => $selectableSpellsByCategory,
 
-                // Discover
-                'affixGroupEaseTiersByAffixGroup' => $this->easeTierService->getTiers()->groupBy(['affix_group_id', 'dungeon_id']),
+                    // Misc
+                    'allGameVersions'                 => GameVersion::active()->get(),
+                    'activeExpansions'                => $activeExpansions, // Show most recent expansions first
+                    'allExpansions'                   => $allExpansions,
+                    'dungeonsByExpansionIdDesc'       => $allDungeonsByExpansionId,
+                    'raidsByExpansionIdDesc'          => $allRaidsByExpansionId,
+                    // Take active expansions into account
+                    'activeDungeonsByExpansionIdDesc' => $activeDungeonsByExpansionId,
+                    'activeRaidsByExpansionIdDesc'    => $activeRaidsByExpansionId,
+                    'siegeOfBoralus'                  => Dungeon::where('key', Dungeon::DUNGEON_SIEGE_OF_BORALUS)->first(),
 
-                // Create route
-                'dungeonExpansions'               => $allDungeonsByExpansionId
-                    ->pluck('expansion_id', 'id')->mapWithKeys(static fn(int $expansionId, int $dungeonId) => [$dungeonId => $allExpansions->where('id', $expansionId)->first()->shortname]),
-                'allSpeedrunDungeons'             => Dungeon::where('speedrun_enabled', true)->get(),
-            ];
-        }, config('keystoneguru.cache.global_view_variables.ttl'));
+                    // Discover
+                    'affixGroupEaseTiersByAffixGroup' => $this->easeTierService->getTiers()->groupBy(['affix_group_id', 'dungeon_id']),
+
+                    // Create route
+                    'dungeonExpansions'               => $allDungeonsByExpansionId
+                        ->pluck('expansion_id', 'id')->mapWithKeys(static fn(int $expansionId, int $dungeonId) => [$dungeonId => $allExpansions->where('id', $expansionId)->first()->shortname]),
+                    'allSpeedrunDungeons'             => Dungeon::where('speedrun_enabled', true)->get(),
+                ];
+            }, config('keystoneguru.cache.global_view_variables.ttl'));
+        });
     }
 
     public function getGameServerRegionViewVariables(GameServerRegion $gameServerRegion, bool $useCache = true): array
     {
-        return $this->cacheService->setCacheEnabled($useCache)->remember(
-            sprintf('view_variables:%s:game_server_region:%s', $this->release, $gameServerRegion->short),
-            function () use ($gameServerRegion) {
-                // So we're already caching the result of this function, Model Cache doesn't need to be involved at this time
-                // The results will likely explode the model cache (and redis usage as a result) so don't use it
-                $currentExpansion = $this->expansionService->getCurrentExpansion($gameServerRegion);
-                $currentSeason    = $this->expansionService->getCurrentSeason($currentExpansion, $gameServerRegion);
+        $viewVariablesGameServerRegionKey = sprintf('view_variables:%s:game_server_region:%s', $this->release, $gameServerRegion->short);
 
-                // Fall back to the current expansion if the next expansion is not known yet, then the next season
-                // is still part of the current expansion
-                $nextExpansion = $this->expansionService->getNextExpansion($gameServerRegion) ?? $currentExpansion;
-                $nextSeason    = $this->expansionService->getNextSeason($nextExpansion, $gameServerRegion);
+        return $this->rememberLocal($viewVariablesGameServerRegionKey, 86400, function () use ($gameServerRegion, $useCache, $viewVariablesGameServerRegionKey) {
+            return $this->cacheService->setCacheEnabled($useCache)->remember(
+                $viewVariablesGameServerRegionKey,
+                function () use ($gameServerRegion) {
+                    // So we're already caching the result of this function, Model Cache doesn't need to be involved at this time
+                    // The results will likely explode the model cache (and redis usage as a result) so don't use it
+                    $currentExpansion = $this->expansionService->getCurrentExpansion($gameServerRegion);
+                    $currentSeason    = $this->expansionService->getCurrentSeason($currentExpansion, $gameServerRegion);
 
-                $allExpansions = Expansion::with(['dungeonsAndRaids'])->orderBy('released_at', 'desc')->get();
+                    // Fall back to the current expansion if the next expansion is not known yet, then the next season
+                    // is still part of the current expansion
+                    $nextExpansion = $this->expansionService->getNextExpansion($gameServerRegion) ?? $currentExpansion;
+                    $nextSeason    = $this->expansionService->getNextSeason($nextExpansion, $gameServerRegion);
 
-                /** @var Collection<ExpansionData> $expansionsData */
-                $expansionsData = collect();
-                foreach ($allExpansions as $expansion) {
-                    $expansionsData->put($expansion->shortname, $this->expansionService->getData($expansion, $gameServerRegion));
-                }
+                    $allExpansions = Expansion::with(['dungeonsAndRaids'])->orderBy('released_at', 'desc')->get();
 
-                /** @var Collection<Expansion> $activeExpansions */
-                $activeExpansions = Expansion::active()->with('dungeonsAndRaids')->orderBy('released_at', 'desc')->get();
+                    /** @var Collection<ExpansionData> $expansionsData */
+                    $expansionsData = collect();
+                    foreach ($allExpansions as $expansion) {
+                        $expansionsData->put($expansion->shortname, $this->expansionService->getData($expansion, $gameServerRegion));
+                    }
 
-                // Build a list of all valid affix groups we may select across all currently active seasons
-                $allAffixGroups    = collect();
-                $allCurrentAffixes = collect();
-                foreach ($expansionsData as $expansionData) {
-                    $allAffixGroups = $allAffixGroups->merge($expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
-                    $allCurrentAffixes->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup());
-                }
+                    /** @var Collection<Expansion> $activeExpansions */
+                    $activeExpansions = Expansion::active()->with('dungeonsAndRaids')->orderBy('released_at', 'desc')->get();
 
-                // Gather all affix groups by active expansions
-                $allAffixGroupsByActiveExpansion  = collect();
-                $featuredAffixesByActiveExpansion = collect();
-                foreach ($activeExpansions as $activeExpansion) {
-                    /** @var ExpansionData $expansionData */
-                    $expansionData = $expansionsData->get($activeExpansion->shortname);
-                    $allAffixGroupsByActiveExpansion->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
-                    $featuredAffixesByActiveExpansion->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getFeaturedAffixes());
-                }
+                    // Build a list of all valid affix groups we may select across all currently active seasons
+                    $allAffixGroups    = collect();
+                    $allCurrentAffixes = collect();
+                    foreach ($expansionsData as $expansionData) {
+                        $allAffixGroups = $allAffixGroups->merge($expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
+                        $allCurrentAffixes->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getCurrentAffixGroup());
+                    }
 
-                return [
-                    // Expansions/season data
-                    'expansionsData' => $expansionsData,
+                    // Gather all affix groups by active expansions
+                    $allAffixGroupsByActiveExpansion  = collect();
+                    $featuredAffixesByActiveExpansion = collect();
+                    foreach ($activeExpansions as $activeExpansion) {
+                        /** @var ExpansionData $expansionData */
+                        $expansionData = $expansionsData->get($activeExpansion->shortname);
+                        $allAffixGroupsByActiveExpansion->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getAllAffixGroups());
+                        $featuredAffixesByActiveExpansion->put($expansionData->getExpansion()->shortname, $expansionData->getExpansionSeason()->getAffixGroups()->getFeaturedAffixes());
+                    }
 
-                    'currentSeason'                    => $currentSeason,
-                    'nextSeason'                       => $nextSeason,
-                    'currentExpansion'                 => $currentExpansion,
+                    return [
+                        // Expansions/season data
+                        'expansionsData' => $expansionsData,
 
-                    // Search
-                    'allAffixGroupsByActiveExpansion'  => $allAffixGroupsByActiveExpansion,
-                    'featuredAffixesByActiveExpansion' => $featuredAffixesByActiveExpansion,
+                        'currentSeason'                    => $currentSeason,
+                        'nextSeason'                       => $nextSeason,
+                        'currentExpansion'                 => $currentExpansion,
 
-                    // Create route
-                    'allAffixGroups'                   => $allAffixGroups,
-                    'allCurrentAffixes'                => $allCurrentAffixes,
-                ];
-            }, config('keystoneguru.cache.global_view_variables.ttl'));
+                        // Search
+                        'allAffixGroupsByActiveExpansion'  => $allAffixGroupsByActiveExpansion,
+                        'featuredAffixesByActiveExpansion' => $featuredAffixesByActiveExpansion,
+
+                        // Create route
+                        'allAffixGroups'                   => $allAffixGroups,
+                        'allCurrentAffixes'                => $allCurrentAffixes,
+                    ];
+                }, config('keystoneguru.cache.global_view_variables.ttl'));
+        });
     }
 
     public function shouldLoadViewVariables(string $uri): bool

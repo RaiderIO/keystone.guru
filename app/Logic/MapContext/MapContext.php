@@ -17,11 +17,11 @@ use App\Models\RaidMarker;
 use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
@@ -32,6 +32,7 @@ use Psr\SimpleCache\InvalidArgumentException;
 abstract class MapContext
 {
     use ListsEnemies;
+    use RemembersToFile;
 
     protected MappingVersion $mappingVersion;
 
@@ -81,108 +82,115 @@ abstract class MapContext
         $mapFacadeStyle = $this->getMapFacadeStyle();
 
         // Get the DungeonData
-        $dungeonData = $this->cacheService->remember(
-            sprintf('dungeon_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $mapFacadeStyle),
-            function () use ($mapFacadeStyle) {
-                $useFacade = $mapFacadeStyle === 'facade';
+        $dungeonDataKey = sprintf('dungeon_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $mapFacadeStyle);
+        $dungeonData    = $this->rememberLocal($dungeonDataKey, 86400, function () use ($dungeonDataKey, $mapFacadeStyle) {
+            return $this->cacheService->remember(
+                $dungeonDataKey,
+                function () use ($mapFacadeStyle) {
+                    $useFacade = $mapFacadeStyle === 'facade';
 
-                /** @var Dungeon $dungeon */
-                $dungeon = $this->floor->dungeon()
-                    ->with(['dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'])
-                    ->without(['floors', 'mapIcons', 'enemyPacks'])
-                    ->first();
-                // Filter out floors that we do not need
-                $dungeon->setRelation('floors', $this->getFloors());
+                    /** @var Dungeon $dungeon */
+                    $dungeon = $this->floor->dungeon()
+                        ->with(['dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'])
+                        ->without(['floors', 'mapIcons', 'enemyPacks'])
+                        ->first();
+                    $dungeon->setRelation('floors', $this->getFloors());
 
-                // Temporarily disabled to improve performance - not using this anyway
-                $auras = collect();
-//                $auras = Spell::where('aura', true)
-//                    ->get()
-//                    ->each(fn(Spell $spell) => $spell->setVisible(['id', 'name', 'icon_url']));
+                    $auras   = collect();
+                    $enemies = $this->mappingVersion->mapContextEnemies($this->coordinatesService, $useFacade);
 
-                $enemies = $this->mappingVersion->mapContextEnemies($this->coordinatesService, $useFacade);
-
-                return array_merge($dungeon->toArray(), $this->getEnemies(), [
-                    'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion),
-                    'auras'                     => $auras,
-                    'enemies'                   => $enemies,
-                    'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
-                    'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $useFacade),
-                    'mapIcons'                  => $this->mappingVersion->mapContextMapIcons($this->coordinatesService, $useFacade),
-                    'dungeonFloorSwitchMarkers' => $this->mappingVersion->mapContextDungeonFloorSwitchMarkers($this->coordinatesService, $useFacade),
-                    'mountableAreas'            => $this->mappingVersion->mapContextMountableAreas($this->coordinatesService, $useFacade),
-                    'floorUnions'               => $this->mappingVersion->mapContextFloorUnions($this->coordinatesService, $useFacade),
-                    'floorUnionAreas'           => $this->mappingVersion->mapContextFloorUnionAreas($this->coordinatesService, $useFacade),
-                ]);
-            }, config('keystoneguru.cache.dungeonData.ttl')
-        );
+                    return array_merge($dungeon->toArray(), $this->getEnemies(), [
+                        'latestMappingVersion'      => $this->floor->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion),
+                        'auras'                     => $auras,
+                        'enemies'                   => $enemies,
+                        'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
+                        'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $useFacade),
+                        'mapIcons'                  => $this->mappingVersion->mapContextMapIcons($this->coordinatesService, $useFacade),
+                        'dungeonFloorSwitchMarkers' => $this->mappingVersion->mapContextDungeonFloorSwitchMarkers($this->coordinatesService, $useFacade),
+                        'mountableAreas'            => $this->mappingVersion->mapContextMountableAreas($this->coordinatesService, $useFacade),
+                        'floorUnions'               => $this->mappingVersion->mapContextFloorUnions($this->coordinatesService, $useFacade),
+                        'floorUnionAreas'           => $this->mappingVersion->mapContextFloorUnionAreas($this->coordinatesService, $useFacade),
+                    ]);
+                },
+                config('keystoneguru.cache.dungeonData.ttl')
+            );
+        });
 
         // Npc data (for localizations)
-        $locale = Auth::user()?->locale ?? 'en_US';
-        $dungeonNpcData = $this->cacheService->remember(
-            sprintf('dungeon_npcs_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $locale),
-            function () use($dungeonData, $locale) {
-                return [
-                    'npcs' => $this->floor->dungeon->npcs()
-                        ->selectRaw('npcs.*, translations.translation as name')
-                        ->leftJoin('translations', static function (JoinClause $clause) use($locale) {
-                            $clause->on('translations.key', 'npcs.name')
+        $locale            = Auth::user()?->locale ?? 'en_US';
+        $dungeonNpcDataKey = sprintf('dungeon_npcs_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $locale);
+        $dungeonNpcData    = $this->rememberLocal($dungeonNpcDataKey, 86400, function () use ($dungeonNpcDataKey, $mapFacadeStyle, $locale, $dungeonData) {
+            return $this->cacheService->remember(
+                $dungeonNpcDataKey,
+                function () use ($dungeonData, $locale) {
+                    return [
+                        'npcs' => $this->floor->dungeon->npcs()
+                            ->selectRaw('npcs.*, translations.translation as name')
+                            ->leftJoin('translations', static function (JoinClause $clause) use ($locale) {
+                                $clause->on('translations.key', 'npcs.name')
+                                    ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
+                            })
+                            ->when($this->onlyLoadInUseNpcs(), function (Builder $query) use ($dungeonData) {
+                                $query->whereIn('npcs.id', $dungeonData['enemies']->pluck('npc_id')->unique());
+                            })->with([
+                                'spells'      => fn(BelongsToMany $belongsToMany) => $belongsToMany
+                                    ->selectRaw('spells.*, translations.translation as name')
+                                    ->leftJoin('translations', static function (JoinClause $clause) use ($locale) {
+                                        $clause->on('translations.key', 'spells.name')
+                                            ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
+                                    }),
+                                // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
+                                'enemyForces' => fn(HasOne $query) => $query->where('mapping_version_id', $this->mappingVersion->id),
+                            ])
+                            // Disable cache for this query though! Since NpcEnemyForces is a cache model, it can otherwise return values from another mapping version
+                            ->disableCache()
+                            ->get()
+                            // Only show what we need in the FE
+                            ->each(function (Npc $npc) {
+                                $npc->enemyForces?->setVisible(['enemy_forces', 'enemy_forces_teeming']);
+                                $npc->setHidden(['pivot']);
+                            }),
+                    ];
+                }, config('keystoneguru.cache.dungeonData.ttl')
+            );
+        });
+
+        $selectableSpellsKey = sprintf('selectable_spells_%s', $locale);
+        $selectableSpells    = $this->rememberLocal($selectableSpellsKey, 86400, function () use ($selectableSpellsKey, $locale) {
+            return $this->cacheService->remember(
+                $selectableSpellsKey,
+                function () use ($locale) {
+                    return Spell::where('selectable', true)
+                        ->selectRaw('spells.*, translations.translation as name')
+                        ->leftJoin('translations', static function (JoinClause $clause) use ($locale) {
+                            $clause->on('translations.key', 'spells.name')
                                 ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
                         })
-                        ->when($this->onlyLoadInUseNpcs(), function (Builder $query) use ($dungeonData) {
-                            $query->whereIn('npcs.id', $dungeonData['enemies']->pluck('npc_id')->unique());
-                        })->with([
-                            'spells' => fn(BelongsToMany $belongsToMany) => $belongsToMany
-                                ->selectRaw('spells.*, translations.translation as name')
-                                ->leftJoin('translations', static function (JoinClause $clause) use($locale) {
-                                    $clause->on('translations.key', 'spells.name')
-                                        ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
-                                }),
-                            // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
-                            'enemyForces' => fn(HasOne $query) => $query->where('mapping_version_id', $this->mappingVersion->id),
-                        ])
-                        // Disable cache for this query though! Since NpcEnemyForces is a cache model, it can otherwise return values from another mapping version
-                        ->disableCache()
-                        ->get()
-                        // Only show what we need in the FE
-                        ->each(function (Npc $npc) {
-                            $npc->enemyForces?->setVisible(['enemy_forces', 'enemy_forces_teeming']);
-                            $npc->setHidden(['pivot']);
-                        }),
-                ];
-            }, config('keystoneguru.cache.dungeonData.ttl')
-        );
-
-        $selectableSpells = $this->cacheService->remember(
-            sprintf('selectable_spells_%s', $locale),
-            function () use ($locale) {
-                return Spell::where('selectable', true)
-                    ->selectRaw('spells.*, translations.translation as name')
-                    ->leftJoin('translations', static function (JoinClause $clause) use($locale) {
-                        $clause->on('translations.key', 'spells.name')
-                            ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
-                    })
-                    ->get();
-            }, config('keystoneguru.cache.dungeonData.ttl')
-        );
+                        ->get();
+                }, config('keystoneguru.cache.dungeonData.ttl')
+            );
+        });
 
         $dungeonData['npcs'] = $dungeonNpcData['npcs'];
 
 
         $characterClasses = CharacterClass::all();
         $mapIconTypes     = MapIconType::all()->keyBy('id');
-        $static           = $this->cacheService->remember('static_data', static fn() => [
-            'mapIconTypes'                      => $mapIconTypes->values(),
-            'unknownMapIconType'                => $mapIconTypes->get(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
-            'awakenedObeliskGatewayMapIconType' => $mapIconTypes->get(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),
-            'classColors'                       => $characterClasses->pluck('color'),
-            'characterClasses'                  => $characterClasses,
-            'characterClassSpecializations'     => CharacterClassSpecialization::all(),
-            'raidMarkers'                       => RaidMarker::all(),
-            'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
-            'publishStates'                     => PublishedState::all(),
-            'gameVersions'                      => GameVersion::all(),
-        ], config('keystoneguru.cache.static_data.ttl'));
+        $staticKey        = 'static_data';
+        $static           = $this->rememberLocal($staticKey, 86400, function () use ($staticKey, $locale, $characterClasses, $mapIconTypes) {
+            return $this->cacheService->remember($staticKey, static fn() => [
+                'mapIconTypes'                      => $mapIconTypes->values(),
+                'unknownMapIconType'                => $mapIconTypes->get(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
+                'awakenedObeliskGatewayMapIconType' => $mapIconTypes->get(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_GATEWAY]),
+                'classColors'                       => $characterClasses->pluck('color'),
+                'characterClasses'                  => $characterClasses,
+                'characterClassSpecializations'     => CharacterClassSpecialization::all(),
+                'raidMarkers'                       => RaidMarker::all(),
+                'factions'                          => Faction::where('name', '<>', 'Unspecified')->with('iconfile')->get(),
+                'publishStates'                     => PublishedState::all(),
+                'gameVersions'                      => GameVersion::all(),
+            ], config('keystoneguru.cache.static_data.ttl'));
+        });
 
         $static['selectableSpells'] = $selectableSpells;
 
