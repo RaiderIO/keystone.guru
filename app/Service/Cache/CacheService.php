@@ -22,12 +22,16 @@ class CacheService implements CacheServiceInterface
 
     }
 
-
     private function getTtl(string $key): ?DateInterval
     {
         $cacheConfig = config('keystoneguru.cache');
 
         return isset($cacheConfig[$key]) ? DateInterval::createFromDateString($cacheConfig[$key]['ttl']) : null;
+    }
+
+    public function isCacheEnabled(): bool
+    {
+        return $this->cacheEnabled;
     }
 
     public function setCacheEnabled(bool $cacheEnabled): CacheService

@@ -191,7 +191,8 @@ class ViewService implements ViewServiceInterface
     {
         $viewVariablesGameServerRegionKey = sprintf('view_variables:%s:game_server_region:%s', $this->release, $gameServerRegion->short);
 
-        return $this->rememberLocal($viewVariablesGameServerRegionKey, 86400, function () use ($gameServerRegion, $useCache, $viewVariablesGameServerRegionKey) {
+        // Lower cache duration since current/next expansion and season may change every hour
+        return $this->rememberLocal($viewVariablesGameServerRegionKey, 3600, function () use ($gameServerRegion, $useCache, $viewVariablesGameServerRegionKey) {
             return $this->cacheService->setCacheEnabled($useCache)->remember(
                 $viewVariablesGameServerRegionKey,
                 function () use ($gameServerRegion) {

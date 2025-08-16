@@ -23,7 +23,7 @@ class DevCacheService extends CacheService
      */
     public function rememberWhen(bool $condition, string $key, mixed $value, mixed $ttl = null): mixed
     {
-        $measureKey = sprintf('cacheservice-rememberwhen[%s]:%s', $key, $condition ? 'hit' : 'miss');
+        $measureKey = sprintf('cacheservice-rememberwhen[%s]:%s', $key, $condition ? 'pass' : 'fail');
         Counter::increase($measureKey);
         Stopwatch::start($measureKey);
         $result = parent::rememberWhen($condition, $key, $value, $ttl);

@@ -43,6 +43,7 @@ class Cache extends SchedulerCommand
 
             set_time_limit(3600);
 
+//            dump('Caching Discover pages');
             $this->info('Caching Discover pages');
 
             // Disable cache so that we may refresh it
@@ -57,6 +58,7 @@ class Cache extends SchedulerCommand
             // Refresh caches for all categories
             foreach ($expansions as $expansion) {
                 /** @var Expansion $expansion */
+//                dump(sprintf('- %s', $expansion->shortname));
                 $this->info(sprintf('- %s', $expansion->shortname));
 
                 $expansion->load('dungeonsAndRaids');
@@ -79,28 +81,39 @@ class Cache extends SchedulerCommand
                 // :expansion/season/:season page. Remember, an expansion's season can have dungeons from any other expansion into it
                 // The cache key changes when you assign a season to the DiscoverService so those pages need to be cached again
                 foreach ($seasons as $season) {
+//                    dump(sprintf('- %s', $season->name));
                     $this->info(sprintf('- %s', $season->name));
 
-//                    foreach ($season->affixGroups ?? [] as $affixGroup) {
-//                        $this->info(sprintf('-- AffixGroup %s', $affixGroup->getTextAttribute()));
-//                        $discoverService->popularGroupedByDungeonByAffixGroup($affixGroup);
-//                    }
+                    // Only cache the current and next affix groups
+                    // The other affix groups are not queried as often so they can miss the cache
+                    $affixGroups = array_filter([
+                        $season->getCurrentAffixGroup(),
+                        $season->getNextAffixGroup(),
+                    ]);
+
+                    foreach ($affixGroups as $affixGroup) {
+//                        dump(sprintf('-- AffixGroup %s', $affixGroup->getTextAttribute()));
+                        $this->info(sprintf('-- AffixGroup %s', $affixGroup->getTextAttribute()));
+                        $discoverService->popularGroupedByDungeonByAffixGroup($affixGroup);
+                    }
 
                     $discoverService->popularBySeason($season);
                     $discoverService->newBySeason($season);
 
                     $discoverService = $discoverService->withSeason($season);
                     foreach ($season->dungeons()->active()->get() as $dungeon) {
-                        $this->info(sprintf('-- Dungeon %s', $dungeon->key));
+//                        dump(sprintf('-- Dungeon %s', $dungeon->key));
+                        $this->info(sprintf('-- Dungeon %s (%s)', __($dungeon->name), $dungeon->key));
 
                         $discoverService->popularByDungeon($dungeon);
                         $discoverService->newByDungeon($dungeon);
                         $discoverService->popularUsersByDungeon($dungeon);
 
-//                        foreach ($season->affixGroups ?? [] as $affixGroup) {
-//                            $this->info(sprintf('--- AffixGroup %s', $affixGroup->getTextAttribute()));
-//                            $discoverService->popularGroupedByDungeonByAffixGroup($affixGroup);
-//                        }
+                        foreach ($affixGroups as $affixGroup) {
+//                            dump(sprintf('--- AffixGroup %s', $affixGroup->getTextAttribute()));
+                            $this->info(sprintf('--- AffixGroup %s', $affixGroup->getTextAttribute()));
+                            $discoverService->popularGroupedByDungeonByAffixGroup($affixGroup);
+                        }
                     }
                 }
 
