@@ -41,8 +41,9 @@ class CreateGithubReleaseTicket extends BaseGithubReleaseCommand
         $this->info(sprintf('>> Creating Github ticket for %s', $version));
 
         if ($release !== null) {
-            $username   = config('keystoneguru.github_username');
-            $repository = config('keystoneguru.github_repository');
+            $username        = config('keystoneguru.github_username');
+            $repositoryOwner = config('keystoneguru.github_repository_owner');
+            $repository      = config('keystoneguru.github_repository');
 
             /** @var Issue $githubIssueClient */
             $githubIssueClient = GitHub::issues();
@@ -51,7 +52,7 @@ class CreateGithubReleaseTicket extends BaseGithubReleaseCommand
             $issueTitle      = sprintf('Release %s', $release->version);
 
             // Only gets the first page - but good enough
-            foreach ($githubIssueClient->all($username, $repository, ['filter' => 'all', 'state' => 'all', 'labels' => 'release']) as $githubIssue) {
+            foreach ($githubIssueClient->all($repositoryOwner, $repository, ['filter' => 'all', 'state' => 'all', 'labels' => 'release']) as $githubIssue) {
                 if (str_starts_with((string)$githubIssue['title'], $issueTitle) && !isset($githubIssue['pull_request'])) {
                     $existingIssueId = $githubIssue['number'];
                     break;
@@ -67,18 +68,18 @@ class CreateGithubReleaseTicket extends BaseGithubReleaseCommand
                 'labels'    => [
                     'release',
                 ],
-                'type' => 'task',
+                'type'      => 'task',
                 'assignees' => [
                     $username,
                 ],
             ];
 
             if ($existingIssueId === 0) {
-                $githubIssueClient->create($username, $repository, $params);
+                $githubIssueClient->create($repositoryOwner, $repository, $params);
                 $this->info(sprintf('Successfully created GitHub issue %s', $version));
                 $result = 1;
             } else {
-                $githubIssueClient->update($username, $repository, $existingIssueId, $params);
+                $githubIssueClient->update($repositoryOwner, $repository, $existingIssueId, $params);
                 $this->info(sprintf('Successfully updated GitHub issue %s', $version));
                 $result = 2;
             }

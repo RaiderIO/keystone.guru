@@ -45,8 +45,9 @@ class CreateGithubReleasePullRequest extends BaseGithubReleaseCommand
             $sourceBranch = 'development';
             $targetBranch = 'master';
 
-            $username   = config('keystoneguru.github_username');
-            $repository = config('keystoneguru.github_repository');
+            $username        = config('keystoneguru.github_username');
+            $repositoryOwner = config('keystoneguru.github_repository_owner');
+            $repository      = config('keystoneguru.github_repository');
 
             /** @var PullRequest $githubPullRequestClient */
             $githubPullRequestClient = GitHub::pr();
@@ -55,7 +56,7 @@ class CreateGithubReleasePullRequest extends BaseGithubReleaseCommand
             $pullRequestTitle      = sprintf('Release %s', $release->version);
 
             // Only gets the first page - but good enough
-            foreach ($githubPullRequestClient->all($username, $repository, ['state' => 'open', 'labels' => 'release']) as $githubPullRequest) {
+            foreach ($githubPullRequestClient->all($repositoryOwner, $repository, ['state' => 'open', 'labels' => 'release']) as $githubPullRequest) {
                 if (str_starts_with((string)$githubPullRequest['head']['repo']['full_name'], sprintf('%s/%s', $username, $repository)) &&
                     $githubPullRequest['head']['ref'] === $sourceBranch &&
                     str_starts_with((string)$githubPullRequest['base']['repo']['full_name'], sprintf('%s/%s', $username, $repository)) &&
@@ -82,20 +83,23 @@ class CreateGithubReleasePullRequest extends BaseGithubReleaseCommand
             ];
 
             if ($existingPullRequestId === 0) {
-                $newPullRequest        = $githubPullRequestClient->create($username, $repository, $params);
+                $newPullRequest        = $githubPullRequestClient->create($repositoryOwner, $repository, $params);
                 $existingPullRequestId = $newPullRequest['id'];
 
                 // Assign the 'release' label to the pull request
                 /** @var Issue $githubIssueClient */
                 $githubIssueClient = GitHub::issues();
-                $githubIssueClient->update($username, $repository, $newPullRequest['number'], [
-                    'labels' => array_merge($params['labels'], ['release']),
+                $githubIssueClient->update($repositoryOwner, $repository, $newPullRequest['number'], [
+                    'labels'    => array_merge($params['labels'], ['release']),
+                    'assignees' => [
+                        $username,
+                    ],
                 ]);
 
                 $this->info(sprintf('Successfully created GitHub pull request %s', $version));
                 $result = 1;
             } else {
-                $githubPullRequestClient->update($username, $repository, $existingPullRequestId, $params);
+                $githubPullRequestClient->update($repositoryOwner, $repository, $existingPullRequestId, $params);
                 $this->info(sprintf('Successfully updated GitHub pull request %s', $version));
                 $result = 2;
             }

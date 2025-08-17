@@ -12,9 +12,9 @@ return [
     'images_base_url'    => sprintf('%s/images', env('ASSETS_BASE_URL', '')),
     'tiles_base_url'     => sprintf('%s/tiles', env('ASSETS_BASE_URL', '/images')),
 
-    'github_username' => 'Wotuu',
-
-    'github_repository' => 'Keystone.guru',
+    'github_username'         => 'Wotuu',
+    'github_repository_owner' => 'RaiderIO',
+    'github_repository'       => 'Keystone.guru',
 
     'reddit_subreddit' => 'KeystoneGuru',
 
