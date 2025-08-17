@@ -42,13 +42,13 @@ class CreateGithubRelease extends BaseGithubReleaseCommand
         if ($release !== null) {
             $this->info(sprintf('>> Creating Github release for %s', $release->version));
 
-            $username   = config('keystoneguru.github_username');
-            $repository = config('keystoneguru.github_repository');
+            $repositoryOwner = config('keystoneguru.github_repository_owner');
+            $repository      = config('keystoneguru.github_repository');
 
             /** @var Repo $githubRepoClient */
             $githubRepoClient = GitHub::repo();
             // May throw an exception if it doesn't exist
-            foreach ($githubRepoClient->releases()->all($username, $repository) as $githubRelease) {
+            foreach ($githubRepoClient->releases()->all($repositoryOwner, $repository) as $githubRelease) {
                 if ($githubRelease['name'] === $release->version) {
                     $this->error(sprintf('OK Unable to create release for %s; already exists!', $release->version));
 
@@ -59,7 +59,7 @@ class CreateGithubRelease extends BaseGithubReleaseCommand
             $body = $release->getGithubBodyAttribute();
 
             try {
-                $githubRepoClient->releases()->create($username, $repository, [
+                $githubRepoClient->releases()->create($repositoryOwner, $repository, [
                     'tag_name' => $release->version,
                     'name'     => $release->version,
                     'body'     => $body,
