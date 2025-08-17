@@ -8,6 +8,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\PublishedState;
 use App\Models\Season;
+use App\Service\Cache\Traits\RemembersToFile;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\JoinClause;
@@ -15,6 +16,8 @@ use Illuminate\Support\Collection;
 
 class DiscoverService extends BaseDiscoverService
 {
+    use RemembersToFile;
+
     private function getCacheKey(string $key): string
     {
         $this->ensureExpansion();
@@ -24,6 +27,11 @@ class DiscoverService extends BaseDiscoverService
         } else {
             return sprintf('discover:%s:%s:%d', $this->expansion->shortname, $key, $this->limit);
         }
+    }
+
+    private function getLocalCacheDuration(): int
+    {
+        return 3600 + rand(0, 1800); // 1 hour + random offset up to 30 minutes, so not all caches expire at the same time
     }
 
     /**
@@ -140,7 +148,7 @@ class DiscoverService extends BaseDiscoverService
     private function applyAffixGroupCountPenalty(Builder $builder): Builder
     {
         return $builder
-            ->selectRaw('dungeon_routes.*, dungeon_routes.popularity * (13 - (
+            ->selectRaw('dungeon_routes.popularity * (13 - (
                     SELECT COUNT(*)
                     FROM dungeon_route_affix_groups
                     WHERE dungeon_route_id = `dungeon_routes`.`id`
@@ -155,7 +163,14 @@ class DiscoverService extends BaseDiscoverService
      */
     public function popular(): Collection
     {
-        return $this->cacheService->rememberWhen($this->closure === null, $this->getCacheKey('popular'), fn() => $this->popularBuilder()->get(), config('keystoneguru.discover.service.popular.ttl'));
+        $cacheKey = $this->getCacheKey('popular');
+
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey) {
+            return $this->cacheService->rememberWhen(
+                $this->closure === null,
+                $this->getCacheKey('popular'),
+                fn() => $this->popularBuilder()->get(), config('keystoneguru.discover.service.popular.ttl'));
+        }, $this->cacheService->isCacheEnabled());
     }
 
     /**
@@ -163,24 +178,28 @@ class DiscoverService extends BaseDiscoverService
      */
     public function popularGroupedByDungeon(): Collection
     {
-        return $this->cacheService->rememberWhen($this->closure === null,
-            $this->getCacheKey('grouped_by_dungeon:popular'), function () {
-                $result = collect();
+        $cacheKey = $this->getCacheKey('grouped_by_dungeon:popular');
 
-                /** @var Collection<Dungeon> $activeDungeons */
-                $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeonsAndRaids())->active()->get();
-                foreach ($activeDungeons as $dungeon) {
-                    // Limit the amount of results of our queries
-                    $result = $result->merge(
-                        collect([
-                            __($dungeon->name) => $this->withLimit(config('keystoneguru.discover.limits.per_dungeon'))->popularByDungeon($dungeon),
-                        ])
-                    );
-                }
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey) {
+            return $this->cacheService->rememberWhen($this->closure === null,
+                $cacheKey, function () {
+                    $result = collect();
 
-                return $result;
-            }, config('keystoneguru.discover.service.popular.ttl')
-        );
+                    /** @var Collection<Dungeon> $activeDungeons */
+                    $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeonsAndRaids())->active()->get();
+                    foreach ($activeDungeons as $dungeon) {
+                        // Limit the amount of results of our queries
+                        $result = $result->merge(
+                            collect([
+                                __($dungeon->name) => $this->withLimit(config('keystoneguru.discover.limits.per_dungeon'))->popularByDungeon($dungeon),
+                            ])
+                        );
+                    }
+
+                    return $result;
+                }, config('keystoneguru.discover.service.popular.ttl')
+            );
+        }, $this->cacheService->isCacheEnabled());
     }
 
     /**
@@ -188,14 +207,18 @@ class DiscoverService extends BaseDiscoverService
      */
     public function popularByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
-        return $this->cacheService->rememberWhen($this->closure === null,
-            $this->getCacheKey(sprintf('affix_group_%d:popular', $affixGroup->id)),
-            fn() => $this->applyAffixGroupCountPenalty(
-                $this->popularBuilder()
-                    ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-                    ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
-            )->get(), config('keystoneguru.discover.service.popular.ttl')
-        );
+        $cacheKey = $this->getCacheKey(sprintf('affix_group_%d:popular', $affixGroup->id));
+
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $affixGroup) {
+            return $this->cacheService->rememberWhen($this->closure === null,
+                $cacheKey,
+                fn() => $this->applyAffixGroupCountPenalty(
+                    $this->popularBuilder()
+                        ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+                        ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+                )->get(), config('keystoneguru.discover.service.popular.ttl')
+            );
+        }, $this->cacheService->isCacheEnabled());
     }
 
     /**
@@ -203,25 +226,29 @@ class DiscoverService extends BaseDiscoverService
      */
     public function popularGroupedByDungeonByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
-        return $this->cacheService->rememberWhen($this->closure === null,
-            $this->getCacheKey(sprintf('grouped_by_dungeon:affix_group_%d:popular', $affixGroup->id)),
-            function () use ($affixGroup) {
-                $result = collect();
+        $cacheKey = $this->getCacheKey(sprintf('grouped_by_dungeon:affix_group_%d:popular', $affixGroup->id));
 
-                /** @var Collection<Dungeon> $activeDungeons */
-                $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeonsAndRaids())->active()->get();
-                foreach ($activeDungeons as $dungeon) {
-                    // Limit the amount of results of our queries
-                    $result = $result->merge(
-                        collect([
-                            __($dungeon->name) => $this->withLimit(config('keystoneguru.discover.limits.per_dungeon'))->popularByDungeonAndAffixGroup($dungeon, $affixGroup),
-                        ])
-                    );
-                }
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $affixGroup) {
+            return $this->cacheService->rememberWhen($this->closure === null,
+                $cacheKey,
+                function () use ($affixGroup) {
+                    $result = collect();
 
-                return $result;
-            }, config('keystoneguru.discover.service.popular.ttl')
-        );
+                    /** @var Collection<Dungeon> $activeDungeons */
+                    $activeDungeons = ($this->season !== null ? $this->season->dungeons() : $this->expansion->dungeonsAndRaids())->active()->get();
+                    foreach ($activeDungeons as $dungeon) {
+                        // Limit the amount of results of our queries
+                        $result = $result->merge(
+                            collect([
+                                __($dungeon->name) => $this->withLimit(config('keystoneguru.discover.limits.per_dungeon'))->popularByDungeonAndAffixGroup($dungeon, $affixGroup),
+                            ])
+                        );
+                    }
+
+                    return $result;
+                }, config('keystoneguru.discover.service.popular.ttl')
+            );
+        }, $this->cacheService->isCacheEnabled());
     }
 
     /**
@@ -229,11 +256,15 @@ class DiscoverService extends BaseDiscoverService
      */
     public function popularByDungeon(Dungeon $dungeon): Collection
     {
-        return $this->cacheService->rememberWhen($this->closure === null,
-            $this->getCacheKey(sprintf('%s:popular', $dungeon->key)), fn() => $this->popularBuilder()
-                ->where('dungeon_routes.dungeon_id', $dungeon->id)
-                ->get(), config('keystoneguru.discover.service.popular.ttl')
-        );
+        $cacheKey = $this->getCacheKey(sprintf('%s:popular', $dungeon->key));
+
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $dungeon) {
+            return $this->cacheService->rememberWhen($this->closure === null,
+                $cacheKey, fn() => $this->popularBuilder()
+                    ->where('dungeon_routes.dungeon_id', $dungeon->id)
+                    ->get(), config('keystoneguru.discover.service.popular.ttl')
+            );
+        }, $this->cacheService->isCacheEnabled());
     }
 
     /**
@@ -241,39 +272,51 @@ class DiscoverService extends BaseDiscoverService
      */
     public function popularByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
     {
-        return $this->cacheService->rememberWhen($this->closure === null,
-            $this->getCacheKey(sprintf('%s:affix_group_%s:popular', $dungeon->key, $affixGroup->id)),
-            fn() => $this->applyAffixGroupCountPenalty(
-                $this->popularBuilder()
-                    ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-                    ->where('dungeon_routes.dungeon_id', $dungeon->id)
-                    ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
-            )->get(), config('keystoneguru.discover.service.popular.ttl')
-        );
+        $cacheKey = $this->getCacheKey(sprintf('%s:affix_group_%s:popular', $dungeon->key, $affixGroup->id));
+
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $dungeon, $affixGroup) {
+            return $this->cacheService->rememberWhen($this->closure === null,
+                $cacheKey,
+                fn() => $this->applyAffixGroupCountPenalty(
+                    $this->popularBuilder()
+                        ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+                        ->where('dungeon_routes.dungeon_id', $dungeon->id)
+                        ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+                )->get(), config('keystoneguru.discover.service.popular.ttl')
+            );
+        }, $this->cacheService->isCacheEnabled());
     }
 
     public function popularBySeason(Season $season): Collection
     {
         $this->withSeason($season);
 
-        return $this->cacheService->rememberWhen($this->closure === null,
-            $this->getCacheKey('popular'), fn() => $this->popularBuilder()
-                ->get(), config('keystoneguru.discover.service.popular.ttl')
-        );
+        $cacheKey = $this->getCacheKey('popular');
+
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey) {
+            return $this->cacheService->rememberWhen($this->closure === null,
+                $cacheKey, fn() => $this->popularBuilder()
+                    ->get(), config('keystoneguru.discover.service.popular.ttl')
+            );
+        }, $this->cacheService->isCacheEnabled());
     }
 
     public function popularBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection
     {
         $this->withSeason($season);
 
-        return $this->cacheService->rememberWhen($this->closure === null,
-            $this->getCacheKey(sprintf('affix_group_%s:popular', $affixGroup->id)),
-            fn() => $this->applyAffixGroupCountPenalty(
-                $this->popularBuilder()
-                    ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-                    ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
-            )->get(), config('keystoneguru.discover.service.popular.ttl')
-        );
+        $cacheKey = $this->getCacheKey(sprintf('affix_group_%s:popular', $affixGroup->id));
+
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $affixGroup) {
+            return $this->cacheService->rememberWhen($this->closure === null,
+                $cacheKey,
+                fn() => $this->applyAffixGroupCountPenalty(
+                    $this->popularBuilder()
+                        ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+                        ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+                )->get(), config('keystoneguru.discover.service.popular.ttl')
+            );
+        }, $this->cacheService->isCacheEnabled());
     }
 
     /**
@@ -281,9 +324,13 @@ class DiscoverService extends BaseDiscoverService
      */
     public function new(): Collection
     {
-        return $this->cacheService->rememberWhen($this->closure === null,
-            $this->getCacheKey('new'), fn() => $this->newBuilder()->get(), config('keystoneguru.discover.service.popular.ttl')
-        );
+        $cacheKey = $this->getCacheKey('new');
+
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey) {
+            return $this->cacheService->rememberWhen($this->closure === null,
+                $cacheKey, fn() => $this->newBuilder()->get(), config('keystoneguru.discover.service.popular.ttl')
+            );
+        }, $this->cacheService->isCacheEnabled());
     }
 
     /**
@@ -291,12 +338,16 @@ class DiscoverService extends BaseDiscoverService
      */
     public function newByAffixGroup(AffixGroupBase $affixGroup): Collection
     {
-        return $this->cacheService->rememberWhen($this->closure === null,
-            $this->getCacheKey(sprintf('affix_group_%d:new', $affixGroup->id)), fn() => $this->newBuilder()
-                ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-                ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
-                ->get(), config('keystoneguru.discover.service.popular.ttl')
-        );
+        $cacheKey = $this->getCacheKey(sprintf('affix_group_%d:new', $affixGroup->id));
+
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $affixGroup) {
+            return $this->cacheService->rememberWhen($this->closure === null,
+                $cacheKey, fn() => $this->newBuilder()
+                    ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+                    ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+                    ->get(), config('keystoneguru.discover.service.popular.ttl')
+            );
+        }, $this->cacheService->isCacheEnabled());
     }
 
     /**
@@ -304,11 +355,15 @@ class DiscoverService extends BaseDiscoverService
      */
     public function newByDungeon(Dungeon $dungeon): Collection
     {
-        return $this->cacheService->rememberWhen($this->closure === null,
-            $this->getCacheKey(sprintf('%s:new', $dungeon->key)), fn() => $this->newBuilder()
-                ->where('dungeon_routes.dungeon_id', $dungeon->id)
-                ->get(), config('keystoneguru.discover.service.popular.ttl')
-        );
+        $cacheKey = $this->getCacheKey(sprintf('%s:new', $dungeon->key));
+
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $dungeon) {
+            return $this->cacheService->rememberWhen($this->closure === null,
+                $cacheKey, fn() => $this->newBuilder()
+                    ->where('dungeon_routes.dungeon_id', $dungeon->id)
+                    ->get(), config('keystoneguru.discover.service.popular.ttl')
+            );
+        }, $this->cacheService->isCacheEnabled());
     }
 
     /**
@@ -316,37 +371,49 @@ class DiscoverService extends BaseDiscoverService
      */
     public function newByDungeonAndAffixGroup(Dungeon $dungeon, AffixGroupBase $affixGroup): Collection
     {
-        return $this->cacheService->rememberWhen($this->closure === null,
-            $this->getCacheKey(sprintf('%s:affix_group_%s:new', $dungeon->key, $affixGroup->id)),
-            fn() => $this->newBuilder()
-                ->where('dungeon_routes.dungeon_id', $dungeon->id)
-                ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-                ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
-                ->get(), config('keystoneguru.discover.service.popular.ttl')
-        );
+        $cacheKey = $this->getCacheKey(sprintf('%s:affix_group_%s:new', $dungeon->key, $affixGroup->id));
+
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $dungeon, $affixGroup) {
+            return $this->cacheService->rememberWhen($this->closure === null,
+                $cacheKey,
+                fn() => $this->newBuilder()
+                    ->where('dungeon_routes.dungeon_id', $dungeon->id)
+                    ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+                    ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+                    ->get(), config('keystoneguru.discover.service.popular.ttl')
+            );
+        }, $this->cacheService->isCacheEnabled());
     }
 
     public function newBySeason(Season $season): Collection
     {
         $this->withSeason($season);
 
-        return $this->cacheService->rememberWhen($this->closure === null,
-            $this->getCacheKey('new'), fn() => $this->newBuilder()
-                ->get(), config('keystoneguru.discover.service.popular.ttl')
-        );
+        $cacheKey = $this->getCacheKey('new');
+
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey) {
+            return $this->cacheService->rememberWhen($this->closure === null,
+                $cacheKey, fn() => $this->newBuilder()
+                    ->get(), config('keystoneguru.discover.service.popular.ttl')
+            );
+        }, $this->cacheService->isCacheEnabled());
     }
 
     public function newBySeasonAndAffixGroup(Season $season, AffixGroupBase $affixGroup): Collection
     {
         $this->withSeason($season);
 
-        return $this->cacheService->rememberWhen($this->closure === null,
-            $this->getCacheKey(sprintf('affix_group_%s:new', $affixGroup->id)),
-            fn() => $this->newBuilder()
-                ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
-                ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
-                ->get(), config('keystoneguru.discover.service.popular.ttl')
-        );
+        $cacheKey = $this->getCacheKey(sprintf('affix_group_%s:new', $affixGroup->id));
+
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $affixGroup) {
+            return $this->cacheService->rememberWhen($this->closure === null,
+                $cacheKey,
+                fn() => $this->newBuilder()
+                    ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
+                    ->where('dungeon_route_affix_groups.affix_group_id', $affixGroup->id)
+                    ->get(), config('keystoneguru.discover.service.popular.ttl')
+            );
+        }, $this->cacheService->isCacheEnabled());
     }
 
     /**

@@ -68,7 +68,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting(): void
     {
         RateLimiter::for('create-dungeonroute', function (Request $request) {
-            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 20)->by($this->userKey($request));
+            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 100)->by($this->userKey($request));
         });
         RateLimiter::for('create-tag', function (Request $request) {
             return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 60)->by($this->userKey($request));
@@ -96,10 +96,10 @@ class RouteServiceProvider extends ServiceProvider
 
         // This consumes the same resources as creating a route - so we limit it
         RateLimiter::for('mdt-details', function (Request $request) {
-            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 60)->by($this->userKey($request));
+            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 1200)->by($this->userKey($request));
         });
         RateLimiter::for('mdt-export', function (Request $request) {
-            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 60)->by($this->userKey($request));
+            return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 1200)->by($this->userKey($request));
         });
         RateLimiter::for('simulate', function (Request $request) {
             return $this->noLimitForExemptions($request) ?? Limit::perHour(self::RATE_LIMIT_OVERRIDE_HTTP ?? 120)->by($this->userKey($request));

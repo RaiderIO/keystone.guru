@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Github;
 
 use App\Console\Commands\Traits\ExecutesShellCommands;
+use Github\Api\Issue;
 use Github\Api\PullRequest;
 use Github\Exception\MissingArgumentException;
 use GrahamCampbell\GitHub\Facades\GitHub;
@@ -83,6 +84,14 @@ class CreateGithubReleasePullRequest extends BaseGithubReleaseCommand
             if ($existingPullRequestId === 0) {
                 $newPullRequest        = $githubPullRequestClient->create($username, $repository, $params);
                 $existingPullRequestId = $newPullRequest['id'];
+
+                // Assign the 'release' label to the pull request
+                /** @var Issue $githubIssueClient */
+                $githubIssueClient = GitHub::issues();
+                $githubIssueClient->update($username, $repository, $newPullRequest['number'], [
+                    'labels' => array_merge($params['labels'], ['release']),
+                ]);
+
                 $this->info(sprintf('Successfully created GitHub pull request %s', $version));
                 $result = 1;
             } else {

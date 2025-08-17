@@ -67,6 +67,7 @@ class CreateGithubReleaseTicket extends BaseGithubReleaseCommand
                 'labels'    => [
                     'release',
                 ],
+                'type' => 'task',
                 'assignees' => [
                     $username,
                 ],
