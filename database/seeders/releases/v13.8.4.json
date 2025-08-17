@@ -1,0 +1,31 @@
+{
+    "id": 315,
+    "release_changelog_id": 322,
+    "version": "v13.8.4",
+    "title": "Performance increases and fix for password reset functionality not working",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-08-17T14:23:46+00:00",
+    "updated_at": "2025-08-17T14:23:46+00:00",
+    "changelog": {
+        "id": 322,
+        "release_id": 315,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 322,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2936,
+                "change": "[Ongoing] Many improvements to site performance to handle the increased load of S3 launch."
+            },
+            {
+                "release_changelog_id": 322,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2939,
+                "change": "Password reset emails now get sent again."
+            }
+        ]
+    }
+}

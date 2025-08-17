@@ -57,12 +57,12 @@ use ($showAffixes, $showDungeonImage, $dungeonroute, $currentAffixGroup, $tierAf
                                     <img class="thumbnail"
                                          src="{{ $thumbnail->getURL() }}"
                                          style="display: {{ $loop->index === 0 ? 'block' : 'none' }}"
-                                         alt="Thumbnail"/>
+                                         alt="{{ __('view_common.dungeonroute.card.thumbnail_alt') }}"/>
                                 </li>
                             @endforeach
                         @else
                             <img class="dungeon" src="{{ $dungeonroute->dungeon->getImage32Url() }}"
-                                 alt="Dungeon"/>
+                                 alt="{{ __('view_common.dungeonroute.card.thumbnail_dungeon_alt') }}"/>
                         @endif
                     </ul>
                 </div>
