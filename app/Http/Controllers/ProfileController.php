@@ -107,36 +107,35 @@ class ProfileController extends Controller
 
             // Send an event that the user's color has changed
             try {
-                // @TODO #2937
-//                // Propagate changes to any channel the user may be in
-//                foreach ($echoServerHttpApiService->getChannels() as $name => $channel) {
-//                    $context = null;
-//
-//                    // If it's a route edit page
-//                    if (str_contains($name, 'route-edit')) {
-//                        $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', $name);
-//                        /** @var DungeonRoute $context */
-//                        $context = DungeonRoute::where('public_key', $routeKey)->first();
-//                    } else if (str_contains($name, 'live-session')) {
-//                        $routeKey = str_replace(sprintf('presence-%s-live-session.', config('app.type')), '', $name);
-//                        /** @var LiveSession $context */
-//                        $context = LiveSession::where('public_key', $routeKey)->first();
-//                    }
-//
-//                    // Only if we could find a route
-//                    if ($context instanceof Model) {
-//                        // Check if the user is in this channel..
-//                        foreach ($echoServerHttpApiService->getChannelUsers($name) as $channelUser) {
-//
-//                            if ($channelUser['id'] === $user->id) {
-//                                // Broadcast that channel that our user's color has changed
-//                                broadcast(new UserColorChangedEvent($context, $user));
-//
-//                                break;
-//                            }
-//                        }
-//                    }
-//                }
+                // Propagate changes to any channel the user may be in
+                foreach ($echoServerHttpApiService->getChannels() as $name => $channel) {
+                    $context = null;
+
+                    // If it's a route edit page
+                    if (str_contains($name, 'route-edit')) {
+                        $routeKey = str_replace(sprintf('presence-%s-route-edit.', config('app.type')), '', $name);
+                        /** @var DungeonRoute $context */
+                        $context = DungeonRoute::where('public_key', $routeKey)->first();
+                    } else if (str_contains($name, 'live-session')) {
+                        $routeKey = str_replace(sprintf('presence-%s-live-session.', config('app.type')), '', $name);
+                        /** @var LiveSession $context */
+                        $context = LiveSession::where('public_key', $routeKey)->first();
+                    }
+
+                    // Only if we could find a route
+                    if ($context instanceof Model) {
+                        // Check if the user is in this channel..
+                        foreach ($echoServerHttpApiService->getChannelUsers($name) as $channelUser) {
+
+                            if ($channelUser['id'] === $user->id) {
+                                // Broadcast that channel that our user's color has changed
+                                broadcast(new UserColorChangedEvent($context, $user));
+
+                                break;
+                            }
+                        }
+                    }
+                }
             } catch (Exception $exception) {
                 report($exception);
 
