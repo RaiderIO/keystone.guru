@@ -22,6 +22,6 @@
         "dungeon_difficulty": null,
         "lat": -156.8495,
         "lng": 181.4962,
-        "kill_priority": -1
+        "kill_priority": null
     }
 ]

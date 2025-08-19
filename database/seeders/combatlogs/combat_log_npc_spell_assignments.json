@@ -9097,5 +9097,41 @@
         "raw_event": "8\/9\/2025 15:21:11.7922  SPELL_AURA_APPLIED,Creature-0-3768-2660-16624-216333-00001749D2,\"Bloodstained Assistant\",0x10a48,0x80000000,Player-1084-0B221A7C,\"Asperine-TarrenMill-EU\",0x511,0x80000000,1604,\"Dazed\",0x1,DEBUFF\r\n",
         "created_at": "2025-08-12T08:49:28+00:00",
         "updated_at": "2025-08-12T08:49:28+00:00"
+    },
+    {
+        "id": 1064,
+        "npc_id": 197915,
+        "spell_id": 394754,
+        "combat_log_path": "tmp5\/WoWCombatLog-081325_073505.zip",
+        "raw_event": "8\/13\/2025 08:03:20.3852  SPELL_AURA_APPLIED,Creature-0-3895-2773-2357-197915-00001C24E8,\"Lindormi\",0xa18,0x80000000,Creature-0-3895-2773-2357-197915-00001C24E8,\"Lindormi\",0xa18,0x80000000,394754,\"Brief Outing\",0x1,BUFF\r\n",
+        "created_at": "2025-08-19T15:49:09+00:00",
+        "updated_at": "2025-08-19T15:49:09+00:00"
+    },
+    {
+        "id": 1065,
+        "npc_id": 178545,
+        "spell_id": 355331,
+        "combat_log_path": "tmp5\/WoWCombatLog-081425_161544.zip",
+        "raw_event": "8\/14\/2025 16:21:09.1842  SPELL_AURA_APPLIED,Creature-0-4243-2441-25515-178545-00019DF05D,\"Watch-Agent Summon Stalker\",0xa48,0x80000000,Creature-0-4243-2441-25515-178545-00019DF05D,\"Watch-Agent Summon Stalker\",0xa48,0x80000000,355331,\"Rift Blasts\",0x40,BUFF\r\n",
+        "created_at": "2025-08-19T15:49:10+00:00",
+        "updated_at": "2025-08-19T15:49:10+00:00"
+    },
+    {
+        "id": 1066,
+        "npc_id": 176564,
+        "spell_id": 357799,
+        "combat_log_path": "tmp5\/WoWCombatLog-081425_161544.zip",
+        "raw_event": "8\/14\/2025 16:42:36.8102  SPELL_DAMAGE,Creature-0-4243-2441-25515-176564-00001DF05D,\"Zo'gron\",0xa28,0x80000000,Player-1329-05A7A7F3,\"Xulatar-Ravencrest-EU\",0x512,0x80000000,357799,\"Bounced!\",0x1,Player-1329-05A7A7F3,0000000000000000,1614150,10803996,100464,12000,36276,1927,253,0,17,0,120,0,3799.54,-1185.56,1989,0.4902,684,9189846,12970793,-1,1,0,0,0,nil,nil,nil,ST\r\n",
+        "created_at": "2025-08-19T15:49:16+00:00",
+        "updated_at": "2025-08-19T15:49:16+00:00"
+    },
+    {
+        "id": 1067,
+        "npc_id": 180286,
+        "spell_id": 356812,
+        "combat_log_path": "tmp5\/WoWCombatLog-081425_161544.zip",
+        "raw_event": "8\/14\/2025 16:49:28.5622  SPELL_AURA_APPLIED,Creature-0-4243-2441-25515-180286-00001DF748,\"Leader Xy'viler\",0xa48,0x80000000,Creature-0-4243-2441-25515-180286-00001DF748,\"Leader Xy'viler\",0xa48,0x80000000,356812,\"Frustrated Disjoint\",0x1,BUFF\r\n",
+        "created_at": "2025-08-19T15:49:17+00:00",
+        "updated_at": "2025-08-19T15:49:17+00:00"
     }
 ]
