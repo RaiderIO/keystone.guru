@@ -45,10 +45,10 @@ class RefreshDisplayIds extends Command
                     usleep(500000);
 
                     if ($displayId !== null && $npc->update(['display_id' => $displayId])) {
-                        $this->info(sprintf('- %s (%d): %d', $npc->name, $npc->id, $displayId));
+                        $this->info(sprintf('- %s (%d): %d', __($npc->name), $npc->id, $displayId));
                         break 2;
                     } else {
-                        $this->error(sprintf('- Failed to update %s (%d): %d', $npc->name, $npc->id, $displayId));
+                        $this->error(sprintf('- Failed to update %s (%d): %d', __($npc->name), $npc->id, $displayId));
                     }
                 }
             }

@@ -62,7 +62,7 @@ class MDTNpc implements Arrayable
             $this->creatureType = $this->rawMdtNpc['creatureType'];
         }
 
-        $this->level            = (int)$this->rawMdtNpc['level'];
+        $this->level            = (int)($this->rawMdtNpc['level'] ?? 0);
         $this->health           = (int)$this->rawMdtNpc['health'];
         $this->healthPercentage = $this->rawMdtNpc['health_percentage'] ?? null;
 

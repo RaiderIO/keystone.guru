@@ -42,7 +42,7 @@ class FetchHealth extends Command
         foreach ($dungeon->npcs as $npc) {
             foreach($dungeon->getMappingVersionGameVersions() as $gameVersion) {
                 if ($npc->getHealthByGameVersion($gameVersion) !== null) {
-                    $this->info(sprintf('Skipping already set health for %s (%d)', $npc->name, $npc->id));
+                    $this->info(sprintf('Skipping already set health for %s (%d)', __($npc->name), $npc->id));
 
                     continue;
                 }
@@ -50,7 +50,7 @@ class FetchHealth extends Command
                 // Don't DDOS
                 sleep(1);
 
-                $this->info(sprintf('Fetching health for %s (%d)', $npc->name, $npc->id));
+                $this->info(sprintf('Fetching health for %s (%d)', __($npc->name), $npc->id));
 
                 $health = $wowheadService->getNpcHealth($gameVersion, $npc);
 

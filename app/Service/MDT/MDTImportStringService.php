@@ -413,7 +413,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 // The other enemy is marked as shrouded, so if we cannot find a shrouded normal mob we skip it and don't alert
                 if (!$mdtEnemy->teeming && $mdtEnemy->seasonal_type !== Enemy::SEASONAL_TYPE_SHROUDED) {
                     $importStringPulls->getWarnings()->push(new ImportWarning(sprintf(__('services.mdt.io.import_string.category.pull'), $newPullIndex),
-                        sprintf(__('services.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy'), $mdtEnemy->mdt_id, $mdtEnemy->npc->name,
+                        sprintf(__('services.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy'), $mdtEnemy->mdt_id, __($mdtEnemy->npc->name),
                             $mdtEnemy->npc_id),
                         ['details' => __('services.mdt.io.import_string.unable_to_find_kg_equivalent_for_mdt_enemy_details')]
                     ));

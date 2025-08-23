@@ -40,12 +40,12 @@ class FetchDisplayIds extends Command
 
         foreach ($dungeon->npcs as $npc) {
             if ($npc->display_id !== null) {
-                $this->info(sprintf('Skipping already set display ID for %s (%d)', $npc->name, $npc->id));
+                $this->info(sprintf('Skipping already set display ID for %s (%d)', __($npc->name), $npc->id));
 
                 continue;
             }
 
-            $this->info(sprintf('Fetching display ID for %s (%d)', $npc->name, $npc->id));
+            $this->info(sprintf('Fetching display ID for %s (%d)', __($npc->name), $npc->id));
 
             foreach ($dungeon->getMappingVersionGameVersions() as $gameVersion) {
                 // Don't DDOS

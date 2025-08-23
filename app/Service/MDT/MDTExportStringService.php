@@ -33,8 +33,10 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
     /** @var DungeonRoute The route that's currently staged for conversion to an encoded string. */
     private DungeonRoute $dungeonRoute;
 
-    public function __construct(private readonly CacheServiceInterface $cacheService, private readonly CoordinatesServiceInterface $coordinatesService)
-    {
+    public function __construct(
+        private readonly CacheServiceInterface $cacheService,
+        private readonly CoordinatesServiceInterface $coordinatesService
+    ) {
     }
 
     private function extractObjects(Collection $warnings): array
@@ -205,7 +207,7 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                             NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]]
                     )) {
                         $warnings->push(new ImportWarning(sprintf(__('services.mdt.io.export_string.category.pull'), $pullIndex),
-                            sprintf(__('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), $enemy->npc->name, $enemy->id, $enemy->getMdtNpcId()),
+                            sprintf(__('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy'), __($enemy->npc->name), $enemy->id, $enemy->getMdtNpcId()),
                             ['details' => __('services.mdt.io.export_string.unable_to_find_mdt_enemy_for_kg_enemy_details')]
                         ));
                     }
