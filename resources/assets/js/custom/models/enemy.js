@@ -49,6 +49,7 @@ class Enemy extends VersionableMapObject {
         super(map, layer, options);
 
         this.label = 'Enemy';
+        this.tooltipText = '';
         // Used for keeping track of what kill zone this enemy is attached to
         /** @type KillZone */
         this.kill_zone = null;
@@ -264,7 +265,10 @@ class Enemy extends VersionableMapObject {
                     {id: ENEMY_SEASONAL_TYPE_TORMENTED, name: lang.get('enemies.seasonal_type.tormented')},
                     {id: ENEMY_SEASONAL_TYPE_ENCRYPTED, name: lang.get('enemies.seasonal_type.encrypted')},
                     {id: ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER, name: lang.get('enemies.seasonal_type.mdt_placeholder')},
-                    {id: ENEMY_SEASONAL_TYPE_REQUIRES_ACTIVATION, name: lang.get('enemies.seasonal_type.requires_activation')},
+                    {
+                        id: ENEMY_SEASONAL_TYPE_REQUIRES_ACTIVATION,
+                        name: lang.get('enemies.seasonal_type.requires_activation')
+                    },
                     {id: ENEMY_SEASONAL_TYPE_SHROUDED, name: lang.get('enemies.seasonal_type.shrouded')},
                     {
                         id: ENEMY_SEASONAL_TYPE_SHROUDED_ZUL_GAMUX,
@@ -398,7 +402,7 @@ class Enemy extends VersionableMapObject {
                 let npc = npcs[index];
                 this.selectNpcs.push({
                     id: npc.id,
-                    name: `${lang.get(npc.name)} (${npc.id})`
+                    name: `${npc.name} (${npc.id})`
                 });
             }
         }
@@ -497,6 +501,14 @@ class Enemy extends VersionableMapObject {
 
             result = {info: [], custom: []};
             // @formatter:off
+            let group = this.getPackGroup();
+            if (group !== null) {
+                result.info.push({
+                    key: lang.get('messages.sidebar_enemy_group_label') + keyLevelLabel,
+                    value: this.getPackGroup()
+                });
+            }
+
             result.info.push({
                 key: lang.get('messages.sidebar_enemy_health_label') + keyLevelLabel,
                 value: scaledHealth.toLocaleString() + percentageString,
@@ -678,6 +690,30 @@ class Enemy extends VersionableMapObject {
     }
 
     /**
+     *
+     * @returns {Number|null}
+     */
+    getPackGroup() {
+        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
+
+        let result = null;
+
+        // Only if we're part of a pack
+        if (this.enemy_pack_id !== null) {
+            // Add all the enemies in said pack to the toggle display
+            let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
+
+            /** @type {EnemyPack|null} */
+            let enemyPack = enemyPackMapObjectGroup.findMapObjectById(this.enemy_pack_id);
+            if (enemyPack !== null) {
+                result = enemyPack.group;
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Sets the click popup to be enabled or not.
      * @param enabled {Boolean} True to enable, false to disable.
      */
@@ -734,16 +770,25 @@ class Enemy extends VersionableMapObject {
         if (this.layer !== null) {
             let text;
             if (this.npc !== null) {
-                text = lang.get(this.npc.name);
+                let group = this.getPackGroup();
+                text = this.npc.name;
+                if (group !== null) {
+                    text += ` (G ${group})`;
+                }
             } else {
                 text = lang.get('messages.no_npc_found_label');
             }
 
-            // Remove any previous tooltip
-            this.unbindTooltip();
-            this.layer.bindTooltip(text, {
-                direction: 'top'
-            });
+            // Only rebind if the text has changed
+            if (this.tooltipText !== text) {
+                this.tooltipText = text;
+
+                // Remove any previous tooltip
+                this.unbindTooltip();
+                this.layer.bindTooltip(text, {
+                    direction: 'top'
+                });
+            }
         }
     }
 

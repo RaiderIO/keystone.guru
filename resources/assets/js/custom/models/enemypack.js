@@ -168,6 +168,8 @@ class EnemyPack extends VersionableMapObject {
             if (enemy !== null) {
                 // We're not unregging this since this will never change when in view/edit mode, only in admin mode when this code isn't triggered
                 enemy.register(['shown', 'hidden'], this, this._onEnemyVisibilityToggled.bind(this));
+                // Ensure that the tooltip now shows the group number
+                enemy.bindTooltip();
             } else {
                 console.warn(`Unable to find enemy with id ${rawEnemy.id} for enemy pack ${this.id}`);
             }
