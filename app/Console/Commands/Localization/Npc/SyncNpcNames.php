@@ -4,7 +4,7 @@ namespace App\Console\Commands\Localization\Npc;
 
 use App\Console\Commands\Localization\Traits\ExportsTranslations;
 use App\Models\GameVersion\GameVersion;
-use App\Service\Wowhead\WowheadServiceInterface;
+use App\Service\Wowhead\WowheadTranslationServiceInterface;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -33,7 +33,7 @@ class SyncNpcNames extends Command
      *
      * @throws Exception
      */
-    public function handle(WowheadServiceInterface $wowheadService): void
+    public function handle(WowheadTranslationServiceInterface $wowheadService): void
     {
         $gameVersionKey = $this->argument('gameVersion');
         $gameVersion    = GameVersion::firstWhere('key', $gameVersionKey);

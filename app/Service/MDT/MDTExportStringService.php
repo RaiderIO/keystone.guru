@@ -313,16 +313,16 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
                         } else {
                             $fixedMapIconComment = false;
 
-                            foreach ($this->dungeonRoute->mapicons as $mapicon) {
-                                $asciiComment = preg_replace('/[[:^print:]]/', '', $mapicon->comment ?? '');
-                                if ($asciiComment !== $mapicon->comment) {
+                            foreach ($this->dungeonRoute->mapicons as $mapIcon) {
+                                $asciiComment = preg_replace('/[[:^print:]]/', '', $mapIcon->comment ?? '');
+                                if ($asciiComment !== $mapIcon->comment) {
                                     $warnings->push(
                                         new ImportWarning(__('services.mdt.io.export_string.category.map_icon'),
                                             __('services.mdt.io.export_string.map_icon_contains_non_ascii_char_bug'),
-                                            ['details' => sprintf(__('services.mdt.io.export_string.map_icon_contains_non_ascii_char_bug_details'), $asciiComment, $mapicon->comment)]
+                                            ['details' => sprintf(__('services.mdt.io.export_string.map_icon_contains_non_ascii_char_bug_details'), $asciiComment, $mapIcon->comment)]
                                         )
                                     );
-                                    $mapicon->comment = $asciiComment;
+                                    $mapIcon->comment = $asciiComment;
 
                                     $fixedMapIconComment = true;
                                 }

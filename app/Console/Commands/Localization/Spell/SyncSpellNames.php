@@ -4,7 +4,7 @@ namespace App\Console\Commands\Localization\Spell;
 
 use App\Console\Commands\Localization\Traits\ExportsTranslations;
 use App\Models\GameVersion\GameVersion;
-use App\Service\Wowhead\WowheadServiceInterface;
+use App\Service\Wowhead\WowheadTranslationServiceInterface;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -33,12 +33,12 @@ class SyncSpellNames extends Command
      *
      * @throws Exception
      */
-    public function handle(WowheadServiceInterface $wowheadService): void
+    public function handle(WowheadTranslationServiceInterface $wowheadTranslationService): void
     {
         $gameVersionKey = $this->argument('gameVersion');
         $gameVersion    = GameVersion::firstWhere('key', $gameVersionKey);
 
-        $spellNamesByLocale = $wowheadService->getSpellNames($gameVersion);
+        $spellNamesByLocale = $wowheadTranslationService->getSpellNames($gameVersion);
 
         foreach ($spellNamesByLocale as $locale => $spellNames) {
             /** @var Collection $spellNames */

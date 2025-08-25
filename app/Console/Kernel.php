@@ -41,6 +41,7 @@ use App\Console\Commands\Localization\Spell\ExportSpellNames;
 use App\Console\Commands\Localization\Spell\ImportSpellNames;
 use App\Console\Commands\Localization\Spell\SyncSpellNames;
 use App\Console\Commands\Localization\Validation\ConvertLocalizations as ValidationConvertLocalizations;
+use App\Console\Commands\Localization\Zone\SyncZoneNames;
 use App\Console\Commands\MapIcon\GenerateItemIcons;
 use App\Console\Commands\Mapping\AssignMDTIDs;
 use App\Console\Commands\Mapping\AssignPackGroups;
@@ -178,6 +179,8 @@ class Kernel extends ConsoleKernel
         SyncSpellNames::class,
         // Localization Validation
         ValidationConvertLocalizations::class,
+        // Localization Zone
+        SyncZoneNames::class,
 
         // MapIcon
         GenerateItemIcons::class,

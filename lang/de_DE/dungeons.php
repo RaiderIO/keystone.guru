@@ -1,829 +1,775 @@
 <?php
 
 return [
-
     'difficulty' => [
-        1 => '',
-        2 => '',
-        3 => '',
-        4 => '',
+        1 => '10-Spieler',
+        2 => '25-Spieler',
+        3 => '20-Spieler',
+        4 => '40-Spieler',
     ],
     'classic'    => [
         'blackfathom_deeps'           => [
-            'name'   => '',
+            'name'   => 'Tiefschwarze Grotte',
             'floors' => [
-                'the_pool_of_ask_ar' => '',
-                'moonshrine_sanctum' => '',
-                'the_forgotten_pool' => '',
+                'the_pool_of_ask_ar' => 'Der Teich von Ask\'Ar',
+                'moonshrine_sanctum' => 'Mondschreinsanktum',
+                'the_forgotten_pool' => 'Der Vergessene Teich',
             ],
         ],
         'blackrock_depths'            => [
-            'name'   => '',
+            'name'   => 'Die Schwarzfelstiefen',
             'floors' => [
-                'detention_block'  => '',
-                'shadowforge_city' => '',
-            ],
-        ],
-        'deadmines'                   => [
-            'name'   => '',
-            'floors' => [
-                'the_deadmines' => '',
-                'ironclad_cove' => '',
-            ],
-        ],
-        'dire_maul_west'              => [
-            'name'   => '',
-            'floors' => [
-                'capital_gardens'        => '',
-                'court_of_the_highborne' => '',
-                'prison_of_immol_thar'   => '',
-            ],
-        ],
-        'dire_maul_north'             => [
-            'name'   => '',
-            'floors' => [
-                'gordok_commons' => '',
-            ],
-        ],
-        'dire_maul_east'              => [
-            'name'   => '',
-            'floors' => [
-                'warpwood_quarter'         => '',
-                'the_shrine_of_eldretharr' => '',
-            ],
-        ],
-        'gnomeregan'                  => [
-            'name'   => '',
-            'floors' => [
-                'the_hall_of_gears' => '',
-                'the_dormitory'     => '',
-                'launch_bay'        => '',
-                'tinkers_court'     => '',
-            ],
-        ],
-        'gnomeregan_sod'              => [
-            'name'   => '',
-            'floors' => [
-                'the_hall_of_gears' => '',
-                'the_dormitory'     => '',
-                'launch_bay'        => '',
-                'tinkers_court'     => '',
-            ],
-        ],
-        'karazhan_crypts'             => [
-            'name'   => '',
-            'floors' => [
-                'karazhan_crypts'         => '',
-                'the_slough_of_dispair'   => '',
-                'tome_of_the_unrepentant' => '',
-                'the_pit_of_criminals'    => '',
-            ],
-        ],
-        'lower_blackrock_spire'       => [
-            'name'   => '',
-            'floors' => [
-                'tazz_alor'          => '',
-                'skitterweb_tunnels' => '',
-                'hordemar_city'      => '',
-                'hall_of_blackhand'  => '',
-                'halycons_lair'      => '',
-                'chamber_of_battle'  => '',
-            ],
-        ],
-        'maraudon'                    => [
-            'name'   => '',
-            'floors' => [
-                'caverns_of_maraudon' => '',
-                'zaetars_grave'       => '',
-            ],
-        ],
-        'ragefire_chasm'              => [
-            'name'   => '',
-            'floors' => [
-                'ragefire_chasm' => '',
-            ],
-        ],
-        'razorfen_downs'              => [
-            'name'   => '',
-            'floors' => [
-                'razorfen_downs' => '',
-            ],
-        ],
-        'razorfen_kraul'              => [
-            'name'   => '',
-            'floors' => [
-                'razorfen_kraul' => '',
-            ],
-        ],
-        'ruins_of_ahnqiraj_sod'       => [
-            'name'   => '',
-            'floors' => [
-                'ruins_of_ahnqiraj' => '',
-            ],
-        ],
-        'ruins_of_ahnqiraj_classic'   => [
-            'name'   => '',
-            'floors' => [
-                'ruins_of_ahnqiraj' => '',
-            ],
-        ],
-        'scarlet_enclave'             => [
-            'name'   => '',
-            'floors' => [
-                'tyrs_hand'              => '',
-                'the_forbidding_expanse' => '',
-                'scarlet_cathedral'      => '',
-                'avalon_monastery'       => '',
-                'ashbringer_chapel'      => '',
-            ],
-        ],
-        'scarlet_monastery_armory'    => [
-            'name'   => '',
-            'floors' => [
-                'armory' => '',
-            ],
-        ],
-        'scarlet_monastery_cathedral' => [
-            'name'   => '',
-            'floors' => [
-                'cathedral' => '',
-            ],
-        ],
-        'scarlet_monastery_graveyard' => [
-            'name'   => '',
-            'floors' => [
-                'graveyard' => '',
-            ],
-        ],
-        'scarlet_monastery_library'   => [
-            'name'   => '',
-            'floors' => [
-                'library' => '',
-            ],
-        ],
-        'scholomance'                 => [
-            'name'   => '',
-            'floors' => [
-                'the_reliquary'        => '',
-                'chamber_of_summoning' => '',
-                'the_upper_study'      => '',
-                'headmasters_story'    => '',
-            ],
-        ],
-        'shadowfang_keep'             => [
-            'name'   => '',
-            'floors' => [
-                'the_courtyard'         => '',
-                'dining_hall'           => '',
-                'the_vacant_den'        => '',
-                'lower_observatory'     => '',
-                'upper_observatory'     => '',
-                'lord_godfreys_chamber' => '',
-                'the_wall_walk'         => '',
-            ],
-        ],
-        'stratholme'                  => [
-            'name'   => '',
-            'floors' => [
-                'crusaders_square' => '',
-                'the_gauntlet'     => '',
-            ],
-        ],
-        'temple_of_ahnqiraj_sod'      => [
-            'name'   => '',
-            'floors' => [
-                'the_hive_undergrounds' => '',
-                'the_temple_gates'      => '',
-                'vault_of_cthun'        => '',
-            ],
-        ],
-        'temple_of_ahnqiraj_classic'  => [
-            'name'   => '',
-            'floors' => [
-                'the_hive_undergrounds' => '',
-                'the_temple_gates'      => '',
-                'vault_of_cthun'        => '',
-            ],
-        ],
-        'the_stockade'                => [
-            'name'   => '',
-            'floors' => [
-                'the_stockade' => '',
-            ],
-        ],
-        'the_temple_of_atal_hakkar'   => [
-            'name'   => '',
-            'floors' => [
-                'the_pit_of_refuse'         => '',
-                'hall_of_serpents'          => '',
-                'entrance'                  => '',
-                'the_temple_of_atal_hakkar' => '',
-                'hall_of_the_cursed'        => '',
-            ],
-        ],
-        'uldaman'                     => [
-            'name'   => '',
-            'floors' => [
-                'hall_of_the_keepers' => '',
-                'khaz_goroths_seat'   => '',
-            ],
-        ],
-        'upper_blackrock_spire'       => [
-            'name'   => '',
-            'floors' => [
-                'dragonspire_hall'  => '',
-                'the_rookery'       => '',
-                'hall_of_blackhand' => '',
-            ],
-        ],
-        'wailing_caverns'             => [
-            'name'   => '',
-            'floors' => [
-                'wailing_caverns' => '',
-            ],
-        ],
-        'zul_farrak'                  => [
-            'name'   => '',
-            'floors' => [
-                'zul_farrak' => '',
-            ],
-        ],
-        'zulgurub'                    => [
-            'name'   => '',
-            'floors' => [
-                'zulgurub' => '',
-            ],
-        ],
-        'onyxias_lair_classic'        => [
-            'name'   => '',
-            'floors' => [
-                'onyxias_lair' => '',
-            ],
-        ],
-        'moltencore'                  => [
-            'name'   => '',
-            'floors' => [
-                'molten_core' => '',
+                'detention_block'  => 'Gefängnisblock',
+                'shadowforge_city' => 'Schattenschmiede',
             ],
         ],
         'blackwinglair'               => [
-            'name'   => '',
+            'name'   => 'Pechschwingenhort',
             'floors' => [
-                'dragonmaw_garrison'   => '',
-                'halls_of_strife'      => '',
-                'crimson_laboratories' => '',
-                'nefarians_lair'       => '',
+                'dragonmaw_garrison'   => 'Garnison des Drachenmals',
+                'halls_of_strife'      => 'Hallen des Zwists',
+                'crimson_laboratories' => 'Blutrote Labore',
+                'nefarians_lair'       => 'Nefarians Unterschlupf',
+            ],
+        ],
+        'deadmines'                   => [
+            'name'   => 'Die Todesminen',
+            'floors' => [
+                'the_deadmines' => 'Die Todesminen',
+                'ironclad_cove' => 'Eiserne Bucht',
+            ],
+        ],
+        'dire_maul_east'              => [
+            'name'   => 'Düsterbruch – Ost',
+            'floors' => [
+                'warpwood_quarter'         => 'Wucherborkenviertel',
+                'the_shrine_of_eldretharr' => 'Schrein von Eldretharr',
+            ],
+        ],
+        'dire_maul_north'             => [
+            'name'   => 'Düsterbruch – Nord',
+            'floors' => [
+                'gordok_commons' => 'Gordokhallen',
+            ],
+        ],
+        'dire_maul_west'              => [
+            'name'   => 'Düsterbruch – West',
+            'floors' => [
+                'capital_gardens'        => 'Hauptgärten',
+                'court_of_the_highborne' => 'Hof der Hochgeborenen',
+                'prison_of_immol_thar'   => 'Gefängnis von Immol\'thar',
+            ],
+        ],
+        'gnomeregan'                  => [
+            'name'   => 'Gnomeregan',
+            'floors' => [
+                'the_hall_of_gears' => 'Die Halle der Zahnräder',
+                'the_dormitory'     => 'Der Schlafsaal',
+                'launch_bay'        => 'Startrampe',
+                'tinkers_court'     => 'Tüftlerhof',
+            ],
+        ],
+        'gnomeregan_sod'              => [
+            'name'   => 'Gnomeregan (SoD)',
+            'floors' => [
+                'the_hall_of_gears' => 'Die Halle der Zahnräder',
+                'the_dormitory'     => 'Der Schlafsaal',
+                'launch_bay'        => 'Startrampe',
+                'tinkers_court'     => 'Tüftlerhof',
+            ],
+        ],
+        'karazhan_crypts'             => [
+            'name'   => 'Katakomben von Karazhan',
+            'floors' => [
+                'karazhan_crypts'         => 'Katakomben von Karazhan',
+                'the_slough_of_dispair'   => 'Sumpf der Verzweiflung',
+                'tome_of_the_unrepentant' => 'Grab der Unbußfertigen',
+                'the_pit_of_criminals'    => 'Grube der Verbrecher',
+            ],
+        ],
+        'lower_blackrock_spire'       => [
+            'name'   => 'Untere Schwarzfelsspitze',
+            'floors' => [
+                'tazz_alor'          => 'Tazz’Alor',
+                'skitterweb_tunnels' => 'Netztunnel',
+                'hordemar_city'      => 'Hordemarstadt',
+                'hall_of_blackhand'  => 'Schwarzfausthalle',
+                'halycons_lair'      => 'Halycons Hort',
+                'chamber_of_battle'  => 'Kammer des Kampfes',
+            ],
+        ],
+        'maraudon'                    => [
+            'name'   => 'Maraudon',
+            'floors' => [
+                'caverns_of_maraudon' => 'Höhlen von Maraudon',
+                'zaetars_grave'       => 'Zaetars Grab',
+            ],
+        ],
+        'moltencore'                  => [
+            'name'   => 'Der Geschmolzene Kern',
+            'floors' => [
+                'molten_core' => 'Der Geschmolzene Kern',
             ],
         ],
         'naxxramas_classic'           => [
-            'name'   => '',
+            'name'   => 'Naxxramas',
             'floors' => [
-                'the_construct_quarter' => '',
-                'the_arachnid_quarter'  => '',
-                'the_military_quarter'  => '',
-                'the_plague_quarter'    => '',
-                'the_lower_necropolis'  => '',
-                'the_upper_necropolis'  => '',
+                'the_construct_quarter' => 'Das Konstruktviertel',
+                'the_arachnid_quarter'  => 'Das Arachnidenviertel',
+                'the_military_quarter'  => 'Das Militärviertel',
+                'the_plague_quarter'    => 'Das Seuchenviertel',
+                'the_lower_necropolis'  => 'Die Untere Nekropole',
+                'the_upper_necropolis'  => 'Die Obere Nekropole',
+            ],
+        ],
+        'onyxias_lair_classic'        => [
+            'name'   => 'Onyxias Hort',
+            'floors' => [
+                'onyxias_lair' => 'Onyxias Hort',
+            ],
+        ],
+        'ragefire_chasm'              => [
+            'name'   => 'Der Flammenschlund',
+            'floors' => [
+                'ragefire_chasm' => 'Der Flammenschlund',
+            ],
+        ],
+        'razorfen_downs'              => [
+            'name'   => 'Hügel der Klingenhauer',
+            'floors' => [
+                'razorfen_downs' => 'Hügel der Klingenhauer',
+            ],
+        ],
+        'razorfen_kraul'              => [
+            'name'   => 'Kral der Klingenhauer',
+            'floors' => [
+                'razorfen_kraul' => 'Kral der Klingenhauer',
+            ],
+        ],
+        'ruins_of_ahnqiraj_classic'   => [
+            'name'   => 'Die Ruinen von Ahn\'Qiraj (Classic)',
+            'floors' => [
+                'ruins_of_ahnqiraj' => 'Die Ruinen von Ahn\'Qiraj',
+            ],
+        ],
+        'ruins_of_ahnqiraj_sod'       => [
+            'name'   => 'Die Ruinen von Ahn\'Qiraj',
+            'floors' => [
+                'ruins_of_ahnqiraj' => 'Die Ruinen von Ahn\'Qiraj',
+            ],
+        ],
+        'scarlet_enclave'             => [
+            'name'   => 'Scharlachrote Enklave',
+            'floors' => [
+                'tyrs_hand'              => 'Tyrs Hand',
+                'the_forbidding_expanse' => 'Die Verbotene Weite',
+                'scarlet_cathedral'      => 'Scharlachrote Kathedrale',
+                'avalon_monastery'       => 'Avalonkloster',
+                'ashbringer_chapel'      => 'Kapelle des Ashbringers',
+            ],
+        ],
+        'scarlet_monastery_armory'    => [
+            'name'   => 'Scharlachrotes Kloster – Waffenkammer',
+            'floors' => [
+                'armory' => 'Waffenkammer',
+            ],
+        ],
+        'scarlet_monastery_cathedral' => [
+            'name'   => 'Scharlachrotes Kloster – Kathedrale',
+            'floors' => [
+                'cathedral' => 'Kathedrale',
+            ],
+        ],
+        'scarlet_monastery_graveyard' => [
+            'name'   => 'Scharlachrotes Kloster – Friedhof',
+            'floors' => [
+                'graveyard' => 'Friedhof',
+            ],
+        ],
+        'scarlet_monastery_library'   => [
+            'name'   => 'Scharlachrotes Kloster – Bibliothek',
+            'floors' => [
+                'library' => 'Bibliothek',
+            ],
+        ],
+        'scholomance'                 => [
+            'name'   => 'Scholomance',
+            'floors' => [
+                'the_reliquary'        => 'Das Reliquiarium',
+                'chamber_of_summoning' => 'Kammer der Beschwörung',
+                'the_upper_study'      => 'Oberes Arbeitszimmer',
+                'headmasters_story'    => 'Arbeitszimmer des Direktors',
+            ],
+        ],
+        'shadowfang_keep'             => [
+            'name'   => 'Burg Schattenfang',
+            'floors' => [
+                'the_courtyard'         => 'Der Hof',
+                'dining_hall'           => 'Speisesaal',
+                'the_vacant_den'        => 'Die Verwaiste Höhle',
+                'lower_observatory'     => 'Tieferes Observatorium',
+                'upper_observatory'     => 'Oberes Observatorium',
+                'lord_godfreys_chamber' => 'Lord Godfreys Kammer',
+                'the_wall_walk'         => 'Der Wehrgang',
+            ],
+        ],
+        'stratholme'                  => [
+            'name'   => 'Stratholme',
+            'floors' => [
+                'crusaders_square' => 'Kreuzzüglerplatz',
+                'the_gauntlet'     => 'Der Spießrutenlauf',
+            ],
+        ],
+        'temple_of_ahnqiraj_classic'  => [
+            'name'   => 'Tempel von Ahn\'Qiraj (Classic)',
+            'floors' => [
+                'the_hive_undergrounds' => 'Untergrund des Schwarmbaus',
+                'the_temple_gates'      => 'Die Tempeltore',
+                'vault_of_cthun'        => 'Höhle von C\'Thun',
+            ],
+        ],
+        'temple_of_ahnqiraj_sod'      => [
+            'name'   => 'Tempel von Ahn\'Qiraj',
+            'floors' => [
+                'the_hive_undergrounds' => 'Untergrund des Schwarmbaus',
+                'the_temple_gates'      => 'Die Tempeltore',
+                'vault_of_cthun'        => 'Höhle von C\'Thun',
+            ],
+        ],
+        'the_stockade'                => [
+            'name'   => 'Das Verlies',
+            'floors' => [
+                'the_stockade' => 'Das Verlies',
+            ],
+        ],
+        'the_temple_of_atal_hakkar'   => [
+            'name'   => 'Versunkener Tempel',
+            'floors' => [
+                'the_pit_of_refuse'         => 'Versunkener Tempel',
+                'hall_of_serpents'          => 'Halle der Schlangen',
+                'entrance'                  => 'Eingang',
+                'the_temple_of_atal_hakkar' => 'Tempel von Atal’Hakkar',
+                'hall_of_the_cursed'        => 'Halle der Verfluchten',
+            ],
+        ],
+        'uldaman'                     => [
+            'name'   => 'Uldaman',
+            'floors' => [
+                'hall_of_the_keepers' => 'Halle der Bewahrer',
+                'khaz_goroths_seat'   => 'Khaz\'goroths Sitz',
+            ],
+        ],
+        'upper_blackrock_spire'       => [
+            'name'   => 'Obere Schwarzfelsspitze',
+            'floors' => [
+                'dragonspire_hall'  => 'Drachenspitzhalle',
+                'the_rookery'       => 'Die Brutstätte',
+                'hall_of_blackhand' => 'Schwarzfausthalle',
+            ],
+        ],
+        'wailing_caverns'             => [
+            'name'   => 'Die Höhlen des Wehklagens',
+            'floors' => [
+                'wailing_caverns' => 'Die Höhlen des Wehklagens',
+            ],
+        ],
+        'zul_farrak'                  => [
+            'name'   => 'Zul\'Farrak',
+            'floors' => [
+                'zul_farrak' => 'Zul\'Farrak',
+            ],
+        ],
+        'zulgurub'                    => [
+            'name'   => 'Zul\'Gurub',
+            'floors' => [
+                'zulgurub' => 'Zul\'Gurub',
             ],
         ],
     ],
     'wotlk'      => [
         'ahn_kahet_the_old_kingdom'                => [
-            'name'   => '',
+            'name'   => 'Ahn\'kahet: Das Alte Königreich',
             'floors' => [
-                'ahn_kahet_the_old_kingdom' => '',
+                'ahn_kahet_the_old_kingdom' => 'Ahn\'kahet: Das Alte Königreich',
             ],
         ],
         'azjol_nerub'                              => [
-            'name'   => '',
+            'name'   => 'Azjol-Nerub',
             'floors' => [
-                'the_brood_pit'   => '',
-                'hadronoxs_lair'  => '',
-                'the_gilded_gate' => '',
-            ],
-        ],
-        'drak_tharon_keep'                         => [
-            'name'   => '',
-            'floors' => [
-                'the_vestibules_of_drak_tharon' => '',
-                'drak_tharon_overlook'          => '',
-            ],
-        ],
-        'gundrak'                                  => [
-            'name'   => '',
-            'floors' => [
-                'gundrak' => '',
-            ],
-        ],
-        'halls_of_lightning'                       => [
-            'name'   => '',
-            'floors' => [
-                'unyielding_garrison' => '',
-                'walk_of_the_makers'  => '',
-            ],
-        ],
-        'halls_of_reflection'                      => [
-            'name'   => '',
-            'floors' => [
-                'halls_of_reflection' => '',
-            ],
-        ],
-        'halls_of_stone'                           => [
-            'name'   => '',
-            'floors' => [
-                'halls_of_stone' => '',
-            ],
-        ],
-        'pit_of_saron'                             => [
-            'name'   => '',
-            'floors' => [
-                'pit_of_saron' => '',
-            ],
-        ],
-        'the_culling_of_stratholme'                => [
-            'name'   => '',
-            'floors' => [
-                'the_culling_of_stratholme' => '',
-                'stratholme_city'           => '',
-            ],
-        ],
-        'the_forge_of_souls'                       => [
-            'name'   => '',
-            'floors' => [
-                'the_forge_of_souls' => '',
-            ],
-        ],
-        'the_nexus'                                => [
-            'name'   => '',
-            'floors' => [
-                'the_nexus' => '',
-            ],
-        ],
-        'the_oculus'                               => [
-            'name'   => '',
-            'floors' => [
-                'the_oculus'            => '',
-                'band_of_variance'      => '',
-                'band_of_acceleration'  => '',
-                'band_of_transmutation' => '',
-                'band_of_alignment'     => '',
-            ],
-        ],
-        'the_violet_hold'                          => [
-            'name'   => '',
-            'floors' => [
-                'the_violet_hold' => '',
-            ],
-        ],
-        'trial_of_the_champion'                    => [
-            'name' => '',
-        ],
-        'utgarde_keep'                             => [
-            'name'   => '',
-            'floors' => [
-                'njorndir_preparation' => '',
-                'dragonflayer_ascent'  => '',
-                'tyrs_terrace'         => '',
-            ],
-        ],
-        'utgarde_pinnacle'                         => [
-            'name'   => '',
-            'floors' => [
-                'lower_pinnacle' => '',
-                'upper_pinnacle' => '',
-            ],
-        ],
-        'icecrown_citadel'                         => [
-            'name'   => '',
-            'floors' => [
-                'the_lower_citadel'     => '',
-                'the_rampart_of_skulls' => '',
-                'deathbringers_rise'    => '',
-                'the_frost_queens_lair' => '',
-                'the_upper_reach'       => '',
-                'royal_quarters'        => '',
-                'the_frozen_throne'     => '',
-                'frostmourne'           => '',
-            ],
-        ],
-        'onyxias_lair'                             => [
-            'name'   => '',
-            'floors' => [
-                'onyxias_lair' => '',
-            ],
-        ],
-        'naxxramas'                                => [
-            'name'   => '',
-            'floors' => [
-                'the_construct_quarter' => '',
-                'the_arachnid_quarter'  => '',
-                'the_military_quarter'  => '',
-                'the_plague_quarter'    => '',
-                'the_lower_necropolis'  => '',
-                'the_upper_necropolis'  => '',
+                'the_brood_pit'   => 'Die Brutgrube',
+                'hadronoxs_lair'  => 'Hadronox\' Hort',
+                'the_gilded_gate' => 'Das Vergoldete Tor',
             ],
         ],
         'crusaders_coliseum_trial_of_the_crusader' => [
-            'name'   => '',
+            'name'   => 'Prüfung des Kreuzfahrers',
             'floors' => [
-                'the_argent_coliseum' => '',
-                'the_icy_depths'      => '',
+                'the_argent_coliseum' => 'Das Argentumkolosseum',
+                'the_icy_depths'      => 'Die Eisigen Tiefen',
+            ],
+        ],
+        'drak_tharon_keep'                         => [
+            'name'   => 'Feste Drak\'Tharon',
+            'floors' => [
+                'the_vestibules_of_drak_tharon' => 'Die Vorhallen von Drak\'Tharon',
+                'drak_tharon_overlook'          => 'Aussichtspunkt von Drak\'Tharon',
+            ],
+        ],
+        'gundrak'                                  => [
+            'name'   => 'Gundrak',
+            'floors' => [
+                'gundrak' => 'Gundrak',
+            ],
+        ],
+        'halls_of_lightning'                       => [
+            'name'   => 'Hallen der Blitze',
+            'floors' => [
+                'unyielding_garrison' => 'Unnachgiebige Garnison',
+                'walk_of_the_makers'  => 'Straße der Schöpfer',
+            ],
+        ],
+        'halls_of_reflection'                      => [
+            'name'   => 'Hallen der Reflexion',
+            'floors' => [
+                'halls_of_reflection' => 'Hallen der Reflexion',
+            ],
+        ],
+        'halls_of_stone'                           => [
+            'name'   => 'Hallen des Steins',
+            'floors' => [
+                'halls_of_stone' => 'Hallen des Steins',
+            ],
+        ],
+        'icecrown_citadel'                         => [
+            'name'   => 'Die Eiskronenzitadelle',
+            'floors' => [
+                'the_lower_citadel'     => 'Die Untere Zitadelle',
+                'the_rampart_of_skulls' => 'Das Schädelbollwerk',
+                'deathbringers_rise'    => 'Dom des Todesbringers',
+                'the_frost_queens_lair' => 'Der Hort der Frostkönigin',
+                'the_upper_reach'       => 'Die Oberen Bereiche',
+                'royal_quarters'        => 'Königliche Quartiere',
+                'the_frozen_throne'     => 'Der Frostthron',
+                'frostmourne'           => 'Frostgram',
+            ],
+        ],
+        'naxxramas'                                => [
+            'name'   => 'Naxxramas',
+            'floors' => [
+                'the_construct_quarter' => 'Das Konstruktviertel',
+                'the_arachnid_quarter'  => 'Das Arachnidenviertel',
+                'the_military_quarter'  => 'Das Militärviertel',
+                'the_plague_quarter'    => 'Das Seuchenviertel',
+                'the_lower_necropolis'  => 'Die Untere Nekropole',
+                'the_upper_necropolis'  => 'Die Obere Nekropole',
+            ],
+        ],
+        'onyxias_lair'                             => [
+            'name'   => 'Onyxias Hort',
+            'floors' => [
+                'onyxias_lair' => 'Onyxias Hort',
+            ],
+        ],
+        'pit_of_saron'                             => [
+            'name'   => 'Die Grube von Saron',
+            'floors' => [
+                'pit_of_saron' => 'Die Grube von Saron',
+            ],
+        ],
+        'the_culling_of_stratholme'                => [
+            'name'   => 'Das Ausmerzen von Stratholme',
+            'floors' => [
+                'the_culling_of_stratholme' => 'Das Ausmerzen von Stratholme',
+                'stratholme_city'           => 'Stratholme',
             ],
         ],
         'the_eye_of_eternity'                      => [
-            'name'   => '',
+            'name'   => 'Das Auge der Ewigkeit',
             'floors' => [
-                'the_eye_of_eternity' => '',
+                'the_eye_of_eternity' => 'Das Auge der Ewigkeit',
+            ],
+        ],
+        'the_forge_of_souls'                       => [
+            'name'   => 'Die Seelenschmiede',
+            'floors' => [
+                'the_forge_of_souls' => 'Die Seelenschmiede',
+            ],
+        ],
+        'the_nexus'                                => [
+            'name'   => 'Der Nexus',
+            'floors' => [
+                'the_nexus' => 'Der Nexus',
             ],
         ],
         'the_obsidian_sanctum'                     => [
-            'name'   => '',
+            'name'   => 'Das Obsidiansanktum',
             'floors' => [
-                'the_obsidian_sanctum' => '',
+                'the_obsidian_sanctum' => 'Das Obsidiansanktum',
+            ],
+        ],
+        'the_oculus'                               => [
+            'name'   => 'Das Oculus',
+            'floors' => [
+                'the_oculus'            => 'Das Oculus',
+                'band_of_variance'      => 'Ring der Varianz',
+                'band_of_acceleration'  => 'Ring der Akzeleration',
+                'band_of_transmutation' => 'Ring der Transmutation',
+                'band_of_alignment'     => 'Ring der Abgleichung',
             ],
         ],
         'the_ruby_sanctum'                         => [
-            'name'   => '',
+            'name'   => 'Das Rubinsanktum',
             'floors' => [
-                'the_ruby_sanctum' => '',
+                'the_ruby_sanctum' => 'Das Rubinsanktum',
+            ],
+        ],
+        'the_violet_hold'                          => [
+            'name'   => 'Die Violette Festung',
+            'floors' => [
+                'the_violet_hold' => 'Die Violette Festung',
+            ],
+        ],
+        'trial_of_the_champion'                    => [
+            'name'   => 'Prüfung des Champions',
+            'floors' => [
+                'trial_of_the_champion' => 'Prüfung des Champions',
             ],
         ],
         'ulduar'                                   => [
-            'name'   => '',
+            'name'   => 'Ulduar',
             'floors' => [
-                'ulduar'                      => '',
-                'the_antechamber_of_ulduar'   => '',
-                'the_inner_sanctum_of_ulduar' => '',
-                'the_prison_of_yogg_saron'    => '',
-                'the_spark_of_imagination'    => '',
-                'the_minds_eye'               => '',
+                'ulduar'                      => 'Ulduar',
+                'the_antechamber_of_ulduar'   => 'Die Vorkammer von Ulduar',
+                'the_inner_sanctum_of_ulduar' => 'Das Innere Sanktum von Ulduar',
+                'the_prison_of_yogg_saron'    => 'Das Gefängnis von Yogg-Saron',
+                'the_spark_of_imagination'    => 'Der Funke der Imagination',
+                'the_minds_eye'               => 'Das Gedankenauge',
+            ],
+        ],
+        'utgarde_keep'                             => [
+            'name'   => 'Burg Utgarde',
+            'floors' => [
+                'njorndir_preparation' => 'Vorbereitung der Njorndir',
+                'dragonflayer_ascent'  => 'Aufstieg der Drachenschinder',
+                'tyrs_terrace'         => 'Tyrs Terrasse',
+            ],
+        ],
+        'utgarde_pinnacle'                         => [
+            'name'   => 'Turm Utgarde',
+            'floors' => [
+                'lower_pinnacle' => 'Untere Spitze',
+                'upper_pinnacle' => 'Obere Spitze',
             ],
         ],
         'vault_of_archavon'                        => [
-            'name'   => '',
+            'name'   => 'Archavons Kammer',
             'floors' => [
-                'vault_of_archavon' => '',
+                'vault_of_archavon' => 'Archavons Kammer',
             ],
         ],
     ],
     'cata'       => [
-        'grim_batol'          => [
-            'name'   => '',
+        'dragon_soul'         => [
+            'name'   => 'Drachenseele',
             'floors' => [
-                'grim_batol' => '',
-            ],
-        ],
-        'the_vortex_pinnacle' => [
-            'name'   => '',
-            'floors' => [
-                'cyclone_summit' => '',
-            ],
-        ],
-        'throne_of_the_tides' => [
-            'name'   => '',
-            'floors' => [
-                'abyssal_halls'       => '',
-                'throne_of_neptulon'  => '',
-                'throne_of_the_tides' => '',
+                'dragon_soul'        => 'Drachenseele',
+                'maw_of_go_rath'     => 'Schlund des Go\'rath',
+                'maw_of_shu_ma'      => 'Schlund des Shu\'ma',
+                'eye_of_eternity'    => 'Auge der Ewigkeit',
+                'skyfire_airship'    => 'Die Himmelsfeuer',
+                'spine_of_deathwing' => 'Todesschwinges Rückgrat',
+                'the_maelstrom'      => 'Der Mahlstrom',
             ],
         ],
         'firelands'           => [
-            'name'   => '',
+            'name'   => 'Die Feuerlande',
             'floors' => [
-                'firelands'              => '',
-                'anvil_of_conflagration' => '',
-                'sulfuron_keep'          => '',
+                'firelands'              => 'Feuerlande',
+                'anvil_of_conflagration' => 'Der Amboss der Feuersbrunst',
+                'sulfuron_keep'          => 'Sulfuronfestung',
             ],
         ],
-        'dragon_soul'         => [
-            'name'   => '',
+        'grim_batol'          => [
+            'name'   => 'Grim Batol',
             'floors' => [
-                'the_dragonblight'   => '',
-                'maw_of_go_rath'     => '',
-                'maw_of_shu_ma'      => '',
-                'eye_of_eternity'    => '',
-                'skyfire_airship'    => '',
-                'spine_of_deathwing' => '',
-                'the_maelstrom'      => '',
+                'grim_batol' => 'Grim Batol',
+            ],
+        ],
+        'the_vortex_pinnacle' => [
+            'name'   => 'Der Vortexgipfel',
+            'floors' => [
+                'cyclone_summit' => 'Der Vortexgipfel',
+            ],
+        ],
+        'throne_of_the_tides' => [
+            'name'   => 'Thron der Gezeiten',
+            'floors' => [
+                'abyssal_halls'       => 'Abyssalhallen',
+                'throne_of_neptulon'  => 'Thron von Neptulon',
+                'throne_of_the_tides' => 'Thron der Gezeiten',
             ],
         ],
     ],
     'mop'        => [
         'gate_of_the_setting_sun'    => [
-            'name'   => '',
+            'name'   => 'Das Tor der Untergehenden Sonne',
             'floors' => [
-                'gate_of_the_setting_sun' => '',
-                'gate_watch_tower'        => '',
+                'gate_of_the_setting_sun' => 'Tor der Untergehenden Sonne',
+                'gate_watch_tower'        => 'Torwachtturm',
             ],
         ],
         'mogu_shan_palace'           => [
-            'name'   => '',
+            'name'   => 'Mogu\'shanpalast',
             'floors' => [
-                'the_crimson_assembly_hall'    => '',
-                'vaults_of_kings_past'         => '',
-                'throne_of_ancient_conquerors' => '',
+                'the_crimson_assembly_hall'    => 'Die Karminrote Versammlungshalle',
+                'vaults_of_kings_past'         => 'Gewölbe der Vergangenen Könige',
+                'throne_of_ancient_conquerors' => 'Thron der Uralten Eroberer',
             ],
         ],
         'scarlet_halls_mop'          => [
-            'name'   => '',
+            'name'   => 'Scharlachrote Hallen',
             'floors' => [
-                'training_grounds' => '',
-                'athenaeum'        => '',
+                'training_grounds' => 'Ausbildungsgelände',
+                'athenaeum'        => 'Athenaeum',
             ],
         ],
         'scarlet_monastery_mop'      => [
-            'name'   => '',
+            'name'   => 'Das Scharlachrote Kloster',
             'floors' => [
-                'forlorn_cloister' => '',
-                'crusaders_chapel' => '',
+                'forlorn_cloister' => 'Unglückseliger Kreuzgang',
+                'crusaders_chapel' => 'Kapelle des Kreuzfahrers',
             ],
         ],
         'scholomance_mop'            => [
-            'name'   => '',
+            'name'   => 'Scholomance',
             'floors' => [
-                'the_reliquary'        => '',
-                'chamber_of_summoning' => '',
-                'the_upper_study'      => '',
-                'headmasters_study'    => '',
+                'the_reliquary'        => 'Das Reliquiarium',
+                'chamber_of_summoning' => 'Kammer der Beschwörung',
+                'the_upper_study'      => 'Das Obere Arbeitszimmer',
+                'headmasters_study'    => 'Arbeitszimmer des Direktors',
             ],
         ],
         'shado_pan_monastery'        => [
-            'name'   => '',
+            'name'   => 'Shado-Pan-Kloster',
             'floors' => [
-                'shado_pan_monastery' => '',
-                'cloudstrike_dojo'    => '',
-                'snowdrift_dojo'      => '',
-                'sealed_chambers'     => '',
+                'shado_pan_monastery' => 'Shado-Pan-Kloster',
+                'cloudstrike_dojo'    => 'Meister Wolkenschlags Dojo',
+                'snowdrift_dojo'      => 'Meister Schneewehes Dojo',
+                'sealed_chambers'     => 'Versiegelte Kammern',
             ],
         ],
         'siege_of_niu_zao_temple'    => [
-            'name'   => '',
+            'name'   => 'Die Belagerung des Niuzaotempels',
             'floors' => [
-                'siege_of_niu_zao_temple' => '',
-                'the_hollowed_out_tree'   => '',
-                'upper_tree_ring'         => '',
+                'siege_of_niu_zao_temple' => 'Die Belagerung des Niuzaotempels',
+                'the_hollowed_out_tree'   => 'Der Ausgehöhlte Baum',
+                'upper_tree_ring'         => 'Oberer Baumring',
             ],
         ],
         'stormstout_brewery'         => [
-            'name'   => '',
+            'name'   => 'Brauerei Sturmbräu',
             'floors' => [
-                'grain_cellar'        => '',
-                'stormstout_brewhall' => '',
-                'the_great_wheel'     => '',
-                'the_tasting_room'    => '',
+                'grain_cellar'        => 'Kornkeller',
+                'stormstout_brewhall' => 'Sturmbräuhalle',
+                'the_great_wheel'     => 'Das Große Rad',
+                'the_tasting_room'    => 'Der Verkostungsraum',
             ],
         ],
         'temple_of_the_jade_serpent' => [
-            'name'   => '',
+            'name'   => 'Tempel der Jadeschlange',
             'floors' => [
-                'temple_of_the_jade_serpent' => '',
-                'scrollkeepers_sanctum'      => '',
+                'temple_of_the_jade_serpent' => 'Tempel der Jadeschlange',
+                'scrollkeepers_sanctum'      => 'Das Sanktum des Schriftrollenhüters',
             ],
         ],
     ],
     'wod'        => [
         'auchindoun'                => [
-            'name'   => '',
+            'name'   => 'Auchindoun',
             'floors' => [
-                'auchindoun' => '',
+                'auchindoun' => 'Auchindoun',
             ],
         ],
         'bloodmaul_slag_mines'      => [
-            'name'   => '',
+            'name'   => 'Blutschlägermine',
             'floors' => [
-                'bloodmaul_slag_mines' => '',
-            ],
-        ],
-        'iron_docks'                => [
-            'name'   => '',
-            'floors' => [
-                'iron_docks' => '',
+                'bloodmaul_slag_mines' => 'Blutschlägermine',
             ],
         ],
         'grimrail_depot'            => [
-            'name'   => '',
+            'name'   => 'Grimmgleisdepot',
             'floors' => [
-                'rafters'            => '',
-                'train_depot'        => '',
-                'rear_train_cars'    => '',
-                'forward_train_cars' => '',
+                'rafters'            => 'Sparren',
+                'train_depot'        => 'Zugdepot',
+                'rear_train_cars'    => 'Hintere Waggons',
+                'forward_train_cars' => 'Vordere Waggons',
+            ],
+        ],
+        'iron_docks'                => [
+            'name'   => 'Eisendocks',
+            'floors' => [
+                'iron_docks' => 'Eisendocks',
             ],
         ],
         'shadowmoon_burial_grounds' => [
-            'name'   => '',
+            'name'   => 'Schattenmondgrabstätte',
             'floors' => [
-                'crypt_of_the_ancients' => '',
-                'altar_of_shadow'       => '',
-                'edge_of_reality'       => '',
+                'crypt_of_the_ancients' => 'Krypta der Ahnen',
+                'altar_of_shadow'       => 'Altar des Schattens',
+                'edge_of_reality'       => 'Rand der Realität',
             ],
         ],
         'the_everbloom'             => [
-            'name'   => '',
+            'name'   => 'Der Immergrüne Flor',
             'floors' => [
-                'the_everbloom' => '',
-                'the_overlook'  => '',
+                'the_everbloom' => 'Der Immergrüne Flor',
+                'the_overlook'  => 'Der Rundblick',
             ],
         ],
     ],
     'legion'     => [
         'arcway'                      => [
-            'name'   => '',
+            'name'   => 'Der Arkus',
             'floors' => [
-                'arcway' => '',
+                'arcway' => 'Der Arkus',
             ],
         ],
         'black_rook_hold'             => [
-            'name'   => '',
+            'name'   => 'Die Rabenwehr',
             'floors' => [
-                'the_ravenscrypt'          => '',
-                'the_grand_hall'           => '',
-                'ravenshold'               => '',
-                'the_rooks_roost'          => '',
-                'lord_ravencrests_chamber' => '',
-                'the_ravens_crown'         => '',
-                'black_rook_hold'          => '',
-            ],
-        ],
-        'court_of_stars'              => [
-            'name'   => '',
-            'floors' => [
-                'court_of_stars' => '',
-            ],
-        ],
-        'darkheart_thicket'           => [
-            'name'   => '',
-            'floors' => [
-                'darkheart_thicket' => '',
-            ],
-        ],
-        'eye_of_azshara'              => [
-            'name'   => '',
-            'floors' => [
-                'eye_of_azshara' => '',
-            ],
-        ],
-        'halls_of_valor'              => [
-            'name'   => '',
-            'floors' => [
-                'the_high_gate'              => '',
-                'fields_of_the_eternal_hunt' => '',
-                'halls_of_valor'             => '',
-            ],
-        ],
-        'maw_of_souls'                => [
-            'name'   => '',
-            'floors' => [
-                'hellmouth_cliffs' => '',
-                'the_hold'         => '',
-                'the_naglfar'      => '',
-            ],
-        ],
-        'neltharions_lair'            => [
-            'name'   => '',
-            'floors' => [
-                'neltharions_lair' => '',
-            ],
-        ],
-        'vault_of_the_wardens'        => [
-            'name'   => '',
-            'floors' => [
-                'the_wardens_court'     => '',
-                'vault_of_the_wardens'  => '',
-                'vault_of_the_betrayer' => '',
-            ],
-        ],
-        'lower_karazhan'              => [
-            'name'   => '',
-            'floors' => [
-                'servants_quarters'    => '',
-                'upper_livery_stables' => '',
-                'the_banquet_hall'     => '',
-                'the_guest_chambers'   => '',
-                'opera_hall_balcony'   => '',
-                'masters_terrace'      => '',
-            ],
-        ],
-        'upper_karazhan'              => [
-            'name'   => '',
-            'floors' => [
-                'lower_broken_stair' => '',
-                'upper_broken_stair' => '',
-                'the_menagerie'      => '',
-                'guardians_library'  => '',
-                'library_floor'      => '',
-                'upper_library'      => '',
-                'gamesmans_hall'     => '',
-                'netherspace'        => '',
+                'the_ravenscrypt'          => 'Die Rabengruft',
+                'the_grand_hall'           => 'Die Große Halle',
+                'ravenshold'               => 'Rabenfeste',
+                'the_rooks_roost'          => 'Der Rabenhorst',
+                'lord_ravencrests_chamber' => 'Lord Rabenkrones Kammer',
+                'the_ravens_crown'         => 'Des Rabens Krone',
+                'black_rook_hold'          => 'Die Rabenwehr',
             ],
         ],
         'cathedral_of_eternal_night'  => [
-            'name'   => '',
+            'name'   => 'Die Kathedrale der Ewigen Nacht',
             'floors' => [
-                'hall_of_the_moon'     => '',
-                'twilight_groove'      => '',
-                'the_emerald_archives' => '',
-                'path_of_illumination' => '',
-                'sacristy_of_elune'    => '',
+                'hall_of_the_moon'     => 'Halle des Mondes',
+                'twilight_groove'      => 'Zwielichtshain',
+                'the_emerald_archives' => 'Das Smaragdgrüne Archiv',
+                'path_of_illumination' => 'Pfad der Illumination',
+                'sacristy_of_elune'    => 'Sakristei der Elune',
+            ],
+        ],
+        'court_of_stars'              => [
+            'name'   => 'Der Hof der Sterne',
+            'floors' => [
+                'court_of_stars' => 'Hof der Sterne',
+            ],
+        ],
+        'darkheart_thicket'           => [
+            'name'   => 'Das Finsterherzdickicht',
+            'floors' => [
+                'darkheart_thicket' => 'Das Finsterherzdickicht',
+            ],
+        ],
+        'eye_of_azshara'              => [
+            'name'   => 'Das Auge Azsharas',
+            'floors' => [
+                'eye_of_azshara' => 'Das Auge Azsharas',
+            ],
+        ],
+        'halls_of_valor'              => [
+            'name'   => 'Die Hallen der Tapferkeit',
+            'floors' => [
+                'the_high_gate'              => 'Die Hohe Pforte',
+                'fields_of_the_eternal_hunt' => 'Felder der Ewigen Jagd',
+                'halls_of_valor'             => 'Hallen der Tapferkeit',
+            ],
+        ],
+        'lower_karazhan'              => [
+            'name'   => 'Karazhan – Untere Ebenen',
+            'floors' => [
+                'servants_quarters'    => 'Dienerquartiere',
+                'upper_livery_stables' => 'Obere Nobelställe',
+                'the_banquet_hall'     => 'Der Bankettsaal',
+                'the_guest_chambers'   => 'Die Gästezimmer',
+                'opera_hall_balcony'   => 'Balkon des Opernsaals',
+                'masters_terrace'      => 'Terrasse des Meisters',
+            ],
+        ],
+        'maw_of_souls'                => [
+            'name'   => 'Die Helmaulklippen',
+            'floors' => [
+                'helmouth_cliffs' => 'Helmaulklippen',
+                'the_hold'        => 'Der Frachtraum',
+                'the_naglfar'     => 'Die Naglfar',
+            ],
+        ],
+        'neltharions_lair'            => [
+            'name'   => 'Neltharions Hort',
+            'floors' => [
+                'neltharions_lair' => 'Neltharions Hort',
             ],
         ],
         'the_seat_of_the_triumvirate' => [
-            'name'   => '',
+            'name'   => 'Der Sitz des Triumvirats',
             'floors' => [
-                'the_seat_of_the_triumvirate' => '',
+                'the_seat_of_the_triumvirate' => 'Der Sitz des Triumvirats',
+            ],
+        ],
+        'upper_karazhan'              => [
+            'name'   => 'Karazhan – Obere Ebenen',
+            'floors' => [
+                'lower_broken_stair' => 'Untere Eingestürzte Treppe',
+                'upper_broken_stair' => 'Obere Eingestürzte Treppe',
+                'the_menagerie'      => 'Die Menagerie',
+                'guardians_library'  => 'Bibliothek des Wächters',
+                'library_floor'      => 'Bibliotheksetage',
+                'upper_library'      => 'Obere Bibliothek',
+                'gamesmans_hall'     => 'Halle der Spiele',
+                'netherspace'        => 'Netherraum',
+            ],
+        ],
+        'vault_of_the_wardens'        => [
+            'name'   => 'Das Verlies der Wächterinnen',
+            'floors' => [
+                'the_wardens_court'     => 'Der Richthof der Wächterinnen',
+                'vault_of_the_wardens'  => 'Verlies der Wächterinnen',
+                'vault_of_the_betrayer' => 'Kerker des Verräters',
             ],
         ],
     ],
     'bfa'        => [
         'atal_dazar'                => [
-            'name'   => '',
+            'name'   => 'Atal\'Dazar',
             'floors' => [
-                'atal_dazar'       => '',
-                'sacrificial_pits' => '',
+                'atal_dazar'       => 'Atal\'Dazar',
+                'sacrificial_pits' => 'Opfergrube',
             ],
         ],
         'freehold'                  => [
-            'name'   => '',
+            'name'   => 'Freihafen',
             'floors' => [
-                'freehold' => '',
+                'freehold' => 'Freihafen',
             ],
         ],
         'kings_rest'                => [
-            'name'   => '',
+            'name'   => 'Die Königsruh',
             'floors' => [
-                'kings_rest' => '',
-            ],
-        ],
-        'shrine_of_the_storm'       => [
-            'name'   => '',
-            'floors' => [
-                'shrine_of_the_storm' => '',
-                'storms_end'          => '',
-            ],
-        ],
-        'siege_of_boralus'          => [
-            'name'   => '',
-            'floors' => [
-                'siege_of_boralus' => '',
-            ],
-        ],
-        'temple_of_sethraliss'      => [
-            'name'   => '',
-            'floors' => [
-                'temple_of_sethraliss'  => '',
-                'atrium_of_the_wardens' => '',
-            ],
-        ],
-        'the_motherlode'            => [
-            'name'   => '',
-            'floors' => [
-                'the_motherlode' => '',
-            ],
-        ],
-        'the_underrot'              => [
-            'name'   => '',
-            'floors' => [
-                'the_underrot'  => '',
-                'ruins_descent' => '',
-            ],
-        ],
-        'tol_dagor'                 => [
-            'name'   => '',
-            'floors' => [
-                'tol_dagor'         => '',
-                'the_drain'         => '',
-                'the_brig'          => '',
-                'detention_block'   => '',
-                'officer_quarters'  => '',
-                'overseers_redoubt' => '',
-                'overseers_summit'  => '',
-            ],
-        ],
-        'waycrest_manor'            => [
-            'name'   => '',
-            'floors' => [
-                'the_grand_foyer' => '',
-                'upstairs'        => '',
-                'the_cellar'      => '',
-                'catacombs'       => '',
-                'the_rupture'     => '',
-                'waycrest_manor'  => '',
+                'kings_rest' => 'Die Königsruh',
             ],
         ],
         'mechagon_junkyard'         => [
-            'name'   => '',
+            'name'   => 'Operation Mechagon: Schrottplatz',
             'floors' => [
-                'mechagon_island' => '',
-                'tunnels'         => '',
+                'mechagon_island' => 'Insel Mechagon',
+                'tunnels'         => 'Tunnel',
             ],
         ],
         'mechagon_workshop'         => [
-            'name'   => '',
+            'name'   => 'Operation Mechagon: Werkstatt',
             'floors' => [
-                'the_robodrome'               => '',
-                'waste_pipes'                 => '',
-                'the_under_junk'              => '',
-                'mechagon_city'               => '',
-                'operation_mechagon_workshop' => '',
+                'the_robodrome'               => 'Das Robodrom',
+                'waste_pipes'                 => 'Abwasserrohre',
+                'the_under_junk'              => 'Die Unterhalde',
+                'mechagon_city'               => 'Stadt Mechagon',
+                'operation_mechagon_workshop' => 'Operation Mechagon: Werkstatt',
             ],
         ],
         'orgrimmar_horrific_vision' => [
@@ -833,263 +779,318 @@ return [
                 'the_drag'                  => '',
             ],
         ],
+        'shrine_of_the_storm'       => [
+            'name'   => 'Der Schrein des Sturms',
+            'floors' => [
+                'shrine_of_the_storm' => 'Schrein des Sturms',
+                'storms_end'          => 'Sturmend',
+            ],
+        ],
+        'siege_of_boralus'          => [
+            'name'   => 'Die Belagerung von Boralus',
+            'floors' => [
+                'siege_of_boralus' => 'Die Belagerung von Boralus',
+            ],
+        ],
         'stormwind_horrific_vision' => [
             'name'   => '',
             'floors' => [
                 'stormwind_horrific_vision' => '',
             ],
         ],
+        'temple_of_sethraliss'      => [
+            'name'   => 'Der Tempel von Sethraliss',
+            'floors' => [
+                'temple_of_sethraliss'  => 'Tempel von Sethraliss',
+                'atrium_of_the_wardens' => 'Atrium von Sethraliss',
+            ],
+        ],
+        'the_motherlode'            => [
+            'name'   => 'Das RIESENFLÖZ!!',
+            'floors' => [
+                'the_motherlode' => 'Das RIESENFLÖZ!!',
+            ],
+        ],
+        'the_underrot'              => [
+            'name'   => 'Der Tiefenpfuhl',
+            'floors' => [
+                'the_underrot'  => 'Der Tiefenpfuhl',
+                'ruins_descent' => 'Der Niedergang',
+            ],
+        ],
+        'tol_dagor'                 => [
+            'name'   => 'Tol Dagor',
+            'floors' => [
+                'tol_dagor'         => 'Tol Dagor',
+                'the_drain'         => 'Der Abfluss',
+                'the_brig'          => 'Die Brigg',
+                'detention_block'   => 'Gefängnisblock',
+                'officer_quarters'  => 'Offiziersquartiere',
+                'overseers_redoubt' => 'Wärterwehr',
+                'overseers_summit'  => 'Wärterspitze',
+            ],
+        ],
+        'waycrest_manor'            => [
+            'name'   => 'Das Kronsteiganwesen',
+            'floors' => [
+                'the_grand_foyer' => 'Das Große Foyer',
+                'upstairs'        => 'Obere Etage',
+                'the_cellar'      => 'Der Keller',
+                'catacombs'       => 'Die Katakomben',
+                'the_rupture'     => 'Der Durchbruch',
+                'waycrest_manor'  => 'Das Kronsteiganwesen',
+            ],
+        ],
     ],
     'sl'         => [
         'de_other_side'              => [
-            'name'   => '',
+            'name'   => 'Die Andre Seite',
             'floors' => [
-                'de_other_side' => '',
-                'mechagon'      => '',
-                'zul_gurub'     => '',
-                'ardenweald'    => '',
+                'de_other_side' => 'Die Andre Seite',
+                'mechagon'      => 'Mechagon',
+                'zul_gurub'     => 'Zul\'Gurub',
+                'ardenweald'    => 'Ardenwald',
             ],
         ],
         'halls_of_atonement'         => [
-            'name'   => '',
+            'name'   => 'Hallen der Sühne',
             'floors' => [
-                'halls_of_atonement'     => '',
-                'the_nave_of_pain'       => '',
-                'the_sanctuary_of_souls' => '',
+                'halls_of_atonement'     => 'Hallen der Sühne',
+                'the_nave_of_pain'       => 'Das Schiff der Schmerzen',
+                'the_sanctuary_of_souls' => 'Die Zuflucht der Seelen',
             ],
         ],
         'mists_of_tirna_scithe'      => [
-            'name'   => '',
+            'name'   => 'Die Nebel von Tirna Scithe',
             'floors' => [
-                'mists_of_tirna_scithe' => '',
+                'mists_of_tirna_scithe' => 'Die Nebel von Tirna Scithe',
             ],
         ],
         'plaguefall'                 => [
-            'name'   => '',
+            'name'   => 'Seuchensturz',
             'floors' => [
-                'plaguefall'            => '',
-                'the_festering_sanctum' => '',
+                'plaguefall'            => 'Seuchensturz',
+                'the_festering_sanctum' => 'Das Schwärende Sanktum',
             ],
         ],
         'sanguine_depths'            => [
-            'name'   => '',
+            'name'   => 'Die Blutigen Tiefen',
             'floors' => [
-                'depths_of_despair'      => '',
-                'amphitheater_of_sorrow' => '',
+                'depths_of_despair'      => 'Tiefen der Verzweiflung',
+                'amphitheater_of_sorrow' => 'Amphitheater der Trauer',
             ],
         ],
         'spires_of_ascension'        => [
-            'name'   => '',
+            'name'   => 'Spitzen des Aufstiegs',
             'floors' => [
-                'honors_ascent'      => '',
-                'gardens_of_repose'  => '',
-                'font_of_fealty'     => '',
-                'seat_of_the_archon' => '',
-            ],
-        ],
-        'the_necrotic_wake'          => [
-            'name'   => '',
-            'floors' => [
-                'the_necrotic_wake' => '',
-                'stitchwerks'       => '',
-                'zolramus'          => '',
-            ],
-        ],
-        'theater_of_pain'            => [
-            'name'   => '',
-            'floors' => [
-                'theater_of_pain'         => '',
-                'chamber_of_conquest'     => '',
-                'altars_of_agony'         => '',
-                'lower_barrow_of_carnage' => '',
-                'upper_barrow_of_carnage' => '',
-            ],
-        ],
-        'tazavesh_streets_of_wonder' => [
-            'name'   => '',
-            'floors' => [
-                'the_veiled_market'          => '',
-                'the_grand_menagerie'        => '',
-                'the_post'                   => '',
-                'myzas_oasis'                => '',
-                'tazavesh_streets_of_wonder' => '',
+                'honors_ascent'      => 'Aufstieg der Ehre',
+                'gardens_of_repose'  => 'Gärten der Rast',
+                'font_of_fealty'     => 'Quell der Treue',
+                'seat_of_the_archon' => 'Sitz der Archon',
             ],
         ],
         'tazavesh_so_leahs_gambit'   => [
-            'name'   => '',
+            'name'   => 'Tazavesh: So\'leah\'s Gambit',
             'floors' => [
-                'stormheim'                => '',
-                'aggramars_vault'          => '',
-                'boralus_harbor'           => '',
-                'the_opulent_nexus'        => '',
-                'tazavesh_so_leahs_gambit' => '',
+                'stormheim'                => 'Sturmheim',
+                'aggramars_vault'          => 'Aggramars Schatzkammer',
+                'boralus_harbor'           => 'Hafen von Boralus',
+                'the_opulent_nexus'        => 'Das Opulente Nexus',
+                'tazavesh_so_leahs_gambit' => 'So\'leah\'s Gambit',
+            ],
+        ],
+        'tazavesh_streets_of_wonder' => [
+            'name'   => 'Tazavesh: Straßen des Wunders',
+            'floors' => [
+                'the_veiled_market'          => 'Der Verschleierte Markt',
+                'the_grand_menagerie'        => 'Die Große Menagerie',
+                'the_post'                   => 'Die Post',
+                'myzas_oasis'                => 'Myzas Oase',
+                'tazavesh_streets_of_wonder' => 'Straßen des Wunders',
+            ],
+        ],
+        'the_necrotic_wake'          => [
+            'name'   => 'Die Nekrotische Schneise',
+            'floors' => [
+                'the_necrotic_wake' => 'Die Nekrotische Schneise',
+                'stitchwerks'       => 'Flickwerke',
+                'zolramus'          => 'Zolramus',
+            ],
+        ],
+        'theater_of_pain'            => [
+            'name'   => 'Theater der Schmerzen',
+            'floors' => [
+                'theater_of_pain'         => 'Theater der Schmerzen',
+                'chamber_of_conquest'     => 'Kammer der Eroberung',
+                'altars_of_agony'         => 'Altäre der Agonie',
+                'lower_barrow_of_carnage' => 'Untere Tunnel des Gemetzels',
+                'upper_barrow_of_carnage' => 'Obere Tunnel des Gemetzels',
             ],
         ],
     ],
     'df'         => [
         'algeth_ar_academy'                    => [
-            'name'   => '',
+            'name'   => 'Akademie von Algeth\'ar',
             'floors' => [
-                'algeth_ar_academy'        => '',
-                'the_pitch'                => '',
-                'the_headteachers_enclave' => '',
+                'algeth_ar_academy'        => 'Akademie von Algeth\'ar',
+                'the_pitch'                => 'Spielfeld',
+                'the_headteachers_enclave' => 'Enklave der Direktorin',
             ],
         ],
         'brackenhide_hollow'                   => [
-            'name'   => '',
+            'name'   => 'Brackenfellhöhle',
             'floors' => [
-                'brackenhide_hollow' => '',
-                'den_of_decay'       => '',
-            ],
-        ],
-        'halls_of_infusion'                    => [
-            'name'   => '',
-            'floors' => [
-                'infusers_rotunda'  => '',
-                'infusion_chamber'  => '',
-                'halls_of_infusion' => '',
-            ],
-        ],
-        'neltharus'                            => [
-            'name'   => '',
-            'floors' => [
-                'the_burning_cauldron' => '',
-                'chamber_of_flames'    => '',
-                'neltharus'            => '',
-            ],
-        ],
-        'ruby_life_pools'                      => [
-            'name'   => '',
-            'floors' => [
-                'infusion_chambers' => '',
-                'ruby_overlook'     => '',
-                'ruby_life_pools'   => '',
-            ],
-        ],
-        'the_azure_vault'                      => [
-            'name'   => '',
-            'floors' => [
-                'the_arcane_conservatory' => '',
-                'crystal_chambers'        => '',
-                'mausoleum_of_legends'    => '',
-                'the_infinity_seal'       => '',
-                'sindragosas_lament'      => '',
-                'the_azure_vault'         => '',
-            ],
-        ],
-        'the_nokhud_offensive'                 => [
-            'name'   => '',
-            'floors' => [
-                'the_nokhud_offensive' => '',
-            ],
-        ],
-        'uldaman_legacy_of_tyr'                => [
-            'name'   => '',
-            'floors' => [
-                'hall_of_the_keepers'   => '',
-                'the_vault_of_tyr'      => '',
-                'uldaman_legacy_of_tyr' => '',
+                'brackenhide_hollow' => 'Brackenfellhöhle',
+                'den_of_decay'       => 'Bau des Verfalls',
             ],
         ],
         'dawn_of_the_infinite_galakronds_fall' => [
-            'name'   => '',
+            'name'   => 'Dämmerung des Ewigen: Galakronds Sturz',
             'floors' => [
-                'galakronds_fall'         => '',
-                'sanctum_of_chronology'   => '',
-                'millennias_threshold'    => '',
-                'locus_of_eternity'       => '',
-                'spoke_of_endless_winter' => '',
-                'crossroads_of_fate'      => '',
+                'galakronds_fall'         => 'Galakronds Sturz',
+                'sanctum_of_chronology'   => 'Sanktum der Chronologie',
+                'millennias_threshold'    => 'Schwelle der Jahrtausende',
+                'locus_of_eternity'       => 'Ort der Ewigkeit',
+                'spoke_of_endless_winter' => 'Speiche des Endlosen Winters',
+                'crossroads_of_fate'      => 'Kreuzung des Schicksals',
             ],
         ],
         'dawn_of_the_infinite_murozonds_rise'  => [
-            'name'   => '',
+            'name'   => 'Dämmerung des Ewigen: Murozonds Aufstieg',
             'floors' => [
-                'murozonds_rise'         => '',
-                'sanctum_of_chronology'  => '',
-                'millennias_threshold'   => '',
-                'locus_of_eternity'      => '',
-                'crossroads_of_fate'     => '',
-                'infinite_conflux'       => '',
-                'twisting_approach'      => '',
-                'immemorial_battlefield' => '',
+                'murozonds_rise'         => 'Murozonds Aufstieg',
+                'sanctum_of_chronology'  => 'Sanktum der Chronologie',
+                'millennias_threshold'   => 'Schwelle der Jahrtausende',
+                'locus_of_eternity'      => 'Ort der Ewigkeit',
+                'crossroads_of_fate'     => 'Kreuzung des Schicksals',
+                'infinite_conflux'       => 'Der Unendliche Konflux',
+                'twisting_approach'      => 'Gewundener Anmarsch',
+                'immemorial_battlefield' => 'Uraltes Schlachtfeld',
+            ],
+        ],
+        'halls_of_infusion'                    => [
+            'name'   => 'Hallen der Infusion',
+            'floors' => [
+                'infusers_rotunda'  => 'Infusorenrotunde',
+                'infusion_chamber'  => 'Infusionskammer',
+                'halls_of_infusion' => 'Hallen der Infusion',
+            ],
+        ],
+        'neltharus'                            => [
+            'name'   => 'Neltharus',
+            'floors' => [
+                'the_burning_cauldron' => 'Der Brennende Kessel',
+                'chamber_of_flames'    => 'Kammer der Flammen',
+                'neltharus'            => 'Neltharus',
+            ],
+        ],
+        'ruby_life_pools'                      => [
+            'name'   => 'Rubinlebensbecken',
+            'floors' => [
+                'infusion_chambers' => 'Infusionskammern',
+                'ruby_overlook'     => 'Rubinwarte',
+                'ruby_life_pools'   => 'Rubinlebensbecken',
+            ],
+        ],
+        'the_azure_vault'                      => [
+            'name'   => 'Das Azurblaue Gewölbe',
+            'floors' => [
+                'the_arcane_conservatory' => 'Arkankonservatorium',
+                'crystal_chambers'        => 'Kristallkammern',
+                'mausoleum_of_legends'    => 'Mausoleum der Legenden',
+                'the_infinity_seal'       => 'Das Siegel der Unendlichkeit',
+                'sindragosas_lament'      => 'Sindragosas Klage',
+                'the_azure_vault'         => 'Das Azurblaue Gewölbe',
+            ],
+        ],
+        'the_nokhud_offensive'                 => [
+            'name'   => 'Der Angriff der Nokhud',
+            'floors' => [
+                'the_nokhud_offensive' => 'Der Angriff der Nokhud',
+            ],
+        ],
+        'uldaman_legacy_of_tyr'                => [
+            'name'   => 'Uldaman',
+            'floors' => [
+                'hall_of_the_keepers'   => 'Halle der Bewahrer',
+                'the_vault_of_tyr'      => 'Die Kammer von Tyr',
+                'uldaman_legacy_of_tyr' => 'Uldaman',
             ],
         ],
     ],
     'tww'        => [
         'ara_kara_city_of_echoes'    => [
-            'name'   => '',
+            'name'   => 'Ara-Kara, Stadt der Echos',
             'floors' => [
-                'echoing_overlook'        => '',
-                'the_undercache'          => '',
-                'ara_kara_city_of_echoes' => '',
+                'echoing_overlook'        => 'Hallender Ausblick',
+                'the_undercache'          => 'Der Tiefenspeicher',
+                'ara_kara_city_of_echoes' => 'Ara-Kara, Stadt der Echos',
             ],
         ],
         'cinderbrew_meadery'         => [
-            'name'   => '',
+            'name'   => 'Metbrauerei Glutbräu',
             'floors' => [
-                'cinderbrew_meadery' => '',
+                'cinderbrew_meadery' => 'Metbrauerei Glutbräu',
             ],
         ],
         'city_of_threads'            => [
-            'name'   => '',
+            'name'   => 'Stadt der Fäden',
             'floors' => [
-                'city_of_threads'    => '',
-                'the_transformatory' => '',
+                'city_of_threads'    => 'Stadt der Fäden',
+                'the_transformatory' => 'Das Transformatorium',
             ],
         ],
         'darkflame_cleft'            => [
-            'name'   => '',
+            'name'   => 'Dunkelflammenspalt',
             'floors' => [
-                'darkflame_cleft' => '',
-                'shadow_realm'    => '',
-            ],
-        ],
-        'priory_of_the_sacred_flame' => [
-            'name'   => '',
-            'floors' => [
-                'sanctified_grounds'         => '',
-                'priory_of_the_sacred_flame' => '',
-            ],
-        ],
-        'the_dawnbreaker'            => [
-            'name'   => '',
-            'floors' => [
-                'the_dawnbreaker' => '',
-            ],
-        ],
-        'the_rookery'                => [
-            'name'   => '',
-            'floors' => [
-                'the_rookery_landing' => '',
-                'storms_roost'        => '',
-                'storm_rookery'       => '',
-                'stormrider_barracks' => '',
-                'crashing_storm_hall' => '',
-                'abandoned_mines'     => '',
-                'the_rookery'         => '',
-            ],
-        ],
-        'the_stonevault'             => [
-            'name'   => '',
-            'floors' => [
-                'the_stonevault' => '',
-            ],
-        ],
-        'operation_floodgate'        => [
-            'name'   => '',
-            'floors' => [
-                'the_waterworks'      => '',
-                'the_grid'            => '',
-                'operation_floodgate' => '',
+                'darkflame_cleft' => 'Dunkelflammenspalt',
+                'shadow_realm'    => 'Schattenreich',
             ],
         ],
         'eco_dome_al_dani'           => [
-            'name'   => '',
+            'name'   => 'Die Biokuppel Al\'dani',
             'floors' => [
-                'eco_dome_al_dani' => '',
+                'eco_dome_al_dani' => 'Die Biokuppel Al\'dani',
+            ],
+        ],
+        'operation_floodgate'        => [
+            'name'   => 'Operation: Schleuse',
+            'floors' => [
+                'the_waterworks'      => 'Die Wasserwerke',
+                'the_grid'            => 'Das R.A.S.T.E.R.',
+                'operation_floodgate' => 'Operation: Schleuse',
+            ],
+        ],
+        'priory_of_the_sacred_flame' => [
+            'name'   => 'Priorat der Heiligen Flamme',
+            'floors' => [
+                'sanctified_grounds'         => 'Geweihter Boden',
+                'priory_of_the_sacred_flame' => 'Priorat der Heiligen Flamme',
+            ],
+        ],
+        'the_dawnbreaker'            => [
+            'name'   => 'Die Morgenbringer',
+            'floors' => [
+                'the_dawnbreaker' => 'Die Morgenbringer',
+            ],
+        ],
+        'the_rookery'                => [
+            'name'   => 'Die Brutstätte',
+            'floors' => [
+                'the_rookery_landing' => 'Der Brutstättenlandeplatz',
+                'storms_roost'        => 'Sturmhorst',
+                'storm_rookery'       => 'Sturmkrähenbrutstätte',
+                'stormrider_barracks' => 'Sturmreiterkaserne',
+                'crashing_storm_hall' => 'Einstürzende Sturmhalle',
+                'abandoned_mines'     => 'Verlassene Minen',
+                'the_rookery'         => 'Die Brutstätte',
+            ],
+        ],
+        'the_stonevault'             => [
+            'name'   => 'Das Steingewölbe',
+            'floors' => [
+                'the_stonevault' => 'Das Steingewölbe',
             ],
         ],
     ],
-
 ];

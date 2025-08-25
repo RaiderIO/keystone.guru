@@ -84,6 +84,8 @@ use App\Service\StructuredLogging\Logging\StructuredLoggingServiceLogging;
 use App\Service\StructuredLogging\Logging\StructuredLoggingServiceLoggingInterface;
 use App\Service\Wowhead\Logging\WowheadServiceLogging;
 use App\Service\Wowhead\Logging\WowheadServiceLoggingInterface;
+use App\Service\Wowhead\Logging\WowheadTranslationServiceLogging;
+use App\Service\Wowhead\Logging\WowheadTranslationServiceLoggingInterface;
 use App\Service\WowTools\Logging\WowToolsServiceLogging;
 use App\Service\WowTools\Logging\WowToolsServiceLoggingInterface;
 use Illuminate\Support\ServiceProvider;
@@ -173,6 +175,7 @@ class LoggingServiceProvider extends ServiceProvider
 
         // Wowhead
         $this->app->bind(WowheadServiceLoggingInterface::class, WowheadServiceLogging::class);
+        $this->app->bind(WowheadTranslationServiceLoggingInterface::class, WowheadTranslationServiceLogging::class);
 
         // Wow Tools
         $this->app->bind(WowToolsServiceLoggingInterface::class, WowToolsServiceLogging::class);
