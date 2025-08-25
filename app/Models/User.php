@@ -78,7 +78,7 @@ class User extends Authenticatable implements LaratrustUser
         self::MAP_FACADE_STYLE_FACADE,
     ];
 
-    public const DEFAULT_MAP_FACADE_STYLE = 'split_floors';
+    public const DEFAULT_MAP_FACADE_STYLE = self::MAP_FACADE_STYLE_FACADE;
 
     public const THEME_DARKLY = 'darkly';
     public const THEME_LUX = 'lux';
