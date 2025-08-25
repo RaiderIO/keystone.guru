@@ -23,9 +23,7 @@ return [
             'thumbnail_regenerate_result'     => 'Hodor',
             'caches_dropped_successfully'     => 'Hodor',
             'releases_exported'               => 'Hodor',
-            'exception'                       => [
-                'internal_server_error' => 'Hodor',
-            ],
+            'exception'                       => 'Hodor',
             'feature_toggle_activated'        => 'Hodor',
             'feature_toggle_deactivated'      => 'Hodor',
             'feature_forgotten'               => 'Hodor',

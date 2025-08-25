@@ -6,6 +6,7 @@ return [
         'class' => '',
         'item'  => '',
         'misc'  => '',
+        'meta'  => '',
     ],
     'no_attributes'       => '',
     'rogue_shroud_skip'   => '',

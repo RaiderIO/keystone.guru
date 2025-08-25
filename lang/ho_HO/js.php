@@ -229,6 +229,7 @@ return [
     'sidebar_expand'                                                       => 'Hodor',
     'sidebar_collapse'                                                     => 'Hodor',
     'copied_to_clipboard'                                                  => 'Hodor',
+    'sidebar_enemy_group_label'                                            => 'Hodor',
     'sidebar_enemy_health_label'                                           => 'Hodor',
     'sidebar_enemy_id_label'                                               => 'Hodor',
     'sidebar_enemy_npc_id_label'                                           => 'Hodor',

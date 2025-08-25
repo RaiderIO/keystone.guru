@@ -36,6 +36,8 @@ return [
             'attributes_selected'     => 'Hodor',
         ],
         'card'       => [
+            'thumbnail_alt'            => 'Hodor',
+            'thumbnail_dungeon_alt'    => 'Hodor',
             'no_description'           => 'Hodor',
             'outdated_mapping_version' => 'Hodor',
             'by_author'                => 'Hodor',

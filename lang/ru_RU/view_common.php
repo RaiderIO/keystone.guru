@@ -36,6 +36,8 @@ return [
             'attributes_selected'     => '{0} Атрибутов',
         ],
         'card'       => [
+            'thumbnail_alt'            => '',
+            'thumbnail_dungeon_alt'    => '',
             'no_description'           => 'Нет описания',
             'outdated_mapping_version' => '',
             'by_author'                => 'Автор',

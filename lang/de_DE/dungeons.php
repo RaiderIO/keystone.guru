@@ -347,7 +347,7 @@ return [
                 'the_rampart_of_skulls' => 'Das Schädelbollwerk',
                 'deathbringers_rise'    => 'Dom des Todesbringers',
                 'the_frost_queens_lair' => 'Der Hort der Frostkönigin',
-                'the_upper_reach'       => 'Die Oberen Bereiche',
+                'the_upper_reaches'     => 'Die Oberen Bereiche',
                 'royal_quarters'        => 'Königliche Quartiere',
                 'the_frozen_throne'     => 'Der Frostthron',
                 'frostmourne'           => 'Frostgram',
@@ -802,7 +802,7 @@ return [
             'name'   => 'Der Tempel von Sethraliss',
             'floors' => [
                 'temple_of_sethraliss'  => 'Tempel von Sethraliss',
-                'atrium_of_the_wardens' => 'Atrium von Sethraliss',
+                'atrium_of_sethraliss' => 'Atrium von Sethraliss',
             ],
         ],
         'the_motherlode'            => [
