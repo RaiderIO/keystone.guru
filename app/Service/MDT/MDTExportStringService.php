@@ -13,6 +13,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcClassification;
 use App\Models\Path;
 use App\Service\Cache\CacheServiceInterface;
+use App\Service\Cache\Traits\RemembersToFile;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Exception;
 use Illuminate\Support\Collection;
@@ -27,6 +28,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  */
 class MDTExportStringService extends MDTBaseService implements MDTExportStringServiceInterface
 {
+    use RemembersToFile;
+
     /** @var int How far away do we create notes in MDT */
     private const KILL_ZONE_DESCRIPTION_DISTANCE = 3;
 
@@ -247,88 +250,97 @@ class MDTExportStringService extends MDTBaseService implements MDTExportStringSe
      *
      * @throws Exception
      */
-    public function getEncodedString(Collection $warnings): string
+    public function getEncodedString(Collection $warnings, bool $useCache = true): string
     {
-        //        $lua = $this->_getLua();
+        return $this->rememberLocal(sprintf('mdt_export_string:%s_%s', $this->dungeonRoute->id, $this->dungeonRoute->updated_at->timestamp),
+            config('keystoneguru.cache.mdt_export_strings.ttl'), function() use ($warnings) {
+            // #2945 I just had a weird issue where copying an MDT string from one route, would actually generate a string
+            // based on another route. The route title was extracted correctly, but the pulls/map icons were from
+            // another route entirely. Clearing the caches solved this issue. I'm disabling the model cache for this operation
+            // as a result.
+            return app('model-cache')->runDisabled(function() use ($warnings) {
+                //        $lua = $this->_getLua();
 
-        $affixes = $this->dungeonRoute->affixes;
+                $affixes = $this->dungeonRoute->affixes;
 
-        $mdtObject = [
-            //
-            'objects'    => $this->extractObjects($warnings),
-            // M+ level
-            'difficulty' => $this->dungeonRoute->level_min,
-            'week'       => $this->dungeonRoute->affixGroups->isEmpty() || $affixes->isEmpty() ? 1 :
-                Conversion::convertAffixGroupToWeek($affixes->first()),
-            'value'      => [
-                'currentDungeonIdx' => $this->dungeonRoute->dungeon->mdt_id,
-                'selection'         => [],
-                'currentPull'       => 1,
-                'teeming'           => $this->dungeonRoute->teeming,
-                // Legacy - we don't do anything with it
-                'riftOffsets'       => [
+                $mdtObject = [
+                    //
+                    'objects'    => $this->extractObjects($warnings),
+                    // M+ level
+                    'difficulty' => $this->dungeonRoute->level_min,
+                    'week'       => $this->dungeonRoute->affixGroups->isEmpty() || $affixes->isEmpty() ? 1 :
+                        Conversion::convertAffixGroupToWeek($affixes->first()),
+                    'value'      => [
+                        'currentDungeonIdx' => $this->dungeonRoute->dungeon->mdt_id,
+                        'selection'         => [],
+                        'currentPull'       => 1,
+                        'teeming'           => $this->dungeonRoute->teeming,
+                        // Legacy - we don't do anything with it
+                        'riftOffsets'       => [
 
-                ],
-                'pulls'             => $this->extractPulls($this->dungeonRoute->mappingVersion, $warnings),
-                'currentSublevel'   => 1,
-            ],
-            'text'       => $this->dungeonRoute->title,
-            'mdi'        => [
-                'freeholdJoined' => false,
-                'freehold'       => 1,
-                'beguiling'      => 1,
-            ],
-            // Leave a consistent UID so multiple imports overwrite eachother - and a little watermark
-            'uid'        => $this->dungeonRoute->public_key . 'xxKG',
-        ];
+                        ],
+                        'pulls'             => $this->extractPulls($this->dungeonRoute->mappingVersion, $warnings),
+                        'currentSublevel'   => 1,
+                    ],
+                    'text'       => $this->dungeonRoute->title,
+                    'mdi'        => [
+                        'freeholdJoined' => false,
+                        'freehold'       => 1,
+                        'beguiling'      => 1,
+                    ],
+                    // Leave a consistent UID so multiple imports overwrite eachother - and a little watermark
+                    'uid'        => $this->dungeonRoute->public_key . 'xxKG',
+                ];
 
-        try {
-            return $this->encode($mdtObject);
-        } catch (Exception $exception) {
-            // Encoding issue - adjust the title and try again
-            if (str_contains($exception->getMessage(), 'call to lua function [string &quot;line&quot;]')) {
-                $asciiTitle = preg_replace('/[[:^print:]]/', '', $this->dungeonRoute->title);
+                try {
+                    return $this->encode($mdtObject);
+                } catch (Exception $exception) {
+                    // Encoding issue - adjust the title and try again
+                    if (str_contains($exception->getMessage(), 'call to lua function [string &quot;line&quot;]')) {
+                        $asciiTitle = preg_replace('/[[:^print:]]/', '', $this->dungeonRoute->title);
 
-                // If stripping ascii characters worked in changing the title somehow
-                if ($asciiTitle !== $this->dungeonRoute->title) {
-                    $warnings->push(
-                        new ImportWarning(__('services.mdt.io.export_string.category.title'),
-                            __('services.mdt.io.export_string.route_title_contains_non_ascii_char_bug'),
-                            ['details' => sprintf(__('services.mdt.io.export_string.route_title_contains_non_ascii_char_bug_details'), $this->dungeonRoute->title, $asciiTitle)]
-                        )
-                    );
-                    $this->dungeonRoute->title = $asciiTitle;
-
-                    return $this->getEncodedString($warnings);
-                } else {
-                    $fixedMapIconComment = false;
-
-                    foreach ($this->dungeonRoute->mapicons as $mapicon) {
-                        $asciiComment = preg_replace('/[[:^print:]]/', '', $mapicon->comment ?? '');
-                        if ($asciiComment !== $mapicon->comment) {
+                        // If stripping ascii characters worked in changing the title somehow
+                        if ($asciiTitle !== $this->dungeonRoute->title) {
                             $warnings->push(
-                                new ImportWarning(__('services.mdt.io.export_string.category.map_icon'),
-                                    __('services.mdt.io.export_string.map_icon_contains_non_ascii_char_bug'),
-                                    ['details' => sprintf(__('services.mdt.io.export_string.map_icon_contains_non_ascii_char_bug_details'), $asciiComment, $mapicon->comment)]
+                                new ImportWarning(__('services.mdt.io.export_string.category.title'),
+                                    __('services.mdt.io.export_string.route_title_contains_non_ascii_char_bug'),
+                                    ['details' => sprintf(__('services.mdt.io.export_string.route_title_contains_non_ascii_char_bug_details'), $this->dungeonRoute->title, $asciiTitle)]
                                 )
                             );
-                            $mapicon->comment = $asciiComment;
+                            $this->dungeonRoute->title = $asciiTitle;
 
-                            $fixedMapIconComment = true;
+                            return $this->getEncodedString($warnings);
+                        } else {
+                            $fixedMapIconComment = false;
+
+                            foreach ($this->dungeonRoute->mapicons as $mapicon) {
+                                $asciiComment = preg_replace('/[[:^print:]]/', '', $mapicon->comment ?? '');
+                                if ($asciiComment !== $mapicon->comment) {
+                                    $warnings->push(
+                                        new ImportWarning(__('services.mdt.io.export_string.category.map_icon'),
+                                            __('services.mdt.io.export_string.map_icon_contains_non_ascii_char_bug'),
+                                            ['details' => sprintf(__('services.mdt.io.export_string.map_icon_contains_non_ascii_char_bug_details'), $asciiComment, $mapicon->comment)]
+                                        )
+                                    );
+                                    $mapicon->comment = $asciiComment;
+
+                                    $fixedMapIconComment = true;
+                                }
+                            }
+
+                            // If we fixed something, try again with encoding
+                            if ($fixedMapIconComment) {
+                                return $this->getEncodedString($warnings);
+                            } else {
+                                throw $exception;
+                            }
                         }
-                    }
-
-                    // If we fixed something, try again with encoding
-                    if ($fixedMapIconComment) {
-                        return $this->getEncodedString($warnings);
                     } else {
                         throw $exception;
                     }
                 }
-            } else {
-                throw $exception;
-            }
-        }
+            });
+        }, $useCache);
     }
 
     /**

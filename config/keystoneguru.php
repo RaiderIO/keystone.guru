@@ -68,6 +68,9 @@ return [
         'default_region'         => [
             'ttl' => '1 week',
         ],
+        'mdt_export_strings'         => [
+            'ttl' => 1800, // 30 minutes
+        ],
     ],
 
     'echo'                                       => [

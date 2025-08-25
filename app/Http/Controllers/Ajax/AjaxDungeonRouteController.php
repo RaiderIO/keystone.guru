@@ -751,17 +751,20 @@ class AjaxDungeonRouteController extends Controller
      * @throws AuthorizationException
      * @throws Throwable
      */
-    public function mdtExport(Request                         $request,
-                              MDTExportStringServiceInterface $mdtExportStringService,
-                              DungeonRoute                    $dungeonRoute)
-    {
+    public function mdtExport(
+        Request                         $request,
+        MDTExportStringServiceInterface $mdtExportStringService,
+        DungeonRoute                    $dungeonRoute
+    ) {
         $this->authorize('view', $dungeonRoute);
+
+        $useCache = (int)$request->get('useCache', 1) === 1;
 
         try {
             $warnings     = new Collection();
             $dungeonRoute = $mdtExportStringService
                 ->setDungeonRoute($dungeonRoute)
-                ->getEncodedString($warnings);
+                ->getEncodedString($warnings, $useCache);
 
             $warningResult = [];
             foreach ($warnings as $warning) {
