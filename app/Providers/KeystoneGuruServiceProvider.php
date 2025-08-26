@@ -350,7 +350,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
-        view()->composer('misc.embedexplore', static function (View $view) use ($viewService, $globalViewVariables) {
+        view()->composer(['misc.embedexplore', 'misc.embedheatmap'], static function (View $view) use ($viewService, $globalViewVariables) {
             $view->with('characterClassSpecializations', $globalViewVariables['characterClassSpecializations']);
         });
 

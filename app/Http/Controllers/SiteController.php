@@ -244,4 +244,17 @@ class SiteController extends Controller
             'parameters'  => $request->all(),
         ]);
     }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function embedHeatmap(Request $request, GameVersion $gameVersion, Dungeon $dungeon, string $floorIndex = '1'): View
+    {
+        return view('misc.embedheatmap', [
+            'gameVersion' => $gameVersion,
+            'model'       => $dungeon,
+            'floorIndex'  => $floorIndex,
+            'parameters'  => $request->all(),
+        ]);
+    }
 }
