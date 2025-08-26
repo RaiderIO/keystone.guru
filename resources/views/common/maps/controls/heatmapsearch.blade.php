@@ -16,6 +16,7 @@ use Illuminate\Support\Collection;
 
 /**
  * @var bool                                     $showAds
+ * @var bool                                     $showSidebar
  * @var Dungeon                                  $dungeon
  * @var MappingVersion                           $mappingVersion
  * @var Season                                   $season
@@ -47,9 +48,9 @@ $defaultState               ??= $isMobile ? 0 : $heatmapSearchSidebarState;
 $heatmapSearchEnabled       = (bool)($_COOKIE['heatmap_search_enabled'] ?? 1);
 $filterExpandedCookiePrefix = 'heatmap_search_expanded';
 
-$shouldShowHeatmapSearchSidebar = $defaultState === 1;
-$hideOnMove                     ??= $isMobile;
-$showAds                        ??= true;
+$isHeatmapSearchSidebarDefaultVisible = $defaultState === 1;
+$hideOnMove                           ??= $isMobile;
+$showAds                              ??= true;
 /** @var Collection<AffixGroup> $affixGroups */
 $affixGroups = $allAffixGroupsByActiveExpansion->get($season->expansion->shortname);
 /** @var Collection<Affix> $featuredAffixes */
@@ -141,6 +142,9 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
     'sidebarScrollSelector' => '#heatmap_search_sidebar .data_container',
     'anchor' => 'right',
     'edit' => $edit,
+
+    // If the sidebar is hidden from view, ignore all UI options and just show the map
+    'passThroughEverything' => !$showSidebar
 ]])
 
 @section('scripts')
@@ -158,13 +162,15 @@ $characterClassSelectOptions = $characterClasses->mapWithKeys(function (Characte
      {{ $embed ? 'embed' : '' }}
      {{ $embedStyle }}
      {{ $isMobile ? 'mobile' : '' }}
-     {{ $shouldShowHeatmapSearchSidebar ? 'active' : '' }}
+     {{ $isHeatmapSearchSidebarDefaultVisible ? 'active' : '' }}
      {{ $showAds ? 'ad_loaded' : '' }}
          ">
     <div class="bg-header">
-        <div id="heatmap_search_sidebar_trigger" class="handle">
-            <i class="fas {{ $shouldShowHeatmapSearchSidebar ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
-        </div>
+        @if($showSidebar)
+            <div id="heatmap_search_sidebar_trigger" class="handle" data-toggle="tooltip">
+                <i class="fas {{ $isHeatmapSearchSidebarDefaultVisible ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
+            </div>
+        @endif
 
         <div class="p-1">
             <div class="row pr-2 mb-2 no-gutters">

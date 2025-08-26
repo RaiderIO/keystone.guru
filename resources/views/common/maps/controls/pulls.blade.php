@@ -51,7 +51,7 @@ $showAds                ??= true;
      {{ $showAds ? 'ad_loaded' : '' }}
          ">
     <div class="{{ $edit ? 'edit' : '' }} bg-header">
-        <div id="pulls_sidebar_trigger" class="handle">
+        <div id="pulls_sidebar_trigger" class="handle" data-toggle="tooltip">
             <i class="fas {{ $shouldShowPullsSidebar ? 'fa-arrow-right' : 'fa-arrow-left' }}"></i>
         </div>
 

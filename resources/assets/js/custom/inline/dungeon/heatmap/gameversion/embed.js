@@ -1,7 +1,4 @@
-/**
- * @deprecated
- */
-class DungeonExploreGameversionEmbed extends InlineCode {
+class DungeonHeatmapGameversionEmbed extends InlineCode {
 
     /**
      */

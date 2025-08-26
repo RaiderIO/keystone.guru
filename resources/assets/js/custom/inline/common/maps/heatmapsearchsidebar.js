@@ -5,6 +5,7 @@
  * @property {Boolean} hideOnMove
  * @property {String} currentFiltersSelector
  * @property {String} loaderSelector
+ * @property {Boolean} passThroughEverything
  *
  * @property {String} keyLevelSelector
  * @property {Number} keyLevelMin
@@ -126,6 +127,13 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'includePlayerSpellIds': new SearchFilterPassThrough(),
             'token': new SearchFilterPassThrough(),
         };
+
+        // This will allow someone to bypass all UI elements and fully control the filters through parameters
+        if (this.options.passThroughEverything) {
+            for (let key in this.filters) {
+                this.filters[key] = new SearchFilterPassThrough();
+            }
+        }
 
         let state = getState();
         if (state.userHasRole(USER_ROLE_ADMIN) || state.userHasRole(USER_ROLE_INTERNAL_TEAM)) {

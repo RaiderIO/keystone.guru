@@ -99,6 +99,7 @@ use Illuminate\Support\Collection;
                     'title' => $embedOptions['show']['enemyInfo'],
                     'heatmapSearch' => $showHeatmapSearch,
                     'heatmapSearchDefaultState' => false,
+                    'heatmapSearchSidebar' => $embedOptions['show']['sidebar'],
                 ],
             ],
         ])

@@ -45,7 +45,7 @@ class DungeonHeatmapController extends Controller
         }
 
         return view('dungeon.heatmap.gameversion.list', [
-            'gameVersion'            => $gameVersion,
+            'gameVersion' => $gameVersion,
         ]);
     }
 
@@ -54,7 +54,7 @@ class DungeonHeatmapController extends Controller
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
         $redirect = $this->guardAgainstInvalidAccess($dungeon, $currentMappingVersion);
-        if($redirect instanceof RedirectResponse) {
+        if ($redirect instanceof RedirectResponse) {
             return $redirect;
         }
 
@@ -92,7 +92,7 @@ class DungeonHeatmapController extends Controller
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
         $redirect = $this->guardAgainstInvalidAccess($dungeon, $currentMappingVersion);
-        if($redirect instanceof RedirectResponse) {
+        if ($redirect instanceof RedirectResponse) {
             return $redirect;
         }
 
@@ -165,7 +165,7 @@ class DungeonHeatmapController extends Controller
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
         $redirect = $this->guardAgainstInvalidAccess($dungeon, $currentMappingVersion);
-        if($redirect instanceof RedirectResponse) {
+        if ($redirect instanceof RedirectResponse) {
             return $redirect;
         }
 
@@ -205,6 +205,7 @@ class DungeonHeatmapController extends Controller
         $mapBackgroundColor    = $request->get('mapBackgroundColor');
         $showEnemyInfo         = $request->get('showEnemyInfo', false);
         $showTitle             = $request->get('showTitle', true);
+        $showSidebar           = $request->get('showSidebar', true);
         $defaultZoom           = $request->get('defaultZoom', 1);
 
         unset(
@@ -213,6 +214,7 @@ class DungeonHeatmapController extends Controller
             $validated['mapBackgroundColor'],
             $validated['showEnemyInfo'],
             $validated['showTitle'],
+            $validated['showSidebar'],
             $validated['defaultZoom']
         );
 
@@ -241,7 +243,8 @@ class DungeonHeatmapController extends Controller
                 'mapBackgroundColor'    => $mapBackgroundColor,
                 'show'                  => [
                     'enemyInfo'      => (bool)$showEnemyInfo, // Default false - not available
-                    'title'          => $showTitle,
+                    'title'          => (bool)$showTitle,
+                    'sidebar'        => (bool)$showSidebar,
                     'floorSelection' => true,                 // Always available, but can be overridden later if there's no floors to select
                 ],
             ],
