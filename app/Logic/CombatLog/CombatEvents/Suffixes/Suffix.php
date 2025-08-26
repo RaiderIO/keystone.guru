@@ -3,6 +3,8 @@
 namespace App\Logic\CombatLog\CombatEvents\Suffixes;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\AuraAppliedBuilder;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraRemoved\AuraRemovedBuilder;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\DamageBuilder;
 use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLanded\DamageLandedBuilder;
 use App\Logic\CombatLog\CombatEvents\Suffixes\DamageLandedSupport\DamageLandedSupportBuilder;
@@ -111,8 +113,8 @@ abstract class Suffix implements HasParameters
         self::SUFFIX_DISPEL                => Dispel::class,
         self::SUFFIX_STOLEN                => Stolen::class,
         self::SUFFIX_EXTRA_ATTACKS         => ExtraAttacks::class,
-        self::SUFFIX_AURA_APPLIED          => AuraApplied::class,
-        self::SUFFIX_AURA_REMOVED          => AuraRemoved::class,
+        self::SUFFIX_AURA_APPLIED          => AuraAppliedBuilder::class,
+        self::SUFFIX_AURA_REMOVED          => AuraRemovedBuilder::class,
         self::SUFFIX_AURA_APPLIED_DOSE     => AuraAppliedDose::class,
         self::SUFFIX_AURA_REMOVED_DOSE     => AuraRemovedDose::class,
         self::SUFFIX_AURA_REFRESH          => AuraRefresh::class,

@@ -6,6 +6,7 @@ return [
         'class' => 'Hodor',
         'item'  => 'Hodor',
         'misc'  => 'Hodor',
+        'meta'  => 'Hodor',
     ],
     'no_attributes'       => 'Hodor',
     'rogue_shroud_skip'   => 'Hodor',

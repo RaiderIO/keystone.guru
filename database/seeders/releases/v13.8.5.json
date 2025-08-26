@@ -1,0 +1,55 @@
+{
+    "id": 316,
+    "release_changelog_id": 323,
+    "version": "v13.8.5",
+    "title": "Many smaller bugfixes - now also showing group number of enemies upon mouseover",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-08-26T20:32:03+00:00",
+    "updated_at": "2025-08-26T20:32:03+00:00",
+    "changelog": {
+        "id": 323,
+        "release_id": 316,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 323,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2946,
+                "change": "The default map view is now MDT-style combined floors."
+            },
+            {
+                "release_changelog_id": 323,
+                "release_changelog_category_id": 1,
+                "ticket_id": 2950,
+                "change": "MDT has been updated to v5.5.4."
+            },
+            {
+                "release_changelog_id": 323,
+                "release_changelog_category_id": 3,
+                "ticket_id": 2948,
+                "change": "Enemies now show their group number upon mouseover."
+            },
+            {
+                "release_changelog_id": 323,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2943,
+                "change": "[Hotfixed] MDT export\/import now works for MoP dungeons (thanks Pogi!)"
+            },
+            {
+                "release_changelog_id": 323,
+                "release_changelog_category_id": 5,
+                "ticket_id": 2945,
+                "change": "Copying an MDT string from a route would sometimes copy pulls and map icons from a completely different route. This appeared to be a caching issue and is fixed."
+            },
+            {
+                "release_changelog_id": 323,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2951,
+                "change": "Embedded heatmap pages no longer try to steal focus when they load, if you pass showSidebar=0. The root cause of this is the user interface elements stealing focus when settings are applied. With the new flag you can disable the user interface entirely if you don't need it, circumventing the issue."
+            }
+        ]
+    }
+}

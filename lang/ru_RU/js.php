@@ -230,6 +230,7 @@ return [
     'sidebar_expand'                                                       => 'Раскрыть боковую панель',
     'sidebar_collapse'                                                     => 'Свернуть боковую панель',
     'copied_to_clipboard'                                                  => 'Скопировано в буфер обмена',
+    'sidebar_enemy_group_label'                                            => '',
     'sidebar_enemy_health_label'                                           => 'Здоровье',
     'sidebar_enemy_id_label'                                               => '',
     'sidebar_enemy_npc_id_label'                                           => '',

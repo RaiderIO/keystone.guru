@@ -23,9 +23,7 @@ return [
             'thumbnail_regenerate_result'     => '',
             'caches_dropped_successfully'     => '',
             'releases_exported'               => '',
-            'exception'                       => [
-                'internal_server_error' => '',
-            ],
+            'exception'                       => '',
             'feature_toggle_activated'        => '',
             'feature_toggle_deactivated'      => '',
             'feature_forgotten'               => '',

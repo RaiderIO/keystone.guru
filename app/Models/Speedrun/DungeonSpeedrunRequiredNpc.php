@@ -115,7 +115,7 @@ class DungeonSpeedrunRequiredNpc extends CacheModel
 
         foreach ($npcs as $npc) {
             if ($npc !== null) {
-                $parts[] = sprintf('%s (%d)', $npc->name, $npc->id);
+                $parts[] = sprintf('%s (%d)', __($npc->name), $npc->id);
             }
         }
 

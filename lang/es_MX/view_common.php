@@ -36,6 +36,8 @@ return [
             'attributes_selected'     => '',
         ],
         'card'       => [
+            'thumbnail_alt'            => '',
+            'thumbnail_dungeon_alt'    => '',
             'no_description'           => '',
             'outdated_mapping_version' => '',
             'by_author'                => '',

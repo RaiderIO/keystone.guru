@@ -72,7 +72,6 @@ use Illuminate\Support\Collection;
             'mapContext' => $mapContext,
             'hiddenMapObjectGroups' => [
                 'brushline',
-                'enemypack',
                 'floorunion',
                 'floorunionarea',
                 'killzone',
@@ -100,6 +99,7 @@ use Illuminate\Support\Collection;
                     'title' => $embedOptions['show']['enemyInfo'],
                     'heatmapSearch' => $showHeatmapSearch,
                     'heatmapSearchDefaultState' => false,
+                    'heatmapSearchSidebar' => $embedOptions['show']['sidebar'],
                 ],
             ],
         ])

@@ -23,9 +23,7 @@ return [
             'thumbnail_regenerate_result'     => '',
             'caches_dropped_successfully'     => 'Кеш сброшен успешно',
             'releases_exported'               => 'Релизы экспортированы',
-            'exception'                       => [
-                'internal_server_error' => 'Дополнение добавлено в админ панель',
-            ],
+            'exception'                       => '',
             'feature_toggle_activated'        => '',
             'feature_toggle_deactivated'      => '',
             'feature_forgotten'               => '',

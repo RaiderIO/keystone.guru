@@ -8,7 +8,7 @@ trait RemembersToFile
 {
     private function rememberLocal(string $key, int $ttl, \Closure $compute, bool $cacheEnabled = true): mixed
     {
-        if (!$cacheEnabled) {
+        if (!$cacheEnabled || config('app.env') === 'local') {
             return $compute();
         }
 

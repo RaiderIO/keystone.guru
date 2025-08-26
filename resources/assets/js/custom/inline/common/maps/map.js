@@ -615,7 +615,8 @@ class CommonMapsMap extends InlineCode {
     _fetchMdtExportString() {
         $.ajax({
             type: 'GET',
-            url: `/ajax/${getState().getMapContext().getPublicKey()}/mdtExport`,
+            // When in edit mode, never use the cache, when viewing we DO want the cache to avoid excessive server load
+            url: `/ajax/${getState().getMapContext().getPublicKey()}/mdtExport?useCache=${this.options.edit ? 0 : 1}`,
             dataType: 'json',
             beforeSend: function () {
                 $('.mdt_export_loader_container').show();

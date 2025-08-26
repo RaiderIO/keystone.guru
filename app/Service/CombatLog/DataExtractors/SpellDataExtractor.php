@@ -6,7 +6,7 @@ use App;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
-use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\AuraAppliedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBase;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBroken;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBrokenSpell;
@@ -101,7 +101,7 @@ class SpellDataExtractor implements DataExtractorInterface
             // Ignore summoned NPCs
             $this->summonedNpcs->search($sourceGuid->getId()) === false &&
             // If destination is an NPC, and it's a buff, or if the target was a player
-            (($destIsNpc && $suffix instanceof AuraApplied && $suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF) ||
+            (($destIsNpc && $suffix instanceof AuraAppliedInterface && $suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF) ||
                 $destGuid instanceof Player)) {
 
 
@@ -299,11 +299,11 @@ class SpellDataExtractor implements DataExtractorInterface
 
         $suffix        = $combatLogEvent->getSuffix();
         $spell->aura   = $spell->aura ||
-        ($suffix instanceof AuraApplied && $suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF &&
+        ($suffix instanceof AuraAppliedInterface && $suffix->getAuraType() === AuraBase::AURA_TYPE_BUFF &&
             $combatLogEvent->getGenericData()->getDestGuid() instanceof Creature &&
             $combatLogEvent->getGenericData()->getDestGuid()->getUnitType() === Creature::CREATURE_UNIT_TYPE_CREATURE) ? 1 : 0;
         $spell->debuff = $spell->debuff ||
-        ($suffix instanceof AuraApplied && $suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF &&
+        ($suffix instanceof AuraAppliedInterface && $suffix->getAuraType() === AuraBase::AURA_TYPE_DEBUFF &&
             $combatLogEvent->getGenericData()->getDestGuid() instanceof Player) ? 1 : 0;
         // If a spell was missed somehow, write it to the miss_types_mask field
         if ($suffix instanceof MissedInterface) {

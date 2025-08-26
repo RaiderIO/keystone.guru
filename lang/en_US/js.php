@@ -236,6 +236,7 @@ return [
     'sidebar_expand'                                                       => 'Expand the sidebar',
     'sidebar_collapse'                                                     => 'Collapse the sidebar',
     'copied_to_clipboard'                                                  => 'Copied to clipboard',
+    'sidebar_enemy_group_label'                                            => 'Group',
     'sidebar_enemy_health_label'                                           => 'Health',
     'sidebar_enemy_id_label'                                               => 'Enemy ID',
     'sidebar_enemy_npc_id_label'                                           => 'Npc ID',

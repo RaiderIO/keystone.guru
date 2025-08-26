@@ -117,6 +117,8 @@ use App\Service\View\ViewService;
 use App\Service\View\ViewServiceInterface;
 use App\Service\Wowhead\WowheadService;
 use App\Service\Wowhead\WowheadServiceInterface;
+use App\Service\Wowhead\WowheadTranslationService;
+use App\Service\Wowhead\WowheadTranslationServiceInterface;
 use App\Service\WowTools\WowToolsService;
 use App\Service\WowTools\WowToolsServiceInterface;
 use Illuminate\Contracts\View\View;
@@ -142,6 +144,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(WowToolsServiceInterface::class, WowToolsService::class);
         $this->app->bind(AdProviderServiceInterface::class, AdProviderService::class);
         $this->app->bind(WowheadServiceInterface::class, WowheadService::class);
+        $this->app->bind(WowheadTranslationServiceInterface::class, WowheadTranslationService::class);
         if (app()->runningUnitTests()) {
             $this->app->bind(RaiderIOApiServiceInterface::class, RaiderIOKeystoneGuruApiService::class);
         } else {
@@ -347,7 +350,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
             $view->with('allGameVersions', $globalViewVariables['allGameVersions']);
         });
 
-        view()->composer('misc.embedexplore', static function (View $view) use ($viewService, $globalViewVariables) {
+        view()->composer(['misc.embedexplore', 'misc.embedheatmap'], static function (View $view) use ($viewService, $globalViewVariables) {
             $view->with('characterClassSpecializations', $globalViewVariables['characterClassSpecializations']);
         });
 

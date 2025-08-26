@@ -53,7 +53,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             $previousFloor = $previousEnemy->floor;
         }
 
-        $validated['kill_priority'] = (int)$validated['kill_priority'] === 0 ? null : (int)$validated['kill_priority'];
+        $validated['kill_priority'] = in_array((int)$validated['kill_priority'], [0, -1]) ? null : (int)$validated['kill_priority'];
 
         return $this->storeModel($coordinatesService, $mappingVersion, $validated, Enemy::class, $enemy, static function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
             $activeAuras = $request->get('active_auras', []);

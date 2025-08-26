@@ -28,3 +28,6 @@ Baseline mapping
 Mapping refinement
 - [ ] Watch VODs/go into dungeon and tweak positions, grouping, patrols
 - [ ] Add Skippable enemies (live sessions)
+
+Raider.io
+- [ ] Ensure the dungeon slugs match with Raider.io

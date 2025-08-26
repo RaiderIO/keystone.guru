@@ -54,15 +54,18 @@ $controlOptions     ??= [];
 $parameters         ??= [];
 
 // Ensure default values for showing/hiding certain elements
-$show['controls']                  ??= [];
-$show['controls']['enemyInfo']     ??= true;
-$show['controls']['pulls']         ??= true;
-$show['controls']['heatmapSearch'] ??= false;
-$show['controls']['enemyForces']   = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
-$show['controls']['draw']          ??= false;
-$show['controls']['view']          ??= false;
-$show['controls']['present']       ??= false;
-$show['controls']['live']          ??= false;
+$show['controls']                         ??= [];
+$show['controls']['enemyInfo']            ??= true;
+$show['controls']['pulls']                ??= true;
+// This controls whether heatmaps are shown at all
+$show['controls']['heatmapSearch']        ??= false;
+// This allows you to show heatmaps, but not the sidebar to influence them. You'll have to do that through parameters then.
+$show['controls']['heatmapSearchSidebar'] ??= true;
+$show['controls']['enemyForces']          = $show['controls']['pulls'] && ($show['controls']['enemyForces'] ?? true);
+$show['controls']['draw']                 ??= false;
+$show['controls']['view']                 ??= false;
+$show['controls']['present']              ??= false;
+$show['controls']['live']                 ??= false;
 
 // Set the key to 'sandbox' if sandbox mode is enabled
 $sandboxMode                      = isset($sandboxMode) && $sandboxMode;
@@ -242,8 +245,9 @@ if ($isAdmin) {
     @if(isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])
         @include('common.maps.controls.heatmapsearch', array_merge($controlOptions['heatmapSearch'] ?? [], [
             'showAds' => $showAds && !$adFree,
+            'showSidebar' => $show['controls']['heatmapSearchSidebar'] ?? true,
             'defaultState' => $show['controls']['heatmapSearchDefaultState'] ?? null,
-            'hideOnMove' => $show['controls']['heatmapSearchHideOnMove'] ?? null,
+            'hideOnMove' => $show['controls']['heatmapSearchHideOnMove'] ?? null
         ]))
     @endif
 

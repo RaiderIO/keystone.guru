@@ -94,6 +94,8 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::get('timetest', (new SiteController())->timetest(...))->name('misc.timetest');
     Route::get('embed/explore/{gameVersion}/{dungeon}', (new SiteController())->embedExplore(...))->name('misc.embed.explore');
     Route::get('embed/explore/{gameVersion}/{dungeon}/{floorIndex}', (new SiteController())->embedExplore(...))->name('misc.embed.explore.floor');
+    Route::get('embed/heatmap/{gameVersion}/{dungeon}', (new SiteController())->embedHeatmap(...))->name('misc.embed.heatmap');
+    Route::get('embed/heatmap/{gameVersion}/{dungeon}/{floorIndex}', (new SiteController())->embedHeatmap(...))->name('misc.embed.heatmap.floor');
     Route::get('embed/{dungeonRoute}', (new SiteController())->embed(...))->name('misc.embed');
     Route::get('status', (new SiteController())->status(...))->name('misc.status');
     Route::get('login/google', (new GoogleLoginController())->redirectToProvider(...))->name('login.google');

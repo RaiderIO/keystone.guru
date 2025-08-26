@@ -156,6 +156,9 @@ class CacheService implements CacheServiceInterface
         // Clear all view caches for dungeonroutes - go through redis to drop all cards
         $prefix = config('database.redis.options.prefix');
         $this->deleteKeysByPattern([
+            // MDT
+            sprintf('/%smdt_npcs_[a-z_]+/', $prefix),
+            sprintf('/%smdt_enemies_[a-z_]+/', $prefix),
             // Cards
             sprintf('/%sdungeonroute_card:(?>vertical|horizontal):[a-zA-Z_]+:[01]_[01]_[01]_\d+/', $prefix),
             // Dungeon data used in MapContext

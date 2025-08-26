@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 interface MDTExportStringServiceInterface
 {
-    public function getEncodedString(Collection $warnings): string;
+    public function getEncodedString(Collection $warnings, bool $useCache = true): string;
 
     public function setDungeonRoute(DungeonRoute $dungeonRoute): self;
 }

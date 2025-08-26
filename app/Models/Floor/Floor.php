@@ -132,6 +132,7 @@ class Floor extends CacheModel implements MappingModelInterface
         2274, // Khaz Algar
         2339, // Dornogal
         2346, // Undermine
+        2472, // Tazavesh
     ];
 
     public const DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID = 2304;

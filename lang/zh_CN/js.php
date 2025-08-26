@@ -229,6 +229,7 @@ return [
     'sidebar_expand'                                                       => '',
     'sidebar_collapse'                                                     => '',
     'copied_to_clipboard'                                                  => '',
+    'sidebar_enemy_group_label'                                            => '',
     'sidebar_enemy_health_label'                                           => '',
     'sidebar_enemy_id_label'                                               => '',
     'sidebar_enemy_npc_id_label'                                           => '',

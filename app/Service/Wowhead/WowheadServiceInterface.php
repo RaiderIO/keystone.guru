@@ -17,10 +17,4 @@ interface WowheadServiceInterface
     public function getNpcDisplayId(GameVersion $gameVersion, Npc $npc): ?int;
 
     public function getSpellData(GameVersion $gameVersion, int $spellId): ?SpellDataResult;
-
-    /** @return Collection<string, Collection<string, string>> */
-    public function getNpcNames(GameVersion $gameVersion): Collection;
-
-    /** @return Collection<string, Collection<string, string>> */
-    public function getSpellNames(GameVersion $gameVersion): Collection;
 }

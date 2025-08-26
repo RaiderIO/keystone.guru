@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 class DungeonExploreGameversionEmbed extends InlineCode {
 
     /**
