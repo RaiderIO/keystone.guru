@@ -703,10 +703,13 @@ class Enemy extends VersionableMapObject {
             // Add all the enemies in said pack to the toggle display
             let enemyPackMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_ENEMY_PACK);
 
-            /** @type {EnemyPack|null} */
-            let enemyPack = enemyPackMapObjectGroup.findMapObjectById(this.enemy_pack_id);
-            if (enemyPack !== null) {
-                result = enemyPack.group;
+            // May be null in certain view modes
+            if (enemyPackMapObjectGroup !== null) {
+                /** @type {EnemyPack|null} */
+                let enemyPack = enemyPackMapObjectGroup.findMapObjectById(this.enemy_pack_id);
+                if (enemyPack !== null) {
+                    result = enemyPack.group;
+                }
             }
         }
 

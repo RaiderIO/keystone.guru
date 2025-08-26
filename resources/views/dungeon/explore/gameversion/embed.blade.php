@@ -72,7 +72,6 @@ use Illuminate\Support\Collection;
             'mapContext' => $mapContext,
             'hiddenMapObjectGroups' => [
                 'brushline',
-                'enemypack',
                 'floorunion',
                 'floorunionarea',
                 'killzone',

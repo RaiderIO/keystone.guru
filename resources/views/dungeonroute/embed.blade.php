@@ -78,7 +78,6 @@ if ($dungeon->floorsForMapFacade($dungeonroute->mappingVersion, $useFacade)->act
             'showAttribution' => false,
             'parameters' => $parameters,
             'hiddenMapObjectGroups' => [
-                'enemypack',
                 'mountablearea',
                 'floorunion',
                 'floorunionarea',
