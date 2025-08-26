@@ -34,11 +34,11 @@
             "type": "package",
             "package": {
                 "name": "nnoggie/mythicdungeontools",
-                "version": "5.5.1",
+                "version": "5.5.4",
                 "source": {
                     "url": "https://github.com/Wotuu/MythicDungeonTools.git",
                     "type": "git",
-                    "reference": "5c289914210997a07010f6d8fe6a6a41f0249d42"
+                    "reference": "7ba53171459089a84bd03493dc42ff5e82484849"
                 }
             }
         },
@@ -117,6 +117,7 @@
         "symfony/mailgun-mailer": "^7.1",
         "tray-labs/laravel-influxdb": "^1.0",
         "tremby/laravel-git-version": "^1.1",
+        "vildanbina/laravel-auto-translation": "^1.5",
         "zircote/swagger-php": "^4.8"
     },
     "require-dev": {

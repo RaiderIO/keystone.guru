@@ -999,7 +999,7 @@
                 "mdt_sub_level": null,
                 "ui_map_id": 706,
                 "map_name": null,
-                "name": "dungeons.legion.maw_of_souls.floors.hellmouth_cliffs",
+                "name": "dungeons.legion.maw_of_souls.floors.helmouth_cliffs",
                 "default": 1,
                 "facade": 0,
                 "min_enemy_size": null,
@@ -1990,7 +1990,7 @@
                 "mdt_sub_level": null,
                 "ui_map_id": 1043,
                 "map_name": null,
-                "name": "dungeons.bfa.temple_of_sethraliss.floors.atrium_of_the_wardens",
+                "name": "dungeons.bfa.temple_of_sethraliss.floors.atrium_of_sethraliss",
                 "default": 0,
                 "facade": 0,
                 "min_enemy_size": null,
@@ -6051,7 +6051,7 @@
                 "mdt_sub_level": null,
                 "ui_map_id": 190,
                 "map_name": null,
-                "name": "dungeons.wotlk.icecrown_citadel.floors.the_upper_reach",
+                "name": "dungeons.wotlk.icecrown_citadel.floors.the_upper_reaches",
                 "default": 0,
                 "facade": 0,
                 "min_enemy_size": null,
@@ -7927,7 +7927,7 @@
     {
         "id": 67,
         "expansion_id": 10,
-        "zone_id": 0,
+        "zone_id": 14032,
         "map_id": 2526,
         "instance_id": 1201,
         "challenge_mode_id": 402,
@@ -8210,7 +8210,7 @@
     {
         "id": 69,
         "expansion_id": 10,
-        "zone_id": 0,
+        "zone_id": 14082,
         "map_id": 2527,
         "instance_id": 1204,
         "challenge_mode_id": 406,
@@ -8450,7 +8450,7 @@
     {
         "id": 71,
         "expansion_id": 10,
-        "zone_id": 0,
+        "zone_id": 13982,
         "map_id": 2516,
         "instance_id": 1198,
         "challenge_mode_id": 400,
@@ -8526,7 +8526,7 @@
     {
         "id": 72,
         "expansion_id": 10,
-        "zone_id": 0,
+        "zone_id": 14063,
         "map_id": 2521,
         "instance_id": 1202,
         "challenge_mode_id": 399,
@@ -9015,7 +9015,7 @@
     {
         "id": 75,
         "expansion_id": 9,
-        "zone_id": 0,
+        "zone_id": 6932,
         "map_id": 1176,
         "instance_id": 537,
         "challenge_mode_id": 165,
@@ -9135,7 +9135,7 @@
     {
         "id": 76,
         "expansion_id": 8,
-        "zone_id": 0,
+        "zone_id": 5956,
         "map_id": 960,
         "instance_id": 313,
         "challenge_mode_id": null,
@@ -13542,7 +13542,7 @@
     {
         "id": 115,
         "expansion_id": 11,
-        "zone_id": 14938,
+        "zone_id": 14883,
         "map_id": 2652,
         "instance_id": 1269,
         "challenge_mode_id": 501,
@@ -14215,7 +14215,7 @@
                 "mdt_sub_level": null,
                 "ui_map_id": 409,
                 "map_name": null,
-                "name": "dungeons.cata.dragon_soul.floors.the_dragonblight",
+                "name": "dungeons.cata.dragon_soul.floors.dragon_soul",
                 "default": 1,
                 "facade": 0,
                 "min_enemy_size": null,
@@ -15498,7 +15498,7 @@
         "map_id": 962,
         "instance_id": 303,
         "challenge_mode_id": null,
-        "mdt_id": 0,
+        "mdt_id": 130,
         "raid": 0,
         "key": "gate_of_the_setting_sun",
         "name": "dungeons.mop.gate_of_the_setting_sun.name",
@@ -15508,7 +15508,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 340,
@@ -15567,7 +15567,7 @@
         "map_id": 994,
         "instance_id": 321,
         "challenge_mode_id": null,
-        "mdt_id": 0,
+        "mdt_id": 131,
         "raid": 0,
         "key": "mogu_shan_palace",
         "name": "dungeons.mop.mogu_shan_palace.name",
@@ -15577,7 +15577,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 342,
@@ -15699,7 +15699,7 @@
         "map_id": 1001,
         "instance_id": 311,
         "challenge_mode_id": null,
-        "mdt_id": 0,
+        "mdt_id": 132,
         "raid": 0,
         "key": "scarlet_halls_mop",
         "name": "dungeons.mop.scarlet_halls_mop.name",
@@ -15709,7 +15709,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 345,
@@ -15782,7 +15782,7 @@
         "map_id": 1004,
         "instance_id": 316,
         "challenge_mode_id": null,
-        "mdt_id": 0,
+        "mdt_id": 133,
         "raid": 0,
         "key": "scarlet_monastery_mop",
         "name": "dungeons.mop.scarlet_monastery_mop.name",
@@ -15792,7 +15792,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 347,
@@ -15865,7 +15865,7 @@
         "map_id": 1007,
         "instance_id": 246,
         "challenge_mode_id": null,
-        "mdt_id": 0,
+        "mdt_id": 134,
         "raid": 0,
         "key": "scholomance_mop",
         "name": "dungeons.mop.scholomance_mop.name",
@@ -15875,7 +15875,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 349,
@@ -16009,7 +16009,7 @@
         "map_id": 959,
         "instance_id": 312,
         "challenge_mode_id": null,
-        "mdt_id": 0,
+        "mdt_id": 135,
         "raid": 0,
         "key": "shado_pan_monastery",
         "name": "dungeons.mop.shado_pan_monastery.name",
@@ -16019,7 +16019,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 353,
@@ -16190,7 +16190,7 @@
         "map_id": 1011,
         "instance_id": 324,
         "challenge_mode_id": null,
-        "mdt_id": 0,
+        "mdt_id": 136,
         "raid": 0,
         "key": "siege_of_niu_zao_temple",
         "name": "dungeons.mop.siege_of_niu_zao_temple.name",
@@ -16200,7 +16200,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 357,
@@ -16334,7 +16334,7 @@
         "map_id": 961,
         "instance_id": 302,
         "challenge_mode_id": null,
-        "mdt_id": 0,
+        "mdt_id": 137,
         "raid": 0,
         "key": "stormstout_brewery",
         "name": "dungeons.mop.stormstout_brewery.name",
@@ -16344,7 +16344,7 @@
         "speedrun_difficulty_10_man_enabled": 0,
         "speedrun_difficulty_25_man_enabled": 0,
         "has_wallpaper": 1,
-        "mdt_supported": false,
+        "mdt_supported": true,
         "floors": [
             {
                 "id": 360,

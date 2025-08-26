@@ -4572,7 +4572,7 @@
         "dungeon_difficulty": null,
         "lat": -170.68,
         "lng": 243.0133,
-        "kill_priority": -19
+        "kill_priority": null
     },
     {
         "id": 81287,
@@ -4597,7 +4597,7 @@
         "dungeon_difficulty": null,
         "lat": -170.6533,
         "lng": 259.4,
-        "kill_priority": -19
+        "kill_priority": null
     },
     {
         "id": 81288,
@@ -4647,7 +4647,7 @@
         "dungeon_difficulty": null,
         "lat": -164.6267,
         "lng": 256.88,
-        "kill_priority": -19
+        "kill_priority": null
     },
     {
         "id": 81290,
@@ -4672,7 +4672,7 @@
         "dungeon_difficulty": null,
         "lat": -162.4933,
         "lng": 250.9333,
-        "kill_priority": -19
+        "kill_priority": null
     },
     {
         "id": 81291,
@@ -4697,7 +4697,7 @@
         "dungeon_difficulty": null,
         "lat": -165.3467,
         "lng": 244.92,
-        "kill_priority": -19
+        "kill_priority": null
     },
     {
         "id": 81292,
@@ -5222,7 +5222,7 @@
         "dungeon_difficulty": null,
         "lat": -157.08,
         "lng": 220.8267,
-        "kill_priority": -19
+        "kill_priority": null
     },
     {
         "id": 81313,
@@ -5247,7 +5247,7 @@
         "dungeon_difficulty": null,
         "lat": -162.8933,
         "lng": 220.7067,
-        "kill_priority": -19
+        "kill_priority": null
     },
     {
         "id": 81314,
@@ -5272,7 +5272,7 @@
         "dungeon_difficulty": null,
         "lat": -168.8933,
         "lng": 220.5867,
-        "kill_priority": -19
+        "kill_priority": null
     },
     {
         "id": 81315,
@@ -5297,7 +5297,7 @@
         "dungeon_difficulty": null,
         "lat": -174.6933,
         "lng": 221.1333,
-        "kill_priority": -19
+        "kill_priority": null
     },
     {
         "id": 81316,
@@ -5322,7 +5322,7 @@
         "dungeon_difficulty": null,
         "lat": -180.5067,
         "lng": 220.7467,
-        "kill_priority": -19
+        "kill_priority": null
     },
     {
         "id": 81317,
