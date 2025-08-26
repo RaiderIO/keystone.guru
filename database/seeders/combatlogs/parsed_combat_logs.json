@@ -8405,5 +8405,96 @@
         "extracted_data": 1,
         "created_at": "2025-08-19T15:49:43+00:00",
         "updated_at": "2025-08-19T15:49:43+00:00"
+    },
+    {
+        "id": 1206,
+        "combat_log_path": "tmp\/WoWCombatLog-081025_182704.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-26T16:32:34+00:00",
+        "updated_at": "2025-08-26T16:32:34+00:00"
+    },
+    {
+        "id": 1207,
+        "combat_log_path": "tmp\/WoWCombatLog-081025_202840.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-26T16:32:59+00:00",
+        "updated_at": "2025-08-26T16:32:59+00:00"
+    },
+    {
+        "id": 1208,
+        "combat_log_path": "tmp\/WoWCombatLog-081125_204722.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-26T16:33:14+00:00",
+        "updated_at": "2025-08-26T16:33:14+00:00"
+    },
+    {
+        "id": 1209,
+        "combat_log_path": "tmp\/WoWCombatLog-081225_210703.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-26T16:33:25+00:00",
+        "updated_at": "2025-08-26T16:33:25+00:00"
+    },
+    {
+        "id": 1210,
+        "combat_log_path": "tmp\/WoWCombatLog-081425_202606.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-26T16:33:44+00:00",
+        "updated_at": "2025-08-26T16:33:44+00:00"
+    },
+    {
+        "id": 1211,
+        "combat_log_path": "tmp\/WoWCombatLog-081625_151554.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-26T16:34:33+00:00",
+        "updated_at": "2025-08-26T16:34:33+00:00"
+    },
+    {
+        "id": 1212,
+        "combat_log_path": "tmp\/WoWCombatLog-081725_184741.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-26T16:34:44+00:00",
+        "updated_at": "2025-08-26T16:34:44+00:00"
+    },
+    {
+        "id": 1213,
+        "combat_log_path": "tmp\/WoWCombatLog-081725_201818.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-26T16:35:10+00:00",
+        "updated_at": "2025-08-26T16:35:10+00:00"
+    },
+    {
+        "id": 1214,
+        "combat_log_path": "tmp\/WoWCombatLog-081825_211630.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-26T16:35:50+00:00",
+        "updated_at": "2025-08-26T16:35:50+00:00"
+    },
+    {
+        "id": 1215,
+        "combat_log_path": "tmp\/WoWCombatLog-081925_132748.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-26T20:03:20+00:00",
+        "updated_at": "2025-08-26T20:03:20+00:00"
+    },
+    {
+        "id": 1216,
+        "combat_log_path": "tmp\/WoWCombatLog-082425_201035.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-26T20:03:59+00:00",
+        "updated_at": "2025-08-26T20:03:59+00:00"
+    },
+    {
+        "id": 1217,
+        "combat_log_path": "tmp\/WoWCombatLog-082525_155512.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-26T20:04:16+00:00",
+        "updated_at": "2025-08-26T20:04:16+00:00"
+    },
+    {
+        "id": 1218,
+        "combat_log_path": "tmp\/WoWCombatLog-082625_132605.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-26T20:04:36+00:00",
+        "updated_at": "2025-08-26T20:04:36+00:00"
     }
 ]
