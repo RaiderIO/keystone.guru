@@ -1,7 +1,7 @@
 ---
 name: Add new dungeon
 about: All tasks that need doing when adding a new dungeon to the site.
-title: ''
+title: 'Add dungeon '
 labels: mapping
 assignees: ''
 
@@ -27,6 +27,7 @@ Baseline mapping
 
 Mapping refinement
 - [ ] Watch VODs/go into dungeon and tweak positions, grouping, patrols
+- [ ] Add Skippable enemies (live sessions)
 
 Raider.io
 - [ ] Ensure the dungeon slugs match with Raider.io
