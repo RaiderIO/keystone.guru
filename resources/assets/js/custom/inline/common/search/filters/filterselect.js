@@ -1,7 +1,7 @@
 class SearchFilterSelect extends SearchFilterInput {
     /**
      *
-     * @returns {string|*}
+     * @returns {Array}
      */
     getPassThroughValue() {
         // Ensure that empty values are ignored
