@@ -54,7 +54,7 @@ class MDTNpc implements Arrayable
             $this->name = $this->rawMdtNpc['name'];
         }
 
-        $this->displayId   = (int)$this->rawMdtNpc['displayId'];
+        $this->displayId   = (int)($this->rawMdtNpc['displayId'] ?? 0);
         $this->encounterId = $this->rawMdtNpc['encounterID'] ?? null;
         $this->instanceId  = $this->rawMdtNpc['instanceID'] ?? null;
         // May not always be set?

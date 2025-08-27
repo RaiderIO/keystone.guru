@@ -504,7 +504,7 @@ class Enemy extends VersionableMapObject {
             let group = this.getPackGroup();
             if (group !== null) {
                 result.info.push({
-                    key: lang.get('messages.sidebar_enemy_group_label') + keyLevelLabel,
+                    key: lang.get('messages.sidebar_enemy_group_label'),
                     value: this.getPackGroup()
                 });
             }
