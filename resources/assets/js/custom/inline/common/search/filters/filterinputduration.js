@@ -5,6 +5,7 @@ class SearchFilterDuration extends SearchFilterInput {
         this.min = min;
         this.max = max;
         this.durationHandler = null;
+        this.passThroughValue = `${min};${max}`;
     }
 
     activate() {
@@ -13,11 +14,13 @@ class SearchFilterDuration extends SearchFilterInput {
         let self = this;
 
         // Level
-        (this.durationHandler = new DurationHandler(this.min, this.max)).apply(this.selector, {
-            onFinish: function () {
-                self.onChange();
-            }
-        });
+        if (!this.passThrough) {
+            (this.durationHandler = new DurationHandler(this.min, this.max)).apply(this.selector, {
+                onFinish: function () {
+                    self.onChange();
+                }
+            });
+        }
     }
 
     getDefaultValue() {
@@ -34,10 +37,14 @@ class SearchFilterDuration extends SearchFilterInput {
      * @param value
      */
     setValue(value) {
-        $(this.selector).data('ionRangeSlider').update({
-            from: value.split(';')[0],
-            to: value.split(';')[1],
-        });
+        if (this.passThrough) {
+            super.setValue(value);
+        } else {
+            $(this.selector).data('ionRangeSlider').update({
+                from: value.split(';')[0],
+                to: value.split(';')[1],
+            });
+        }
     }
 
     getParamsOverride() {

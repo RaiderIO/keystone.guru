@@ -59,6 +59,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
             if (!is_array($json) || !isset($json['gridsByFloor'], $json['numRuns'])) {
                 $this->log->getHeatmapDataInvalidResponse(
                     __($heatmapDataFilter->getDungeon()->name, [], 'en_US'),
+                    $url,
                     $response
                 );
 

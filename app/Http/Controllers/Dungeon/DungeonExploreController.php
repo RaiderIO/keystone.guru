@@ -208,6 +208,7 @@ class DungeonExploreController extends Controller
         $mapBackgroundColor    = $request->get('mapBackgroundColor');
         $showEnemyInfo         = $request->get('showEnemyInfo', false);
         $showTitle             = $request->get('showTitle', true);
+        $showSidebar           = $request->get('showSidebar', true);
         $defaultZoom           = $request->get('defaultZoom', 1);
 
         unset(
@@ -216,6 +217,7 @@ class DungeonExploreController extends Controller
             $validated['mapBackgroundColor'],
             $validated['showEnemyInfo'],
             $validated['showTitle'],
+            $validated['showSidebar'],
             $validated['defaultZoom']
         );
 
@@ -244,7 +246,8 @@ class DungeonExploreController extends Controller
                 'mapBackgroundColor'    => $mapBackgroundColor,
                 'show'                  => [
                     'enemyInfo'      => (bool)$showEnemyInfo, // Default false - not available
-                    'title'          => $showTitle,
+                    'title'          => (bool)$showTitle,
+                    'sidebar'        => (bool)$showSidebar,
                     'floorSelection' => true,                 // Always available, but can be overridden later if there's no floors to select
                 ],
             ],

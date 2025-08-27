@@ -125,13 +125,17 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'excludePlayerDeathSpecIds': new SearchFilterPassThrough(),
             'excludePlayerDeathClassIds': new SearchFilterPassThrough(),
             'includePlayerSpellIds': new SearchFilterPassThrough(),
+            'showSidebar': new SearchFilterPassThrough(),
             'token': new SearchFilterPassThrough(),
         };
 
         // This will allow someone to bypass all UI elements and fully control the filters through parameters
         if (this.options.passThroughEverything) {
             for (let key in this.filters) {
-                this.filters[key] = new SearchFilterPassThrough();
+                // If the filter uses the DOM, tell it to not to and just pass through everything - save values internally
+                if (this.filters[key] instanceof SearchFilterInput) {
+                    this.filters[key].setPassThrough(true);
+                }
             }
         }
 

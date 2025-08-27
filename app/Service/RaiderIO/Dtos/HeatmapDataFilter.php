@@ -38,8 +38,8 @@ class HeatmapDataFilter implements Arrayable
     private Collection $includePlayerDeathSpecIds;
     private ?int       $minPeriod          = null;
     private ?int       $maxPeriod          = null;
-    private ?int       $timerFractionMin   = null;
-    private ?int       $timerFractionMax   = null;
+    private ?float     $timerFractionMin   = null;
+    private ?float     $timerFractionMax   = null;
     private ?int       $minSamplesRequired = null;
 
     // Passthroughs
@@ -279,26 +279,26 @@ class HeatmapDataFilter implements Arrayable
         $this->maxPeriod = $maxPeriod;
     }
 
-    public function getTimerFractionMin(): ?int
+    public function getTimerFractionMin(): ?float
     {
         return $this->timerFractionMin;
     }
 
-    public function setTimerFractionMin(?int $timerFractionMin): HeatmapDataFilter
+    public function setTimerFractionMin(?float $timerFractionMin): HeatmapDataFilter
     {
         $this->timerFractionMin = $timerFractionMin;
 
         return $this;
     }
 
-    public function getTimerFractionMax(): ?int
+    public function getTimerFractionMax(): ?float
     {
         return $this->timerFractionMax;
     }
 
-    public function setTimerFractionMax(?int $timerFractionMAx): HeatmapDataFilter
+    public function setTimerFractionMax(?float $timerFractionMax): HeatmapDataFilter
     {
-        $this->timerFractionMax = $timerFractionMAx;
+        $this->timerFractionMax = $timerFractionMax;
 
         return $this;
     }
@@ -496,7 +496,12 @@ class HeatmapDataFilter implements Arrayable
             $result['floorsAsArray'] = 'true';
         }
 
-        return array_filter($result);
+        // If a value is 0 we DO want to send the value to Raider.IO
+        // For example, maxPlayerDeaths 0 is a valid value.
+        return array_filter($result, fn($value) => (is_string($value) && strlen($value) > 0) ||
+            (is_array($value) && count($value) > 0) ||
+            is_numeric($value)
+        );
     }
 
     /**

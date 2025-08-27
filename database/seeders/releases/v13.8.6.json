@@ -1,0 +1,25 @@
+{
+    "id": 317,
+    "release_changelog_id": 324,
+    "version": "v13.8.6",
+    "title": "More for embedded heatmaps stealing focus",
+    "backup_db": 0,
+    "silent": 0,
+    "spotlight": 0,
+    "released": 0,
+    "created_at": "2025-08-27T22:02:16+00:00",
+    "updated_at": "2025-08-27T22:02:16+00:00",
+    "changelog": {
+        "id": 324,
+        "release_id": 317,
+        "description": null,
+        "changes": [
+            {
+                "release_changelog_id": 324,
+                "release_changelog_category_id": 13,
+                "ticket_id": 2951,
+                "change": "Additional changes to prevent embedded heatmaps from stealing focus (pass showSidebar=0)."
+            }
+        ]
+    }
+}
