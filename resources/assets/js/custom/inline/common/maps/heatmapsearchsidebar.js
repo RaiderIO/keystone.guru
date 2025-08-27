@@ -132,12 +132,10 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         // This will allow someone to bypass all UI elements and fully control the filters through parameters
         if (this.options.passThroughEverything) {
             for (let key in this.filters) {
-                let options = {
-                    array: this.filters[key].options.array
-                };
-                this.filters[key] = this.filters[key] instanceof SearchFilterSelect ?
-                    new SearchFilterPassThroughAsArray(options) :
-                    new SearchFilterPassThrough(options);
+                // If the filter uses the DOM, tell it to not to and just pass through everything - save values internally
+                if (this.filters[key] instanceof SearchFilterInput) {
+                    this.filters[key].setPassThrough(true);
+                }
             }
         }
 

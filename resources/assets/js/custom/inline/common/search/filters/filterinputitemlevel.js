@@ -5,6 +5,7 @@ class SearchFilterItemLevel extends SearchFilterInput {
         this.itemLevelMin = itemLevelMin;
         this.itemLevelMax = itemLevelMax;
         this.levelHandler = null;
+        this.passThroughValue = `${itemLevelMin};${itemLevelMax}`;
     }
 
     activate() {
@@ -13,11 +14,13 @@ class SearchFilterItemLevel extends SearchFilterInput {
         let self = this;
 
         // Level
-        (this.levelHandler = new ItemLevelHandler(this.itemLevelMin, this.itemLevelMax)).apply(this.selector, {
-            onFinish: function () {
-                self.onChange();
-            }
-        });
+        if (!this.passThrough) {
+            (this.levelHandler = new ItemLevelHandler(this.itemLevelMin, this.itemLevelMax)).apply(this.selector, {
+                onFinish: function () {
+                    self.onChange();
+                }
+            });
+        }
     }
 
     getFilterHeaderText() {
@@ -34,10 +37,14 @@ class SearchFilterItemLevel extends SearchFilterInput {
      * @param value
      */
     setValue(value) {
-        $(this.selector).data('ionRangeSlider').update({
-            from: value.split(';')[0],
-            to: value.split(';')[1],
-        });
+        if (this.passThrough) {
+            super.setValue(value);
+        } else {
+            $(this.selector).data('ionRangeSlider').update({
+                from: value.split(';')[0],
+                to: value.split(';')[1],
+            });
+        }
     }
 
     /**
@@ -49,7 +56,9 @@ class SearchFilterItemLevel extends SearchFilterInput {
         this.itemLevelMin = min;
         this.itemLevelMax = max;
 
-        this.levelHandler.update(min, max);
+        if (this.levelHandler !== null) {
+            this.levelHandler.update(min, max);
+        }
     }
 
     getParamsOverride() {

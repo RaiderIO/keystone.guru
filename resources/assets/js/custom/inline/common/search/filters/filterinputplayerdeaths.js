@@ -5,6 +5,7 @@ class SearchFilterPlayerDeaths extends SearchFilterInput {
         this.playerDeathsMin = playerDeathsMin;
         this.playerDeathsMax = playerDeathsMax;
         this.levelHandler = null;
+        this.passThroughValue = `${playerDeathsMin};${playerDeathsMax}`;
     }
 
     activate() {
@@ -13,11 +14,13 @@ class SearchFilterPlayerDeaths extends SearchFilterInput {
         let self = this;
 
         // Level
-        (this.levelHandler = new PlayerDeathsHandler(this.playerDeathsMin, this.playerDeathsMax)).apply(this.selector, {
-            onFinish: function () {
-                self.onChange();
-            }
-        });
+        if (!this.passThrough) {
+            (this.levelHandler = new PlayerDeathsHandler(this.playerDeathsMin, this.playerDeathsMax)).apply(this.selector, {
+                onFinish: function () {
+                    self.onChange();
+                }
+            });
+        }
     }
 
     getFilterHeaderText() {
@@ -34,10 +37,14 @@ class SearchFilterPlayerDeaths extends SearchFilterInput {
      * @param value
      */
     setValue(value) {
-        $(this.selector).data('ionRangeSlider').update({
-            from: value.split(';')[0],
-            to: value.split(';')[1],
-        });
+        if (this.passThrough) {
+            super.setValue(value);
+        } else {
+            $(this.selector).data('ionRangeSlider').update({
+                from: value.split(';')[0],
+                to: value.split(';')[1],
+            });
+        }
     }
 
     /**
@@ -49,7 +56,9 @@ class SearchFilterPlayerDeaths extends SearchFilterInput {
         this.playerDeathsMin = min;
         this.playerDeathsMax = max;
 
-        this.levelHandler.update(min, max);
+        if (this.levelHandler !== null) {
+            this.levelHandler.update(min, max);
+        }
     }
 
     getParamsOverride() {
