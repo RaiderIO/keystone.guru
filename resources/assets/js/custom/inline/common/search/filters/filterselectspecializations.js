@@ -1,6 +1,6 @@
 class SearchFilterSpecializations extends SearchFilterSelect {
-    constructor(selector, onChange) {
-        super(selector, onChange);
+    constructor(selector, onChange, options = {}) {
+        super(selector, onChange, options);
     }
 
     activate() {
@@ -9,11 +9,13 @@ class SearchFilterSpecializations extends SearchFilterSelect {
         let self = this;
 
         // Grouped affixes
-        $(this.selector).off('change').on('change', function () {
-            self.onChange();
+        if (!this.passThrough) {
+            $(this.selector).off('change').on('change', function () {
+                self.onChange();
 
-            refreshSelectPickers();
-        });
+                refreshSelectPickers();
+            });
+        }
     }
 
     /**
