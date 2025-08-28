@@ -133,7 +133,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         if (this.options.passThroughEverything) {
             for (let key in this.filters) {
                 // If the filter uses the DOM, tell it to not to and just pass through everything - save values internally
-                if (this.filters[key] instanceof SearchFilterInput) {
+                if (typeof this.filters[key].setPassThrough === 'function') {
                     this.filters[key].setPassThrough(true);
                 }
             }

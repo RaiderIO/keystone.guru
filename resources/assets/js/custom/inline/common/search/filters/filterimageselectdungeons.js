@@ -1,8 +1,8 @@
 class SearchFilterDungeons extends SearchFilterImageSelect {
-    constructor(selector, onChange) {
-        super(selector, onChange, {
+    constructor(selector, onChange, options = {}) {
+        super(selector, onChange, $.extend({}, options, {
             array: true,
-        });
+        }));
     }
 
     getFilterHeaderText() {

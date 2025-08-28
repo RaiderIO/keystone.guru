@@ -5,11 +5,13 @@ class SearchFilterWeeklyAffixGroups extends SearchFilterInput {
         let self = this;
 
         // Grouped affixes
-        $(this.selector).off('change').on('change', function () {
-            self.onChange();
+        if (!this.passThrough) {
+            $(this.selector).off('change').on('change', function () {
+                self.onChange();
 
-            refreshSelectPickers();
-        });
+                refreshSelectPickers();
+            });
+        }
     }
 
     getDefaultValue() {

@@ -643,7 +643,7 @@ html, body, #map, #app, .wrapper {
 }
 
 .snackbar_footer.ad_loaded {
-    margin-bottom: 72px !important;
+    margin-bottom: 90px !important;
 }
 
 @media (max-width: 1200px) {
