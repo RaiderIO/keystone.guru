@@ -26,7 +26,8 @@ class AuraAppliedBuilder implements SuffixBuilderInterface
             CombatLogVersion::RETAIL_11_0_2,
             CombatLogVersion::RETAIL_11_0_5,
             CombatLogVersion::RETAIL_11_0_7,
-            CombatLogVersion::RETAIL_11_1_0 => new AuraAppliedV22($combatLogVersion),
+            CombatLogVersion::RETAIL_11_1_0,
+            CombatLogVersion::RETAIL_11_1_7 => new AuraAppliedV22($combatLogVersion),
             default => new AuraAppliedV22_1($combatLogVersion),
         };
     }

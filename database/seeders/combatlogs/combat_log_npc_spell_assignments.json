@@ -9142,5 +9142,23 @@
         "raw_event": "8\/26\/2025 13:54:41.8441  SPELL_AURA_APPLIED,Creature-0-3061-2441-12472-180590-00002DAE8D,\"Demon Skull\",0xa18,0x80000000,Creature-0-3061-2441-12472-180590-00002DAE8D,\"Demon Skull\",0xa18,0x80000000,351656,\"[DNT] Periodic Riding Check\",0x1,BUFF\r\n",
         "created_at": "2025-08-26T20:04:22+00:00",
         "updated_at": "2025-08-26T20:04:22+00:00"
+    },
+    {
+        "id": 1069,
+        "npc_id": 180594,
+        "spell_id": 351656,
+        "combat_log_path": "tmp\/WoWCombatLog-081725_184624_2_tazavesh-the-veiled-market.zip",
+        "raw_event": "8\/17\/2025 21:35:52.9911  SPELL_AURA_APPLIED,Creature-0-1467-2441-5515-180594-0000223D29,\"Vulpera Flute\",0xa18,0x80000000,Creature-0-1467-2441-5515-180594-0000223D29,\"Vulpera Flute\",0xa18,0x80000000,351656,\"[DNT] Periodic Riding Check\",0x1,BUFF\r\n",
+        "created_at": "2025-08-29T20:52:45+00:00",
+        "updated_at": "2025-08-29T20:52:45+00:00"
+    },
+    {
+        "id": 1070,
+        "npc_id": 178320,
+        "spell_id": 351656,
+        "combat_log_path": "tmp\/WoWCombatLog-082025_201908_4_tazavesh-the-veiled-market.zip",
+        "raw_event": "8\/20\/2025 22:48:10.0261  SPELL_AURA_APPLIED,Creature-0-1461-2441-21912-178320-000026429A,\"Stale Bread\",0xa18,0x80000000,Creature-0-1461-2441-21912-178320-000026429A,\"Stale Bread\",0xa18,0x80000000,351656,\"[DNT] Periodic Riding Check\",0x1,BUFF\r\n",
+        "created_at": "2025-08-29T20:54:41+00:00",
+        "updated_at": "2025-08-29T20:54:41+00:00"
     }
 ]
