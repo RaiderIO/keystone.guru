@@ -23,6 +23,9 @@ class SyncZoneNames extends Command
         Dungeon::DUNGEON_DIRE_MAUL_NORTH,
         Dungeon::DUNGEON_DIRE_MAUL_WEST,
 
+        Dungeon::DUNGEON_MECHAGON_JUNKYARD,
+        Dungeon::DUNGEON_MECHAGON_WORKSHOP,
+
         Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL,
         Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE,
 
@@ -81,6 +84,7 @@ class SyncZoneNames extends Command
                 // Skip some zones that we split off compared to the Wowhead data
                 if (in_array($dungeon->key, self::EXCLUDE_DUNGEONS)) {
                     $this->comment(sprintf('- Skipping excluded dungeon %s', $dungeon->key));
+                    $this->warn(sprintf('-- Got name "%s" for locale %s', $dungeonName, $locale));
                     continue;
                 }
 
@@ -89,7 +93,12 @@ class SyncZoneNames extends Command
                     $updatedTranslations[$locale][$dungeon->expansion->shortname] = [];
                 }
 
-                $updatedTranslations[$locale][$dungeon->expansion->shortname][explode('.', $dungeon->name)[2]]['name'] = $dungeonName;
+                $dungeonTranslationKey = explode('.', $dungeon->name)[2];
+                // Only if we didn't have a translation yet for this dungeon, we add it
+                // This way we can make manual corrections that won't be overwritten
+                if (empty($existingTranslations[$dungeon->expansion->shortname][$dungeonTranslationKey]['name'])) {
+                    $updatedTranslations[$locale][$dungeon->expansion->shortname][$dungeonTranslationKey]['name'] = $dungeonName;
+                }
             }
 
             $updatedTranslations[$locale] = array_replace_recursive($existingTranslations, $updatedTranslations[$locale]);
@@ -234,7 +243,11 @@ class SyncZoneNames extends Command
                             continue;
                         }
 
-                        $updatedTranslations[$dungeon->expansion->shortname][$dungeonTranslationKey]['floors'][$data['translationKey']] = $floorNamesForLocale[$zoneId][$data['index']];
+                        // Only if we didn't have a translation yet for this floor, we add it
+                        // This way we can make manual corrections that won't be overwritten
+                        if (empty($existingTranslationsByLocale[$locale][$dungeon->expansion->shortname][$dungeonTranslationKey]['floors'][$data['translationKey']])) {
+                            $updatedTranslations[$dungeon->expansion->shortname][$dungeonTranslationKey]['floors'][$data['translationKey']] = $floorNamesForLocale[$zoneId][$data['index']];
+                        }
                     }
 
 //                    if ($dungeon->key === Dungeon::DUNGEON_OPERATION_FLOODGATE) {

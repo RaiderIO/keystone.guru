@@ -13702,7 +13702,7 @@
                 "mdt_sub_level": null,
                 "ui_map_id": 232,
                 "map_name": "MoltenCore",
-                "name": "dungeons.classic.moltencore.floors.molten_core",
+                "name": "dungeons.classic.moltencore.floors.moltencore",
                 "default": 1,
                 "facade": 0,
                 "min_enemy_size": null,

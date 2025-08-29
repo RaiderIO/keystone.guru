@@ -801,7 +801,7 @@ return [
         'temple_of_sethraliss'      => [
             'name'   => 'Temple of Sethraliss',
             'floors' => [
-                'temple_of_sethraliss'  => 'Temple of Sethraliss',
+                'temple_of_sethraliss' => 'Temple of Sethraliss',
                 'atrium_of_sethraliss' => 'Atrium of Sethraliss',
             ],
         ],

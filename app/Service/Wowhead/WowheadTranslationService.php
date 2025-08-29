@@ -18,16 +18,16 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
 
     private const LOCALE_URL_MAPPING = [
         'en_US' => '',
-//        'ko_KR' => 'ko/',
-//        'fr_FR' => 'fr/',
+        'ko_KR' => 'ko/',
+        'fr_FR' => 'fr/',
         'de_DE' => 'de/',
-//        'zh_CN' => 'cn/',
-//        'zh_TW' => 'tw/',
-//        'es_ES' => 'es/',
-//        'es_MX' => 'mx/',
-//        'ru_RU' => 'ru/',
-//        'pt_BR' => 'pt/',
-//        'it_IT' => 'it/',
+        'zh_CN' => 'cn/',
+        'zh_TW' => 'tw/',
+        'es_ES' => 'es/',
+        'es_MX' => 'mx/',
+        'ru_RU' => 'ru/',
+        'pt_BR' => 'pt/',
+        'it_IT' => 'it/',
     ];
 
     private const EXPANSION_URL_MAPPING = [
