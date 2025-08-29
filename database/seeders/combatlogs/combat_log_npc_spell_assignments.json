@@ -9160,5 +9160,50 @@
         "raw_event": "8\/20\/2025 22:48:10.0261  SPELL_AURA_APPLIED,Creature-0-1461-2441-21912-178320-000026429A,\"Stale Bread\",0xa18,0x80000000,Creature-0-1461-2441-21912-178320-000026429A,\"Stale Bread\",0xa18,0x80000000,351656,\"[DNT] Periodic Riding Check\",0x1,BUFF\r\n",
         "created_at": "2025-08-29T20:54:41+00:00",
         "updated_at": "2025-08-29T20:54:41+00:00"
+    },
+    {
+        "id": 1071,
+        "npc_id": 178322,
+        "spell_id": 351656,
+        "combat_log_path": "tmp\/Split-2025-09-29T192336.337Z-TazaveshtheVeiledMarket 4.zip",
+        "raw_event": "8\/25\/2025 14:37:43.3302  SPELL_AURA_APPLIED,Creature-0-3110-2441-22007-178322-00002C5917,\"Damaged Flask\",0xa18,0x80000000,Creature-0-3110-2441-22007-178322-00002C5917,\"Damaged Flask\",0xa18,0x80000000,351656,\"[DNT] Periodic Riding Check\",0x1,BUFF\r\n",
+        "created_at": "2025-08-29T20:59:19+00:00",
+        "updated_at": "2025-08-29T20:59:19+00:00"
+    },
+    {
+        "id": 1072,
+        "npc_id": 178315,
+        "spell_id": 351656,
+        "combat_log_path": "tmp\/Split-2025-09-29T235822.496Z-TazaveshtheVeiledMarket 6.zip",
+        "raw_event": "8\/25\/2025 17:21:08.4022  SPELL_AURA_APPLIED,Creature-0-3110-2441-3529-178315-00002C7F64,\"Cracked Warhammer\",0xa18,0x80000000,Creature-0-3110-2441-3529-178315-00002C7F64,\"Cracked Warhammer\",0xa18,0x80000000,351656,\"[DNT] Periodic Riding Check\",0x1,BUFF\r\n",
+        "created_at": "2025-08-29T20:59:38+00:00",
+        "updated_at": "2025-08-29T20:59:38+00:00"
+    },
+    {
+        "id": 1073,
+        "npc_id": 180592,
+        "spell_id": 351656,
+        "combat_log_path": "tmp\/Split-2025-09-30T073523.377Z-TazaveshtheVeiledMarket 6.zip",
+        "raw_event": "8\/25\/2025 22:50:33.9972  SPELL_AURA_APPLIED,Creature-0-3890-2441-30871-180592-00002CCC9A,\"Chunk of Jade\",0xa18,0x80000000,Creature-0-3890-2441-30871-180592-00002CCC9A,\"Chunk of Jade\",0xa18,0x80000000,351656,\"[DNT] Periodic Riding Check\",0x1,BUFF\r\n",
+        "created_at": "2025-08-29T20:59:53+00:00",
+        "updated_at": "2025-08-29T20:59:53+00:00"
+    },
+    {
+        "id": 1074,
+        "npc_id": 178001,
+        "spell_id": 351656,
+        "combat_log_path": "tmp\/WoWCombatLog-082325_143946_5_tazavesh-the-veiled-market.zip",
+        "raw_event": "8\/23\/2025 14:59:10.6891  SPELL_AURA_APPLIED,Creature-0-4243-2441-11844-178001-000029C92E,\"Dull Opal\",0xa18,0x80000000,Creature-0-4243-2441-11844-178001-000029C92E,\"Dull Opal\",0xa18,0x80000000,351656,\"[DNT] Periodic Riding Check\",0x1,BUFF\r\n",
+        "created_at": "2025-08-29T21:01:30+00:00",
+        "updated_at": "2025-08-29T21:01:30+00:00"
+    },
+    {
+        "id": 1075,
+        "npc_id": 180588,
+        "spell_id": 351656,
+        "combat_log_path": "tmp\/WoWCombatLog-082325_143946_5_tazavesh-the-veiled-market.zip",
+        "raw_event": "8\/23\/2025 14:59:41.1881  SPELL_AURA_APPLIED,Creature-0-4243-2441-11844-180588-000029C94D,\"Plate of Ripe Purians\",0xa18,0x80000000,Creature-0-4243-2441-11844-180588-000029C94D,\"Plate of Ripe Purians\",0xa18,0x80000000,351656,\"[DNT] Periodic Riding Check\",0x1,BUFF\r\n",
+        "created_at": "2025-08-29T21:01:30+00:00",
+        "updated_at": "2025-08-29T21:01:30+00:00"
     }
 ]

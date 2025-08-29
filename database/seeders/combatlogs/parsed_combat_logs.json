@@ -8699,5 +8699,229 @@
         "extracted_data": 1,
         "created_at": "2025-08-29T20:55:48+00:00",
         "updated_at": "2025-08-29T20:55:48+00:00"
+    },
+    {
+        "id": 1248,
+        "combat_log_path": "tmp\/Split-2025-09-18T163337.683Z-Eco-DomeAldani 2.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T20:58:19+00:00",
+        "updated_at": "2025-08-29T20:58:19+00:00"
+    },
+    {
+        "id": 1249,
+        "combat_log_path": "tmp\/Split-2025-09-20T074016.885Z-TazaveshtheVeiledMarket 4.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T20:58:30+00:00",
+        "updated_at": "2025-08-29T20:58:30+00:00"
+    },
+    {
+        "id": 1250,
+        "combat_log_path": "tmp\/Split-2025-09-24T081038.443Z-Ara-KaraCityofEchoes 6.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T20:58:40+00:00",
+        "updated_at": "2025-08-29T20:58:40+00:00"
+    },
+    {
+        "id": 1251,
+        "combat_log_path": "tmp\/Split-2025-09-28T173820.053Z-TheDawnbreaker 2.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T20:58:46+00:00",
+        "updated_at": "2025-08-29T20:58:46+00:00"
+    },
+    {
+        "id": 1252,
+        "combat_log_path": "tmp\/Split-2025-09-28T210516.463Z-Eco-DomeAldani 4.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T20:58:54+00:00",
+        "updated_at": "2025-08-29T20:58:54+00:00"
+    },
+    {
+        "id": 1253,
+        "combat_log_path": "tmp\/Split-2025-09-29T022501.899Z-Ara-KaraCityofEchoes 2.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T20:59:03+00:00",
+        "updated_at": "2025-08-29T20:59:03+00:00"
+    },
+    {
+        "id": 1254,
+        "combat_log_path": "tmp\/Split-2025-09-29T170739.853Z-TazaveshtheVeiledMarket 2.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T20:59:10+00:00",
+        "updated_at": "2025-08-29T20:59:10+00:00"
+    },
+    {
+        "id": 1255,
+        "combat_log_path": "tmp\/Split-2025-09-29T174142.532Z-TazaveshtheVeiledMarket 4.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T20:59:15+00:00",
+        "updated_at": "2025-08-29T20:59:15+00:00"
+    },
+    {
+        "id": 1256,
+        "combat_log_path": "tmp\/Split-2025-09-29T192336.337Z-TazaveshtheVeiledMarket 4.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T20:59:22+00:00",
+        "updated_at": "2025-08-29T20:59:22+00:00"
+    },
+    {
+        "id": 1257,
+        "combat_log_path": "tmp\/Split-2025-09-29T205738.438Z-HallsofAtonement 5.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T20:59:32+00:00",
+        "updated_at": "2025-08-29T20:59:32+00:00"
+    },
+    {
+        "id": 1258,
+        "combat_log_path": "tmp\/Split-2025-09-29T235822.496Z-TazaveshtheVeiledMarket 6.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T20:59:40+00:00",
+        "updated_at": "2025-08-29T20:59:40+00:00"
+    },
+    {
+        "id": 1259,
+        "combat_log_path": "tmp\/Split-2025-09-30T063523.377Z-TazaveshtheVeiledMarket 6.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T20:59:47+00:00",
+        "updated_at": "2025-08-29T20:59:47+00:00"
+    },
+    {
+        "id": 1260,
+        "combat_log_path": "tmp\/Split-2025-09-30T073523.377Z-TazaveshtheVeiledMarket 6.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T20:59:54+00:00",
+        "updated_at": "2025-08-29T20:59:54+00:00"
+    },
+    {
+        "id": 1261,
+        "combat_log_path": "tmp\/Split-2025-10-01T033640.918Z-Eco-DomeAldani 2.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:00:02+00:00",
+        "updated_at": "2025-08-29T21:00:02+00:00"
+    },
+    {
+        "id": 1262,
+        "combat_log_path": "tmp\/Split-2025-10-01T101822.457Z-Eco-DomeAldani 4.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:00:11+00:00",
+        "updated_at": "2025-08-29T21:00:11+00:00"
+    },
+    {
+        "id": 1263,
+        "combat_log_path": "tmp\/Split-2025-10-02T051418.836Z-PrioryoftheSacredFlame 7.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:00:20+00:00",
+        "updated_at": "2025-08-29T21:00:20+00:00"
+    },
+    {
+        "id": 1264,
+        "combat_log_path": "tmp\/WoWCombatLog-081625_082137_3_halls-of-atonement.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:00:30+00:00",
+        "updated_at": "2025-08-29T21:00:30+00:00"
+    },
+    {
+        "id": 1265,
+        "combat_log_path": "tmp\/WoWCombatLog-081625_140038_2_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:00:39+00:00",
+        "updated_at": "2025-08-29T21:00:39+00:00"
+    },
+    {
+        "id": 1266,
+        "combat_log_path": "tmp\/WoWCombatLog-081625_140038_2_tazavesh-the-veiled-market-1.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:00:44+00:00",
+        "updated_at": "2025-08-29T21:00:44+00:00"
+    },
+    {
+        "id": 1267,
+        "combat_log_path": "tmp\/WoWCombatLog-081625_140038_2_tazavesh-the-veiled-market.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:00:49+00:00",
+        "updated_at": "2025-08-29T21:00:49+00:00"
+    },
+    {
+        "id": 1268,
+        "combat_log_path": "tmp\/WoWCombatLog-081625_140038_4_operation-floodgate.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:00:59+00:00",
+        "updated_at": "2025-08-29T21:00:59+00:00"
+    },
+    {
+        "id": 1269,
+        "combat_log_path": "tmp\/WoWCombatLog-081925_195920_2_eco-dome-aldani.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:01:06+00:00",
+        "updated_at": "2025-08-29T21:01:06+00:00"
+    },
+    {
+        "id": 1270,
+        "combat_log_path": "tmp\/WoWCombatLog-082325_113306_5_operation-floodgate.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:01:14+00:00",
+        "updated_at": "2025-08-29T21:01:14+00:00"
+    },
+    {
+        "id": 1271,
+        "combat_log_path": "tmp\/WoWCombatLog-082325_143946_4_ara-kara-city-of-echoes.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:01:26+00:00",
+        "updated_at": "2025-08-29T21:01:26+00:00"
+    },
+    {
+        "id": 1272,
+        "combat_log_path": "tmp\/WoWCombatLog-082325_143946_5_tazavesh-the-veiled-market.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:01:31+00:00",
+        "updated_at": "2025-08-29T21:01:31+00:00"
+    },
+    {
+        "id": 1273,
+        "combat_log_path": "tmp\/WoWCombatLog-082325_200631_4_eco-dome-aldani.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:01:38+00:00",
+        "updated_at": "2025-08-29T21:01:38+00:00"
+    },
+    {
+        "id": 1274,
+        "combat_log_path": "tmp\/WoWCombatLog-082325_200631_4_tazavesh-the-veiled-market.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:01:45+00:00",
+        "updated_at": "2025-08-29T21:01:45+00:00"
+    },
+    {
+        "id": 1275,
+        "combat_log_path": "tmp\/WoWCombatLog-082425_093356_4_priory-of-the-sacred-flame.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:01:51+00:00",
+        "updated_at": "2025-08-29T21:01:51+00:00"
+    },
+    {
+        "id": 1276,
+        "combat_log_path": "tmp\/WoWCombatLog-082425_104628_5_halls-of-atonement.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:02:00+00:00",
+        "updated_at": "2025-08-29T21:02:00+00:00"
+    },
+    {
+        "id": 1277,
+        "combat_log_path": "tmp\/WoWCombatLog-082525_101515_6_operation-floodgate.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:02:09+00:00",
+        "updated_at": "2025-08-29T21:02:09+00:00"
+    },
+    {
+        "id": 1278,
+        "combat_log_path": "tmp\/WoWCombatLog-082525_101515_7_tazavesh-the-veiled-market.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:02:17+00:00",
+        "updated_at": "2025-08-29T21:02:17+00:00"
+    },
+    {
+        "id": 1279,
+        "combat_log_path": "tmp\/WoWCombatLog-082525_191418_7_tazavesh-the-veiled-market.zip",
+        "extracted_data": 1,
+        "created_at": "2025-08-29T21:02:24+00:00",
+        "updated_at": "2025-08-29T21:02:24+00:00"
     }
 ]
