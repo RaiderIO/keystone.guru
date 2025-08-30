@@ -40,33 +40,33 @@ return [
             ],
         ],
         'dire_maul_east'              => [
-            'name'   => '',
+            'name'   => 'Hache-tripes (Ouest)',
             'floors' => [
-                'warpwood_quarter'         => '',
-                'the_shrine_of_eldretharr' => '',
+                'warpwood_quarter'         => 'Quartier de Crochebois',
+                'the_shrine_of_eldretharr' => 'Sanctuaire d’Eldretharr',
             ],
         ],
         'dire_maul_north'             => [
-            'name'   => '',
+            'name'   => 'Armurerie du monastère écarlate',
             'floors' => [
-                'gordok_commons' => '',
+                'gordok_commons' => 'Quartier des Gordok',
             ],
         ],
         'dire_maul_west'              => [
-            'name'   => '',
+            'name'   => 'Cathédrale du monastère écarlate',
             'floors' => [
-                'capital_gardens'        => '',
-                'court_of_the_highborne' => '',
-                'prison_of_immol_thar'   => '',
+                'capital_gardens'        => 'Jardins capitaux',
+                'court_of_the_highborne' => 'Cour des Bien-nés',
+                'prison_of_immol_thar'   => 'Prison d’Immol’thar',
             ],
         ],
         'gnomeregan'                  => [
-            'name'   => '',
+            'name'   => 'Opération Mécagone – la Décharge',
             'floors' => [
-                'the_hall_of_gears' => '',
-                'the_dormitory'     => '',
-                'launch_bay'        => '',
-                'tinkers_court'     => '',
+                'the_hall_of_gears' => 'Salle des engrenages',
+                'the_dormitory'     => 'Le dortoir',
+                'launch_bay'        => 'Baie de lancement',
+                'tinkers_court'     => 'Cour des Bricoleurs',
             ],
         ],
         'gnomeregan_sod'              => [
@@ -79,23 +79,23 @@ return [
             ],
         ],
         'karazhan_crypts'             => [
-            'name'   => '',
+            'name'   => 'Vision horrifique d’Orgrimmar',
             'floors' => [
-                'karazhan_crypts'         => '',
-                'the_slough_of_dispair'   => '',
-                'tome_of_the_unrepentant' => '',
-                'the_pit_of_criminals'    => '',
+                'karazhan_crypts'         => 'Cryptes de Karazhan',
+                'the_slough_of_dispair'   => 'Bourbier du désespoir',
+                'tome_of_the_unrepentant' => 'Tome de l’Impénitent',
+                'the_pit_of_criminals'    => 'Fosse des criminels',
             ],
         ],
         'lower_blackrock_spire'       => [
-            'name'   => '',
+            'name'   => 'Cryptes de Karazhan',
             'floors' => [
-                'tazz_alor'          => '',
-                'skitterweb_tunnels' => '',
-                'hordemar_city'      => '',
-                'hall_of_blackhand'  => '',
-                'halycons_lair'      => '',
-                'chamber_of_battle'  => '',
+                'tazz_alor'          => 'Tazz’Alaor',
+                'skitterweb_tunnels' => 'Tunnels de Tisse-soie',
+                'hordemar_city'      => 'Cité d’Hordemar',
+                'hall_of_blackhand'  => 'Salle de Main-noire',
+                'halycons_lair'      => 'Repaire de Halycon',
+                'chamber_of_battle'  => 'Chambre de bataille',
             ],
         ],
         'maraudon'                    => [
@@ -106,9 +106,9 @@ return [
             ],
         ],
         'moltencore'                  => [
-            'name' => 'Cœur du Magma',
+            'name'   => 'Cœur du Magma',
             'floors' => [
-                'molten_core' => '',
+                'moltencore' => 'Cœur du Magma',
             ],
         ],
         'naxxramas_classic'           => [
@@ -147,9 +147,9 @@ return [
             ],
         ],
         'ruins_of_ahnqiraj_classic'   => [
-            'name'   => '',
+            'name'   => 'Hache-tripes (Est)',
             'floors' => [
-                'ruins_of_ahnqiraj' => '',
+                'ruins_of_ahnqiraj' => 'Ruines d’Ahn’Qiraj',
             ],
         ],
         'ruins_of_ahnqiraj_sod'       => [
@@ -159,37 +159,37 @@ return [
             ],
         ],
         'scarlet_enclave'             => [
-            'name'   => '',
+            'name'   => 'Bibliothèque du monastère écarlate',
             'floors' => [
-                'tyrs_hand'              => '',
-                'the_forbidding_expanse' => '',
-                'scarlet_cathedral'      => '',
-                'avalon_monastery'       => '',
-                'ashbringer_chapel'      => '',
+                'tyrs_hand'              => 'Main de Tyr',
+                'the_forbidding_expanse' => 'L’Étendue interdite',
+                'scarlet_cathedral'      => 'Cathédrale écarlate',
+                'avalon_monastery'       => 'Monastère d’Avalon',
+                'ashbringer_chapel'      => 'Chapelle de Porte-cendres',
             ],
         ],
         'scarlet_monastery_armory'    => [
-            'name'   => '',
+            'name'   => 'Karazhan (inférieur)',
             'floors' => [
-                'armory' => '',
+                'armory' => 'Armurerie',
             ],
         ],
         'scarlet_monastery_cathedral' => [
-            'name'   => '',
+            'name'   => 'Cimetière du monastère écarlate',
             'floors' => [
-                'cathedral' => '',
+                'cathedral' => 'Cathédrale',
             ],
         ],
         'scarlet_monastery_graveyard' => [
-            'name'   => '',
+            'name'   => 'Enclave écarlate',
             'floors' => [
-                'graveyard' => '',
+                'graveyard' => 'Cimetière',
             ],
         ],
         'scarlet_monastery_library'   => [
-            'name'   => '',
+            'name'   => 'Vision horrifique de Hurlevent',
             'floors' => [
-                'library' => '',
+                'library' => 'Bibliothèque',
             ],
         ],
         'scholomance'                 => [
@@ -221,11 +221,11 @@ return [
             ],
         ],
         'temple_of_ahnqiraj_classic'  => [
-            'name'   => '',
+            'name'   => 'L’aube de l’Infini : la chute de Galakrond',
             'floors' => [
-                'the_hive_undergrounds' => '',
-                'the_temple_gates'      => '',
-                'vault_of_cthun'        => '',
+                'the_hive_undergrounds' => 'Souterrains de la Ruche',
+                'the_temple_gates'      => 'Portes du temple',
+                'vault_of_cthun'        => 'Caveau de C’Thun',
             ],
         ],
         'temple_of_ahnqiraj_sod'      => [
@@ -245,11 +245,11 @@ return [
         'the_temple_of_atal_hakkar'   => [
             'name'   => 'Temple englouti',
             'floors' => [
-                'the_pit_of_refuse' => 'Temple englouti',
-                'hall_of_serpents'          => '',
-                'entrance'                  => '',
-                'the_temple_of_atal_hakkar' => '',
-                'hall_of_the_cursed'        => '',
+                'the_pit_of_refuse'         => 'Temple englouti',
+                'hall_of_serpents'          => 'Salle des serpents',
+                'entrance'                  => 'Entrée',
+                'the_temple_of_atal_hakkar' => 'Temple d’Atal’Hakkar',
+                'hall_of_the_cursed'        => 'Salle des maudits',
             ],
         ],
         'uldaman'                     => [
@@ -262,8 +262,8 @@ return [
         'upper_blackrock_spire'       => [
             'name'   => 'Pic Rochenoire',
             'floors' => [
-                'dragonspire_hall'  => '',
-                'the_rookery'       => '',
+                'dragonspire_hall'  => 'Salle du Pic du dragon',
+                'the_rookery'       => 'La Couveuse',
                 'hall_of_blackhand' => 'Salle de Main-Noire',
             ],
         ],
@@ -354,20 +354,20 @@ return [
             ],
         ],
         'naxxramas'                                => [
-            'name'   => '',
+            'name'   => 'Naxxramas',
             'floors' => [
-                'the_construct_quarter' => '',
-                'the_arachnid_quarter'  => '',
-                'the_military_quarter'  => '',
-                'the_plague_quarter'    => '',
-                'the_lower_necropolis'  => '',
-                'the_upper_necropolis'  => '',
+                'the_construct_quarter' => 'Le quartier des Assemblages',
+                'the_arachnid_quarter'  => 'Le quartier des Arachnides',
+                'the_military_quarter'  => 'Le quartier Militaire',
+                'the_plague_quarter'    => 'Le quartier de la Peste',
+                'the_lower_necropolis'  => 'Partie inférieure de la Nécropole',
+                'the_upper_necropolis'  => 'Partie supérieure de la Nécropole',
             ],
         ],
         'onyxias_lair'                             => [
-            'name'   => '',
+            'name'   => 'Repaire d’Onyxia',
             'floors' => [
-                'onyxias_lair' => '',
+                'onyxias_lair' => 'Repaire d’Onyxia',
             ],
         ],
         'pit_of_saron'                             => [
@@ -410,7 +410,7 @@ return [
         'the_oculus'                               => [
             'name'   => 'L’Oculus',
             'floors' => [
-                'the_oculus'            => '',
+                'the_oculus'            => 'L’Oculus',
                 'band_of_variance'      => 'Bague de variance',
                 'band_of_acceleration'  => 'Bague d’accélération',
                 'band_of_transmutation' => 'Bague de transmutation',
@@ -579,7 +579,7 @@ return [
             'name'   => 'Temple du Serpent de jade',
             'floors' => [
                 'temple_of_the_jade_serpent' => 'Temple du Serpent de jade',
-                'scrollkeepers_sanctum'      => '',
+                'scrollkeepers_sanctum'      => 'Sanctuaire du gardien des parchemins',
             ],
         ],
     ],
@@ -677,20 +677,20 @@ return [
         'halls_of_valor'              => [
             'name'   => 'Salles des Valeureux',
             'floors' => [
-                'the_high_gate'  => 'La Haute-Porte',
-                'fields_of_the_eternal_hunt' => '',
-                'halls_of_valor' => 'Salles des Valeureux',
+                'the_high_gate'              => 'La Haute-Porte',
+                'fields_of_the_eternal_hunt' => 'Champs de la Chasse éternelle',
+                'halls_of_valor'             => 'Salles des Valeureux',
             ],
         ],
-        'lower_karazhan'              => [
-            'name'   => '',
+        'lower_karazhan' => [
+            'name' => 'Karazhan (inférieur)',
             'floors' => [
-                'servants_quarters'    => '',
-                'upper_livery_stables' => '',
-                'the_banquet_hall'     => '',
-                'the_guest_chambers'   => '',
-                'opera_hall_balcony'   => '',
-                'masters_terrace'      => '',
+                'servants_quarters'    => 'Quartiers des serviteurs',
+                'upper_livery_stables' => 'Écuries supérieures',
+                'the_banquet_hall'     => 'Salle du banquet',
+                'the_guest_chambers'   => 'Chambres des invités',
+                'opera_hall_balcony'   => 'Balcon de la salle d’opéra',
+                'masters_terrace'      => 'Terrasse du maître',
             ],
         ],
         'maw_of_souls'                => [
@@ -739,7 +739,7 @@ return [
         'atal_dazar'                => [
             'name'   => 'Atal’Dazar',
             'floors' => [
-                'atal_dazar'       => '',
+                'atal_dazar'       => 'Atal’Dazar',
                 'sacrificial_pits' => 'Fosses sacrificielles',
             ],
         ],
@@ -756,27 +756,27 @@ return [
             ],
         ],
         'mechagon_junkyard'         => [
-            'name'   => '',
+            'name'   => 'Opération Mécagone – la Décharge',
             'floors' => [
-                'mechagon_island' => '',
-                'tunnels'         => '',
+                'mechagon_island' => 'Île de Mécagone',
+                'tunnels'         => 'Tunnels',
             ],
         ],
         'mechagon_workshop'         => [
             'name'   => 'Opération Mécagone',
             'floors' => [
                 'the_robodrome'               => 'Le Robodrome',
-                'waste_pipes'                 => '',
+                'waste_pipes'                 => 'Conduites d’évacuation',
                 'the_under_junk'              => 'Décharge souterraine',
                 'mechagon_city'               => 'Mécagone',
                 'operation_mechagon_workshop' => 'Opération Mécagone',
             ],
         ],
         'orgrimmar_horrific_vision' => [
-            'name'   => '',
+            'name'   => 'L’aube de l’Infini: l’ascension de Murozond',
             'floors' => [
-                'orgrimmar_horrific_vision' => '',
-                'the_drag'                  => '',
+                'orgrimmar_horrific_vision' => 'Vision horrifique d’Orgrimmar',
+                'the_drag'                  => 'La Travée',
             ],
         ],
         'shrine_of_the_storm'       => [
@@ -795,7 +795,7 @@ return [
         'stormwind_horrific_vision' => [
             'name'   => '',
             'floors' => [
-                'stormwind_horrific_vision' => '',
+                'stormwind_horrific_vision' => 'Vision horrifique de Hurlevent',
             ],
         ],
         'temple_of_sethraliss'      => [
@@ -890,23 +890,23 @@ return [
             ],
         ],
         'tazavesh_so_leahs_gambit'   => [
-            'name'   => '',
+            'name'   => 'Tazavesh : le stratagème de So’leah',
             'floors' => [
-                'stormheim'                => '',
-                'aggramars_vault'          => '',
-                'boralus_harbor'           => '',
-                'the_opulent_nexus'        => '',
-                'tazavesh_so_leahs_gambit' => '',
+                'stormheim'                => 'Tornheim',
+                'aggramars_vault'          => 'Caveau d’Aggramar',
+                'boralus_harbor'           => 'Port de Boralus',
+                'the_opulent_nexus'        => 'Le Nexus opulent',
+                'tazavesh_so_leahs_gambit' => 'Le stratagème de So’leah',
             ],
         ],
         'tazavesh_streets_of_wonder' => [
-            'name'   => '',
+            'name'   => 'Tazavesh : Rues des merveilles',
             'floors' => [
-                'the_veiled_market'          => '',
-                'the_grand_menagerie'        => '',
-                'the_post'                   => '',
-                'myzas_oasis'                => '',
-                'tazavesh_streets_of_wonder' => '',
+                'the_veiled_market'          => 'Le marché dissimulé',
+                'the_grand_menagerie'        => 'La Grande ménagerie',
+                'the_post'                   => 'La Poste',
+                'myzas_oasis'                => 'Oasis de Myza',
+                'tazavesh_streets_of_wonder' => 'Rues des merveilles',
             ],
         ],
         'the_necrotic_wake'          => [
@@ -945,27 +945,27 @@ return [
             ],
         ],
         'dawn_of_the_infinite_galakronds_fall' => [
-            'name'   => '',
+            'name'   => 'L’aube de l’Infini : la chute de Galakrond',
             'floors' => [
-                'galakronds_fall'         => '',
-                'sanctum_of_chronology'   => '',
-                'millennias_threshold'    => '',
-                'locus_of_eternity'       => '',
-                'spoke_of_endless_winter' => '',
-                'crossroads_of_fate'      => '',
+                'galakronds_fall'         => 'Chute de Galakrond',
+                'sanctum_of_chronology'   => 'Sanctuaire de la chronologie',
+                'millennias_threshold'    => 'Seuil des millénaires',
+                'locus_of_eternity'       => 'Locus de l’éternité',
+                'spoke_of_endless_winter' => 'Rayon de l’hiver sans fin',
+                'crossroads_of_fate'      => 'Carrefour du destin',
             ],
         ],
         'dawn_of_the_infinite_murozonds_rise'  => [
-            'name'   => '',
+            'name'   => 'L’aube de l’Infini : l’ascension de Murozond',
             'floors' => [
-                'murozonds_rise'         => '',
-                'sanctum_of_chronology'  => '',
-                'millennias_threshold'   => '',
-                'locus_of_eternity'      => '',
-                'crossroads_of_fate'     => '',
-                'infinite_conflux'       => '',
-                'twisting_approach'      => '',
-                'immemorial_battlefield' => '',
+                'murozonds_rise'         => 'Ascension de Murozond',
+                'sanctum_of_chronology'  => 'Sanctuaire de la chronologie',
+                'millennias_threshold'   => 'Seuil des millénaires',
+                'locus_of_eternity'      => 'Locus de l’éternité',
+                'crossroads_of_fate'     => 'Carrefour du destin',
+                'infinite_conflux'       => 'Conflux infini',
+                'twisting_approach'      => 'Approche tortueuse',
+                'immemorial_battlefield' => 'Champ de bataille immémorial',
             ],
         ],
         'halls_of_infusion'                    => [
@@ -998,8 +998,8 @@ return [
                 'the_arcane_conservatory' => 'Conservatoire Arcanique',
                 'crystal_chambers'        => 'Chambres de Cristal',
                 'mausoleum_of_legends'    => 'Mausolée des Légendes',
-                'the_infinity_seal'       => '',
-                'sindragosas_lament'      => '',
+                'the_infinity_seal'       => 'Le Sceau de l’infini',
+                'sindragosas_lament'      => 'Lamentation de Sindragosa',
                 'the_azure_vault'         => 'Caveau d’Azur',
             ],
         ],
@@ -1044,7 +1044,7 @@ return [
             'name'   => 'Faille de Flamme-Noire',
             'floors' => [
                 'darkflame_cleft' => 'Faille de Flamme-Noire',
-                'shadow_realm'    => '',
+                'shadow_realm'    => 'Royaume des ombres',
             ],
         ],
         'eco_dome_al_dani'           => [
