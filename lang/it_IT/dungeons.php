@@ -114,10 +114,10 @@ return [
         'naxxramas_classic'           => [
             'name'   => 'Naxxramas',
             'floors' => [
-                'the_construct_quarter' => 'Ala dei Costrutti',
-                'the_arachnid_quarter'  => 'Ala degli Aracnidi',
-                'the_military_quarter'  => 'Ala dei Combattenti',
-                'the_plague_quarter'    => 'Ala della Pestilenza',
+                'the_construct_quarter' => 'Quartiere delle Costruzioni',
+                'the_arachnid_quarter'  => 'Quartiere degli Aracnidi',
+                'the_military_quarter'  => 'Quartiere Militare',
+                'the_plague_quarter'    => 'Quartiere della Piaga',
                 'the_lower_necropolis'  => 'Necropoli Inferiore',
                 'the_upper_necropolis'  => 'Necropoli Superiore',
             ],
@@ -243,9 +243,9 @@ return [
             ],
         ],
         'the_temple_of_atal_hakkar'   => [
-            'name'   => 'Sunken Temple',
+            'name'   => 'Tempio di Atal\'Hakkar',
             'floors' => [
-                'the_pit_of_refuse'         => 'Sunken Temple',
+                'the_pit_of_refuse'         => 'Fossa dei Rifiuti',
                 'hall_of_serpents'          => 'Sala dei Serpenti',
                 'entrance'                  => 'Ingresso',
                 'the_temple_of_atal_hakkar' => 'Tempio di Atal\'Hakkar',
@@ -260,7 +260,7 @@ return [
             ],
         ],
         'upper_blackrock_spire'       => [
-            'name'   => 'Bastioni di Roccianera',
+            'name'   => 'Pinnacolo di Roccia Nera (Superiore)',
             'floors' => [
                 'dragonspire_hall'  => 'Sala della Guglia del Drago',
                 'the_rookery'       => 'La Nidiata',
@@ -408,7 +408,7 @@ return [
             ],
         ],
         'the_oculus'                               => [
-            'name'   => 'Oculus',
+            'name'   => 'L’Oculus',
             'floors' => [
                 'the_oculus'            => 'L’Oculus',
                 'band_of_variance'      => 'Anello della Varianza',
