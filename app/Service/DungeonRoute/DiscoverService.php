@@ -48,7 +48,7 @@ class DiscoverService extends BaseDiscoverService
             collect();
 
         return DungeonRoute::query()
-            ->selectRaw('DISTINCT `dungeon_routes`.*')
+            ->selectRaw('`dungeon_routes`.*')
             ->limit($this->limit)
             ->when($this->closure !== null, $this->closure)
             ->with([
@@ -70,13 +70,13 @@ class DiscoverService extends BaseDiscoverService
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             // Order by affix group ID in case of old seasons where all weightedPopularity will end up being 0.
             // We want the most recent season's routes showing up for this if possible
-            ->joinSub(
-                DungeonRouteAffixGroup::query()
-                    ->selectRaw('dungeon_route_id, MAX(affix_group_id)')
-                    ->groupBy('dungeon_route_id'),
-                'ag', static function (JoinClause $joinClause) {
-                $joinClause->on('ag.dungeon_route_id', '=', 'dungeon_routes.id');
-            })
+//            ->joinSub(
+//                DungeonRouteAffixGroup::query()
+//                    ->selectRaw('dungeon_route_id, MAX(affix_group_id)')
+//                    ->groupBy('dungeon_route_id'),
+//                'ag', static function (JoinClause $joinClause) {
+//                $joinClause->on('ag.dungeon_route_id', '=', 'dungeon_routes.id');
+//            })
             ->when($this->season === null, function (Builder $builder) {
                 $builder->where('dungeons.expansion_id', $this->expansion->id)
                     ->orderBy('dungeon_routes.popularity', 'desc');
@@ -86,7 +86,7 @@ class DiscoverService extends BaseDiscoverService
                     ->selectRaw(
                         sprintf(
                             '
-                            `dungeon_routes`.*, `dungeon_routes`.`popularity` * IF(`dungeon_routes`.`season_id` = %d, 1, %d) as weightedPopularity',
+                            `dungeon_routes`.`popularity` * IF(`dungeon_routes`.`season_id` = %d, 1, %d) as weightedPopularity',
                             $this->season->id, config('keystoneguru.discover.service.popular_wrong_season_penalty')
                         )
                     )
