@@ -32,14 +32,13 @@ class MDTImportController extends Controller
         MDTImportStringServiceInterface $mdtImportStringService
     ) {
         $validated = $request->validated();
-        $string    = $validated['import_string'];
+        $string = $validated['import_string'];
 
         try {
             $warnings = collect();
-            $errors   = collect();
+            $errors = collect();
 
-            return $mdtImportStringService
-                ->setEncodedString($string)
+            return $mdtImportStringService->setEncodedString($string)
                 ->getDetails($warnings, $errors);
         } catch (MDTStringParseException $ex) {
             return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.mdt_string_parsing_failed'));
@@ -72,30 +71,24 @@ class MDTImportController extends Controller
      *
      * @throws Throwable
      */
-    public function import(ImportStringFormRequest $request, MDTImportStringServiceInterface $mdtImportStringService)
-    {
+    public function import(
+        ImportStringFormRequest         $request,
+        MDTImportStringServiceInterface $mdtImportStringService
+    ) {
         $user = Auth::user();
 
         $validated = $request->validated();
 
-        // If you're logged in, we will use the sandbox setting. Otherwise, we will ignore it.
-        $sandbox = Auth::check() ? ($validated['mdt_import_sandbox'] ?? false) : false;
+        // If you're logged in, we will use the sandbox setting. Otherwise, we will ignore it and return true
+        $sandbox = Auth::check() ? ($validated['mdt_import_sandbox'] ?? false) : true;
 
         // @TODO This should be handled differently imho
         if ($sandbox || ($user !== null && $user->canCreateDungeonRoute())) {
             $string = $validated['import_string'];
 
             try {
-                $dungeonRoute = $mdtImportStringService
-                    ->setEncodedString($string)
-                    ->getDungeonRoute(
-                        collect(),
-                        collect(),
-                        $sandbox,
-                        true,
-                        $validated['assign_notes_to_pulls'] ?? false,
-                        $validated['import_as_this_week'] ?? false
-                    );
+                $dungeonRoute = $mdtImportStringService->setEncodedString($string)
+                    ->getDungeonRoute(collect(), collect(), $sandbox, true, $validated['assign_notes_to_pulls'] ?? false, $validated['import_as_this_week'] ?? false);
 
                 // Ensure team_id is set
                 if (!$sandbox) {
