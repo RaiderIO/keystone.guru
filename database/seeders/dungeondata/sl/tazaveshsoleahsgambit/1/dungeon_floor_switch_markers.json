@@ -42,5 +42,16 @@
         "direction": null,
         "lat": -133,
         "lng": 241.5
+    },
+    {
+        "id": 2223,
+        "mapping_version_id": 604,
+        "floor_id": 97,
+        "source_floor_id": null,
+        "target_floor_id": 98,
+        "linked_dungeon_floor_switch_marker_id": 2224,
+        "direction": null,
+        "lat": -133,
+        "lng": 241.5
     }
 ]
