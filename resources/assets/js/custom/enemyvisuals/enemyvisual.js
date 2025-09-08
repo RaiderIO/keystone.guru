@@ -694,6 +694,9 @@ class EnemyVisual extends Signalable {
                     case 'enemy_forces':
                         this.mainVisual = new EnemyVisualMainEnemyForces(this);
                         break;
+                    case 'enemy_group':
+                        this.mainVisual = new EnemyVisualMainEnemyGroup(this);
+                        break;
                     case 'enemy_portrait':
                         this.mainVisual = new EnemyVisualMainEnemyPortrait(this);
                         break;
