@@ -127,6 +127,7 @@ class Floor extends CacheModel implements MappingModelInterface
         1490, // Mechagon
         1493, // Mechagon
         1525, // Revendreth
+        2016, // Tazavesh, the Veiled Market
         2214, // The Ringing Deeps
         2248, // Isle of Dorn
         2274, // Khaz Algar

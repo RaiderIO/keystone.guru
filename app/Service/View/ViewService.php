@@ -134,12 +134,13 @@ class ViewService implements ViewServiceInterface
                     'appVersion'                      => $latestRelease->version,
                     'appRevision'                     => $appRevision,
                     'appVersionAndName'               => sprintf(
-                        '%s® © 2018-%d %s - %s (%s)',
+                        '%s® © 2018-%d %s - %s (%s), MDT %s',
                         config('app.name'),
                         date('Y'),
-                        'Ludicrous Speed, LLC.',
+                        'RaiderIO, Inc.',
                         $latestRelease->version,
-                        substr($appRevision, 0, 6)
+                        substr($appRevision, 0, 6),
+                        config('keystoneguru.mdt.version')
                     ),
 
                     // Home

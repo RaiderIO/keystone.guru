@@ -441,4 +441,8 @@ return [
     'raider_io' => [
         'team_id' => 2136,
     ],
+
+    'mdt' => [
+        'version' => 'v5.5.9',
+    ]
 ];

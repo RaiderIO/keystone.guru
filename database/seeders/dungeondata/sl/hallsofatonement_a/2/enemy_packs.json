@@ -178,5 +178,53 @@
         "color_animated": null,
         "label": "Imported from MDT - group 73",
         "vertices_json": "[{\"lat\":-144.1727,\"lng\":55.2992},{\"lat\":-109.2049,\"lng\":55.2992},{\"lat\":-109.2049,\"lng\":111.2673},{\"lat\":-144.1727,\"lng\":111.2673}]"
+    },
+    {
+        "id": 16954,
+        "mapping_version_id": 602,
+        "floor_id": 78,
+        "group": 68,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 68",
+        "vertices_json": "[{\"lat\":-140.0517,\"lng\":257.893},{\"lat\":-114.4081,\"lng\":257.893},{\"lat\":-114.4081,\"lng\":271.0696},{\"lat\":-140.0517,\"lng\":271.0696}]"
+    },
+    {
+        "id": 16960,
+        "mapping_version_id": 602,
+        "floor_id": 78,
+        "group": 69,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 69",
+        "vertices_json": "[{\"lat\":-138.6156,\"lng\":160.4881},{\"lat\":-116.094,\"lng\":160.4881},{\"lat\":-116.094,\"lng\":185.9444},{\"lat\":-138.6156,\"lng\":185.9444}]"
+    },
+    {
+        "id": 16979,
+        "mapping_version_id": 602,
+        "floor_id": 78,
+        "group": 67,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 67",
+        "vertices_json": "[{\"lat\":-134.5571,\"lng\":290.6527},{\"lat\":-119.882,\"lng\":290.6527},{\"lat\":-119.882,\"lng\":303.4754},{\"lat\":-134.5571,\"lng\":303.4754}]"
+    },
+    {
+        "id": 16985,
+        "mapping_version_id": 602,
+        "floor_id": 78,
+        "group": 73,
+        "teeming": null,
+        "faction": "any",
+        "color": null,
+        "color_animated": null,
+        "label": "Imported from MDT - group 73",
+        "vertices_json": "[{\"lat\":-144.1727,\"lng\":55.2992},{\"lat\":-109.2049,\"lng\":55.2992},{\"lat\":-109.2049,\"lng\":111.2673},{\"lat\":-144.1727,\"lng\":111.2673}]"
     }
 ]

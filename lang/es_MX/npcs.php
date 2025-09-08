@@ -4848,7 +4848,7 @@ return [
     207943    => 'Neófito arathi',
     207946    => 'Capitán Dailcry',
     207949    => 'Templaria ferviente',
-    208165    => 'Caballera de la Alianza',
+    208165    => 'Caballero de la Alianza',
     208193    => 'Paladín de la Mano de Plata',
     208198    => 'Agarre de sombras',
     208208    => 'Destructor de la Alianza',

@@ -24,7 +24,7 @@ class DungeonColumnHandler extends DatatablesColumnHandler
     {
         // If we should search for this value
         if ($columnData['searchable'] === 'true') {
-            $searchValue = $columnData['search']['value'];
+            $searchValue = $columnData['search']['value'] ?? null;
             // -1 = all dungeons = no filter
             if ((int)$searchValue !== -1 && !empty($searchValue)) {
                 $explode = explode('-', (string)$searchValue);

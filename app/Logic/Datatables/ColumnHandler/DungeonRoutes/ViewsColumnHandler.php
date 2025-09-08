@@ -21,7 +21,7 @@ class ViewsColumnHandler extends DatatablesColumnHandler
 
     protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
     {
-        $views = $columnData['search']['value'];
+        //        $views = $columnData['search']['value'] ?? null;
         //        if (!empty($views)) {
         //            $builder->whereHas('affixes', function ($query) use (&$affixIds) {
         //                /** @var $query Builder */
