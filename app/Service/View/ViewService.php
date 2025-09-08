@@ -134,7 +134,7 @@ class ViewService implements ViewServiceInterface
                     'appVersion'                      => $latestRelease->version,
                     'appRevision'                     => $appRevision,
                     'appVersionAndName'               => sprintf(
-                        '%s® © 2018-%d %s - %s (%s, MDT %s)',
+                        '%s® © 2018-%d %s - %s (%s), MDT %s',
                         config('app.name'),
                         date('Y'),
                         'RaiderIO, Inc.',
