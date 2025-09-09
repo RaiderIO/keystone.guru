@@ -898,17 +898,44 @@ class Enemy extends VersionableMapObject {
             // If we are tormented, but the route has no tormented enemies..
             if (this.hasOwnProperty('seasonal_type')) {
                 let hasShroudedAffix = mapContext.hasAffix(AFFIX_SHROUDED);
+
                 if ((this.seasonal_type === ENEMY_SEASONAL_TYPE_BEGUILING && !mapContext.hasAffix(AFFIX_BEGUILING)) ||
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_AWAKENED && !mapContext.hasAffix(AFFIX_AWAKENED)) ||
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_TORMENTED && !mapContext.hasAffix(AFFIX_TORMENTED)) ||
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_ENCRYPTED && !mapContext.hasAffix(AFFIX_ENCRYPTED)) ||
-                    (this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED && !hasShroudedAffix) ||
                     // Special case for enemies marked as non-shrouded which replace the enemies that are marked as shrouded
                     (this.seasonal_type === ENEMY_SEASONAL_TYPE_NO_SHROUDED && hasShroudedAffix) ||
                     // MDT placeholders are only to suppress warnings when importing - don't show these on the map
                     this.seasonal_type === ENEMY_SEASONAL_TYPE_MDT_PLACEHOLDER) {
                     // console.warn(`Hiding enemy due to enemy being tormented but our route does not supported tormented units ${this.id}`);
                     return true;
+                }
+
+                /**
+                 * Shrouded gets a bit tricky here. The way it used to work on KSG side is that I'd put the Nathrezim Infiltrator
+                 * in the mapping and tag it as shrouded. When the route had shrouded enabled, the enemy would show up. Then,
+                 * the enemy that was replaced by the Infiltrator (e.g. a normal trash mob) would be tagged as "no shrouded".
+                 * The no shrouded enemies would be removed when Shrouded was not active, and the Shrouded enemies would only show
+                 * up when Shrouded was active.
+                 *
+                 * Now - later when we started using the MDT mapping, they simply marked the original enemy as shrouded, and
+                 * never mentioned the Nathrezim Infiltrator at all. This means that when we would import the MDT mapping,
+                 * the regular mob was now marked with Shrouded, and when the Shrouded affix was not active
+                 * (recyling Tazavesh in TWW S3 for example), the mob would disappear, leaving no enemy at all.
+                 *
+                 * To resolve this, check if the enemy is the Nathrezim Infiltrator specifically, and if so, only show it when
+                 * Shrouded is active, regardless of whether the replaced enemy is marked as shrouded or not.
+                 */
+                if (this.seasonal_type === ENEMY_SEASONAL_TYPE_SHROUDED) {
+                    if (this.npc !== null) {
+                        if (this.npc.id === NPC_ID_NATHREZIM_INFILTRATOR || this.npc.id === NPC_ID_ZUL_GAMUX) {
+                            if (!hasShroudedAffix) {
+                                // Hide the Nathrezim Infiltrator/Zul'Gamux when Shrouded is not active
+                                return true;
+                            }
+                        }
+                        // Otherwise, this is a regular enemy marked as shrouded - we should always show it
+                    }
                 }
             }
 
