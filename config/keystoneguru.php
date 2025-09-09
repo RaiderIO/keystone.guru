@@ -443,6 +443,6 @@ return [
     ],
 
     'mdt' => [
-        'version' => 'v5.5.9',
+        'version' => 'v5.6.3',
     ]
 ];

@@ -50,7 +50,6 @@ use App\Models\DungeonRoute\DungeonRoute;
         'parameters' => $parameters,
         'hiddenMapObjectGroups' => [
             'enemypatrol',
-            'enemypack',
             'mountablearea',
             'floorunion',
             'floorunionarea',
