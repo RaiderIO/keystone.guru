@@ -3454,5 +3454,17 @@
         "color_animated": null,
         "label": "Imported from MDT - group 71",
         "vertices_json": "[{\"lat\":-152.552,\"lng\":93.0373},{\"lat\":-122.8052,\"lng\":93.0373},{\"lat\":-122.8052,\"lng\":109.6248},{\"lat\":-152.552,\"lng\":109.6248}]"
+    },
+    {
+        "id": 17432,
+        "mapping_version_id": 610,
+        "floor_id": 77,
+        "group": 62,
+        "teeming": null,
+        "faction": "any",
+        "color": "#5993D2",
+        "color_animated": null,
+        "label": "Enemy pack",
+        "vertices_json": "[{\"lat\":-102.7914,\"lng\":167.044},{\"lat\":-113.8208,\"lng\":168.7754},{\"lat\":-113.6925,\"lng\":176.2779},{\"lat\":-102.7914,\"lng\":174.9954}]"
     }
 ]

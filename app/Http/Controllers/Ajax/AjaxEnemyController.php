@@ -90,11 +90,13 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                 $enemy->update($newLatLng->toArray());
             }
 
-            $enemy->npc->name = __($enemy->npc->name);
-            foreach ($enemy->npc->spells as $spell) {
-                $spell->name           = __($spell->name);
-                $spell->category       = __($spell->category);
-                $spell->cooldown_group = __($spell->cooldown_group);
+            if ($enemy->npc !== null) {
+                $enemy->npc->name = __($enemy->npc->name);
+                foreach ($enemy->npc->spells as $spell) {
+                    $spell->name           = __($spell->name);
+                    $spell->category       = __($spell->category);
+                    $spell->cooldown_group = __($spell->cooldown_group);
+                }
             }
         });
     }
