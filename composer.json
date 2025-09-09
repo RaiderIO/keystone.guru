@@ -34,11 +34,11 @@
             "type": "package",
             "package": {
                 "name": "nnoggie/mythicdungeontools",
-                "version": "5.5.9",
+                "version": "5.6.2",
                 "source": {
                     "url": "https://github.com/Wotuu/MythicDungeonTools.git",
                     "type": "git",
-                    "reference": "bdac629fb0651684e2978fd9fb3b768609e60620"
+                    "reference": "c5c84229bda9c4ca5e79fdf91ec1e03e4acbf931"
                 }
             }
         },
