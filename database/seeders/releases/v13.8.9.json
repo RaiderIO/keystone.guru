@@ -1,0 +1,25 @@
+{
+  "id": 320,
+  "release_changelog_id": 327,
+  "version": "v13.8.9",
+  "title": "Updated MDT to v5.6.2 - Halls of Atonement hotfixes",
+  "backup_db": 0,
+  "silent": 0,
+  "spotlight": 0,
+  "released": 0,
+  "created_at": "2025-09-09T20:37:43+00:00",
+  "updated_at": "2025-09-09T20:37:43+00:00",
+  "changelog": {
+    "id": 327,
+    "release_id": 320,
+    "description": null,
+    "changes": [
+      {
+        "release_changelog_id": 327,
+        "release_changelog_category_id": 4,
+        "ticket_id": 2967,
+        "change": "Halls of Atonement mapping changes after hotfixes."
+      }
+    ]
+  }
+}
