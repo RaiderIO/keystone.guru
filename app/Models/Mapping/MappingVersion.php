@@ -260,7 +260,10 @@ class MappingVersion extends Model
         $floorUnions = $this
             ->floorUnions()
             ->where('floor_id', $floorId)
-            ->with(['floor', 'targetFloor'])
+            ->with([
+                'floor',
+                'targetFloor',
+            ])
             ->get();
 
         $this->cachedFloorUnionsOnFloor->put($floorId, $floorUnions);
@@ -268,8 +271,11 @@ class MappingVersion extends Model
         return $floorUnions;
     }
 
-    public function getFloorUnionForLatLng(CoordinatesServiceInterface $coordinatesService, MappingVersion $mappingVersion, LatLng $latLng): ?FloorUnion
-    {
+    public function getFloorUnionForLatLng(
+        CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
+        LatLng                      $latLng
+    ): ?FloorUnion {
         $floor = $latLng->getFloor();
         if ($floor === null) {
             return null;
@@ -285,7 +291,10 @@ class MappingVersion extends Model
         } else {
             $floorUnions = $this->floorUnions()
                 ->where('target_floor_id', $floor->id)
-                ->with(['floor', 'targetFloor'])
+                ->with([
+                    'floor',
+                    'targetFloor',
+                ])
                 ->get();
 
             $this->cachedFloorUnionsForFloor->put($floor->id, $floorUnions);
@@ -358,7 +367,8 @@ class MappingVersion extends Model
 
         $newFloor = isset($convertedLatLngs[0]) ? $convertedLatLngs[0]->getFloor() : $floor;
 
-        $hasVertices->vertices_json = json_encode($convertedLatLngs->map(static fn(LatLng $latLng) => $latLng->toArray()));
+        $hasVertices->vertices_json = json_encode($convertedLatLngs->map(static fn(LatLng $latLng
+        ) => $latLng->toArray()));
 
         return $newFloor;
     }
@@ -369,7 +379,10 @@ class MappingVersion extends Model
     public function mapContextEnemyPacks(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
     {
         /** @var Collection<EnemyPack> $enemyPacks */
-        $enemyPacks = $this->enemyPacks()->with(['floor', 'enemies:enemies.id,enemies.enemy_pack_id'])->get();
+        $enemyPacks = $this->enemyPacks()->with([
+            'floor',
+            'enemies:enemies.id,enemies.enemy_pack_id',
+        ])->get();
 
         if ($this->facade_enabled && $useFacade) {
             $enemyPacks = $enemyPacks->map(function (EnemyPack $enemyPack) use ($coordinatesService) {
@@ -432,8 +445,10 @@ class MappingVersion extends Model
     /**
      * @return Collection<DungeonFloorSwitchMarker>
      */
-    public function mapContextDungeonFloorSwitchMarkers(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
-    {
+    public function mapContextDungeonFloorSwitchMarkers(
+        CoordinatesServiceInterface $coordinatesService,
+        bool                        $useFacade
+    ): Collection {
         /** @var Collection<DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
         $dungeonFloorSwitchMarkers = $this->dungeonFloorSwitchMarkers()
             ->whereNull('source_floor_id')
@@ -461,8 +476,10 @@ class MappingVersion extends Model
     /**
      * @return Collection<MountableArea>
      */
-    public function mapContextMountableAreas(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
-    {
+    public function mapContextMountableAreas(
+        CoordinatesServiceInterface $coordinatesService,
+        bool                        $useFacade
+    ): Collection {
         /** @var Collection<MountableArea> $mountableAreas */
         $mountableAreas = $this->mountableAreas()->with('floor')->get();
 
@@ -484,8 +501,10 @@ class MappingVersion extends Model
         return $this->floorUnions;
     }
 
-    public function mapContextFloorUnionAreas(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
-    {
+    public function mapContextFloorUnionAreas(
+        CoordinatesServiceInterface $coordinatesService,
+        bool                        $useFacade
+    ): Collection {
         return $this->floorUnionAreas;
     }
 

@@ -73,8 +73,12 @@ class ChallengeModeSplitter extends CombatLogSplitter
         // Pass $this->>parseCombatLogEvent as callable
         $this->combatLogService->parseCombatLog(
             $filePath,
-            fn($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr) =>
-                $this->parseCombatLogEvent($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr)
+            fn(
+                $combatLogVersion,
+                $advancedLoggingEnabled,
+                $rawEvent,
+                $lineNr
+            ) => $this->parseCombatLogEvent($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr)
         );
 
         // Remove the lineNr context since we stopped parsing lines, don't let the last line linger in the context
@@ -93,8 +97,12 @@ class ChallengeModeSplitter extends CombatLogSplitter
         return $this->result;
     }
 
-    private function parseCombatLogEvent(int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent, int $lineNr): ?BaseEvent
-    {
+    private function parseCombatLogEvent(
+        int    $combatLogVersion,
+        bool   $advancedLoggingEnabled,
+        string $rawEvent,
+        int    $lineNr
+    ): ?BaseEvent {
         $this->log->addContext('lineNr', [
             'combatLogVersion'       => $combatLogVersion,
             'advancedLoggingEnabled' => $advancedLoggingEnabled,
@@ -133,7 +141,7 @@ class ChallengeModeSplitter extends CombatLogSplitter
                 $parsedEvent->getZoneId() === $this->currentDungeon->map_id &&
                 $this->isInWrongZone) {
                 // Reset the flag
-                $this->isInWrongZone       = false;
+                $this->isInWrongZone = false;
                 // Capture the zone change though!
                 $this->lastZoneChangeEvent = $parsedEvent;
 

@@ -64,7 +64,10 @@ class UserController extends Controller
                 $user->addRole($role);
 
                 // Message to the user
-                Session::flash('status', __('controller.user.flash.user_is_now_a_role', ['user' => $user->name, 'role' => $role]));
+                Session::flash('status', __('controller.user.flash.user_is_now_a_role', [
+                    'user' => $user->name,
+                    'role' => $role,
+                ]));
             }
         }
 

@@ -25,11 +25,19 @@ class TracksUserIpAddress
                 [
                     'user_id'    => $user->id,
                     'ip_address' => $request->ip(),
-                    'count'      => 1, // Default value for new rows
-                    'updated_at' => now(), // Example of tracking when a row is updated
+                    'count'      => 1,
+                    // Default value for new rows
+                    'updated_at' => now(),
+                    // Example of tracking when a row is updated
                 ],
-                ['user_id', 'ip_address'],
-                ['count' => DB::raw('count + 1'), 'updated_at'] // Update these columns if a conflict occurs
+                [
+                    'user_id',
+                    'ip_address',
+                ],
+                [
+                    'count' => DB::raw('count + 1'),
+                    'updated_at',
+                ] // Update these columns if a conflict occurs
             );
         }
 

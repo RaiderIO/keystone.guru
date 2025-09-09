@@ -35,19 +35,27 @@ class DungeonRouteSubmitFormRequest extends FormRequest
             'dungeon_route_sandbox'     => 'int',
             'dungeon_route_level'       => new DungeonRouteLevelRule(),
             // Only active dungeons are allowed
-            'dungeon_id'                => ['required', Rule::in(
-                Dungeon::select('dungeons.id')
-                    ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
-                    ->where('expansions.active', true)
-                    ->where('dungeons.active', true)
-                    ->get()
-                    ->pluck('id')
-                    ->toArray()
-            )],
+            'dungeon_id' => [
+                'required',
+                Rule::in(
+                    Dungeon::select('dungeons.id')
+                        ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
+                        ->where('expansions.active', true)
+                        ->where('dungeons.active', true)
+                        ->get()
+                        ->pluck('id')
+                        ->toArray()
+                ),
+            ],
             // May be -1 (unset) or must be part of the user's teams
-            'team_id'                   => [Rule::in(
-                array_merge($user?->teams->pluck('id')->toArray() ?? [], [null, -1])
-            )],
+            'team_id'    => [
+                Rule::in(
+                    array_merge($user?->teams->pluck('id')->toArray() ?? [], [
+                        null,
+                        -1,
+                    ])
+                ),
+            ],
             'teeming'                   => 'nullable|int',
             'template'                  => 'nullable|int',
 
@@ -55,7 +63,10 @@ class DungeonRouteSubmitFormRequest extends FormRequest
             'seasonal_index'            => 'nullable|array',
             'seasonal_index.*'          => 'nullable|numeric',
 
-            'faction_id' => [Rule::exists('factions', 'id'), new FactionSelectionRequiredRule($this->request)],
+            'faction_id' => [
+                Rule::exists('factions', 'id'),
+                new FactionSelectionRequiredRule($this->request),
+            ],
 
             'race'  => 'nullable|array',
             'class' => 'nullable|array',

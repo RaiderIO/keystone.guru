@@ -26,8 +26,8 @@ class MapContextLiveSession extends MapContext
         CoordinatesServiceInterface             $coordinatesService,
         private OverpulledEnemyServiceInterface $overpulledEnemyService,
         LiveSession                             $liveSession,
-        Floor                                   $floor)
-    {
+        Floor $floor
+    ) {
         parent::__construct($cacheService, $coordinatesService, $liveSession, $floor, $liveSession->dungeonroute->mappingVersion);
     }
 

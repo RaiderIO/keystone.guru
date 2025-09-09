@@ -26,7 +26,10 @@ interface ResultEventDungeonRouteBuilderLoggingInterface extends DungeonRouteBui
 
     public function buildCreateNewActivePullChainPullCompleted(): void;
 
-    public function buildCreateNewActiveChainPull(float $activePullAverageHPPercent, int $chainPullDetectionHPPercent): void;
+    public function buildCreateNewActiveChainPull(
+        float $activePullAverageHPPercent,
+        int   $chainPullDetectionHPPercent
+    ): void;
 
     public function buildEnemyKilled(string $guid, string $timestamp): void;
 }

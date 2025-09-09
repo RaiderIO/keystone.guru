@@ -81,7 +81,7 @@ class User extends Authenticatable implements LaratrustUser
     public const DEFAULT_MAP_FACADE_STYLE = self::MAP_FACADE_STYLE_FACADE;
 
     public const THEME_DARKLY = 'darkly';
-    public const THEME_LUX = 'lux';
+    public const THEME_LUX               = 'lux';
 
     public const THEME_ALL = [
         self::THEME_DARKLY,
@@ -120,14 +120,21 @@ class User extends Authenticatable implements LaratrustUser
      * @var array
      */
     protected $visible = [
-        'id', 'public_key', 'name', 'echo_color',
+        'id',
+        'public_key',
+        'name',
+        'echo_color',
     ];
 
     protected $appends = [
         'initials',
     ];
 
-    protected $with = ['iconfile', 'patreonUserLink', 'gameVersion'];
+    protected $with = [
+        'iconfile',
+        'patreonUserLink',
+        'gameVersion',
+    ];
 
     public function getInitialsAttribute(): string
     {

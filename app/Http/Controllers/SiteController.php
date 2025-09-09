@@ -235,8 +235,12 @@ class SiteController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function embedExplore(Request $request, GameVersion $gameVersion, Dungeon $dungeon, string $floorIndex = '1'): View
-    {
+    public function embedExplore(
+        Request     $request,
+        GameVersion $gameVersion,
+        Dungeon     $dungeon,
+        string      $floorIndex = '1'
+    ): View {
         return view('misc.embedexplore', [
             'gameVersion' => $gameVersion,
             'model'       => $dungeon,
@@ -248,8 +252,12 @@ class SiteController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function embedHeatmap(Request $request, GameVersion $gameVersion, Dungeon $dungeon, string $floorIndex = '1'): View
-    {
+    public function embedHeatmap(
+        Request     $request,
+        GameVersion $gameVersion,
+        Dungeon     $dungeon,
+        string      $floorIndex = '1'
+    ): View {
         return view('misc.embedheatmap', [
             'gameVersion' => $gameVersion,
             'model'       => $dungeon,

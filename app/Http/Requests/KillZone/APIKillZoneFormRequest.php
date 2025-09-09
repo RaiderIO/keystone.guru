@@ -33,7 +33,10 @@ class APIKillZoneFormRequest extends FormRequest
     {
         return [
             'id'          => 'nullable|int',
-            'floor_id'    => ['nullable', Rule::exists(Floor::class, 'id')],
+            'floor_id' => [
+                'nullable',
+                Rule::exists(Floor::class, 'id'),
+            ],
             'color'       => [
                 'nullable',
                 'string',

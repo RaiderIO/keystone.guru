@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\Season;

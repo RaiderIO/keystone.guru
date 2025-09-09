@@ -88,17 +88,30 @@ class MDTNpc implements Arrayable
 
     public function isEmissary(): bool
     {
-        return in_array($this->id, [155432, 155433, 155434]);
+        return in_array($this->id, [
+            155432,
+            155433,
+            155434,
+        ]);
     }
 
     public function isAwakened(): bool
     {
-        return in_array($this->id, [161244, 161243, 161124, 161241]);
+        return in_array($this->id, [
+            161244,
+            161243,
+            161124,
+            161241,
+        ]);
     }
 
     public function isEncrypted(): bool
     {
-        return in_array($this->id, [185680, 185683, 185685]);
+        return in_array($this->id, [
+            185680,
+            185683,
+            185685,
+        ]);
     }
 
     public function isValid(): bool

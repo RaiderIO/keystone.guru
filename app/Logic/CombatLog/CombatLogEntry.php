@@ -16,7 +16,8 @@ class CombatLogEntry
 {
     public const DATE_FORMATS = [
         'm/d H:i:s.v',
-        'm/d/Y H:i:s.v-1', // These are all the timezones that are used in the combat log
+        'm/d/Y H:i:s.v-1',
+        // These are all the timezones that are used in the combat log
         'm/d/Y H:i:s.v-2',
         'm/d/Y H:i:s.v-3',
         'm/d/Y H:i:s.v-4',
@@ -72,8 +73,10 @@ class CombatLogEntry
      *
      * @throws Exception
      */
-    public function parseEvent(array $eventWhiteList = [], int $combatLogVersion = CombatLogVersion::RETAIL_11_0_5): ?BaseEvent
-    {
+    public function parseEvent(
+        array $eventWhiteList = [],
+        int   $combatLogVersion = CombatLogVersion::RETAIL_11_0_5
+    ): ?BaseEvent {
         $matches = [];
         if (!preg_match('/(\d*\/\d*(?:\/\d*)? \d*:\d*:\d*.\d*(?:-\d*)?)\s\s(.+)/', $this->rawEvent, $matches)) {
             if (!in_array(trim($this->rawEvent), self::RAW_EVENT_IGNORE)) {
@@ -89,7 +92,7 @@ class CombatLogEntry
             throw new Exception(sprintf('Unable to parse datetime: %s', $matches[1]), $invalidFormatException->getCode(), $invalidFormatException);
         }
 
-        $eventData     = $matches[2];
+        $eventData = $matches[2];
         $mayParseEvent = empty($eventWhiteList);
 
         if (!$mayParseEvent) {

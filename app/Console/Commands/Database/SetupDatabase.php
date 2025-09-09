@@ -17,8 +17,10 @@ abstract class SetupDatabase extends Command
             'driver'    => 'mysql',
             'host'      => $host,
             'port'      => $port,
-            'database'  => null, // No specific database yet
-            'username'  => config('database.connections.migrate.username'), // Root user
+            'database' => null,
+            // No specific database yet
+            'username' => config('database.connections.migrate.username'),
+            // Root user
             'password'  => config('database.connections.migrate.password'),
             'charset'   => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
@@ -52,8 +54,12 @@ abstract class SetupDatabase extends Command
         return $databaseExists === null;
     }
 
-    public function setupUserForDatabase(Connection $connection, string $database, string $username, string $password): int
-    {
+    public function setupUserForDatabase(
+        Connection $connection,
+        string     $database,
+        string     $username,
+        string     $password
+    ): int {
         $this->info(sprintf("👤 Creating user (if not exists) '%s' for database '%s'...", $username, $database));
         $connection->statement(sprintf("CREATE USER IF NOT EXISTS '%s'@'%%' IDENTIFIED BY '%s';", $username, $password));
         $connection->statement(sprintf("GRANT ALL PRIVILEGES ON %s.* TO '%s'@'%%';", $database, $username));

@@ -44,7 +44,11 @@ class IngestCombatLogRouteJson extends Command
         // We are the admin
         Auth::loginUsingId(1);
 
-        return $this->parseCreateRouteCombatLogJsonRecursively($filePath, function (string $filePath) use ($combatLogRouteBodyDungeonRouteService, $temp, $log) {
+        return $this->parseCreateRouteCombatLogJsonRecursively($filePath, function (string $filePath) use (
+            $combatLogRouteBodyDungeonRouteService,
+            $temp,
+            $log
+        ) {
             if (!Str::endsWith($filePath, '.json')) {
                 $this->comment(sprintf('- Skipping file %s', $filePath));
 

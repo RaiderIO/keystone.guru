@@ -21,15 +21,18 @@ class ExpansionSeason
 
     private bool $isInfernal = false;
 
-    public function __construct(ExpansionServiceInterface $expansionService, Expansion $expansion, GameServerRegion $gameServerRegion)
-    {
+    public function __construct(
+        ExpansionServiceInterface $expansionService,
+        Expansion                 $expansion,
+        GameServerRegion          $gameServerRegion
+    ) {
         $this->season = $expansionService->getCurrentSeason($expansion, $gameServerRegion);
 
         if ($this->season !== null) {
-            $this->isAwakened  = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_AWAKENED];
-            $this->isPrideful  = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_PRIDEFUL];
+            $this->isAwakened = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_AWAKENED];
+            $this->isPrideful = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_PRIDEFUL];
             $this->isTormented = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_TORMENTED];
-            $this->isInfernal  = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_INFERNAL];
+            $this->isInfernal = $this->season->seasonal_affix_id === Affix::ALL[Affix::AFFIX_INFERNAL];
         }
 
         $this->affixGroups = new ExpansionSeasonAffixGroups($expansionService, $expansion, $gameServerRegion, $this);

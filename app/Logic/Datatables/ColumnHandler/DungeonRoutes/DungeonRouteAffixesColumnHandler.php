@@ -20,8 +20,13 @@ class DungeonRouteAffixesColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'affixes.id');
     }
 
-    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
-    {
+    protected function applyFilter(
+        Builder $subBuilder,
+        Builder $orderBuilder,
+                $columnData,
+                $order,
+                $generalSearch
+    ): void {
         $affixIds = $columnData['search']['value'] ?? [];
         if (!empty($affixIds)) {
             $subBuilder->whereHas('affixes', static function ($query) use (&$affixIds) {

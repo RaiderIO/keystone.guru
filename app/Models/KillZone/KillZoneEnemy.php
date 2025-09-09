@@ -10,19 +10,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\JoinClause;
 
 /**
- * @property int      $id
- * @property int      $kill_zone_id
- * @property int      $npc_id
- * @property int      $mdt_id
+ * @property int   $id
+ * @property int   $kill_zone_id
+ * @property int   $npc_id
+ * @property int   $mdt_id
  * @property KillZone $killzone
- * @property Enemy    $enemy
- * @property Npc      $npc
+ * @property Enemy $enemy
+ * @property Npc   $npc
  *
  * @mixin Eloquent
  */
 class KillZoneEnemy extends Model
 {
-    public $hidden = ['id', 'kill_zone_id'];
+    public $hidden = [
+        'id',
+        'kill_zone_id',
+    ];
 
     public $timestamps = false;
 

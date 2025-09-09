@@ -90,7 +90,13 @@ class MappingVersionSeeder extends Seeder implements TableSeederInterface
         $count = 0;
         // Temp - but assign the proper mapping versions to all routes (this is slowish but simplest to get the job done, just once)
         DungeonRoute::with(['dungeon'])
-            ->without(['faction', 'specializations', 'classes', 'races', 'affixes'])
+            ->without([
+                'faction',
+                'specializations',
+                'classes',
+                'races',
+                'affixes',
+            ])
             ->whereNull('mapping_version_id')
             ->chunk(100, function (Collection $dungeonRoutes) use (&$count) {
                 /** @var Collection<DungeonRoute> $dungeonRoutes */

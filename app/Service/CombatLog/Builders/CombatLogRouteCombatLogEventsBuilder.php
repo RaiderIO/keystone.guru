@@ -198,8 +198,10 @@ class CombatLogRouteCombatLogEventsBuilder extends CombatLogRouteCorrectionBuild
         for ($i = 0; $i < $correctedCombatLogRoute->roster?->numMembers ?? 0; $i++) {
             $result[] = [
                 'id'    => $correctedCombatLogRoute->roster->characterIds[$i] ?? 12345,
-                'class' => $correctedCombatLogRoute->roster->classIds[$i] ?? 1, // Warrior
-                'spec'  => $correctedCombatLogRoute->roster->specIds[$i] ?? 73, // Warrior Protection
+                'class' => $correctedCombatLogRoute->roster->classIds[$i] ?? 1,
+                // Warrior
+                'spec'  => $correctedCombatLogRoute->roster->specIds[$i] ?? 73,
+                // Warrior Protection
             ];
         }
 

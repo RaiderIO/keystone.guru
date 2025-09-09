@@ -7,7 +7,6 @@ use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Traits\HasVertices;
 use App\Models\Traits\SeederModel;
 use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -35,7 +34,14 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
 {
     use SeederModel;
 
-    public $visible = ['id', 'mapping_version_id', 'floor_id', 'teeming', 'faction', 'polyline'];
+    public $visible = [
+        'id',
+        'mapping_version_id',
+        'floor_id',
+        'teeming',
+        'faction',
+        'polyline',
+    ];
 
     protected $fillable = [
         'id',
@@ -90,8 +96,10 @@ class EnemyPatrol extends CacheModel implements MappingModelCloneableInterface, 
         return $this->floor?->dungeon_id ?? null;
     }
 
-    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): EnemyPatrol
-    {
+    public function cloneForNewMappingVersion(
+        MappingVersion         $mappingVersion,
+        ?MappingModelInterface $newParent = null
+    ): EnemyPatrol {
         /** @var EnemyPatrol|MappingModelInterface $clonedEnemyPatrol */
         $clonedEnemyPatrol                     = clone $this;
         $clonedEnemyPatrol->exists             = false;

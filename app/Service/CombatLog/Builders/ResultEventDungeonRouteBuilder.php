@@ -166,7 +166,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                     $activePull->addSpell($resultEvent->getSpellId());
 
                     $this->log->buildSpellCast(
-                        // We use the owner guid if available (in case a pet cast this), otherwise we use the info guid (which is the owner/caster)
+                    // We use the owner guid if available (in case a pet cast this), otherwise we use the info guid (which is the owner/caster)
                         $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData()->getOwnerGuid()?->getGuid() ??
                         $resultEvent->getAdvancedCombatLogEvent()->getAdvancedData()->getInfoGuid()->getGuid(),
                         $resultEvent->getSpellId()

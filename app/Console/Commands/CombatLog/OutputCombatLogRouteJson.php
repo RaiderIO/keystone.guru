@@ -33,7 +33,9 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
 
         $filePath = $this->argument('filePath');
 
-        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogRouteBodyDungeonRouteService) {
+        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use (
+            $combatLogRouteBodyDungeonRouteService
+        ) {
             if (!str_contains($filePath, '.zip')) {
                 $this->comment(sprintf('- Skipping file %s (not a .zip)', $filePath));
 
@@ -53,14 +55,19 @@ class OutputCombatLogRouteJson extends BaseCombatLogCommand
     /**
      * @throws Exception
      */
-    private function outputCombatLogRouteJson(CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService, string $filePath): int
-    {
+    private function outputCombatLogRouteJson(
+        CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
+        string                                     $filePath
+    ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
-        $resultingFile = str_replace(['.txt', '.zip'], '.json', $filePath);
+        $resultingFile = str_replace([
+            '.txt',
+            '.zip',
+        ], '.json', $filePath);
 
         $combatLogRouteJson = $combatLogRouteDungeonRouteService->getCombatLogRoute($filePath);
-        if( $combatLogRouteJson !== null ) {
+        if ($combatLogRouteJson !== null) {
             $result = file_put_contents(
                 $resultingFile,
                 json_encode($combatLogRouteJson, JSON_PRETTY_PRINT)

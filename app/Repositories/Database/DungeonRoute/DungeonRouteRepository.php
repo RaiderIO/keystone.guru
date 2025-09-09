@@ -25,7 +25,8 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         }
     }
 
-    public function getDungeonRoutesWithExpiredThumbnails(?Collection $dungeonRoutes = null): Collection {
+    public function getDungeonRoutesWithExpiredThumbnails(?Collection $dungeonRoutes = null): Collection
+    {
         /** @var Collection<DungeonRoute> $routes */
         return DungeonRoute::where('author_id', '>', '0')
             // Check if in queue, if so skip, unless the queue age is longer than keystoneguru.thumbnail.refresh_requeue_hours

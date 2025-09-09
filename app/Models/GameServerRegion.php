@@ -59,7 +59,14 @@ class GameServerRegion extends CacheModel
         self::WORLD    => 6,
     ];
 
-    protected $fillable = ['short', 'name', 'epoch_start', 'timezone', 'reset_day_offset', 'reset_hours_offset'];
+    protected $fillable = [
+        'short',
+        'name',
+        'epoch_start',
+        'timezone',
+        'reset_day_offset',
+        'reset_hours_offset',
+    ];
 
     protected $casts = [
         'epoch_start' => 'datetime',

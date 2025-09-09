@@ -17,7 +17,10 @@ class RaidMarker extends CacheModel
 
     public $timestamps = false;
 
-    protected $fillable = ['id', 'name'];
+    protected $fillable = [
+        'id',
+        'name',
+    ];
 
     protected $appends = [
         'image_url',

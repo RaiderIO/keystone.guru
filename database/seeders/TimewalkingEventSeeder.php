@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Expansion;
 use App\Models\Timewalking\TimewalkingEvent;
 use App\SeederHelpers\Traits\FindsAffixes;
 use Illuminate\Database\Seeder;

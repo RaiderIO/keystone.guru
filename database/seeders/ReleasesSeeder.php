@@ -58,14 +58,14 @@ class ReleasesSeeder extends Seeder implements TableSeederInterface
             $releaseAttribute['created_at'] = Carbon::createFromFormat(Release::SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['created_at'])->toDateTimeString();
             $releaseAttribute['updated_at'] = Carbon::createFromFormat(Release::SERIALIZED_DATE_TIME_FORMAT, $releaseAttribute['updated_at'])->toDateTimeString();
 
-            if($existingReleases->has($releaseAttribute['id'])){
+            if ($existingReleases->has($releaseAttribute['id'])) {
                 /** @var Release $existingRelease */
                 $existingRelease = $existingReleases->get($releaseAttribute['id']);
 
-                $releaseAttribute['released'] = $existingRelease->released;
+                $releaseAttribute['released']  = $existingRelease->released;
                 $releaseAttribute['backup_db'] = $existingRelease->backup_db ?? 1;
             } else {
-                $releaseAttribute['released'] = 0;
+                $releaseAttribute['released']  = 0;
                 $releaseAttribute['backup_db'] = $releaseAttribute['backup_db'] ?? 1;
             }
             $releaseAttributes[] = $releaseAttribute;

@@ -62,18 +62,32 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         $this->critical(__METHOD__, get_defined_vars());
     }
 
-    public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY, ?float $previousPullLat, ?float $previousPullLng, array $preferredGroups): void
-    {
+    public function findUnkilledEnemyForNpcAtIngameLocationStart(
+        int    $npcId,
+        float  $ingameX,
+        float  $ingameY,
+        ?float $previousPullLat,
+        ?float $previousPullLng,
+        array  $preferredGroups
+    ): void {
         $this->start(__METHOD__, get_defined_vars());
     }
 
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(int $id, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy, int $group): void
-    {
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(
+        int   $id,
+        float $distanceBetweenEnemies,
+        float $distanceBetweenLastPullAndEnemy,
+        int   $group
+    ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredFloor(int $id, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy, int $floorId): void
-    {
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredFloor(
+        int   $id,
+        float $distanceBetweenEnemies,
+        float $distanceBetweenLastPullAndEnemy,
+        int   $floorId
+    ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
@@ -102,8 +116,10 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         $this->start(__METHOD__);
     }
 
-    public function findClosestEnemyInAllFilteredEnemiesEnemyIsNull(float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void
-    {
+    public function findClosestEnemyInAllFilteredEnemiesEnemyIsNull(
+        float $distanceBetweenEnemies,
+        float $distanceBetweenLastPullAndEnemy
+    ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
@@ -112,8 +128,12 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    public function findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(?int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy, int $maxDistance): void
-    {
+    public function findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(
+        ?int  $enemyId,
+        float $distanceBetweenEnemies,
+        float $distanceBetweenLastPullAndEnemy,
+        int   $maxDistance
+    ): void {
         $this->warning(__METHOD__, get_defined_vars());
     }
 
@@ -122,8 +142,11 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         $this->end(__METHOD__);
     }
 
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void
-    {
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(
+        int   $enemyId,
+        float $distanceBetweenEnemies,
+        float $distanceBetweenLastPullAndEnemy
+    ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
@@ -137,13 +160,20 @@ class DungeonRouteBuilderLogging extends RollbarStructuredLogging implements Dun
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function findClosestEnemyAndDistanceFromListResult(?int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void
-    {
+    public function findClosestEnemyAndDistanceFromListResult(
+        ?int  $enemyId,
+        float $distanceBetweenEnemies,
+        float $distanceBetweenLastPullAndEnemy
+    ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function findClosestEnemyAndDistanceDistanceBetweenEnemies(array $enemyXY, array $targetEnemyXY, float $distanceBetweenEnemies, float $closestEnemyDistanceBetweenEnemies): void
-    {
+    public function findClosestEnemyAndDistanceDistanceBetweenEnemies(
+        array $enemyXY,
+        array $targetEnemyXY,
+        float $distanceBetweenEnemies,
+        float $closestEnemyDistanceBetweenEnemies
+    ): void {
         $this->debug(__METHOD__, get_defined_vars());
     }
 }

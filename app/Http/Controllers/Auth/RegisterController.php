@@ -49,7 +49,11 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['guest', TrustProxies::class, 'throttle:create-user']);
+        $this->middleware([
+            'guest',
+            TrustProxies::class,
+            'throttle:create-user',
+        ]);
     }
 
     /**

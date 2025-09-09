@@ -3,7 +3,6 @@
 namespace App\Http\Models\Request\CombatLog\Route;
 
 use App\Models\Enemy;
-use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * @OA\Schema(schema="CombatLogRoutePlayerDeathCorrection")

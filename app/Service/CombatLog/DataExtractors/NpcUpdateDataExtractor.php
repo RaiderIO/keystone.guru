@@ -7,7 +7,6 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Models\Npc\Npc;
-use App\Models\Npc\NpcHealth;
 use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\DataExtractors\Logging\NpcUpdateDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
@@ -35,8 +34,11 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
 
     }
 
-    public function extractData(ExtractedDataResult $result, DataExtractionCurrentDungeon $currentDungeon, BaseEvent $parsedEvent): void
-    {
+    public function extractData(
+        ExtractedDataResult          $result,
+        DataExtractionCurrentDungeon $currentDungeon,
+        BaseEvent                    $parsedEvent
+    ): void {
         if (!($parsedEvent instanceof AdvancedCombatLogEvent)) {
             return;
         }
@@ -68,8 +70,8 @@ class NpcUpdateDataExtractor implements DataExtractorInterface
         ExtractedDataResult          $result,
         DataExtractionCurrentDungeon $currentDungeon,
         AdvancedCombatLogEvent       $parsedEvent,
-        Npc                          $npc): void
-    {
+        Npc $npc
+    ): void {
         // This code needs to know the game version of the combat log file, so we can fetch the correct health for the NPC
 
 //        $npcHealth = $npc->getHealthByGameVersion($currentDungeon->dungeon->gameVersion);

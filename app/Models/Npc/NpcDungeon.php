@@ -9,11 +9,11 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int     $id
- * @property int     $npc_id
- * @property int     $dungeon_id
+ * @property int $id
+ * @property int $npc_id
+ * @property int $dungeon_id
  *
- * @property Npc     $npc
+ * @property Npc $npc
  * @property Dungeon $dungeon
  *
  * @mixin Eloquent
@@ -24,7 +24,11 @@ class NpcDungeon extends CacheModel
 
     public $timestamps = false;
 
-    protected $fillable = ['id', 'npc_id', 'dungeon_id'];
+    protected $fillable = [
+        'id',
+        'npc_id',
+        'dungeon_id',
+    ];
 
     public $with = ['dungeon'];
 

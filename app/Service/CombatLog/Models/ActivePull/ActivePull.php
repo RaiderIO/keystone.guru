@@ -29,11 +29,11 @@ class ActivePull
 
     public function __construct()
     {
-        $this->startTime       = null;
-        $this->endTime         = null;
+        $this->startTime     = null;
+        $this->endTime       = null;
         $this->enemiesInCombat = collect();
-        $this->enemiesKilled   = collect();
-        $this->spellsCast      = collect();
+        $this->enemiesKilled = collect();
+        $this->spellsCast    = collect();
 
         $this->isCompleted = false;
     }
@@ -50,7 +50,8 @@ class ActivePull
 
     public function getAverageHPPercentAt(Carbon $timestamp): float
     {
-        $inCombatSum = $this->enemiesInCombat->sum(static fn(ActivePullEnemy $activePullEnemy) => $activePullEnemy->getHPPercentAt($timestamp));
+        $inCombatSum = $this->enemiesInCombat->sum(static fn(ActivePullEnemy $activePullEnemy
+        ) => $activePullEnemy->getHPPercentAt($timestamp));
 
         $totalEnemiesInPull = ($this->enemiesInCombat->count() + $this->enemiesKilled->count());
         if ($totalEnemiesInPull === 0) {
@@ -143,7 +144,10 @@ class ActivePull
 
     public function getAvgLatLng(): array
     {
-        $result = ['lat' => 0, 'lng' => 0];
+        $result = [
+            'lat' => 0,
+            'lng' => 0,
+        ];
 
         $count = 0;
         foreach ($this->enemiesKilled as $killedActivePullEnemy) {

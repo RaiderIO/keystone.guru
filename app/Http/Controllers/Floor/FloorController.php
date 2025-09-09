@@ -108,8 +108,8 @@ class FloorController extends Controller
         Request                    $request,
         MapContextServiceInterface $mapContextService,
         Dungeon                    $dungeon,
-        Floor                      $floor)
-    {
+        Floor $floor
+    ) {
         /** @var MappingVersion $mappingVersion */
         $mappingVersion = MappingVersion::findOrFail($request->get('mapping_version'));
 

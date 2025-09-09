@@ -31,7 +31,12 @@ class Polyline extends Model implements ConvertsVerticesInterface, MappingModelC
 
     public $timestamps = false;
 
-    public $visible = ['color', 'color_animated', 'weight', 'vertices_json'];
+    public $visible = [
+        'color',
+        'color_animated',
+        'weight',
+        'vertices_json',
+    ];
 
     protected $casts = [
         'id'            => 'int',
@@ -40,10 +45,20 @@ class Polyline extends Model implements ConvertsVerticesInterface, MappingModelC
         'vertices_json' => 'string',
     ];
 
-    public $fillable = ['id', 'model_id', 'model_class', 'color', 'color_animated', 'weight', 'vertices_json'];
+    public $fillable = [
+        'id',
+        'model_id',
+        'model_class',
+        'color',
+        'color_animated',
+        'weight',
+        'vertices_json',
+    ];
 
-    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Polyline
-    {
+    public function cloneForNewMappingVersion(
+        MappingVersion         $mappingVersion,
+        ?MappingModelInterface $newParent = null
+    ): Polyline {
         /** @var Polyline|MappingModelInterface $clone */
         $clone           = clone $this;
         $clone->exists   = false;

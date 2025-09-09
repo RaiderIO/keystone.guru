@@ -26,7 +26,10 @@ interface MappingServiceInterface
 
     public function createNewBareMappingVersion(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion;
 
-    public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion;
+    public function createNewMappingVersionFromPreviousMapping(
+        Dungeon     $dungeon,
+        GameVersion $gameVersion
+    ): MappingVersion;
 
     /**
      * Creates a new mapping version for a dungeon.
@@ -42,7 +45,10 @@ interface MappingServiceInterface
     /**
      * Takes an existing mapping version's contents and applies it to another mapping version.
      */
-    public function copyMappingVersionContentsToDungeon(MappingVersion $sourceMappingVersion, MappingVersion $targetMappingVersion): MappingVersion;
+    public function copyMappingVersionContentsToDungeon(
+        MappingVersion $sourceMappingVersion,
+        MappingVersion $targetMappingVersion
+    ): MappingVersion;
 
     /**
      * Gets a mapping version of a dungeon, or creates a new one for this dungeon if the most recent version has been pushed.

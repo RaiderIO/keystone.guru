@@ -15,10 +15,14 @@ class UsersDatatablesHandler extends DatatablesHandler
     protected function calculateRecordsTotal(): int
     {
         $query = $this->builder->getQuery()
-            ->cloneWithout(['columns', 'offset', 'limit'])->cloneWithoutBindings(['select'])
+            ->cloneWithout([
+                'columns',
+                'offset',
+                'limit',
+            ])->cloneWithoutBindings(['select'])
             ->selectRaw(DB::raw('SQL_CALC_FOUND_ROWS *')->getValue($this->builder->getGrammar()));
 
-        $havings        = $query->havings;
+        $havings = $query->havings;
         $query->havings = null;
 
         $query->orders = null;

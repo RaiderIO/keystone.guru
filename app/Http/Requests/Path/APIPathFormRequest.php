@@ -34,7 +34,10 @@ class APIPathFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'floor_id'                   => ['required', Rule::exists(Floor::class, 'id')],
+            'floor_id' => [
+                'required',
+                Rule::exists(Floor::class, 'id'),
+            ],
             'polyline'                   => 'required|array',
             'polyline.color'             => [
                 'nullable',

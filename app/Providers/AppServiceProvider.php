@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Force HTTPS in production - these environments are running in AWS which terminates https at the load balancer
         // instead of at nginx, so the site will think it's serving http if it's not forced to https
-        if(!$this->app->environment('local')) {
+        if (!$this->app->environment('local')) {
             URL::forceScheme('https');
         }
 

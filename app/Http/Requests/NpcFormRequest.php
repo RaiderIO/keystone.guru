@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Dungeon;
 use App\Models\Laratrust\Role;
 use App\Models\Npc\Npc;
 use Auth;
@@ -31,7 +30,10 @@ class NpcFormRequest extends FormRequest
             'dungeon_ids.*'             => Rule::exists('dungeons', 'id'),
             'npc_type_id'               => Rule::exists('npc_types', 'id'),
             'npc_class_id'              => Rule::exists('npc_classes', 'id'),
-            'classification_id'         => [Rule::exists('npc_classifications', 'id'), 'required'],
+            'classification_id' => [
+                Rule::exists('npc_classifications', 'id'),
+                'required',
+            ],
             'aggressiveness'            => Rule::in(Npc::ALL_AGGRESSIVENESS),
             'health_percentage'         => 'int|nullable',
             'level'                     => 'int|nullable',

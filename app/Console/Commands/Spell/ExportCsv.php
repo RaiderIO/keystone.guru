@@ -56,7 +56,20 @@ class ExportCsv extends Command
 
         $this->outputToCsv(
             sprintf('%s_spells.csv', Str::slug(__($dungeon->name, [], 'en_US'))),
-            ['id', 'npc_id', 'mechanic', 'name', 'dispel_type', 'schools', 'miss_types', 'aura', 'debuff', 'cast_time', 'duration', 'wowhead_link'],
+            [
+                'id',
+                'npc_id',
+                'mechanic',
+                'name',
+                'dispel_type',
+                'schools',
+                'miss_types',
+                'aura',
+                'debuff',
+                'cast_time',
+                'duration',
+                'wowhead_link',
+            ],
             $csvData
         );
 

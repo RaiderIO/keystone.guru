@@ -22,12 +22,15 @@ class MapContextService implements MapContextServiceInterface
         private readonly CacheServiceInterface           $cacheService,
         private readonly CoordinatesServiceInterface     $coordinatesService,
         private readonly OverpulledEnemyServiceInterface $overpulledEnemyService,
-        private readonly SeasonServiceInterface          $seasonService)
-    {
+        private readonly SeasonServiceInterface $seasonService
+    ) {
     }
 
-    public function createMapContextDungeonRoute(DungeonRoute $dungeonRoute, Floor $floor, ?string $mapFacadeStyle = null): MapContextDungeonRoute
-    {
+    public function createMapContextDungeonRoute(
+        DungeonRoute $dungeonRoute,
+        Floor        $floor,
+        ?string      $mapFacadeStyle = null
+    ): MapContextDungeonRoute {
         return new MapContextDungeonRoute(
             $this->cacheService,
             $this->coordinatesService,
@@ -48,8 +51,11 @@ class MapContextService implements MapContextServiceInterface
         );
     }
 
-    public function createMapContextDungeonExplore(Dungeon $dungeon, Floor $floor, MappingVersion $mappingVersion): MapContextDungeonExplore
-    {
+    public function createMapContextDungeonExplore(
+        Dungeon        $dungeon,
+        Floor          $floor,
+        MappingVersion $mappingVersion
+    ): MapContextDungeonExplore {
         return new MapContextDungeonExplore(
             $this->cacheService,
             $this->coordinatesService,
@@ -60,8 +66,11 @@ class MapContextService implements MapContextServiceInterface
         );
     }
 
-    public function createMapContextMappingVersionEdit(Dungeon $dungeon, Floor $floor, MappingVersion $mappingVersion): MapContextMappingVersionEdit
-    {
+    public function createMapContextMappingVersionEdit(
+        Dungeon        $dungeon,
+        Floor          $floor,
+        MappingVersion $mappingVersion
+    ): MapContextMappingVersionEdit {
         return new MapContextMappingVersionEdit(
             $this->cacheService,
             $this->coordinatesService,

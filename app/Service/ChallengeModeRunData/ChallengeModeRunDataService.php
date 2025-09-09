@@ -18,8 +18,8 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
     private Collection $dungeonCache;
 
     public function __construct(
-        private readonly CombatLogRouteDungeonRouteServiceInterface  $createRouteDungeonRouteService,
-        private readonly CombatLogEventRepositoryInterface           $combatLogEventRepository,
+        private readonly CombatLogRouteDungeonRouteServiceInterface $createRouteDungeonRouteService,
+        private readonly CombatLogEventRepositoryInterface          $combatLogEventRepository,
         private readonly ChallengeModeRunDataServiceLoggingInterface $log
     ) {
         $this->dungeonCache = collect();
@@ -108,8 +108,11 @@ class ChallengeModeRunDataService implements ChallengeModeRunDataServiceInterfac
     }
 
 
-    public function insertToOpensearch(Collection $combatLogEvents, int $count = 1000, ?callable $onProcess = null): bool
-    {
+    public function insertToOpensearch(
+        Collection $combatLogEvents,
+        int        $count = 1000,
+        ?callable  $onProcess = null
+    ): bool {
         $ids = $combatLogEvents->pluck('id')->toArray();
 
         if ($onProcess !== null) {

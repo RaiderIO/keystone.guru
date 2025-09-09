@@ -37,8 +37,8 @@ class CombatLogService implements CombatLogServiceInterface
         private readonly SeasonServiceInterface           $seasonService,
         private readonly NpcRepositoryInterface           $npcRepository,
         private readonly DungeonRepositoryInterface       $dungeonRepository,
-        private readonly CombatLogServiceLoggingInterface $log)
-    {
+        private readonly CombatLogServiceLoggingInterface $log
+    ) {
     }
 
     /**
@@ -50,7 +50,11 @@ class CombatLogService implements CombatLogServiceInterface
     {
         $events = new Collection();
 
-        $this->parseCombatLog($filePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) use ($events) {
+        $this->parseCombatLog($filePath, function (
+            int    $combatLogVersion,
+            bool   $advancedLoggingEnabled,
+            string $rawEvent
+        ) use ($events) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
 
             if ($parsedEvent !== null) {
@@ -70,7 +74,12 @@ class CombatLogService implements CombatLogServiceInterface
      */
     public function parseCombatLogStreaming(string $filePath, callable $callable): void
     {
-        $this->parseCombatLog($filePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent, int $lineNr) use ($callable) {
+        $this->parseCombatLog($filePath, function (
+            int    $combatLogVersion,
+            bool   $advancedLoggingEnabled,
+            string $rawEvent,
+            int    $lineNr
+        ) use ($callable) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
 
             if ($parsedEvent !== null) {
@@ -92,7 +101,11 @@ class CombatLogService implements CombatLogServiceInterface
     {
         $events = new Collection();
 
-        $this->parseCombatLog($filePath, static function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) use ($events) {
+        $this->parseCombatLog($filePath, static function (
+            int    $combatLogVersion,
+            bool   $advancedLoggingEnabled,
+            string $rawEvent
+        ) use ($events) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent(
                 [SpecialEvent::SPECIAL_EVENT_CHALLENGE_MODE_START], $combatLogVersion
             );
@@ -127,7 +140,11 @@ class CombatLogService implements CombatLogServiceInterface
     {
         $result = new Collection();
 
-        $this->parseCombatLog($filePath, static function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) use ($result) {
+        $this->parseCombatLog($filePath, static function (
+            int    $combatLogVersion,
+            bool   $advancedLoggingEnabled,
+            string $rawEvent
+        ) use ($result) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([SpecialEvent::SPECIAL_EVENT_MAP_CHANGE], $combatLogVersion);
             if ($parsedEvent instanceof MapChangeEvent) {
                 $result->put($parsedEvent->getUiMapID(), $parsedEvent->getUiMapName());
@@ -146,8 +163,17 @@ class CombatLogService implements CombatLogServiceInterface
 
         $currentDungeon = null;
 
-        $this->parseCombatLog($filePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) use (
-            &$dungeon, &$ingameMinX, &$ingameMinY, &$ingameMaxX, &$ingameMaxY, &$currentDungeon
+        $this->parseCombatLog($filePath, function (
+            int    $combatLogVersion,
+            bool   $advancedLoggingEnabled,
+            string $rawEvent
+        ) use (
+            &$dungeon,
+            &$ingameMinX,
+            &$ingameMinY,
+            &$ingameMaxX,
+            &$ingameMaxY,
+            &$currentDungeon
         ) {
             $parsedEvent = (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);
             if ($parsedEvent instanceof ZoneChange) {
@@ -196,7 +222,11 @@ class CombatLogService implements CombatLogServiceInterface
 
             try {
                 $this->parseCombatLogStreaming($combatLogFilePath,
-                    function (BaseEvent $baseEvent, int $lineNr) use (&$dungeonRouteFilter, &$combatLogDungeonRouteFilter) {
+                    function (BaseEvent $baseEvent, int $lineNr) use (
+                        &$dungeonRouteFilter,
+                        &
+                        $combatLogDungeonRouteFilter
+                    ) {
                         // If parsing was successful, it generated a dungeonroute, so then construct our filter
                         if ($dungeonRouteFilter->parse($baseEvent, $lineNr)) {
                             $combatLogDungeonRouteFilter->setValidNpcIds(

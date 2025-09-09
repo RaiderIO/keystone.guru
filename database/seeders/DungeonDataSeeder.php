@@ -427,7 +427,12 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
 
         // Can DEFINITELY NOT truncate DungeonRoute table here. That'd wipe the entire instance, not good.
         /** @var Collection<DungeonRoute> $demoRoutes */
-        $demoRoutes = DungeonRoute::with(['brushlines', 'paths', 'killZones', 'livesessions'])
+        $demoRoutes = DungeonRoute::with([
+            'brushlines',
+            'paths',
+            'killZones',
+            'livesessions',
+        ])
             ->where('demo', true)
             ->get();
 

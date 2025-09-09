@@ -47,7 +47,7 @@ class DungeonExploreController extends Controller
         }
 
         return view('dungeon.explore.gameversion.list', [
-            'gameVersion'            => $gameVersion,
+            'gameVersion' => $gameVersion,
         ]);
     }
 
@@ -245,10 +245,12 @@ class DungeonExploreController extends Controller
                 'headerBackgroundColor' => $headerBackgroundColor,
                 'mapBackgroundColor'    => $mapBackgroundColor,
                 'show'                  => [
-                    'enemyInfo'      => (bool)$showEnemyInfo, // Default false - not available
+                    'enemyInfo'      => (bool)$showEnemyInfo,
+                    // Default false - not available
                     'title'          => (bool)$showTitle,
                     'sidebar'        => (bool)$showSidebar,
-                    'floorSelection' => true,                 // Always available, but can be overridden later if there's no floors to select
+                    'floorSelection' => true,
+                    // Always available, but can be overridden later if there's no floors to select
                 ],
             ],
         ]));

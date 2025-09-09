@@ -11,7 +11,11 @@ interface CombatLogServiceLoggingInterface
 
     public function getResultEventsForChallengeModeStart(string $combatLogFilePath): void;
 
-    public function getResultEventsForChallengeModeFilterParseError(string $rawEvent, int $lineNr, Throwable $throwable): void;
+    public function getResultEventsForChallengeModeFilterParseError(
+        string    $rawEvent,
+        int       $lineNr,
+        Throwable $throwable
+    ): void;
 
     public function getResultEventsForChallengeModeAdvancedLogNotEnabled(string $message): void;
 
@@ -31,7 +35,10 @@ interface CombatLogServiceLoggingInterface
 
     public function parseCombatLogParseEventsStart(): void;
 
-    public function parseCombatLogParseEventsChangedCombatLogVersion(int $combatLogVersion, bool $advancedLoggingEnabled): void;
+    public function parseCombatLogParseEventsChangedCombatLogVersion(
+        int  $combatLogVersion,
+        bool $advancedLoggingEnabled
+    ): void;
 
     public function parseCombatLogParseEventsException(string $rawEvent, Exception $exception): void;
 

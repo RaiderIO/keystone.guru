@@ -29,11 +29,11 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
      * @throws Throwable
      */
     public function store(
-        MountableAreaFormRequest    $request,
+        MountableAreaFormRequest $request,
         CoordinatesServiceInterface $coordinatesService,
-        MappingVersion              $mappingVersion,
-        ?MountableArea              $mountableArea = null): MountableArea
-    {
+        MappingVersion           $mappingVersion,
+        ?MountableArea           $mountableArea = null
+    ): MountableArea {
         $validated = $request->validated();
 
         $validated['vertices_json'] = json_encode($request->get('vertices'));
@@ -71,8 +71,12 @@ class AjaxMountableAreaController extends AjaxMappingModelBaseController
         });
     }
 
-    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
-    {
+    protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        Model                       $model
+    ): ModelChangedEvent {
         return new MountableAreaChangedEvent($context, $user, $model);
     }
 }

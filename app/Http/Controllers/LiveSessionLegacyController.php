@@ -19,8 +19,12 @@ class LiveSessionLegacyController extends Controller
         ]);
     }
 
-    public function viewfloor(Request $request, DungeonRoute $dungeonroute, LiveSession $livesession, string $floorIndex): RedirectResponse
-    {
+    public function viewfloor(
+        Request      $request,
+        DungeonRoute $dungeonroute,
+        LiveSession  $livesession,
+        string       $floorIndex
+    ): RedirectResponse {
         return redirect()->route('dungeonroute.livesession.view', [
             'dungeon'      => $dungeonroute->dungeon,
             'dungeonroute' => $dungeonroute,

@@ -25,7 +25,10 @@ class PublishFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'published_state' => ['required', Rule::in(array_keys(PublishedState::ALL))],
+            'published_state' => [
+                'required',
+                Rule::in(array_keys(PublishedState::ALL)),
+            ],
         ];
     }
 }

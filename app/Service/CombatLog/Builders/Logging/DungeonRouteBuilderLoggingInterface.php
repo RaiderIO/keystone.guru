@@ -28,13 +28,34 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function findFloorByUiMapIdNoFloorFound(Exception $exception, int $uitMapId): void;
 
-    public function findUnkilledEnemyForNpcAtIngameLocationStart(int $npcId, float $ingameX, float $ingameY, ?float $previousPullLat, ?float $previousPullLng, array $preferredGroups): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationStart(
+        int    $npcId,
+        float  $ingameX,
+        float  $ingameY,
+        ?float $previousPullLat,
+        ?float $previousPullLng,
+        array  $preferredGroups
+    ): void;
 
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(int $id, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy, int $group): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredGroup(
+        int   $id,
+        float $distanceBetweenEnemies,
+        float $distanceBetweenLastPullAndEnemy,
+        int   $group
+    ): void;
 
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredFloor(int $id, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy, int $floorId): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFoundInPreferredFloor(
+        int   $id,
+        float $distanceBetweenEnemies,
+        float $distanceBetweenLastPullAndEnemy,
+        int   $floorId
+    ): void;
 
-    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void;
+    public function findUnkilledEnemyForNpcAtIngameLocationEnemyFound(
+        int   $enemyId,
+        float $distanceBetweenEnemies,
+        float $distanceBetweenLastPullAndEnemy
+    ): void;
 
     public function findUnkilledEnemyForNpcAtIngameLocationEnd(): void;
 
@@ -48,17 +69,34 @@ interface DungeonRouteBuilderLoggingInterface
 
     public function findClosestEnemyInAllFilteredEnemiesStart(): void;
 
-    public function findClosestEnemyInAllFilteredEnemiesEnemyIsNull(float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void;
+    public function findClosestEnemyInAllFilteredEnemiesEnemyIsNull(
+        float $distanceBetweenEnemies,
+        float $distanceBetweenLastPullAndEnemy
+    ): void;
 
     public function findClosestEnemyInAllFilteredEnemiesEnemyIsBossIgnoringTooFarAwayCheck(): void;
 
-    public function findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(?int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy, int $maxDistance): void;
+    public function findClosestEnemyInAllFilteredEnemiesEnemyTooFarAway(
+        ?int  $enemyId,
+        float $distanceBetweenEnemies,
+        float $distanceBetweenLastPullAndEnemy,
+        int   $maxDistance
+    ): void;
 
     public function findClosestEnemyInAllFilteredEnemiesEnd(): void;
 
     public function findClosestEnemyAndDistanceFromList(int $enemiesCount, bool $considerPatrols): void;
 
-    public function findClosestEnemyAndDistanceFromListResult(?int $enemyId, float $distanceBetweenEnemies, float $distanceBetweenLastPullAndEnemy): void;
+    public function findClosestEnemyAndDistanceFromListResult(
+        ?int  $enemyId,
+        float $distanceBetweenEnemies,
+        float $distanceBetweenLastPullAndEnemy
+    ): void;
 
-    public function findClosestEnemyAndDistanceDistanceBetweenEnemies(array $enemyXY, array $targetEnemyXY, float $distanceBetweenEnemies, float $closestEnemyDistanceBetweenEnemies): void;
+    public function findClosestEnemyAndDistanceDistanceBetweenEnemies(
+        array $enemyXY,
+        array $targetEnemyXY,
+        float $distanceBetweenEnemies,
+        float $closestEnemyDistanceBetweenEnemies
+    ): void;
 }

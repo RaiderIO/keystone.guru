@@ -91,7 +91,8 @@ class WebhookController extends Controller
                     $totalCharacterCount += strlen($addedDescription);
 
                     $embeds[] = [
-                        'color'       => 2328118, // #238636
+                        'color' => 2328118,
+                        // #238636
                         'description' => $addedDescription,
                     ];
                 }
@@ -103,7 +104,8 @@ class WebhookController extends Controller
                     $totalCharacterCount += strlen($modifiedDescription);
 
                     $embeds[] = [
-                        'color'       => 25284, // #0062C4
+                        'color' => 25284,
+                        // #0062C4
                         'description' => $modifiedDescription,
                     ];
                 }
@@ -115,7 +117,8 @@ class WebhookController extends Controller
                     $totalCharacterCount += strlen($removedDescription);
 
                     $embeds[] = [
-                        'color'       => 14300723, // #DA3633
+                        'color' => 14300723,
+                        // #DA3633
                         'description' => $removedDescription,
                     ];
                 }

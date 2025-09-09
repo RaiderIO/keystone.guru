@@ -30,6 +30,7 @@ class APIDungeonController extends Controller
             Dungeon::active()->get()
         );
     }
+
     /**
      * @OA\Get(
      *     operationId="getDungeon",

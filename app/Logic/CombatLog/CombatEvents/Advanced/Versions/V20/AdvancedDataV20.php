@@ -173,9 +173,9 @@ class AdvancedDataV20 implements AdvancedDataInterface
         $this->positionX = $parameters[13] * -1;
         $this->positionY = $parameters[12];
         // @TODO TEMP ARA-KARA FIX
-        $this->uiMapId   = $parameters[14];
-        $this->facing    = $parameters[15];
-        $this->level     = $parameters[16];
+        $this->uiMapId = $parameters[14];
+        $this->facing  = $parameters[15];
+        $this->level   = $parameters[16];
 
         return $this;
     }

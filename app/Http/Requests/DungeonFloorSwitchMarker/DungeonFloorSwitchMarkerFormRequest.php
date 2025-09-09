@@ -40,12 +40,34 @@ class DungeonFloorSwitchMarkerFormRequest extends FormRequest
     {
         return [
             'id'                                    => 'int',
-            'mapping_version_id'                    => ['required', Rule::exists(MappingVersion::class, 'id')],
-            'floor_id'                              => ['required', Rule::exists(Floor::class, 'id')],
-            'source_floor_id'                       => ['nullable', Rule::in(array_merge([-1], Floor::all('id')->pluck('id')->toArray()))],
-            'target_floor_id'                       => ['nullable', Rule::exists(Floor::class, 'id')],
-            'linked_dungeon_floor_switch_marker_id' => ['nullable', Rule::exists(DungeonFloorSwitchMarker::class, 'id')],
-            'direction'                             => ['nullable', Rule::in(array_merge(FloorCoupling::ALL, ['-1', '', null]))],
+            'mapping_version_id'                    => [
+                'required',
+                Rule::exists(MappingVersion::class, 'id'),
+            ],
+            'floor_id'                              => [
+                'required',
+                Rule::exists(Floor::class, 'id'),
+            ],
+            'source_floor_id'                       => [
+                'nullable',
+                Rule::in(array_merge([-1], Floor::all('id')->pluck('id')->toArray())),
+            ],
+            'target_floor_id'                       => [
+                'nullable',
+                Rule::exists(Floor::class, 'id'),
+            ],
+            'linked_dungeon_floor_switch_marker_id' => [
+                'nullable',
+                Rule::exists(DungeonFloorSwitchMarker::class, 'id'),
+            ],
+            'direction'                             => [
+                'nullable',
+                Rule::in(array_merge(FloorCoupling::ALL, [
+                    '-1',
+                    '',
+                    null,
+                ])),
+            ],
             'lat'                                   => 'numeric',
             'lng'                                   => 'numeric',
         ];

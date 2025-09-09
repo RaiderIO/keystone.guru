@@ -42,7 +42,7 @@ class NpcEnemyForcesController extends Controller
         Session::flash('status', __('view_admin.npcenemyforces.flash.enemy_forces_created'));
 
         return redirect()->route('admin.npc.npcenemyforces.edit', [
-            'npc'       => $npc,
+            'npc' => $npc,
             'npcEnemyForces' => $npcEnemyForces,
         ]);
     }
@@ -53,20 +53,23 @@ class NpcEnemyForcesController extends Controller
     public function edit(Request $request, Npc $npc, NpcEnemyForces $npcEnemyForces): \Illuminate\View\View
     {
         return view('admin.npcenemyforces.edit', [
-            'npc'       => $npc,
+            'npc' => $npc,
             'npcEnemyForces' => $npcEnemyForces,
         ]);
     }
 
-    public function update(NpcEnemyForcesFormRequest $request, Npc $npc, NpcEnemyForces $npcEnemyForces): \Illuminate\View\View
-    {
+    public function update(
+        NpcEnemyForcesFormRequest $request,
+        Npc                       $npc,
+        NpcEnemyForces            $npcEnemyForces
+    ): \Illuminate\View\View {
         $npcEnemyForces->update($request->validated());
 
         // Message to the user
         Session::flash('status', __('view_admin.npcenemyforces.flash.enemy_forces_updated'));
 
         return view('admin.npcenemyforces.edit', [
-            'npc'       => $npc,
+            'npc' => $npc,
             'npcEnemyForces' => $npcEnemyForces,
         ]);
     }

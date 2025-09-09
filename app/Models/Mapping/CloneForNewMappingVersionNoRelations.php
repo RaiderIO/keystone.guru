@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 trait CloneForNewMappingVersionNoRelations
 {
-    public function cloneForNewMappingVersion(MappingVersion $mappingVersion, ?MappingModelInterface $newParent = null): Model
-    {
+    public function cloneForNewMappingVersion(
+        MappingVersion         $mappingVersion,
+        ?MappingModelInterface $newParent = null
+    ): Model {
         /** @var Model|MappingModelInterface $clone */
         $clone                     = clone $this;
         $clone->exists             = false;

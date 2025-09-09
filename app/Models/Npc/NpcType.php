@@ -47,7 +47,10 @@ class NpcType extends CacheModel
         'Not specified' => self::NOT_SPECIFIED,
     ];
 
-    protected $fillable = ['id', 'type'];
+    protected $fillable = [
+        'id',
+        'type',
+    ];
 
     public $timestamps = false;
 

@@ -45,7 +45,11 @@ class CombatLogEventGridAggregationResult implements Arrayable
             if ($this->floorsAsArray) {
                 $rowCount = count($rows);
                 for ($i = 0; $i < $rowCount; $i += 3) {
-                    $rawData[] = [$rows[$i], $rows[$i + 1], $rows[$i + 2]];
+                    $rawData[] = [
+                        $rows[$i],
+                        $rows[$i + 1],
+                        $rows[$i + 2],
+                    ];
                 }
             } else {
                 foreach ($rows as $xy => $count) {
@@ -62,7 +66,11 @@ class CombatLogEventGridAggregationResult implements Arrayable
 
             $latLngs = [];
             foreach ($rawData as $row) {
-                [$x, $y, $count] = $row;
+                [
+                    $x,
+                    $y,
+                    $count,
+                ] = $row;
 
                 $latLngArray           = $this->convertIngameLocationToLatLngArray(new IngameXY($x, $y, $floor));
                 $latLngArray['weight'] = $count;

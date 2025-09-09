@@ -37,12 +37,13 @@ class DungeonRepositorySwoole extends DungeonRepository implements DungeonReposi
 
         /** @var Dungeon $dungeon */
         $dungeon = clone $this->dungeonsByChallengeModeId->get($challengeModeId);
+
         return $dungeon;
     }
 
     public function getMappingVersionByVersion(Dungeon $dungeon, int $version): ?MappingVersion
     {
-        if(!$this->dungeonMappingVersions->has($dungeon->id)){
+        if (!$this->dungeonMappingVersions->has($dungeon->id)) {
             $this->dungeonMappingVersions->put($dungeon->id, $dungeon->mappingVersions()->get());
         }
 

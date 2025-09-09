@@ -94,7 +94,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
                     }
 
                     $locale = str_replace('name_', '', $nameLocale);
-                    $parts = str_split($locale, 2);                              // e.g., enus -> ['en', 'us']
+                    $parts = str_split($locale, 2);                               // e.g., enus -> ['en', 'us']
                     $locale = sprintf('%s_%s', $parts[0], strtoupper($parts[1])); // en_US, fr_FR, etc.
 
                     $result->put($locale, $result->get($locale, collect())
@@ -230,7 +230,7 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
                     $json = rtrim($json, ');');
                     $data = json_decode($json, true);
 
-                    foreach($data as $zoneId => &$zoneData) {
+                    foreach ($data as $zoneId => &$zoneData) {
                         // Make the keys uniform
                         $zoneData = array_values($zoneData);
                     }
@@ -298,18 +298,19 @@ class WowheadTranslationService implements WowheadTranslationServiceInterface
             // Unescape any escaped single quotes first, then escape backslashes and double quotes for JSON
             $inner = str_replace([
                 "\\'",
-                "\\\\"
+                "\\\\",
             ], [
                 "'",
-                "\\\\"
+                "\\\\",
             ], $inner);
             $inner = str_replace([
                 '\\',
-                '"'
+                '"',
             ], [
                 '\\\\',
-                '\\"'
+                '\\"',
             ], $inner);
+
             return '"' . $inner . '"';
         }, $s);
 

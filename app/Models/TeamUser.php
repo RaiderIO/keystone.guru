@@ -39,13 +39,20 @@ class TeamUser extends Model
         self::ROLE_ADMIN        => 4,
     ];
 
-    protected $fillable = ['team_id', 'user_id', 'role'];
+    protected $fillable = [
+        'team_id',
+        'user_id',
+        'role',
+    ];
 
     protected $with = ['user'];
 
     public function scopeIsModerator(Builder $query, int $userId): Builder
     {
-        return $query->where('user_id', $userId)->whereIn('role', [self::ROLE_ADMIN, self::ROLE_MODERATOR]);
+        return $query->where('user_id', $userId)->whereIn('role', [
+            self::ROLE_ADMIN,
+            self::ROLE_MODERATOR,
+        ]);
     }
 
     public function team(): BelongsTo

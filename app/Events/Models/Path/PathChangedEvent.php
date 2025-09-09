@@ -18,13 +18,13 @@ class PathChangedEvent extends ModelChangedEvent
      * @param CoordinatesServiceInterface $coordinatesService
      * @param Model                       $context
      * @param User                        $user
-     * @param Path|Model             $model
+     * @param Path|Model $model
      */
     public function __construct(
         private readonly CoordinatesServiceInterface $coordinatesService,
         Model                                        $context,
         User                                         $user,
-        protected Path|Model                    $model
+        protected Path|Model $model
     ) {
         parent::__construct($context, $user, $model);
     }

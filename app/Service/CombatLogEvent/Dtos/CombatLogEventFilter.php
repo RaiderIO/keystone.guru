@@ -342,13 +342,17 @@ class CombatLogEventFilter implements Arrayable
             'affixes'                     => $this->affixes->map(function (Affix $affix) {
                 return __($affix->name, [], 'en_US');
             }),
-            'specializations'             => $this->specializations->map(function (CharacterClassSpecialization $characterClassSpecialization) {
+            'specializations'             => $this->specializations->map(function (
+                CharacterClassSpecialization $characterClassSpecialization
+            ) {
                 return __($characterClassSpecialization->name, [], 'en_US');
             }),
             'classes'                     => $this->classes->map(function (CharacterClass $characterClass) {
                 return __($characterClass->name, [], 'en_US');
             }),
-            'specializationsPlayerDeaths' => $this->specializationsPlayerDeaths->map(function (CharacterClassSpecialization $characterClassSpecialization) {
+            'specializationsPlayerDeaths' => $this->specializationsPlayerDeaths->map(function (
+                CharacterClassSpecialization $characterClassSpecialization
+            ) {
                 return __($characterClassSpecialization->name, [], 'en_US');
             }),
             'classesPlayerDeaths'         => $this->classesPlayerDeaths->map(function (CharacterClass $characterClass) {
@@ -461,11 +465,15 @@ class CombatLogEventFilter implements Arrayable
                 );
 
                 /** @var WeeklyAffixGroup $minWeeklyAffixGroup */
-                $minWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (WeeklyAffixGroup $weeklyAffixGroup) use ($mostRecentSeason) {
+                $minWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (
+                    WeeklyAffixGroup $weeklyAffixGroup
+                ) use ($mostRecentSeason) {
                     return $weeklyAffixGroup->week === $this->getPeriodMin() - $mostRecentSeason?->start_period;
                 });
                 /** @var WeeklyAffixGroup $maxWeeklyAffixGroup */
-                $maxWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (WeeklyAffixGroup $weeklyAffixGroup) use ($mostRecentSeason) {
+                $maxWeeklyAffixGroup = $weeklyAffixGroupsSinceStart->firstWhere(function (
+                    WeeklyAffixGroup $weeklyAffixGroup
+                ) use ($mostRecentSeason) {
                     return $weeklyAffixGroup->week === $this->getPeriodMax() - $mostRecentSeason?->start_period;
                 });
 
@@ -488,8 +496,10 @@ class CombatLogEventFilter implements Arrayable
         ];
     }
 
-    public static function fromHeatmapDataFilter(SeasonServiceInterface $seasonService, HeatmapDataFilter $heatmapDataFilter): CombatLogEventFilter
-    {
+    public static function fromHeatmapDataFilter(
+        SeasonServiceInterface $seasonService,
+        HeatmapDataFilter      $heatmapDataFilter
+    ): CombatLogEventFilter {
         $combatLogEventFilter = new CombatLogEventFilter(
             $seasonService,
             $heatmapDataFilter->getDungeon(),

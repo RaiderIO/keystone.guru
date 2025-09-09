@@ -43,7 +43,10 @@ class PatreonUserLink extends Model
 
     protected $with = ['patreonbenefits'];
 
-    protected $visible = ['patreonbenefits', 'manually_granted'];
+    protected $visible = [
+        'patreonbenefits',
+        'manually_granted',
+    ];
 
     protected $appends = ['manually_granted'];
 

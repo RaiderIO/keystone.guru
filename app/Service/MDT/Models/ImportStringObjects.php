@@ -15,10 +15,15 @@ class ImportStringObjects
 
     private readonly Collection $mapIcons;
 
-    public function __construct(private readonly Collection $warnings, private readonly Collection $errors, private readonly Dungeon $dungeon, private readonly Collection $killZoneAttributes, private readonly array $mdtObjects)
-    {
-        $this->lines    = collect();
-        $this->paths    = collect();
+    public function __construct(
+        private readonly Collection $warnings,
+        private readonly Collection $errors,
+        private readonly Dungeon    $dungeon,
+        private readonly Collection $killZoneAttributes,
+        private readonly array      $mdtObjects
+    ) {
+        $this->lines = collect();
+        $this->paths = collect();
         $this->mapIcons = collect();
     }
 

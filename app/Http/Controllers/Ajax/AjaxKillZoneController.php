@@ -124,7 +124,10 @@ class AjaxKillZoneController extends Controller
                 RefreshEnemyForces::dispatch($dungeonroute->id);
             }
 
-            $this->dungeonRouteChanged($dungeonroute, $beforeModel, $killZone, function (array &$beforeAttributes, array &$afterAttributes) use ($beforeModel, $killZone) {
+            $this->dungeonRouteChanged($dungeonroute, $beforeModel, $killZone, function (
+                array &$beforeAttributes,
+                array &$afterAttributes
+            ) use ($beforeModel, $killZone) {
                 $beforeAttributes['enemies'] = $beforeModel?->getEnemiesAttribute() ?? [];
                 $afterAttributes['enemies']  = $killZone->getEnemiesAttribute();
             });
@@ -244,7 +247,8 @@ class AjaxKillZoneController extends Controller
             try {
                 if (isset($killZoneData['enemies'])) {
                     // Filter enemies - only allow those who are actually on the allowed floors (don't couple to enemies in other dungeons)
-                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn($item) => in_array($item, $validEnemyIds));
+                    $killZoneDataEnemies = array_filter($killZoneData['enemies'], static fn($item
+                    ) => in_array($item, $validEnemyIds));
 
                     // Assign kill zone to each passed enemy
                     foreach ($killZoneDataEnemies as $killZoneDataEnemyId) {

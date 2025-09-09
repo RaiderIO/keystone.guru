@@ -127,7 +127,10 @@ class MDTDungeon
      */
     public function getClonesAsEnemies(MappingVersion $mappingVersion, Collection $floors): Collection
     {
-        return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeon->key), function () use ($mappingVersion, $floors) {
+        return $this->cacheService->remember(sprintf('mdt_enemies_%s', $this->dungeon->key), function () use (
+            $mappingVersion,
+            $floors
+        ) {
             $enemies = new Collection();
 
             try {
@@ -232,9 +235,16 @@ class MDTDungeon
                         $enemy->setRelation('npc',
                             $this->dungeon->npcs->firstWhere('id', $enemy->npc_id)?->makeHidden([
                                 // We don't care for the relationships here - just want to know if the NPC exists or not
-                                'type', 'class', 'npcbolsteringwhitelists', 'characteristics', 'spells'
+                                'type',
+                                'class',
+                                'npcbolsteringwhitelists',
+                                'characteristics',
+                                'spells',
                             ]) ??
-                            new Npc(['name' => 'UNABLE TO FIND NPC!', 'id' => $npcId])
+                            new Npc([
+                                'name' => 'UNABLE TO FIND NPC!',
+                                'id'   => $npcId,
+                            ])
                         );
 
                         if ($enemy->npc->isEmissary()) {

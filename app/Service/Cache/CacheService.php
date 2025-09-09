@@ -199,9 +199,12 @@ class CacheService implements CacheServiceInterface
 
         // List of Redis connection names to operate on.
         $connections = [
-            'default',      // App logic
-            'model_cache',  // Model cache
-            'cache',        // Used by Laravel cache
+            'default',
+            // App logic
+            'model_cache',
+            // Model cache
+            'cache',
+            // Used by Laravel cache
         ];
 
         // Get the key prefix (if any)
@@ -211,7 +214,7 @@ class CacheService implements CacheServiceInterface
 
         foreach ($connections as $connection) {
             // Get the Redis connection once.
-            $redis = Redis::connection($connection);
+            $redis             = Redis::connection($connection);
             $deletedCountForThisConnection = $this->deleteKeysByPatternOnConnection($redis, $regexes, $idleTimeSeconds, $prefix);
             $totalDeletedCount += $deletedCountForThisConnection;
         }
@@ -219,8 +222,12 @@ class CacheService implements CacheServiceInterface
         return $totalDeletedCount;
     }
 
-    private function deleteKeysByPatternOnConnection(Connection $redis, array $regexes, ?int $idleTimeSeconds, string $prefix): int
-    {
+    private function deleteKeysByPatternOnConnection(
+        Connection $redis,
+        array      $regexes,
+        ?int       $idleTimeSeconds,
+        string     $prefix
+    ): int {
         $deletedKeysCountTotal = 0;
         $deletedKeysCount = 0;
         $i = 0;
@@ -231,18 +238,21 @@ class CacheService implements CacheServiceInterface
 
             do {
                 // Use SCAN to iterate keys. The SCAN command returns [cursor, keys...]
-                $result = $redis->command('SCAN', [$nextKey]);
-                $nextKey = (int) $result[0];
+                $result  = $redis->command('SCAN', [$nextKey]);
+                $nextKey = (int)$result[0];
 
                 $toDelete = [];
 
                 // Iterate over the keys returned by SCAN
                 foreach ($result[1] as $redisKey) {
                     foreach ($regexes as $regex) {
-                        if (preg_match($regex, (string) $redisKey)) {
+                        if (preg_match($regex, (string)$redisKey)) {
                             // If an idle time is provided, check key's idle time.
                             if ($idleTimeSeconds !== null) {
-                                $keyIdleTimeSeconds = $redis->command('OBJECT', ['idletime', $redisKey]);
+                                $keyIdleTimeSeconds = $redis->command('OBJECT', [
+                                    'idletime',
+                                    $redisKey,
+                                ]);
                                 if ($keyIdleTimeSeconds > $idleTimeSeconds) {
                                     $toDelete[] = $redisKey;
                                 }

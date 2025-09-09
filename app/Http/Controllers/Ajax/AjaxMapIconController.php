@@ -30,8 +30,10 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
 {
     use ChangesDungeonRoute;
 
-    protected function shouldCallMappingChanged(?MappingModelInterface $beforeModel, ?MappingModelInterface $afterModel): bool
-    {
+    protected function shouldCallMappingChanged(
+        ?MappingModelInterface $beforeModel,
+        ?MappingModelInterface $afterModel
+    ): bool {
         /** @var MapIcon $beforeModel */
         /** @var MapIcon $afterModel */
         return $beforeModel?->dungeon_route_id === null || $afterModel?->dungeon_route_id === null;
@@ -202,8 +204,8 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         CoordinatesServiceInterface $coordinatesService,
         MapIconFormRequest          $request,
         DungeonRoute                $dungeonRoute,
-        ?MapIcon                    $mapIcon = null): MapIcon
-    {
+        ?MapIcon $mapIcon = null
+    ): MapIcon {
         return $this->store($coordinatesService, $request, null, $dungeonRoute, $mapIcon);
     }
 
@@ -215,8 +217,8 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         CoordinatesServiceInterface $coordinatesService,
         MapIconFormRequest          $request,
         MappingVersion              $mappingVersion,
-        ?MapIcon                    $mapIcon = null): MapIcon
-    {
+        ?MapIcon $mapIcon = null
+    ): MapIcon {
         return $this->store($coordinatesService, $request, $mappingVersion, null, $mapIcon);
     }
 
@@ -230,8 +232,12 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         return $this->delete($request, null, $mapIcon);
     }
 
-    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, MapIcon|Model $model): ModelChangedEvent
-    {
+    protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        MapIcon|Model               $model
+    ): ModelChangedEvent {
         return new MapIconChangedEvent($coordinatesService, $context, Auth::getUser(), $model);
     }
 }

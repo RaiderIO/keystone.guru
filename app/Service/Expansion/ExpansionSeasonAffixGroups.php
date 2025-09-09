@@ -19,11 +19,15 @@ class ExpansionSeasonAffixGroups
 
     private Collection $allAffixGroups;
 
-    public function __construct(ExpansionServiceInterface $expansionService, Expansion $expansion, GameServerRegion $gameServerRegion, ExpansionSeason $expansionSeason)
-    {
-        $this->featuredAffixes   = $expansionSeason->getSeason()?->getFeaturedAffixes() ?? collect();
+    public function __construct(
+        ExpansionServiceInterface $expansionService,
+        Expansion                 $expansion,
+        GameServerRegion          $gameServerRegion,
+        ExpansionSeason           $expansionSeason
+    ) {
+        $this->featuredAffixes = $expansionSeason->getSeason()?->getFeaturedAffixes() ?? collect();
         $this->currentAffixGroup = $expansionService->getCurrentAffixGroup($expansion, $gameServerRegion);
-        $this->nextAffixGroup    = $expansionService->getNextAffixGroup($expansion, $gameServerRegion);
+        $this->nextAffixGroup  = $expansionService->getNextAffixGroup($expansion, $gameServerRegion);
 
         if ($expansionSeason->getSeason() !== null) {
             $this->allAffixGroups = $expansionSeason->getSeason()->affixGroups()

@@ -30,7 +30,10 @@ class AssignMDTIDs extends Command
     public function handle(): int
     {
         /** @var Collection<MappingVersion> $mappingVersions */
-        $mappingVersions = MappingVersion::with(['enemies', 'dungeon'])->get();
+        $mappingVersions   = MappingVersion::with([
+            'enemies',
+            'dungeon',
+        ])->get();
 
         $dungeonWhitelist = [
             Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN,
@@ -67,8 +70,8 @@ class AssignMDTIDs extends Command
                         }
                     }
 
-                    foreach($enemiesByNpcId as $enemy) {
-                        if(empty($enemy->mdt_id)){
+                    foreach ($enemiesByNpcId as $enemy) {
+                        if (empty($enemy->mdt_id)) {
                             // Increment first, then write
                             $enemy->update(['mdt_id' => ++$maxId]);
                         }

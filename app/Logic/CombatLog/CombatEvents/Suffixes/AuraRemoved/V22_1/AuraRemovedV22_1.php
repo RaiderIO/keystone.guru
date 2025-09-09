@@ -3,10 +3,8 @@
 namespace App\Logic\CombatLog\CombatEvents\Suffixes\AuraRemoved\V22_1;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
-use App\Logic\CombatLog\CombatEvents\Suffixes\AuraRemoved\AuraRemovedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBase;
-use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
-use App\Logic\CombatLog\Guid\Guid;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraRemoved\AuraRemovedInterface;
 
 class AuraRemovedV22_1 extends AuraBase implements AuraRemovedInterface
 {

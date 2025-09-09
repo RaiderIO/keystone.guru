@@ -26,9 +26,18 @@ class CharacterClassSpecialization extends CacheModel
 
     public $timestamps = false;
 
-    public $hidden = ['icon_file_id', 'pivot'];
+    public $hidden = [
+        'icon_file_id',
+        'pivot',
+    ];
 
-    public $fillable = ['character_class_id', 'specialization_id', 'key', 'name', 'icon_file_id'];
+    public $fillable = [
+        'character_class_id',
+        'specialization_id',
+        'key',
+        'name',
+        'icon_file_id',
+    ];
 
     public function class(): BelongsTo
     {

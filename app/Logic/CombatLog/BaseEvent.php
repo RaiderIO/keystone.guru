@@ -10,8 +10,8 @@ abstract class BaseEvent
         private readonly int    $combatLogVersion,
         private readonly Carbon $timestamp,
         private readonly string $eventName,
-        private readonly string $rawEvent)
-    {
+        private readonly string $rawEvent
+    ) {
     }
 
     public function getCombatLogVersion(): int

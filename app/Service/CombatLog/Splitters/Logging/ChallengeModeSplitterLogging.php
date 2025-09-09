@@ -14,13 +14,20 @@ class ChallengeModeSplitterLogging extends CombatLogSplitterLogging implements C
         $this->info(__METHOD__);
     }
 
-    public function parseCombatLogEventTooBigTimestampGap(float $seconds, string $previousTimestamp, string $timestamp): void
-    {
+    public function parseCombatLogEventTooBigTimestampGap(
+        float  $seconds,
+        string $previousTimestamp,
+        string $timestamp
+    ): void {
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    public function parseCombatLogEventZoneChangeMismatch(int $zoneId, string $zoneName, int $dungeonZoneId, string $dungeonName): void
-    {
+    public function parseCombatLogEventZoneChangeMismatch(
+        int    $zoneId,
+        string $zoneName,
+        int    $dungeonZoneId,
+        string $dungeonName
+    ): void {
         $this->warning(__METHOD__, get_defined_vars());
     }
 

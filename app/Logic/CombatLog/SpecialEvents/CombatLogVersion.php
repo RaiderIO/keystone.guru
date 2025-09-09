@@ -49,7 +49,11 @@ class CombatLogVersion extends SpecialEvent
      */
     public function getVersionLong(): int
     {
-        [$major, $minor, $patch] = explode('.', $this->buildVersion);
+        [
+            $major,
+            $minor,
+            $patch,
+        ] = explode('.', $this->buildVersion);
 
         return ($this->version * 1_000_000_000) +
             ((int)$major * 1_000_000) + ((int)($minor ?? 0) * 1_000) + (int)($patch ?? 0);
@@ -62,10 +66,10 @@ class CombatLogVersion extends SpecialEvent
     {
         parent::setParameters($parameters);
 
-        $this->version            = $parameters[0];
+        $this->version      = $parameters[0];
         $this->advancedLogEnabled = $parameters[2];
-        $this->buildVersion       = $parameters[4];
-        $this->projectID          = $parameters[6];
+        $this->buildVersion = $parameters[4];
+        $this->projectID    = $parameters[6];
 
         if (!isset(CombatLogVersionConstant::ALL[$this->getVersionLong()])) {
             throw new Exception(sprintf('Unable to find combat log version %d!', $this->getVersionLong()));

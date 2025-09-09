@@ -20,11 +20,23 @@ class DungeonRouteEmbedUrlFormRequest extends DungeonRouteBaseUrlFormRequest
     public function rules(): array
     {
         return array_merge(parent::rules(), [
-            'style'                 => ['nullable', Rule::in(['compact', 'regular'])],
+            'style'                 => [
+                'nullable',
+                Rule::in([
+                    'compact',
+                    'regular',
+                ]),
+            ],
             'pullsDefaultState'     => 'nullable|integer',
             'pullsHideOnMove'       => 'nullable|bool',
-            'headerBackgroundColor' => ['nullable', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
-            'mapBackgroundColor'    => ['nullable', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'headerBackgroundColor' => [
+                'nullable',
+                'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
+            ],
+            'mapBackgroundColor'    => [
+                'nullable',
+                'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
+            ],
             'showEnemyInfo'         => 'nullable|bool',
             'showPulls'             => 'nullable|bool',
             'showEnemyForces'       => 'nullable|bool',

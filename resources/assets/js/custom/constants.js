@@ -126,6 +126,10 @@ const NPC_TYPE_MECHANICAL = 9;
 const NPC_TYPE_UNDEAD = 10;
 const NPC_TYPE_UNCATEGORIZED = 11;
 
+// Hard coded NPC IDs we need to add exceptions for
+const NPC_ID_NATHREZIM_INFILTRATOR = 189878;
+const NPC_ID_ZUL_GAMUX = 190128;
+
 // Seasonal types
 let ENEMY_SEASONAL_TYPE_BEGUILING = 'beguiling';
 let ENEMY_SEASONAL_TYPE_AWAKENED = 'awakened';

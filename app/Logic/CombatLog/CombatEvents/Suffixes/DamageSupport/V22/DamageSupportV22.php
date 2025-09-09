@@ -4,7 +4,6 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes\DamageSupport\V22;
 
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\V20\DamageV20;
-use App\Logic\CombatLog\CombatEvents\Suffixes\Damage\V22\DamageV22;
 use App\Logic\CombatLog\CombatEvents\Suffixes\DamageSupport\DamageSupportInterface;
 use App\Logic\CombatLog\Guid\Guid;
 

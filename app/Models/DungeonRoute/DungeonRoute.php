@@ -166,7 +166,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
      *
      * @var array
      */
-    protected $appends = ['setup', 'has_thumbnail', 'has_team', 'published'];
+    protected $appends = [
+        'setup',
+        'has_thumbnail',
+        'has_team',
+        'published',
+    ];
 
     protected $hidden = [
         'id',
@@ -256,7 +261,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function getSetupAttribute(): array
     {
         // Telescope has an issue where somehow it doesn't have these relations loaded and causes crashes
-        $this->load(['faction', 'specializations', 'classes', 'races']);
+        $this->load([
+            'faction',
+            'specializations',
+            'classes',
+            'races',
+        ]);
 
         return [
             'faction'         => $this->faction,
@@ -476,7 +486,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
 
         $newFloor = isset($convertedLatLngs[0]) ? $convertedLatLngs[0]->getFloor() : $floor;
 
-        $hasVertices->vertices_json = json_encode($convertedLatLngs->map(static fn(LatLng $latLng) => $latLng->toArray()));
+        $hasVertices->vertices_json = json_encode($convertedLatLngs->map(static fn(LatLng $latLng
+        ) => $latLng->toArray()));
 
         return $newFloor;
     }
@@ -536,7 +547,9 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         if ($useFacade) {
             $brushlines = $brushlines
                 // #2177 Sometimes brushlines don't have a polyline
-                ->filter(static fn(Brushline $brushline) => $brushline->polyline !== null)->map(function (Brushline $brushline) use ($coordinatesService) {
+                ->filter(static fn(Brushline $brushline) => $brushline->polyline !== null)->map(function (
+                    Brushline $brushline
+                ) use ($coordinatesService) {
                     $newFloor = $this->convertVerticesForFacade($coordinatesService, $brushline->polyline, $brushline->floor);
                     $brushline->setRelation('floor', $newFloor);
                     $brushline->floor_id = $newFloor->id;
@@ -989,7 +1002,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                     foreach ($newAffixes as $value) {
                         $value = (int)$value;
 
-                        if ($activeSeason->affixGroups->filter(static fn(AffixGroup $affixGroup) => $affixGroup->id === $value)->isEmpty()) {
+                        if ($activeSeason->affixGroups->filter(static fn(AffixGroup $affixGroup
+                        ) => $affixGroup->id === $value)->isEmpty()) {
                             // Attempted to assign an affix that the dungeon cannot have - abort it
                             continue;
                         }
@@ -1122,7 +1136,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             foreach ($relation as $model) {
                 // We have to load the enemies before we re-assign the ID - this is no longer done lazily for us
                 if ($model instanceof KillZone) {
-                    $model->load(['killZoneEnemies', 'killZoneSpells']);
+                    $model->load([
+                        'killZoneEnemies',
+                        'killZoneSpells',
+                    ]);
                 }
 
                 /** @var $model Model */
@@ -1246,7 +1263,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                     // Get any new enemies in this pack that have the seasonal type we're migrating to
                     foreach ($enemy->enemyPack->getEnemiesWithSeasonalType($seasonalType) as $seasonalTypeEnemy) {
                         // But only create new enemies if these enemies are new to the pack
-                        if ($killZone->getEnemies()->filter(static fn(Enemy $enemy) => $enemy->id === $seasonalTypeEnemy->id)->isEmpty()) {
+                        if ($killZone->getEnemies()->filter(static fn(Enemy $enemy
+                        ) => $enemy->id === $seasonalTypeEnemy->id)->isEmpty()) {
                             KillZoneEnemy::create([
                                 'enemy_id'     => $seasonalTypeEnemy->id,
                                 'kill_zone_id' => $killZone->id,
@@ -1363,7 +1381,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function getDominantAffix(): ?string
     {
         $fortifiedCount = $tyrannicalCount = 0;
-        if (in_array($this->season_id, [Season::SEASON_TWW_S1, Season::SEASON_TWW_S2, Season::SEASON_TWW_S3, Season::SEASON_TWW_S4])) {
+        if (in_array($this->season_id, [
+            Season::SEASON_TWW_S1,
+            Season::SEASON_TWW_S2,
+            Season::SEASON_TWW_S3,
+            Season::SEASON_TWW_S4,
+        ])) {
             foreach ($this->affixes as $affixGroup) {
                 // Look at the 2nd affix - this is what people are going to be focussed on mostly!
                 // These affix groups have both fortified and tyrannical so just look at the one that comes first
@@ -1408,12 +1431,14 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             $affixGroup = $this->affixes->first();
 
             /** @var Affix|null $xalAtathsGuile */
-            $xalAtathsGuile = $affixGroup->affixes->first(fn(Affix $affix) => $affix->key === Affix::AFFIX_XALATATHS_GUILE);
+            $xalAtathsGuile = $affixGroup->affixes->first(fn(Affix $affix
+            ) => $affix->key === Affix::AFFIX_XALATATHS_GUILE);
 
             if ($xalAtathsGuile !== null) {
                 /** @var AffixGroupCoupling|null $affixCoupling */
                 $affixGroup->load(['affixGroupCouplings']);
-                $affixCoupling = $affixGroup->affixGroupCouplings->first(fn(AffixGroupCoupling $affix) => $affix->affix_id === $xalAtathsGuile->id);
+                $affixCoupling = $affixGroup->affixGroupCouplings->first(fn(AffixGroupCoupling $affix
+                ) => $affix->affix_id === $xalAtathsGuile->id);
 
                 if ($affixCoupling !== null && $this->level_min >= $affixCoupling->key_level) {
                     $foundSeasonalAffix = $xalAtathsGuile;
@@ -1424,7 +1449,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         else {
             $this->affixes->each(static function (AffixGroup $affixGroup) use (&$foundSeasonalAffix) {
                 foreach (Affix::SEASONAL_AFFIXES as $seasonalAffix) {
-                    $foundSeasonalAffix = $foundSeasonalAffix ?? $affixGroup->affixes->first(function (Affix $affix) use ($seasonalAffix) {
+                    $foundSeasonalAffix = $foundSeasonalAffix ?? $affixGroup->affixes->first(function (Affix $affix) use
+                    (
+                        $seasonalAffix
+                    ) {
                         return $affix->key === $seasonalAffix;
                     });
                 }
@@ -1478,7 +1506,11 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 // Can't use %s for the href since PhpStorm then complains >.>
                 'routeLink' => sprintf(
                     ' <a href="' .
-                    route('dungeonroute.view', ['dungeonroute' => $this->clone_of, 'dungeon' => $this->dungeon, 'title' => $this->title]) .
+                    route('dungeonroute.view', [
+                        'dungeonroute' => $this->clone_of,
+                        'dungeon'      => $this->dungeon,
+                        'title'        => $this->title,
+                    ]) .
                     '">%s</a>',
                     $this->clone_of
                 ),
@@ -1515,7 +1547,10 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 $this->views_embed++;
             }
 
-            $this->update(['views', 'views_embed']);
+            $this->update([
+                'views',
+                'views_embed',
+            ]);
         }
 
         return $result;
@@ -1561,11 +1596,23 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     {
         try {
             // This can be better - but it's fine if you're using it to drop caches for 1 route.
-            $orientations = ['vertical', 'horizontal'];
+            $orientations = [
+                'vertical',
+                'horizontal',
+            ];
             $locales      = language()->allowed();
-            $showAffixes  = [0, 1];
-            $showDungeon  = [0, 1];
-            $isAdmin      = [0, 1];
+            $showAffixes  = [
+                0,
+                1,
+            ];
+            $showDungeon  = [
+                0,
+                1,
+            ];
+            $isAdmin      = [
+                0,
+                1,
+            ];
 
             foreach ($orientations as $orientation) {
                 foreach ($locales as $code => $name) {
@@ -1582,8 +1629,14 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         }
     }
 
-    public static function getCardCacheKey(int $dungeonRouteId, string $orientation, string $locale, int $showAffixes, int $showDungeonImage, int $isAdmin): string
-    {
+    public static function getCardCacheKey(
+        int    $dungeonRouteId,
+        string $orientation,
+        string $locale,
+        int    $showAffixes,
+        int    $showDungeonImage,
+        int    $isAdmin
+    ): string {
         return sprintf(
             'view:dungeonroute_card:%s:%s_%d_%d_%d_%d',
             $orientation,

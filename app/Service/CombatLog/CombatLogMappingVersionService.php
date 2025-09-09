@@ -60,7 +60,9 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                 return null;
             }
 
-            $mappingVersion = $this->createMappingVersionFromCombatLog($filePath, static function (BaseEvent $parsedEvent) {
+            $mappingVersion = $this->createMappingVersionFromCombatLog($filePath, static function (
+                BaseEvent $parsedEvent
+            ) {
                 $dungeon = null;
                 // Ensure we know the dungeon and verify it
                 if ($parsedEvent instanceof ChallengeModeStart) {
@@ -76,11 +78,16 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         return $mappingVersion;
     }
 
-    public function createMappingVersionFromDungeonOrRaid(string $filePath, ?MappingVersion $mappingVersion = null, bool $enemyConnections = false): ?MappingVersion
-    {
+    public function createMappingVersionFromDungeonOrRaid(
+        string          $filePath,
+        ?MappingVersion $mappingVersion = null,
+        bool            $enemyConnections = false
+    ): ?MappingVersion {
         $this->log->createMappingVersionFromDungeonOrRaidStart($filePath);
         try {
-            $mappingVersion = $this->createMappingVersionFromCombatLog($filePath, static function (BaseEvent $parsedEvent) {
+            $mappingVersion = $this->createMappingVersionFromCombatLog($filePath, static function (
+                BaseEvent $parsedEvent
+            ) {
                 $dungeon = null;
                 // Ensure we know the dungeon and verify it
                 if ($parsedEvent instanceof ZoneChange) {
@@ -128,12 +135,28 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         /** @var LatLng|null $previousEnemyLatLng */
         $previousEnemyLatLng = null;
 
-        $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent, int $lineNr)
+        $this->combatLogService->parseCombatLog($targetFilePath, function (
+            int    $combatLogVersion,
+            bool   $advancedLoggingEnabled,
+            string $rawEvent,
+            int    $lineNr
+        )
         use (
-            $extractDungeonCallable, $hasExistingMappingVersion, &$mappingVersion, &$dungeon, &$currentFloor, &$npcs,
-            &$enemiesAttributes, &$enemyConnectionsAttributes, &$previousEnemyLatLng
+            $extractDungeonCallable,
+            $hasExistingMappingVersion,
+            &$mappingVersion,
+            &$dungeon,
+            &$currentFloor,
+            &$npcs,
+            &$enemiesAttributes,
+            &$enemyConnectionsAttributes,
+            &$previousEnemyLatLng
         ) {
-            $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => trim($rawEvent), 'lineNr' => $lineNr]);
+            $this->log->addContext('lineNr', [
+                'combatLogVersion' => $combatLogVersion,
+                'rawEvent'         => trim($rawEvent),
+                'lineNr'           => $lineNr,
+            ]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
             $parsedEvent    = $combatLogEntry->parseEvent([], $combatLogVersion);
@@ -174,11 +197,17 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
 
                         $newMappingVersionVersion = $mostRecentMappingVersion === null ? 1 : $mostRecentMappingVersion->version + 1;
 
-                        $mappingVersion->update(['dungeon_id' => $dungeon->id, 'version' => $newMappingVersionVersion]);
+                        $mappingVersion->update([
+                            'dungeon_id' => $dungeon->id,
+                            'version'    => $newMappingVersionVersion,
+                        ]);
                         $mappingVersion->setRelation('dungeon', $dungeon);
                     }
 
-                    $npcs = Npc::whereIn('dungeon_id', [-1, $dungeon->id])->get()->keyBy('id');
+                    $npcs = Npc::whereIn('dungeon_id', [
+                        -1,
+                        $dungeon->id,
+                    ])->get()->keyBy('id');
 
                     // Assign the default floor in case there's no MapChange event coming (Ara-Kara is one such?)
                     /** @var Floor $currentFloor */
@@ -246,8 +275,14 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
                             'model_id'    => -1,
                             'model_class' => EnemyPatrol::class,
                             'lat_lngs'    => [
-                                ['lat' => $previousEnemyLatLng?->getLat() ?? CoordinatesService::MAP_MAX_LAT, 'lng' => $previousEnemyLatLng?->getLng() ?? CoordinatesService::MAP_MAX_LNG],
-                                ['lat' => $latLng->getLat(), 'lng' => $latLng->getLng()],
+                                [
+                                    'lat' => $previousEnemyLatLng?->getLat() ?? CoordinatesService::MAP_MAX_LAT,
+                                    'lng' => $previousEnemyLatLng?->getLng() ?? CoordinatesService::MAP_MAX_LNG,
+                                ],
+                                [
+                                    'lat' => $latLng->getLat(),
+                                    'lng' => $latLng->getLng(),
+                                ],
                             ],
                         ],
                     ];
@@ -264,9 +299,18 @@ class CombatLogMappingVersionService implements CombatLogMappingVersionServiceIn
         Enemy::insert($enemiesAttributes);
         if ($enemyConnections) {
             $enemyConnectionsGradient = [
-                [0, '#00FF00'],
-                [50, '#0000BB'],
-                [100, '#FF0000'],
+                [
+                    0,
+                    '#00FF00',
+                ],
+                [
+                    50,
+                    '#0000BB',
+                ],
+                [
+                    100,
+                    '#FF0000',
+                ],
             ];
 
             $weightStep = 100 / count($enemiesAttributes);

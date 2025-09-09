@@ -25,5 +25,11 @@ interface CombatLogEventServiceInterface
     public function getAvailableDateRange(CombatLogEventFilter $filters): ?CarbonPeriod;
 
     /** @return Collection<CombatLogEvent> */
-    public function generateCombatLogEvents(Season $season, CombatLogEventEventType $type, int $runCount = 1, int $eventsPerRun = 5, ?Dungeon $dungeon = null): Collection;
+    public function generateCombatLogEvents(
+        Season                  $season,
+        CombatLogEventEventType $type,
+        int                     $runCount = 1,
+        int                     $eventsPerRun = 5,
+        ?Dungeon                $dungeon = null
+    ): Collection;
 }

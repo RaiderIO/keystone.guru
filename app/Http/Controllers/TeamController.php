@@ -176,7 +176,10 @@ class TeamController extends Controller
 
         if ($team !== null) {
             if ($team->isCurrentUserMember()) {
-                $result = view('team.invite', ['team' => $team, 'member' => true]);
+                $result = view('team.invite', [
+                    'team'   => $team,
+                    'member' => true,
+                ]);
             } else {
                 $result = view('team.invite', ['team' => $team]);
             }
@@ -196,7 +199,10 @@ class TeamController extends Controller
         $team = Team::where('invite_code', $invitecode)->first();
 
         if ($team->isCurrentUserMember()) {
-            $result = view('team.invite', ['team' => $team, 'member' => true]);
+            $result = view('team.invite', [
+                'team'   => $team,
+                'member' => true,
+            ]);
         } else {
             /** @var User $user */
             $user = Auth::getUser();

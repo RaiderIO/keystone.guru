@@ -8,17 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int      $id
- * @property int      $kill_zone_id
- * @property int      $spell_id
+ * @property int   $id
+ * @property int   $kill_zone_id
+ * @property int   $spell_id
  * @property KillZone $killzone
- * @property Spell    $spell
+ * @property Spell $spell
  *
  * @mixin Eloquent
  */
 class KillZoneSpell extends Model
 {
-    public $hidden = ['id', 'kill_zone_id'];
+    public $hidden = [
+        'id',
+        'kill_zone_id',
+    ];
 
     public $timestamps = false;
 

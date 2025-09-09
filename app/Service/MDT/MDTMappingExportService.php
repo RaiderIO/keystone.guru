@@ -47,8 +47,11 @@ class MDTMappingExportService implements MDTMappingExportServiceInterface
         return $header . $dungeonMaps . $dungeonSubLevels . $dungeonTotalCountString . $mapPOIs . $dungeonEnemies;
     }
 
-    private function getHeader(MappingVersion $mappingVersion, Collection $translations, bool $excludeTranslations = false): string
-    {
+    private function getHeader(
+        MappingVersion $mappingVersion,
+        Collection     $translations,
+        bool           $excludeTranslations = false
+    ): string {
         $translations->push(__($mappingVersion->dungeon->name));
 
         $translationsLua = $excludeTranslations ? '' : $this->getTranslations($translations);
@@ -170,7 +173,10 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
             if (!$mappingVersion->facade_enabled) {
                 /** @var DungeonFloorSwitchMarker[] $dungeonFloorSwitchMarkers */
                 $dungeonFloorSwitchMarkers = $floor->dungeonFloorSwitchMarkers($mappingVersion)
-                    ->with(['floor', 'targetFloor'])
+                    ->with([
+                        'floor',
+                        'targetFloor',
+                    ])
                     ->get();
 
                 foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
@@ -179,7 +185,8 @@ MDT.dungeonTotalCount[dungeonIndex] = { normal = %d, teeming = %s, teemingEnable
                         'type'            => 'mapLink',
                         'target'          => $dungeonFloorSwitchMarker->targetFloor->mdt_sub_level ?? $dungeonFloorSwitchMarker->targetFloor->index,
                         'direction'       => $dungeonFloorSwitchMarker->getMdtDirection(),
-                        'connectionIndex' => $mapPOIIndex, // @TODO this is wrong?
+                        'connectionIndex' => $mapPOIIndex,
+                        // @TODO this is wrong?
                     ], Conversion::convertLatLngToMDTCoordinate($dungeonFloorSwitchMarker->getLatLng()));
                 }
             }
@@ -247,7 +254,11 @@ MDT.mapPOIs[dungeonIndex] = {};
 
         $enemiesByNpcId = $mappingVersion
             ->enemies()
-            ->with(['floor', 'enemyPatrol', 'enemyPack'])
+            ->with([
+                'floor',
+                'enemyPatrol',
+                'enemyPack',
+            ])
             ->get()
             ->groupBy('npc_id');
 
@@ -260,7 +271,10 @@ MDT.mapPOIs[dungeonIndex] = {};
             }
 
             // Ensure that if new enemies are added they are added last and not first - this helps a lot with assigning new IDs
-            $enemies = $enemies->sort(static fn(Enemy $a, Enemy $b) => $a->mdt_id === null || $b->mdt_id === null ? -1 : $a->mdt_id > $b->mdt_id);
+            $enemies             = $enemies->sort(static fn(
+                Enemy $a,
+                Enemy $b
+            ) => $a->mdt_id === null || $b->mdt_id === null ? -1 : $a->mdt_id > $b->mdt_id);
             /** @var Npc $npc */
             $npc = $npcs->get($npcId);
 
@@ -349,9 +363,9 @@ MDT.mapPOIs[dungeonIndex] = {};
                     $enemy->enemyPatrol->mdt_id === $enemy->mdt_id) {
 
                     $patrolVertices = [];
-                    $vertexIndex     = 0;
+                    $vertexIndex = 0;
                     // Prefer the mdt polyline if it exists (it was introduced later), otherwise use the regular polyline
-                    if($enemy->enemyPatrol->mdtPolyline !== null) {
+                    if ($enemy->enemyPatrol->mdtPolyline !== null) {
                         $polylineMdtXYs = $enemy->enemyPatrol->mdtPolyline
                             ->getDecodedLatLngs($enemy->floor);
                         foreach ($polylineMdtXYs as $vertexMdtLatLng) {

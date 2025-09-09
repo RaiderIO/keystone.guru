@@ -499,7 +499,8 @@ body {
   .enemy_icon.rangedcaster,
   .enemy_icon.rangedhealer,
   .enemy_icon.rangedmelee,
-  .enemy_icon.enemy_forces {
+  .enemy_icon.enemy_forces,
+  .enemy_icon.enemy_group {
     background-color: var($--theme-darker);
     color: var($--theme-text-contrast);
   }

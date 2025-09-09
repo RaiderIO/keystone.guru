@@ -46,8 +46,8 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
         protected KillZoneSpellRepositoryInterface                    $killZoneSpellRepository,
         protected EnemyRepositoryInterface                            $enemyRepository,
         protected NpcRepositoryInterface                              $npcRepository,
-        private readonly CombatLogDungeonRouteServiceLoggingInterface $log)
-    {
+        private readonly CombatLogDungeonRouteServiceLoggingInterface $log
+    ) {
     }
 
     /**

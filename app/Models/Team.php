@@ -38,7 +38,11 @@ class Team extends Model
     use HasIconFile;
     use GeneratesPublicKey;
 
-    protected $visible = ['name', 'description', 'public_key'];
+    protected $visible = [
+        'name',
+        'description',
+        'public_key',
+    ];
 
     protected $fillable = ['default_role'];
 
@@ -73,7 +77,9 @@ class Team extends Model
     public function getVisibleRouteCount(): int
     {
         return $this->dungeonroutes()->whereIn('published_state_id', PublishedState::whereIn('name', [
-            PublishedState::TEAM, PublishedState::WORLD, PublishedState::WORLD_WITH_LINK,
+            PublishedState::TEAM,
+            PublishedState::WORLD,
+            PublishedState::WORLD_WITH_LINK,
         ])->get()->pluck('id'))->count();
     }
 

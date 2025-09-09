@@ -3,9 +3,9 @@
 namespace App\Logic\CombatLog\SpecialEvents\DamageSplit;
 
 use App\Logic\CombatLog\CombatLogVersion;
-use App\Logic\CombatLog\SpecialEvents\DamageSplit\Versions\V9SoD\DamageSplitV9SoD;
 use App\Logic\CombatLog\SpecialEvents\DamageSplit\Versions\V20\DamageSplitV20;
 use App\Logic\CombatLog\SpecialEvents\DamageSplit\Versions\V22\DamageSplitV22;
+use App\Logic\CombatLog\SpecialEvents\DamageSplit\Versions\V9SoD\DamageSplitV9SoD;
 use App\Logic\CombatLog\SpecialEvents\SpecialEvent;
 use App\Logic\CombatLog\SpecialEvents\SpecialEventBuilderInterface;
 use Illuminate\Support\Carbon;

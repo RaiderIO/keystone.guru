@@ -9,7 +9,6 @@ use App\Service\Traits\Curl;
 use App\Service\Wowhead\Dtos\SpellDataResult;
 use App\Service\Wowhead\Logging\WowheadServiceLoggingInterface;
 use Carbon\CarbonInterval;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
@@ -214,7 +213,10 @@ class WowheadService implements WowheadServiceInterface
                 $mechanicFound = true;
             } // Triggered on the next line
             else if ($mechanicFound) {
-                $mechanic = str_replace(['<td>', '</td>'], '', $line);
+                $mechanic = str_replace([
+                    '<td>',
+                    '</td>',
+                ], '', $line);
                 if (str_contains($mechanic, 'n/a')) {
                     $mechanic = null;
                 } else {
@@ -225,7 +227,11 @@ class WowheadService implements WowheadServiceInterface
             } // Spell name
             else if (str_contains($line, self::IDENTIFYING_TOKEN_SPELL_NAME)) {
                 $name = html_entity_decode(
-                    str_replace([self::IDENTIFYING_TOKEN_SPELL_NAME, '"', '>'], '', $line),
+                    str_replace([
+                        self::IDENTIFYING_TOKEN_SPELL_NAME,
+                        '"',
+                        '>',
+                    ], '', $line),
                     ENT_QUOTES | ENT_XML1
                 );
             } // Spell school
@@ -233,7 +239,10 @@ class WowheadService implements WowheadServiceInterface
                 $schoolFound = true;
             } // Triggered on the next line
             else if ($schoolFound) {
-                $schoolsStr = str_replace(['<td>', '</td>'], '', $line);
+                $schoolsStr = str_replace([
+                    '<td>',
+                    '</td>',
+                ], '', $line);
                 $schools    = explode(', ', $schoolsStr);
 
                 foreach ($schools as $school) {
@@ -250,7 +259,10 @@ class WowheadService implements WowheadServiceInterface
                 $dispelTypeFound = true;
             } // Triggered on the next line
             else if ($dispelTypeFound) {
-                $dispelType = str_replace(['<td>', '</td>'], '', $line);
+                $dispelType = str_replace([
+                    '<td>',
+                    '</td>',
+                ], '', $line);
                 if (str_contains($dispelType, 'n/a')) {
                     $dispelType = Spell::DISPEL_TYPE_NOT_AVAILABLE;
                 } else if (!in_array($dispelType, Spell::ALL_DISPEL_TYPES)) {
@@ -265,7 +277,10 @@ class WowheadService implements WowheadServiceInterface
                 $castTimeFound = true;
             } // Triggered on the next line
             else if ($castTimeFound) {
-                $castTime = str_replace(['<td>', '</td>'], '', $line);
+                $castTime = str_replace([
+                    '<td>',
+                    '</td>',
+                ], '', $line);
                 if (str_contains($castTime, 'n/a')) {
                     $castTime = null;
                 } else if (str_contains($castTime, 'Instant')) {
@@ -281,7 +296,10 @@ class WowheadService implements WowheadServiceInterface
             } // Triggered on the next line
             else if ($durationFound) {
                 /** @noinspection HtmlDeprecatedAttribute */
-                $duration = str_replace(['<td width="100%">', '</td>'], '', $line);
+                $duration = str_replace([
+                    '<td width="100%">',
+                    '</td>',
+                ], '', $line);
                 if (str_contains($duration, 'n/a')) {
                     $duration = null;
                 } else {

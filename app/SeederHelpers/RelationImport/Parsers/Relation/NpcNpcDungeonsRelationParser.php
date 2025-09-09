@@ -4,7 +4,6 @@ namespace App\SeederHelpers\RelationImport\Parsers\Relation;
 
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcDungeon;
-use App\Models\Npc\NpcEnemyForces;
 use Database\Seeders\DatabaseSeeder;
 
 class NpcNpcDungeonsRelationParser implements RelationParserInterface

@@ -19,8 +19,13 @@ class ViewsColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, 'views');
     }
 
-    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
-    {
+    protected function applyFilter(
+        Builder $subBuilder,
+        Builder $orderBuilder,
+                $columnData,
+                $order,
+                $generalSearch
+    ): void {
         //        $views = $columnData['search']['value'] ?? null;
         //        if (!empty($views)) {
         //            $builder->whereHas('affixes', function ($query) use (&$affixIds) {

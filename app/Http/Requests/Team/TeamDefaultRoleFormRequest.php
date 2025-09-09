@@ -25,7 +25,10 @@ class TeamDefaultRoleFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'default_role' => ['required', Rule::in(array_keys(TeamUser::ALL_ROLES))],
+            'default_role' => [
+                'required',
+                Rule::in(array_keys(TeamUser::ALL_ROLES)),
+            ],
         ];
     }
 }

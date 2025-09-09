@@ -32,8 +32,10 @@ class BattleNetLoginController extends OAuthLoginController
         return 'battlenet';
     }
 
-    public function redirectToProvider(Request $request, ReadOnlyModeServiceInterface $readOnlyModeService): RedirectResponse
-    {
+    public function redirectToProvider(
+        Request                      $request,
+        ReadOnlyModeServiceInterface $readOnlyModeService
+    ): RedirectResponse {
         $this->redirectTo = $request->get('redirect', '/');
 
         $region = $request->get('region', GameServerRegion::DEFAULT_REGION);

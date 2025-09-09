@@ -59,7 +59,10 @@ class Spell extends CacheModel implements MappingModelInterface
 
     public $hidden = ['pivot'];
 
-    protected $appends = ['icon_url', 'wowhead_url'];
+    protected $appends = [
+        'icon_url',
+        'wowhead_url',
+    ];
 
     protected $fillable = [
         'id',

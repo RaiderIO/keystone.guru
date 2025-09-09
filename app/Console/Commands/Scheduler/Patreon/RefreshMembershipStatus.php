@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Scheduler\Patreon;
 
 use App\Console\Commands\Scheduler\SchedulerCommand;
-use App\Service\Patreon\PatreonApiService;
 use App\Service\Patreon\PatreonServiceInterface;
 
 class RefreshMembershipStatus extends SchedulerCommand

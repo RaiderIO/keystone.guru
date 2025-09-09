@@ -15,8 +15,11 @@ use Swoole\Http\Status;
 
 class MappingVersionController extends Controller
 {
-    public function saveNew(Request $request, Dungeon $dungeon, MappingServiceInterface $mappingService): RedirectResponse
-    {
+    public function saveNew(
+        Request                 $request,
+        Dungeon                 $dungeon,
+        MappingServiceInterface $mappingService
+    ): RedirectResponse {
         $gameVersionId = $request->get('game_version');
         $action        = $request->get('action');
 

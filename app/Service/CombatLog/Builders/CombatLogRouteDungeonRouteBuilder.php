@@ -5,7 +5,6 @@ namespace App\Service\CombatLog\Builders;
 use App;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteNpcRequestModel;
 use App\Http\Models\Request\CombatLog\Route\CombatLogRouteRequestModel;
-use App\Http\Models\Request\CombatLog\Route\CombatLogRouteSpellRequestModel;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
@@ -116,7 +115,8 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
 
     private function buildKillZones(): void
     {
-        $filteredNpcs = $this->combatLogRoute->npcs->filter(fn(CombatLogRouteNpcRequestModel $npc) => $this->validNpcIds->search($npc->npcId) !== false);
+        $filteredNpcs = $this->combatLogRoute->npcs->filter(fn(CombatLogRouteNpcRequestModel $npc
+        ) => $this->validNpcIds->search($npc->npcId) !== false);
 
         $npcEngagedEvents = $filteredNpcs->map(static fn(CombatLogRouteNpcRequestModel $npc) => [
             'type'      => 'engaged',

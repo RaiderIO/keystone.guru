@@ -7,7 +7,7 @@ use App\Models\Traits\SeederModel;
 use Eloquent;
 
 /**
- * @property int    $id
+ * @property int $id
  * @property string $locale
  * @property string $key
  * @property string $translation
@@ -20,5 +20,10 @@ class Translation extends CacheModel
 
     public $timestamps = false;
 
-    protected $fillable = ['id', 'locale', 'key', 'translation'];
+    protected $fillable = [
+        'id',
+        'locale',
+        'key',
+        'translation',
+    ];
 }

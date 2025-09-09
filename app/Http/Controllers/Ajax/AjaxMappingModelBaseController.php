@@ -27,8 +27,10 @@ abstract class AjaxMappingModelBaseController extends Controller
 {
     use ChangesMapping;
 
-    protected function shouldCallMappingChanged(?MappingModelInterface $beforeModel, ?MappingModelInterface $afterModel): bool
-    {
+    protected function shouldCallMappingChanged(
+        ?MappingModelInterface $beforeModel,
+        ?MappingModelInterface $afterModel
+    ): bool {
         return true;
     }
 
@@ -51,19 +53,30 @@ abstract class AjaxMappingModelBaseController extends Controller
         }
 
         /** @var Model $modelClass */
-        return DB::transaction(function () use ($coordinatesService, $validated, $modelClass, $model, $onSaveSuccess, $echoContext) {
+        return DB::transaction(function () use (
+            $coordinatesService,
+            $validated,
+            $modelClass,
+            $model,
+            $onSaveSuccess,
+            $echoContext
+        ) {
             /** @var Model|null $beforeModel */
             $beforeModel = $model === null ? null : clone $model;
 
             if ($model === null) {
-                $model   = $modelClass::create($validated);
+                $model = $modelClass::create($validated);
                 $success = $model instanceof $modelClass;
             } else {
                 $success = $model->update($validated);
             }
 
             if ($success) {
-                $model->load(['mappingVersion', 'floor', 'floor.dungeon']);
+                $model->load([
+                    'mappingVersion',
+                    'floor',
+                    'floor.dungeon',
+                ]);
 
                 if ($onSaveSuccess != null) {
                     $onSaveSuccess($model);
@@ -86,5 +99,10 @@ abstract class AjaxMappingModelBaseController extends Controller
         });
     }
 
-    protected abstract function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent;
+    protected abstract function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        Model                       $model
+    ): ModelChangedEvent;
 }

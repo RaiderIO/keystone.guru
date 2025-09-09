@@ -33,7 +33,6 @@ use JsonSerializable;
  *
  * @mixin DungeonRouteThumbnailJob
  */
-
 class DungeonRouteThumbnailJobResource extends JsonResource
 {
     /**

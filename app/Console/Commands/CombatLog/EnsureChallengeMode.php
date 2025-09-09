@@ -30,7 +30,8 @@ class EnsureChallengeMode extends BaseCombatLogCommand
         $filePath = $this->argument('filePath');
 
         // Assume error
-        return $this->parseCombatLogRecursively($filePath, fn(string $filePath) => $this->analyzeCombatLog($combatLogService, $filePath));
+        return $this->parseCombatLogRecursively($filePath, fn(string $filePath
+        ) => $this->analyzeCombatLog($combatLogService, $filePath));
     }
 
     private function analyzeCombatLog(CombatLogServiceInterface $combatLogService, string $filePath): int

@@ -25,7 +25,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use Mockery\Exception;
@@ -88,7 +87,10 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
      *
      * @var array
      */
-    protected $appends = ['floor_count', 'mdt_supported'];
+    protected $appends = [
+        'floor_count',
+        'mdt_supported',
+    ];
 
     protected $fillable = [
         'expansion_id',
@@ -110,7 +112,10 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
         'views',
     ];
 
-    public $with = ['expansion', 'floors'];
+    public $with = [
+        'expansion',
+        'floors',
+    ];
 
     public $hidden = [
         'expansion_id',
@@ -367,7 +372,9 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
      */
     public function scopeFactionSelectionRequired(Builder $query): Builder
     {
-        return $query->whereIn('key', [/*self::DUNGEON_SIEGE_OF_BORALUS,*/ self::DUNGEON_THE_NEXUS]);
+        return $query->whereIn('key', [/*self::DUNGEON_SIEGE_OF_BORALUS,*/
+                                       self::DUNGEON_THE_NEXUS,
+        ]);
     }
 
     /**
@@ -466,7 +473,11 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
             ->where('enemies.mapping_version_id', $mappingVersion->id)
             ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
             ->where('npc_type_id', '!=', NpcType::CRITTER)
-            ->whereIn('aggressiveness', [Npc::AGGRESSIVENESS_AGGRESSIVE, Npc::AGGRESSIVENESS_UNFRIENDLY, Npc::AGGRESSIVENESS_AWAKENED])
+            ->whereIn('aggressiveness', [
+                Npc::AGGRESSIVENESS_AGGRESSIVE,
+                Npc::AGGRESSIVENESS_UNFRIENDLY,
+                Npc::AGGRESSIVENESS_AWAKENED,
+            ])
             // If we don't show em - don't take em into account for health calculations
             ->where(function ($query) {
                 $query->whereNull('enemies.seasonal_type')
@@ -482,18 +493,21 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public function loadMappingVersions(): self
     {
-        $this->load(['mappingVersions' => function (HasMany $query) {
-            // Prevent circular reference loading - we also don't need it because WE are the dungeon
-            $query->without('dungeon')
-                ->orderByDesc('mapping_versions.version');
-        }]);
+        $this->load([
+            'mappingVersions' => function (HasMany $query) {
+                // Prevent circular reference loading - we also don't need it because WE are the dungeon
+                $query->without('dungeon')
+                    ->orderByDesc('mapping_versions.version');
+            },
+        ]);
 
         return $this;
     }
 
     public function hasMappingVersionWithSeasons(): bool
     {
-        return $this->loadMappingVersions()->mappingVersions->contains(static function (MappingVersion $mappingVersion) {
+        return $this->loadMappingVersions()->mappingVersions->contains(static function (MappingVersion $mappingVersion
+        ) {
             return $mappingVersion->gameVersion->has_seasons;
         });
     }
@@ -510,7 +524,10 @@ class Dungeon extends CacheModel implements MappingModelInterface, TracksPageVie
 
     public function isFactionSelectionRequired(): bool
     {
-        return in_array($this->key, [self::DUNGEON_SIEGE_OF_BORALUS, self::DUNGEON_THE_NEXUS]);
+        return in_array($this->key, [
+            self::DUNGEON_SIEGE_OF_BORALUS,
+            self::DUNGEON_THE_NEXUS,
+        ]);
     }
 
     public function getImageUrl(): string

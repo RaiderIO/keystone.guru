@@ -20,9 +20,8 @@ class FloorDataExtractor implements DataExtractorInterface
     private FloorDataExtractorLoggingInterface $log;
 
     public function __construct(
-        private readonly FloorRepositoryInterface                       $floorRepository
-    )
-    {
+        private readonly FloorRepositoryInterface $floorRepository
+    ) {
         $log = App::make(FloorDataExtractorLoggingInterface::class);
         /** @var FloorDataExtractorLoggingInterface $log */
 
@@ -34,8 +33,11 @@ class FloorDataExtractor implements DataExtractorInterface
 
     }
 
-    public function extractData(ExtractedDataResult $result, DataExtractionCurrentDungeon $currentDungeon, BaseEvent $parsedEvent): void
-    {
+    public function extractData(
+        ExtractedDataResult          $result,
+        DataExtractionCurrentDungeon $currentDungeon,
+        BaseEvent                    $parsedEvent
+    ): void {
         if (!($parsedEvent instanceof MapChange)) {
             // Don't log anything because that'd just spam the hell out of it
             return;

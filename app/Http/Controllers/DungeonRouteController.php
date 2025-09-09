@@ -186,8 +186,8 @@ class DungeonRouteController extends Controller
         Dungeon                        $dungeon,
         DungeonRoute                   $dungeonroute,
         string                         $title,
-        string                         $floorIndex)
-    {
+        string $floorIndex
+    ) {
         $this->authorize('present', $dungeonroute);
 
         // @TODO fix this - it has a different connection and that messes with the relation
@@ -264,7 +264,10 @@ class DungeonRouteController extends Controller
         string                            $title,
         string                            $floorIndex
     ) {
-        $this->authorize('preview', [$dungeonroute, $request->get('secret', '') ?? '']);
+        $this->authorize('preview', [
+            $dungeonroute,
+            $request->get('secret', '') ?? '',
+        ]);
 
         if (!is_numeric($floorIndex)) {
             $floorIndex = '1';
@@ -369,8 +372,13 @@ class DungeonRouteController extends Controller
      *
      * @throws AuthorizationException
      */
-    public function copy(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title, ThumbnailServiceInterface $thumbnailService)
-    {
+    public function copy(
+        Request                   $request,
+        Dungeon                   $dungeon,
+        DungeonRoute              $dungeonroute,
+        string                    $title,
+        ThumbnailServiceInterface $thumbnailService
+    ) {
         $this->authorize('clone', $dungeonroute);
 
         /** @var User $user */
@@ -391,8 +399,12 @@ class DungeonRouteController extends Controller
         }
     }
 
-    public function claim(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, string $title): RedirectResponse
-    {
+    public function claim(
+        Request      $request,
+        Dungeon      $dungeon,
+        DungeonRoute $dungeonroute,
+        string       $title
+    ): RedirectResponse {
         // Regardless of the result, try to claim the route
         $dungeonroute->claim(Auth::id());
 
@@ -437,8 +449,8 @@ class DungeonRouteController extends Controller
         Dungeon                        $dungeon,
         DungeonRoute                   $dungeonroute,
         ?string                        $title,
-        ?string                        $floorIndex)
-    {
+        ?string $floorIndex
+    ) {
         $this->authorize('edit', $dungeonroute);
 
         if (!is_numeric($floorIndex)) {
@@ -514,8 +526,8 @@ class DungeonRouteController extends Controller
         DungeonRouteEmbedUrlFormRequest $request,
         MapContextServiceInterface      $mapContextService,
         mixed                           $dungeonroute,
-        string                          $floorIndex = '1')
-    {
+        string $floorIndex = '1'
+    ) {
         if (!is_numeric($floorIndex)) {
             $dungeonroute = DungeonRoute::where('public_key', $floorIndex)->first();
             if ($dungeonroute === null) {
@@ -550,7 +562,10 @@ class DungeonRouteController extends Controller
         $showPresenterButton = $request->get('showPresenterButton', false);
 
         return view('dungeonroute.embed', [
-            'dungeon'      => $dungeonroute->dungeon->load(['expansion', 'floors']),
+            'dungeon'      => $dungeonroute->dungeon->load([
+                'expansion',
+                'floors',
+            ]),
             'dungeonroute' => $dungeonroute,
             'title'        => $dungeonroute->getTitleSlug(),
             'floor'        => $floor,
@@ -559,18 +574,26 @@ class DungeonRouteController extends Controller
             'embedOptions' => [
                 'style'                 => $style,
                 // Null if not set - but cast to a bool if it is ("0" or 0 both equal false, "1" or 1 both equal true
-                'pullsDefaultState'     => (int)$pullsDefaultState, // Default false - closed
+                'pullsDefaultState'     => (int)$pullsDefaultState,
+                // Default false - closed
                 'pullsHideOnMove'       => $pullsHideOnMove === null ? null : (bool)$pullsHideOnMove,
                 'headerBackgroundColor' => $headerBackgroundColor,
                 'mapBackgroundColor'    => $mapBackgroundColor,
                 'show'                  => [
-                    'enemyInfo'       => (bool)$showEnemyInfo,       // Default false - not available
-                    'pulls'           => (bool)$showPulls,           // Default true - available
-                    'enemyForces'     => (bool)$showEnemyForces,     // Default true - available
-                    'affixes'         => (bool)$showAffixes,         // Default true - available
-                    'title'           => (bool)$showTitle,           // Default true - available
-                    'presenterButton' => (bool)$showPresenterButton, // Default false, not available
-                    'floorSelection'  => true,                       // Always available, but can be overridden later if there's no floors to select
+                    'enemyInfo'       => (bool)$showEnemyInfo,
+                    // Default false - not available
+                    'pulls'           => (bool)$showPulls,
+                    // Default true - available
+                    'enemyForces'     => (bool)$showEnemyForces,
+                    // Default true - available
+                    'affixes'         => (bool)$showAffixes,
+                    // Default true - available
+                    'title'           => (bool)$showTitle,
+                    // Default true - available
+                    'presenterButton' => (bool)$showPresenterButton,
+                    // Default false, not available
+                    'floorSelection'  => true,
+                    // Always available, but can be overridden later if there's no floors to select
                 ],
             ],
         ]);
@@ -651,8 +674,12 @@ class DungeonRouteController extends Controller
      * @throws InvalidArgumentException
      * @throws Exception
      */
-    public function upgrade(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title): RedirectResponse
-    {
+    public function upgrade(
+        Request      $request,
+        Dungeon      $dungeon,
+        DungeonRoute $dungeonroute,
+        ?string      $title
+    ): RedirectResponse {
         $this->authorize('edit', $dungeonroute);
 
         // Store it

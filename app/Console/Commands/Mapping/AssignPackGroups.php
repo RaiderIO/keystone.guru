@@ -30,7 +30,10 @@ class AssignPackGroups extends Command
     public function handle(): int
     {
         /** @var Collection<MappingVersion> $mappingVersions */
-        $mappingVersions = MappingVersion::with(['enemyPacks', 'dungeon'])->get();
+        $mappingVersions = MappingVersion::with([
+            'enemyPacks',
+            'dungeon',
+        ])->get();
 
         $dungeonWhitelist = [
             Dungeon::DUNGEON_GATE_OF_THE_SETTING_SUN,
@@ -52,7 +55,7 @@ class AssignPackGroups extends Command
                     ->get();
 
                 $index = 0;
-                foreach($enemyPacks as $enemyPack) {
+                foreach ($enemyPacks as $enemyPack) {
                     // Increment first, then write
                     $enemyPack->update(['group' => ++$index]);
                 }

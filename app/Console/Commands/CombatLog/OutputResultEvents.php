@@ -32,11 +32,15 @@ class OutputResultEvents extends BaseCombatLogCommand
     {
         ini_set('memory_limit', '2G');
 
-        $filePath      = $this->argument('filePath');
-        $force         = (bool)$this->option('force');
+        $filePath = $this->argument('filePath');
+        $force    = (bool)$this->option('force');
         $dungeonOrRaid = (bool)$this->option('dungeonOrRaid');
 
-        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use ($combatLogService, $force, $dungeonOrRaid) {
+        return $this->parseCombatLogRecursively($filePath, function (string $filePath) use (
+            $combatLogService,
+            $force,
+            $dungeonOrRaid
+        ) {
             if (!str_contains($filePath, '.zip')) {
                 $this->comment(sprintf('Skipping file %s (not a .zip file)', $filePath));
 
@@ -55,7 +59,10 @@ class OutputResultEvents extends BaseCombatLogCommand
     ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
-        $resultingFile = str_replace(['.txt', '.zip'], '_events.txt', $filePath);
+        $resultingFile = str_replace([
+            '.txt',
+            '.zip',
+        ], '_events.txt', $filePath);
 
         if (!$force && file_exists($resultingFile)) {
             $this->warn(sprintf('- Skipping %s (events already generated)', $filePath));

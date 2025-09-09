@@ -75,8 +75,12 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     /**
      * @throws Exception
      */
-    private function parseAffixes(Collection $warnings, array $decoded, Dungeon $dungeon, bool $importAsThisWeek = false): ?AffixGroup
-    {
+    private function parseAffixes(
+        Collection $warnings,
+        array      $decoded,
+        Dungeon    $dungeon,
+        bool       $importAsThisWeek = false
+    ): ?AffixGroup {
         $affixGroup = Conversion::convertWeekToAffixGroup($this->seasonService, $dungeon, $decoded['week']);
 
         // If affix group not found or
@@ -160,7 +164,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                     'comment'            => __($obeliskMapIcon->mapIconType->name),
                     'obelisk_map_icon'   => $obeliskMapIcon,
                     // MDT has the x and y inverted here
-                ], Conversion::convertMDTCoordinateToLatLng(['x' => $mdtXy['x'], 'y' => $mdtXy['y']], $enemy->floor)->toArray());
+                ], Conversion::convertMDTCoordinateToLatLng([
+                    'x' => $mdtXy['x'],
+                    'y' => $mdtXy['y'],
+                ], $enemy->floor)->toArray());
 
                 $hasAnimatedLines = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ANIMATED_POLYLINES);
 
@@ -363,7 +370,11 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             if ($mdtEnemiesByMdtNpcIndex->has($npcIndex)) {
                 foreach ($mdtEnemiesByMdtNpcIndex->get($npcIndex) as $mdtEnemyCandidate) {
                     // Skip Emissaries (Season 3), season is over
-                    if ($isEmissary = in_array($mdtEnemyCandidate->npc_id, [155432, 155433, 155434])) {
+                    if ($isEmissary = in_array($mdtEnemyCandidate->npc_id, [
+                        155432,
+                        155433,
+                        155434,
+                    ])) {
                         break;
                     }
 
@@ -560,8 +571,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     /**
      * Parse any saved objects from the MDT string to a $dungeonRoute, optionally $save'ing the objects to the database.
      */
-    private function parseObjects(ImportStringObjects $importStringObjects, bool $assignNotesToPulls): ImportStringObjects
-    {
+    private function parseObjects(
+        ImportStringObjects $importStringObjects,
+        bool                $assignNotesToPulls
+    ): ImportStringObjects {
         if (count($importStringObjects->getMdtObjects()) > config('keystoneguru.dungeon_route_limits.map_icons')) {
             $importStringObjects->getErrors()->push(
                 new ImportError(
@@ -625,7 +638,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $mdtSubLevel = ((int)$details[2]);
 
                 /** @var Floor $floor */
-                $floor = $floors->first(static fn(Floor $floor) => ($floor->mdt_sub_level ?? $floor->index) === $mdtSubLevel);
+                $floor = $floors->first(static fn(Floor $floor
+                ) => ($floor->mdt_sub_level ?? $floor->index) === $mdtSubLevel);
 
                 if ($floor === null) {
                     throw new ImportWarning(
@@ -670,8 +684,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         Floor               $floor,
         array               $details,
         array               $line,
-        float               $rotationRad): void
-    {
+        float $rotationRad
+    ): void {
         // Don't parse as paths, but as free-drawn instead
         $details[6] = true;
 
@@ -693,7 +707,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
         $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, array_merge(
             $lastPoint,
-            [$leftPartLatLng->getLat(), $leftPartLatLng->getLng()]
+            [
+                $leftPartLatLng->getLat(),
+                $leftPartLatLng->getLng(),
+            ]
         ));
 
         // Create the right part of the arrow
@@ -703,7 +720,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         );
         $this->parseObjectLine($importStringObjects, $mappingVersion, $floor, $details, array_merge(
             $lastPoint,
-            [$rightPartLatLng->getLat(), $rightPartLatLng->getLng()],
+            [
+                $rightPartLatLng->getLat(),
+                $rightPartLatLng->getLng(),
+            ],
         ));
     }
 
@@ -712,8 +732,8 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         MappingVersion      $mappingVersion,
         Floor               $floor,
         array               $details,
-        array               $line): void
-    {
+        array $line
+    ): void {
         $isFreeDrawn = isset($details[6]) && $details[6];
 
         $vertices      = [];
@@ -722,7 +742,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
 
         for ($i = 0; $i < $lineCount; $i += 2) {
             $latLng = Conversion::convertMDTCoordinateToLatLng(
-                ['x' => floatval($line[$i]), 'y' => floatval($line[$i + 1])],
+                [
+                    'x' => floatval($line[$i]),
+                    'y' => floatval($line[$i + 1]),
+                ],
                 $floor
             );
 
@@ -789,7 +812,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         array               $details,
         bool                $assignNotesToPulls
     ): void {
-        $latLng = Conversion::convertMDTCoordinateToLatLng(['x' => $details[0], 'y' => $details[1]], $floor);
+        $latLng = Conversion::convertMDTCoordinateToLatLng([
+            'x' => $details[0],
+            'y' => $details[1],
+        ], $floor);
 
         if ($floor->facade) {
             $latLng = $this->coordinatesService->convertFacadeMapLocationToMapLocation(
@@ -826,7 +852,14 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                         $enemyIngameXY->getY(), $ingameXY->getY()
                     ) < self::IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS) {
 
-                    $bloodLustNames = ['bloodlust', 'heroism', 'fury of the ancients', 'time warp', 'timewarp', 'ancient hysteria'];
+                    $bloodLustNames = [
+                        'bloodlust',
+                        'heroism',
+                        'fury of the ancients',
+                        'time warp',
+                        'timewarp',
+                        'ancient hysteria',
+                    ];
 
                     // If the user wants to put heroism/bloodlust on this pull, directly assign it instead
                     $commentLower = strtolower(trim((string)$details[4]));
@@ -1012,7 +1045,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 throw new InvalidMDTStringException($error);
             }
 
-            $dungeon        = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
+            $dungeon = Conversion::convertMDTDungeonIDToDungeon($decoded['value']['currentDungeonIdx']);
             $currentMappingVersion = $dungeon->getCurrentMappingVersion();
 
             // Create a dungeon route
@@ -1167,8 +1200,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         $dungeonRoute->update(['seasonal_index' => $affixGroup->seasonal_index]);
     }
 
-    private function applyObjectsToDungeonRoute(ImportStringObjects $importStringObjects, DungeonRoute $dungeonRoute): void
-    {
+    private function applyObjectsToDungeonRoute(
+        ImportStringObjects $importStringObjects,
+        DungeonRoute        $dungeonRoute
+    ): void {
         $now                 = now();
         $polyLinesAttributes = [];
 
@@ -1201,7 +1236,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         Path::insert($pathsAttributes);
 
         // Load back the brushlines and paths so that we know the IDs
-        $dungeonRoute->load(['brushlines', 'paths']);
+        $dungeonRoute->load([
+            'brushlines',
+            'paths',
+        ]);
 
         // Assign these IDs to their respective polylines
         $polyLineIndex = 0;
@@ -1256,8 +1294,10 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
         MapIcon::insert($mapIconsAttributes);
     }
 
-    private function applyRiftOffsetsToDungeonRoute(ImportStringRiftOffsets $importStringRiftOffsets, DungeonRoute $dungeonRoute): void
-    {
+    private function applyRiftOffsetsToDungeonRoute(
+        ImportStringRiftOffsets $importStringRiftOffsets,
+        DungeonRoute            $dungeonRoute
+    ): void {
         $now = now();
 
         // Assign map objects to the route

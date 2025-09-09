@@ -27,7 +27,7 @@ class DurabilityDamage extends Suffix
     {
         parent::setParameters($parameters);
 
-        $this->itemId  = (int)$parameters[0];
+        $this->itemId = (int)$parameters[0];
         $this->itemName = $parameters[1];
 
         return $this;

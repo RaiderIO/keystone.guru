@@ -73,7 +73,8 @@ class TimewalkingEventService implements TimewalkingEventServiceInterface
             }
         } else {
             logger()->error('Overlapping timewalking events found?', [
-                $timewalkingEvent, $expansion,
+                $timewalkingEvent,
+                $expansion,
             ]);
         }
 

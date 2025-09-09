@@ -3,7 +3,6 @@
 namespace App\Service\Spell;
 
 use App\Models\CharacterClass;
-use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\Spell\Logging\SpellServiceLoggingInterface;
@@ -14,8 +13,7 @@ class SpellService implements SpellServiceInterface
     public function __construct(
         private readonly SpellRepositoryInterface $spellRepository,
         private readonly SpellServiceLoggingInterface $log
-    )
-    {
+    ) {
     }
 
     public function importFromCsv(string $filePath): bool

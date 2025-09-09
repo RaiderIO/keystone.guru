@@ -30,9 +30,20 @@ class Path extends Model
 {
     use HasLinkedAwakenedObelisk;
 
-    protected $visible = ['id', 'floor_id', 'linked_awakened_obelisk_id', 'polyline'];
+    protected $visible = [
+        'id',
+        'floor_id',
+        'linked_awakened_obelisk_id',
+        'polyline',
+    ];
 
-    protected $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'dungeon_route_id',
+        'floor_id',
+        'polyline_id',
+        'created_at',
+        'updated_at',
+    ];
 
     protected $casts = [
         'id'               => 'int',
@@ -41,7 +52,10 @@ class Path extends Model
         'polyline_id'      => 'int',
     ];
 
-    protected $with = ['polyline', 'linkedawakenedobelisks'];
+    protected $with = [
+        'polyline',
+        'linkedawakenedobelisks',
+    ];
 
     protected $appends = ['linked_awakened_obelisk_id'];
 

@@ -224,7 +224,8 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
         // Filter out properties that don't have the correct amount of affixes
         if ($affixes->count() === 3 + (int)($currentSeason->seasonal_affix_id !== null)) {
             // Check if there's any affixes in the list that we cannot find in our own database
-            $invalidAffixes = $affixes->filter(static fn(string $affixName) => $affixList->filter(static fn(Affix $affix) => __($affix->name, [], 'en_US') === $affixName)->isEmpty());
+            $invalidAffixes = $affixes->filter(static fn(string $affixName) => $affixList->filter(static fn(Affix $affix
+            ) => __($affix->name, [], 'en_US') === $affixName)->isEmpty());
 
             // No invalid affixes found, great!
             if ($invalidAffixes->isEmpty()) {
@@ -232,7 +233,8 @@ class AffixGroupEaseTierService implements AffixGroupEaseTierServiceInterface
                 foreach ($currentSeasonAffixGroups as $affixGroup) {
 
                     // Loop over the affixes of the affix group and empty the list
-                    $notFoundAffixes = $affixGroup->affixes->filter(static fn(Affix $affix) => $affixes->search($affix->key) === false);
+                    $notFoundAffixes = $affixGroup->affixes->filter(static fn(Affix $affix
+                    ) => $affixes->search($affix->key) === false);
 
                     // If we have found the match, we're done
                     if ($notFoundAffixes->isEmpty()) {

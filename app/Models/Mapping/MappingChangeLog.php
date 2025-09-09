@@ -31,7 +31,7 @@ class MappingChangeLog extends Model
         'model_id',
         'model_class',
         'before_model',
-        'after_model'
+        'after_model',
     ];
 
     public function shouldSynchronize(MappingCommitLog $mostRecentMappingCommitLog): bool

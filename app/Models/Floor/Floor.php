@@ -94,13 +94,16 @@ class Floor extends CacheModel implements MappingModelInterface
         762  => 761,
         763  => 761,
         // Siege of Boralus
-        876  => 1162, // Kul Tiras -> Siege of Boralus
-        895  => 1162, // Tiragarde Sound -> Siege of Boralus
+        876  => 1162,
+        // Kul Tiras -> Siege of Boralus
+        895  => 1162,
+        // Tiragarde Sound -> Siege of Boralus
         //        1533 => 1162, // Bastion -> Siege of Boralus ????
         // Brackenhide Hollow
         2106 => 2096,
         // Mists of Tirna Scithe
-        1565 => 1669, // Ardenweald -> Mists of Tirna Scithe
+        1565 => 1669,
+        // Ardenweald -> Mists of Tirna Scithe
         // Temple of the Jade Serpent
         430  => 429,
         // Algeth'ar Academy
@@ -110,30 +113,46 @@ class Floor extends CacheModel implements MappingModelInterface
         // Nokhud Offensive
         2023 => 2093,
         // City of Threads,
-        2216 => 2357, // City of Threads (Lower) -> City of Echoes
+        2216 => 2357,
+        // City of Threads (Lower) -> City of Echoes
         // The Dawnbreaker
-        2215 => 2359, // Harrowfall -> The Dawnbreaker
+        2215 => 2359,
+        // Harrowfall -> The Dawnbreaker
         // Grim Batol
-        241  => 293, // Twilight Highlands -> Grim Batol
+        241  => 293,
+        // Twilight Highlands -> Grim Batol
     ];
 
     /**
      * Some IDs which are open world, and we cannot resolve to a dungeon floor.
      */
     public const UI_MAP_ID_OPEN_WORLD = [
-        0, // Unknown
-        1536, // Maldraxxus
-        1550, // The Shadowlands
-        1490, // Mechagon
-        1493, // Mechagon
-        1525, // Revendreth
-        2016, // Tazavesh, the Veiled Market
-        2214, // The Ringing Deeps
-        2248, // Isle of Dorn
-        2274, // Khaz Algar
-        2339, // Dornogal
-        2346, // Undermine
-        2472, // Tazavesh
+        0,
+        // Unknown
+        1536,
+        // Maldraxxus
+        1550,
+        // The Shadowlands
+        1490,
+        // Mechagon
+        1493,
+        // Mechagon
+        1525,
+        // Revendreth
+        2016,
+        // Tazavesh, the Veiled Market
+        2214,
+        // The Ringing Deeps
+        2248,
+        // Isle of Dorn
+        2274,
+        // Khaz Algar
+        2339,
+        // Dornogal
+        2346,
+        // Undermine
+        2472,
+        // Tazavesh
     ];
 
     public const DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID = 2304;
@@ -313,8 +332,12 @@ class Floor extends CacheModel implements MappingModelInterface
         return $query->where('floors.active', 1);
     }
 
-    public function scopeIndexOrFacade(Builder $builder, MappingVersion $mappingVersion, int $floorIndex, ?string $mapFacadeStyle = null): Builder
-    {
+    public function scopeIndexOrFacade(
+        Builder        $builder,
+        MappingVersion $mappingVersion,
+        int            $floorIndex,
+        ?string        $mapFacadeStyle = null
+    ): Builder {
         $useFacade = (($mapFacadeStyle ?? User::getCurrentUserMapFacadeStyle()) === User::MAP_FACADE_STYLE_FACADE) && $mappingVersion->facade_enabled;
 
         // Facade should be FORCED to use floor index 1
@@ -358,8 +381,8 @@ class Floor extends CacheModel implements MappingModelInterface
     public function findClosestFloorSwitchMarker(
         CoordinatesServiceInterface $coordinatesService,
         LatLng                      $latLng,
-        int                         $targetFloorId): ?DungeonFloorSwitchMarker
-    {
+        int $targetFloorId
+    ): ?DungeonFloorSwitchMarker {
         $result = null;
 
         /** @var Collection<DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */

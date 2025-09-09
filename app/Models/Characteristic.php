@@ -21,9 +21,16 @@ class Characteristic extends CacheModel
 {
     use SeederModel;
 
-    protected $fillable = ['id', 'name', 'key'];
+    protected $fillable = [
+        'id',
+        'name',
+        'key',
+    ];
 
-    protected $visible = ['name', 'key'];
+    protected $visible = [
+        'name',
+        'key',
+    ];
 
     public const CHARACTERISTIC_TAUNT           = 'taunt';
     public const CHARACTERISTIC_INCAPACITATE    = 'incapacitate';

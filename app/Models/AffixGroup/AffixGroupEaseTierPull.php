@@ -25,7 +25,10 @@ use Illuminate\Support\Collection;
  **/
 class AffixGroupEaseTierPull extends CacheModel
 {
-    protected $with = ['affixGroup', 'affixGroupEaseTiers'];
+    protected $with = [
+        'affixGroup',
+        'affixGroupEaseTiers',
+    ];
 
     protected $fillable = [
         'affix_group_id',

@@ -25,7 +25,11 @@ class AffixGroupCoupling extends CacheModel
 
     public $timestamps = false;
 
-    protected $fillable = ['affix_id', 'affix_group_id', 'key_level'];
+    protected $fillable = [
+        'affix_id',
+        'affix_group_id',
+        'key_level',
+    ];
 
     public function affix(): HasOne
     {
