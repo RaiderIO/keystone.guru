@@ -5,7 +5,13 @@ namespace App\Jobs\Logging;
 interface ProcessRouteFloorThumbnailLoggingInterface
 {
 
-    public function handleStart(string $publicKey, int $dungeonRouteId, int $mappingVersionId, int $floorIndex, int $attempts): void;
+    public function handleStart(
+        string $publicKey,
+        int    $dungeonRouteId,
+        int    $mappingVersionId,
+        int    $floorIndex,
+        int    $attempts
+    ): void;
 
     public function handleCreateThumbnailError(): void;
 

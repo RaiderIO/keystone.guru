@@ -67,7 +67,12 @@ class ZoneChangeSplitter extends CombatLogSplitter
         // Pass $this->>parseCombatLogEvent as callable
         $this->combatLogService->parseCombatLog(
             $filePath,
-            fn($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr) => $this->parseCombatLogEvent($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr)
+            fn(
+                $combatLogVersion,
+                $advancedLoggingEnabled,
+                $rawEvent,
+                $lineNr
+            ) => $this->parseCombatLogEvent($combatLogVersion, $advancedLoggingEnabled, $rawEvent, $lineNr)
         );
 
         // Make sure that everything captured from last zone change and onwards is still saved to disk
@@ -81,8 +86,12 @@ class ZoneChangeSplitter extends CombatLogSplitter
         return $this->result;
     }
 
-    private function parseCombatLogEvent(int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent, int $lineNr)
-    {
+    private function parseCombatLogEvent(
+        int    $combatLogVersion,
+        bool   $advancedLoggingEnabled,
+        string $rawEvent,
+        int    $lineNr
+    ) {
         $this->log->addContext('lineNr', [
             'combatLogVersion'       => $combatLogVersion,
             'advancedLoggingEnabled' => $advancedLoggingEnabled,

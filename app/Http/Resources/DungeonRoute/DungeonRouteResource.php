@@ -50,7 +50,8 @@ class DungeonRouteResource extends JsonResource
             )->toArray(),
             'author'              => new UserResource($this->author),
             'affixGroups'         => $this->affixes->map(
-                fn(AffixGroup $affixGroup) => new AffixGroupResource($affixGroup->setRelation('expansion', $this->dungeon->expansion))
+                fn(AffixGroup $affixGroup
+                ) => new AffixGroupResource($affixGroup->setRelation('expansion', $this->dungeon->expansion))
             )->toArray(),
             'links'               => new DungeonRouteLinksResource($this),
         ];

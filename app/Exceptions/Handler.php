@@ -86,7 +86,7 @@ class Handler extends ExceptionHandler
             if ($e instanceof ModelNotFoundException) {
                 return response()->json([
                     'message' => __('exceptions.handler.api_model_not_found', [
-                        'ids'   => implode(', ', $e->getIds()),
+                        'ids' => implode(', ', $e->getIds()),
                         'model' => $e->getModel(),
                     ]),
                 ], StatusCode::NOT_FOUND);
@@ -130,7 +130,11 @@ class Handler extends ExceptionHandler
             return null;
         }
 
-        $keys = ['_token', 'password', 'password_confirmation'];
+        $keys = [
+            '_token',
+            'password',
+            'password_confirmation',
+        ];
         foreach ($keys as $key) {
             if (isset($array[$key]) && is_string($array[$key])) {
                 $array[$key] = '*********';

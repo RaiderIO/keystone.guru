@@ -65,8 +65,11 @@ class SpellDataExtractor implements DataExtractorInterface
         $this->currentCombatLogFilePath = $combatLogFilePath;
     }
 
-    public function extractData(ExtractedDataResult $result, DataExtractionCurrentDungeon $currentDungeon, BaseEvent $parsedEvent): void
-    {
+    public function extractData(
+        ExtractedDataResult          $result,
+        DataExtractionCurrentDungeon $currentDungeon,
+        BaseEvent                    $parsedEvent
+    ): void {
         if (!($parsedEvent instanceof CombatLogEvent)) {
             // Don't log anything because that'd just spam the hell out of it
             return;

@@ -52,9 +52,17 @@ class Release extends CacheModel
 
     protected $with = ['changelog'];
 
-    protected $appends = ['github_body', 'discord_body', 'reddit_body'];
+    protected $appends = [
+        'github_body',
+        'discord_body',
+        'reddit_body',
+    ];
 
-    protected $hidden = ['reddit_body', 'discord_body', 'github_body'];
+    protected $hidden = [
+        'reddit_body',
+        'discord_body',
+        'github_body',
+    ];
 
     /**
      * @var int https://discord.com/developers/docs/resources/channel#embed-object-embed-limits
@@ -174,7 +182,8 @@ class Release extends CacheModel
 
         return [
             [
-                'color'       => 14641434, // '#DF691A'
+                'color' => 14641434,
+                // '#DF691A'
                 'title'       => $this->getFormattedTitle(),
                 'description' => substr($this->discord_body, 0, self::DISCORD_EMBED_DESCRIPTION_LIMIT),
                 'url'         => sprintf('%s/release/%s', config('app.url'), $this->version),

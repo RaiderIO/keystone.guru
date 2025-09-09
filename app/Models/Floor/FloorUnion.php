@@ -52,7 +52,10 @@ class FloorUnion extends CacheModel implements MappingModelCloneableInterface, M
         'floorUnionAreas',
     ];
 
-    protected $hidden = ['mappingVersion', 'floor'];
+    protected $hidden = [
+        'mappingVersion',
+        'floor',
+    ];
 
     protected $casts = [
         'mapping_version_id' => 'integer',

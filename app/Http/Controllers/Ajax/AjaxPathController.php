@@ -37,8 +37,8 @@ class AjaxPathController extends Controller
         APIPathFormRequest          $request,
         CoordinatesServiceInterface $coordinatesService,
         DungeonRoute                $dungeonRoute,
-        ?Path                       $path = null)
-    {
+        ?Path $path = null
+    ) {
         $dungeonRoute = $path?->dungeonRoute ?? $dungeonRoute;
 
         $this->authorize('edit', $dungeonRoute);

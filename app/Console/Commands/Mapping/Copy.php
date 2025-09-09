@@ -78,7 +78,8 @@ class Copy extends Command
                 'enemyPatrols',
                 'mapIcons',
                 'mountableAreas',
-                'floorUnions', //floor_id, target_floor
+                'floorUnions',
+                //floor_id, target_floor
                 'floorUnionAreas',
                 'npcEnemyForces',
             ];

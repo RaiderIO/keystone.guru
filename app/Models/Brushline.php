@@ -33,9 +33,19 @@ use Illuminate\Support\Carbon;
  */
 class Brushline extends Model
 {
-    protected $visible = ['id', 'floor_id', 'polyline'];
+    protected $visible = [
+        'id',
+        'floor_id',
+        'polyline',
+    ];
 
-    protected $fillable = ['dungeon_route_id', 'floor_id', 'polyline_id', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'dungeon_route_id',
+        'floor_id',
+        'polyline_id',
+        'created_at',
+        'updated_at',
+    ];
 
     protected $casts = [
         'id'               => 'int',

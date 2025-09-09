@@ -125,8 +125,13 @@ abstract class SpecialEvent extends BaseEvent implements HasParameters
         self::SPECIAL_EVENT_COMBATANT_INFO         => CombatantInfoBuilder::class,
     ];
 
-    public function __construct(int $combatLogVersion, Carbon $timestamp, string $eventName, array $parameters, string $rawEvent)
-    {
+    public function __construct(
+        int    $combatLogVersion,
+        Carbon $timestamp,
+        string $eventName,
+        array  $parameters,
+        string $rawEvent
+    ) {
         parent::__construct($combatLogVersion, $timestamp, $eventName, $rawEvent);
 
         $this->setParameters($parameters);

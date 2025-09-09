@@ -244,6 +244,7 @@ trait SpellConstants
     ];
 
     public const EXCLUDE_MDT_IMPORT_SPELLS = [
-        186439, // Shadow Mend, was removed from the game
+        186439,
+        // Shadow Mend, was removed from the game
     ];
 }

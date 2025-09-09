@@ -27,9 +27,18 @@ class Faction extends CacheModel
 
     public $timestamps = false;
 
-    public $hidden = ['icon_file_id', 'pivot'];
+    public $hidden = [
+        'icon_file_id',
+        'pivot',
+    ];
 
-    public $fillable = ['id', 'icon_file_id', 'key', 'name', 'color'];
+    public $fillable = [
+        'id',
+        'icon_file_id',
+        'key',
+        'name',
+        'color',
+    ];
 
     protected $with = ['iconfile'];
 

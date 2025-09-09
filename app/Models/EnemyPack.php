@@ -54,7 +54,8 @@ class EnemyPack extends CacheModel implements ConvertsVerticesInterface, Mapping
     ];
 
     protected $hidden = [
-        'mappingVersion', 'floor',
+        'mappingVersion',
+        'floor',
     ];
 
     protected $casts = [

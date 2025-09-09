@@ -6,7 +6,10 @@ use Exception;
 
 interface MDTMappingImportServiceLoggingInterface
 {
-    public function importMappingVersionFromMDTMappingChanged(?string $mdtMappingHash, string $latestMdtMappingHash): void;
+    public function importMappingVersionFromMDTMappingChanged(
+        ?string $mdtMappingHash,
+        string  $latestMdtMappingHash
+    ): void;
 
     public function importMappingVersionFromMDTCreateMappingVersion(int $version, int $id): void;
 
@@ -14,7 +17,10 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importMappingVersionFromMDTEnd(): void;
 
-    public function importDungeonMappingVersionFromMDTNoChangeDetected(string $key, ?string $latestMdtMappingHash): void;
+    public function importDungeonMappingVersionFromMDTNoChangeDetected(
+        string  $key,
+        ?string $latestMdtMappingHash
+    ): void;
 
     public function importDungeonStart(): void;
 
@@ -77,7 +83,10 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemiesSkipTeemingEnemy(string $uniqueKey): void;
 
-    public function importEnemiesDistanceTooLargeNotTransferringExistingEnemyLatLng(string $mdtUniqueKey, float $distance): void;
+    public function importEnemiesDistanceTooLargeNotTransferringExistingEnemyLatLng(
+        string $mdtUniqueKey,
+        float  $distance
+    ): void;
 
     public function importEnemiesRecoverPropertiesFromExistingEnemy(string $uniqueKey, array $updatedFields): void;
 
@@ -103,7 +112,12 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importEnemyPatrolsStart(): void;
 
-    public function importEnemyPatrolsUnableToFindAttachedEnemy(int $mdtCloneIndex, array $mdtNpcClone, int $npcId, int $mdtId): void;
+    public function importEnemyPatrolsUnableToFindAttachedEnemy(
+        int   $mdtCloneIndex,
+        array $mdtNpcClone,
+        int   $npcId,
+        int   $mdtId
+    ): void;
 
     public function importEnemyPatrolsEnemyHasPatrol(string $uniqueKey): void;
 
@@ -135,7 +149,11 @@ interface MDTMappingImportServiceLoggingInterface
 
     public function importMapPOIsMapIconAlreadyExists(int $mapIconId, array $latLng, string $mdtMapPOIName): void;
 
-    public function importMapPOIsNewDungeonFloorSwitchMarkerOK(int $dungeonFloorSwitchMarkerId, int $floorId, int $targetFloorId): void;
+    public function importMapPOIsNewDungeonFloorSwitchMarkerOK(
+        int $dungeonFloorSwitchMarkerId,
+        int $floorId,
+        int $targetFloorId
+    ): void;
 
     public function importMapPOIsHaveExistingFloorSwitchMarkers(int $count): void;
 

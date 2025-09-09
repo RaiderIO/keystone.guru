@@ -21,8 +21,13 @@ class DungeonColumnHandler extends SimpleColumnHandler
         parent::__construct($dtHandler, 'dungeon_id', 'dungeons_names');
     }
 
-    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder, $columnData, $order, $generalSearch): void
-    {
+    protected function applyFilter(
+        Builder $subBuilder,
+        Builder $orderBuilder,
+                $columnData,
+                $order,
+                $generalSearch
+    ): void {
         // Only order
         $subBuilder
             ->join('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')

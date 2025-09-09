@@ -31,9 +31,18 @@ class CharacterClass extends CacheModel
 
     public $timestamps = false;
 
-    public $hidden = ['icon_file_id', 'pivot'];
+    public $hidden = [
+        'icon_file_id',
+        'pivot',
+    ];
 
-    public $fillable = ['class_id', 'key', 'name', 'color', 'icon_file_id'];
+    public $fillable = [
+        'class_id',
+        'key',
+        'name',
+        'color',
+        'icon_file_id',
+    ];
 
     public const CHARACTER_CLASS_WARRIOR      = 'warrior';
     public const CHARACTER_CLASS_HUNTER       = 'hunter';

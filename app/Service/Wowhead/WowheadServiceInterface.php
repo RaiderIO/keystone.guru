@@ -4,9 +4,7 @@ namespace App\Service\Wowhead;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
-use App\Service\Wowhead\Dtos\LocalizedNpcName;
 use App\Service\Wowhead\Dtos\SpellDataResult;
-use Illuminate\Support\Collection;
 
 interface WowheadServiceInterface
 {

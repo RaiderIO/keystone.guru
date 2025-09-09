@@ -10,7 +10,10 @@ class DiscordApiService implements DiscordApiServiceInterface
 
     public function sendMessage(string $webhookUrl, string $message, ?string $username = null, array $embeds = []): bool
     {
-        $result = $this->curlPost($webhookUrl, ['message' => $message, 'username' => $username]);
+        $result = $this->curlPost($webhookUrl, [
+            'message'  => $message,
+            'username' => $username,
+        ]);
 
         return true;
     }

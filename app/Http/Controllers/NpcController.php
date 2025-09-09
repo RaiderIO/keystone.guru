@@ -158,7 +158,10 @@ class NpcController extends Controller
             }
 
             // Re-load the relations so we're echoing back a fully updated npc
-            $npc->load(['npcbolsteringwhitelists', 'spells']);
+            $npc->load([
+                'npcbolsteringwhitelists',
+                'spells',
+            ]);
 
             // Trigger mapping changed event so the mapping gets saved across all environments
             $this->mappingChanged($npcBefore, $npc);
@@ -178,7 +181,10 @@ class NpcController extends Controller
     public function create()
     {
         return view('admin.npc.edit', [
-            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(string $name, int $id) => [$id => __($name)]),
+            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(
+                string $name,
+                int    $id
+            ) => [$id => __($name)]),
             'spells'          => Spell::all(),
             'bolsteringNpcs'  => Npc::join('npc_dungeons', 'npc_dungeons.npc_id', '=', 'npcs.id')
                 ->join('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
@@ -210,7 +216,10 @@ class NpcController extends Controller
     {
         return view('admin.npc.edit', [
             'npc'             => $npc,
-            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(string $name, int $id) => [$id => __($name)]),
+            'classifications' => NpcClassification::all()->pluck('name', 'id')->mapWithKeys(static fn(
+                string $name,
+                int    $id
+            ) => [$id => __($name)]),
             'spells'          => Spell::all(),
             'bolsteringNpcs'  => $npcService->getNpcsForDropdown($npc->dungeons),
         ]);

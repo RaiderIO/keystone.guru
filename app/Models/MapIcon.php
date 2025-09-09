@@ -88,7 +88,10 @@ class MapIcon extends Model implements MappingModelCloneableInterface, MappingMo
         'linked_awakened_obelisk_id' => 'integer',
     ];
 
-    protected $with = ['mapIconType', 'linkedawakenedobelisks'];
+    protected $with = [
+        'mapIconType',
+        'linkedawakenedobelisks',
+    ];
 
     public function getIsAdminAttribute(): bool
     {

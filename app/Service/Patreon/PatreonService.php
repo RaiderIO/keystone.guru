@@ -47,7 +47,8 @@ class PatreonService implements PatreonServiceInterface
                 return null;
             }
 
-            return collect($tiersAndBenefitsResponse['included'])->filter(static fn($included) => $included['type'] === 'benefit')->toArray();
+            return collect($tiersAndBenefitsResponse['included'])->filter(static fn($included
+            ) => $included['type'] === 'benefit')->toArray();
         } finally {
             $this->log->loadCampaignBenefitsEnd();
         }
@@ -81,7 +82,8 @@ class PatreonService implements PatreonServiceInterface
                 return null;
             }
 
-            return collect($tiersAndBenefitsResponse['included'])->filter(static fn($included) => $included['type'] === 'tier')->toArray();
+            return collect($tiersAndBenefitsResponse['included'])->filter(static fn($included
+            ) => $included['type'] === 'tier')->toArray();
         } finally {
             $this->log->loadCampaignTiersEnd();
         }
@@ -113,7 +115,8 @@ class PatreonService implements PatreonServiceInterface
             }
 
 
-            return collect($membersResponse['data'])->filter(static fn($included) => $included['type'] === 'member')->toArray();
+            return collect($membersResponse['data'])->filter(static fn($included
+            ) => $included['type'] === 'member')->toArray();
         } finally {
             $this->log->loadCampaignMembersEnd();
         }
@@ -248,7 +251,8 @@ class PatreonService implements PatreonServiceInterface
                         $result = LinkToUserIdResult::InternalErrorOccurred;
                         $this->log->linkToUserAccountIdentityIncludedNotSet();
                     } else {
-                        $member = collect($identityResponse['included'])->filter(static fn(array $included) => $included['type'] === 'member')->first();
+                        $member = collect($identityResponse['included'])->filter(static fn(array $included
+                        ) => $included['type'] === 'member')->first();
 
                         $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];
                         $this->createPatreonUserLink($patreonUserLinkAttributes, $user);

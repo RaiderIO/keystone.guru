@@ -39,8 +39,8 @@ class ThumbnailService implements ThumbnailServiceInterface
     public function createThumbnail(
         DungeonRoute $dungeonRoute,
         int          $floorIndex,
-        int          $attempts = 0): ?DungeonRouteThumbnail
-    {
+        int $attempts = 0
+    ): ?DungeonRouteThumbnail {
         try {
             $this->log->createThumbnailStart($dungeonRoute->public_key, $floorIndex, $attempts);
 
@@ -66,8 +66,8 @@ class ThumbnailService implements ThumbnailServiceInterface
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
-        ?int         $quality = null): ?DungeonRouteThumbnail
-    {
+        ?int $quality = null
+    ): ?DungeonRouteThumbnail {
         try {
             $this->log->createThumbnailCustomStart($dungeonRoute->public_key, $floorIndex, $attempts, $viewportWidth, $viewportHeight, $imageWidth, $imageHeight, $zoomLevel, $quality);
 
@@ -304,8 +304,8 @@ class ThumbnailService implements ThumbnailServiceInterface
         ?int         $imageWidth = null,
         ?int         $imageHeight = null,
         ?int         $zoomLevel = null,
-        ?int         $quality = null): Collection
-    {
+        ?int $quality = null
+    ): Collection {
         $result = collect();
 
         // Generate thumbnails for _all_ floors
@@ -412,7 +412,14 @@ class ThumbnailService implements ThumbnailServiceInterface
         string       $thumbnailData,
         bool         $isCustom = false,
     ): ?DungeonRouteThumbnail {
-        return DB::transaction(function () use ($dungeonRoute, $floorIndex, $isCustom, $target, $thumbnailData, &$result) {
+        return DB::transaction(function () use (
+            $dungeonRoute,
+            $floorIndex,
+            $isCustom,
+            $target,
+            $thumbnailData,
+            &$result
+        ) {
             /** @var Floor $floor */
             $floor = $dungeonRoute->dungeon->floors->where('index', $floorIndex)->firstOrFail();
 

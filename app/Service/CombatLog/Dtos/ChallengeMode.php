@@ -7,8 +7,11 @@ use Illuminate\Support\Carbon;
 
 class ChallengeMode
 {
-    public function __construct(private readonly Carbon $carbon, private readonly Dungeon $dungeon, private readonly int $keyLevel)
-    {
+    public function __construct(
+        private readonly Carbon  $carbon,
+        private readonly Dungeon $dungeon,
+        private readonly int     $keyLevel
+    ) {
     }
 
     public function getCarbon(): Carbon

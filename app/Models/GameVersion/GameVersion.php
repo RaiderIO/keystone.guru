@@ -100,7 +100,8 @@ class GameVersion extends CacheModel
 
     public function getDungeonsWithHeatmapsEnabled(): Collection
     {
-        return $this->mappingVersions->filter(fn(MappingVersion $mappingVersion) => $mappingVersion->dungeon !== null && $mappingVersion->dungeon->heatmap_enabled);
+        return $this->mappingVersions->filter(fn(MappingVersion $mappingVersion
+        ) => $mappingVersion->dungeon !== null && $mappingVersion->dungeon->heatmap_enabled);
     }
 
     /**
@@ -124,6 +125,7 @@ class GameVersion extends CacheModel
         /** @var CacheServiceInterface $cacheService */
         $cacheService = App::make(CacheServiceInterface::class);
 
-        return $cacheService->remember('default_game_version', static fn() => GameVersion::firstWhere('key', self::DEFAULT_GAME_VERSION));
+        return $cacheService->remember('default_game_version', static fn(
+        ) => GameVersion::firstWhere('key', self::DEFAULT_GAME_VERSION));
     }
 }

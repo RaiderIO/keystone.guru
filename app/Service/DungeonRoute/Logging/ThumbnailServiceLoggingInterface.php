@@ -12,11 +12,31 @@ interface ThumbnailServiceLoggingInterface
 
     public function createThumbnailEnd(): void;
 
-    public function createThumbnailCustomStart(string $publicKey, int $floorIndex, int $attempts, ?int $viewportWidth, ?int $viewportHeight, ?int $imageWidth, ?int $imageHeight, ?int $zoomLevel, ?int $quality): void;
+    public function createThumbnailCustomStart(
+        string $publicKey,
+        int    $floorIndex,
+        int    $attempts,
+        ?int   $viewportWidth,
+        ?int   $viewportHeight,
+        ?int   $imageWidth,
+        ?int   $imageHeight,
+        ?int   $zoomLevel,
+        ?int   $quality
+    ): void;
 
     public function createThumbnailCustomEnd(): void;
 
-    public function doCreateThumbnailStart(string $publicKey, int $floorIndex, string $targetFolder, ?int $viewportWidth, ?int $viewportHeight, ?int $imageWidth, ?int $imageHeight, ?int $zoomLevel, ?int $quality): void;
+    public function doCreateThumbnailStart(
+        string $publicKey,
+        int    $floorIndex,
+        string $targetFolder,
+        ?int   $viewportWidth,
+        ?int   $viewportHeight,
+        ?int   $imageWidth,
+        ?int   $imageHeight,
+        ?int   $zoomLevel,
+        ?int   $quality
+    ): void;
 
     public function doCreateThumbnailMaintenanceMode(): void;
 
@@ -42,7 +62,12 @@ interface ThumbnailServiceLoggingInterface
 
     public function doCreateThumbnailEnd(): void;
 
-    public function copyThumbnailsException(string $sourcePublicKey, string $targetPublicKey, int $id, Exception $exception): void;
+    public function copyThumbnailsException(
+        string    $sourcePublicKey,
+        string    $targetPublicKey,
+        int       $id,
+        Exception $exception
+    ): void;
 
     public function attachThumbnailToDungeonRouteDeleteExistingThumbnail(
         int     $id,

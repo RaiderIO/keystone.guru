@@ -60,7 +60,11 @@ trait ListsEnemies
                     ->getClonesAsEnemies($mappingVersion, $mappingVersion->dungeon->floors()->with(['dungeon'])
                         ->get());
 
-                $mdtEnemies = $mdtEnemies->filter(static fn(Enemy $mdtEnemy) => !in_array($mdtEnemy->npc_id, [155432, 155433, 155434]));
+                $mdtEnemies = $mdtEnemies->filter(static fn(Enemy $mdtEnemy) => !in_array($mdtEnemy->npc_id, [
+                    155432,
+                    155433,
+                    155434,
+                ]));
 
             } // Thrown when Lua hasn't been configured
             catch (Error) {
@@ -95,6 +99,9 @@ trait ListsEnemies
             unset($enemy->npc_id);
         }
 
-        return ['enemies' => $enemies->toArray(), 'enemiesMdt' => $mdtEnemies->values()->toArray()];
+        return [
+            'enemies'    => $enemies->toArray(),
+            'enemiesMdt' => $mdtEnemies->values()->toArray(),
+        ];
     }
 }

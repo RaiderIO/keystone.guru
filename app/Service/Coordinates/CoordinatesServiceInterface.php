@@ -14,7 +14,11 @@ interface CoordinatesServiceInterface
 
     public function calculateMapLocationForIngameLocation(IngameXY $ingameXY): LatLng;
 
-    public function convertFacadeMapLocationToMapLocation(MappingVersion $mappingVersion, LatLng $latLng, ?Floor $forceFloor = null): LatLng;
+    public function convertFacadeMapLocationToMapLocation(
+        MappingVersion $mappingVersion,
+        LatLng         $latLng,
+        ?Floor         $forceFloor = null
+    ): LatLng;
 
     public function convertMapLocationToFacadeMapLocation(MappingVersion $mappingVersion, LatLng $latLng): LatLng;
 
@@ -26,5 +30,9 @@ interface CoordinatesServiceInterface
 
     public function polygonContainsPoint(LatLng $latLng, array $polygon): bool;
 
-    public function calculateGridLocationForIngameLocation(IngameXY $ingameXY, int $gridSizeX, int $gridSizeY): IngameXY;
+    public function calculateGridLocationForIngameLocation(
+        IngameXY $ingameXY,
+        int      $gridSizeX,
+        int      $gridSizeY
+    ): IngameXY;
 }

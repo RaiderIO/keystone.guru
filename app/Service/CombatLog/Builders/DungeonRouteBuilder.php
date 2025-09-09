@@ -342,7 +342,9 @@ abstract class DungeonRouteBuilder
             // Build a list of potential enemies which will always take precedence since they're in a group that we have aggroed.
             // Therefore, these enemies should be in combat with us regardless
             /** @var Collection<Enemy> $preferredEnemiesInEngagedGroups */
-            $preferredEnemiesInEngagedGroups = $filteredEnemies->filter(static function (Enemy $availableEnemy) use ($preferredGroups) {
+            $preferredEnemiesInEngagedGroups = $filteredEnemies->filter(static function (Enemy $availableEnemy) use (
+                $preferredGroups
+            ) {
                 return $availableEnemy->enemy_pack_id !== null && $preferredGroups->has($availableEnemy->enemyPack->group);
             });
 
@@ -401,8 +403,8 @@ abstract class DungeonRouteBuilder
         Collection      $filteredEnemies,
         ActivePullEnemy $activePullEnemy,
         ?LatLng         $previousPullLatLng,
-        ClosestEnemy    $closestEnemy): void
-    {
+        ClosestEnemy $closestEnemy
+    ): void {
         try {
             $this->log->findClosestEnemyInAllFilteredEnemiesStart();
 

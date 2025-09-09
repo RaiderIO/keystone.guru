@@ -17,11 +17,13 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
     public function run(): void
     {
         /** @var Collection<Expansion> $expansions */
-        $expansions = Expansion::all()->mapWithKeys(function (Expansion $expansion) {
-            return [$expansion->shortname => $expansion->id];
-        });
+        $expansions = Expansion::all()
+            ->mapWithKeys(function (Expansion $expansion) {
+                return [$expansion->shortname => $expansion->id];
+            });
 
-        $dungeonsByExpansion = Dungeon::all()->groupBy('expansion_id', true);
+        $dungeonsByExpansion = Dungeon::all()
+            ->groupBy('expansion_id', true);
 
         $seasonAttributes = [
             [
@@ -37,7 +39,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'item_level_min'          => null,
                 'item_level_max'          => null,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_BFA),
                 'seasonal_affix_id'       => 16,
                 'index'                   => 2,
@@ -50,7 +53,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'item_level_min'          => null,
                 'item_level_max'          => null,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_BFA),
                 'seasonal_affix_id'       => 17,
                 'index'                   => 3,
@@ -63,7 +67,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'item_level_min'          => null,
                 'item_level_max'          => null,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_BFA),
                 'seasonal_affix_id'       => 18,
                 'index'                   => 4,
@@ -76,7 +81,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'item_level_min'          => null,
                 'item_level_max'          => null,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_BFA)),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
                 'seasonal_affix_id'       => 22,
                 'index'                   => 1,
@@ -89,7 +95,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'item_level_min'          => null,
                 'item_level_max'          => null,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
                 'seasonal_affix_id'       => 23,
                 'index'                   => 2,
@@ -102,7 +109,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'item_level_min'          => null,
                 'item_level_max'          => null,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_LEGION),
                 'seasonal_affix_id'       => 25,
                 'index'                   => 1,
@@ -115,7 +123,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'item_level_min'          => null,
                 'item_level_max'          => null,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_LEGION)),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
                 'seasonal_affix_id'       => 26,
                 'index'                   => 3,
@@ -128,7 +137,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                 'item_level_min'          => null,
                 'item_level_max'          => null,
                 'dungeons'                => $dungeonsByExpansion->get($expansions->get(Expansion::EXPANSION_SHADOWLANDS)),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_SHADOWLANDS),
                 'seasonal_affix_id'       => 26,
                 'index'                   => 4,
@@ -151,9 +161,11 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                         Dungeon::DUNGEON_UPPER_KARAZHAN,
                         Dungeon::DUNGEON_GRIMRAIL_DEPOT,
                         Dungeon::DUNGEON_IRON_DOCKS,
-                    ])->orderBy('expansions.released_at')
+                    ])
+                    ->orderBy('expansions.released_at')
                     ->get(),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
                 'seasonal_affix_id'       => 26,
                 'index'                   => 1,
@@ -176,9 +188,11 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                         Dungeon::DUNGEON_HALLS_OF_VALOR,
                         Dungeon::DUNGEON_SHADOWMOON_BURIAL_GROUNDS,
                         Dungeon::DUNGEON_TEMPLE_OF_THE_JADE_SERPENT,
-                    ])->orderBy('expansions.released_at')
+                    ])
+                    ->orderBy('expansions.released_at')
                     ->get(),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
                 'seasonal_affix_id'       => null,
                 'index'                   => 2,
@@ -201,9 +215,11 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                         Dungeon::DUNGEON_FREEHOLD,
                         Dungeon::DUNGEON_THE_UNDERROT,
                         Dungeon::DUNGEON_THE_VORTEX_PINNACLE,
-                    ])->orderBy('expansions.released_at')
+                    ])
+                    ->orderBy('expansions.released_at')
                     ->get(),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
                 'seasonal_affix_id'       => null,
                 'index'                   => 3,
@@ -226,9 +242,11 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                         Dungeon::DUNGEON_ATAL_DAZAR,
                         Dungeon::DUNGEON_THE_EVERBLOOM,
                         Dungeon::DUNGEON_THRONE_OF_THE_TIDES,
-                    ])->orderBy('expansions.released_at')
+                    ])
+                    ->orderBy('expansions.released_at')
                     ->get(),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_DRAGONFLIGHT),
                 'seasonal_affix_id'       => null,
                 'index'                   => 4,
@@ -251,9 +269,11 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                         Dungeon::DUNGEON_BRACKENHIDE_HOLLOW,
                         Dungeon::DUNGEON_ULDAMAN_LEGACY_OF_TYR,
                         Dungeon::DUNGEON_NELTHARUS,
-                    ])->orderBy('expansions.released_at')
+                    ])
+                    ->orderBy('expansions.released_at')
                     ->get(),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_TWW),
                 'seasonal_affix_id'       => null,
                 'index'                   => 1,
@@ -276,9 +296,11 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                         Dungeon::DUNGEON_THE_NECROTIC_WAKE,
                         Dungeon::DUNGEON_SIEGE_OF_BORALUS,
                         Dungeon::DUNGEON_GRIM_BATOL,
-                    ])->orderBy('expansions.released_at')
+                    ])
+                    ->orderBy('expansions.released_at')
                     ->get(),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_TWW),
                 'seasonal_affix_id'       => null,
                 'index'                   => 2,
@@ -301,9 +323,11 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                         Dungeon::DUNGEON_OPERATION_FLOODGATE,
                         Dungeon::DUNGEON_THEATER_OF_PAIN,
                         Dungeon::DUNGEON_THE_MOTHERLODE,
-                    ])->orderBy('expansions.released_at')
+                    ])
+                    ->orderBy('expansions.released_at')
                     ->get(),
-            ], [
+            ],
+            [
                 'expansion_id'            => $expansions->get(Expansion::EXPANSION_TWW),
                 'seasonal_affix_id'       => null,
                 'index'                   => 3,
@@ -326,7 +350,8 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
                         Dungeon::DUNGEON_OPERATION_FLOODGATE,
                         Dungeon::DUNGEON_PRIORY_OF_THE_SACRED_FLAME,
                         Dungeon::DUNGEON_THE_DAWNBREAKER,
-                    ])->orderBy('expansions.released_at')
+                    ])
+                    ->orderBy('expansions.released_at')
                     ->get(),
             ],
         ];
@@ -348,8 +373,10 @@ class SeasonsSeeder extends Seeder implements TableSeederInterface
             $seasonId++;
         }
 
-        Season::from(DatabaseSeeder::getTempTableName(Season::class))->insert($seasonAttributes);
-        SeasonDungeon::from(DatabaseSeeder::getTempTableName(SeasonDungeon::class))->insert($seasonDungeonAttributes);
+        Season::from(DatabaseSeeder::getTempTableName(Season::class))
+            ->insert($seasonAttributes);
+        SeasonDungeon::from(DatabaseSeeder::getTempTableName(SeasonDungeon::class))
+            ->insert($seasonDungeonAttributes);
     }
 
     public static function getAffectedModelClasses(): array

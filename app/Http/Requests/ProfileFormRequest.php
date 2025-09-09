@@ -3,9 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\GameServerRegion;
-use App\Models\Laratrust\Role;
 use App\Models\User;
-use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
@@ -30,19 +28,47 @@ class ProfileFormRequest extends FormRequest
         $user = $this->route()->parameter('user');
 
         return [
-            'avatar'                => ['nullable',
-                                        File::image()
-                                            ->min(1)
-                                            ->max(250)
-                                            ->dimensions(Rule::dimensions()->maxWidth(256)->maxHeight(256))
-                                            ->extensions(['jpg', 'jpeg', 'png']),
+            'avatar'                => [
+                'nullable',
+                File::image()
+                    ->min(1)
+                    ->max(250)
+                    ->dimensions(Rule::dimensions()->maxWidth(256)->maxHeight(256))
+                    ->extensions([
+                        'jpg',
+                        'jpeg',
+                        'png',
+                    ]),
             ],
-            'name'                  => ['nullable', 'alpha_dash', 'min:3', 'max:24', Rule::unique('users', 'id')->ignore($user, 'id')],
-            'email'                 => ['required', 'email', Rule::unique('users', 'email')->ignore($user, 'id')],
-            'game_server_region_id' => ['nullable', Rule::in(array_merge([0], array_values(GameServerRegion::ALL)))],
-            'echo_anonymous'        => ['nullable', 'boolean'],
-            'echo_color'            => ['required', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
-            'timezone'              => ['required', 'string', 'timezone'],
+            'name'                  => [
+                'nullable',
+                'alpha_dash',
+                'min:3',
+                'max:24',
+                Rule::unique('users', 'id')->ignore($user, 'id'),
+            ],
+            'email'                 => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($user, 'id'),
+            ],
+            'game_server_region_id' => [
+                'nullable',
+                Rule::in(array_merge([0], array_values(GameServerRegion::ALL))),
+            ],
+            'echo_anonymous'        => [
+                'nullable',
+                'boolean',
+            ],
+            'echo_color'            => [
+                'required',
+                'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
+            ],
+            'timezone'              => [
+                'required',
+                'string',
+                'timezone',
+            ],
         ];
     }
 }

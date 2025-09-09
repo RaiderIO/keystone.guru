@@ -81,7 +81,10 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.discover', [
             'breadcrumbs'       => 'dungeonroutes.season',
-            'breadcrumbsParams' => [$expansion, $season],
+            'breadcrumbsParams' => [
+                $expansion,
+                $season,
+            ],
             'gridDungeons'      => $season->dungeons()->active()->get(),
             'expansion'         => $expansion,
             'season'            => $season,
@@ -116,7 +119,10 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.season.category', [
             'breadcrumbs'       => 'dungeonroutes.season.popular',
-            'breadcrumbsParams' => [$expansion, $season],
+            'breadcrumbsParams' => [
+                $expansion,
+                $season,
+            ],
             'expansion'         => $expansion,
             'category'          => 'popular',
             'title'             => sprintf(__('controller.dungeonroutediscover.season.popular'), __($season->name)),
@@ -138,8 +144,8 @@ class DungeonRouteDiscoverController extends Controller
         string                    $seasonIndex,
         DiscoverServiceInterface  $discoverService,
         ExpansionServiceInterface $expansionService,
-        SeasonServiceInterface    $seasonService)
-    {
+        SeasonServiceInterface $seasonService
+    ) {
         $season = Season::where('expansion_id', $expansion->id)->where('index', $seasonIndex)->first();
 
         // Redirect to the current expansion
@@ -154,7 +160,10 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.season.category', [
             'breadcrumbs'       => 'dungeonroutes.season.thisweek',
-            'breadcrumbsParams' => [$expansion, $season],
+            'breadcrumbsParams' => [
+                $expansion,
+                $season,
+            ],
             'expansion'         => $expansion,
             'category'          => 'thisweek',
             'title'             => sprintf(__('controller.dungeonroutediscover.season.this_week_affixes'), __($season->name)),
@@ -193,7 +202,10 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.season.category', [
             'breadcrumbs'       => 'dungeonroutes.season.nextweek',
-            'breadcrumbsParams' => [$expansion, $season],
+            'breadcrumbsParams' => [
+                $expansion,
+                $season,
+            ],
             'expansion'         => $expansion,
             'category'          => 'nextweek',
             'title'             => sprintf(__('controller.dungeonroutediscover.season.next_week_affixes'), __($season->name)),
@@ -214,8 +226,8 @@ class DungeonRouteDiscoverController extends Controller
     public function discoverSeasonNew(
         Expansion                $expansion,
         string                   $seasonIndex,
-        DiscoverServiceInterface $discoverService)
-    {
+        DiscoverServiceInterface $discoverService
+    ) {
         $season = Season::where('expansion_id', $expansion->id)->where('index', $seasonIndex)->first();
 
         // Redirect to the current expansion
@@ -228,7 +240,10 @@ class DungeonRouteDiscoverController extends Controller
 
         return view('dungeonroute.discover.season.category', [
             'breadcrumbs'       => 'dungeonroutes.season.new',
-            'breadcrumbsParams' => [$expansion, $season],
+            'breadcrumbsParams' => [
+                $expansion,
+                $season,
+            ],
             'expansion'         => $expansion,
             'category'          => 'new',
             'title'             => sprintf(__('controller.dungeonroutediscover.season.new'), __($season->name)),
@@ -248,8 +263,8 @@ class DungeonRouteDiscoverController extends Controller
     public function discoverExpansion(
         Expansion                 $expansion,
         ExpansionServiceInterface $expansionService,
-        DiscoverServiceInterface  $discoverService)
-    {
+        DiscoverServiceInterface $discoverService
+    ) {
         $this->authorize('view', $expansion);
 
         $discoverService = $discoverService->withExpansion($expansion);
@@ -287,8 +302,8 @@ class DungeonRouteDiscoverController extends Controller
         Dungeon                   $dungeon,
         DiscoverServiceInterface  $discoverService,
         ExpansionServiceInterface $expansionService,
-        SeasonServiceInterface    $seasonService): View
-    {
+        SeasonServiceInterface $seasonService
+    ): View {
         $expansion = $this->applyCorrectedExpansion($expansion, $dungeon, $discoverService, $seasonService);
 
         $this->authorize('view', $expansion);
@@ -346,8 +361,11 @@ class DungeonRouteDiscoverController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function discoverthisweek(Expansion $expansion, DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService): View
-    {
+    public function discoverthisweek(
+        Expansion                 $expansion,
+        DiscoverServiceInterface  $discoverService,
+        ExpansionServiceInterface $expansionService
+    ): View {
         $this->authorize('view', $expansion);
 
         $affixGroup = $expansionService->getCurrentAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion());
@@ -368,8 +386,11 @@ class DungeonRouteDiscoverController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function discovernextweek(Expansion $expansion, DiscoverServiceInterface $discoverService, ExpansionServiceInterface $expansionService): View
-    {
+    public function discovernextweek(
+        Expansion                 $expansion,
+        DiscoverServiceInterface  $discoverService,
+        ExpansionServiceInterface $expansionService
+    ): View {
         $this->authorize('view', $expansion);
 
         $affixGroup = $expansionService->getNextAffixGroup($expansion, GameServerRegion::getUserOrDefaultRegion());
@@ -409,8 +430,11 @@ class DungeonRouteDiscoverController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function discoverdungeonpopular(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService): View
-    {
+    public function discoverdungeonpopular(
+        Expansion                $expansion,
+        Dungeon                  $dungeon,
+        DiscoverServiceInterface $discoverService
+    ): View {
         $this->authorize('view', $dungeon->expansion);
         $this->authorize('view', $dungeon);
 
@@ -436,8 +460,8 @@ class DungeonRouteDiscoverController extends Controller
         Dungeon                   $dungeon,
         DiscoverServiceInterface  $discoverService,
         ExpansionServiceInterface $expansionService,
-        SeasonServiceInterface    $seasonService): View
-    {
+        SeasonServiceInterface $seasonService
+    ): View {
         $expansion = $this->applyCorrectedExpansion($expansion, $dungeon, $discoverService, $seasonService);
 
         $this->authorize('view', $dungeon->expansion);
@@ -476,8 +500,8 @@ class DungeonRouteDiscoverController extends Controller
         Dungeon                   $dungeon,
         DiscoverServiceInterface  $discoverService,
         ExpansionServiceInterface $expansionService,
-        SeasonServiceInterface    $seasonService): View
-    {
+        SeasonServiceInterface $seasonService
+    ): View {
         $expansion = $this->applyCorrectedExpansion($expansion, $dungeon, $discoverService, $seasonService);
 
         $this->authorize('view', $dungeon->expansion);
@@ -510,8 +534,11 @@ class DungeonRouteDiscoverController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function discoverdungeonnew(Expansion $expansion, Dungeon $dungeon, DiscoverServiceInterface $discoverService): View
-    {
+    public function discoverdungeonnew(
+        Expansion                $expansion,
+        Dungeon                  $dungeon,
+        DiscoverServiceInterface $discoverService
+    ): View {
         $this->authorize('view', $dungeon->expansion);
         $this->authorize('view', $dungeon);
 

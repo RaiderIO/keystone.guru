@@ -58,7 +58,10 @@ class MissedV9SoD extends Suffix implements MissedInterface
 
         $this->missType = Guid::createFromGuidString($parameters[0]);
         $this->offhand  = $parameters[1] !== 'nil';
-        if (!isset($parameters[2]) || in_array($parameters[2], ['ST', 'AOE'])) {
+        if (!isset($parameters[2]) || in_array($parameters[2], [
+                'ST',
+                'AOE',
+            ])) {
             $this->amountMissed = 0;
             $this->amountTotal  = 0;
             $this->damageType   = $parameters[2] ?? null;

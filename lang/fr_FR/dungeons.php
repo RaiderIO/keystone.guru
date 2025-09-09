@@ -682,8 +682,8 @@ return [
                 'halls_of_valor'             => 'Salles des Valeureux',
             ],
         ],
-        'lower_karazhan' => [
-            'name' => 'Karazhan (inférieur)',
+        'lower_karazhan'              => [
+            'name'   => 'Karazhan (inférieur)',
             'floors' => [
                 'servants_quarters'    => 'Quartiers des serviteurs',
                 'upper_livery_stables' => 'Écuries supérieures',

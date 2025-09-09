@@ -21,8 +21,13 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function create(NpcServiceInterface $npcService, Request $request, Dungeon $dungeon, Floor $floor, int $difficulty): \Illuminate\View\View
-    {
+    public function create(
+        NpcServiceInterface $npcService,
+        Request             $request,
+        Dungeon             $dungeon,
+        Floor               $floor,
+        int                 $difficulty
+    ): \Illuminate\View\View {
         $npcs = $npcService->getNpcsForDropdown(collect([$dungeon]))->toArray();
 
         return view('admin.dungeonspeedrunrequirednpc.new', [
@@ -34,8 +39,12 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
         ]);
     }
 
-    public function createSave(DungeonSpeedrunRequiredNpcsFormRequest $request, Dungeon $dungeon, Floor $floor, int $difficulty): RedirectResponse
-    {
+    public function createSave(
+        DungeonSpeedrunRequiredNpcsFormRequest $request,
+        Dungeon                                $dungeon,
+        Floor                                  $floor,
+        int                                    $difficulty
+    ): RedirectResponse {
         $validated            = $request->validated();
         $validated['npc2_id'] = (int)$validated['npc2_id'] === -1 ? null : $validated['npc2_id'];
         $validated['npc3_id'] = (int)$validated['npc3_id'] === -1 ? null : $validated['npc3_id'];
@@ -45,11 +54,19 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
 
         Session::flash('status', __('controller.dungeonspeedrunrequirednpcs.flash.npc_added_successfully'));
 
-        return redirect()->route('admin.floor.edit', ['dungeon' => $dungeon, 'floor' => $floor]);
+        return redirect()->route('admin.floor.edit', [
+            'dungeon' => $dungeon,
+            'floor'   => $floor,
+        ]);
     }
 
-    public function delete(Request $request, Dungeon $dungeon, Floor $floor, int $difficulty, DungeonSpeedrunRequiredNpc $dungeonspeedrunrequirednpc): RedirectResponse
-    {
+    public function delete(
+        Request                    $request,
+        Dungeon                    $dungeon,
+        Floor                      $floor,
+        int                        $difficulty,
+        DungeonSpeedrunRequiredNpc $dungeonspeedrunrequirednpc
+    ): RedirectResponse {
         try {
             $dungeonspeedrunrequirednpc->delete();
         } catch (Exception) {
@@ -58,6 +75,9 @@ class DungeonSpeedrunRequiredNpcsController extends Controller
 
         Session::flash('status', __('controller.dungeonspeedrunrequirednpcs.flash.npc_deleted_successfully'));
 
-        return redirect()->route('admin.floor.edit', ['dungeon' => $dungeon, 'floor' => $floor]);
+        return redirect()->route('admin.floor.edit', [
+            'dungeon' => $dungeon,
+            'floor'   => $floor,
+        ]);
     }
 }

@@ -94,8 +94,12 @@ class AjaxEnemyPatrolController extends AjaxMappingModelBaseController
         return $result;
     }
 
-    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
-    {
+    protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        Model                       $model
+    ): ModelChangedEvent {
         return new EnemyPatrolChangedEvent($context, $user, $model);
     }
 

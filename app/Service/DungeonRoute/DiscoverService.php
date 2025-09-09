@@ -5,13 +5,11 @@ namespace App\Service\DungeonRoute;
 use App\Models\AffixGroup\AffixGroupBase;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Service\Cache\Traits\RemembersToFile;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 
 class DiscoverService extends BaseDiscoverService
@@ -58,25 +56,35 @@ class DiscoverService extends BaseDiscoverService
                 'mappingVersion',
                 'thumbnails',
                 'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
-                'season'  => fn(BelongsTo $query) => $query->without(['affixGroups', 'dungeons']),
+                'season' => fn(BelongsTo $query) => $query->without([
+                    'affixGroups',
+                    'dungeons',
+                ]),
             ])
-            ->without(['faction', 'specializations', 'classes', 'races'])
+            ->without([
+                'faction',
+                'specializations',
+                'classes',
+                'races',
+            ])
             // This query makes sure that routes which are 'catch all' for affixes drop down since they aren't as specific
             // as routes who only have say 1 or 2 affixes assigned to them.
             // It also applies a big penalty for routes that do not belong to the current season
-            ->when($currentSeasonAffixGroups->isNotEmpty(), static function (Builder $builder) use ($currentSeasonAffixGroups) {
+            ->when($currentSeasonAffixGroups->isNotEmpty(), static function (Builder $builder) use (
+                $currentSeasonAffixGroups
+            ) {
             })
             ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
             // Order by affix group ID in case of old seasons where all weightedPopularity will end up being 0.
             // We want the most recent season's routes showing up for this if possible
-//            ->joinSub(
-//                DungeonRouteAffixGroup::query()
-//                    ->selectRaw('dungeon_route_id, MAX(affix_group_id)')
-//                    ->groupBy('dungeon_route_id'),
-//                'ag', static function (JoinClause $joinClause) {
-//                $joinClause->on('ag.dungeon_route_id', '=', 'dungeon_routes.id');
-//            })
+            //            ->joinSub(
+            //                DungeonRouteAffixGroup::query()
+            //                    ->selectRaw('dungeon_route_id, MAX(affix_group_id)')
+            //                    ->groupBy('dungeon_route_id'),
+            //                'ag', static function (JoinClause $joinClause) {
+            //                $joinClause->on('ag.dungeon_route_id', '=', 'dungeon_routes.id');
+            //            })
             ->when($this->season === null, function (Builder $builder) {
                 $builder->where('dungeons.expansion_id', $this->expansion->id)
                     ->orderBy('dungeon_routes.popularity', 'desc');
@@ -119,9 +127,17 @@ class DiscoverService extends BaseDiscoverService
                 'mappingVersion',
                 'thumbnails',
                 'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
-                'season'  => fn(BelongsTo $query) => $query->without(['affixGroups', 'dungeons']),
+                'season' => fn(BelongsTo $query) => $query->without([
+                    'affixGroups',
+                    'dungeons',
+                ]),
             ])
-            ->without(['faction', 'specializations', 'classes', 'races'])
+            ->without([
+                'faction',
+                'specializations',
+                'classes',
+                'races',
+            ])
             ->select('dungeon_routes.*')
             ->join('dungeons', 'dungeons.id', 'dungeon_routes.dungeon_id')
             ->join('mapping_versions', 'mapping_versions.id', 'dungeon_routes.mapping_version_id')
@@ -209,7 +225,10 @@ class DiscoverService extends BaseDiscoverService
     {
         $cacheKey = $this->getCacheKey(sprintf('affix_group_%d:popular', $affixGroup->id));
 
-        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $affixGroup) {
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use (
+            $cacheKey,
+            $affixGroup
+        ) {
             return $this->cacheService->rememberWhen($this->closure === null,
                 $cacheKey,
                 fn() => $this->applyAffixGroupCountPenalty(
@@ -228,7 +247,10 @@ class DiscoverService extends BaseDiscoverService
     {
         $cacheKey = $this->getCacheKey(sprintf('grouped_by_dungeon:affix_group_%d:popular', $affixGroup->id));
 
-        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $affixGroup) {
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use (
+            $cacheKey,
+            $affixGroup
+        ) {
             return $this->cacheService->rememberWhen($this->closure === null,
                 $cacheKey,
                 function () use ($affixGroup) {
@@ -274,7 +296,11 @@ class DiscoverService extends BaseDiscoverService
     {
         $cacheKey = $this->getCacheKey(sprintf('%s:affix_group_%s:popular', $dungeon->key, $affixGroup->id));
 
-        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $dungeon, $affixGroup) {
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use (
+            $cacheKey,
+            $dungeon,
+            $affixGroup
+        ) {
             return $this->cacheService->rememberWhen($this->closure === null,
                 $cacheKey,
                 fn() => $this->applyAffixGroupCountPenalty(
@@ -307,7 +333,10 @@ class DiscoverService extends BaseDiscoverService
 
         $cacheKey = $this->getCacheKey(sprintf('affix_group_%s:popular', $affixGroup->id));
 
-        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $affixGroup) {
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use (
+            $cacheKey,
+            $affixGroup
+        ) {
             return $this->cacheService->rememberWhen($this->closure === null,
                 $cacheKey,
                 fn() => $this->applyAffixGroupCountPenalty(
@@ -340,7 +369,10 @@ class DiscoverService extends BaseDiscoverService
     {
         $cacheKey = $this->getCacheKey(sprintf('affix_group_%d:new', $affixGroup->id));
 
-        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $affixGroup) {
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use (
+            $cacheKey,
+            $affixGroup
+        ) {
             return $this->cacheService->rememberWhen($this->closure === null,
                 $cacheKey, fn() => $this->newBuilder()
                     ->join('dungeon_route_affix_groups', 'dungeon_routes.id', '=', 'dungeon_route_affix_groups.dungeon_route_id')
@@ -373,7 +405,11 @@ class DiscoverService extends BaseDiscoverService
     {
         $cacheKey = $this->getCacheKey(sprintf('%s:affix_group_%s:new', $dungeon->key, $affixGroup->id));
 
-        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $dungeon, $affixGroup) {
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use (
+            $cacheKey,
+            $dungeon,
+            $affixGroup
+        ) {
             return $this->cacheService->rememberWhen($this->closure === null,
                 $cacheKey,
                 fn() => $this->newBuilder()
@@ -405,7 +441,10 @@ class DiscoverService extends BaseDiscoverService
 
         $cacheKey = $this->getCacheKey(sprintf('affix_group_%s:new', $affixGroup->id));
 
-        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use ($cacheKey, $affixGroup) {
+        return $this->rememberLocal($cacheKey, $this->getLocalCacheDuration(), function () use (
+            $cacheKey,
+            $affixGroup
+        ) {
             return $this->cacheService->rememberWhen($this->closure === null,
                 $cacheKey,
                 fn() => $this->newBuilder()

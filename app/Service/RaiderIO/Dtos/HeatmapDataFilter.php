@@ -458,7 +458,8 @@ class HeatmapDataFilter implements Arrayable
 
         if ($this->getIncludeSpecIds()->isNotEmpty()) {
             $result['includeSpecIds'] = implode(',', $this->getIncludeSpecIds()->map(
-                fn(CharacterClassSpecialization $characterClassSpecialization) => $characterClassSpecialization->specialization_id
+                fn(CharacterClassSpecialization $characterClassSpecialization
+                ) => $characterClassSpecialization->specialization_id
             )->toArray());
         }
 
@@ -470,7 +471,8 @@ class HeatmapDataFilter implements Arrayable
 
         if ($this->getIncludePlayerDeathSpecIds()->isNotEmpty()) {
             $result['includePlayerDeathSpecIds'] = implode(',', $this->getIncludePlayerDeathSpecIds()->map(
-                fn(CharacterClassSpecialization $characterClassSpecialization) => $characterClassSpecialization->specialization_id
+                fn(CharacterClassSpecialization $characterClassSpecialization
+                ) => $characterClassSpecialization->specialization_id
             )->toArray());
         }
 

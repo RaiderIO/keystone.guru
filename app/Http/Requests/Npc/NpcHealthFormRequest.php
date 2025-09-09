@@ -28,7 +28,10 @@ class NpcHealthFormRequest extends FormRequest
 
         // Remove commas or dots in the name; we want the integer value
         $this->merge([
-            'health' => str_replace([',', '.'], '', (string)$this->input('health')),
+            'health' => str_replace([
+                ',',
+                '.',
+            ], '', (string)$this->input('health')),
         ]);
     }
 

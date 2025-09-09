@@ -29,7 +29,8 @@ class CharacterClassesSeeder extends Seeder implements TableSeederInterface
                 'key'          => CharacterClass::CHARACTER_CLASS_WARRIOR,
                 'name'         => 'classes.' . CharacterClass::CHARACTER_CLASS_WARRIOR,
                 'color'        => '#C79C6E',
-                'icon_file_id' => -1, // Temporary value
+                'icon_file_id' => -1,
+                // Temporary value
             ],
             [
                 'class_id'     => 3,

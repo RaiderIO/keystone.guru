@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Swoole;
 
-use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Repositories\Database\Npc\NpcRepository;
 use App\Repositories\Swoole\Interfaces\NpcRepositorySwooleInterface;

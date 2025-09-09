@@ -106,7 +106,7 @@ return [
             ],
         ],
         'moltencore'                  => [
-            'name' => '熔火之心',
+            'name'   => '熔火之心',
             'floors' => [
                 'molten_core' => '',
             ],
@@ -245,7 +245,7 @@ return [
         'the_temple_of_atal_hakkar'   => [
             'name'   => '沉没的神庙',
             'floors' => [
-                'the_pit_of_refuse' => '沉没的神庙',
+                'the_pit_of_refuse'         => '沉没的神庙',
                 'hall_of_serpents'          => '',
                 'entrance'                  => '',
                 'the_temple_of_atal_hakkar' => '',
@@ -677,9 +677,9 @@ return [
         'halls_of_valor'              => [
             'name'   => '英灵殿',
             'floors' => [
-                'the_high_gate'  => '至高之门',
+                'the_high_gate'              => '至高之门',
                 'fields_of_the_eternal_hunt' => '',
-                'halls_of_valor' => '英灵殿',
+                'halls_of_valor'             => '英灵殿',
             ],
         ],
         'lower_karazhan'              => [

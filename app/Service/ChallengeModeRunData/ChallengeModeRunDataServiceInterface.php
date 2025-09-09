@@ -13,5 +13,9 @@ interface ChallengeModeRunDataServiceInterface
 
     public function insertAllToOpensearch(int $count = 1000, ?callable $onProcess = null): bool;
 
-    public function insertToOpensearch(Collection $combatLogEvents, int $count = 1000, ?callable $onProcess = null): bool;
+    public function insertToOpensearch(
+        Collection $combatLogEvents,
+        int        $count = 1000,
+        ?callable  $onProcess = null
+    ): bool;
 }

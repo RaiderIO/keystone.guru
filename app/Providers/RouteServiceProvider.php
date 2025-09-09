@@ -13,7 +13,7 @@ use RateLimiter;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    private const RATE_LIMIT_OVERRIDE_HTTP           = null;
+    private const RATE_LIMIT_OVERRIDE_HTTP = null;
     private const RATE_LIMIT_OVERRIDE_PER_MINUTE_API = null;
 
     /**
@@ -58,7 +58,11 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes(): void
     {
         Route::prefix('api')
-            ->middleware(['api', 'throttle:api-general', ApiMetrics::class])
+            ->middleware([
+                'api',
+                'throttle:api-general',
+                ApiMetrics::class,
+            ])
             ->group(base_path('routes/api.php'));
     }
 
@@ -127,7 +131,10 @@ class RouteServiceProvider extends ServiceProvider
         /** @var User|null $user */
         $user = $request->user();
 
-        if ($user?->hasRole(Role::roles([Role::ROLE_ADMIN, Role::ROLE_INTERNAL_TEAM]))) {
+        if ($user?->hasRole(Role::roles([
+            Role::ROLE_ADMIN,
+            Role::ROLE_INTERNAL_TEAM,
+        ]))) {
             return Limit::none();
         }
 

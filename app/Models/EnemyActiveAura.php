@@ -8,9 +8,9 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int   $id
- * @property int   $enemy_id
- * @property int   $spell_id
+ * @property int $id
+ * @property int $enemy_id
+ * @property int $spell_id
  * @property Enemy $enemy
  * @property Spell $spell
  *
@@ -20,7 +20,11 @@ class EnemyActiveAura extends CacheModel
 {
     use SeederModel;
 
-    public $visible = ['id', 'enemy_id', 'spell_id'];
+    public $visible = [
+        'id',
+        'enemy_id',
+        'spell_id',
+    ];
 
     public $timestamps = false;
 

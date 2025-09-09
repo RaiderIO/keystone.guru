@@ -151,8 +151,10 @@ class SimulationCraftRaidEventsOptions extends Model
     /**
      * @throws RandomException
      */
-    public static function fromRequest(AjaxDungeonRouteSimulateFormRequest $request, DungeonRoute $dungeonRoute): SimulationCraftRaidEventsOptions
-    {
+    public static function fromRequest(
+        AjaxDungeonRouteSimulateFormRequest $request,
+        DungeonRoute                        $dungeonRoute
+    ): SimulationCraftRaidEventsOptions {
         $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ADVANCED_SIMULATION);
 
         $validated = $request->validated();

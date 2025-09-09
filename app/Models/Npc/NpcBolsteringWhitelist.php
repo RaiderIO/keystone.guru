@@ -22,7 +22,11 @@ class NpcBolsteringWhitelist extends CacheModel
 
     public $timestamps = false;
 
-    protected $fillable = ['id', 'npc_id', 'whitelist_npc_id'];
+    protected $fillable = [
+        'id',
+        'npc_id',
+        'whitelist_npc_id',
+    ];
 
     public $with = ['whitelistnpc'];
 

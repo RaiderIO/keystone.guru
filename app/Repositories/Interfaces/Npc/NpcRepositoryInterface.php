@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Interfaces\Npc;
 
-use App\Models\Dungeon;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Repositories\BaseRepositoryInterface;

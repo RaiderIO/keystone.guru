@@ -21,9 +21,17 @@ class MapObjectToAwakenedObeliskLink extends Model
 {
     public $timestamps = false;
 
-    public $visible = ['target_map_icon_type_id', 'target_map_icon_seasonal_index'];
+    public $visible = [
+        'target_map_icon_type_id',
+        'target_map_icon_seasonal_index',
+    ];
 
-    public $fillable = ['source_map_object_id', 'source_map_object_class_name', 'target_map_icon_type_id', 'target_map_icon_seasonal_index'];
+    public $fillable = [
+        'source_map_object_id',
+        'source_map_object_class_name',
+        'target_map_icon_type_id',
+        'target_map_icon_seasonal_index',
+    ];
 
     public function sourcemapobject(): HasOne
     {

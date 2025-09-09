@@ -40,7 +40,13 @@ class DungeonFloorSwitchMarker extends CacheModel implements MappingModelCloneab
 
     protected $appends = ['floorCouplingDirection']; // , 'ingameX', 'ingameY'
 
-    protected $hidden = ['mappingVersion', 'floor', 'targetFloor', 'sourceFloor', 'laravel_through_key'];
+    protected $hidden = [
+        'mappingVersion',
+        'floor',
+        'targetFloor',
+        'sourceFloor',
+        'laravel_through_key',
+    ];
 
     protected $fillable = [
         'id',

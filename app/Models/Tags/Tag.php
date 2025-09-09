@@ -33,7 +33,11 @@ class Tag extends Model
 {
     use HasGenericModelRelation;
 
-    protected $visible = ['id', 'name', 'color'];
+    protected $visible = [
+        'id',
+        'name',
+        'color',
+    ];
 
     protected $with = ['tagCategory'];
 

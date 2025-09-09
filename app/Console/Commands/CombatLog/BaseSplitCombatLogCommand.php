@@ -10,7 +10,7 @@ abstract class BaseSplitCombatLogCommand extends BaseCombatLogCommand
      * Execute the console command.
      */
     public function parseCombatLogSplitRecursively(
-        string   $filePath,
+        string $filePath,
         callable $splitCombatLogCallable,
     ): int {
         ini_set('memory_limit', '2G');
@@ -38,7 +38,10 @@ abstract class BaseSplitCombatLogCommand extends BaseCombatLogCommand
             $this->warn('- File contained no splittable parts!');
         }
 
-        $targetFileName = str_replace(['.txt', '.zip'], $targetFileExtension, $filePath);
+        $targetFileName = str_replace([
+            '.txt',
+            '.zip',
+        ], $targetFileExtension, $filePath);
 
         $this->comment(sprintf('- Renaming original file to %s', $targetFileName));
         rename($filePath, $targetFileName);

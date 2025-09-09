@@ -25,11 +25,13 @@ class Conversion
         Expansion::EXPANSION_WOTLK        => 'WrathOfTheLichKing',
         Expansion::EXPANSION_CATACLYSM    => 'Cataclysm',
         Expansion::EXPANSION_MOP          => 'MistsOfPandaria',
-        Expansion::EXPANSION_WOD          => 'Shadowlands', // WoD dungeons are under Shadowlands for latest MDT
+        Expansion::EXPANSION_WOD          => 'Shadowlands',
+        // WoD dungeons are under Shadowlands for latest MDT
         Expansion::EXPANSION_LEGION       => 'Legion',
         Expansion::EXPANSION_BFA          => 'BattleForAzeroth',
         Expansion::EXPANSION_SHADOWLANDS  => 'Shadowlands',
-        Expansion::EXPANSION_DRAGONFLIGHT => 'Dragonflight', // DF S1 has MoP/WoD dungeons under here
+        Expansion::EXPANSION_DRAGONFLIGHT => 'Dragonflight',
+        // DF S1 has MoP/WoD dungeons under here
         Expansion::EXPANSION_TWW          => 'TheWarWithin',
     ];
 
@@ -353,7 +355,10 @@ class Conversion
      */
     public static function convertLatLngToMDTCoordinate(LatLng $latLng): array
     {
-        return ['y' => round($latLng->getLat() * 2.185, 1), 'x' => round($latLng->getLng() * 2.185, 1)];
+        return [
+            'y' => round($latLng->getLat() * 2.185, 1),
+            'x' => round($latLng->getLng() * 2.185, 1),
+        ];
     }
 
     /**
@@ -362,8 +367,11 @@ class Conversion
      *
      * @throws Exception
      */
-    public static function convertWeekToAffixGroup(SeasonService $seasonService, Dungeon $dungeon, int $mdtWeek): ?AffixGroup
-    {
+    public static function convertWeekToAffixGroup(
+        SeasonService $seasonService,
+        Dungeon       $dungeon,
+        int           $mdtWeek
+    ): ?AffixGroup {
         if (!$dungeon->hasMappingVersionWithSeasons()) {
             return null;
         }

@@ -3,7 +3,6 @@
 namespace App\Http\Models\Request\CombatLog\Route;
 
 use App\Http\Models\Request\RequestModel;
-use App\Models\Enemy;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
 

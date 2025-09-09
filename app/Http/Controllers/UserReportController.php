@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserReport;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
 
 class UserReportController extends Controller

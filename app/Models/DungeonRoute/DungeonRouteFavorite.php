@@ -8,17 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int          $id
- * @property int          $dungeon_route_id
- * @property int          $user_id
+ * @property int  $id
+ * @property int  $dungeon_route_id
+ * @property int  $user_id
  * @property DungeonRoute $dungeonRoute
- * @property User         $user
+ * @property User $user
  *
  * @mixin Eloquent
  */
 class DungeonRouteFavorite extends Model
 {
-    public $fillable = ['dungeon_route_id', 'user_id'];
+    public $fillable = [
+        'dungeon_route_id',
+        'user_id',
+    ];
 
     public $timestamps = false;
 

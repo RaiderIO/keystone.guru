@@ -40,8 +40,11 @@ class CreateMissingNpcDataExtractor implements DataExtractorInterface
 
     }
 
-    public function extractData(ExtractedDataResult $result, DataExtractionCurrentDungeon $currentDungeon, BaseEvent $parsedEvent): void
-    {
+    public function extractData(
+        ExtractedDataResult          $result,
+        DataExtractionCurrentDungeon $currentDungeon,
+        BaseEvent                    $parsedEvent
+    ): void {
         // Don't create summoned enemies!
         if ($parsedEvent instanceof CombatLogEvent && $parsedEvent->getSuffix() instanceof Summon) {
             $guid = $parsedEvent->getGenericData()->getDestGuid();

@@ -18,7 +18,10 @@ class DungeonRoutePreviewUrlFormRequest extends DungeonRouteBaseUrlFormRequest
     public function rules(): array
     {
         return array_merge(parent::rules(), [
-            'secret' => ['nullable', 'string'],
+            'secret' => [
+                'nullable',
+                'string',
+            ],
         ]);
     }
 }

@@ -25,7 +25,11 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
             $dungeonRoute->makeHidden(['mappingVersion']);
             $dungeonRoute->dungeon->makeHidden(['gameVersion']);
             $dungeonRoute->dungeon->floors->each(function (Floor $floor) {
-                $floor->setVisible(['active', 'index', 'facade']);
+                $floor->setVisible([
+                    'active',
+                    'index',
+                    'facade',
+                ]);
             });
         });
 
@@ -37,7 +41,10 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
     {
         // Clear them
         $countQuery = $this->builder->getQuery()
-            ->cloneWithout(['havings', 'groups'])
+            ->cloneWithout([
+                'havings',
+                'groups',
+            ])
             // ->cloneWithoutBindings(['select'])
             ->selectRaw('count(distinct dungeon_routes.id) as aggregate');
         // Get the count
@@ -58,10 +65,14 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
         // then FOUND_ROWS() would return the result from the wrong function, rather annoying that is.
         // Bit of a hack, but for now the only way to reliably get the pre-limit count.
         $query = $this->builder->getQuery()
-            ->cloneWithout(['columns', 'offset', 'limit'])->cloneWithoutBindings(['select'])
+            ->cloneWithout([
+                'columns',
+                'offset',
+                'limit',
+            ])->cloneWithoutBindings(['select'])
             ->selectRaw(DB::raw('count( distinct dungeon_routes.id) as aggregate')->getValue($this->builder->getGrammar()));
         // Temp store; it messes with the count
-        $havings        = $query->havings;
+        $havings = $query->havings;
         $query->havings = null;
 
         $query->orders = null;

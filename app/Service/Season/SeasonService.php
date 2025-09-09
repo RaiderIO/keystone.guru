@@ -57,7 +57,8 @@ class SeasonService implements SeasonServiceInterface
                 ->get();
         }
 
-        return $this->seasonCache->when($expansion !== null, static fn(Collection $seasonCache) => $seasonCache->where('expansion_id', $expansion->id));
+        return $this->seasonCache->when($expansion !== null, static fn(Collection $seasonCache
+        ) => $seasonCache->where('expansion_id', $expansion->id));
     }
 
     public function getFirstSeason(): Season
@@ -155,8 +156,11 @@ class SeasonService implements SeasonServiceInterface
      *
      * @throws Exception
      */
-    public function getAffixGroupIndexAt(Carbon $date, ?GameServerRegion $region = null, ?Expansion $expansion = null): ?int
-    {
+    public function getAffixGroupIndexAt(
+        Carbon            $date,
+        ?GameServerRegion $region = null,
+        ?Expansion        $expansion = null
+    ): ?int {
         $season = $this->getSeasonAt($date, $expansion, $region);
         // There's no season active at the given time!
         if ($season === null || $season->affix_group_count <= 0) {

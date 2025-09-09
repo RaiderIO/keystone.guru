@@ -54,10 +54,14 @@ function isValidBase64(string $string): bool
 /**
  * @return array|array[][]|false[][]|string[][]|string[][][]
  */
-function str_getcsv_assoc(string $csv_string, string $delimiter = ',', bool $skip_empty_lines = true, bool $trim_fields = true)
-{
-    $enc   = preg_replace('/(?<!")""/', '!!Q!!', $csv_string);
-    $enc   = preg_replace_callback(
+function str_getcsv_assoc(
+    string $csv_string,
+    string $delimiter = ',',
+    bool   $skip_empty_lines = true,
+    bool   $trim_fields = true
+) {
+    $enc = preg_replace('/(?<!")""/', '!!Q!!', $csv_string);
+    $enc = preg_replace_callback(
         '/"(.*?)"/s',
         static fn($field) => urlencode(utf8_encode($field[1])),
         (string)$enc

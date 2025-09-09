@@ -78,7 +78,11 @@ class PhpArray2LuaTable
     private function renderValue($value, int $indent): array
     {
         if (is_string($value)) {
-            $tokens = [self::TOKEN_STRING_QUOTE, $value, self::TOKEN_STRING_QUOTE];
+            $tokens = [
+                self::TOKEN_STRING_QUOTE,
+                $value,
+                self::TOKEN_STRING_QUOTE,
+            ];
         } else if (is_bool($value)) {
             $tokens = [$value ? 'true' : 'false'];
         } else {

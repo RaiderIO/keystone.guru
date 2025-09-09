@@ -2,7 +2,6 @@
 
 namespace App\Service\User;
 
-use App\Logic\Utils\Stopwatch;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -33,7 +32,7 @@ class UserService implements UserServiceInterface
             return false;
         }
 
-        $base64     = Str::replace('Basic ', '', $authentication);
+        $base64 = Str::replace('Basic ', '', $authentication);
         $usernamePw = base64_decode($base64);
         if ($usernamePw === false) {
             return false;
@@ -44,7 +43,10 @@ class UserService implements UserServiceInterface
             return false;
         }
 
-        [$username, $password] = $explode;
+        [
+            $username,
+            $password,
+        ] = $explode;
 
         return $this->loginAsUser($username, $password);
     }

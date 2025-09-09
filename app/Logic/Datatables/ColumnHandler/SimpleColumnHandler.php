@@ -30,8 +30,13 @@ class SimpleColumnHandler extends DatatablesColumnHandler
         parent::__construct($dtHandler, $columnName, $columnData);
     }
 
-    protected function applyFilter(Builder $subBuilder, Builder $orderBuilder,  $columnData, $order, $generalSearch): void
-    {
+    protected function applyFilter(
+        Builder $subBuilder,
+        Builder $orderBuilder,
+                $columnData,
+                $order,
+                $generalSearch
+    ): void {
         // If the column name is not valid, ignore it entirely
         if (!in_array($this->getColumnName(), self::VALID_COLUMN_NAMES)) {
             return;

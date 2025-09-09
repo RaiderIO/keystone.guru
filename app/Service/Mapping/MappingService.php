@@ -85,8 +85,10 @@ class MappingService implements MappingServiceInterface
         ]);
     }
 
-    public function createNewMappingVersionFromPreviousMapping(Dungeon $dungeon, GameVersion $gameVersion): MappingVersion
-    {
+    public function createNewMappingVersionFromPreviousMapping(
+        Dungeon     $dungeon,
+        GameVersion $gameVersion
+    ): MappingVersion {
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
         $newVersion            = (($currentMappingVersion?->version) ?? 0) + 1;
 
@@ -141,8 +143,10 @@ class MappingService implements MappingServiceInterface
         return MappingVersion::find($id);
     }
 
-    public function copyMappingVersionContentsToDungeon(MappingVersion $sourceMappingVersion, MappingVersion $targetMappingVersion): MappingVersion
-    {
+    public function copyMappingVersionContentsToDungeon(
+        MappingVersion $sourceMappingVersion,
+        MappingVersion $targetMappingVersion
+    ): MappingVersion {
         // Copy all elements over from the previous mapping version - this allows us to keep adding elements regardless of
         // MDT mapping
 

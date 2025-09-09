@@ -30,9 +30,20 @@ class PridefulEnemy extends Model
     use HasLatLng;
     use Reportable;
 
-    protected $fillable = ['dungeon_route_id', 'enemy_id', 'floor_id', 'lat', 'lng'];
+    protected $fillable = [
+        'dungeon_route_id',
+        'enemy_id',
+        'floor_id',
+        'lat',
+        'lng',
+    ];
 
-    protected $visible = ['enemy_id', 'floor_id', 'lat', 'lng'];
+    protected $visible = [
+        'enemy_id',
+        'floor_id',
+        'lat',
+        'lng',
+    ];
 
     public function dungeonRoute(): BelongsTo
     {

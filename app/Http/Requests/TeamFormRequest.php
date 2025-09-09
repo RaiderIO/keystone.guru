@@ -33,14 +33,19 @@ class TeamFormRequest extends FormRequest
         }
 
         return [
-            'name'        => $nameRules,
+            'name' => $nameRules,
             'description' => 'string|nullable',
-            'logo'        => ['nullable',
-                              File::image()
-                                  ->min(1)
-                                  ->max(500)
-                                  ->dimensions(Rule::dimensions()->maxWidth(512)->maxHeight(512))
-                                  ->extensions(['jpg', 'jpeg', 'png']),
+            'logo' => [
+                'nullable',
+                File::image()
+                    ->min(1)
+                    ->max(500)
+                    ->dimensions(Rule::dimensions()->maxWidth(512)->maxHeight(512))
+                    ->extensions([
+                        'jpg',
+                        'jpeg',
+                        'png',
+                    ]),
             ],
         ];
     }

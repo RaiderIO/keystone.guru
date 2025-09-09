@@ -13,7 +13,11 @@ function hsv2rgb($h, $s, $v): array
         return $v - $v * $s * max(min($k, 4 - $k, 1), 0);
     };
 
-    return [$f(5), $f(3), $f(1)];
+    return [
+        $f(5),
+        $f(3),
+        $f(1),
+    ];
 }
 
 function rgb2hsv($r, $g, $b): array
@@ -22,15 +26,114 @@ function rgb2hsv($r, $g, $b): array
     $n = $v - min($r, $g, $b);
     $h = $n <= 0 ? $n : (($v === $r) ? ($g - $b) / $n : (($v === $g) ? 2 + ($b - $r) / $n : 4 + ($r - $g) / $n));
 
-    return [60 * ($h < 0 ? $h + 6 : $h), $v <= 0 ? $v : $n / $v, $v];
+    return [
+        60 * ($h < 0 ? $h + 6 : $h),
+        $v <= 0 ? $v : $n / $v,
+        $v,
+    ];
 }
 
 $GLOBALS['clrLkp'] = [
-    ['light blue red', 345], ['blue red', 330], ['magenta', 315], ['blue magenta', 300], ['violet', 285],
-    ['indigo', 270], ['blue', 255], ['light green blue', 240], ['green blue', 225], ['green cyan', 210],
-    ['blaucyan', 195], ['cyan', 180], ['green cyan', 165], ['blue green', 150], ['light blue-green', 135],
-    ['green', 120], ['limett', 105], ['green yellow', 90], ['light green yellow', 75], ['yellow', 60],
-    ['safran', 45], ['orange', 30], ['brown', 20], ['vermilion', 15], ['red', 0],
+    [
+        'light blue red',
+        345,
+    ],
+    [
+        'blue red',
+        330,
+    ],
+    [
+        'magenta',
+        315,
+    ],
+    [
+        'blue magenta',
+        300,
+    ],
+    [
+        'violet',
+        285,
+    ],
+    [
+        'indigo',
+        270,
+    ],
+    [
+        'blue',
+        255,
+    ],
+    [
+        'light green blue',
+        240,
+    ],
+    [
+        'green blue',
+        225,
+    ],
+    [
+        'green cyan',
+        210,
+    ],
+    [
+        'blaucyan',
+        195,
+    ],
+    [
+        'cyan',
+        180,
+    ],
+    [
+        'green cyan',
+        165,
+    ],
+    [
+        'blue green',
+        150,
+    ],
+    [
+        'light blue-green',
+        135,
+    ],
+    [
+        'green',
+        120,
+    ],
+    [
+        'limett',
+        105,
+    ],
+    [
+        'green yellow',
+        90,
+    ],
+    [
+        'light green yellow',
+        75,
+    ],
+    [
+        'yellow',
+        60,
+    ],
+    [
+        'safran',
+        45,
+    ],
+    [
+        'orange',
+        30,
+    ],
+    [
+        'brown',
+        20,
+    ],
+    [
+        'vermilion',
+        15,
+    ],
+    [
+        'red',
+        0,
+    ],
 ];
 
 /**
@@ -119,18 +222,23 @@ function randomHexColorNoMapColors(): string
     // to prevent the color from blending into the background map
     do {
         $result = randomHexColor();
-    } while (in_array(hex2name($result), ['orange', 'brown', 'vermillion']));
+    } while (in_array(hex2name($result), [
+        'orange',
+        'brown',
+        'vermillion',
+    ]));
 
     return $result;
 }
 
-function pickHexFromHandlers(array $handlers, float $weight): string {
+function pickHexFromHandlers(array $handlers, float $weight): string
+{
     assert(count($handlers) > 1, 'Handlers.length <= 1!');
 
     // If color is before the start or after the end of any gradients, return last known color
     if ($handlers[0][0] >= $weight) {
         return strtolower($handlers[0][1]);
-    } elseif ($handlers[count($handlers) - 1][0] <= $weight) {
+    } else if ($handlers[count($handlers) - 1][0] <= $weight) {
         return strtolower($handlers[count($handlers) - 1][1]);
     } else {
         // Color is in between gradients, determine which gradient it is
@@ -148,7 +256,7 @@ function pickHexFromHandlers(array $handlers, float $weight): string {
 
                 $gradientRange = $b[0] - $a[0];
                 $weightOnGradientRange = $weight - $a[0];
-                $scaledWeight = $weightOnGradientRange / $gradientRange;
+                $scaledWeight  = $weightOnGradientRange / $gradientRange;
 
                 break;
             }

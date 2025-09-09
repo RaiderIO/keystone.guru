@@ -70,7 +70,10 @@ class MissedV22 extends Suffix implements MissedInterface
         $this->offHand  = $parameters[1] !== 'nil';
 
         // It was an immune of sorts apparently. But the parameter CAN be optional if it's a SWING instead of a SPELL..
-        if (!isset($parameters[2]) || in_array($parameters[2], ['ST', 'AOE'])) {
+        if (!isset($parameters[2]) || in_array($parameters[2], [
+                'ST',
+                'AOE',
+            ])) {
             $this->amountMissed = 0;
             $this->amountTotal  = 0;
             $this->critical     = false;

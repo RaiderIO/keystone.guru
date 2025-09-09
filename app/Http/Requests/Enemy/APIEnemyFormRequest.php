@@ -28,16 +28,41 @@ class APIEnemyFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'floor_id'                      => ['required', Rule::exists(Floor::class, 'id')],
-            'enemy_pack_id'                 => ['nullable', Rule::exists(EnemyPack::class, 'id')],
-            'enemy_patrol_id'               => ['nullable', Rule::exists(EnemyPatrol::class, 'id')],
-            'npc_id'                        => ['nullable', Rule::exists(Npc::class, 'id')],
+            'floor_id'           => [
+                'required',
+                Rule::exists(Floor::class, 'id'),
+            ],
+            'enemy_pack_id'      => [
+                'nullable',
+                Rule::exists(EnemyPack::class, 'id'),
+            ],
+            'enemy_patrol_id'    => [
+                'nullable',
+                Rule::exists(EnemyPatrol::class, 'id'),
+            ],
+            'npc_id'             => [
+                'nullable',
+                Rule::exists(Npc::class, 'id'),
+            ],
             'mdt_id'                        => 'nullable|int',
             'mdt_npc_id'                    => 'nullable|int',
-            'exclusive_enemy_id'            => ['nullable', Rule::exists(Enemy::class, 'id')],
+            'exclusive_enemy_id' => [
+                'nullable',
+                Rule::exists(Enemy::class, 'id'),
+            ],
             'seasonal_index'                => 'nullable|int',
-            'seasonal_type'                 => [Rule::in(array_merge(Enemy::SEASONAL_TYPE_ALL, ['', null]))],
-            'teeming'                       => [Rule::in(array_merge(Enemy::TEEMING_ALL, ['', null]))],
+            'seasonal_type'      => [
+                Rule::in(array_merge(Enemy::SEASONAL_TYPE_ALL, [
+                    '',
+                    null,
+                ])),
+            ],
+            'teeming'            => [
+                Rule::in(array_merge(Enemy::TEEMING_ALL, [
+                    '',
+                    null,
+                ])),
+            ],
             'faction'                       => [Rule::in(array_merge(array_keys(Faction::ALL), ['any']))],
             'required'                      => 'boolean',
             'skippable'                     => 'boolean',
@@ -45,7 +70,13 @@ class APIEnemyFormRequest extends FormRequest
             'kill_priority'                 => 'nullable|int',
             'enemy_forces_override'         => 'nullable|int',
             'enemy_forces_override_teeming' => 'nullable|int',
-            'dungeon_difficulty'            => [Rule::in(array_merge(Dungeon::DIFFICULTY_ALL, ['-1', '', null]))],
+            'dungeon_difficulty' => [
+                Rule::in(array_merge(Dungeon::DIFFICULTY_ALL, [
+                    '-1',
+                    '',
+                    null,
+                ])),
+            ],
             'lat'                           => 'numeric',
             'lng'                           => 'numeric',
         ];

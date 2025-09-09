@@ -27,11 +27,15 @@ class DungeonRouteLinksResource extends JsonResource
     public function toArray(Request $request): array
     {
         $thumbnailUrls = [];
-        foreach($this->thumbnails as $thumbnail) {
+        foreach ($this->thumbnails as $thumbnail) {
             $thumbnailUrls[] = $thumbnail->getURL();
         }
 
-        $dungeonRouteUrlParams = ['dungeon' => $this->dungeon, 'dungeonroute' => $this, 'title' => $this->getTitleSlug()];
+        $dungeonRouteUrlParams = [
+            'dungeon'      => $this->dungeon,
+            'dungeonroute' => $this,
+            'title'        => $this->getTitleSlug(),
+        ];
 
         return [
             'view'       => route('dungeonroute.view', $dungeonRouteUrlParams),

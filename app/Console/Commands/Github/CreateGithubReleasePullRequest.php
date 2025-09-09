@@ -56,7 +56,10 @@ class CreateGithubReleasePullRequest extends BaseGithubReleaseCommand
             $pullRequestTitle      = sprintf('Release %s', $release->version);
 
             // Only gets the first page - but good enough
-            foreach ($githubPullRequestClient->all($repositoryOwner, $repository, ['state' => 'open', 'labels' => 'release']) as $githubPullRequest) {
+            foreach ($githubPullRequestClient->all($repositoryOwner, $repository, [
+                'state'  => 'open',
+                'labels' => 'release',
+            ]) as $githubPullRequest) {
                 if (str_starts_with((string)$githubPullRequest['head']['repo']['full_name'], sprintf('%s/%s', $username, $repository)) &&
                     $githubPullRequest['head']['ref'] === $sourceBranch &&
                     str_starts_with((string)$githubPullRequest['base']['repo']['full_name'], sprintf('%s/%s', $username, $repository)) &&

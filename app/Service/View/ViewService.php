@@ -105,10 +105,16 @@ class ViewService implements ViewServiceInterface
                     )->first();
 
                 $allRegions    = GameServerRegion::all();
-                $allExpansions = Expansion::with(['dungeons', 'raids'])->orderBy('released_at', 'desc')->get();
+                $allExpansions = Expansion::with([
+                    'dungeons',
+                    'raids',
+                ])->orderBy('released_at', 'desc')->get();
 
                 /** @var Collection<Expansion> $activeExpansions */
-                $activeExpansions = Expansion::active()->with(['dungeons', 'raids'])->orderBy('released_at', 'desc')->get();
+                $activeExpansions = Expansion::active()->with([
+                    'dungeons',
+                    'raids',
+                ])->orderBy('released_at', 'desc')->get();
 
                 // Spells
                 $selectableSpellsByCategory = Spell::where('selectable', true)
@@ -128,7 +134,8 @@ class ViewService implements ViewServiceInterface
                     'demoRoutes'                      => $demoRoutes,
                     'demoRouteDungeons'               => $demoRouteDungeons,
                     'demoRouteMapping'                => $demoRouteDungeons
-                        ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => $demoRoutes->where('dungeon_id', $dungeon->id)->first()->public_key]),
+                        ->mapWithKeys(static fn(Dungeon $dungeon
+                        ) => [$dungeon->id => $demoRoutes->where('dungeon_id', $dungeon->id)->first()->public_key]),
                     'latestRelease'                   => $latestRelease,
                     'latestReleaseSpotlight'          => $latestReleaseSpotlight,
                     'appVersion'                      => $latestRelease->version,
@@ -167,7 +174,8 @@ class ViewService implements ViewServiceInterface
 
                     // Misc
                     'allGameVersions'                 => GameVersion::active()->get(),
-                    'activeExpansions'                => $activeExpansions, // Show most recent expansions first
+                    'activeExpansions'                => $activeExpansions,
+                    // Show most recent expansions first
                     'allExpansions'                   => $allExpansions,
                     'dungeonsByExpansionIdDesc'       => $allDungeonsByExpansionId,
                     'raidsByExpansionIdDesc'          => $allRaidsByExpansionId,
@@ -177,11 +185,17 @@ class ViewService implements ViewServiceInterface
                     'siegeOfBoralus'                  => Dungeon::where('key', Dungeon::DUNGEON_SIEGE_OF_BORALUS)->first(),
 
                     // Discover
-                    'affixGroupEaseTiersByAffixGroup' => $this->easeTierService->getTiers()->groupBy(['affix_group_id', 'dungeon_id']),
+                    'affixGroupEaseTiersByAffixGroup' => $this->easeTierService->getTiers()->groupBy([
+                        'affix_group_id',
+                        'dungeon_id',
+                    ]),
 
                     // Create route
                     'dungeonExpansions'               => $allDungeonsByExpansionId
-                        ->pluck('expansion_id', 'id')->mapWithKeys(static fn(int $expansionId, int $dungeonId) => [$dungeonId => $allExpansions->where('id', $expansionId)->first()->shortname]),
+                        ->pluck('expansion_id', 'id')->mapWithKeys(static fn(
+                            int $expansionId,
+                            int $dungeonId
+                        ) => [$dungeonId => $allExpansions->where('id', $expansionId)->first()->shortname]),
                     'allSpeedrunDungeons'             => Dungeon::where('speedrun_enabled', true)->get(),
                 ];
             }, config('keystoneguru.cache.global_view_variables.ttl'));
@@ -193,7 +207,11 @@ class ViewService implements ViewServiceInterface
         $viewVariablesGameServerRegionKey = sprintf('view_variables:%s:game_server_region:%s', $this->release, $gameServerRegion->short);
 
         // Lower cache duration since current/next expansion and season may change every hour
-        return $this->rememberLocal($viewVariablesGameServerRegionKey, 3600, function () use ($gameServerRegion, $useCache, $viewVariablesGameServerRegionKey) {
+        return $this->rememberLocal($viewVariablesGameServerRegionKey, 3600, function () use (
+            $gameServerRegion,
+            $useCache,
+            $viewVariablesGameServerRegionKey
+        ) {
             return $this->cacheService->setCacheEnabled($useCache)->remember(
                 $viewVariablesGameServerRegionKey,
                 function () use ($gameServerRegion) {

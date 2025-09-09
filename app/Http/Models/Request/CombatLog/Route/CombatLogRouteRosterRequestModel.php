@@ -16,12 +16,11 @@ use Illuminate\Contracts\Support\Arrayable;
 class CombatLogRouteRosterRequestModel extends RequestModel implements Arrayable
 {
     public function __construct(
-        public ?int    $numMembers = null,
-        public ?float  $averageItemLevel = null,
-        public ?array  $characterIds = null,
-        public ?array  $specIds = null,
-        public ?array  $classIds = null
-    )
-    {
+        public ?int   $numMembers = null,
+        public ?float $averageItemLevel = null,
+        public ?array $characterIds = null,
+        public ?array $specIds = null,
+        public ?array $classIds = null
+    ) {
     }
 }

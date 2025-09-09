@@ -11,7 +11,6 @@ use App\Models\Season;
 use App\SeederHelpers\Traits\FindsAffixes;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
-use Str;
 
 class AffixSeeder extends Seeder implements TableSeederInterface
 {

@@ -30,7 +30,7 @@ class File extends Model
         'model_class',
         'created_at',
         'updated_at',
-        'pivot'
+        'pivot',
     ];
 
     /**
@@ -39,10 +39,15 @@ class File extends Model
     public $appends = [
         'url',
         // @TODO remove this? Find usages in .js files though
-        'icon_url'
+        'icon_url',
     ];
 
-    protected $fillable = ['model_id', 'model_class', 'disk', 'path'];
+    protected $fillable = [
+        'model_id',
+        'model_class',
+        'disk',
+        'path',
+    ];
 
     /**
      * @return bool|null|void

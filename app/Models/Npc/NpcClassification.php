@@ -22,7 +22,12 @@ class NpcClassification extends CacheModel
 {
     use SeederModel;
 
-    protected $fillable = ['id', 'name', 'key', 'color'];
+    protected $fillable = [
+        'id',
+        'name',
+        'key',
+        'color',
+    ];
 
     public const NPC_CLASSIFICATION_NORMAL     = 'normal';
     public const NPC_CLASSIFICATION_ELITE      = 'elite';

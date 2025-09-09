@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V1\Public\Route;
 
 use App\Http\Controllers\Controller;
-use App\Http\Models\Request\Route\DungeonRouteThumbnailRequestModel;
 use App\Http\Requests\Api\V1\Route\DungeonRouteListRequest;
 use App\Http\Requests\Api\V1\Route\DungeonRouteThumbnailRequest;
 use App\Http\Resources\DungeonRoute\DungeonRouteEnvelopeResource;
@@ -30,7 +29,14 @@ class APIDungeonRouteController extends Controller
         $validated = $request->validated();
 
         return new DungeonRouteEnvelopeResource(
-            DungeonRoute::withOnly(['dungeon', 'author', 'killZones', 'affixes', 'thumbnails', 'mappingVersion'])
+            DungeonRoute::withOnly([
+                'dungeon',
+                'author',
+                'killZones',
+                'affixes',
+                'thumbnails',
+                'mappingVersion',
+            ])
                 ->where('author_id', Auth::id())
                 ->when($validated['dungeon_id'] ?? false, static function (Builder $builder) use ($validated) {
                     $builder->where('dungeon_id', $validated['dungeon_id']);

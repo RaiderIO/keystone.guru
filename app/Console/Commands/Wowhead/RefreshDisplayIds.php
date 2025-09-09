@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Wowhead;
 
 use App\Models\Dungeon;
-use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Illuminate\Console\Command;

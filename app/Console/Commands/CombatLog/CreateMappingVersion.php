@@ -49,8 +49,8 @@ class CreateMappingVersion extends BaseCombatLogCommand
         CombatLogMappingVersionServiceInterface $combatLogMappingVersionService,
         string                                  $filePath,
         ?MappingVersion                         $mappingVersion = null,
-        bool                                    $enemyConnections = false): int
-    {
+        bool $enemyConnections = false
+    ): int {
         $this->info(sprintf('Parsing file %s', $filePath));
 
         if (!str_contains($filePath, '_events.txt')) {
@@ -63,7 +63,7 @@ class CreateMappingVersion extends BaseCombatLogCommand
 
         $mappingVersion = $combatLogMappingVersionService->createMappingVersionFromDungeonOrRaid($filePath, $mappingVersion, $enemyConnections);
 
-        if($mappingVersion === null ) {
+        if ($mappingVersion === null) {
             $this->error(sprintf('Failed to create mapping version: %s', $filePath));
         } else {
             $this->info(

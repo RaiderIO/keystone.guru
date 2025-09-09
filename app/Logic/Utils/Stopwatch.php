@@ -34,7 +34,10 @@ class Stopwatch
             unset(self::$timers[$timerName]['end']);
         } // Create a new timer instead; user wants to discard what was there
         else {
-            self::$timers[$timerName] = ['start' => self::_getTime(), 'count' => 1];
+            self::$timers[$timerName] = [
+                'start' => self::_getTime(),
+                'count' => 1,
+            ];
         }
 
         if (config('debugbar.enabled')) {
@@ -71,7 +74,7 @@ class Stopwatch
     public static function elapsed(string $timerName = 'default'): float
     {
         // We've now ended, grab time asap
-        $now        = self::_getTime();
+        $now = self::_getTime();
         $timerStart = $now;
         // If timer is not set just return 0
         if (isset(self::$timers[$timerName])) {

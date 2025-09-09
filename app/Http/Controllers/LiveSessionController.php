@@ -27,8 +27,13 @@ class LiveSessionController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function create(Request $request, Dungeon $dungeon, DungeonRoute $dungeonroute, ?string $title, EchoServerHttpApiServiceInterface $echoServerHttpApiService): RedirectResponse
-    {
+    public function create(
+        Request                           $request,
+        Dungeon                           $dungeon,
+        DungeonRoute                      $dungeonroute,
+        ?string                           $title,
+        EchoServerHttpApiServiceInterface $echoServerHttpApiService
+    ): RedirectResponse {
         $this->authorize('view', $dungeonroute);
 
         $liveSession = LiveSession::create([
@@ -88,8 +93,8 @@ class LiveSessionController extends Controller
         Dungeon                    $dungeon,
         DungeonRoute               $dungeonroute,
         ?string                    $title,
-        LiveSession                $livesession)
-    {
+        LiveSession $livesession
+    ) {
         $defaultFloor = $dungeonroute->dungeon->floors()->where('default', true)->first();
 
         return $this->viewfloor(
@@ -115,8 +120,8 @@ class LiveSessionController extends Controller
         DungeonRoute               $dungeonroute,
         ?string                    $title,
         LiveSession                $livesession,
-        string                     $floorIndex)
-    {
+        string $floorIndex
+    ) {
         $this->authorize('view', $dungeonroute);
         try {
             $this->authorize('view', $livesession);

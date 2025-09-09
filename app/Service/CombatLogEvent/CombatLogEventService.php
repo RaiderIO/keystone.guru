@@ -224,7 +224,8 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 }
 
                 $gridResult[$floor->id] = array_combine(
-                    array_map(fn($bucket) => sprintf('%s,%s', $bucket['key']['pos_grid_x'], $bucket['key']['pos_grid_y']), $buckets),
+                    array_map(fn($bucket
+                    ) => sprintf('%s,%s', $bucket['key']['pos_grid_x'], $bucket['key']['pos_grid_y']), $buckets),
                     array_column($buckets, 'doc_count')
                 );
             }
@@ -466,7 +467,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
 
             $success = $currentMappingVersion->timer_max_seconds > ($runDurationMs / 1000);
             $start = $runStart->toDateTimeString();
-            $end   = $runStart->addMilliseconds($runDurationMs)->toDateTimeString();
+            $end = $runStart->addMilliseconds($runDurationMs)->toDateTimeString();
 
             /** @var AffixGroup $affixGroup */
             $affixGroup = $season->affixGroups->random();
@@ -475,7 +476,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             $level            = rand($season->key_level_min, $season->key_level_max);
             $averageItemLevel = rand($season->item_level_min, $season->item_level_max);
 
-            $dateTime   = $now->toDateTimeString();
+            $dateTime = $now->toDateTimeString();
             for ($j = 0; $j < $eventsPerRun; $j++) {
                 /** @var Enemy $enemy */
                 $enemy = $currentMappingVersion->enemies->random();
@@ -557,7 +558,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
                 ->documents()
                 ->create($result->pluck('id')->toArray());
 
-            if(($i + 1) % 100 === 0) {
+            if (($i + 1) % 100 === 0) {
                 echo sprintf('Inserted run %d/%d', $i + 1, $runCount) . PHP_EOL;
             }
         }

@@ -23,5 +23,11 @@ interface WowheadServiceLoggingInterface
 
     public function getSpellDataSpellDispelTypeNotFound(string $dispelType): void;
 
-    public function getSpellDataDataNotSet(bool $mechanicSet, bool $schoolSet, bool $dispelTypeSet, bool $castTimeSet, bool $durationSet): void;
+    public function getSpellDataDataNotSet(
+        bool $mechanicSet,
+        bool $schoolSet,
+        bool $dispelTypeSet,
+        bool $castTimeSet,
+        bool $durationSet
+    ): void;
 }

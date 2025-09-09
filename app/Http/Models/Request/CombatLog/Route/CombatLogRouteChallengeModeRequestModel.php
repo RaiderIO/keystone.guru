@@ -30,7 +30,7 @@ class CombatLogRouteChallengeModeRequestModel extends RequestModel implements Ar
         public ?int    $challengeModeId = null,
         public ?int    $level = null,
         public ?int    $numDeaths = null,
-        public ?array  $affixes = null)
-    {
+        public ?array $affixes = null
+    ) {
     }
 }

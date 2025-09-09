@@ -41,12 +41,14 @@ class AjaxDungeonRouteSearchFormRequest extends FormRequest
             'limit'     => 'integer|required',
             'title'     => 'string',
             'season'    => Rule::exists(Season::class, 'id'),
-            'expansion' => [Rule::in(
-                Expansion::active()
-                    ->get()
-                    ->pluck('shortname')
-                    ->toArray()
-            )],
+            'expansion' => [
+                Rule::in(
+                    Expansion::active()
+                        ->get()
+                        ->pluck('shortname')
+                        ->toArray()
+                ),
+            ],
         ];
     }
 }

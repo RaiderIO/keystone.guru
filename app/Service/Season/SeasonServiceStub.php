@@ -58,8 +58,11 @@ class SeasonServiceStub implements SeasonServiceInterface
         return null;
     }
 
-    public function getAffixGroupIndexAt(Carbon $date, ?GameServerRegion $region = null, ?Expansion $expansion = null): ?int
-    {
+    public function getAffixGroupIndexAt(
+        Carbon            $date,
+        ?GameServerRegion $region = null,
+        ?Expansion        $expansion = null
+    ): ?int {
         return null;
     }
 

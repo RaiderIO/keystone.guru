@@ -29,8 +29,8 @@ abstract class MapContextMappingVersion extends MapContext
         CoordinatesServiceInterface $coordinatesService,
         Dungeon                     $dungeon,
         Floor                       $floor,
-        MappingVersion              $mappingVersion)
-    {
+        MappingVersion $mappingVersion
+    ) {
         parent::__construct($cacheService, $coordinatesService, $dungeon, $floor, $mappingVersion);
     }
 
@@ -66,7 +66,11 @@ abstract class MapContextMappingVersion extends MapContext
                 })
                 ->where('npc_dungeons.dungeon_id', $this->context->id)
                 ->get()
-                ->map(static fn(Npc $npc) => ['id' => $npc->id, 'name' => $npc->name, 'dungeon_ids' => $npc->dungeons->pluck('id')])
+                ->map(static fn(Npc $npc) => [
+                    'id'          => $npc->id,
+                    'name'        => $npc->name,
+                    'dungeon_ids' => $npc->dungeons->pluck('id'),
+                ])
                 ->values();
         }, config('keystoneguru.cache.npcs.ttl'));
 

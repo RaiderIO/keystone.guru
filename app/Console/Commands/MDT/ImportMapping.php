@@ -31,8 +31,10 @@ class ImportMapping extends Command
      *
      * @throws Exception
      */
-    public function handle(MappingServiceInterface $mappingService, MDTMappingImportServiceInterface $mappingImportService): void
-    {
+    public function handle(
+        MappingServiceInterface          $mappingService,
+        MDTMappingImportServiceInterface $mappingImportService
+    ): void {
         $dungeonKey = $this->argument('dungeon');
         $force      = (bool)$this->option('force');
 

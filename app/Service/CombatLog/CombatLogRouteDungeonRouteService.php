@@ -169,8 +169,8 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
      * @throws DungeonNotSupportedException
      * @throws Exception
      */
-    public function correctCombatLogRoute(CombatLogRouteRequestModel $combatLogRoute): CombatLogRouteCorrectionRequestModel
-    {
+    public function correctCombatLogRoute(CombatLogRouteRequestModel $combatLogRoute
+    ): CombatLogRouteCorrectionRequestModel {
         $isSwoole = onSwooleServer();
 
         $builder = new CombatLogRouteCorrectionBuilder(
@@ -218,12 +218,15 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
             $validNpcIds = $this->npcRepository->getInUseNpcIds($dungeonRoute->mappingVersion);
 
             /** @var ChallengeModeStartSpecialEvent $challengeModeStartEvent */
-            $challengeModeStartEvent = $resultEvents->filter(static fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
+            $challengeModeStartEvent = $resultEvents->filter(static fn(BaseResultEvent $resultEvent
+            ) => $resultEvent instanceof ChallengeModeStartResultEvent)->first()->getChallengeModeStartEvent();
 
             /** @var ChallengeModeEndSpecialEvent $challengeModeEndEvent */
-            $challengeModeEndEvent = $resultEvents->filter(static fn(BaseResultEvent $resultEvent) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
+            $challengeModeEndEvent = $resultEvents->filter(static fn(BaseResultEvent $resultEvent
+            ) => $resultEvent instanceof ChallengeModeEndResultEvent)->first()->getChallengeModeEndEvent();
 
-            $playerDeathEvents = $resultEvents->filter(static fn(BaseResultEvent $resultEvent) => $resultEvent instanceof PlayerDiedResultEvent);
+            $playerDeathEvents = $resultEvents->filter(static fn(BaseResultEvent $resultEvent
+            ) => $resultEvent instanceof PlayerDiedResultEvent);
 
             $challengeMode = new CombatLogRouteChallengeModeRequestModel(
                 $challengeModeStartEvent->getTimestamp()->format(CombatLogRouteRequestModel::DATE_TIME_FORMAT),
@@ -364,14 +367,19 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
                 new CombatLogRouteRosterRequestModel(
                     $mostRecentCombatantInfo->count(),
                     $mostRecentCombatantInfo->map(
-                        static fn(CombatantInfoResultEvent $combatantInfo) => $combatantInfo->getCombatantInfoEvent()->getAverageItemLevel()
+                        static fn(CombatantInfoResultEvent $combatantInfo
+                        ) => $combatantInfo->getCombatantInfoEvent()->getAverageItemLevel()
                     )->average(),
                     // I don't know the Raider.IO character IDs - so just make something up
                     $mostRecentCombatantInfo->map(
-                        static fn(CombatantInfoResultEvent $combatantInfo, string $guidKey) => $mostRecentCombatantInfoIndexFn($guidKey)
+                        static fn(
+                            CombatantInfoResultEvent $combatantInfo,
+                            string                   $guidKey
+                        ) => $mostRecentCombatantInfoIndexFn($guidKey)
                     )->values()->toArray(),
                     $mostRecentCombatantInfo->map(
-                        static fn(CombatantInfoResultEvent $combatantInfo) => $combatantInfo->getSpecialization()->specialization_id
+                        static fn(CombatantInfoResultEvent $combatantInfo
+                        ) => $combatantInfo->getSpecialization()->specialization_id
                     )->values()->toArray(),
                     $mostRecentCombatantInfo->map(
                         static fn(CombatantInfoResultEvent $combatantInfo) => $combatantInfo->getClass()->class_id
@@ -460,7 +468,7 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         $brushlineAttributes = [];
 
         /** @var Collection<Npc> $validNpcIds */
-        $npcs          = $this->npcRepository->getInUseNpcs($dungeonRoute->mappingVersion)->keyBy('id');
+        $npcs = $this->npcRepository->getInUseNpcs($dungeonRoute->mappingVersion)->keyBy('id');
         /** @var Collection<int> $validNpcIds */
         $validNpcIds   = $this->npcRepository->getInUseNpcIds($dungeonRoute->mappingVersion);
         $previousFloor = null;

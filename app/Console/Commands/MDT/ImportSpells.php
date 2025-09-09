@@ -36,8 +36,8 @@ class ImportSpells extends Command
     public function handle(
         CacheServiceInterface            $cacheService,
         CoordinatesServiceInterface      $coordinatesService,
-        MDTMappingImportServiceInterface $mappingImportService): void
-    {
+        MDTMappingImportServiceInterface $mappingImportService
+    ): void {
         $dungeonKey = $this->option('dungeon');
 
         $dungeons = collect();

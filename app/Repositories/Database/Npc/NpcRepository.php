@@ -79,7 +79,8 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                     197857,
                 ]);
             })
-            ->when($mappingVersion->dungeon->key === Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE, function (Builder $builder) {
+            ->when($mappingVersion->dungeon->key === Dungeon::DUNGEON_THE_NOKHUD_OFFENSIVE, function (Builder $builder
+            ) {
                 $builder->orWhereIn('npcs.id', [
                     // War Ohuna gives 0 enemy forces but is in the mapping regardless
                     192803,
@@ -91,7 +92,10 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                     195579,
                 ]);
             })
-            ->when(in_array($mappingVersion->dungeon->key, [Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL, Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE]), function (Builder $builder) {
+            ->when(in_array($mappingVersion->dungeon->key, [
+                Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_GALAKRONDS_FALL,
+                Dungeon::DUNGEON_DAWN_OF_THE_INFINITE_MUROZONDS_RISE,
+            ]), function (Builder $builder) {
                 $builder->orWhereIn('npcs.id', [
                     // Temporal Deviation gives 0 enemy forces but is in the mapping regardless
                     206063,

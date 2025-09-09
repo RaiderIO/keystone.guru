@@ -20,7 +20,8 @@ interface RaidEventPullInterface
     public function calculateDelayBetweenPointsOnDifferentFloors(LatLng $latLngA, LatLng $latLngB): float;
 
     public function calculateMountedFactorAndMountCastsBetweenPoints(
-        LatLng $latLngA, LatLng $latLngB
+        LatLng $latLngA,
+        LatLng $latLngB
     ): array;
 
     public function calculateDelayForDistanceMounted(float $ingameDistance, float $factor, int $speed): float;

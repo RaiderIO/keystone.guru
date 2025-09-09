@@ -31,8 +31,10 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
      */
     public const SUMMONED_NPC_IDS = [
         // Storm, Earth and Fire talent (Monk)
-        69791, // Fire Spirit
-        69792, // Earth Spirit
+        69791,
+        // Fire Spirit
+        69792,
+        // Earth Spirit
     ];
 
     /** @var Collection<DataExtractorInterface> */
@@ -65,14 +67,23 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             $dataExtractor->beforeExtract($result, $filePath);
         }
 
-        $this->combatLogService->parseCombatLog($targetFilePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent, int $lineNr)
+        $this->combatLogService->parseCombatLog($targetFilePath, function (
+            int    $combatLogVersion,
+            bool   $advancedLoggingEnabled,
+            string $rawEvent,
+            int    $lineNr
+        )
         use (&$result, &$currentDungeon, &$currentFloor, &$checkedNpcIds, $onProcessLine) {
             // We don't care if there's no advanced logging enabled!
             if (!$advancedLoggingEnabled) {
                 return null;
             }
 
-            $this->log->addContext('lineNr', ['combatLogVersion' => $combatLogVersion, 'rawEvent' => trim($rawEvent), 'lineNr' => $lineNr]);
+            $this->log->addContext('lineNr', [
+                'combatLogVersion' => $combatLogVersion,
+                'rawEvent'         => trim($rawEvent),
+                'lineNr'           => $lineNr,
+            ]);
 
             $combatLogEntry = (new CombatLogEntry($rawEvent));
 
@@ -115,8 +126,10 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
         return $result;
     }
 
-    private function extractDungeon(?DataExtractionCurrentDungeon $currentDungeon, BaseEvent $parsedEvent): ?DataExtractionCurrentDungeon
-    {
+    private function extractDungeon(
+        ?DataExtractionCurrentDungeon $currentDungeon,
+        BaseEvent                     $parsedEvent
+    ): ?DataExtractionCurrentDungeon {
         $result = null;
 
         // One way or another, enforce we extract the dungeon from the combat log
@@ -177,7 +190,11 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
 
             $totalLines = 0;
             try {
-                $this->combatLogService->parseCombatLog($filePath, function (int $combatLogVersion, bool $advancedLoggingEnabled, string $rawEvent) use (&$totalLines) {
+                $this->combatLogService->parseCombatLog($filePath, function (
+                    int    $combatLogVersion,
+                    bool   $advancedLoggingEnabled,
+                    string $rawEvent
+                ) use (&$totalLines) {
                     $totalLines++;
 
                     return (new CombatLogEntry($rawEvent))->parseEvent([], $combatLogVersion);

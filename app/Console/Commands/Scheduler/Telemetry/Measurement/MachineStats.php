@@ -63,10 +63,18 @@ class MachineStats extends Measurement
     {
         $fh          = fopen('/proc/meminfo', 'r');
         $out         = [];
-        $multipliers = ['kb' => 1024, 'mb' => 1024 * 1024, 'gb' => 1024 * 1024 * 1024, 'tb' => 1024 * 1024 * 1024 * 1024];
+        $multipliers = [
+            'kb' => 1024,
+            'mb' => 1024 * 1024,
+            'gb' => 1024 * 1024 * 1024,
+            'tb' => 1024 * 1024 * 1024 * 1024,
+        ];
 
         while ($line = fgets($fh)) {
-            [$key, $val] = explode(':', $line, 2);
+            [
+                $key,
+                $val,
+            ] = explode(':', $line, 2);
             $val   = trim($val);
             $chunk = explode(' ', $val, 2);
             $val   = intval($chunk[0]);

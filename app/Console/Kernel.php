@@ -283,7 +283,10 @@ class Kernel extends ConsoleKernel
             $commands[] = $schedule->command('dungeonroute:deleteexpired')->hourly();
             $commands[] = $schedule->command('dungeonroute:touch', ['teamId' => config('keystoneguru.raider_io.team_id')])->weeklyOn(3, '0');
 
-            if (in_array($appType, ['mapping', 'local'])) {
+            if (in_array($appType, [
+                'mapping',
+                'local',
+            ])) {
                 $commands[] = $schedule->command('mapping:sync')->everyFiveMinutes();
 
                 // Ensure display IDs are set

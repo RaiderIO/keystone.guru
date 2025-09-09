@@ -81,8 +81,8 @@ class Repository extends Command
         string $interfaceNamespace,
         string $repositoryNamespace,
         string $modelNamespace,
-        string $modelClass): bool
-    {
+        string $modelClass
+    ): bool {
         // Check if the repository already exists for this model
         $targetRepositoryFullClassName = sprintf('%s%sRepository',
             $repositoryNamespace,
@@ -96,7 +96,13 @@ class Repository extends Command
         }
 
         $newRepositoryFilePath = app_path(
-            sprintf('%s.php', str_replace(['App\\', '\\'], ['', '/'], $targetRepositoryFullClassName))
+            sprintf('%s.php', str_replace([
+                'App\\',
+                '\\',
+            ], [
+                '',
+                '/',
+            ], $targetRepositoryFullClassName))
         );
 
         $this->ensureDirForFile($newRepositoryFilePath);
@@ -135,7 +141,15 @@ class Repository extends Command
         );
         $newInterfaceFilePath     = app_path(
             sprintf('%s.php',
-                str_replace([$repositoryNamespace, 'App\\', '\\'], [$interfaceNamespace, '', '/'], $targetInterfaceClassName)
+                str_replace([
+                    $repositoryNamespace,
+                    'App\\',
+                    '\\',
+                ], [
+                    $interfaceNamespace,
+                    '',
+                    '/',
+                ], $targetInterfaceClassName)
             )
         );
 

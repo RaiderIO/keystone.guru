@@ -3,11 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\CharacterClass;
-use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
 use App\Models\CharacterRaceClassCoupling;
 use App\Models\Faction;
-use App\Models\File;
 use Exception;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;

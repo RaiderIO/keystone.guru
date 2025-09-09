@@ -353,7 +353,10 @@ class KillZone extends Model
               and enemies.mapping_version_id = dungeon_routes.mapping_version_id
               and enemies.skippable = 1
             group by kill_zone_enemies.id, enemies.enemy_pack_id
-            ", ['teeming' => (int)$teeming, 'kill_zone_id' => $this->id]);
+            ", [
+            'teeming'      => (int)$teeming,
+            'kill_zone_id' => $this->id,
+        ]);
 
         return collect($queryResult);
     }

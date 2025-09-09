@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Auth;
 trait ChangesDungeonRoute
 {
     private const IGNORE_KEYS = [
-        'index', // KillZone index upon mass change.. I don't care about this
+        'index',
+        // KillZone index upon mass change.. I don't care about this
         'updated_at',
     ];
 
@@ -21,8 +22,12 @@ trait ChangesDungeonRoute
      * @param Model|null   $afterModel
      * @throws Exception
      */
-    public function dungeonRouteChanged(DungeonRoute $dungeonRoute, ?Model $beforeModel, ?Model $afterModel, ?callable $modifyAttributes = null): void
-    {
+    public function dungeonRouteChanged(
+        DungeonRoute $dungeonRoute,
+        ?Model       $beforeModel,
+        ?Model       $afterModel,
+        ?callable    $modifyAttributes = null
+    ): void {
         // We only care for these changes when the route is part of a team
         if ($dungeonRoute->team_id === -1) {
             return;
@@ -34,9 +39,9 @@ trait ChangesDungeonRoute
 
         $user = Auth::user();
 
-        $boolToInt        = fn($value) => is_bool($value) ? (int)$value : $value;
+        $boolToInt       = fn($value) => is_bool($value) ? (int)$value : $value;
         $beforeAttributes = $beforeModel !== null ? array_map($boolToInt, $beforeModel->getAttributes()) : [];
-        $afterAttributes  = $afterModel !== null ? array_map($boolToInt, $afterModel->getAttributes()) : [];
+        $afterAttributes = $afterModel !== null ? array_map($boolToInt, $afterModel->getAttributes()) : [];
         if ($modifyAttributes !== null) {
             $modifyAttributes($beforeAttributes, $afterAttributes);
         }

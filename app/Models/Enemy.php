@@ -150,7 +150,7 @@ class Enemy extends CacheModel implements MappingModelCloneableInterface, Mappin
         self::SEASONAL_TYPE_SHROUDED,
         self::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX,
         self::SEASONAL_TYPE_NO_SHROUDED,
-        self::SEASONAL_TYPE_REQUIRES_ACTIVATION
+        self::SEASONAL_TYPE_REQUIRES_ACTIVATION,
     ];
 
     public const TEEMING_VISIBLE = 'visible';

@@ -118,7 +118,10 @@ class AjaxTeamController extends Controller
      */
     public function removeMember(Request $request, Team $team, User $user)
     {
-        $this->authorize('remove-member', [$team, $user]);
+        $this->authorize('remove-member', [
+            $team,
+            $user,
+        ]);
 
         // Only when successful
         if ($team->removeMember($user)) {
@@ -186,7 +189,7 @@ class AjaxTeamController extends Controller
         }
 
         return PatreonAdFreeGiveaway::create([
-            'giver_user_id'    => $currentUser->id,
+            'giver_user_id' => $currentUser->id,
             'receiver_user_id' => $user->id,
         ]);
     }

@@ -34,7 +34,7 @@ class ConvertToEvents extends Command
         // We don't care for logging atm, we got a progress bar baby
         StructuredLogging::disable();
 
-        $force    = (bool)$this->option('force');
+        $force = (bool)$this->option('force');
         $saveToOS = (bool)$this->option('saveToOpensearch');
 
         $count = ChallengeModeRunData::when(!$force, function (Builder $builder) {
@@ -45,7 +45,11 @@ class ConvertToEvents extends Command
         $progressBar->setFormat(ProgressBar::FORMAT_DEBUG);
 
         $result = $challengeModeRunDataService->convert($force,
-            function (ChallengeModeRunData $challengeModeRunData) use (&$progressBar, $saveToOS, $challengeModeRunDataService) {
+            function (ChallengeModeRunData $challengeModeRunData) use (
+                &$progressBar,
+                $saveToOS,
+                $challengeModeRunDataService
+            ) {
                 $progressBar->advance();
 
                 // This immediately saves the data to Opensearch so you can start using it while it's being inserted

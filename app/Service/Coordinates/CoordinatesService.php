@@ -82,8 +82,11 @@ class CoordinatesService implements CoordinatesServiceInterface
         );
     }
 
-    public function convertFacadeMapLocationToMapLocation(MappingVersion $mappingVersion, LatLng $latLng, ?Floor $forceFloor = null): LatLng
-    {
+    public function convertFacadeMapLocationToMapLocation(
+        MappingVersion $mappingVersion,
+        LatLng         $latLng,
+        ?Floor         $forceFloor = null
+    ): LatLng {
         $sourceFloor = $latLng->getFloor();
         if ($sourceFloor === null) {
             throw new InvalidArgumentException('No floor set for latlng!');
@@ -146,8 +149,11 @@ class CoordinatesService implements CoordinatesServiceInterface
         return $result;
     }
 
-    public function convertMapLocationToFacadeMapLocation(MappingVersion $mappingVersion, LatLng $latLng, ?FloorUnion $forceFloorUnion = null): LatLng
-    {
+    public function convertMapLocationToFacadeMapLocation(
+        MappingVersion $mappingVersion,
+        LatLng         $latLng,
+        ?FloorUnion    $forceFloorUnion = null
+    ): LatLng {
         $sourceFloor = $latLng->getFloor();
 
         if ($sourceFloor === null) {
@@ -235,7 +241,10 @@ class CoordinatesService implements CoordinatesServiceInterface
                 return null;
             }
 
-            return LatLng::fromArray(['lat' => $lat, 'lng' => $lng]);
+            return LatLng::fromArray([
+                'lat' => $lat,
+                'lng' => $lng,
+            ]);
         }
     }
 

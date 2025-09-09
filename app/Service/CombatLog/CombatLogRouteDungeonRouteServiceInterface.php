@@ -15,7 +15,8 @@ interface CombatLogRouteDungeonRouteServiceInterface
     /** @return Collection<CombatLogEvent> */
     public function convertCombatLogRouteToCombatLogEvents(CombatLogRouteRequestModel $combatLogRoute): Collection;
 
-    public function correctCombatLogRoute(CombatLogRouteRequestModel $combatLogRoute): CombatLogRouteCorrectionRequestModel;
+    public function correctCombatLogRoute(CombatLogRouteRequestModel $combatLogRoute
+    ): CombatLogRouteCorrectionRequestModel;
 
     public function getCombatLogRoute(string $combatLogFilePath): ?CombatLogRouteRequestModel;
 }

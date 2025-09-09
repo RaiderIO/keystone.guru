@@ -6,8 +6,18 @@ use App\Logging\StructuredLogging;
 
 class ProcessRouteFloorThumbnailCustomLogging extends StructuredLogging implements ProcessRouteFloorThumbnailCustomLoggingInterface
 {
-    public function handleStart(string $publicKey, int $floorIndex, int $id, int $attempts, ?int $viewportWidth, ?int $viewportHeight, ?int $imageWidth, ?int $imageHeight, ?float $zoomLevel, ?int $quality): void
-    {
+    public function handleStart(
+        string $publicKey,
+        int    $floorIndex,
+        int    $id,
+        int    $attempts,
+        ?int   $viewportWidth,
+        ?int   $viewportHeight,
+        ?int   $imageWidth,
+        ?int   $imageHeight,
+        ?float $zoomLevel,
+        ?int   $quality
+    ): void {
         $this->start(__METHOD__, get_defined_vars());
     }
 

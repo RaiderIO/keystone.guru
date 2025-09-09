@@ -81,7 +81,10 @@ class RedditApiService implements RedditApiServiceInterface
         curl_setopt_array($ch, [
             CURLOPT_URL        => $webhookUrl,
             CURLOPT_POST       => true,
-            CURLOPT_POSTFIELDS => json_encode(['content' => $message, 'username' => $username], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+            CURLOPT_POSTFIELDS => json_encode([
+                'content'  => $message,
+                'username' => $username,
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
             CURLOPT_HTTPHEADER => [
                 'Content-Type: application/json',
             ],

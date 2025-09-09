@@ -96,7 +96,10 @@ class Save extends Command
 
         // Save all mapping versions
         $mappingVersions = MappingVersion::all()
-            ->makeVisible(['created_at', 'updated_at']);
+            ->makeVisible([
+                'created_at',
+                'updated_at',
+            ]);
 
         $this->saveDataToJsonFile(
             $mappingVersions->toArray(),
@@ -115,7 +118,10 @@ class Save extends Command
 
         // Save all mapping versions
         $mappingVersions = MappingCommitLog::all()
-            ->makeVisible(['created_at', 'updated_at']);
+            ->makeVisible([
+                'created_at',
+                'updated_at',
+            ]);
 
         $this->saveDataToJsonFile(
             $mappingVersions->toArray(),
@@ -133,8 +139,18 @@ class Save extends Command
         $this->info('Saving dungeons');
 
         // Save all dungeons
-        $dungeons = Dungeon::without(['expansion', 'gameVersion', 'dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man', 'floors.floorUnions6'])
-            ->with(['floors.floorcouplings', 'floors.dungeonSpeedrunRequiredNpcs10Man', 'floors.dungeonSpeedrunRequiredNpcs25Man'])
+        $dungeons = Dungeon::without([
+            'expansion',
+            'gameVersion',
+            'dungeonSpeedrunRequiredNpcs10Man',
+            'dungeonSpeedrunRequiredNpcs25Man',
+            'floors.floorUnions6',
+        ])
+            ->with([
+                'floors.floorcouplings',
+                'floors.dungeonSpeedrunRequiredNpcs10Man',
+                'floors.dungeonSpeedrunRequiredNpcs25Man',
+            ])
             ->get();
 
         foreach ($dungeons as $dungeon) {
@@ -187,15 +203,28 @@ class Save extends Command
 
         // Save all NPCs which aren't directly tied to a dungeon
         /** @var Collection<Npc> $npcs */
-        $npcs = Npc::without(['characteristics', 'spells', 'enemyForces'])
-            ->with(['npcCharacteristics', 'npcSpells', 'npcEnemyForces', 'npcDungeons'])
+        $npcs = Npc::without([
+            'characteristics',
+            'spells',
+            'enemyForces',
+        ])
+            ->with([
+                'npcCharacteristics',
+                'npcSpells',
+                'npcEnemyForces',
+                'npcDungeons',
+            ])
             ->get()
             ->values();
 
         foreach ($npcs as $npc) {
-            $npc->makeHidden(['type', 'class', 'enemy_portrait_url']);
+            $npc->makeHidden([
+                'type',
+                'class',
+                'enemy_portrait_url',
+            ]);
             $npc->npcbolsteringwhitelists->makeHidden(['whitelistnpc']);
-            foreach($npc->npcDungeons as $npcDungeon) {
+            foreach ($npc->npcDungeons as $npcDungeon) {
                 $npcDungeon->makeHidden(['dungeon']);
             }
         }
@@ -214,7 +243,10 @@ class Save extends Command
 
         $spells = Spell::with('spellDungeons')->get();
         foreach ($spells as $spell) {
-            $spell->makeHidden(['icon_url', 'wowhead_url'])->makeVisible(['spellDungeons']);
+            $spell->makeHidden([
+                'icon_url',
+                'wowhead_url',
+            ])->makeVisible(['spellDungeons']);
         }
 
         $this->saveDataToJsonFile($spells->toArray(), $dungeonDataDir, 'spells.json');
@@ -247,7 +279,10 @@ class Save extends Command
         /** @var Dungeon $lastDungeon */
         $lastDungeon = $dungeons->last();
 
-        $this->withProgressBar($dungeons, function (Dungeon $dungeon, ProgressBar $progressBar) use ($dungeonDataDir, $lastDungeon) {
+        $this->withProgressBar($dungeons, function (Dungeon $dungeon, ProgressBar $progressBar) use (
+            $dungeonDataDir,
+            $lastDungeon
+        ) {
             $progressBar->setFormat(self::PROGRESS_BAR_FORMAT);
             $progressBar->maxSecondsBetweenRedraws(0.1);
             $progressBar->setMessage(__($dungeon->name));
@@ -291,13 +326,41 @@ class Save extends Command
             $demoRoute->setAppends([]);
             // Ids cannot be guaranteed with users uploading dungeonroutes as well. As such, a new internal ID must be created
             // for each and every re-import
-            $demoRoute->setHidden(['id', 'updated_at', 'thumbnail_refresh_queued_at', 'thumbnail_updated_at', 'unlisted',
-                                   'published_at', 'faction', 'specializations', 'classes', 'races', 'affixes',
-                                   'expires_at', 'views', 'views_embed', 'popularity', 'pageviews', 'dungeon', 'mappingVersion',
-                                   'season', 'thumbnails']);
-            $demoRoute->load(['playerspecializations', 'playerraces', 'playerclasses',
-                              'routeattributesraw', 'affixGroups', 'brushlines', 'paths', 'killZones', 'enemyRaidMarkers',
-                              'pridefulEnemies', 'mapicons']);
+            $demoRoute->setHidden([
+                'id',
+                'updated_at',
+                'thumbnail_refresh_queued_at',
+                'thumbnail_updated_at',
+                'unlisted',
+                'published_at',
+                'faction',
+                'specializations',
+                'classes',
+                'races',
+                'affixes',
+                'expires_at',
+                'views',
+                'views_embed',
+                'popularity',
+                'pageviews',
+                'dungeon',
+                'mappingVersion',
+                'season',
+                'thumbnails',
+            ]);
+            $demoRoute->load([
+                'playerspecializations',
+                'playerraces',
+                'playerclasses',
+                'routeattributesraw',
+                'affixGroups',
+                'brushlines',
+                'paths',
+                'killZones',
+                'enemyRaidMarkers',
+                'pridefulEnemies',
+                'mapicons',
+            ]);
 
             // Routes and killzone IDs (and dungeonRouteIDs) are not determined by me, users will be adding routes and killzones.
             // I cannot serialize the IDs in the dev environment and expect it to be the same on the production instance
@@ -326,21 +389,32 @@ class Save extends Command
             }
 
             foreach ($demoRoute->brushlines as $item) {
-                $item->setVisible(['floor_id', 'polyline']);
+                $item->setVisible([
+                    'floor_id',
+                    'polyline',
+                ]);
                 $toHide->add($item);
             }
 
             foreach ($demoRoute->paths as $item) {
                 $item->load(['linkedawakenedobelisks']);
-                $item->setVisible(['floor_id', 'polyline', 'linkedawakenedobelisks']);
+                $item->setVisible([
+                    'floor_id',
+                    'polyline',
+                    'linkedawakenedobelisks',
+                ]);
                 $toHide->add($item);
             }
 
             foreach ($demoRoute->killZones as $item) {
                 // Hidden by default to save data
                 $item->makeVisible(['floor_id']);
-                foreach($item->spells as $spell) {
-                    $spell->makeHidden(['icon_name', 'icon_url', 'wowhead_url']);
+                foreach ($item->spells as $spell) {
+                    $spell->makeHidden([
+                        'icon_name',
+                        'icon_url',
+                        'wowhead_url',
+                    ]);
                 }
                 $toHide->add($item);
             }
@@ -370,7 +444,10 @@ class Save extends Command
 
             foreach ($toHide as $item) {
                 /** @var $item Model */
-                $item->makeHidden(['id', 'dungeon_route_id']);
+                $item->makeHidden([
+                    'id',
+                    'dungeon_route_id',
+                ]);
             }
         }
 
@@ -394,7 +471,7 @@ class Save extends Command
             return $model;
         };
 
-        $roundLatLngVerticesFn = static function (mixed $model) {
+        $roundLatLngVerticesFn  = static function (mixed $model) {
             /** @var HasVertices $model */
             $decodedLatLngs = $model->getDecodedLatLngs();
             foreach ($decodedLatLngs as $latLng) {
@@ -405,7 +482,7 @@ class Save extends Command
 
             return $model;
         };
-        $roundLatLngPolyLinesFn = static function (mixed $model) use($roundLatLngVerticesFn) {
+        $roundLatLngPolyLinesFn = static function (mixed $model) use ($roundLatLngVerticesFn) {
             /** @var HasVertices $polyline */
             $polyline = $model->polyline;
 
@@ -413,7 +490,10 @@ class Save extends Command
         };
 //        $this->info(sprintf('-- Saving floor %s', __($floor->name)));
         // Only export NPC->id, no need to store the full npc in the enemy
-        $enemies = $floor->enemiesForExport()->without(['npc', 'type'])->get()->makeVisible(['mdt_scale'])->values()
+        $enemies = $floor->enemiesForExport()->without([
+            'npc',
+            'type',
+        ])->get()->makeVisible(['mdt_scale'])->values()
             ->each($roundLatLngFn);
 
         $enemyPacks   = $floor->enemyPacksForExport->values()->each($roundLatLngVerticesFn);
@@ -439,7 +519,10 @@ class Save extends Command
 
         // Map icons can ALSO be added by users, thus we never know where this thing comes. As such, insert it
         // at the end of the table instead.
-        $mapIcons->makeHidden(['id', 'linked_awakened_obelisk_id']);
+        $mapIcons->makeHidden([
+            'id',
+            'linked_awakened_obelisk_id',
+        ]);
 
         $result['enemies']                      = $enemies;
         $result['enemy_packs']                  = $enemyPacks;

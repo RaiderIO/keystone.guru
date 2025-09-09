@@ -23,9 +23,18 @@ class HeatmapEmbedUrlFormRequest extends ExploreUrlFormRequest
     public function rules(): array
     {
         return array_merge(parent::rules(), [
-            'style'                 => ['nullable', Rule::in(['compact'])],
-            'headerBackgroundColor' => ['nullable', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
-            'mapBackgroundColor'    => ['nullable', 'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i'],
+            'style'                 => [
+                'nullable',
+                Rule::in(['compact']),
+            ],
+            'headerBackgroundColor' => [
+                'nullable',
+                'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
+            ],
+            'mapBackgroundColor'    => [
+                'nullable',
+                'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
+            ],
             'showEnemyInfo'         => 'nullable|bool',
             'showTitle'             => 'nullable|bool',
             'showSidebar'           => 'nullable|bool',

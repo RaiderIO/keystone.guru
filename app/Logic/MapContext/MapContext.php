@@ -83,7 +83,10 @@ abstract class MapContext
 
         // Get the DungeonData
         $dungeonDataKey = sprintf('dungeon_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $mapFacadeStyle);
-        $dungeonData    = $this->rememberLocal($dungeonDataKey, 86400, function () use ($dungeonDataKey, $mapFacadeStyle) {
+        $dungeonData = $this->rememberLocal($dungeonDataKey, 86400, function () use (
+            $dungeonDataKey,
+            $mapFacadeStyle
+        ) {
             return $this->cacheService->remember(
                 $dungeonDataKey,
                 function () use ($mapFacadeStyle) {
@@ -91,8 +94,15 @@ abstract class MapContext
 
                     /** @var Dungeon $dungeon */
                     $dungeon = $this->floor->dungeon()
-                        ->with(['dungeonSpeedrunRequiredNpcs10Man', 'dungeonSpeedrunRequiredNpcs25Man'])
-                        ->without(['floors', 'mapIcons', 'enemyPacks'])
+                        ->with([
+                            'dungeonSpeedrunRequiredNpcs10Man',
+                            'dungeonSpeedrunRequiredNpcs25Man',
+                        ])
+                        ->without([
+                            'floors',
+                            'mapIcons',
+                            'enemyPacks',
+                        ])
                         ->first();
                     $dungeon->setRelation('floors', $this->getFloors());
 
@@ -119,7 +129,12 @@ abstract class MapContext
         // Npc data (for localizations)
         $locale            = Auth::user()?->locale ?? 'en_US';
         $dungeonNpcDataKey = sprintf('dungeon_npcs_%d_%d_%s', $this->floor->dungeon->id, $this->mappingVersion->id, $locale);
-        $dungeonNpcData    = $this->rememberLocal($dungeonNpcDataKey, 86400, function () use ($dungeonNpcDataKey, $mapFacadeStyle, $locale, $dungeonData) {
+        $dungeonNpcData = $this->rememberLocal($dungeonNpcDataKey, 86400, function () use (
+            $dungeonNpcDataKey,
+            $mapFacadeStyle,
+            $locale,
+            $dungeonData
+        ) {
             return $this->cacheService->remember(
                 $dungeonNpcDataKey,
                 function () use ($dungeonData, $locale) {
@@ -140,14 +155,18 @@ abstract class MapContext
                                             ->on('translations.locale', DB::raw(sprintf('"%s"', $locale)));
                                     }),
                                 // Restrain the enemy forces relationship so that it returns the enemy forces of the target mapping version only
-                                'enemyForces' => fn(HasOne $query) => $query->where('mapping_version_id', $this->mappingVersion->id),
+                                'enemyForces' => fn(HasOne $query
+                                ) => $query->where('mapping_version_id', $this->mappingVersion->id),
                             ])
                             // Disable cache for this query though! Since NpcEnemyForces is a cache model, it can otherwise return values from another mapping version
                             ->disableCache()
                             ->get()
                             // Only show what we need in the FE
                             ->each(function (Npc $npc) {
-                                $npc->enemyForces?->setVisible(['enemy_forces', 'enemy_forces_teeming']);
+                                $npc->enemyForces?->setVisible([
+                                    'enemy_forces',
+                                    'enemy_forces_teeming',
+                                ]);
                                 $npc->setHidden(['pivot']);
                             }),
                     ];
@@ -156,7 +175,10 @@ abstract class MapContext
         });
 
         $selectableSpellsKey = sprintf('selectable_spells_%s', $locale);
-        $selectableSpells    = $this->rememberLocal($selectableSpellsKey, 86400, function () use ($selectableSpellsKey, $locale) {
+        $selectableSpells = $this->rememberLocal($selectableSpellsKey, 86400, function () use (
+            $selectableSpellsKey,
+            $locale
+        ) {
             return $this->cacheService->remember(
                 $selectableSpellsKey,
                 function () use ($locale) {
@@ -177,7 +199,12 @@ abstract class MapContext
         $characterClasses = CharacterClass::all();
         $mapIconTypes     = MapIconType::all()->keyBy('id');
         $staticKey        = 'static_data';
-        $static           = $this->rememberLocal($staticKey, 86400, function () use ($staticKey, $locale, $characterClasses, $mapIconTypes) {
+        $static = $this->rememberLocal($staticKey, 86400, function () use (
+            $staticKey,
+            $locale,
+            $characterClasses,
+            $mapIconTypes
+        ) {
             return $this->cacheService->remember($staticKey, static fn() => [
                 'mapIconTypes'                      => $mapIconTypes->values(),
                 'unknownMapIconType'                => $mapIconTypes->get(MapIconType::ALL[MapIconType::MAP_ICON_TYPE_UNKNOWN]),
@@ -194,7 +221,10 @@ abstract class MapContext
 
         $static['selectableSpells'] = $selectableSpells;
 
-        [$npcMinHealth, $npcMaxHealth] = $this->floor->dungeon->getNpcsMinMaxHealth($this->mappingVersion);
+        [
+            $npcMinHealth,
+            $npcMaxHealth,
+        ] = $this->floor->dungeon->getNpcsMinMaxHealth($this->mappingVersion);
 
         // Prevent the values being exactly the same, which causes issues in the front end
         if ($npcMaxHealth <= $npcMinHealth) {

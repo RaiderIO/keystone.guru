@@ -30,13 +30,16 @@ class DebugInfoContextLogger
         ];
 
         // We don't want this on any other environment because it's just spam - I know the URLs on those environments
-        if (in_array(config('app.type'), ['production', 'staging'])) {
+        if (in_array(config('app.type'), [
+            'production',
+            'staging',
+        ])) {
             $context['url'] = $request->fullUrl();
         }
 
         if ($dungeonRoute instanceof DungeonRoute) {
             $context = array_merge($context, [
-                'publicKey'        => $dungeonRoute->public_key,
+                'publicKey' => $dungeonRoute->public_key,
                 'mappingVersionId' => $dungeonRoute->mapping_version_id,
             ]);
         }

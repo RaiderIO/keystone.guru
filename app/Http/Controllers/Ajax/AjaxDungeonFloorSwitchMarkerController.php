@@ -67,8 +67,12 @@ class AjaxDungeonFloorSwitchMarkerController extends AjaxMappingModelBaseControl
         return $result;
     }
 
-    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
-    {
+    protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        Model                       $model
+    ): ModelChangedEvent {
         return new DungeonFloorSwitchMarkerChangedEvent($context, $user, $model);
     }
 

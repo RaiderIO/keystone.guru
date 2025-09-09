@@ -53,9 +53,14 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
             $previousFloor = $previousEnemy->floor;
         }
 
-        $validated['kill_priority'] = in_array((int)$validated['kill_priority'], [0, -1]) ? null : (int)$validated['kill_priority'];
+        $validated['kill_priority'] = in_array((int)$validated['kill_priority'], [
+            0,
+            -1,
+        ]) ? null : (int)$validated['kill_priority'];
 
-        return $this->storeModel($coordinatesService, $mappingVersion, $validated, Enemy::class, $enemy, static function (Enemy $enemy) use ($request, $coordinatesService, $previousFloor) {
+        return $this->storeModel($coordinatesService, $mappingVersion, $validated, Enemy::class, $enemy, static function (
+            Enemy $enemy
+        ) use ($request, $coordinatesService, $previousFloor) {
             $activeAuras = $request->get('active_auras', []);
             // Clear current active auras
             $enemy->enemyActiveAuras()->delete();
@@ -72,7 +77,11 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
                 }
             }
 
-            $enemy->load(['npc', 'npc.enemyForces', 'floor'])->makeHidden(['floor']);
+            $enemy->load([
+                'npc',
+                'npc.enemyForces',
+                'floor',
+            ])->makeHidden(['floor']);
             // Perform floor change and move enemy to the correct location on the new floor
             if ($previousFloor !== null && $enemy->floor->id !== $previousFloor->id) {
                 $ingameXY  = $coordinatesService->calculateIngameLocationForMapLocation($enemy->getLatLng()->setFloor($previousFloor));
@@ -157,8 +166,12 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
         });
     }
 
-    protected function getModelChangedEvent(CoordinatesServiceInterface $coordinatesService, Model $context, User $user, Model $model): ModelChangedEvent
-    {
+    protected function getModelChangedEvent(
+        CoordinatesServiceInterface $coordinatesService,
+        Model                       $context,
+        User                        $user,
+        Model                       $model
+    ): ModelChangedEvent {
         return new EnemyChangedEvent($coordinatesService, $context, $user, $model);
     }
 }

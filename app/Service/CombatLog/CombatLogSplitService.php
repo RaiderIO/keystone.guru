@@ -15,8 +15,8 @@ class CombatLogSplitService implements CombatLogSplitServiceInterface
     public function __construct(
         private readonly CombatLogServiceInterface             $combatLogService,
         private readonly DungeonRepositoryInterface            $dungeonRepository,
-        private readonly CombatLogSplitServiceLoggingInterface $log)
-    {
+        private readonly CombatLogSplitServiceLoggingInterface $log
+    ) {
     }
 
     public function splitCombatLogOnChallengeModes(string $filePath): Collection

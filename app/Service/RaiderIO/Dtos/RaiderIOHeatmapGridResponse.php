@@ -30,7 +30,10 @@ class RaiderIOHeatmapGridResponse extends CombatLogEventGridAggregationResult
     {
         $result = parent::toArray();
 
-        if (Auth::check() && (Auth::user()->hasRole(Role::roles([Role::ROLE_ADMIN, Role::ROLE_INTERNAL_TEAM])))) {
+        if (Auth::check() && (Auth::user()->hasRole(Role::roles([
+                Role::ROLE_ADMIN,
+                Role::ROLE_INTERNAL_TEAM,
+            ])))) {
             $result['url'] = $this->url;
         }
         // Override the weight_max

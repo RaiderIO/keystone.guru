@@ -90,8 +90,20 @@ class AjaxDungeonRouteController extends Controller
         // Which relationship should be load?
         $tagsRelationshipName = $teamPublicKey ? 'tagsteam' : 'tagspersonal';
 
-        $routes = DungeonRoute::with(['faction', 'specializations', 'classes', 'races', 'dungeon', 'affixes', 'thumbnails',
-                                      'author', 'routeattributes', 'ratings', 'metricAggregations', $tagsRelationshipName])
+        $routes = DungeonRoute::with([
+            'faction',
+            'specializations',
+            'classes',
+            'races',
+            'dungeon',
+            'affixes',
+            'thumbnails',
+            'author',
+            'routeattributes',
+            'ratings',
+            'metricAggregations',
+            $tagsRelationshipName,
+        ])
             ->without(['season'])
             // Specific selection of dungeon columns; if we don't do it somehow the Affixes and Attributes of the result is cleared.
             // Probably selecting similar named columns leading Laravel to believe the relation is already satisfied.
@@ -105,7 +117,10 @@ class AjaxDungeonRouteController extends Controller
                 $query->orWhereNull('expires_at');
             })
             // required for the enemy forces calculation
-            ->groupBy(['dungeon_routes.id', 'mapping_versions.dungeon_id']);
+            ->groupBy([
+                'dungeon_routes.id',
+                'mapping_versions.dungeon_id',
+            ]);
 
         /** @var User $user */
         $user = Auth::user();
@@ -177,7 +192,7 @@ class AjaxDungeonRouteController extends Controller
                     [
                         PublishedState::ALL[PublishedState::TEAM],
                         PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
-                        PublishedState::ALL[PublishedState::WORLD]
+                        PublishedState::ALL[PublishedState::WORLD],
                     ]
                 );
                 //                $routes = $routes->whereHas('teams', function ($query) use (&$user, $teamId) {
@@ -254,13 +269,27 @@ class AjaxDungeonRouteController extends Controller
             $season = Season::find($request->get('season'));
         }
 
-        $query = DungeonRoute::with(['faction', 'specializations', 'classes', 'races', 'author', 'affixes', 'thumbnails',
-                                     'ratings', 'routeattributes', 'dungeon', 'dungeon.activeFloors', 'mappingVersion'])
+        $query = DungeonRoute::with([
+            'faction',
+            'specializations',
+            'classes',
+            'races',
+            'author',
+            'affixes',
+            'thumbnails',
+            'ratings',
+            'routeattributes',
+            'dungeon',
+            'dungeon.activeFloors',
+            'mappingVersion',
+        ])
             ->join('dungeons', 'dungeon_routes.dungeon_id', 'dungeons.id')
             ->join('mapping_versions', 'mapping_versions.dungeon_id', 'dungeons.id')
-            ->when($expansion !== null, static fn(Builder $builder) => $builder->where('dungeons.expansion_id', $expansion->id)
+            ->when($expansion !== null, static fn(Builder $builder
+            ) => $builder->where('dungeons.expansion_id', $expansion->id)
             )
-            ->when($season !== null, static fn(Builder $builder) => $builder->where('dungeon_routes.season_id', $season->id)
+            ->when($season !== null, static fn(Builder $builder
+            ) => $builder->where('dungeon_routes.season_id', $season->id)
             )
             // Only non-try routes, combine both where() and whereNull(), there are inconsistencies where one or the
             // other may work, this covers all bases for both dev and live
@@ -377,8 +406,8 @@ class AjaxDungeonRouteController extends Controller
      * @return Response|string
      */
     public function htmlsearchcategory(
-        Request $request,
-        string $category,
+        Request                  $request,
+        string                   $category,
         DiscoverServiceInterface $discoverService,
         ExpansionServiceInterface $expansionService,
         ThumbnailServiceInterface $thumbnailService
@@ -569,8 +598,12 @@ class AjaxDungeonRouteController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function cloneToTeam(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonRoute, Team $team): Response
-    {
+    public function cloneToTeam(
+        Request                   $request,
+        ThumbnailServiceInterface $thumbnailService,
+        DungeonRoute              $dungeonRoute,
+        Team                      $team
+    ): Response {
         $this->authorize('clone', $dungeonRoute);
 
         /** @var User $user */
@@ -618,7 +651,10 @@ class AjaxDungeonRouteController extends Controller
             $user = Auth::user();
 
             /** @var DungeonRouteRating $dungeonRouteRating */
-            $dungeonRouteRating         = DungeonRouteRating::firstOrNew(['dungeon_route_id' => $dungeonRoute->id, 'user_id' => $user->id]);
+            $dungeonRouteRating = DungeonRouteRating::firstOrNew([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'user_id'          => $user->id,
+            ]);
             $dungeonRouteRating->rating = max(1, min(10, $value));
             $dungeonRouteRating->save();
         }
@@ -661,7 +697,10 @@ class AjaxDungeonRouteController extends Controller
         $user = Auth::user();
 
         /** @var DungeonRouteFavorite $dungeonRouteFavorite */
-        $dungeonRouteFavorite = DungeonRouteFavorite::firstOrNew(['dungeon_route_id' => $dungeonRoute->id, 'user_id' => $user->id]);
+        $dungeonRouteFavorite = DungeonRouteFavorite::firstOrNew([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'user_id'          => $user->id,
+        ]);
         $dungeonRouteFavorite->save();
 
         return response()->noContent();
@@ -772,7 +811,10 @@ class AjaxDungeonRouteController extends Controller
                 $warningResult[] = $warning->toArray();
             }
 
-            return ['mdt_string' => $dungeonRoute, 'warnings' => $warningResult];
+            return [
+                'mdt_string' => $dungeonRoute,
+                'warnings'   => $warningResult,
+            ];
         } catch (Exception $ex) {
             Log::error(sprintf('MDT export error: %s', $ex->getMessage()), ['dungeonroute' => $dungeonRoute]);
 
@@ -794,8 +836,11 @@ class AjaxDungeonRouteController extends Controller
      * @throws AuthorizationException
      * @throws RandomException
      */
-    public function simulate(AjaxDungeonRouteSimulateFormRequest $request, RaidEventsServiceInterface $raidEventsService, DungeonRoute $dungeonRoute): array
-    {
+    public function simulate(
+        AjaxDungeonRouteSimulateFormRequest $request,
+        RaidEventsServiceInterface          $raidEventsService,
+        DungeonRoute                        $dungeonRoute
+    ): array {
         $this->authorize('view', $dungeonRoute);
 
         $raidEventsCollection = $raidEventsService->getRaidEvents(
@@ -807,15 +852,20 @@ class AjaxDungeonRouteController extends Controller
         ];
     }
 
-    public function refreshThumbnail(Request $request, ThumbnailServiceInterface $thumbnailService, DungeonRoute $dungeonroute): Response
-    {
+    public function refreshThumbnail(
+        Request                   $request,
+        ThumbnailServiceInterface $thumbnailService,
+        DungeonRoute              $dungeonroute
+    ): Response {
         $thumbnailService->queueThumbnailRefresh($dungeonroute, true);
 
         return response()->noContent();
     }
 
-    public function getDungeonRoutesData(AjaxDungeonRouteDataFormRequest $request, CoordinatesServiceInterface $coordinatesService): Collection
-    {
+    public function getDungeonRoutesData(
+        AjaxDungeonRouteDataFormRequest $request,
+        CoordinatesServiceInterface     $coordinatesService
+    ): Collection {
         $publicKeys = $request->validated()['public_keys'];
 
         return $this->getDungeonRoutesProperties($coordinatesService, $publicKeys);

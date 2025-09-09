@@ -59,7 +59,10 @@ class AjaxTagController extends Controller
         /** @var Builder $query */
         /** @noinspection PhpUndefinedMethodInspection */
         $query = $tagCategory->model_class::query();
-        if (in_array($tagCategory->name, [TagCategory::DUNGEON_ROUTE_PERSONAL, TagCategory::DUNGEON_ROUTE_TEAM])) {
+        if (in_array($tagCategory->name, [
+            TagCategory::DUNGEON_ROUTE_PERSONAL,
+            TagCategory::DUNGEON_ROUTE_TEAM,
+        ])) {
             /** @var DungeonRoute $dungeonRoute */
             $query = $query->where('public_key', $modelId);
         } else {
@@ -70,7 +73,10 @@ class AjaxTagController extends Controller
         $model = $query->firstOrFail();
 
         // Now that we know the category and created an instance of the model, check if we may actually do this
-        $this->authorize('create-tag', [$tagCategory, $model]);
+        $this->authorize('create-tag', [
+            $tagCategory,
+            $model,
+        ]);
 
         //
         if (!$model->hasTag($tagCategory->id, $tagName)) {
@@ -112,7 +118,10 @@ class AjaxTagController extends Controller
         Tag::where('name', $tag->name)
             ->where('tag_category_id', $tag->tag_category_id)
             ->where('user_id', Auth::id())
-            ->update(['name' => $request->get('name'), 'color' => $request->get('color')]);
+            ->update([
+                'name'  => $request->get('name'),
+                'color' => $request->get('color'),
+            ]);
 
         return response()->noContent();
     }

@@ -25,8 +25,10 @@ trait DungeonRouteProperties
     /**
      * @return Collection<DungeonRoute>
      */
-    private function getDungeonRoutesProperties(CoordinatesServiceInterface $coordinatesService, array $publicKeys): Collection
-    {
+    private function getDungeonRoutesProperties(
+        CoordinatesServiceInterface $coordinatesService,
+        array                       $publicKeys
+    ): Collection {
         $result = collect();
 
         /** @var Collection<DungeonRoute> $dungeonRoutes */
@@ -46,8 +48,10 @@ trait DungeonRouteProperties
         return $result;
     }
 
-    private function getDungeonRouteProperties(CoordinatesServiceInterface $coordinatesService, DungeonRoute $dungeonRoute): array
-    {
+    private function getDungeonRouteProperties(
+        CoordinatesServiceInterface $coordinatesService,
+        DungeonRoute                $dungeonRoute
+    ): array {
         $useFacade = $this->getMapFacadeStyle() === 'facade';
 
         return [
@@ -74,7 +78,9 @@ trait DungeonRouteProperties
             'paths'                    => $dungeonRoute->mapContextPaths($coordinatesService, $useFacade),
             'brushlines'               => $dungeonRoute->mapContextBrushlines($coordinatesService, $useFacade),
             'pridefulEnemies'          => $dungeonRoute->pridefulEnemies,
-            'enemyRaidMarkers'         => $dungeonRoute->enemyRaidMarkers->map(static fn(DungeonRouteEnemyRaidMarker $drEnemyRaidMarker) => [
+            'enemyRaidMarkers' => $dungeonRoute->enemyRaidMarkers->map(static fn(
+                DungeonRouteEnemyRaidMarker $drEnemyRaidMarker
+            ) => [
                 'enemy_id'         => $drEnemyRaidMarker->enemy_id,
                 'raid_marker_name' => $drEnemyRaidMarker->raidMarker->name,
             ]),

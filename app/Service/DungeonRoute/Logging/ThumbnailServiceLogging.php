@@ -18,8 +18,17 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->end(__METHOD__);
     }
 
-    public function createThumbnailCustomStart(string $publicKey, int $floorIndex, int $attempts, ?int $viewportWidth, ?int $viewportHeight, ?int $imageWidth, ?int $imageHeight, ?int $zoomLevel, ?int $quality): void
-    {
+    public function createThumbnailCustomStart(
+        string $publicKey,
+        int    $floorIndex,
+        int    $attempts,
+        ?int   $viewportWidth,
+        ?int   $viewportHeight,
+        ?int   $imageWidth,
+        ?int   $imageHeight,
+        ?int   $zoomLevel,
+        ?int   $quality
+    ): void {
         $this->start(__METHOD__, get_defined_vars());
     }
 
@@ -28,8 +37,17 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->end(__METHOD__);
     }
 
-    public function doCreateThumbnailStart(string $publicKey, int $floorIndex, string $targetFolder, ?int $viewportWidth, ?int $viewportHeight, ?int $imageWidth, ?int $imageHeight, ?int $zoomLevel, ?int $quality): void
-    {
+    public function doCreateThumbnailStart(
+        string $publicKey,
+        int    $floorIndex,
+        string $targetFolder,
+        ?int   $viewportWidth,
+        ?int   $viewportHeight,
+        ?int   $imageWidth,
+        ?int   $imageHeight,
+        ?int   $zoomLevel,
+        ?int   $quality
+    ): void {
         $this->start(__METHOD__, get_defined_vars());
     }
 
@@ -108,8 +126,12 @@ class ThumbnailServiceLogging extends StructuredLogging implements ThumbnailServ
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function copyThumbnailsException(string $sourcePublicKey, string $targetPublicKey, int $id, Exception $exception): void
-    {
+    public function copyThumbnailsException(
+        string    $sourcePublicKey,
+        string    $targetPublicKey,
+        int       $id,
+        Exception $exception
+    ): void {
         $this->error(__METHOD__, get_defined_vars());
     }
 

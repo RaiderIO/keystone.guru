@@ -123,7 +123,12 @@ class DungeonRouteService implements DungeonRouteServiceInterface
         try {
             $this->log->deleteOutdatedDungeonRoutesStart();
 
-            $dungeonRoutes = DungeonRoute::with(['brushlines', 'paths', 'killZones', 'livesessions'])
+            $dungeonRoutes = DungeonRoute::with([
+                'brushlines',
+                'paths',
+                'killZones',
+                'livesessions',
+            ])
                 ->whereRaw('expires_at < NOW()')
                 ->where('expires_at', '!=', 0)
                 ->whereNotNull('expires_at')

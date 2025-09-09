@@ -2,7 +2,6 @@
 
 namespace App\Service\Wowhead;
 
-use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use Illuminate\Support\Collection;
 

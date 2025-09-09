@@ -242,10 +242,12 @@ class DungeonHeatmapController extends Controller
                 'headerBackgroundColor' => $headerBackgroundColor,
                 'mapBackgroundColor'    => $mapBackgroundColor,
                 'show'                  => [
-                    'enemyInfo'      => (bool)$showEnemyInfo, // Default false - not available
+                    'enemyInfo'      => (bool)$showEnemyInfo,
+                    // Default false - not available
                     'title'          => (bool)$showTitle,
                     'sidebar'        => (bool)$showSidebar,
-                    'floorSelection' => true,                 // Always available, but can be overridden later if there's no floors to select
+                    'floorSelection' => true,
+                    // Always available, but can be overridden later if there's no floors to select
                 ],
             ],
         ]));
@@ -272,8 +274,10 @@ class DungeonHeatmapController extends Controller
      * @param MappingVersion|null $currentMappingVersion
      * @return RedirectResponse|null
      */
-    private function guardAgainstInvalidAccess(Dungeon $dungeon, ?MappingVersion $currentMappingVersion): ?RedirectResponse
-    {
+    private function guardAgainstInvalidAccess(
+        Dungeon         $dungeon,
+        ?MappingVersion $currentMappingVersion
+    ): ?RedirectResponse {
         if (
             !$dungeon->active ||
             !$dungeon->heatmap_enabled ||

@@ -46,9 +46,21 @@ class Expansion extends CacheModel
     use SeederModel;
     use UserCurrentTime;
 
-    public $fillable = ['active', 'icon_file_id', 'name', 'shortname', 'color', 'released_at'];
+    public $fillable = [
+        'active',
+        'icon_file_id',
+        'name',
+        'shortname',
+        'color',
+        'released_at',
+    ];
 
-    public $hidden = ['id', 'icon_file_id', 'created_at', 'updated_at'];
+    public $hidden = [
+        'id',
+        'icon_file_id',
+        'created_at',
+        'updated_at',
+    ];
 
     public $with = ['timewalkingEvent'];
 
@@ -146,7 +158,11 @@ class Expansion extends CacheModel
         /** @var Season|null $season */
         $season = $this->hasOne(Season::class)
             ->whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) < ?',
-                [$gameServerRegion->reset_day_offset, $gameServerRegion->reset_hours_offset, Carbon::now()]
+                [
+                    $gameServerRegion->reset_day_offset,
+                    $gameServerRegion->reset_hours_offset,
+                    Carbon::now(),
+                ]
             )
             ->orderBy('start', 'desc')
             ->limit(1)
@@ -173,7 +189,11 @@ class Expansion extends CacheModel
         $season = $this->hasOne(Season::class)
             ->where('expansion_id', $this->id)
             ->whereRaw('DATE_ADD(DATE_ADD(`start`, INTERVAL ? day), INTERVAL ? hour) >= ?',
-                [$gameServerRegion->reset_day_offset, $gameServerRegion->reset_hours_offset, Carbon::now()]
+                [
+                    $gameServerRegion->reset_day_offset,
+                    $gameServerRegion->reset_hours_offset,
+                    Carbon::now(),
+                ]
             )
             ->orderBy('start')
             ->limit(1)

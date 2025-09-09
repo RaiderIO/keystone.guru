@@ -106,7 +106,7 @@ return [
             ],
         ],
         'moltencore'                  => [
-            'name' => 'Огненные Недра',
+            'name'   => 'Огненные Недра',
             'floors' => [
                 'molten_core' => '',
             ],
@@ -245,7 +245,7 @@ return [
         'the_temple_of_atal_hakkar'   => [
             'name'   => 'Затонувший храм',
             'floors' => [
-                'the_pit_of_refuse' => 'Затонувший храм',
+                'the_pit_of_refuse'         => 'Затонувший храм',
                 'hall_of_serpents'          => '',
                 'entrance'                  => '',
                 'the_temple_of_atal_hakkar' => '',
@@ -643,7 +643,7 @@ return [
                 'the_rooks_roost'          => 'Гнездовье Черной Ладьи',
                 'lord_ravencrests_chamber' => 'Комната лорда Гребня Ворона',
                 'the_ravens_crown'         => 'Корона Ворона',
-                'black_rook_hold' => 'Крепость Черной Ладьи',
+                'black_rook_hold'          => 'Крепость Черной Ладьи',
             ],
         ],
         'cathedral_of_eternal_night'  => [
@@ -714,7 +714,7 @@ return [
             ],
         ],
         'upper_karazhan'              => [
-            'name' => 'Каражан',
+            'name'   => 'Каражан',
             'floors' => [
                 'lower_broken_stair' => 'Низ разрушенной лестницы',
                 'upper_broken_stair' => 'Верх разрушенной лестницы',
@@ -825,7 +825,7 @@ return [
                 'the_drain'         => 'Стоки',
                 'the_brig'          => 'Гауптвахта',
                 'detention_block'   => 'Тюремный блок',
-                'officer_quarters' => 'Офицерская',
+                'officer_quarters'  => 'Офицерская',
                 'overseers_redoubt' => 'Цитадель надзирателя',
                 'overseers_summit'  => 'Терраса надзирателя',
             ],
@@ -838,7 +838,7 @@ return [
                 'the_cellar'      => 'Погреб',
                 'catacombs'       => 'Катакомбы',
                 'the_rupture'     => 'Разлом',
-                'waycrest_manor' => 'Усадьба Уэйкрестов',
+                'waycrest_manor'  => 'Усадьба Уэйкрестов',
             ],
         ],
     ],
@@ -914,7 +914,7 @@ return [
             'floors' => [
                 'the_necrotic_wake' => 'Смертельная тризна',
                 'stitchwerks'       => 'Трупосшивальня',
-                'zolramus' => '"Золрамус"',
+                'zolramus'          => '"Золрамус"',
             ],
         ],
         'theater_of_pain'            => [

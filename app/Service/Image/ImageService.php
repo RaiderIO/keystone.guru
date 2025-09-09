@@ -77,12 +77,31 @@ class ImageService implements ImageServiceInterface
         $threeQuarterHeight = $height * 0.75;
 
         $points = [
-            ['x' => $halfWidth, 'y' => 0],
-            ['x' => $width - 1, 'y' => $quarterHeight], // Sub 1 so that the border is drawn inside the image
-            ['x' => $width - 1, 'y' => $threeQuarterHeight],
-            ['x' => $halfWidth, 'y' => $height - 1],
-            ['x' => 0, 'y' => $threeQuarterHeight],
-            ['x' => 0, 'y' => $quarterHeight],
+            [
+                'x' => $halfWidth,
+                'y' => 0,
+            ],
+            [
+                'x' => $width - 1,
+                'y' => $quarterHeight,
+            ],
+            // Sub 1 so that the border is drawn inside the image
+            [
+                'x' => $width - 1,
+                'y' => $threeQuarterHeight,
+            ],
+            [
+                'x' => $halfWidth,
+                'y' => $height - 1,
+            ],
+            [
+                'x' => 0,
+                'y' => $threeQuarterHeight,
+            ],
+            [
+                'x' => 0,
+                'y' => $quarterHeight,
+            ],
         ];
 
         // Add the margin to all points to center the hexagon again

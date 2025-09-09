@@ -23,7 +23,10 @@ class UserFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'map_facade_style' => ['nullable', Rule::in(User::MAP_FACADE_STYLE_ALL)],
+            'map_facade_style' => [
+                'nullable',
+                Rule::in(User::MAP_FACADE_STYLE_ALL),
+            ],
         ];
     }
 }

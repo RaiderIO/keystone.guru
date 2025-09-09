@@ -29,9 +29,17 @@ class DevDiscoverService extends BaseDiscoverService
                 'mappingVersion',
                 'thumbnails',
                 'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
-                'season'  => fn(BelongsTo $query) => $query->without(['affixGroups', 'dungeons']),
+                'season' => fn(BelongsTo $query) => $query->without([
+                    'affixGroups',
+                    'dungeons',
+                ]),
             ])
-            ->without(['faction', 'specializations', 'classes', 'races'])
+            ->without([
+                'faction',
+                'specializations',
+                'classes',
+                'races',
+            ])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->when($this->season === null, function (Builder $builder) {
                 $builder->where('dungeons.expansion_id', $this->expansion->id);
@@ -62,9 +70,17 @@ class DevDiscoverService extends BaseDiscoverService
                 'mappingVersion',
                 'thumbnails',
                 'dungeon' => fn(BelongsTo $query) => $query->without(['gameVersion']),
-                'season'  => fn(BelongsTo $query) => $query->without(['affixGroups', 'dungeons']),
+                'season' => fn(BelongsTo $query) => $query->without([
+                    'affixGroups',
+                    'dungeons',
+                ]),
             ])
-            ->without(['faction', 'specializations', 'classes', 'races'])
+            ->without([
+                'faction',
+                'specializations',
+                'classes',
+                'races',
+            ])
             ->join('dungeons', 'dungeon_routes.dungeon_id', '=', 'dungeons.id')
             ->when($this->season === null, function (Builder $builder) {
                 $builder->where('dungeons.expansion_id', $this->expansion->id);

@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Models\Dungeon;
-use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
@@ -37,13 +36,19 @@ class DungeonFormRequest extends FormRequest
             'instance_id'                        => 'nullable|int',
             'challenge_mode_id'                  => 'nullable|int',
             'mdt_id'                             => 'int',
-            'name'                               => ['required', Rule::unique(Dungeon::class, 'name')->ignore($this->get('name'), 'name')],
+            'name' => [
+                'required',
+                Rule::unique(Dungeon::class, 'name')->ignore($this->get('name'), 'name'),
+            ],
             'key'                                => [
                 'required',
                 Rule::unique(Dungeon::class, 'key')->ignore($this->get('key'), 'key'),
                 Rule::in(collect(array_merge_recursive(Dungeon::ALL, Dungeon::ALL_RAID))->flatten()),
             ],
-            'slug'                               => ['required', Rule::unique(Dungeon::class, 'slug')->ignore($this->get('slug'), 'slug')],
+            'slug' => [
+                'required',
+                Rule::unique(Dungeon::class, 'slug')->ignore($this->get('slug'), 'slug'),
+            ],
         ];
     }
 }

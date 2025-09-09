@@ -52,7 +52,11 @@ class AjaxNpcController extends Controller
      */
     public function get(Request $request): array
     {
-        $npcs = Npc::with(['type', 'classification', 'enemyForces'])
+        $npcs = Npc::with([
+            'type',
+            'classification',
+            'enemyForces',
+        ])
             ->selectRaw('npcs.*, npc_name_translations.translation as name, GROUP_CONCAT(DISTINCT translations.translation SEPARATOR ", ") AS dungeon_names, COUNT(enemies.id) as enemy_count')
             ->join('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')
             ->leftJoin('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')

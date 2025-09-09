@@ -27,7 +27,11 @@ class AffixGroup extends AffixGroupBase
 {
     use SeederModel;
 
-    public $fillable = ['season_id', 'seasonal_index', 'confirmed'];
+    public $fillable = [
+        'season_id',
+        'seasonal_index',
+        'confirmed',
+    ];
 
     protected function getAffixGroupCouplingsTableName(): string
     {

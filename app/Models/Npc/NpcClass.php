@@ -27,7 +27,10 @@ class NpcClass extends CacheModel
         'name',
     ];
 
-    protected $visible = ['name', 'key'];
+    protected $visible = [
+        'name',
+        'key',
+    ];
 
     public $timestamps = false;
 

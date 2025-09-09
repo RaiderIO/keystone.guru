@@ -52,7 +52,11 @@ class CreateGithubReleaseTicket extends BaseGithubReleaseCommand
             $issueTitle      = sprintf('Release %s', $release->version);
 
             // Only gets the first page - but good enough
-            foreach ($githubIssueClient->all($repositoryOwner, $repository, ['filter' => 'all', 'state' => 'all', 'labels' => 'release']) as $githubIssue) {
+            foreach ($githubIssueClient->all($repositoryOwner, $repository, [
+                'filter' => 'all',
+                'state'  => 'all',
+                'labels' => 'release',
+            ]) as $githubIssue) {
                 if (str_starts_with((string)$githubIssue['title'], $issueTitle) && !isset($githubIssue['pull_request'])) {
                     $existingIssueId = $githubIssue['number'];
                     break;

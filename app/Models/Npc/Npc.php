@@ -78,7 +78,14 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public $timestamps = false;
 
-    protected $with = ['type', 'class', 'npcbolsteringwhitelists', 'npcHealths', 'characteristics', 'spells'];
+    protected $with = [
+        'type',
+        'class',
+        'npcbolsteringwhitelists',
+        'npcHealths',
+        'characteristics',
+        'spells',
+    ];
 
     protected $fillable = [
         'id',
@@ -231,17 +238,30 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function isEmissary(): bool
     {
-        return in_array($this->id, [155432, 155433, 155434]);
+        return in_array($this->id, [
+            155432,
+            155433,
+            155434,
+        ]);
     }
 
     public function isAwakened(): bool
     {
-        return in_array($this->id, [161244, 161243, 161124, 161241]);
+        return in_array($this->id, [
+            161244,
+            161243,
+            161124,
+            161241,
+        ]);
     }
 
     public function isEncrypted(): bool
     {
-        return in_array($this->id, [185680, 185683, 185685]);
+        return in_array($this->id, [
+            185680,
+            185683,
+            185685,
+        ]);
     }
 
     public function isPrideful(): bool
@@ -261,12 +281,18 @@ class Npc extends CacheModel implements MappingModelInterface
 
     public function isAffectedByFortified(): bool
     {
-        return in_array($this->classification_id, [NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL], NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE]]);
+        return in_array($this->classification_id, [
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL],
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
+        ]);
     }
 
     public function isAffectedByTyrannical(): bool
     {
-        return in_array($this->classification_id, [NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS], NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS]]);
+        return in_array($this->classification_id, [
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS],
+            NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS],
+        ]);
     }
 
     public function getScalingFactor(int $keyLevel, array $affixes = []): float

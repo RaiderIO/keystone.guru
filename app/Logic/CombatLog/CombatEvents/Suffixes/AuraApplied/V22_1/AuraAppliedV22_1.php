@@ -5,8 +5,6 @@ namespace App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\V22_1;
 use App\Logic\CombatLog\CombatEvents\Interfaces\HasParameters;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\AuraAppliedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBase;
-use App\Logic\CombatLog\CombatEvents\Suffixes\Suffix;
-use App\Logic\CombatLog\Guid\Guid;
 
 class AuraAppliedV22_1 extends AuraBase implements AuraAppliedInterface
 {

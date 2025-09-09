@@ -2,8 +2,6 @@
 
 namespace App\Service\Cache;
 
-use Illuminate\Contracts\Cache\Lock;
-
 interface CacheServiceInterface
 {
     public function isCacheEnabled(): bool;

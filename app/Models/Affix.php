@@ -30,13 +30,26 @@ class Affix extends CacheModel
     use HasIconFile;
     use SeederModel;
 
-    public $hidden = ['icon_file_id', 'pivot'];
+    public $hidden = [
+        'icon_file_id',
+        'pivot',
+    ];
 
     public $timestamps = false;
 
-    protected $fillable = ['id', 'icon_file_id', 'affix_id', 'key', 'name', 'description'];
+    protected $fillable = [
+        'id',
+        'icon_file_id',
+        'affix_id',
+        'key',
+        'name',
+        'description',
+    ];
 
-    protected $appends = ['image_name', 'image_url'];
+    protected $appends = [
+        'image_name',
+        'image_url',
+    ];
 
     public const AFFIX_BOLSTERING                  = 'Bolstering';
     public const AFFIX_BURSTING                    = 'Bursting';

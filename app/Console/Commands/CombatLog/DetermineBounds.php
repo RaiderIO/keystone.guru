@@ -37,8 +37,11 @@ class DetermineBounds extends BaseCombatLogCommand
         );
     }
 
-    private function extractUiMapIds(CombatLogServiceInterface $combatLogService, string $filePath, Dungeon $dungeon): int
-    {
+    private function extractUiMapIds(
+        CombatLogServiceInterface $combatLogService,
+        string                    $filePath,
+        Dungeon                   $dungeon
+    ): int {
         $mapBounds = $combatLogService->getBoundsFromEvents($filePath, $dungeon);
 
         $this->info(

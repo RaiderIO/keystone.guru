@@ -66,8 +66,11 @@ class ProfileController extends Controller
     /**
      * @throws Exception
      */
-    public function update(ProfileFormRequest $request, User $user, EchoServerHttpApiServiceInterface $echoServerHttpApiService): RedirectResponse
-    {
+    public function update(
+        ProfileFormRequest                $request,
+        User                              $user,
+        EchoServerHttpApiServiceInterface $echoServerHttpApiService
+    ): RedirectResponse {
         $validated = $request->validated();
 
         // Allow username change once!
@@ -175,7 +178,10 @@ class ProfileController extends Controller
 
         $error = [];
         // Check if the entered PW was correct
-        if (!Auth::attempt(['name' => $user->name, 'password' => $currentPw])) {
+        if (!Auth::attempt([
+            'name'     => $user->name,
+            'password' => $currentPw,
+        ])) {
             $error = ['passwords_incorrect' => __('controller.profile.flash.current_password_is_incorrect')];
         } // New passwords must match
         else if ($newPassword !== $newPasswordConfirm) {

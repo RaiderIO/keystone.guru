@@ -2,8 +2,8 @@
 
 namespace App\Logic\CombatLog\CombatEvents\Suffixes\AuraRemoved\V22;
 
-use App\Logic\CombatLog\CombatEvents\Suffixes\AuraRemoved\AuraRemovedInterface;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBase;
+use App\Logic\CombatLog\CombatEvents\Suffixes\AuraRemoved\AuraRemovedInterface;
 
 /**
  * Two versions!! One where there's an immunity of sorts, and one where there's not.

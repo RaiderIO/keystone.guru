@@ -99,11 +99,19 @@ class Season extends CacheModel
         'item_level_max',
     ];
 
-    public $with = ['expansion', 'affixGroups', 'dungeons'];
+    public $with = [
+        'expansion',
+        'affixGroups',
+        'dungeons',
+    ];
 
     public $timestamps = false;
 
-    protected $appends = ['name', 'name_long', 'start_period'];
+    protected $appends = [
+        'name',
+        'name_long',
+        'start_period',
+    ];
 
     protected $casts = [
         'start'          => 'datetime',
@@ -123,7 +131,10 @@ class Season extends CacheModel
 
     public function getNameLongAttribute(): string
     {
-        return __('seasons.name_long', ['expansion' => __($this->expansion->name), 'season' => $this->index]);
+        return __('seasons.name_long', [
+            'expansion' => __($this->expansion->name),
+            'season'    => $this->index,
+        ]);
     }
 
     public function getStartPeriodAttribute(): int
@@ -327,7 +338,9 @@ class Season extends CacheModel
         $startIndex      = $this->affixGroups->search(
             $this->getAffixGroupAt($this->start($region), $region)
         );
-        $affixGroupIndex = $this->affixGroups->search($this->affixGroups->filter(static fn(AffixGroup $affixGroupCandidate) => $affixGroupCandidate->id === $affixGroup->id)->first());
+        $affixGroupIndex = $this->affixGroups->search($this->affixGroups->filter(static fn(
+            AffixGroup $affixGroupCandidate
+        ) => $affixGroupCandidate->id === $affixGroup->id)->first());
 
         return $this->presets !== 0 ? ($startIndex + $affixGroupIndex % $this->affixGroups->count()) % $this->presets + 1 : 0;
     }

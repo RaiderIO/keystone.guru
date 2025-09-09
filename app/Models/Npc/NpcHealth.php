@@ -9,13 +9,13 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int         $id
- * @property int         $npc_id
- * @property int         $game_version_id
- * @property int         $health
- * @property int         $percentage
+ * @property int $id
+ * @property int $npc_id
+ * @property int $game_version_id
+ * @property int $health
+ * @property int $percentage
  *
- * @property Npc         $npc
+ * @property Npc $npc
  * @property GameVersion $gameVersion
  *
  * @mixin Eloquent
@@ -26,7 +26,13 @@ class NpcHealth extends CacheModel
 
     public $timestamps = false;
 
-    protected $fillable = ['id', 'npc_id', 'game_version_id', 'health', 'percentage'];
+    protected $fillable = [
+        'id',
+        'npc_id',
+        'game_version_id',
+        'health',
+        'percentage',
+    ];
 
     public function npc(): BelongsTo
     {

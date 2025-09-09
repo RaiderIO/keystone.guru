@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 /**
- * @property int    $id
- * @property int    $giver_user_id
- * @property int    $receiver_user_id
+ * @property int $id
+ * @property int $giver_user_id
+ * @property int $receiver_user_id
  * @property Carbon $updated_at
  * @property Carbon $created_at
  *
@@ -19,7 +19,10 @@ use Illuminate\Support\Carbon;
  */
 class PatreonAdFreeGiveaway extends Model
 {
-    protected $fillable = ['giver_user_id', 'receiver_user_id'];
+    protected $fillable = [
+        'giver_user_id',
+        'receiver_user_id',
+    ];
 
     public function giver(): HasOne
     {

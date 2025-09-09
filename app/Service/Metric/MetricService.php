@@ -42,7 +42,13 @@ class MetricService implements MetricServiceInterface
 
     public function storeMetricAsync(?int $modelId, ?string $modelClass, int $category, string $tag, int $value): void
     {
-        $this->cacheService->lock('metrics:pending:lock', function () use ($modelId, $modelClass, $category, $tag, $value) {
+        $this->cacheService->lock('metrics:pending:lock', function () use (
+            $modelId,
+            $modelClass,
+            $category,
+            $tag,
+            $value
+        ) {
             $key = 'metrics:pending';
 
             // Get current metrics list or initialize an empty array

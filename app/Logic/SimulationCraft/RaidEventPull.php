@@ -24,15 +24,19 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
     /** @var Collection<RaidEventPullEnemy> */
     private Collection $raidEventPullEnemies;
 
-    public function __construct(private readonly CoordinatesServiceInterface $coordinatesService, private readonly SimulationCraftRaidEventsOptions $options)
-    {
+    public function __construct(
+        private readonly CoordinatesServiceInterface      $coordinatesService,
+        private readonly SimulationCraftRaidEventsOptions $options
+    ) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function calculateRaidEventPullEnemies(KillZone $killZone, LatLng $previousKillLocation): RaidEventPullInterface
-    {
+    public function calculateRaidEventPullEnemies(
+        KillZone $killZone,
+        LatLng   $previousKillLocation
+    ): RaidEventPullInterface {
         // If bloodlust is enabled, and if this pull has bloodlust active on it..
         $this->bloodLust = $this->options->hasRaidBuff(SimulationCraftRaidBuffs::Bloodlust) &&
             in_array($killZone->id, explode(',', $this->options->simulate_bloodlust_per_pull));
@@ -84,7 +88,10 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             throw new InvalidArgumentException('Cannot calculate delay between two points if floor differs!');
         }
 
-        [$mountFactorsAndSpeeds, $mountCasts] = $this->calculateMountedFactorAndMountCastsBetweenPoints(
+        [
+            $mountFactorsAndSpeeds,
+            $mountCasts,
+        ] = $this->calculateMountedFactorAndMountCastsBetweenPoints(
             $latLngA,
             $latLngB
         );
@@ -177,11 +184,15 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
      * @return array{array{factor: float, speed: int}, mountCasts: int}
      */
     public function calculateMountedFactorAndMountCastsBetweenPoints(
-        LatLng $latLngA, LatLng $latLngB
+        LatLng $latLngA,
+        LatLng $latLngB
     ): array {
         // 0% of the time on mounts, 0 mount casts
         if (!$this->options->use_mounts) {
-            return [[], 0];
+            return [
+                [],
+                0,
+            ];
         }
 
         /** @var MountableArea|null $startMountableArea The mountable area that we started in - can be null if not started inside a mountable area */
@@ -222,10 +233,21 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         if ($allMountableAreaIntersections->isEmpty()) {
             if ($startMountableArea !== null) {
                 // We are mounted 100% of the way, with 1 cast to mount up
-                return [[['factor' => 1, 'speed' => $startMountableArea->getSpeedOrDefault()]], 1];
+                return [
+                    [
+                        [
+                            'factor' => 1,
+                            'speed'  => $startMountableArea->getSpeedOrDefault(),
+                        ],
+                    ],
+                    1,
+                ];
             } else {
                 // We are mounted 0% of the way and will keep walking
-                return [[], 0];
+                return [
+                    [],
+                    0,
+                ];
             }
         }
 
@@ -297,7 +319,10 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             ];
         }
 
-        return [$factorsAndSpeeds, $mountCasts];
+        return [
+            $factorsAndSpeeds,
+            $mountCasts,
+        ];
     }
 
     public function calculateDelayForDistanceOnFoot(float $ingameDistance): float
